@@ -29,12 +29,7 @@ protected:
   protected LayerTilesRenderParameters _parameters;
 #endif
 
-#ifdef C_CODE
   const TimeInterval _timeToCache;
-#endif
-#ifdef JAVA_CODE
-  protected final TimeInterval _timeToCache;
-#endif
   const bool _readExpired;
 
   RasterLayer(const TimeInterval&               timeToCache,

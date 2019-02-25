@@ -4,7 +4,7 @@ public class MeshRenderer_MeshParserAsyncTask extends GAsyncTask
   private G3MContext _context;
 
   private MeshRenderer _meshRenderer;
-  public final URL _url;
+  private final URL _url;
   private IByteBuffer _buffer;
   private final float _pointSize;
   private final double _deltaHeight;

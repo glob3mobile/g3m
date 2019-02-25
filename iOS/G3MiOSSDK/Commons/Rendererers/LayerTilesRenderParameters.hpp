@@ -18,21 +18,15 @@ class LayerTilesRenderParameters {
 private:
   static const Vector2S calculateTopSectorSplitsParametersWGS84(const Sector& topSector);
 public:
-  const Sector _topSector;
-  const int    _topSectorSplitsByLatitude;
-  const int    _topSectorSplitsByLongitude;
-  const int    _firstLevel;
-  const int    _maxLevel;
-  const int    _maxLevelForPoles;
-#ifdef C_CODE
+  const Sector   _topSector;
+  const int      _topSectorSplitsByLatitude;
+  const int      _topSectorSplitsByLongitude;
+  const int      _firstLevel;
+  const int      _maxLevel;
+  const int      _maxLevelForPoles;
   const Vector2S _tileTextureResolution;
   const Vector2S _tileMeshResolution;
-#endif
-#ifdef JAVA_CODE
-  public final Vector2S _tileTextureResolution;
-  public final Vector2S _tileMeshResolution;
-#endif
-  const bool _mercator;
+  const bool     _mercator;
 
   LayerTilesRenderParameters(const Sector&   topSector,
                              const int       topSectorSplitsByLatitude,

@@ -61,25 +61,23 @@ class ShapesRenderer : public DefaultRenderer {
 private:
   class LoadQueueItem {
   public:
-#ifdef C_CODE
     const URL                     _url;
     const TimeInterval            _timeToCache;
+#ifdef C_CODE
     const SceneJSParserParameters _parameters;
 #endif
 #ifdef JAVA_CODE
-    public final URL                     _url;
-    public final TimeInterval            _timeToCache;
     public final SceneJSParserParameters _parameters;
 #endif
-    const long long    _priority;
-    const bool         _readExpired;
-    const std::string  _uriPrefix;
-    const bool         _isTransparent;
-    const Geodetic3D   _position;
-    const AltitudeMode _altitudeMode;
-    ShapeLoadListener* _listener;
-    const bool         _deleteListener;
-    const bool         _isBSON;
+    const long long               _priority;
+    const bool                    _readExpired;
+    const std::string             _uriPrefix;
+    const bool                    _isTransparent;
+    const Geodetic3D              _position;
+    const AltitudeMode            _altitudeMode;
+    ShapeLoadListener*            _listener;
+    const bool                    _deleteListener;
+    const bool                    _isBSON;
 
     LoadQueueItem(const URL&                     url,
                   long long                      priority,

@@ -23,12 +23,7 @@ class IDownloader;
 
 struct SingleBILElevationDataProvider_Request {
   const Sector _sector;
-#ifdef C_CODE
   const Vector2I _extent;
-#endif
-#ifdef JAVA_CODE
-  public final Vector2I _extent;
-#endif
   IElevationDataListener* const _listener;
   const bool _autodeleteListener;
 

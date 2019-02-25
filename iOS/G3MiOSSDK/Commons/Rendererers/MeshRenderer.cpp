@@ -298,12 +298,7 @@ private:
 #endif
 
   MeshRenderer*     _meshRenderer;
-#ifdef C_CODE
-  const URL          _url;
-#endif
-#ifdef JAVA_CODE
-  public final URL _url;
-#endif
+  const URL         _url;
   IByteBuffer*      _buffer;
   const float       _pointSize;
   const double      _deltaHeight;

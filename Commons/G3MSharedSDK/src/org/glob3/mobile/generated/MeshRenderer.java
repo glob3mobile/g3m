@@ -4,7 +4,7 @@ public class MeshRenderer extends DefaultRenderer
 
   private static class LoadQueueItem
   {
-    public final URL          _url;
+    public final URL _url;
     public final TimeInterval _timeToCache;
     public final long _priority;
     public final boolean _readExpired;

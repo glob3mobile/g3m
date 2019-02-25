@@ -30,12 +30,7 @@ protected:
 
 public:
   const Sector     _sector;
-#ifdef C_CODE
   const Vector2S   _extent;
-#endif
-#ifdef JAVA_CODE
-  public final Vector2S _extent;
-#endif
   const Geodetic2D _resolution;
 
   DEMSubscription(DEMProvider*    demProvider,

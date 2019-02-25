@@ -198,7 +198,7 @@ public class TiledVectorLayer extends VectorLayer
 
   public static class RequestGEOJSONBufferData
   {
-    public final URL          _url;
+    public final URL _url;
     public final TimeInterval _timeToCache;
     public final boolean _readExpired;
 

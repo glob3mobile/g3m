@@ -42,12 +42,7 @@ protected:
   virtual ~PyramidDEMProvider();
 
 public:
-#ifdef C_CODE
-  const Vector2S   _tileExtent;
-#endif
-#ifdef JAVA_CODE
-  public final Vector2S _tileExtent;
-#endif
+  const Vector2S _tileExtent;
 
   virtual PyramidNode* createNode(const PyramidNode*  parent,
                                   const size_t childID) = 0;
