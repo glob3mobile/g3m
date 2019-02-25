@@ -33,7 +33,7 @@ public class Plane
 
   public Plane(Vector3D normal, double d)
   {
-     _normal = new Vector3D(normal.normalized());
+     _normal = normal.normalized();
      _d = d;
      _normalF = new Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized();
      _dF = (float) d;
@@ -41,7 +41,7 @@ public class Plane
 
   public Plane(Vector3D normal, Vector3D point)
   {
-     _normal = new Vector3D(normal.normalized());
+     _normal = normal.normalized();
      _d = - normal._x * point._x - normal._y * point._y - normal._z * point._z;
      _normalF = new Vector3F((float) normal._x, (float) normal._y, (float) normal._z).normalized();
      _dF = (float) _d;

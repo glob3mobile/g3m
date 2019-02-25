@@ -69,9 +69,9 @@ public class CoordinateSystem
 
   public CoordinateSystem(Vector3D x, Vector3D y, Vector3D z, Vector3D origin)
   {
-     _x = new Vector3D(x.normalized());
-     _y = new Vector3D(y.normalized());
-     _z = new Vector3D(z.normalized());
+     _x = x.normalized();
+     _y = y.normalized();
+     _z = z.normalized();
      _origin = origin;
     if (!checkConsistency(x, y, z))
     {

@@ -26,7 +26,7 @@ public class Ray
   public Ray(Vector3D origin, Vector3D direction)
   {
      _origin = origin;
-     _direction = new Vector3D(direction.normalized());
+     _direction = direction.normalized();
   }
 
   public void dispose()
