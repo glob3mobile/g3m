@@ -5,8 +5,6 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.TimeInterval;
 
-import android.os.SystemClock;
-
 
 public final class Timer_Android
          extends
@@ -16,38 +14,37 @@ public final class Timer_Android
 
 
    Timer_Android() {
-      //start();
-      _startTimeInMilliseconds = SystemClock.uptimeMillis();
+      _startTimeInMilliseconds = System.currentTimeMillis();
    }
 
 
    @Override
    public TimeInterval now() {
-      return TimeInterval.fromMilliseconds(SystemClock.uptimeMillis());
+      return TimeInterval.fromMilliseconds(System.currentTimeMillis());
    }
 
 
    @Override
    public long nowInMilliseconds() {
-      return SystemClock.uptimeMillis();
+      return System.currentTimeMillis();
    }
 
 
    @Override
    public void start() {
-      _startTimeInMilliseconds = SystemClock.uptimeMillis();
+      _startTimeInMilliseconds = System.currentTimeMillis();
    }
 
 
    @Override
    public TimeInterval elapsedTime() {
-      return TimeInterval.fromMilliseconds(SystemClock.uptimeMillis() - _startTimeInMilliseconds);
+      return TimeInterval.fromMilliseconds(System.currentTimeMillis() - _startTimeInMilliseconds);
    }
 
 
    @Override
    public long elapsedTimeInMilliseconds() {
-      return SystemClock.uptimeMillis() - _startTimeInMilliseconds;
+      return System.currentTimeMillis() - _startTimeInMilliseconds;
    }
 
 

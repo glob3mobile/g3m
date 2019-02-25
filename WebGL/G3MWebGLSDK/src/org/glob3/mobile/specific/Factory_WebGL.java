@@ -16,8 +16,8 @@ import org.glob3.mobile.generated.URL;
 
 
 public final class Factory_WebGL
-   extends
-      IFactory {
+         extends
+            IFactory {
 
 
    @Override

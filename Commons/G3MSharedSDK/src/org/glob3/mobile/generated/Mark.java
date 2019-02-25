@@ -1034,12 +1034,17 @@ public class Mark implements SurfaceElevationListener
 
   public final void setTextureCoordinatesTransformation(Vector2F translation, Vector2F scaling)
   {
+    setTextureCoordinatesTransformation(translation._x, translation._y, scaling._x, scaling._y);
+  }
+
+  public final void setTextureCoordinatesTransformation(float translationX, float translationY, float scalingX, float scalingY)
+  {
   
-    _translationTCX = translation._x;
-    _translationTCY = translation._y;
+    _translationTCX = translationX;
+    _translationTCY = translationY;
   
-    _scalingTCX = scaling._x;
-    _scalingTCY = scaling._y;
+    _scalingTCX = scalingX;
+    _scalingTCY = scalingY;
   
     if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1)
     {

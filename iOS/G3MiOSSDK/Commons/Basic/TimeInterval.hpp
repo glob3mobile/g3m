@@ -31,19 +31,19 @@ public:
   }
 
   static TimeInterval fromSeconds(const double seconds) {
-    return TimeInterval::fromMilliseconds((long long) (seconds * 1000.0));
+    return fromMilliseconds((long long) (seconds * 1000.0));
   }
 
   static TimeInterval fromMinutes(const double minutes) {
-    return TimeInterval::fromSeconds(minutes * 60.0);
+    return fromSeconds(minutes * 60.0);
   }
 
   static TimeInterval fromHours(const double hours) {
-    return TimeInterval::fromMinutes(hours * 60.0);
+    return fromMinutes(hours * 60.0);
   }
 
   static TimeInterval fromDays(const double days) {
-    return TimeInterval::fromHours(days * 24.0);
+    return fromHours(days * 24.0);
   }
 
   static TimeInterval forever();

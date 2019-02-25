@@ -2,13 +2,14 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.TimeInterval;
 
 
 public final class Timer_WebGL
-   extends
-      ITimer {
+         extends
+            ITimer {
 
    private long _startTimeInMilliseconds;
 

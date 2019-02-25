@@ -383,6 +383,11 @@ public:
   void setTextureCoordinatesTransformation(const Vector2F& translation,
                                            const Vector2F& scaling);
   
+  void setTextureCoordinatesTransformation(const float translationX,
+                                           const float translationY,
+                                           const float scalingX,
+                                           const float scalingY);
+
   void setMarkAnchor(float anchorU, float anchorV);
 
   void setToken(const std::string& token) {
@@ -410,37 +415,46 @@ class TextureAtlasMarkAnimationTask: public PeriodicalTask{
   
   class TextureAtlasMarkAnimationGTask: public GTask{
     Mark* _mark;
-    int _cols;
-    int _rows;
-    int _nFrames;
-    
+
+    const int _cols;
+    const int _rows;
+    const int _nFrames;
+    const float _scaleX;
+    const float _scaleY;
+
     int _currentFrame;
     
-    float _scaleX;
-    float _scaleY;
   public:
     
     ~TextureAtlasMarkAnimationGTask() {}
     
-    TextureAtlasMarkAnimationGTask(Mark* mark, int nColumn, int nRows, int nFrames):
-    _mark(mark), _currentFrame(0), _cols(nColumn), _rows(nRows), _nFrames(nFrames)
+    TextureAtlasMarkAnimationGTask(Mark* mark,
+                                   int cols,
+                                   int rows,
+                                   int nFrames):
+    _mark(mark),
+    _cols(cols),
+    _rows(rows),
+    _nFrames(nFrames),
+    _scaleX(1.0f / cols),
+    _scaleY(1.0f / rows),
+    _currentFrame(0)
     {
       //    _mark->setOnScreenSize(Vector2F(100,100));
-      
-      _scaleX = 1.0f / _cols;
-      _scaleY = 1.0f / _rows;
     }
     
     
     virtual void run(const G3MContext* context) {
-      int row = _currentFrame / _cols;
-      int col = _currentFrame % _cols;
+      const int row = _currentFrame / _cols;
+      const int col = _currentFrame % _cols;
       
-      float transX = col * (1.0f / _cols);
-      float transY = row * (1.0f / _rows);
-      //        printf("FRAME:%d, R:%d, C:%d -> %f %f\n", _currentFrame, row, col, transX, transY);
-      
-      _mark->setTextureCoordinatesTransformation(Vector2F(transX,transY), Vector2F(_scaleX, _scaleY));
+      const float translationX = col * (1.0f / _cols);
+      const float translationY = row * (1.0f / _rows);
+
+      _mark->setTextureCoordinatesTransformation(translationX,
+                                                 translationY,
+                                                 _scaleX,
+                                                 _scaleY);
       _currentFrame = (_currentFrame+1) % _nFrames;
     }
     

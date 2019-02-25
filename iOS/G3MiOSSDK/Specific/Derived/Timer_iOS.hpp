@@ -12,9 +12,9 @@
 
 class Timer_iOS : public ITimer {
 private:
-  double _startedInSeconds;
-  
-  double nowInSeconds() const {
+  double _startTimeInSeconds;
+
+  static double nowInSeconds() {
     return CACurrentMediaTime();
   }
   
@@ -33,15 +33,15 @@ public:
   }
 
   void start() {
-    _startedInSeconds = nowInSeconds();
+    _startTimeInSeconds = nowInSeconds();
   }
   
   TimeInterval elapsedTime() const {
-    return TimeInterval::fromSeconds(nowInSeconds() - _startedInSeconds);
+    return TimeInterval::fromSeconds(nowInSeconds() - _startTimeInSeconds);
   }
 
   long long elapsedTimeInMilliseconds() const {
-    return (long long) ((nowInSeconds() - _startedInSeconds) * 1000.0);
+    return (long long) ((nowInSeconds() - _startTimeInSeconds) * 1000.0);
   }
 
 };

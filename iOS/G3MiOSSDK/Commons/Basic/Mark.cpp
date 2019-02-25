@@ -946,12 +946,22 @@ void Mark::setOnScreenSizeOnProportionToImage(float width, float height) {
 
 void Mark::setTextureCoordinatesTransformation(const Vector2F& translation,
                                                const Vector2F& scaling) {
+  setTextureCoordinatesTransformation(translation._x,
+                                      translation._y,
+                                      scaling._x,
+                                      scaling._y);
+}
 
-  _translationTCX = translation._x;
-  _translationTCY = translation._y;
+void Mark::setTextureCoordinatesTransformation(const float translationX,
+                                               const float translationY,
+                                               const float scalingX,
+                                               const float scalingY) {
 
-  _scalingTCX = scaling._x;
-  _scalingTCY = scaling._y;
+  _translationTCX = translationX;
+  _translationTCY = translationY;
+
+  _scalingTCX = scalingX;
+  _scalingTCY = scalingY;
 
   if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1) {
     _hasTCTransformations = true;

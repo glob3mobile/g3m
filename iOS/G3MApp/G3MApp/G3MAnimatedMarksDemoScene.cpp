@@ -103,7 +103,8 @@ void G3MAnimatedMarksDemoScene::rawActivate(const G3MContext* context) {
   }
   
   
-  Geodetic3D canarias[] = { Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
+  Geodetic3D canarias[] = {
+    Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
     Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
     Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
     Geodetic3D::fromDegrees(28.467706, -16.251426, 0),

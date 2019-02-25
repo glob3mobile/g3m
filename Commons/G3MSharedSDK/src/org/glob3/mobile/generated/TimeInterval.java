@@ -38,22 +38,22 @@ public class TimeInterval
 
   public static TimeInterval fromSeconds(double seconds)
   {
-    return TimeInterval.fromMilliseconds((long)(seconds * 1000.0));
+    return fromMilliseconds((long)(seconds * 1000.0));
   }
 
   public static TimeInterval fromMinutes(double minutes)
   {
-    return TimeInterval.fromSeconds(minutes * 60.0);
+    return fromSeconds(minutes * 60.0);
   }
 
   public static TimeInterval fromHours(double hours)
   {
-    return TimeInterval.fromMinutes(hours * 60.0);
+    return fromMinutes(hours * 60.0);
   }
 
   public static TimeInterval fromDays(double days)
   {
-    return TimeInterval.fromHours(days * 24.0);
+    return fromHours(days * 24.0);
   }
 
   public static TimeInterval forever()
