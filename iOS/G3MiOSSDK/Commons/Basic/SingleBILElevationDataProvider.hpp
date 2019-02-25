@@ -58,12 +58,7 @@ private:
 
   ElevationData* _elevationData;
   bool _elevationDataResolved;
-#ifdef C_CODE
   const URL _bilUrl;
-#endif
-#ifdef JAVA_CODE
-  private final URL _bilUrl;
-#endif
   const Sector _sector;
   const int _extentWidth;
   const int _extentHeight;

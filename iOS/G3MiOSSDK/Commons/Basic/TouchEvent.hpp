@@ -15,14 +15,8 @@
 
 class Touch {
 private:
-#ifdef C_CODE
-  const Vector2F _pos;
-  const Vector2F _prevPos;
-#endif
-#ifdef JAVA_CODE
-  private final Vector2F _pos;
-  private final Vector2F _prevPos;
-#endif
+  const Vector2F      _pos;
+  const Vector2F      _prevPos;
   const unsigned char _tapCount;
 
 public:
@@ -30,7 +24,9 @@ public:
   _pos(other._pos),
   _prevPos(other._prevPos),
   _tapCount(other._tapCount)
-  {}
+  {
+
+  }
 
   Touch(const Vector2F& pos,
         const Vector2F& prev,
@@ -38,7 +34,9 @@ public:
   _pos(pos),
   _prevPos(prev),
   _tapCount(tapCount)
-  { }
+  {
+
+  }
 
   const Vector2F getPos() const { return _pos; }
   const Vector2F getPrevPos() const { return _prevPos; }
@@ -68,7 +66,7 @@ private:
 
 
   TouchEvent(const TouchEventType& type,
-             const std::vector<const Touch*> touchs,
+             const std::vector<const Touch*>& touchs,
              bool shift,
              bool ctrl,
              double wheelDelta) :
@@ -86,16 +84,17 @@ public:
   _touchs(other._touchs),
   _shiftPressed(other._shiftPressed),
   _ctrlPressed(other._ctrlPressed),
-  _wheelDelta(other._wheelDelta) {
+  _wheelDelta(other._wheelDelta)
+  {
   }
 
   static TouchEvent* create(const TouchEventType& type,
-                            const std::vector<const Touch*> touchs) {
+                            const std::vector<const Touch*>& touchs) {
     return new TouchEvent(type, touchs, false, false, 0.0);
   }
 
   static TouchEvent* create(const TouchEventType& type,
-                            const std::vector<const Touch*> touchs,
+                            const std::vector<const Touch*>& touchs,
                             bool shift,
                             bool ctrl,
                             double wheelDelta) {

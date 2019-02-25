@@ -23,12 +23,7 @@ private:
   class ImageListener : public IImageListener {
   private:
     const std::string           _tileID;
-#ifdef C_CODE
     const TileImageContribution* _contribution;
-#endif
-#ifdef JAVA_CODE
-    private final TileImageContribution _contribution;
-#endif
 
     TileImageListener*          _listener;
     bool                        _deleteListener;
@@ -47,12 +42,7 @@ private:
 
   };
   
-#ifdef C_CODE
   const GFont _font;
-#endif
-#ifdef JAVA_CODE
-  private final GFont _font;
-#endif
   const Color _color;
   
   const bool _showIDLabel;

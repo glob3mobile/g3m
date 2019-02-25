@@ -16,16 +16,10 @@
 
 class DownloaderImageBuilder : public AbstractImageBuilder {
 private:
-#ifdef C_CODE
   const URL          _url;
   const TimeInterval _timeToCache;
-#endif
-#ifdef JAVA_CODE
-  private final URL          _url;
-  private final TimeInterval _timeToCache;
-#endif
-  const long long _priority;
-  const bool      _readExpired;
+  const long long    _priority;
+  const bool         _readExpired;
 
 
 public:

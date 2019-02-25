@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public class DownloaderImageBuilder extends AbstractImageBuilder
 {
-  private final URL          _url;
+  private final URL _url;
   private final TimeInterval _timeToCache;
   private final long _priority;
   private final boolean _readExpired;
@@ -29,7 +29,7 @@ public class DownloaderImageBuilder extends AbstractImageBuilder
   {
      _url = url;
      _priority = DownloadPriority.MEDIUM;
-     _timeToCache = TimeInterval.fromDays(30);
+     _timeToCache = new TimeInterval(TimeInterval.fromDays(30));
      _readExpired = true;
   }
 

@@ -65,7 +65,7 @@ public class CachedDownloader extends IDownloader
   
       if (_lastImageURL != null)
          _lastImageURL.dispose();
-      _lastImageURL = new URL(url);
+      _lastImageURL = url;
     }
   
     return new IImageResult(cachedImage, cachedImageResult._expired);

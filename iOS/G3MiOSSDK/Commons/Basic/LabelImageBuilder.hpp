@@ -23,23 +23,13 @@ class ImageBackground;
 class LabelImageBuilder : public AbstractImageBuilder {
 private:
   std::string _text;
-#ifdef C_CODE
   const GFont _font;
-#endif
-#ifdef JAVA_CODE
-  private final GFont _font;
-#endif
   const Color _color;
   
   const Color _shadowColor;
   const float _shadowBlur;
-#ifdef C_CODE
   const Vector2F _shadowOffset;
-#endif
-#ifdef JAVA_CODE
-  private final Vector2F _shadowOffset;
-#endif
-  
+
   const ImageBackground* _background;
   
   const bool  _isMutable;

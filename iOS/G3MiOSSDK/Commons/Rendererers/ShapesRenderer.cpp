@@ -404,12 +404,11 @@ void ShapesRenderer::loadBSONSceneJS(const URL&                     url,
 class ShapesRenderer_SceneJSParserAsyncTask : public GAsyncTask {
 private:
   ShapesRenderer*    _shapesRenderer;
-#ifdef C_CODE
   const URL                     _url;
+#ifdef C_CODE
   const SceneJSParserParameters _parameters;
 #endif
 #ifdef JAVA_CODE
-  private final URL                     _url;
   private final SceneJSParserParameters _parameters;
 #endif
   IByteBuffer*       _buffer;

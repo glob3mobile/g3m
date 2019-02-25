@@ -27,7 +27,7 @@ public class TextCanvasElement extends CanvasElement
   public TextCanvasElement(String text, GFont font, Color color)
   {
      _text = text;
-     _font = new GFont(font);
+     _font = font;
      _color = new Color(color);
 
   }

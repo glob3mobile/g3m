@@ -22,14 +22,8 @@ class SimpleTextureMapping;
 
 class MultiTexturedHUDQuadWidget : public HUDWidget {
 private:
-#ifdef C_CODE
   const URL _imageURL1;
   const URL _imageURL2;
-#endif
-#ifdef JAVA_CODE
-  private final URL _imageURL1;
-  private final URL _imageURL2;
-#endif
 
   const HUDPosition* _x;
   const HUDPosition* _y;

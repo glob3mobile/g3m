@@ -123,7 +123,7 @@ public class QuadShape extends AbstractMeshShape
   public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, URL textureURL, float width, float height, boolean withNormals)
   {
      super(position, altitudeMode);
-     _textureURL = new URL(textureURL);
+     _textureURL = textureURL;
      _width = width;
      _height = height;
      _textureRequested = false;

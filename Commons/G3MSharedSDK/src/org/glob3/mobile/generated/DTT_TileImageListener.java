@@ -12,7 +12,7 @@ public class DTT_TileImageListener extends TileImageListener
   private final IImage _backgroundTileImage;
   private final String _backgroundTileImageName;
 
-  private final Vector2S  _tileTextureResolution;
+  private final Vector2S _tileTextureResolution;
 
   public DTT_TileImageListener(DTT_TileTextureBuilder builder, Tile tile, Vector2S tileTextureResolution, IImage backgroundTileImage, String backgroundTileImageName)
   {

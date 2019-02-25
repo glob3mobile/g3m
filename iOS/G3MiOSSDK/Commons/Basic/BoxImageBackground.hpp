@@ -34,20 +34,10 @@ class BoxImageBackground : public ImageBackground {
 private:
   BoxImageBackground(const BoxImageBackground& that);
 
-#ifdef C_CODE
   const Vector2F _margin;
-#endif
-#ifdef JAVA_CODE
-  private final Vector2F _margin;
-#endif
   const float _borderWidth;
   const Color _borderColor;
-#ifdef C_CODE
   const Vector2F _padding;
-#endif
-#ifdef JAVA_CODE
-  private final Vector2F _padding;
-#endif
   const Color _backgroundColor;
   const float _cornerRadius;
 

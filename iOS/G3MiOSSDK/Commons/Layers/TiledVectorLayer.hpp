@@ -30,15 +30,10 @@ private:
 #ifdef JAVA_CODE
   private GEORasterSymbolizer _symbolizer;
 #endif
-  const std::string          _urlTemplate;
-  const Sector               _dataSector;
-#ifdef C_CODE
+  const std::string  _urlTemplate;
+  const Sector       _dataSector;
   const TimeInterval _timeToCache;
-#endif
-#ifdef JAVA_CODE
-  private final TimeInterval _timeToCache;
-#endif
-  const bool                 _readExpired;
+  const bool         _readExpired;
 
 #ifdef C_CODE
   mutable const IMathUtils*   _mu;

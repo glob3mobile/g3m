@@ -159,7 +159,7 @@ public abstract class ICanvas
   {
     if (_currentFont != null)
        _currentFont.dispose();
-    _currentFont = new GFont(font);
+    _currentFont = font;
     _setFont(font);
   }
 

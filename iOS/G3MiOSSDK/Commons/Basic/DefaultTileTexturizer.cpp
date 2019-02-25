@@ -43,12 +43,7 @@ private:
   float _scaleV;
 
   const TileTessellator* _tessellator;
-#ifdef C_CODE
   const Vector2S _resolution;
-#endif
-#ifdef JAVA_CODE
-  private final Vector2S _resolution;
-#endif
 
 public:
   DTT_LTMInitializer(const Vector2S& resolution,
@@ -120,12 +115,7 @@ private:
   const IImage*           _backgroundTileImage;
   const std::string       _backgroundTileImageName;
 
-#ifdef C_CODE
   const Vector2S          _tileTextureResolution;
-#endif
-#ifdef JAVA_CODE
-  private final Vector2S  _tileTextureResolution;
-#endif
 
 public:
   DTT_TileImageListener(DTT_TileTextureBuilder* builder,
@@ -157,12 +147,7 @@ private:
   const std::string    _tileID;
   TileImageProvider*   _tileImageProvider;
   TexturesHandler*     _texturesHandler;
-#ifdef C_CODE
   const Vector2S       _tileTextureResolution;
-#endif
-#ifdef JAVA_CODE
-  private final Vector2S _tileTextureResolution;
-#endif
   const bool          _logTilesPetitions;
   const long long     _tileTextureDownloadPriority;
   bool                _canceled;

@@ -1,10 +1,8 @@
 package org.glob3.mobile.generated;
 public class WMSLayer extends RasterLayer
 {
-
   private final URL _mapServerURL;
   private final URL _queryServerURL;
-
   private final String _mapLayer;
   private final WMSServerVersion _mapServerVersion;
   private final String _queryLayer;

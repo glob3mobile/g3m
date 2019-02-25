@@ -64,12 +64,7 @@ public:
     const bool              _deleteHandler;
     IByteBuffer*            _buffer;
     const Sector            _sector;
-#ifdef C_CODE
     const Vector2I          _extent;
-#endif
-#ifdef JAVA_CODE
-    private final Vector2I  _extent;
-#endif
     const short             _noDataValue;
     const double            _deltaHeight;
 
@@ -98,12 +93,7 @@ public:
   class BufferDownloadListener : public IBufferDownloadListener {
   private:
     const Sector            _sector;
-#ifdef C_CODE
     const Vector2I          _extent;
-#endif
-#ifdef JAVA_CODE
-    private final Vector2I  _extent;
-#endif
     const short             _noDataValue;
     const double            _deltaHeight;
     BILDownloader::Handler* _handler;

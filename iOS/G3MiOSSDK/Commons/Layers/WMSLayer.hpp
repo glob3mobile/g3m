@@ -20,16 +20,8 @@ enum WMSServerVersion {
 
 class WMSLayer: public RasterLayer {
 private:
-
-#ifdef C_CODE
-  const URL _mapServerURL;
-  const URL _queryServerURL;
-#endif
-#ifdef JAVA_CODE
-  private final URL _mapServerURL;
-  private final URL _queryServerURL;
-#endif
-
+  const URL              _mapServerURL;
+  const URL              _queryServerURL;
   const std::string      _mapLayer;
   const WMSServerVersion _mapServerVersion;
   const std::string      _queryLayer;

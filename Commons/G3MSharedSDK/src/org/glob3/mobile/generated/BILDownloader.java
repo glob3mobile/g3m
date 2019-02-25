@@ -61,7 +61,7 @@ public class BILDownloader
     private final boolean _deleteHandler;
     private IByteBuffer _buffer;
     private final Sector _sector ;
-    private final Vector2I  _extent;
+    private final Vector2I _extent;
     private final short _noDataValue;
     private final double _deltaHeight;
 
@@ -125,7 +125,7 @@ public class BILDownloader
   public static class BufferDownloadListener extends IBufferDownloadListener
   {
     private final Sector _sector ;
-    private final Vector2I  _extent;
+    private final Vector2I _extent;
     private final short _noDataValue;
     private final double _deltaHeight;
     private BILDownloader.Handler _handler;

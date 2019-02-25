@@ -26,12 +26,7 @@ private:
 
   IStorage* _storage;
 
-#ifdef C_CODE
   const TimeInterval _timeToCache;
-#endif
-#ifdef JAVA_CODE
-  private final TimeInterval _timeToCache;
-#endif
 
 public:
   BufferSaverDownloadListener(CachedDownloader* downloader,
@@ -137,12 +132,7 @@ private:
 
   IStorage* _storage;
 
-#ifdef C_CODE
   const TimeInterval _timeToCache;
-#endif
-#ifdef JAVA_CODE
-  private final TimeInterval _timeToCache;
-#endif
 
 public:
   ImageSaverDownloadListener(CachedDownloader* downloader,

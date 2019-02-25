@@ -477,23 +477,13 @@ private:
 
   class PointCloud {
   private:
-#ifdef C_CODE
     const URL         _serverURL;
-#endif
-#ifdef JAVA_CODE
-    private final URL _serverURL;
-#endif
     const std::string _cloudName;
-    const float _verticalExaggeration;
-    const double _deltaHeight;
+    const float       _verticalExaggeration;
+    const double      _deltaHeight;
 
     const long long    _downloadPriority;
-#ifdef C_CODE
     const TimeInterval _timeToCache;
-#endif
-#ifdef JAVA_CODE
-    private final TimeInterval _timeToCache;
-#endif
     const bool         _readExpired;
 
     PointCloudMetadataListener* _metadataListener;

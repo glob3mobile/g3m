@@ -28,6 +28,7 @@ public class Touch
      _pos = other._pos;
      _prevPos = other._prevPos;
      _tapCount = other._tapCount;
+
   }
 
   public Touch(Vector2F pos, Vector2F prev)
@@ -39,6 +40,7 @@ public class Touch
      _pos = pos;
      _prevPos = prev;
      _tapCount = tapCount;
+
   }
 
   public final Vector2F getPos()

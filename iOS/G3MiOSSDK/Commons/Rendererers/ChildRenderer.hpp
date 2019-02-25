@@ -15,10 +15,10 @@ class ChildRenderer {
 private:
   Renderer* _renderer;
   std::vector<const Info*> _info;
-  
+
 public:
   
-  ChildRenderer(Renderer* renderer):
+  ChildRenderer(Renderer* renderer) :
   _renderer(renderer)
   {
     
@@ -50,4 +50,4 @@ public:
 
 };
 
-#endif /* defined(__G3MiOSSDK__ChildRenderer__) */
+#endif

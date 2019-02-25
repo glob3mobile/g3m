@@ -48,12 +48,7 @@ private:
 
   class GEOJSONBufferRasterizer : public GAsyncTask {
   private:
-#ifdef C_CODE
-    const URL       _url;
-#endif
-#ifdef JAVA_CODE
-    private final URL _url;
-#endif
+    const URL              _url;
     ImageAssembler*        _imageAssembler;
     IByteBuffer*           _buffer;
     const GEOObjectHolder* _geoObjectHolder;

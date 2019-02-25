@@ -598,23 +598,17 @@ public:
   class VectorSet : public RCObject {
   private:
     VectorStreamingRenderer* _renderer;
-#ifdef C_CODE
     const URL _serverURL;
+#ifdef C_CODE
     const VectorSetSymbolizer* _symbolizer;
 #endif
 #ifdef JAVA_CODE
-    private final URL _serverURL;
     private VectorSetSymbolizer _symbolizer;
 #endif
     const std::string          _name;
     const bool                 _deleteSymbolizer;
     const long long            _downloadPriority;
-#ifdef C_CODE
     const TimeInterval         _timeToCache;
-#endif
-#ifdef JAVA_CODE
-    private final TimeInterval _timeToCache;
-#endif
     const bool                 _readExpired;
     const bool                 _verbose;
     const bool                 _haltOnError;

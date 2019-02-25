@@ -248,7 +248,7 @@ public class Mark implements SurfaceElevationListener
   {
      _imageBuilder = null;
      _label = label;
-     _iconURL = new URL(iconURL);
+     _iconURL = iconURL;
      _position = new Geodetic3D(position);
      _altitudeMode = altitudeMode;
      _labelBottom = labelBottom;
@@ -405,7 +405,7 @@ public class Mark implements SurfaceElevationListener
      _imageBuilder = null;
      _label = "";
      _labelBottom = true;
-     _iconURL = new URL(iconURL);
+     _iconURL = iconURL;
      _position = new Geodetic3D(position);
      _altitudeMode = altitudeMode;
      _labelFontSize = 20F;

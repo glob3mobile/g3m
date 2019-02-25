@@ -120,7 +120,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
 
   public DebugTileImageProvider()
   {
-     _font = GFont.monospaced(15);
+     _font = new GFont(GFont.monospaced(15));
      _color = new Color(Color.YELLOW);
      _showIDLabel = true;
      _showSectorLabels = true;
