@@ -282,6 +282,7 @@ _textureHeight(0),
 _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
+_maxDistanceToCamera(0),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL._path + "_" + label ),
@@ -341,6 +342,7 @@ _textureHeight(0),
 _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
+_maxDistanceToCamera(0),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( "_" + label ),
@@ -397,6 +399,7 @@ _textureHeight(0),
 _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
+_maxDistanceToCamera(0),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( iconURL._path + "_" ),
@@ -454,6 +457,7 @@ _textureHeight(image->getHeight()),
 _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
+_maxDistanceToCamera(0),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( imageID ),
@@ -509,6 +513,7 @@ _textureHeight(0),
 _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
+_maxDistanceToCamera(0),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( "" ),
@@ -704,6 +709,14 @@ double Mark::getMinDistanceToCamera() {
   return _minDistanceToCamera;
 }
 
+void Mark::setMaxDistanceToCamera(double maxDistanceToCamera) {
+  _maxDistanceToCamera = maxDistanceToCamera;
+}
+
+double Mark::getMaxDistanceToCamera() {
+  return _maxDistanceToCamera;
+}
+
 void Mark::createGLState(const Planet* planet,
                          IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
@@ -775,14 +788,23 @@ void Mark::render(const G3MRenderContext* rc,
                         markPosition->_y - cameraPosition.y(),
                         markPosition->_z - cameraPosition.z());
 
-  // mark will be renderered only if is renderable by distance and placed on a visible globe area
-  bool renderableByDistance;
-  if (_minDistanceToCamera == 0) {
-    renderableByDistance = true;
-  }
-  else {
-    const double squaredDistanceToCamera = _markCameraVector.squaredLength();
-    renderableByDistance = ( squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera) );
+  bool renderableByDistance = true;
+  {
+    const bool hasMinDistanceToCamera = (_minDistanceToCamera > 0);
+    const bool hasMaxDistanceToCamera = (_maxDistanceToCamera > 0);
+    if (hasMinDistanceToCamera || hasMaxDistanceToCamera) {
+      const double squaredDistanceToCamera = _markCameraVector.squaredLength();
+
+      if (hasMinDistanceToCamera &&
+          (squaredDistanceToCamera > (_minDistanceToCamera * _minDistanceToCamera))) {
+        renderableByDistance = false;
+      }
+
+      if (hasMaxDistanceToCamera &&
+          ( squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera))) {
+        renderableByDistance = false;
+      }
+    }
   }
 
   _renderedMark = false;

@@ -57,6 +57,9 @@ public class Mark implements SurfaceElevationListener
    * Default value: 4.5e+06
    */
   private double _minDistanceToCamera;
+
+  private double _maxDistanceToCamera;
+
   /**
    * The extra data to be stored by the mark.
    * Usefull to store data such us name, URL...
@@ -266,6 +269,7 @@ public class Mark implements SurfaceElevationListener
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
+     _maxDistanceToCamera = 0;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL._path + "_" + label;
@@ -350,6 +354,7 @@ public class Mark implements SurfaceElevationListener
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
+     _maxDistanceToCamera = 0;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = "_" + label;
@@ -422,6 +427,7 @@ public class Mark implements SurfaceElevationListener
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
+     _maxDistanceToCamera = 0;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = iconURL._path + "_";
@@ -494,6 +500,7 @@ public class Mark implements SurfaceElevationListener
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
+     _maxDistanceToCamera = 0;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = imageID;
@@ -565,6 +572,7 @@ public class Mark implements SurfaceElevationListener
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
+     _maxDistanceToCamera = 0;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = "";
@@ -841,6 +849,15 @@ public class Mark implements SurfaceElevationListener
     return _minDistanceToCamera;
   }
 
+  public final void setMaxDistanceToCamera(double maxDistanceToCamera)
+  {
+    _maxDistanceToCamera = maxDistanceToCamera;
+  }
+  public final double getMaxDistanceToCamera()
+  {
+    return _maxDistanceToCamera;
+  }
+
   public final Vector3D getCartesianPosition(Planet planet)
   {
     if (_cartesianPosition == null)
@@ -866,16 +883,26 @@ public class Mark implements SurfaceElevationListener
   
     _markCameraVector.set(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
   
-    // mark will be renderered only if is renderable by distance and placed on a visible globe area
-    boolean renderableByDistance;
-    if (_minDistanceToCamera == 0)
+    boolean renderableByDistance = true;
     {
-      renderableByDistance = true;
-    }
-    else
-    {
-      final double squaredDistanceToCamera = _markCameraVector.squaredLength();
-      renderableByDistance = (squaredDistanceToCamera <= (_minDistanceToCamera * _minDistanceToCamera));
+      final boolean hasMinDistanceToCamera = (_minDistanceToCamera > 0);
+      final boolean hasMaxDistanceToCamera = (_maxDistanceToCamera > 0);
+      if (hasMinDistanceToCamera || hasMaxDistanceToCamera)
+      {
+        final double squaredDistanceToCamera = _markCameraVector.squaredLength();
+  
+        if (hasMinDistanceToCamera && (squaredDistanceToCamera > (_minDistanceToCamera * _minDistanceToCamera)))
+        {
+          renderableByDistance = false;
+        }
+        else
+        {
+          if (hasMaxDistanceToCamera && (squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera)))
+          {
+            renderableByDistance = false;
+          }
+        }
+      }
     }
   
     _renderedMark = false;

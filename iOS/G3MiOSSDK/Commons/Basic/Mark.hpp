@@ -113,6 +113,9 @@ private:
    * Default value: 4.5e+06
    */
   double      _minDistanceToCamera;
+
+  double      _maxDistanceToCamera;
+
   /**
    * The extra data to be stored by the mark.
    * Usefull to store data such us name, URL...
@@ -355,6 +358,9 @@ public:
 
   void setMinDistanceToCamera(double minDistanceToCamera);
   double getMinDistanceToCamera();
+
+  void setMaxDistanceToCamera(double maxDistanceToCamera);
+  double getMaxDistanceToCamera();
 
   Vector3D* getCartesianPosition(const Planet* planet);
 
