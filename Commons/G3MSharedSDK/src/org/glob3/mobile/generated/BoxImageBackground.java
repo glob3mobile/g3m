@@ -50,9 +50,9 @@ public class BoxImageBackground extends ImageBackground
   {
      _margin = margin;
      _borderWidth = borderWidth;
-     _borderColor = new Color(borderColor);
+     _borderColor = borderColor;
      _padding = padding;
-     _backgroundColor = new Color(backgroundColor);
+     _backgroundColor = backgroundColor;
      _cornerRadius = cornerRadius;
   
   }

@@ -64,7 +64,7 @@ public class GEOLabelRasterSymbol extends GEORasterSymbol
      _position = new Geodetic2D(position);
      _label = label;
      _font = font;
-     _color = new Color(color);
+     _color = color;
      _sector = null;
   }
 

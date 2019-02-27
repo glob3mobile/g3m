@@ -86,7 +86,7 @@ public class CircleShape extends AbstractMeshShape
   {
      super(position, altitudeMode);
      _radius = radius;
-     _color = new Color(color);
+     _color = color;
      _steps = steps;
      _useNormals = useNormals;
 

@@ -625,7 +625,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     if (_backgroundColor != null)
        _backgroundColor.dispose();
   
-    _backgroundColor = new Color(backgroundColor);
+    _backgroundColor = backgroundColor;
   }
   public final Color getBackgroundColor()
   {
@@ -875,7 +875,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
      _frustumPolicy = frustumPolicy;
      _currentCamera = new Camera(1, frustumPolicy.copy());
      _nextCamera = new Camera(2, frustumPolicy.copy());
-     _backgroundColor = new Color(backgroundColor);
+     _backgroundColor = backgroundColor;
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;
      _totalRenderTime = 0;

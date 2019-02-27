@@ -36,8 +36,8 @@ public class ChessboardTileImageProvider extends TileImageProvider
 
   public ChessboardTileImageProvider(Color backgroundColor, Color boxColor, int splits)
   {
-     _backgroundColor = new Color(backgroundColor);
-     _boxColor = new Color(boxColor);
+     _backgroundColor = backgroundColor;
+     _boxColor = boxColor;
      _splits = splits;
      _image = null;
   }

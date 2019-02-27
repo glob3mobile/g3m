@@ -26,7 +26,7 @@ public class GEOLine2DStyle extends GEOStyle
 
   public GEOLine2DStyle(Color color, float width)
   {
-     _color = new Color(color);
+     _color = color;
      _width = width;
 
   }

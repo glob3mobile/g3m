@@ -121,7 +121,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   public DebugTileImageProvider()
   {
      _font = new GFont(GFont.monospaced(15));
-     _color = new Color(Color.YELLOW);
+     _color = Color.YELLOW;
      _showIDLabel = true;
      _showSectorLabels = true;
      _showTileBounds = true;
@@ -130,7 +130,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   public DebugTileImageProvider(GFont font, Color color, boolean showIDLabel, boolean showSectorLabels, boolean showTileBounds)
   {
      _font = font;
-     _color = new Color(color);
+     _color = color;
      _showIDLabel = showIDLabel;
      _showSectorLabels = showSectorLabels;
      _showTileBounds = showTileBounds;

@@ -44,7 +44,7 @@ public class CircleImageBuilder extends CanvasImageBuilder
   public CircleImageBuilder(Color color, int radius)
   {
      super(radius *2 + 2, radius *2 + 2, true);
-     _color = new Color(color);
+     _color = color;
      _radius = radius;
   
   }

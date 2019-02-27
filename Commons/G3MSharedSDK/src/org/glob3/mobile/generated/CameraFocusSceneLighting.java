@@ -20,8 +20,8 @@ public class CameraFocusSceneLighting extends SceneLighting
 
   public CameraFocusSceneLighting(Color ambient, Color diffuse)
   {
-     _ambientColor = new Color(ambient);
-     _diffuseColor = new Color(diffuse);
+     _ambientColor = ambient;
+     _diffuseColor = diffuse;
      _cameraDirX = 0;
      _cameraDirY = 0;
      _cameraDirZ = 0;

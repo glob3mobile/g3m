@@ -24,12 +24,12 @@ public class GEO2DSurfaceRasterStyle
 
   public GEO2DSurfaceRasterStyle(Color color)
   {
-     _color = new Color(color);
+     _color = color;
   }
 
   public GEO2DSurfaceRasterStyle(GEO2DSurfaceRasterStyle that)
   {
-     _color = new Color(that._color);
+     _color = that._color;
   }
 
   public final boolean apply(ICanvas canvas)

@@ -63,7 +63,7 @@ public class AtmosphereRenderer extends DefaultRenderer
   //                         1.0f)),
   {
      _blueSky = new Color(Color.fromRGBA255(135, 206, 235, 255));
-     _darkSpace = new Color(Color.BLACK);
+     _darkSpace = Color.BLACK;
      _minHeight = 8000.0;
      _previousBackgroundColor = null;
      _overPrecisionThreshold = true;

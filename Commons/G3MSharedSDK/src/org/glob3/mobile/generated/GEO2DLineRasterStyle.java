@@ -31,7 +31,7 @@ public class GEO2DLineRasterStyle
 
   public GEO2DLineRasterStyle(Color color, float width, StrokeCap cap, StrokeJoin join, float miterLimit, float[] dashLengths, int dashCount, int dashPhase)
   {
-     _color = new Color(color);
+     _color = color;
      _width = width;
      _cap = cap;
      _join = join;
@@ -55,7 +55,7 @@ public class GEO2DLineRasterStyle
 
   public GEO2DLineRasterStyle(GEO2DLineRasterStyle that)
   {
-     _color = new Color(that._color);
+     _color = that._color;
      _width = that._width;
      _cap = that._cap;
      _join = that._join;

@@ -28,7 +28,7 @@ public class TextCanvasElement extends CanvasElement
   {
      _text = text;
      _font = font;
-     _color = new Color(color);
+     _color = color;
 
   }
 

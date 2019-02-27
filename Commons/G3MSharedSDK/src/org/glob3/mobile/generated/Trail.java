@@ -280,7 +280,7 @@ public class Trail
 
     public Segment(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double visibleAlpha)
     {
-       _color = new Color(color);
+       _color = color;
        _ribbonWidth = ribbonWidth;
        _depthTest = depthTest;
        _polygonOffsetFill = polygonOffsetFill;
@@ -430,7 +430,7 @@ public class Trail
   public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight, int maxPositionsPerSegment)
   {
      _visible = true;
-     _color = new Color(color);
+     _color = color;
      _ribbonWidth = ribbonWidth;
      _depthTest = depthTest;
      _polygonOffsetFill = polygonOffsetFill;

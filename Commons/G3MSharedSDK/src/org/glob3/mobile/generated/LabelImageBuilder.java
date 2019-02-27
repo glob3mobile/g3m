@@ -75,8 +75,8 @@ public class LabelImageBuilder extends AbstractImageBuilder
   {
      _text = text;
      _font = font;
-     _color = new Color(color);
-     _shadowColor = new Color(shadowColor);
+     _color = color;
+     _shadowColor = shadowColor;
      _shadowBlur = shadowBlur;
      _shadowOffset = shadowOffset;
      _background = (background == null) ? new NullImageBackground() : background;

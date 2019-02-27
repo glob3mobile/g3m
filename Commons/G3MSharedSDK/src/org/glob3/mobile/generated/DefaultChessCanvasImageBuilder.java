@@ -70,8 +70,8 @@ public class DefaultChessCanvasImageBuilder extends CanvasImageBuilder
   public DefaultChessCanvasImageBuilder(int width, int height, Color backgroundColor, Color boxColor, int splits)
   {
      super(width, height, false);
-     _backgroundColor = new Color(backgroundColor);
-     _boxColor = new Color(boxColor);
+     _backgroundColor = backgroundColor;
+     _boxColor = boxColor;
      _splits = splits;
   }
 

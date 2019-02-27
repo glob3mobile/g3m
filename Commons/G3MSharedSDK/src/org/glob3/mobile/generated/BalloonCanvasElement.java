@@ -50,7 +50,7 @@ public class BalloonCanvasElement extends CanvasElement
   public BalloonCanvasElement(CanvasElement child, Color color, float margin, float radius, float arrowLength, float arrowPointSize)
   {
      _child = child;
-     _color = new Color(color);
+     _color = color;
      _margin = margin;
      _radius = radius;
      _arrowLength = arrowLength;

@@ -59,8 +59,8 @@ public class ChessboardLayer extends ProceduralLayer
   {
      super(parametersVector, transparency, condition, layerInfo);
      _dataSector = new Sector(dataSector);
-     _backgroundColor = new Color(backgroundColor);
-     _boxColor = new Color(boxColor);
+     _backgroundColor = backgroundColor;
+     _boxColor = boxColor;
      _splits = splits;
   }
 
@@ -112,8 +112,8 @@ public class ChessboardLayer extends ProceduralLayer
   {
      super(LayerTilesRenderParameters.createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel), transparency, condition, layerInfo);
      _dataSector = new Sector(dataSector);
-     _backgroundColor = new Color(backgroundColor);
-     _boxColor = new Color(boxColor);
+     _backgroundColor = backgroundColor;
+     _boxColor = boxColor;
      _splits = splits;
   }
 

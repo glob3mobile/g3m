@@ -37,7 +37,7 @@ public class GEOLine2DMeshSymbol extends GEOMeshSymbol
   public GEOLine2DMeshSymbol(java.util.ArrayList<Geodetic2D> coordinates, GEOLine2DStyle style, double deltaHeight)
   {
      _coordinates = coordinates;
-     _lineColor = new Color(style.getColor());
+     _lineColor = style.getColor();
      _lineWidth = style.getWidth();
      _deltaHeight = deltaHeight;
   

@@ -39,7 +39,7 @@ public class FrameImageBackground extends ImageBackground
      _bottomFrameHeight = bottomFrameHeight;
      _leftFrameWidth = leftFrameWidth;
      _rightFrameWidth = rightFrameWidth;
-     _color = new Color(color);
+     _color = color;
   
   }
 

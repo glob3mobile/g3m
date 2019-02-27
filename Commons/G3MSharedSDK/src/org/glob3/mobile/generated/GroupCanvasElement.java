@@ -32,7 +32,7 @@ public abstract class GroupCanvasElement extends CanvasElement
 
   protected GroupCanvasElement(Color color, float margin, float padding, float cornerRadius)
   {
-     _color = new Color(color);
+     _color = color;
      _margin = margin;
      _padding = padding;
      _cornerRadius = cornerRadius;

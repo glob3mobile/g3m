@@ -218,7 +218,7 @@ public class BoxShape extends AbstractMeshShape
      _topQuadric = Quadric.fromPlane(0, 0, 1, -extent._z/2);
      _bottomQuadric = Quadric.fromPlane(0, 0, -1, -extent._z/2);
      _borderWidth = borderWidth;
-     _surfaceColor = new Color(surfaceColor);
+     _surfaceColor = surfaceColor;
      _borderColor = borderColor;
      _useNormals = useNormals;
 
