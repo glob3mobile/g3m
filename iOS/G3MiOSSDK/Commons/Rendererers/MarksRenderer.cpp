@@ -81,6 +81,10 @@ void MarksRenderer::onChangedContext() {
   }
 }
 
+const bool MarksRenderer::hasMarks() const {
+  return !_marks.empty();
+}
+
 void MarksRenderer::addMark(Mark* mark) {
   _marks.push_back(mark);
   if ((_context != NULL) && !_progressiveInitialization) {

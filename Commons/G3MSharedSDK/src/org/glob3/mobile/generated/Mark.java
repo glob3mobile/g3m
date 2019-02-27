@@ -895,12 +895,10 @@ public class Mark implements SurfaceElevationListener
         {
           renderableByDistance = false;
         }
-        else
+  
+        if (hasMaxDistanceToCamera && (squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera)))
         {
-          if (hasMaxDistanceToCamera && (squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera)))
-          {
-            renderableByDistance = false;
-          }
+          renderableByDistance = false;
         }
       }
     }

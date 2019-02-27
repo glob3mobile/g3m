@@ -69,6 +69,8 @@ public:
 
   virtual void render(const G3MRenderContext* rc, GLState* glState);
 
+  const bool hasMarks() const;
+
   void addMark(Mark* mark);
 
   void removeMark(Mark* mark);

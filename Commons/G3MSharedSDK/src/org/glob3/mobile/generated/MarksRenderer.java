@@ -219,6 +219,11 @@ public class MarksRenderer extends DefaultRenderer
     }
   }
 
+  public final boolean hasMarks()
+  {
+    return !_marks.isEmpty();
+  }
+
   public final void addMark(Mark mark)
   {
     _marks.add(mark);
