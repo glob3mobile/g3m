@@ -25,6 +25,20 @@ public final class Timer_Android
 
 
    @Override
+   public TimeInterval fromDaysFromNow(final double days) {
+      final long daysInMilliseconds = Math.round(days //
+                                                 * 24 /* hours */
+                                                 * 60 /* minutes */
+                                                 * 60 /* seconds */
+                                                 * 1000 /* milliseconds */ );
+
+      final long milliseconds = System.currentTimeMillis() + daysInMilliseconds;
+
+      return TimeInterval.fromMilliseconds(milliseconds);
+   }
+
+
+   @Override
    public long nowInMilliseconds() {
       return System.currentTimeMillis();
    }

@@ -28,6 +28,17 @@ public:
     return TimeInterval::fromSeconds(nowInSeconds());
   }
 
+  TimeInterval fromDaysFromNow(const double days) const {
+    const double daysInSeconds = (days
+                                  * 24 /* hours */
+                                  * 60 /* minutes */
+                                  * 60 /* seconds */);
+
+    const double seconds = nowInSeconds() + daysInSeconds;
+
+    return TimeInterval::fromSeconds(seconds);
+  }
+
   long long nowInMilliseconds() const {
     return (long long) (nowInSeconds() * 1000.0);
   }
