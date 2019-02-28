@@ -86,8 +86,8 @@ void SGGeometryNode::createGLState() {
                                                       false,
                                                       0,
                                                       false,
-                                                      Vector2F::zero(),
-                                                      Vector2F::zero()) ,
+                                                      Vector2F::ZERO,
+                                                      Vector2F::ZERO),
                            false);
   }
 }

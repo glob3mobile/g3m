@@ -19,9 +19,10 @@ private:
   Vector2F& operator=(const Vector2F& v);
 
 public:
+  static const Vector2F ZERO;
 
   static Vector2F zero() {
-    return Vector2F(0, 0);
+    return Vector2F::ZERO;
   }
 
   static Vector2F nan();
@@ -36,7 +37,7 @@ public:
   _y(y)
   {
   }
-
+  
   Vector2F(const Vector2F &v) :
   _x(v._x),
   _y(v._y)

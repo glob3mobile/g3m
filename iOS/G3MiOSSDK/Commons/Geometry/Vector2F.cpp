@@ -13,6 +13,8 @@
 #include "IStringBuilder.hpp"
 
 
+const Vector2F Vector2F::ZERO = Vector2F(0, 0);
+
 const double Vector2F::squaredDistanceTo(const Vector2F& that) const {
   const double dx = _x - that._x;
   const double dy = _y - that._y;

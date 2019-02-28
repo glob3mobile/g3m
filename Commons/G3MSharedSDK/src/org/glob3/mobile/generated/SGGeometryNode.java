@@ -43,7 +43,7 @@ public class SGGeometryNode extends SGNode
   
     if (_uv != null)
     {
-      _glState.addGLFeature(new TextureCoordsGLFeature(_uv, 2, 0, false, 0, false, Vector2F.zero(), Vector2F.zero()), false);
+      _glState.addGLFeature(new TextureCoordsGLFeature(_uv, 2, 0, false, 0, false, Vector2F.ZERO, Vector2F.ZERO), false);
     }
   }
 

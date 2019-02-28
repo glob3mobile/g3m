@@ -19,7 +19,7 @@ const Vector2F NullImageBackground::initializeCanvas(ICanvas* canvas,
   canvas->initialize((int) mu->ceil(contentWidth),
                      (int) mu->ceil(contentHeight));
   
-  return Vector2F::zero();
+  return Vector2F::ZERO;
 }
 
 const std::string NullImageBackground::description() const {

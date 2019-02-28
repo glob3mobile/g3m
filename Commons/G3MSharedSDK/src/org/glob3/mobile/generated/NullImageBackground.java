@@ -25,7 +25,7 @@ public class NullImageBackground extends ImageBackground
   
     canvas.initialize((int) mu.ceil(contentWidth), (int) mu.ceil(contentHeight));
   
-    return Vector2F.zero();
+    return Vector2F.ZERO;
   }
 
   public final String description()

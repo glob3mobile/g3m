@@ -197,7 +197,7 @@ public class NonOverlappingMark
       _springVertices.rawPut(2, asp._x);
       _springVertices.rawPut(3, -asp._y);
   
-      _springGLState.addGLFeature(new Geometry2DGLFeature(_springVertices, 2, 0, true, 0, 3.0f, true, 1.0f, Vector2F.zero()), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
+      _springGLState.addGLFeature(new Geometry2DGLFeature(_springVertices, 2, 0, true, 0, 3.0f, true, 1.0f, Vector2F.ZERO), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
   
       _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
       _springGLState.addGLFeature(_springViewportExtentGLFeature, false);

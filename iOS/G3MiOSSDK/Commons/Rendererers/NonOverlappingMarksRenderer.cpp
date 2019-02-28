@@ -358,7 +358,7 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                                          3.0f,            // lineWidth
                                                          true,            // needsPointSize
                                                          1.0f,            // pointSize
-                                                         Vector2F::zero() // translation
+                                                         Vector2F::ZERO   // translation
                                                          ),
                                  false);
 

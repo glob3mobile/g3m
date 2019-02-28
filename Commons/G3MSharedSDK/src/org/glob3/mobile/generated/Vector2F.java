@@ -25,10 +25,11 @@ public class Vector2F
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector2F operator =(Vector2F v);
 
+  public static final Vector2F ZERO = new Vector2F(0, 0);
 
   public static Vector2F zero()
   {
-    return new Vector2F(0, 0);
+    return Vector2F.ZERO;
   }
 
   public static Vector2F nan()
