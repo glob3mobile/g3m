@@ -37,7 +37,7 @@ public:
   _y(y)
   {
   }
-  
+
   Vector2F(const Vector2F &v) :
   _x(v._x),
   _y(v._y)
