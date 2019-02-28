@@ -15,7 +15,7 @@ private:
   double _startTimeInSeconds;
 
   static double nowInSeconds() {
-    return CACurrentMediaTime();
+    return [[NSDate date] timeIntervalSince1970];
   }
   
 public:
