@@ -90,6 +90,7 @@ public class JSONObject extends JSONBaseObject
       return defaultValue;
     }
   
+  
     final JSONBoolean jsBool = jsValue.asBoolean();
     return (jsBool == null) ? defaultValue : jsBool.value();
   }

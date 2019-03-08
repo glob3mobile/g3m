@@ -119,6 +119,14 @@ bool JSONObject::getAsBoolean(const std::string& key,
     return defaultValue;
   }
 
+#ifdef C_CODE
+  // iOS json parser handles booleans as numbers
+  const JSONNumber* jsNumber = jsValue->asNumber();
+  if (jsNumber != NULL) {
+    return (jsNumber->value() != 0);
+  }
+#endif
+
   const JSONBoolean* jsBool = jsValue->asBoolean();
   return (jsBool == NULL) ? defaultValue : jsBool->value();
 }
