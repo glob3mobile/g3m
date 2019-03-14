@@ -96,7 +96,7 @@ private:
   std::vector<Renderer*>*           createDefaultRenderers();
   std::vector<PeriodicalTask*>*     createDefaultPeriodicalTasks();
   Sector                            getShownSector() const;
-  InfoDisplay*                      getInfoDisplay() const;
+  //InfoDisplay*                      getInfoDisplay() const;
 
   FrustumPolicy*                    getFrustumPolicy();
 

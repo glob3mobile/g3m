@@ -61,7 +61,7 @@ private:
   {
   }
 
-  MutableMatrix44D& operator=(const MutableMatrix44D& that);
+//  MutableMatrix44D& operator=(const MutableMatrix44D& that);
 
 
 public:

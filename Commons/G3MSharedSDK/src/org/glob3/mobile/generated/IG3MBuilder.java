@@ -310,10 +310,7 @@ public abstract class IG3MBuilder
     }
     return _shownSector;
   }
-  private InfoDisplay getInfoDisplay()
-  {
-    return _infoDisplay;
-  }
+  //InfoDisplay*                      getInfoDisplay() const;
 
   private FrustumPolicy getFrustumPolicy()
   {
@@ -1164,3 +1161,8 @@ public abstract class IG3MBuilder
     _infoDisplay = infoDisplay;
   }
 }
+//InfoDisplay* IG3MBuilder::getInfoDisplay() const {
+//  return _infoDisplay;
+//}
+
+

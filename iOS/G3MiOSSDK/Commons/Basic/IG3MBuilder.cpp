@@ -958,8 +958,8 @@ void IG3MBuilder::setInfoDisplay(InfoDisplay *infoDisplay) {
   _infoDisplay = infoDisplay;
 }
 
-InfoDisplay* IG3MBuilder::getInfoDisplay() const {
-  return _infoDisplay;
-}
+//InfoDisplay* IG3MBuilder::getInfoDisplay() const {
+//  return _infoDisplay;
+//}
 
 
