@@ -8,8 +8,6 @@
 #ifndef G3MiOSSDK_TimeInterval
 #define G3MiOSSDK_TimeInterval
 
-//#include "IMathUtils.hpp"
-
 
 class TimeInterval {
 private:
@@ -68,7 +66,6 @@ public:
     return _milliseconds == 0;
   }
 
-  
 #ifdef JAVA_CODE
   @Override
   public int hashCode() {
@@ -77,7 +74,6 @@ public:
     result = (prime * result) + (int) (_milliseconds ^ (_milliseconds >>> 32));
     return result;
   }
-
 
   @Override
   public boolean equals(final Object obj) {
@@ -99,6 +95,5 @@ public:
 #endif
 
 };
-
 
 #endif

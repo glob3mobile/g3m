@@ -14,8 +14,6 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "IMathUtils.hpp"
-
 
 public class TimeInterval
 {
@@ -86,7 +84,6 @@ public class TimeInterval
     return _milliseconds == 0;
   }
 
-
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -94,7 +91,6 @@ public class TimeInterval
     result = (prime * result) + (int) (_milliseconds ^ (_milliseconds >>> 32));
     return result;
   }
-
 
   @Override
   public boolean equals(final Object obj) {
