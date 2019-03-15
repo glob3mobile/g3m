@@ -8,25 +8,24 @@
 #include "MutableMatrix44D.hpp"
 
 #include "Matrix44D.hpp"
-#include "Frustum.hpp"
-#include "MutableVector3D.hpp"
-#include "Vector2D.hpp"
-#include "IFloatBuffer.hpp"
-#include "Vector3F.hpp"
-#include "Vector2F.hpp"
+#include "ILogger.hpp"
 #include "IStringBuilder.hpp"
+#include "FrustumData.hpp"
+#include "Vector2D.hpp"
+#include "Vector2F.hpp"
+#include "Vector3F.hpp"
+#include "Angle.hpp"
+#include "IMathUtils.hpp"
+#include "MutableVector3D.hpp"
 #include "Geodetic2D.hpp"
 #include "Geodetic3D.hpp"
-#include "IMathUtils.hpp"
-#include "ILogger.hpp"
-#include "FrustumData.hpp"
 
 
 MutableMatrix44D MutableMatrix44D::TEMP1;
 MutableMatrix44D MutableMatrix44D::TEMP2;
 
 
-MutableMatrix44D::MutableMatrix44D(const MutableMatrix44D &m):
+MutableMatrix44D::MutableMatrix44D(const MutableMatrix44D &m) :
 _isValid(m._isValid)
 {
   _m00 = m._m00;
@@ -55,7 +54,7 @@ _isValid(m._isValid)
   }
 }
 
-MutableMatrix44D::MutableMatrix44D(const Matrix44D &m):
+MutableMatrix44D::MutableMatrix44D(const Matrix44D &m) :
 _isValid(true),
 _matrix44D(NULL)
 {
@@ -102,41 +101,6 @@ const std::string MutableMatrix44D::description() const {
   delete isb;
   return s;
 }
-
-
-
-//MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
-//  if (this != &that) {
-//    _m00 = that._m00;
-//    _m01 = that._m01;
-//    _m02 = that._m02;
-//    _m03 = that._m03;
-//
-//    _m10 = that._m10;
-//    _m11 = that._m11;
-//    _m12 = that._m12;
-//    _m13 = that._m13;
-//
-//    _m20 = that._m20;
-//    _m21 = that._m21;
-//    _m22 = that._m22;
-//    _m23 = that._m23;
-//
-//    _m30 = that._m30;
-//    _m31 = that._m31;
-//    _m32 = that._m32;
-//    _m33 = that._m33;
-//
-//    _isValid = that._isValid;
-//
-//    if (_matrix44D != NULL) {
-//      _matrix44D->_release();
-//      _matrix44D = NULL;
-//    }
-//  }
-//
-//  return *this;
-//}
 
 MutableMatrix44D::~MutableMatrix44D() {
   if (_matrix44D != NULL) {
