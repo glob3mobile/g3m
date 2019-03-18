@@ -8,6 +8,8 @@
 #ifndef G3MiOSSDK_JSONBaseObject
 #define G3MiOSSDK_JSONBaseObject
 
+#include <string>
+
 class JSONObject;
 class JSONArray;
 class JSONBoolean;
@@ -15,8 +17,6 @@ class JSONNumber;
 class JSONString;
 class JSONNull;
 class JSONVisitor;
-
-#include <string>
 
 
 class JSONBaseObject {
@@ -39,9 +39,7 @@ public:
   virtual const JSONBoolean* asBoolean() const;
   virtual const JSONNumber*  asNumber()  const;
   virtual const JSONString*  asString()  const;
-
-  virtual const JSONNull*    asNull() const;
-
+  virtual const JSONNull*    asNull()    const;
 
   virtual JSONBaseObject* deepCopy() const = 0;
 

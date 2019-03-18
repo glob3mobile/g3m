@@ -14,6 +14,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class JSONObject;
 //class JSONArray;
 //class JSONBoolean;
@@ -21,7 +22,6 @@ package org.glob3.mobile.generated;
 //class JSONString;
 //class JSONNull;
 //class JSONVisitor;
-
 
 
 public abstract class JSONBaseObject
@@ -67,13 +67,11 @@ public abstract class JSONBaseObject
     //ILogger::instance()->logError("The requested Object is not of type JSONString!");
     return null;
   }
-
   public JSONNull asNull()
   {
     //ILogger::instance()->logError("The requested Object is not of type JSONNull!");
     return null;
   }
-
 
   public abstract JSONBaseObject deepCopy();
 
