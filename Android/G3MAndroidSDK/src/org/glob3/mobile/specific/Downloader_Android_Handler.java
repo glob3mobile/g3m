@@ -269,7 +269,7 @@ public final class Downloader_Android_Handler {
          }
       }
       catch (final IOException e) {
-         ILogger.instance().logError(TAG + " runWithDownloader: IOException url=" + _g3mURL._path);
+         ILogger.instance().logError(TAG + " runWithDownloader: " + e + ", url=" + _g3mURL._path);
          e.printStackTrace();
       }
       finally {
@@ -322,7 +322,7 @@ public final class Downloader_Android_Handler {
          bis.close();
       }
       catch (final IOException e) {
-         ILogger.instance().logError(TAG + " getData: IOException url=" + _g3mURL._path);
+         ILogger.instance().logError(TAG + " getData: " + e + ", url=" + _g3mURL._path);
          e.printStackTrace();
       }
 
