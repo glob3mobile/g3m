@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0344C5C4221ECE1300600902 /* RampColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0344C5C2221ECE1300600902 /* RampColorizer.cpp */; };
-		0344C5C5221EE9D400600902 /* RampColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0344C5C3221ECE1300600902 /* RampColorizer.hpp */; };
 		0344C5C0221EB25D00600902 /* FrameImageBackground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0344C5BE221EB25D00600902 /* FrameImageBackground.cpp */; };
 		0344C5C1221ECCB600600902 /* FrameImageBackground.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0344C5BF221EB25D00600902 /* FrameImageBackground.hpp */; };
+		0344C5C4221ECE1300600902 /* RampColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0344C5C2221ECE1300600902 /* RampColorizer.cpp */; };
+		0344C5C5221EE9D400600902 /* RampColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0344C5C3221ECE1300600902 /* RampColorizer.hpp */; };
 		349B218A19615EBA00F3397C /* GEORectangleRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */; };
 		349B218B196160F300F3397C /* GEORectangleRasterSymbol.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */; };
 		383BD37D1577EDC00012AC53 /* Logger_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.mm */; };
@@ -1393,10 +1393,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0344C5C2221ECE1300600902 /* RampColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RampColorizer.cpp; path = Commons/Basic/RampColorizer.cpp; sourceTree = "<group>"; };
-		0344C5C3221ECE1300600902 /* RampColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RampColorizer.hpp; path = Commons/Basic/RampColorizer.hpp; sourceTree = "<group>"; };
 		0344C5BE221EB25D00600902 /* FrameImageBackground.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FrameImageBackground.cpp; path = Commons/Basic/FrameImageBackground.cpp; sourceTree = "<group>"; };
 		0344C5BF221EB25D00600902 /* FrameImageBackground.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FrameImageBackground.hpp; path = Commons/Basic/FrameImageBackground.hpp; sourceTree = "<group>"; };
+		0344C5C2221ECE1300600902 /* RampColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RampColorizer.cpp; path = Commons/Basic/RampColorizer.cpp; sourceTree = "<group>"; };
+		0344C5C3221ECE1300600902 /* RampColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = RampColorizer.hpp; path = Commons/Basic/RampColorizer.hpp; sourceTree = "<group>"; };
 		349B218819615EBA00F3397C /* GEORectangleRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEORectangleRasterSymbol.cpp; path = Commons/GEO/GEORectangleRasterSymbol.cpp; sourceTree = "<group>"; };
 		349B218919615EBA00F3397C /* GEORectangleRasterSymbol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEORectangleRasterSymbol.hpp; path = Commons/GEO/GEORectangleRasterSymbol.hpp; sourceTree = "<group>"; };
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
@@ -3555,14 +3555,15 @@
 		D8EEF3AC1577924D003FEB5E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1020;
 			};
 			buildConfigurationList = D8EEF3AF1577924D003FEB5E /* Build configuration list for PBXProject "G3MiOSSDK" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = D8EEF3AA1577924D003FEB5E;
 			productRefGroup = D8EEF3B61577924D003FEB5E /* Products */;
@@ -4035,6 +4036,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
@@ -4092,6 +4094,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
