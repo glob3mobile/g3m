@@ -31,7 +31,7 @@ public final class StringUtils_Android
    @Override
    public ArrayList<String> splitLines(final String string) {
       final String lines[] = string.split("\\r?\\n");
-      final ArrayList<String> result = new ArrayList<String>(lines.length);
+      final ArrayList<String> result = new ArrayList<>(lines.length);
       Collections.addAll(result, lines);
       return result;
    }

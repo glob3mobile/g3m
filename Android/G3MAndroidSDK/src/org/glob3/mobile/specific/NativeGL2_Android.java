@@ -233,7 +233,7 @@ public final class NativeGL2_Android
    @Override
    public ArrayList<IGLTextureID> genTextures(final int count) {
       checkOpenGLThread();
-      final ArrayList<IGLTextureID> result = new ArrayList<IGLTextureID>(count);
+      final ArrayList<IGLTextureID> result = new ArrayList<>(count);
       final int[] textureIds = new int[count];
       GLES20.glGenTextures(count, textureIds, 0);
       for (int i = 0; i < count; i++) {

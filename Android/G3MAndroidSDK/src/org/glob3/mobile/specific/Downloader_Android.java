@@ -34,8 +34,8 @@ public final class Downloader_Android
    private long                                          _requestsCounter     = 0;
    private long                                          _cancelsCounter      = 0;
    private final List<Downloader_Android_WorkerThread>   _workers;
-   private final Map<String, Downloader_Android_Handler> _downloadingHandlers = new HashMap<String, Downloader_Android_Handler>();
-   private final Map<String, Downloader_Android_Handler> _queuedHandlers      = new HashMap<String, Downloader_Android_Handler>();
+   private final Map<String, Downloader_Android_Handler> _downloadingHandlers = new HashMap<>();
+   private final Map<String, Downloader_Android_Handler> _queuedHandlers      = new HashMap<>();
    private final TimeInterval                            _connectTimeout;
    private final TimeInterval                            _readTimeout;
    private final Context                                 _appContext;
@@ -52,7 +52,7 @@ public final class Downloader_Android
                       final Context appContext) {
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _appContext = appContext;
-      _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
+      _workers = new ArrayList<>(maxConcurrentOperationCount);
 
       _connectTimeout = connectTimeout;
       _readTimeout = readTimeout;

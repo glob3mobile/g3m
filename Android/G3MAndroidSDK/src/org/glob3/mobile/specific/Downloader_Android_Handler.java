@@ -44,7 +44,7 @@ public final class Downloader_Android_Handler {
    private long                                         _priority;
    private final URL                                    _g3mURL;
    private java.net.URL                                 _javaURL;
-   private final List<Downloader_Android_ListenerEntry> _listeners = new ArrayList<Downloader_Android_ListenerEntry>();
+   private final List<Downloader_Android_ListenerEntry> _listeners = new ArrayList<>();
 
    private boolean _hasImageListeners;
 

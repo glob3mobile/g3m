@@ -54,3 +54,4 @@ public final class Downloader_WebGL_Handler_WebkitImpl
    }-*/;
 
 }
+

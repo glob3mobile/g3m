@@ -8,7 +8,6 @@ import java.util.Iterator;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.GWT;
@@ -18,9 +17,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class Downloader_WebGL_Handler_DefaultImpl
          implements
             Downloader_WebGL_Handler {
-
-
-   private final static String TAG = "Downloader_WebGL_HandlerImpl ";
 
 
    private long                     _priority;
@@ -44,7 +40,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final String tag) {
       _priority = priority;
       _url = url;
-      _listeners = new ArrayList<ListenerEntry>();
+      _listeners = new ArrayList<>();
       _listeners.add(new ListenerEntry(bufferListener, null, deleteListener, requestID, tag));
       _requestingImage = false;
    }
@@ -59,7 +55,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final String tag) {
       _priority = priority;
       _url = url;
-      _listeners = new ArrayList<ListenerEntry>();
+      _listeners = new ArrayList<>();
       _listeners.add(new ListenerEntry(null, imageListener, deleteListener, requestID, tag));
       _requestingImage = true;
    }
@@ -196,8 +192,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
       else {
          if ((_downloader == null) || _downloader._verboseErrors) {
-            log(LogLevel.ErrorLevel,
-                     ": Error runWithDownloader: statusCode=" + statusCode + ", data=" + data + ", url=" + _url._path);
+            logError("runWithDownloader: statusCode=" + statusCode + ", data=" + data + ", url=" + _url._path);
          }
 
          for (final ListenerEntry listener : _listeners) {
@@ -257,31 +252,16 @@ public class Downloader_WebGL_Handler_DefaultImpl
    }-*/;
 
 
-   public static void log(final LogLevel level,
-                          final String msg) {
+   private static void logError(final String msg) {
       final ILogger logger = ILogger.instance();
       if (logger == null) {
-         GWT.log(TAG + msg);
+         GWT.log(msg);
       }
       else {
-         switch (level) {
-            case InfoLevel:
-               logger.logInfo(TAG + msg);
-               break;
-
-            case WarningLevel:
-               logger.logWarning(TAG + msg);
-               break;
-
-            case ErrorLevel:
-               logger.logError(TAG + msg);
-               break;
-
-            default:
-               break;
-         }
+         logger.logError(msg);
       }
    }
 
 
 }
+

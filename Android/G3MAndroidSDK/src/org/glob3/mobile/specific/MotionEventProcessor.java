@@ -18,8 +18,8 @@ public final class MotionEventProcessor {
    //Stores pointer positions, id and event type
    private static class EventProcessed {
       // LAST EVENT PROCESSED
-      private ArrayList<Integer> _pointersID = new ArrayList<Integer>();
-      private ArrayList<Touch>   _touchs     = new ArrayList<Touch>();
+      private ArrayList<Integer> _pointersID = new ArrayList<>();
+      private ArrayList<Touch>   _touchs     = new ArrayList<>();
       private TouchEventType     _type       = TouchEventType.Down;
 
 

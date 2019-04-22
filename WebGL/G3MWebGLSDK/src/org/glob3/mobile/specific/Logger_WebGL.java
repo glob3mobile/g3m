@@ -12,51 +12,57 @@ import com.google.gwt.regexp.shared.RegExp;
 
 
 public final class Logger_WebGL
-   extends
-      ILogger {
+         extends
+            ILogger {
 
    private final Logger _logger;
+
+   private final boolean _logInfo;
+   private final boolean _logWarning;
+   private final boolean _logError;
 
 
    public Logger_WebGL(final LogLevel level) {
       super(level);
 
       _logger = Logger.getLogger("");
+
+      final int levelValue = _level.getValue();
+      _logInfo = levelValue <= LogLevel.InfoLevel.getValue();
+      _logWarning = levelValue <= LogLevel.WarningLevel.getValue();
+      _logError = levelValue <= LogLevel.ErrorLevel.getValue();
    }
 
 
    @Override
-   public void logInfo(final String x,
-                       final Object... LegacyParamArray) {
-      if (_level.getValue() <= LogLevel.InfoLevel.getValue()) {
-         final String res = stringFormat(x, LegacyParamArray);
-         _logger.log(Level.INFO, res);
+   public void logInfo(final String message,
+                       final Object... args) {
+      if (_logInfo) {
+         _logger.log(Level.INFO, stringFormat(message, args));
       }
    }
 
 
    @Override
-   public void logWarning(final String x,
-                          final Object... LegacyParamArray) {
-      if (_level.getValue() <= LogLevel.WarningLevel.getValue()) {
-         final String res = stringFormat(x, LegacyParamArray);
-         _logger.log(Level.WARNING, res);
+   public void logWarning(final String message,
+                          final Object... args) {
+      if (_logWarning) {
+         _logger.log(Level.WARNING, stringFormat(message, args));
       }
    }
 
 
    @Override
-   public void logError(final String x,
-                        final Object... LegacyParamArray) {
-      if (_level.getValue() <= LogLevel.ErrorLevel.getValue()) {
-         final String res = stringFormat(x, LegacyParamArray);
-         _logger.log(Level.SEVERE, res);
+   public void logError(final String message,
+                        final Object... args) {
+      if (_logError) {
+         _logger.log(Level.SEVERE, stringFormat(message, args));
       }
    }
 
 
-   static public String stringFormat(final String format,
-                                     final Object... args) {
+   private static String stringFormat(final String format,
+                                      final Object... args) {
       final RegExp exp = RegExp.compile("%[sdf]");
       int nextSub = 0;
       String output = "";
@@ -67,7 +73,6 @@ public final class Logger_WebGL
          }
          nextSub++;
       }
-
       return output;
    }
 

@@ -23,8 +23,8 @@ public final class ThreadUtils_Android
    private final ThreadPoolExecutor _backgroundExecutor;
    private boolean                  _paused = false;
 
-   private final List<Runnable> _backgroundQueue     = new ArrayList<Runnable>();
-   private final List<Runnable> _rendererThreadQueue = new ArrayList<Runnable>();
+   private final List<Runnable> _backgroundQueue     = new ArrayList<>();
+   private final List<Runnable> _rendererThreadQueue = new ArrayList<>();
 
 
    public ThreadUtils_Android(final G3MWidget_Android widgetAndroid) {
@@ -39,7 +39,7 @@ public final class ThreadUtils_Android
       }
       _widgetAndroid = widgetAndroid;
 
-      final BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<Runnable>();
+      final BlockingQueue<Runnable> workQueue = new LinkedBlockingDeque<>();
       _backgroundExecutor = new ThreadPoolExecutor(numBackgroundThreads, numBackgroundThreads, 1, TimeUnit.DAYS, workQueue);
    }
 

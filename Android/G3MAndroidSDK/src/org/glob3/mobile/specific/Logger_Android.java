@@ -26,25 +26,25 @@ public final class Logger_Android
 
    @Override
    public void logInfo(final String x,
-                       final Object... legacyParamArray) {
+                       final Object... params) {
 
       if (_level == LogLevel.SilenceLevel) {
          return;
       }
 
       try {
-         final String res = String.format(_locale, x, legacyParamArray);
+         final String res = String.format(_locale, x, params);
          Log.i("Info: ", res);
       }
       catch (final IllegalFormatException e) {
-         Log.e("Info: ", x + " " + Arrays.toString(legacyParamArray));
+         Log.e("Info: ", x + " " + Arrays.toString(params));
       }
    }
 
 
    @Override
    public void logWarning(final String x,
-                          final Object... legacyParamArray) {
+                          final Object... params) {
       if (_level == LogLevel.SilenceLevel) {
          return;
       }
@@ -53,28 +53,28 @@ public final class Logger_Android
       }
 
       try {
-         final String res = String.format(_locale, x, legacyParamArray);
+         final String res = String.format(_locale, x, params);
          Log.w("Warning: ", res);
       }
       catch (final IllegalFormatException e) {
-         Log.e("Warning: ", x + " " + Arrays.toString(legacyParamArray));
+         Log.e("Warning: ", x + " " + Arrays.toString(params));
       }
    }
 
 
    @Override
    public void logError(final String x,
-                        final Object... legacyParamArray) {
+                        final Object... params) {
       if (_level != LogLevel.ErrorLevel) {
          return;
       }
 
       try {
-         final String res = String.format(_locale, x, legacyParamArray);
+         final String res = String.format(_locale, x, params);
          Log.e("Error: ", res);
       }
       catch (final IllegalFormatException e) {
-         Log.e("Error: ", x + " " + Arrays.toString(legacyParamArray));
+         Log.e("Error: ", x + " " + Arrays.toString(params));
       }
 
    }
