@@ -1393,7 +1393,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final int maxNodeDepth = (int) jsonObject.getAsNumber("maxNodeDepth").value();
           final String language = jsonObject.getAsString("language").value();
           final String nameFieldName = jsonObject.getAsString("nameFieldName").value();
-          final String urlFieldName = jsonObject.getAsString("urlFieldName").value();
+          final String urlFieldName = jsonObject.getAsString("urlFieldName", "");
           final MagnitudeMetadata magnitudeMetadata = MagnitudeMetadata.fromJSON(jsonObject.getAsObject("magnitude"));
     
           _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, urlFieldName, magnitudeMetadata);
