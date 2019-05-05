@@ -24,7 +24,7 @@ public class Poly2TriPainting
 
    private static final long    serialVersionUID = 1L;
 
-   private final List<double[]> polygons         = new ArrayList<double[]>();
+   private final List<double[]> polygons         = new ArrayList<>();
 
    double                       maxX             = 10;
    double                       maxY             = 10;

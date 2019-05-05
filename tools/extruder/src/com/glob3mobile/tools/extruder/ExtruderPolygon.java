@@ -75,8 +75,8 @@ public abstract class ExtruderPolygon {
 
             final Wall exteriorWall = createExteriorWall(_lowerHeight);
             final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
-            return new Building(this, getAverage(), roofArea, _minHeight, toVector3DList(data._vertices), roofTriangles,
-                     exteriorWall, interiorWalls, _material, _depthTest);
+            return new Building(this, getAverage(), roofArea, _minHeight, toVector3DList(data._vertices), roofTriangles, exteriorWall, interiorWalls,
+                     _material, _depthTest);
          }
       }
       catch (final NullPointerException e) {
@@ -111,7 +111,7 @@ public abstract class ExtruderPolygon {
    }
 
 
-   private List<Vector3D> toVector3DList(final double[][] vertices) {
+   private static List<Vector3D> toVector3DList(final double[][] vertices) {
       final List<Vector3D> result = new ArrayList<>(vertices.length);
       for (final double[] vertex : vertices) {
          final double x = vertex[0];

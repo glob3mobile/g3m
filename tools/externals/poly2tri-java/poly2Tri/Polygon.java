@@ -27,89 +27,88 @@ public class Polygon {
    /**
     * Was unsigned int! Number of _contours.
     */
-   protected int                            _ncontours       = 0;
+   protected int _ncontours = 0;
 
    /**
     * vector<unsigned int> _nVertices; //
     */
-   protected int[]                          _nVertices       = null;
+   protected int[] _nVertices = null;
 
    /**
     * typedef map<unsigned int, Pointbase*> PointbaseMap; all _vertices ... is needed as normal array, map in C++ code probably
     * because od adding into map ... see _pointsKeys
     */
-   protected HashMap<Integer, Pointbase>    _points          = new HashMap<Integer, Pointbase>();
+   protected HashMap<Integer, Pointbase> _points = new HashMap<>();
 
    /**
     * Initialized in initialize() method ... _number of points doesn't change during iteration - all iteration in C++ code are
     * done from smaller to bigger ... HashMap.keySet().iterator() isn't returning keys in natural order.
     */
-   protected int[]                          _pointsKeys      = null;
+   protected int[] _pointsKeys = null;
 
    /**
     * typedef map<unsigned int, Linebase*> LineMap; all edges
     */
-   protected HashMap<Integer, Linebase>     _edges           = new HashMap<Integer, Linebase>();
+   protected HashMap<Integer, Linebase> _edges = new HashMap<>();
 
    /**
     * See _pointsKeys ... same for _edges. ---{ Today, it's you }--- Terry Pratchett's Death Right now I'm not sure wether _number
     * of edges can't change... ... better call initializeEdgesKeys() all the time ;)
     */
-   protected int[]                          _edgesKeys       = null;
+   protected int[] _edgesKeys = null;
 
    /**
     * typedef priority_queue<Pointbase> PQueue; ... use PointbaseComparatorCoordinatesReverse! (Jakub Gemrot) priority queue for
     * event points
     */
-   private final PriorityQueue<Pointbase>   _qpoints         = new PriorityQueue<Pointbase>(30,
-                                                                      new PointbaseComparatorCoordinatesReverse());
+   private final PriorityQueue<Pointbase> _qpoints = new PriorityQueue<>(30, new PointbaseComparatorCoordinatesReverse());
 
    /**
     * typedef SplayTree<Linebase*, double> EdgeBST; edge binary searching tree (splaytree)
     */
-   private final SplayTree                  _edgebst         = new SplayTree();
+   private final SplayTree _edgebst = new SplayTree();
 
    /**
     * typedef list<Monopoly> Monopolys; typedef list<unsigned int> Monopoly; all monotone polygon piece list;
     */
-   private final List<List<Integer>>        _mpolys          = new ArrayList<List<Integer>>();
+   private final List<List<Integer>> _mpolys = new ArrayList<>();
 
    /**
     * all triangle list; typedef list<Triangle> Triangles; typedef vector<unsigned int> Triangle;
     */
    //   private final List<List<Integer>>        _triangles       = new ArrayList<List<Integer>>();
-   private final List<Triangle>             _triangles       = new ArrayList<Triangle>();
+   private final List<Triangle> _triangles = new ArrayList<>();
 
    /**
     * typedef map<unsigned int, set<unsigned int> > AdjEdgeMap; data for monotone piece searching purpose;
     */
-   private final Map<Integer, Set<Integer>> _startAdjEdgeMap = new HashMap<Integer, Set<Integer>>();
+   private final Map<Integer, Set<Integer>> _startAdjEdgeMap = new HashMap<>();
 
    /**
     * typedef map<unsigned int, Linebase*> LineMap; added diagonals to partition polygon to monotont pieces, not all diagonals of
     * given polygon
     */
-   private final Map<Integer, Linebase>     _diagonals       = new HashMap<Integer, Linebase>();
+   private final Map<Integer, Linebase> _diagonals = new HashMap<>();
 
    /**
     * debug option;
     */
-   private boolean                          _debug           = false;
+   private boolean _debug = false;
 
    /**
     * log file for debug purpose;
     */
-   private FileWriter                       _logfile         = null;
+   private FileWriter _logfile = null;
 
    /**
     * This is used to change key of all items in SplayTree.
     */
-   private final UpdateKey                  updateKey        = new UpdateKey();
+   private final UpdateKey updateKey = new UpdateKey();
 
    /**
     * If _debug == true, file with this _name will be used to log the messages.
     */
-   private String                           _debugFileName   = "polygon_triangulation_log.txt";
+   private String _debugFileName = "polygon_triangulation_log.txt";
 
 
    public HashMap<Integer, Pointbase> points() {
@@ -124,11 +123,11 @@ public class Polygon {
 
    /**
     * For params see contructor Polygon(int, int[], double[][])
-    * 
+    *
     * @param _numContours
     * @param numVerticesInContures
     * @param _vertices
-    * 
+    *
     *           ---{ CLEAR }---
     */
    private void initPolygon(final int numContours,
@@ -141,8 +140,7 @@ public class Polygon {
       _nVertices = new int[_ncontours];
       for (i = 0; i < numContours; ++i) {
          for (j = 0; j < numVerticesInContours[i]; ++j) {
-            _points.put(nextNumber, new Pointbase(nextNumber, vertices[nextNumber - 1][0], vertices[nextNumber - 1][1],
-                     Poly2TriUtils.INPUT));
+            _points.put(nextNumber, new Pointbase(nextNumber, vertices[nextNumber - 1][0], vertices[nextNumber - 1][1], Poly2TriUtils.INPUT));
             ++nextNumber;
          }
       }
@@ -178,7 +176,7 @@ public class Polygon {
     * Example: numContures = 1 (1 OUTER CONTURE, 1 INNER CONTURE) numVerticesInContures = { 3, 3 } // triangle with inner triangle
     * as a hol _vertices = { {0, 0}, {7, 0}, {4, 4}, // outer conture, counter clockwise order {2, 2}, {2, 3}, {3, 3} // inner
     * conture, clockwise order }
-    * 
+    *
     * @param numContures
     *           _number of contures of polygon (1 OUTER + n INNER)
     * @param numVerticesInContures
@@ -248,7 +246,7 @@ public class Polygon {
 
    /**
     * return the previous point (or edge) id for a given ith point (or edge);
-    * 
+    *
     * was all UNSIGNED (ints)
     */
    private int prev(final int i) {
@@ -307,7 +305,7 @@ public class Polygon {
    //   }
 
 
-   private int[] getSorted(final Set<Integer> s) {
+   private static int[] getSorted(final Set<Integer> s) {
       final Object[] temp = s.toArray();
       final int[] result = new int[temp.length];
       for (int i = 0; i < temp.length; ++i) {
@@ -333,7 +331,7 @@ public class Polygon {
       if (s != null) {
          return s;
       }
-      s = new HashSet<Integer>();
+      s = new HashSet<>();
       _startAdjEdgeMap.put(index, s);
       return s;
    }
@@ -342,7 +340,7 @@ public class Polygon {
    /**
     * polygon initialization; to find types of all polygon _vertices; create a priority queue for all _vertices; construct an edge
     * set for each vertex (the set holds all edges starting from the vertex, only for loop searching purpose).
-    * 
+    *
     * ---{ CLEAR }---
     */
    private void initializate() {
@@ -368,8 +366,7 @@ public class Polygon {
             p.type = Poly2TriUtils.REGULAR_UP;
          }
          else {
-            area = Poly2TriUtils.orient2d(new double[] { pprev.x, pprev.y }, new double[] { p.x, p.y }, new double[] { pnext.x,
-                     pnext.y });
+            area = Poly2TriUtils.orient2d(new double[] { pprev.x, pprev.y }, new double[] { p.x, p.y }, new double[] { pnext.x, pnext.y });
 
             if ((pprev.compareTo(p) > 0) && (pnext.compareTo(p) > 0)) {
                p.type = (area > 0) ? Poly2TriUtils.END : Poly2TriUtils.MERGE;
@@ -390,7 +387,7 @@ public class Polygon {
 
    /**
     * Add a diagonal from point id _i to j
-    * 
+    *
     * C++ code: was all unsigned (_i,j)
     */
    private void addDiagonal(final int i,
@@ -411,7 +408,7 @@ public class Polygon {
 
    /**
     * handle event vertext according to vertex type; Handle start vertex
-    * 
+    *
     * C++ code: was all UNSIGNED
     */
    private void handleStartVertex(final int i) {
@@ -436,7 +433,7 @@ public class Polygon {
 
    /**
     * handle event vertext according to vertex type; Handle end vertex
-    * 
+    *
     * C++ code: param _i was unsigned
     */
    private void handleEndVertex(final int i) {
@@ -608,7 +605,7 @@ public class Polygon {
 
    /**
     * main member function for polygon triangulation; partition polygon to monotone polygon pieces C++ code: id was unsigned
-    * 
+    *
     * @return success
     * @throws TriangulationException
     */
@@ -680,9 +677,9 @@ public class Polygon {
     * angle ABC for three given points, for monotone polygon searching purpose; calculate angle B for A, B, C three given points
     * auxiliary function to find monotone polygon pieces
     */
-   private double angleCosb(final double[] pa,
-                            final double[] pb,
-                            final double[] pc) {
+   private static double angleCosb(final double[] pa,
+                                   final double[] pb,
+                                   final double[] pc) {
       final double dxab = pa[0] - pb[0];
       final double dyab = pa[1] - pb[1];
 
@@ -772,7 +769,7 @@ public class Polygon {
 
    /**
     * searching all monotone pieces; C++ code: unsigned - nexte
-    * 
+    *
     * @return success
     * @throws TriangulationException
     */
@@ -794,7 +791,7 @@ public class Polygon {
       while (edges.size() > _diagonals.size()) {
          loop++;
          // typedef list<unsigned int> Monopoly;
-         poly = new ArrayList<Integer>();
+         poly = new ArrayList<>();
 
          edgesKeys = getSorted(edges.keySet());
 
@@ -831,8 +828,7 @@ public class Polygon {
             nexte = selectNextEdge(next);
 
             if (nexte == 0) {
-               throw new TriangulationException(
-                        "Please check your input polygon: 1)orientations? 2)with duplicated points?\n3)is a simple one?");
+               throw new TriangulationException("Please check your input polygon: 1)orientations? 2)with duplicated points?\n3)is a simple one?");
             }
 
             next = edges.get(nexte);
@@ -852,7 +848,7 @@ public class Polygon {
     * triangulate a monotone polygon piece; void triangulateMonotone(Monopoly& mpoly); Monopoly == list<Monopoly>
     */
    private void triangulateMonotone(final List<Integer> mpoly) {
-      final PriorityQueue<Pointbase> qvertex = new PriorityQueue<Pointbase>(30, new PointbaseComparatorCoordinatesReverse());
+      final PriorityQueue<Pointbase> qvertex = new PriorityQueue<>(30, new PointbaseComparatorCoordinatesReverse());
       // is it realy ID?
 
       int i, it, itnext;
@@ -869,7 +865,7 @@ public class Polygon {
          qvertex.add(point);
       }
 
-      final Stack<Pointbase> spoint = new Stack<Pointbase>();
+      final Stack<Pointbase> spoint = new Stack<>();
 
       for (i = 0; i < 2; i++) {
          spoint.push(qvertex.poll());
@@ -887,7 +883,7 @@ public class Polygon {
 
       // TODO -> doesn't seem that copy constructors are needed here
       //		    nothing is changing ... we're wasting time here!
-      //			YES ... if you look through the code, there's no need 
+      //			YES ... if you look through the code, there's no need
       //				    to create new instances, changed
       while (qvertex.size() > 1) {
 
@@ -970,7 +966,7 @@ public class Polygon {
 
    /**
     * main triangulation function; In _triangles is result -> polygon _triangles.
-    * 
+    *
     * @return success
     * @throws TriangulationException
     */

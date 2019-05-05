@@ -54,7 +54,7 @@ public class SplayTree {
       }
       else {
          Double keys = x.keyValue();
-         while (true) { // to avoid recursion	    		
+         while (true) { // to avoid recursion
             root = splay(keys, root);
             final Double rootk = root.keyValue();
             if (keys.compareTo(rootk) < 0) {
@@ -116,7 +116,7 @@ public class SplayTree {
 
    /**
     * Returns deleted max. BTreeNode.
-    * 
+    *
     * @return
     */
    public BTreeNode deleteMax() {
@@ -219,12 +219,12 @@ public class SplayTree {
    }
 
 
-   public BTreeNode left(final BTreeNode node) {
+   public static BTreeNode left(final BTreeNode node) {
       return node.left();
    }
 
 
-   public BTreeNode right(final BTreeNode node) {
+   public static BTreeNode right(final BTreeNode node) {
       return node.right();
    }
 
@@ -255,8 +255,9 @@ public class SplayTree {
 
    // Tree manipulations
 
+
    //void rotateWithLeftChild( BTreeNode<T, KeyType> * & k2 ) const;
-   private BTreeNode rotateWithLeftChild(final BTreeNode k2) {
+   private static BTreeNode rotateWithLeftChild(final BTreeNode k2) {
       final BTreeNode k1 = k2._left;
       k2._left = k1._right;
       k1._right = k2;
@@ -265,7 +266,7 @@ public class SplayTree {
 
 
    //void rotateWithRightChild( BTreeNode<T, KeyType> * & k1 ) const;
-   private BTreeNode rotateWithRightChild(final BTreeNode k1) {
+   private static BTreeNode rotateWithRightChild(final BTreeNode k1) {
       final BTreeNode k2 = k1._right;
       k1._right = k2._left;
       k2._left = k1;
@@ -278,7 +279,7 @@ public class SplayTree {
    /**
     * Internal method to perform a top-down splay. x is the key of target node to splay around. t is the root of the subtree to
     * splay.
-    * 
+    *
     * @param keys
     * @param t
     * @return

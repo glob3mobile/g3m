@@ -46,7 +46,7 @@ public class Extruder3DPolygon
 
    private static Wall createExteriorWall(final List<Geodetic3D> coordinates,
                                           final double lowerHeight) {
-      final List<WallQuad> wallQuads = new ArrayList<WallQuad>(coordinates.size());
+      final List<WallQuad> wallQuads = new ArrayList<>(coordinates.size());
 
       Geodetic3D previousCoordinate = coordinates.get(coordinates.size() - 1);
       for (final Geodetic3D coordinate3D : coordinates) {
@@ -206,7 +206,7 @@ public class Extruder3DPolygon
    }
 
 
-   private List<List<Geodetic2D>> to2DList(final List<List<Geodetic3D>> coordinatesArray) {
+   private static List<List<Geodetic2D>> to2DList(final List<List<Geodetic3D>> coordinatesArray) {
       final List<List<Geodetic2D>> result = new ArrayList<>(coordinatesArray.size());
       for (final List<Geodetic3D> coordinates : coordinatesArray) {
          result.add(to2D(coordinates));

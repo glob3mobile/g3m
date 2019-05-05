@@ -58,7 +58,7 @@ public class Extruder2DPolygon
    private static Wall createExteriorWall(final List<Geodetic2D> coordinates,
                                           final double lowerHeight,
                                           final double upperHeight) {
-      final List<WallQuad> wallQuads = new ArrayList<WallQuad>(coordinates.size());
+      final List<WallQuad> wallQuads = new ArrayList<>(coordinates.size());
 
       Geodetic3D previousCoordinate = new Geodetic3D(coordinates.get(coordinates.size() - 1), upperHeight);
       for (final Geodetic2D coordinate2D : coordinates) {

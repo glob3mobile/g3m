@@ -44,7 +44,7 @@ public class Poly2TriTest {
    public static double[][]          _vertices;
 
    public static int                 _number    = 0;
-   public static List<Poly2TriFrame> _tstfs     = new ArrayList<Poly2TriFrame>();
+   public static List<Poly2TriFrame> _tstfs     = new ArrayList<>();
 
    public static String              _name      = "";
 
@@ -146,7 +146,7 @@ public class Poly2TriTest {
 
 
    public static boolean loadBDMFile(final String fileName) {
-      final ArrayList<ArrayList<double[]>> contoursAL = new ArrayList<ArrayList<double[]>>();
+      final ArrayList<ArrayList<double[]>> contoursAL = new ArrayList<>();
       ArrayList<double[]> verticesAL;
       int numVertices = 0;
       int curNumVertices;
@@ -170,7 +170,7 @@ public class Poly2TriTest {
                num = getNumber(line, new int[] { 0 });
                curNumVertices = (int) Math.round(num);
                numVertices += curNumVertices;
-               verticesAL = new ArrayList<double[]>();
+               verticesAL = new ArrayList<>();
                for (int i = 0; i < curNumVertices; ++i) {
                   line = fr.readLine();
                   if (line == null) {

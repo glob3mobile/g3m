@@ -4,6 +4,7 @@ package poly2Tri.testPoly2Tri;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 
 public class Poly2TriFrame
@@ -12,12 +13,12 @@ public class Poly2TriFrame
 
    private static final long serialVersionUID = 1L;
 
-   private JPanel            jContentPane     = null;
+   private JPanel jContentPane = null;
 
-   private double            maxX             = +10;
-   private double            maxY             = +10;
-   private double            minX             = -10;
-   private double            minY             = -10;
+   private double maxX = +10;
+   private double maxY = +10;
+   private double minX = -10;
+   private double minY = -10;
 
 
    /**
@@ -31,20 +32,20 @@ public class Poly2TriFrame
 
    /**
     * This method initializes this
-    * 
+    *
     * @return void
     */
    private void initialize() {
       this.setSize(300, 300);
       this.setContentPane(getJContentPane());
       this.setTitle("Poly2Tri");
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
    }
 
 
    /**
     * This method initializes jContentPane
-    * 
+    *
     * @return javax.swing.JPanel
     */
    private JPanel getJContentPane() {
@@ -58,7 +59,7 @@ public class Poly2TriFrame
 
    /**
     * Applies only to new _triangles. Set before using / calling addTriangle()
-    * 
+    *
     * @param newMaxX
     */
    public void setMaxX(final double newMaxX) {
@@ -74,7 +75,7 @@ public class Poly2TriFrame
 
    /**
     * Applies only to new _triangles. Set before using / calling addTriangle()
-    * 
+    *
     * @param newMaxX
     */
    public void setMaxY(final double newMaxY) {
@@ -90,7 +91,7 @@ public class Poly2TriFrame
 
    /**
     * Applies only to new _triangles. Set before using / calling addTriangle()
-    * 
+    *
     * @param newMaxX
     */
    public void setMinX(final double newMinX) {
@@ -106,7 +107,7 @@ public class Poly2TriFrame
 
    /**
     * Applies only to new _triangles. Set before using / calling addTriangle()
-    * 
+    *
     * @param newMaxX
     */
    public void setMinY(final double newMinY) {
