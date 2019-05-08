@@ -115,8 +115,8 @@ void StackLayoutImageBuilder::doLayout(const G3MContext* context,
       const int imageWidth  = image->getWidth();
       const int imageHeight = image->getHeight();
       
-      const float top  = contentPos._y + ((contentWidth - imageHeight) / 2.0f);
-      const float left = contentPos._x + ((contentHeight - imageWidth)  / 2.0f);
+      const float top  = contentPos._y + ((contentHeight - imageHeight) / 2.0f);
+      const float left = contentPos._x + ((contentWidth  - imageWidth ) / 2.0f);
       canvas->drawImage(image, left, top);
     }
     

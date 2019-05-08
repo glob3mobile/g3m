@@ -82,8 +82,8 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
         final int imageWidth = image.getWidth();
         final int imageHeight = image.getHeight();
   
-        final float top = contentPos._y + ((contentWidth - imageHeight) / 2.0f);
-        final float left = contentPos._x + ((contentHeight - imageWidth) / 2.0f);
+        final float top = contentPos._y + ((contentHeight - imageHeight) / 2.0f);
+        final float left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
         canvas.drawImage(image, left, top);
       }
   
