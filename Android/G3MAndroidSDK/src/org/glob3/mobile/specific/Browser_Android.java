@@ -4,6 +4,9 @@ package org.glob3.mobile.specific;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.util.Log;
 import android.webkit.JsResult;
@@ -40,15 +43,15 @@ public class Browser_Android {
    }
 
 
-   public void openInBrowser(final String targetUrl) {
+   public void openInBrowser(final String targetUrl,final Context context, final String errorInvalidCertificate) {
 
       final URL url = new URL(targetUrl, false);
-      openInBrowser(url);
+      openInBrowser(url,context,errorInvalidCertificate);
    }
 
 
    @SuppressLint("SetJavaScriptEnabled")
-   public void openInBrowser(final URL targetUrl) {
+   public void openInBrowser(final URL targetUrl,final Context context, final String errorInvalidCertificate){
 
       _webView.getSettings().setAllowFileAccess(true);
       _webView.getSettings().setJavaScriptEnabled(true);
@@ -56,11 +59,30 @@ public class Browser_Android {
       _webView.setClickable(true);
       _webView.getSettings().setLightTouchEnabled(true);
 
+      if(_activity!=null) {
+         _activity.setProgressBarIndeterminateVisibility(true);
+      }
 
       WebViewClient webViewClient = new WebViewClient() {
          @Override
-         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            handler.proceed(); // Ignore SSL certificate errors
+         public void onReceivedSslError(WebView view, final  SslErrorHandler handler, SslError error) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            builder.setMessage(errorInvalidCertificate);
+            builder.setPositiveButton("Continuar", new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+                  handler.proceed();
+               }
+            });
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+                  handler.cancel();
+               }
+            });
+            final AlertDialog dialog = builder.create();
+            dialog.show();
          }
 
          @Override
