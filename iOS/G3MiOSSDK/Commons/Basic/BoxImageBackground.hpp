@@ -35,11 +35,11 @@ private:
   BoxImageBackground(const BoxImageBackground& that);
 
   const Vector2F _margin;
-  const float _borderWidth;
-  const Color _borderColor;
+  const float    _borderWidth;
+  const Color    _borderColor;
   const Vector2F _padding;
-  const Color _backgroundColor;
-  const float _cornerRadius;
+  const Color    _backgroundColor;
+  const float    _cornerRadius;
 
 
 public:
