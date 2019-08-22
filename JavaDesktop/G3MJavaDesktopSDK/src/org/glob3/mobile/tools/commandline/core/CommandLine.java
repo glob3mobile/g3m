@@ -50,7 +50,6 @@ public class CommandLine {
       final Process p = Runtime.getRuntime().exec(cmd);
       final int exitVal = p.waitFor();
 
-
       final ExecResult execResult;
       final InputStreamReader isr;
       if (exitVal == 0) {
@@ -61,7 +60,6 @@ public class CommandLine {
          isr = new InputStreamReader(p.getErrorStream());
          execResult = new ExecResult(ExecResultType.ERROR, new BufferedReader(isr));
       }
-
 
       isr.close();
       p.destroy();
@@ -78,8 +76,7 @@ public class CommandLine {
 
       // any output?
       final InputStreamReader isrOutput = new InputStreamReader(p.getInputStream());
-      final StreamGobbler outputGobbler = new StreamGobbler(new BufferedReader(isrOutput),
-               StreamGobbler.streamGobblerType.OUTPUT);
+      final StreamGobbler outputGobbler = new StreamGobbler(new BufferedReader(isrOutput), StreamGobbler.streamGobblerType.OUTPUT);
 
       // kick them off
       errorGobbler.start();
@@ -115,8 +112,7 @@ public class CommandLine {
 
       // any output?
       final InputStreamReader isrOutput = new InputStreamReader(p.getInputStream());
-      final StreamGobbler outputGobbler = new StreamGobbler(new BufferedReader(isrOutput),
-               StreamGobbler.streamGobblerType.OUTPUT);
+      final StreamGobbler outputGobbler = new StreamGobbler(new BufferedReader(isrOutput), StreamGobbler.streamGobblerType.OUTPUT);
 
       // kick them off
       errorGobbler.start();
@@ -186,8 +182,8 @@ public class CommandLine {
    }
 
    public static class StreamGobbler
-      extends
-         Thread {
+            extends
+               Thread {
 
       public enum streamGobblerType {
          ERROR,

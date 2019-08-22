@@ -53,9 +53,9 @@ public class JSONtoBSON {
    private static JSONBaseObject readJsonFile(final File fJson) {
       JSONBaseObject jbase = null;
       if (fJson.exists()) {
-         try {
+         try (final FileInputStream finJson = new FileInputStream(fJson)) {
             // create FileInputStream object
-            final FileInputStream finJson = new FileInputStream(fJson);
+
             /*
              * Create byte array large enough to hold the content of the file.
              * Use File.length to determine size of the file in bytes.
@@ -67,7 +67,6 @@ public class JSONtoBSON {
              * int read(byte[] byteArray) method of java FileInputStream class.
              */
             finJson.read(fileContent);
-            finJson.close();
 
             final JSONParser_JavaDesktop jp = new JSONParser_JavaDesktop();
             jbase = jp.parse(new ByteBuffer_JavaDesktop(fileContent));
@@ -87,19 +86,12 @@ public class JSONtoBSON {
    }
 
 
-   /**
-    * @param fBson
-    */
    private static void writeBsonFile(final JSONBaseObject jbase,
                                      final File fBson) {
       if (!fBson.exists() && (jbase != null)) {
-         try {
-            final FileOutputStream fout = new FileOutputStream(fBson);
-
+         try (final FileOutputStream fout = new FileOutputStream(fBson)) {
             final ByteBuffer_JavaDesktop bb = (ByteBuffer_JavaDesktop) BSONGenerator.generate(jbase);
             fout.write(bb.getBuffer().array());
-            fout.flush();
-            fout.close();
          }
          catch (final FileNotFoundException e) {
             System.out.println("File not found" + e);
