@@ -563,7 +563,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       final int firstPointsVerticesBufferSize = _firstPointsVerticesBuffer.size();
     
       final Color baseColor = Color.MAGENTA;
-      final int wheelSize = 2147483647;
+      final int wheelSize = 1000000;
       final IMathUtils mu = IMathUtils.instance();
     
       if (_currentLoadedLevel <= _preloadedLevel)
@@ -578,9 +578,9 @@ public class PointCloudsRenderer extends DefaultRenderer
           for (int i = 0; i < firstPointsCount; i++)
           {
             final float height = _firstPointsHeightsBuffer.get(i);
-            final float alpha = (float)((height - minHeight) / deltaHeight);
+            final float alpha = mu.clamp((float)((height - minHeight) / deltaHeight), 0.0f, 1.0f);
     
-            final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
+            final Color color = baseColor.wheelStep(wheelSize, mu.checkedRound(wheelSize * alpha));
     
             final int i4 = i *4;
             _firstPointsColorsBuffer.rawPut(i4 + 0, color._red);
@@ -623,9 +623,9 @@ public class PointCloudsRenderer extends DefaultRenderer
       for (int i = 0; i < firstPointsCount; i++)
       {
         final float height = _firstPointsHeightsBuffer.get(i);
-        final float alpha = (float)((height - minHeight) / deltaHeight);
+        final float alpha = mu.clamp((float)((height - minHeight) / deltaHeight), 0.0f, 1.0f);
     
-        final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
+        final Color color = baseColor.wheelStep(wheelSize, mu.checkedRound(wheelSize * alpha));
     
         final int i4 = i *4;
         colors.rawPut(i4 + 0, color._red);
@@ -643,9 +643,9 @@ public class PointCloudsRenderer extends DefaultRenderer
           for (int i = 0; i < _levelsPointsCount[level]; i++)
           {
             final float height = levelHeightsBuffers.get(i);
-            final float alpha = (float)((height - minHeight) / deltaHeight);
+            final float alpha = mu.clamp((float)((height - minHeight) / deltaHeight), 0.0f, 1.0f);
     
-            final Color color = baseColor.wheelStep(wheelSize, mu.round(wheelSize * alpha));
+            final Color color = baseColor.wheelStep(wheelSize, mu.checkedRound(wheelSize * alpha));
     
             final int offset = cursor + i *4;
             colors.rawPut(offset + 0, color._red);
@@ -670,7 +670,7 @@ public class PointCloudsRenderer extends DefaultRenderer
       if (justRecalculatedProjectedArea)
       {
     // #warning TODO: quality factor 2
-        final int intendedPointsCount = IMathUtils.instance().round((float) projectedArea * 0.09f);
+        final int intendedPointsCount = IMathUtils.instance().checkedRound((float) projectedArea * 0.09f);
         // const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.25f);
         int accummulated = 0;
         int neededLevel = -1;

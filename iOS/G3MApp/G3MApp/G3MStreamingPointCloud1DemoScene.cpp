@@ -73,7 +73,7 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
 //#warning TODO cache
   model->getPointCloudsRenderer()->addPointCloud(//URL("http://glob3mobile.dyndns.org:8080"),
                                                  //URL("http://aerog3m.cloudapp.net:8082"),
-                                                 URL("http://192.168.1.35:8082"),
+                                                 URL("http://192.168.1.12:8082"),
                                                  "Loudoun-VA_simplified2_LOD",
                                                  //"Wallonia-Belgium_simplified2_LOD",
                                                  DownloadPriority::LOWER,

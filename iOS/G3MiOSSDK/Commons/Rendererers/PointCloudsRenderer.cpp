@@ -721,7 +721,7 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
   const size_t firstPointsVerticesBufferSize = _firstPointsVerticesBuffer->size();
 
   const Color baseColor = Color::MAGENTA;
-  const int wheelSize = 2147483647;
+  const int wheelSize = 1000000;
   const IMathUtils* mu = IMathUtils::instance();
 
   if (_currentLoadedLevel <= _preloadedLevel) {
@@ -733,10 +733,12 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
       _firstPointsColorsBuffer = IFactory::instance()->createFloatBuffer( firstPointsCount * 4 );
       for (int i = 0; i < firstPointsCount; i++) {
         const float height = _firstPointsHeightsBuffer->get(i);
-        const float alpha = (float) ((height - minHeight) / deltaHeight);
+        const float alpha = mu->clamp((float) ((height - minHeight) / deltaHeight),
+                                      0.0f,
+                                      1.0f);
 
         const Color color = baseColor.wheelStep(wheelSize,
-                                                mu->round(wheelSize * alpha) );
+                                                mu->checkedRound(wheelSize * alpha) );
 
         const int i4 = i*4;
         _firstPointsColorsBuffer->rawPut(i4 + 0, color._red);
@@ -783,10 +785,12 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
 
   for (int i = 0; i < firstPointsCount; i++) {
     const float height = _firstPointsHeightsBuffer->get(i);
-    const float alpha = (float) ((height - minHeight) / deltaHeight);
+    const float alpha = mu->clamp((float) ((height - minHeight) / deltaHeight),
+                                  0.0f,
+                                  1.0f);
 
     const Color color = baseColor.wheelStep(wheelSize,
-                                            mu->round(wheelSize * alpha) );
+                                            mu->checkedRound(wheelSize * alpha) );
 
     const int i4 = i*4;
     colors->rawPut(i4 + 0, color._red);
@@ -801,10 +805,12 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
     if (levelHeightsBuffers != NULL) {
       for (int i = 0; i < _levelsPointsCount[level]; i++) {
         const float height = levelHeightsBuffers->get(i);
-        const float alpha = (float) ((height - minHeight) / deltaHeight);
+        const float alpha = mu->clamp((float) ((height - minHeight) / deltaHeight),
+                                      0.0f,
+                                      1.0f);
 
         const Color color = baseColor.wheelStep(wheelSize,
-                                                mu->round(wheelSize * alpha) );
+                                                mu->checkedRound(wheelSize * alpha) );
 
         const size_t offset = cursor + i*4;
         colors->rawPut(offset + 0, color._red);
@@ -845,7 +851,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
 
   if (justRecalculatedProjectedArea) {
 // #warning TODO: quality factor 2
-    const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.09f);
+    const int intendedPointsCount = IMathUtils::instance()->checkedRound((float) projectedArea * 0.09f);
     // const int intendedPointsCount = IMathUtils::instance()->round((float) projectedArea * 0.25f);
     int accummulated = 0;
     int neededLevel = -1;

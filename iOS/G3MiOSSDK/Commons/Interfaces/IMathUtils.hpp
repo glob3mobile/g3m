@@ -88,6 +88,8 @@ public:
   virtual long long round(double v) const = 0;
   virtual int       round(float v)  const = 0;
 
+  virtual int       checkedRound(float v)  const = 0;
+
   virtual int    abs(int v)    const = 0;
   virtual double abs(double v) const = 0;
   virtual float  abs(float v)  const = 0;

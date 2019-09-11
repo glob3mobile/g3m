@@ -8,8 +8,8 @@ import org.glob3.mobile.generated.IMathUtils;
 
 
 public final class MathUtils_WebGL
-   extends
-      IMathUtils {
+         extends
+            IMathUtils {
 
    private final Random _random = new Random();
 
@@ -109,6 +109,21 @@ public final class MathUtils_WebGL
    @Override
    public int round(final float v) {
       return Math.round(v);
+   }
+
+
+   @Override
+   public int checkedRound(final float v) {
+      final float roundedF = Math.round(v);
+      if (roundedF > maxInt32()) {
+         return maxInt32();
+      }
+      else if (roundedF < minInt16()) {
+         return minInt16();
+      }
+      else {
+         return (int) roundedF;
+      }
    }
 
 
@@ -280,8 +295,8 @@ public final class MathUtils_WebGL
       final int b7 = byteArray[6] & 0xFF;
       final int b8 = byteArray[7] & 0xFF;
 
-      return (b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40)
-             | ((long) b7 << 48) | ((long) b8 << 56);
+      return (b1) | ((long) b2 << 8) | ((long) b3 << 16) | ((long) b4 << 24) | ((long) b5 << 32) | ((long) b6 << 40) | ((long) b7 << 48)
+             | ((long) b8 << 56);
    }
 
 

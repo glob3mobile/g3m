@@ -8,8 +8,8 @@ import org.glob3.mobile.generated.IMathUtils;
 
 
 public final class MathUtils_Android
-   extends
-      IMathUtils {
+         extends
+            IMathUtils {
 
    private final Random _random = new Random();
 
@@ -109,6 +109,21 @@ public final class MathUtils_Android
    @Override
    public int round(final float v) {
       return Math.round(v);
+   }
+
+
+   @Override
+   public int checkedRound(final float v) {
+      final float roundedF = Math.round(v);
+      if (roundedF > maxInt32()) {
+         return maxInt32();
+      }
+      else if (roundedF < minInt16()) {
+         return minInt16();
+      }
+      else {
+         return (int) roundedF;
+      }
    }
 
 

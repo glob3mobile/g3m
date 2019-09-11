@@ -70,6 +70,19 @@ public:
   long long round(double v) const { return (long long) MathAux::round_(v); }
   int       round(float v)  const { return (int) roundf(v); }
 
+  int checkedRound(float v) const {
+    const float roundedF = roundf(v);
+    if (roundedF > maxInt32()) {
+      return maxInt32();
+    }
+    else if (roundedF < minInt16()) {
+      return minInt16();
+    }
+    else {
+      return (int) roundedF;
+    }
+  }
+
   int    abs(int v)    const { return MathAux::abs_(v); }
   double abs(double v) const { return fabs(v); }
   float  abs(float v)  const { return fabsf(v); }

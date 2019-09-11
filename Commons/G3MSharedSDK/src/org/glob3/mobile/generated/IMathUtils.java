@@ -85,6 +85,8 @@ public abstract class IMathUtils
   public abstract long round(double v);
   public abstract int round(float v);
 
+  public abstract int checkedRound(float v);
+
   public abstract int abs(int v);
   public abstract double abs(double v);
   public abstract float abs(float v);
