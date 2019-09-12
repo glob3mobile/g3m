@@ -53,7 +53,8 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  const float pointSize = 2;
+  const float pointSize = 1;
+  const bool dynamicPointSize = true;
   const float verticalExaggeration = 1;
   const double deltaHeight = 0;
 
@@ -82,6 +83,7 @@ void G3MStreamingPointCloud1DemoScene::rawActivate(const G3MContext *context) {
                                                  PointCloudsRenderer::MIN_AVERAGE3_HEIGHT,
                                                  //PointCloudsRenderer::MIN_MAX_HEIGHT,
                                                  pointSize,
+                                                 dynamicPointSize,
                                                  verticalExaggeration,
                                                  deltaHeight,
                                                  new G3MStreamingPointCloud1DemoScene_PointCloudMetadataListener(g3mWidget),

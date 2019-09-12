@@ -75,6 +75,7 @@ private:
                                 double minHeight,
                                 double maxHeight,
                                 float pointSize,
+                                bool dynamicPointSize,
                                 long long nowInMS,
                                 bool justRecalculatedProjectedArea) = 0;
 
@@ -99,6 +100,7 @@ private:
                      double minHeight,
                      double maxHeight,
                      float pointSize,
+                     bool dynamicPointSize,
                      long long nowInMS);
 
     virtual bool isInner() const = 0;
@@ -133,6 +135,7 @@ private:
                         double minHeight,
                         double maxHeight,
                         float pointSize,
+                        bool dynamicPointSize,
                         long long nowInMS,
                         bool justRecalculatedProjectedArea);
 
@@ -297,7 +300,11 @@ private:
 
     DirectMesh* createMesh(double minHeight,
                            double maxHeight,
-                           float pointSize);
+                           float pointSize,
+                           bool dynamicPointSize);
+
+    void adjustPointSize(float pointSize,
+                         bool dynamicPointSize);
 
   protected:
     long long rawRender(const PointCloud* pointCloud,
@@ -308,6 +315,7 @@ private:
                         double minHeight,
                         double maxHeight,
                         float pointSize,
+                        bool dynamicPointSize,
                         long long nowInMS,
                         bool justRecalculatedProjectedArea);
 
@@ -501,7 +509,9 @@ private:
     double _minHeight;
     double _maxHeight;
     double _averageHeight;
+
     const float _pointSize;
+    const bool  _dynamicPointSize;
 
     PointCloudInnerNode* _rootNode;
 
@@ -514,6 +524,7 @@ private:
                double deltaHeight,
                ColorPolicy colorPolicy,
                float pointSize,
+               bool dynamicPointSize,
                long long downloadPriority,
                const TimeInterval& timeToCache,
                bool readExpired,
@@ -526,6 +537,7 @@ private:
     _deltaHeight(deltaHeight),
     _colorPolicy(colorPolicy),
     _pointSize(pointSize),
+    _dynamicPointSize(dynamicPointSize),
     _downloadPriority(downloadPriority),
     _timeToCache(timeToCache),
     _readExpired(readExpired),
@@ -608,7 +620,8 @@ public:
   void addPointCloud(const URL& serverURL,
                      const std::string& cloudName,
                      ColorPolicy colorPolicy,
-                     float pointSize = 2.0f,
+                     float pointSize = 1.0f,
+                     bool dynamicPointSize = true,
                      float verticalExaggeration = 1.0f,
                      double deltaHeight = 0,
                      PointCloudMetadataListener* metadataListener = NULL,
@@ -621,7 +634,8 @@ public:
                      const TimeInterval& timeToCache,
                      bool readExpired,
                      ColorPolicy colorPolicy,
-                     float pointSize = 2.0f,
+                     float pointSize = 1.0f,
+                     bool dynamicPointSize = true,
                      float verticalExaggeration = 1.0f,
                      double deltaHeight = 0,
                      PointCloudMetadataListener* metadataListener = NULL,

@@ -162,6 +162,9 @@ private:
   const float _polygonOffsetUnits;
   const float _lineWidth;
 
+  float _pointSize;
+  GPUUniformValueFloat* _pointSizeGPUUniformValueFloat;
+
   ~GeometryGLFeature();
 
 public:
@@ -184,6 +187,7 @@ public:
 
   void applyOnGlobalGLState(GLGlobalState* state) const ;
 
+  void setPointSize(float pointSize);
 };
 
 

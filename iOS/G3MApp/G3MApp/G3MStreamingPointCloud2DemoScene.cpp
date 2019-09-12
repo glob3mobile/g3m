@@ -37,11 +37,16 @@ public:
     // _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.084024168630392637, -77.643438514919708382, 11000) );
 
     _g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
-                                          Geodetic3D::fromDegrees(44.950996472837502438,
-                                                                  -93.098090960367656521,
-                                                                  301.5960958814906121),
+//                                          Geodetic3D::fromDegrees(44.950996472837502438,
+//                                                                  -93.098090960367656521,
+//                                                                  301.5960958814906121),
+                                          Geodetic3D::fromDegrees(53.7194561048,
+                                                                  3.955078125,
+                                                                  2000),
                                           Angle::zero(),
-                                          Angle::fromDegrees(-26));
+                                          Angle::minusHalfPi()
+                                          //Angle::fromDegrees(-26)
+                                          );
   }
 
 };
@@ -51,9 +56,13 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  const float pointSize = 2;
+  const float pointSize = 1;
+  const bool dynamicPointSize = true;
+
   const float verticalExaggeration = 1;
-  const double deltaHeight = -202;
+//  const double deltaHeight = -202;
+//const double deltaHeight = -3.7930956;
+  const double deltaHeight = 13;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
@@ -80,12 +89,15 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
   model->getPointCloudsRenderer()->addPointCloud(//URL("http://glob3mobile.dyndns.org:8080"),
                                                  //URL("http://aerog3m.cloudapp.net:8082"),
                                                  URL("http://192.168.1.12:8082"),
-                                                 "minnesota_LOD",
+                                                 //"minnesota_LOD",
+                                                 "TomTom_LOD",
                                                  DownloadPriority::LOWER,
                                                  TimeInterval::zero(),
                                                  true,
-                                                 PointCloudsRenderer::MIN_MAX_HEIGHT,
+                                                 PointCloudsRenderer::MIN_AVERAGE3_HEIGHT,
+                                                 // PointCloudsRenderer::MIN_MAX_HEIGHT,
                                                  pointSize,
+                                                 dynamicPointSize,
                                                  verticalExaggeration,
                                                  deltaHeight,
                                                  new G3MStreamingPointCloud2DemoScene_PointCloudMetadataListener(g3mWidget),

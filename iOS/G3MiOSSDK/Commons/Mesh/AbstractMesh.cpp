@@ -24,6 +24,10 @@ AbstractMesh::~AbstractMesh() {
 
   delete _boundingVolume;
 
+  if (_geometryGLFeature) {
+    _geometryGLFeature->_release();
+  }
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -59,7 +63,8 @@ _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
 _polygonOffsetFill(polygonOffsetFill),
 _cullFace(cullFace),
-_culledFace(culledFace)
+_culledFace(culledFace),
+_geometryGLFeature(NULL)
 {
 }
 
@@ -141,24 +146,34 @@ void AbstractMesh::rawRender(const G3MRenderContext* rc,
   renderMesh(rc, glState);
 }
 
+void AbstractMesh::setPointSize(float pointSize) {
+  if (_pointSize != pointSize) {
+    _pointSize = pointSize;
+
+    if (_geometryGLFeature != NULL) {
+      _geometryGLFeature->setPointSize(_pointSize);
+    }
+  }
+}
+
 void AbstractMesh::initializeGLState(GLState* glState) const {
   TransformableMesh::initializeGLState(glState);
 
-  glState->addGLFeature(new GeometryGLFeature(_vertices,            // The attribute is a float vector of 4 elements
-                                              3,                    // Our buffer contains elements of 3
-                                              0,                    // Index 0
-                                              false,                // Not normalized
-                                              0,                    // Stride 0
-                                              _depthTest,
-                                              _cullFace,
-                                              _culledFace,
-                                              _polygonOffsetFill,
-                                              _polygonOffsetFactor,
-                                              _polygonOffsetUnits,
-                                              _lineWidth,
-                                              true,                 // needsPointSize
-                                              _pointSize),
-                        false);
+  _geometryGLFeature = new GeometryGLFeature(_vertices,            // The attribute is a float vector of 4 elements
+                                             3,                    // Our buffer contains elements of 3
+                                             0,                    // Index 0
+                                             false,                // Not normalized
+                                             0,                    // Stride 0
+                                             _depthTest,
+                                             _cullFace,
+                                             _culledFace,
+                                             _polygonOffsetFill,
+                                             _polygonOffsetFactor,
+                                             _polygonOffsetUnits,
+                                             _lineWidth,
+                                             true,                 // needsPointSize
+                                             _pointSize);
+  glState->addGLFeature(_geometryGLFeature, true);
 
   if (_normals != NULL) {
     glState->addGLFeature(new VertexNormalGLFeature(_normals, 3, 0, false, 0),

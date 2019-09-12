@@ -123,9 +123,14 @@ _lineWidth(lineWidth)
 {
   GPUAttributeValueVec4Float* position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
   _values->addAttributeValue(POSITION, position, false);
-  
+
+  _pointSize = pointSize;
   if (needsPointSize) {
-    _values->addUniformValue(POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
+    _pointSizeGPUUniformValueFloat = new GPUUniformValueFloat(pointSize);
+    _values->addUniformValue(POINT_SIZE, _pointSizeGPUUniformValueFloat, true);
+  }
+  else {
+    _pointSizeGPUUniformValueFloat = NULL;
   }
 }
 
@@ -152,9 +157,24 @@ void GeometryGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
   }
   
   state->setLineWidth(_lineWidth);
+
+  if (_pointSizeGPUUniformValueFloat != NULL) {
+    _pointSizeGPUUniformValueFloat->_value = _pointSize;
+  }
+}
+
+void GeometryGLFeature::setPointSize(float pointSize) {
+  _pointSize = pointSize;
+
+  if (_pointSizeGPUUniformValueFloat != NULL) {
+    _pointSizeGPUUniformValueFloat->_value = _pointSize;
+  }
 }
 
 GeometryGLFeature::~GeometryGLFeature() {
+  if (_pointSizeGPUUniformValueFloat != NULL) {
+    _pointSizeGPUUniformValueFloat->_release();
+  }
   //  _position->_release();
 #ifdef JAVA_CODE
   super.dispose();

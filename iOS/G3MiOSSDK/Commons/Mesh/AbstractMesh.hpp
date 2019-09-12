@@ -14,10 +14,14 @@
 
 class IFloatBuffer;
 class Color;
+class GeometryGLFeature;
 
 
 class AbstractMesh : public TransformableMesh {
 private:
+  float         _pointSize;
+
+  mutable GeometryGLFeature* _geometryGLFeature;
 
 protected:
   const int           _primitive;
@@ -26,7 +30,6 @@ protected:
   const Color*        _flatColor;
   const IFloatBuffer* _colors;
   const float         _lineWidth;
-  const float         _pointSize;
   const bool          _depthTest;
   const IFloatBuffer* _normals;
   const bool          _polygonOffsetFill;
@@ -74,6 +77,8 @@ public:
 
   void rawRender(const G3MRenderContext* rc,
                  const GLState* parentGLState) const;
+
+  void setPointSize(float pointSize);
 
 };
 

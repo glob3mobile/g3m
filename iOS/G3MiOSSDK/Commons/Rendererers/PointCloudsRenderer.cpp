@@ -417,7 +417,7 @@ void PointCloudsRenderer::PointCloud::render(const G3MRenderContext* rc,
     final double maxHeight = (_colorPolicy == ColorPolicy.MIN_MAX_HEIGHT) ? _maxHeight : _averageHeight * 3;
 #endif
 
-    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, maxHeight, _pointSize, nowInMS);
+    const long long renderedCount = _rootNode->render(this, rc, glState, frustum, _minHeight, maxHeight, _pointSize, _dynamicPointSize, nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {
@@ -440,13 +440,14 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
                                                       double minHeight,
                                                       double maxHeight,
                                                       float pointSize,
+                                                      bool dynamicPointSize,
                                                       long long nowInMS) {
   const Box* bounds = getBounds();
   if (bounds != NULL) {
     if (bounds->touchesFrustum(frustum)) {
       bool justRecalculatedProjectedArea = false;
       if ((_projectedArea == -1) ||
-          ((_lastProjectedAreaTimeInMS + 500) < nowInMS)) {
+          ((_lastProjectedAreaTimeInMS + 25) < nowInMS)) {
         const double currentProjectedArea = bounds->projectedArea(rc);
         if (currentProjectedArea != _projectedArea) {
           _projectedArea = currentProjectedArea;
@@ -457,7 +458,8 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
 
 // #warning TODO: quality factor 1
 //      const double minProjectedArea = 250 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
-      const double minProjectedArea = 2500 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+//      const double minProjectedArea = 2500 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+      const double minProjectedArea = 1000 * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
       if (_projectedArea >= minProjectedArea) {
         const long long renderedCount = rawRender(pointCloud,
                                                   rc,
@@ -467,6 +469,7 @@ long long PointCloudsRenderer::PointCloudNode::render(const PointCloud* pointClo
                                                   minHeight,
                                                   maxHeight,
                                                   pointSize,
+                                                  dynamicPointSize,
                                                   nowInMS,
                                                   justRecalculatedProjectedArea);
         _rendered = true;
@@ -491,13 +494,14 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
                                                               double minHeight,
                                                               double maxHeight,
                                                               float pointSize,
+                                                              bool dynamicPointSize,
                                                               long long nowInMS,
                                                               bool justRecalculatedProjectedArea) {
   long long renderedCount = 0;
   for (int i = 0; i < 4; i++) {
     PointCloudNode* child = _children[i];
     if (child != NULL) {
-      renderedCount += child->render(pointCloud, rc, glState, frustum, minHeight, maxHeight, pointSize, nowInMS);
+      renderedCount += child->render(pointCloud, rc, glState, frustum, minHeight, maxHeight, pointSize, dynamicPointSize, nowInMS);
     }
   }
 
@@ -715,9 +719,23 @@ void PointCloudsRenderer::PointCloudLeafNode::onLevelBufferCancel(int level) {
   _loadingLevelRequestID = -1;
 }
 
+void PointCloudsRenderer::PointCloudLeafNode::adjustPointSize(float pointSize,
+                                                              bool dynamicPointSize) {
+  if (_mesh != NULL) {
+    const float retinaPointSize = pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+    if (dynamicPointSize) {
+      _mesh->setPointSize(retinaPointSize * IMathUtils::instance()->sqrt((float) _neededPoints / _mesh->getRenderVerticesCount()) );
+    }
+    else {
+      _mesh->setPointSize(retinaPointSize);
+    }
+  }
+}
+
 DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight,
                                                                 double maxHeight,
-                                                                float pointSize) {
+                                                                float pointSize,
+                                                                bool dynamicPointSize) {
   const size_t firstPointsVerticesBufferSize = _firstPointsVerticesBuffer->size();
 
   const Color baseColor = Color::MAGENTA;
@@ -758,6 +776,11 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                       _firstPointsColorsBuffer, // colors
                                       true);
     mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
+    if (_mesh != NULL) {
+      if (_neededPoints > _mesh->getRenderVerticesCount()) {
+        adjustPointSize(pointSize, dynamicPointSize);
+      }
+    }
 
     return mesh;
   }
@@ -833,6 +856,11 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                     true);
   // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
   mesh->setRenderVerticesCount( pointsCount );
+  if (_mesh != NULL) {
+    if (_neededPoints > _mesh->getRenderVerticesCount()) {
+      adjustPointSize(pointSize, dynamicPointSize);
+    }
+  }
 
   return mesh;
 }
@@ -846,6 +874,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
                                                              double minHeight,
                                                              double maxHeight,
                                                              float pointSize,
+                                                             bool dynamicPointSize,
                                                              long long nowInMS,
                                                              bool justRecalculatedProjectedArea) {
 
@@ -877,6 +906,7 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
       _neededPoints = neededPoints;
       if (_mesh != NULL) {
         _mesh->setRenderVerticesCount( IMathUtils::instance()->min(_neededPoints, _mesh->getRenderVerticesCount()) );
+        adjustPointSize(pointSize, dynamicPointSize);
       }
     }
   }
@@ -918,7 +948,8 @@ long long PointCloudsRenderer::PointCloudLeafNode::rawRender(const PointCloud* p
 
 
   if (_mesh == NULL) {
-    _mesh = createMesh(minHeight, maxHeight, pointSize);
+    _mesh = createMesh(minHeight, maxHeight, pointSize, dynamicPointSize);
+    adjustPointSize(pointSize, dynamicPointSize);
   }
   _mesh->render(rc, glState);
 //#warning remove debug code
@@ -1032,6 +1063,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         const std::string& cloudName,
                                         ColorPolicy colorPolicy,
                                         float pointSize,
+                                        bool dynamicPointSize,
                                         float verticalExaggeration,
                                         double deltaHeight,
                                         PointCloudMetadataListener* metadataListener,
@@ -1044,6 +1076,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                 true,
                 colorPolicy,
                 pointSize,
+                dynamicPointSize,
                 verticalExaggeration,
                 deltaHeight,
                 metadataListener,
@@ -1058,6 +1091,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                         bool readExpired,
                                         ColorPolicy colorPolicy,
                                         float pointSize,
+                                        bool dynamicPointSize,
                                         float verticalExaggeration,
                                         double deltaHeight,
                                         PointCloudMetadataListener* metadataListener,
@@ -1069,6 +1103,7 @@ void PointCloudsRenderer::addPointCloud(const URL& serverURL,
                                           deltaHeight,
                                           colorPolicy,
                                           pointSize,
+                                          dynamicPointSize,
                                           downloadPriority,
                                           timeToCache,
                                           readExpired,

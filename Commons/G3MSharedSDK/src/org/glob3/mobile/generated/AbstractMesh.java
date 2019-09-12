@@ -20,10 +20,14 @@ package org.glob3.mobile.generated;
 
 //class IFloatBuffer;
 //class Color;
+//class GeometryGLFeature;
 
 
 public abstract class AbstractMesh extends TransformableMesh
 {
+  private float _pointSize;
+
+  private GeometryGLFeature _geometryGLFeature;
 
   protected final int _primitive;
   protected final boolean _owner;
@@ -31,7 +35,6 @@ public abstract class AbstractMesh extends TransformableMesh
   protected final Color _flatColor;
   protected final IFloatBuffer _colors;
   protected final float _lineWidth;
-  protected final float _pointSize;
   protected final boolean _depthTest;
   protected final IFloatBuffer _normals;
   protected final boolean _polygonOffsetFill;
@@ -121,6 +124,7 @@ public abstract class AbstractMesh extends TransformableMesh
      _polygonOffsetFill = polygonOffsetFill;
      _cullFace = cullFace;
      _culledFace = culledFace;
+     _geometryGLFeature = null;
   }
 
   protected abstract void renderMesh(G3MRenderContext rc, GLState glState);
@@ -136,7 +140,8 @@ public abstract class AbstractMesh extends TransformableMesh
   {
     super.initializeGLState(glState);
   
-    glState.addGLFeature(new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, _cullFace, _culledFace, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize), false); // needsPointSize -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+    _geometryGLFeature = new GeometryGLFeature(_vertices, 3, 0, false, 0, _depthTest, _cullFace, _culledFace, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _lineWidth, true, _pointSize); // needsPointSize -  Stride 0 -  Not normalized -  Index 0 -  Our buffer contains elements of 3 -  The attribute is a float vector of 4 elements
+    glState.addGLFeature(_geometryGLFeature, true);
   
     if (_normals != null)
     {
@@ -175,6 +180,11 @@ public abstract class AbstractMesh extends TransformableMesh
     if (_boundingVolume != null)
        _boundingVolume.dispose();
   
+    if (_geometryGLFeature != null)
+    {
+      _geometryGLFeature._release();
+    }
+  
     super.dispose();
   }
 
@@ -212,6 +222,19 @@ public abstract class AbstractMesh extends TransformableMesh
     GLState glState = getGLState();
     glState.setParent(parentGLState);
     renderMesh(rc, glState);
+  }
+
+  public final void setPointSize(float pointSize)
+  {
+    if (_pointSize != pointSize)
+    {
+      _pointSize = pointSize;
+  
+      if (_geometryGLFeature != null)
+      {
+        _geometryGLFeature.setPointSize(_pointSize);
+      }
+    }
   }
 
 }

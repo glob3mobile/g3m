@@ -11,8 +11,15 @@ public class GeometryGLFeature extends GLFeature
   private final float _polygonOffsetUnits;
   private final float _lineWidth;
 
+  private float _pointSize;
+  private GPUUniformValueFloat _pointSizeGPUUniformValueFloat;
+
   public void dispose()
   {
+    if (_pointSizeGPUUniformValueFloat != null)
+    {
+      _pointSizeGPUUniformValueFloat._release();
+    }
     //  _position->_release();
     super.dispose();
   }
@@ -31,9 +38,15 @@ public class GeometryGLFeature extends GLFeature
     GPUAttributeValueVec4Float position = new GPUAttributeValueVec4Float(buffer, arrayElementSize, index, stride, normalized);
     _values.addAttributeValue(GPUAttributeKey.POSITION, position, false);
   
+    _pointSize = pointSize;
     if (needsPointSize)
     {
-      _values.addUniformValue(GPUUniformKey.POINT_SIZE, new GPUUniformValueFloat(pointSize), false);
+      _pointSizeGPUUniformValueFloat = new GPUUniformValueFloat(pointSize);
+      _values.addUniformValue(GPUUniformKey.POINT_SIZE, _pointSizeGPUUniformValueFloat, true);
+    }
+    else
+    {
+      _pointSizeGPUUniformValueFloat = null;
     }
   }
 
@@ -68,6 +81,20 @@ public class GeometryGLFeature extends GLFeature
     }
   
     state.setLineWidth(_lineWidth);
+  
+    if (_pointSizeGPUUniformValueFloat != null)
+    {
+      _pointSizeGPUUniformValueFloat._value = _pointSize;
+    }
   }
 
+  public final void setPointSize(float pointSize)
+  {
+    _pointSize = pointSize;
+  
+    if (_pointSizeGPUUniformValueFloat != null)
+    {
+      _pointSizeGPUUniformValueFloat._value = _pointSize;
+    }
+  }
 }

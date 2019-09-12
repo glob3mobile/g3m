@@ -2,6 +2,7 @@
 
 package com.glob3mobile.pointcloud.octree;
 
+import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -41,8 +42,7 @@ class CreateMapTask
                                     final double percent,
                                     final long elapsed,
                                     final long estimatedMsToFinish) {
-            System.out.println("- drawing map \"" + sourceCloudName + "\" "
-                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+            System.out.println("- drawing map \"" + sourceCloudName + "\" " + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
       _mapSector = statistics.getSector();
@@ -99,7 +99,10 @@ class CreateMapTask
       _g.dispose();
 
       try {
-         ImageIO.write(_image, "png", new File("_DEBUG_ot_map.png"));
+         final File pngFile = new File("_DEBUG_ot_map.png");
+         ImageIO.write(_image, "png", pngFile);
+
+         Desktop.getDesktop().open(pngFile);
       }
       catch (final IOException e) {
          throw new RuntimeException(e);
