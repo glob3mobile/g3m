@@ -526,7 +526,8 @@ long long PointCloudsRenderer::PointCloudInnerNode::rawRender(const PointCloud* 
                              pointSize * 2 *  IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                              Color::newFromRGBA(1, 1, 0, 1), // flatColor
                              NULL, // colors
-                             true);
+                             true  // depthTest
+                             );
     }
     _mesh->render(rc, glState);
     renderedCount = 1;
@@ -774,7 +775,8 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                       pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                                       NULL,                     // flatColor
                                       _firstPointsColorsBuffer, // colors
-                                      true);
+                                      true // depthTest
+                                      );
     mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
     if (_mesh != NULL) {
       if (_neededPoints > _mesh->getRenderVerticesCount()) {
@@ -853,7 +855,8 @@ DirectMesh* PointCloudsRenderer::PointCloudLeafNode::createMesh(double minHeight
                                     pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio(),
                                     NULL,   // flatColor
                                     colors, // colors
-                                    true);
+                                    true    // depthTest
+                                    );
   // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
   mesh->setRenderVerticesCount( pointsCount );
   if (_mesh != NULL) {

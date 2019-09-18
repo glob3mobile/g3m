@@ -75,6 +75,8 @@ _context(NULL)
 {
   _scenes.push_back( new G3MRasterLayersDemoScene(this) );
   _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
+  _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
+  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
   _scenes.push_back( new G3MVectorialDemoScene(this) );
   _scenes.push_back( new G3MMarksDemoScene(this) );
   _scenes.push_back( new G3M3DSymbologyDemoScene(this) );
@@ -83,8 +85,6 @@ _context(NULL)
   _scenes.push_back( new G3MCameraDemoScene(this) );
   _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
   _scenes.push_back( new G3MTiledVectorDemoScene(this) );
-  _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
-  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
   _scenes.push_back( new G3MHUDDemoScene(this) );
   _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
   _scenes.push_back( new G3MAugmentedRealityDemoScene(this) );

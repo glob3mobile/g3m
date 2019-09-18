@@ -21,7 +21,8 @@ protected:
 
 public:
   G3MStreamingPointCloud2DemoScene(G3MDemoModel* model) :
-  G3MDemoScene(model, "Streaming Points 2", "", -1)
+  G3MDemoScene(model, "Amsterdam - Point Cloud streaming", "", -1)
+//  G3MDemoScene(model, "Streaming Points 2", "", -1)
   {
   }
 

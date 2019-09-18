@@ -40,8 +40,8 @@ public:
 //                                          Geodetic3D::fromDegrees(44.950996472837502438,
 //                                                                  -93.098090960367656521,
 //                                                                  301.5960958814906121),
-                                          Geodetic3D::fromDegrees(53.7194561048,
-                                                                  3.955078125,
+                                          Geodetic3D::fromDegrees(52.3965400833,
+                                                                  4.919128418,
                                                                   2000),
                                           Angle::zero(),
                                           Angle::minusHalfPi()
@@ -62,7 +62,8 @@ void G3MStreamingPointCloud2DemoScene::rawActivate(const G3MContext *context) {
   const float verticalExaggeration = 1;
 //  const double deltaHeight = -202;
 //const double deltaHeight = -3.7930956;
-  const double deltaHeight = 13;
+//  const double deltaHeight = 13;
+  const double deltaHeight = 0;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
