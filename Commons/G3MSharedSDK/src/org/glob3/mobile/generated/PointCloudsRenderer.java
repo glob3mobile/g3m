@@ -231,7 +231,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           pointsBuffer.rawPut(1, (float)(average._y - averageY));
           pointsBuffer.rawPut(2, (float)(average._z - averageZ));
     
-          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2 * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), Color.newFromRGBA(1, 1, 0, 1), null, true); // colors -  flatColor
+          _mesh = new DirectMesh(GLPrimitive.points(), true, new Vector3D(averageX, averageY, averageZ), pointsBuffer, 1, pointSize * 2 * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), Color.newFromRGBA(1, 1, 0, 1), null, true); // depthTest -  colors -  flatColor
         }
         _mesh.render(rc, glState);
         renderedCount = 1;
@@ -591,7 +591,7 @@ public class PointCloudsRenderer extends DefaultRenderer
           }
         }
     
-        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), null, _firstPointsColorsBuffer, true); // colors -  flatColor
+        DirectMesh mesh = new DirectMesh(GLPrimitive.points(), false, _average, _firstPointsVerticesBuffer, 1, pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), null, _firstPointsColorsBuffer, true); // depthTest -  colors -  flatColor
         mesh.setRenderVerticesCount(mu.min(_neededPoints, firstPointsCount));
         if (_mesh != null)
         {
@@ -665,7 +665,7 @@ public class PointCloudsRenderer extends DefaultRenderer
         }
       }
     
-      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), null, colors, true); // colors -  flatColor
+      DirectMesh mesh = new DirectMesh(GLPrimitive.points(), true, _average, vertices, 1, pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio(), null, colors, true); // depthTest -  colors -  flatColor
       // mesh->setRenderVerticesCount( mu->min(_neededPoints, firstPointsCount) );
       mesh.setRenderVerticesCount(pointsCount);
       if (_mesh != null)
