@@ -665,6 +665,10 @@ void G3MWidget::rawRenderMono(const RenderState_Type renderStateType) {
   rawRender(renderStateType);
 }
 
+void G3MWidget::addCameraConstrainer(ICameraConstrainer* constrainer) {
+  _cameraConstrainers.push_back(constrainer);
+}
+
 void G3MWidget::render(int width, int height) {
   if (_paused) {
     return;

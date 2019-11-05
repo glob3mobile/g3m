@@ -257,6 +257,7 @@ public:
 
   void resetFrustumPolicy();
 
+  void addCameraConstrainer(ICameraConstrainer* constrainer);
 
 private:
   IStorage*                _storage;
