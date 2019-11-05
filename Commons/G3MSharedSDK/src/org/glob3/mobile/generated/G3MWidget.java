@@ -765,6 +765,10 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     }
   }
 
+  public final void addCameraConstrainer(ICameraConstrainer constrainer)
+  {
+    _cameraConstrainers.add(constrainer);
+  }
 
   private IStorage _storage;
   private IDownloader _downloader;
