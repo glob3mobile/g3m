@@ -362,7 +362,7 @@ public class Trail
       return _positions.get(_positions.size() - 1);
     }
 
-    public final Trail.Position getPreLastPosition()
+    public final Trail.Position getPenultimatePosition()
     {
       return _positions.get(_positions.size() - 2);
     }
@@ -499,7 +499,7 @@ public class Trail
         _segments.add(newSegment);
   
         currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha, heading);
-        newSegment.setPreviousSegmentLastPosition(currentSegment.getPreLastPosition());
+        newSegment.setPreviousSegmentLastPosition(currentSegment.getPenultimatePosition());
         newSegment.addPosition(currentSegment.getLastPosition());
   
         currentSegment = newSegment;
