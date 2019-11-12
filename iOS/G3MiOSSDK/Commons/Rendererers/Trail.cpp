@@ -126,7 +126,7 @@ Trail::Position Trail::Segment::getLastPosition() const {
 #endif
 }
 
-Trail::Position Trail::Segment::getPreLastPosition() const {
+Trail::Position Trail::Segment::getPenultimatePosition() const {
 #ifdef C_CODE
   return *(_positions[ _positions.size() - 2]);
 #endif
@@ -466,7 +466,7 @@ void Trail::addPosition(const Angle& latitude,
                                                   height + _deltaHeight,
                                                   alpha,
                                                   heading);
-      newSegment->setPreviousSegmentLastPosition( currentSegment->getPreLastPosition() );
+      newSegment->setPreviousSegmentLastPosition( currentSegment->getPenultimatePosition() );
       newSegment->addPosition( currentSegment->getLastPosition() );
 
       currentSegment = newSegment;

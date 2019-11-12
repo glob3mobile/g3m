@@ -156,7 +156,7 @@ const std::string JSONObject::getAsString(const std::string& key,
 }
 
 
-std::vector<std::string> JSONObject::keys() const {
+const std::vector<std::string> JSONObject::keys() const {
 #ifdef C_CODE
   std::vector<std::string> result;
 

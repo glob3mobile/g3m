@@ -153,7 +153,7 @@ private:
 
     Position getLastPosition() const;
 
-    Position getPreLastPosition() const;
+    Position getPenultimatePosition() const;
 
     void render(const G3MRenderContext* rc,
                 const Frustum* frustum,

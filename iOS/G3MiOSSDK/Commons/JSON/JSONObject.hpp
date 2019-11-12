@@ -71,7 +71,7 @@ public:
 
   size_t size() const;
 
-  std::vector<std::string> keys() const;
+  const std::vector<std::string> keys() const;
 
   const std::string description() const;
   const std::string toString() const;
