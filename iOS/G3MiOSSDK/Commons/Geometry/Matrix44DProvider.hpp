@@ -17,115 +17,111 @@
 
 class Matrix44DProvider: public RCObject {
 protected:
-  virtual ~Matrix44DProvider() {
+    virtual ~Matrix44DProvider() {
 #ifdef JAVA_CODE
-    super.dispose();
+        super.dispose();
 #endif
-  }
-
+    }
+    
 public:
-  virtual const Matrix44D* getMatrix() const = 0;
+    virtual const Matrix44D* getMatrix() const = 0;
 };
 
 
 class Matrix44DHolder: public Matrix44DProvider {
 private:
 #ifdef C_CODE
-  const Matrix44D* _matrix;
+    const Matrix44D* _matrix;
 #endif
 #ifdef JAVA_CODE
-  private Matrix44D _matrix;
+    private Matrix44D _matrix;
 #endif
-
-  ~Matrix44DHolder() {
-    _matrix->_release();
-
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-  }
-
-public:
-  Matrix44DHolder(const Matrix44D* matrix) :
-  _matrix(matrix)
-  {
-    if (matrix == NULL) {
-      THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
-    }
-    _matrix->_retain();
-  }
-
-  void setMatrix(const Matrix44D* matrix) {
-    if (matrix == NULL) {
-      THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
-    }
-
-    if (matrix != _matrix) {
-      if (_matrix != NULL) {
+    
+    ~Matrix44DHolder() {
         _matrix->_release();
-      }
-      _matrix = matrix;
-      _matrix->_retain();
+        
+#ifdef JAVA_CODE
+        super.dispose();
+#endif
     }
-  }
-
-  const Matrix44D* getMatrix() const {
-    return _matrix;
-  }
+    
+public:
+    Matrix44DHolder(const Matrix44D* matrix):_matrix(matrix) {
+        if (matrix == NULL) {
+            THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
+        }
+        _matrix->_retain();
+    }
+    
+    void setMatrix(const Matrix44D* matrix) {
+        if (matrix == NULL) {
+            THROW_EXCEPTION("Setting NULL in Matrix44D Holder");
+        }
+        
+        if (matrix != _matrix) {
+            if (_matrix != NULL) {
+                _matrix->_release();
+            }
+            _matrix = matrix;
+            _matrix->_retain();
+        }
+    }
+    
+    const Matrix44D* getMatrix() const {
+        return _matrix;
+    }
 };
 
 
 class Matrix44DMultiplicationHolder : public Matrix44DProvider {
 private:
-  const Matrix44D**         _matrices;
-  const Matrix44DProvider** _providers;
-  const size_t _matricesSize;
-  mutable Matrix44D* _modelview;
-
-  void pullMatrixes() const;
-
-  ~Matrix44DMultiplicationHolder();
-
+    mutable long long _sumMatrixIDs;
+    const Matrix44DProvider** _providers;
+    const size_t _matricesSize;
+    mutable Matrix44D* _result;
+    
+    ~Matrix44DMultiplicationHolder();
+    
 public:
-  Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
-                                size_t matricesSize);
-
-  Matrix44D* getMatrix() const;
-  
+    Matrix44DMultiplicationHolder(const Matrix44DProvider* providers[],
+                                  size_t matricesSize);
+    
+    Matrix44D* getMatrix() const;
+    
 };
 
 
 class Matrix44DMultiplicationHolderBuilder {
 private:
-  std::vector<const Matrix44DProvider*> _providers;
-
+    std::vector<const Matrix44DProvider*> _providers;
+    
 public:
-  ~Matrix44DMultiplicationHolderBuilder() {
-    const size_t providersSize = _providers.size();
-    for (size_t i = 0; i < providersSize; i++) {
-      _providers[i]->_release();
+    ~Matrix44DMultiplicationHolderBuilder() {
+        const size_t providersSize = _providers.size();
+        for (size_t i = 0; i < providersSize; i++) {
+            _providers[i]->_release();
+        }
     }
-  }
-
-  size_t size() const {
-    return _providers.size();
-  }
-  
-  void add(const Matrix44DProvider* provider) {
-    _providers.push_back(provider);
-    provider->_retain();
-  }
-
-  Matrix44DMultiplicationHolder* create() const {
-    const size_t providersSize = _providers.size();
-    const Matrix44DProvider* ps[providersSize];
-    for (size_t i = 0; i < providersSize; i++) {
-      ps[i] = _providers[i];
+    
+    size_t size() const {
+        return _providers.size();
     }
-
-    return new Matrix44DMultiplicationHolder(ps, providersSize);
-  }
-
+    
+    void add(const Matrix44DProvider* provider) {
+        _providers.push_back(provider);
+        provider->_retain();
+    }
+    
+    Matrix44DMultiplicationHolder* create() const {
+        const size_t providersSize = _providers.size();
+        const Matrix44DProvider* ps[providersSize];
+        for (size_t i = 0; i < providersSize; i++) {
+            ps[i] = _providers[i];
+        }
+        
+        return new Matrix44DMultiplicationHolder(ps, providersSize);
+    }
+    
 };
 
 #endif
