@@ -50,7 +50,7 @@ void G3MBuilder_Wasm::addGPUProgramSources() {
 
 G3MWidget_Wasm* G3MBuilder_Wasm::createWidget() const {
   G3MWidget_Wasm* nativeWidget = new G3MWidget_Wasm();
-  if (nativeWidget.isWebGLSupported()) {
+  if (nativeWidget->isWebGLSupported()) {
     addGPUProgramSources();
 
     setGL(nativeWidget.getGL());
