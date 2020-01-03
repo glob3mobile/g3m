@@ -29,9 +29,9 @@ private:
   
 protected:
   
-  ChangedRendererInfoListener* _changedInfoListener = NULL;
+  ChangedRendererInfoListener* _changedInfoListener;
   
-  size_t _rendererID = 0;
+  size_t _rendererID;
   
 #ifdef C_CODE
   const G3MContext* _context;
@@ -40,13 +40,17 @@ protected:
 #endif
   
   DefaultRenderer() :
-  _enable(true)
+  _enable(true),
+  _changedInfoListener(NULL),
+  _rendererID(0)
   {
 
   }
   
   DefaultRenderer(bool enable) :
-  _enable(enable)
+  _enable(enable),
+  _changedInfoListener(NULL),
+  _rendererID(0)
   {
     
   }

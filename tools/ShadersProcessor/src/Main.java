@@ -1,29 +1,51 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.JFileChooser;
+import javax.swing.*;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.*;
 
 
 public class Main {
 
-   private static String _classSource      = "//\n" + "//  BasicShadersGL2.hpp\n" + "//  G3MiOSSDK\n" + "//\n"
-                                             + "//  Created by Jose Miguel SN on 15/11/13.\n" + "//\n" + "//\n" + "\n"
-                                             + "#ifndef G3MiOSSDK_BasicShadersGL2_h\n" + "#define G3MiOSSDK_BasicShadersGL2_h\n"
-                                             + "\n" + "#include \"GPUProgramFactory.hpp\"\n" + "\n"
-                                             + "class BasicShadersGL2: public GPUProgramFactory{\n" + "\n" + "public:\n"
-                                             + "  BasicShadersGL2(){\n" + "#ifdef C_CODE\n"
-                                             + "    std::string emptyString = \"\";\n" + "#endif\n" + "#ifdef JAVA_CODE\n"
-                                             + "    String emptyString = \"\";\n" + "#endif\n" + "\n" + "ADDING_SHADERS"
-                                             + "  }\n" + "\n" + "};\n" + "#endif\n";
+   private static final String _classSource = "//\n" + //
+                                              "//  BasicShadersGL2.hpp\n" + //
+                                              "//  G3MiOSSDK\n" + //
+                                              "//\n" + //
+                                              "//  Created by Jose Miguel SN on 15/11/13.\n" + //
+                                              "//\n" + //
+                                              "//\n" + //
+                                              "\n" + //
+                                              "#ifndef G3MiOSSDK_BasicShadersGL2_h\n" + //
+                                              "#define G3MiOSSDK_BasicShadersGL2_h\n" + //
+                                              "\n" + //
+                                              "#include \"GPUProgramFactory.hpp\"\n" + //
+                                              "\n" + //
+                                              "class BasicShadersGL2: public GPUProgramFactory {\n" + //
+                                              "\n" + //
+                                              "public:\n" + //
+                                              "  BasicShadersGL2() {\n" + //
+                                              "#ifdef C_CODE\n" + //
+                                              "    const std::string emptyString = \"\";\n" + //
+                                              "#endif\n" + //
+                                              "#ifdef JAVA_CODE\n" + //
+                                              "    final String emptyString = \"\";\n" + //
+                                              "#endif\n" + //
+                                              "\n" + //
+                                              "ADDING_SHADERS" + "  }\n" + //
+                                              "\n" + //
+                                              "};\n" + //
+                                              "#endif\n";
 
-   private static String _addProgramSource = "    GPUProgramSources sourcesShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n"
-                                             + "    this->add(sourcesShader_Name);\n\n";
+   //   private static final String ADD_PROGRAM_SOURCE = "    GPUProgramSources srcShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n" + //
+   //                                                    "    this->add(srcShader_Name);\n\n";
+
+   private static final String ADD_PROGRAM_SOURCE = "    {\n" + //
+                                                    "      GPUProgramSources srcShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n" + //
+                                                    "      this->add(srcShader_Name);\n" + //
+                                                    "    }\n" + //
+                                                    "\n";
+
 
    private static class Shader {
       public String _name;
@@ -54,7 +76,7 @@ public class Main {
 
       final String[] lines = source.split(System.getProperty("line.separator"));
 
-      String result = "emptyString +  \n";
+      String result = "emptyString +\n";
 
       for (int i = 0; i < lines.length; i++) {
          String line = lines[i];
@@ -145,7 +167,7 @@ public class Main {
          String addingShadersString = "";
          for (int i = 0; i < shaders.size(); i++) {
             final Shader shader = shaders.get(i);
-            String source = _addProgramSource.replaceAll("Shader_Name", shader._name);
+            String source = ADD_PROGRAM_SOURCE.replaceAll("Shader_Name", shader._name);
             source = source.replace("Shader_Vertex", processSourceString(shader._vertex));
             source = source.replace("Shader_Fragment", processSourceString(shader._fragment));
 
@@ -155,12 +177,9 @@ public class Main {
 
          }
 
-         _classSource = _classSource.replace("ADDING_SHADERS", addingShadersString);
-
-         //THIS SAVES TO FILE IN SHADERS FOLDER
          final String outPath = (new File(filePath)).getAbsolutePath();
          try (final PrintWriter out = new PrintWriter(outPath)) {
-            out.print(_classSource);
+            out.print(_classSource.replace("ADDING_SHADERS", addingShadersString));
          }
 
 

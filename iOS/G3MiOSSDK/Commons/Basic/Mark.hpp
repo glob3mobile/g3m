@@ -136,7 +136,7 @@ private:
    */
   const bool        _autoDeleteListener;
 
-  std::string _token = "";
+  std::string _token;
 
 #ifdef C_CODE
   const TextureIDReference* _textureID;

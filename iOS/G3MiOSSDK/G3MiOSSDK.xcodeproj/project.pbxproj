@@ -3587,7 +3587,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#cd ../../tools/ShadersProcessor/\n#java -jar Built_161110.jar";
+			shellScript = "#cd ../../tools/ShadersProcessor/\n#java -jar Built_161110.jar\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -2,27 +2,20 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+import org.glob3.mobile.generated.*;
 import org.glob3.mobile.generated.Touch;
-import org.glob3.mobile.generated.TouchEvent;
-import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2F;
 
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.*;
+import com.google.gwt.dom.client.*;
 import com.google.gwt.dom.client.CanvasElement;
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.*;
 
 
 final class MotionEventProcessor {
 
-   private static final Vector2F DELTA = new Vector2F(10, 0);
+   private static final Vector2F DELTA                  = new Vector2F(10, 0);
 
 
    private final G3MWidget_WebGL _widget;
@@ -152,8 +145,8 @@ final class MotionEventProcessor {
    }
 
 
-   private TouchEvent processTouchCancel(@SuppressWarnings("unused")
-   final Event event) {
+   @SuppressWarnings("unused")
+   private TouchEvent processTouchCancel(final Event event) {
       _previousTouchesPositions.clear();
       return null;
    }
@@ -288,33 +281,33 @@ final class MotionEventProcessor {
 
 
    private native void jsAddMouseWheelListener() /*-{
-                                                 var thisInstance = this;
+		var thisInstance = this;
 
-                                                 var canvas = this.@org.glob3.mobile.specific.MotionEventProcessor::_canvasElement;
+		var canvas = this.@org.glob3.mobile.specific.MotionEventProcessor::_canvasElement;
 
-                                                 $wnd.g3mMouseWheelHandler = function(e) {
-                                                 // cross-browser wheel delta
-                                                 var e = $wnd.event || e; // old IE support
-                                                 var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
-                                                 thisInstance.@org.glob3.mobile.specific.MotionEventProcessor::processMouseWheel(III)(delta, e.clientX, e.clientY);
-                                                 };
+		$wnd.g3mMouseWheelHandler = function(e) {
+			// cross-browser wheel delta
+			var e = $wnd.event || e; // old IE support
+			var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
+			thisInstance.@org.glob3.mobile.specific.MotionEventProcessor::processMouseWheel(III)(delta, e.clientX, e.clientY);
+		};
 
-                                                 if (canvas) {
-                                                 if (canvas.addEventListener) {
-                                                 // IE9, Chrome, Safari, Opera
-                                                 canvas.addEventListener("mousewheel", $wnd.g3mMouseWheelHandler,
-                                                 false);
-                                                 // Firefox
-                                                 canvas.addEventListener("DOMMouseScroll",
-                                                 $wnd.g3mMouseWheelHandler, false);
-                                                 }
-                                                 // IE 6/7/8
-                                                 else {
-                                                 canvas.attachEvent("onmousewheel", $wnd.g3mMouseWheelHandler);
-                                                 }
-                                                 }
+		if (canvas) {
+			if (canvas.addEventListener) {
+				// IE9, Chrome, Safari, Opera
+				canvas.addEventListener("mousewheel",
+						$wnd.g3mMouseWheelHandler, false);
+				// Firefox
+				canvas.addEventListener("DOMMouseScroll",
+						$wnd.g3mMouseWheelHandler, false);
+			}
+			// IE 6/7/8
+			else {
+				canvas.attachEvent("onmousewheel", $wnd.g3mMouseWheelHandler);
+			}
+		}
 
-                                                 }-*/;
+   }-*/;
 
 
 }

@@ -2,22 +2,14 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.GFont;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.Vector2F;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayNumber;
+import com.google.gwt.core.client.*;
 
 
 public final class Canvas_WebGL
-   extends
-      ICanvas {
+         extends
+            ICanvas {
 
    private final JavaScriptObject _domCanvas;
    private final JavaScriptObject _domCanvasContext;
@@ -53,8 +45,8 @@ public final class Canvas_WebGL
 
 		var isRetina = this.@org.glob3.mobile.generated.ICanvas::_retina;
 		var ratio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
-		var w = width * ratio;
-		var h = height * ratio;
+		var w = Math.ceil(width * ratio);
+		var h = Math.ceil(height * ratio);
 
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_width = w;
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_height = h;
@@ -296,7 +288,7 @@ public final class Canvas_WebGL
    protected native Vector2F _textExtent(final String text) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.textBaseline = "top";
-		var width = context.measureText(text).width;
+		var width = Math.ceil(context.measureText(text).width);
 		var height = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize;
 		return @org.glob3.mobile.generated.Vector2F::new(FF)(width, height);
    }-*/;

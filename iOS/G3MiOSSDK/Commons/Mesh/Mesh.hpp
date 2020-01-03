@@ -30,7 +30,7 @@ private:
 
   MeshUserData* _userData;
 
-  std::string _token = "";
+  std::string _token;
 
 protected:
   Mesh();

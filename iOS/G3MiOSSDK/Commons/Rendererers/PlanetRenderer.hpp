@@ -155,7 +155,7 @@ private:
   TilesRenderParameters* _tilesRenderParameters;
   bool                   _showStatistics;
   const bool             _logTilesPetitions;
-  ITileVisitor*          _tileVisitor = NULL;
+  ITileVisitor*          _tileVisitor;
   TileLODTester*         _tileLODTester;
   TileVisibilityTester*  _tileVisibilityTester;
 

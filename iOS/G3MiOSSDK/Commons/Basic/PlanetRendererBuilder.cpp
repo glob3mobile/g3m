@@ -53,7 +53,8 @@ _changedInfoListener(NULL),
 _touchEventTypeOfTerrainTouchListener(LongPress),
 _tileLODTester(NULL),
 _tileVisibilityTester(NULL),
-_verboseTileTexturizerErrors(true)
+_verboseTileTexturizerErrors(true),
+_defaultTileBackgroundImage(NULL)
 {
 }
 

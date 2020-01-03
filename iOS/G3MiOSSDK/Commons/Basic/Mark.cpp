@@ -306,7 +306,8 @@ _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
 _deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false)
+_zoomOutDisappearsStarted(false),
+_token("")
 {
 
 }
@@ -366,7 +367,8 @@ _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
 _deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false)
+_zoomOutDisappearsStarted(false),
+_token("")
 {
 
 }
@@ -423,7 +425,8 @@ _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
 _deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false)
+_zoomOutDisappearsStarted(false),
+_token("")
 {
 
 }
@@ -480,7 +483,8 @@ _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
 _deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false)
+_zoomOutDisappearsStarted(false),
+_token("")
 {
 
 }
@@ -536,7 +540,8 @@ _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
 _deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false)
+_zoomOutDisappearsStarted(false),
+_token("")
 {
   if (_imageBuilder->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image builders");

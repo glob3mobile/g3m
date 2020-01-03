@@ -3,31 +3,19 @@
 package org.glob3.mobile.specific;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.*;
 
-import org.glob3.mobile.generated.FrameTasksExecutor;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.*;
 
-import android.content.Context;
-import android.util.Log;
+import android.content.*;
+import android.util.*;
 
 
 public final class Downloader_Android
          extends
             IDownloader {
 
-   final static String TAG = "Downloader_Android";
+   final static String                                   TAG                  = "Downloader_Android";
 
    private final int                                     _maxConcurrentOperationCount;
    private int                                           _requestIDCounter    = 1;
@@ -40,10 +28,10 @@ public final class Downloader_Android
    private final TimeInterval                            _readTimeout;
    private final Context                                 _appContext;
 
-   private boolean      _started        = false;
-   private final Object _startStopMutex = new Object();
+   private boolean                                       _started             = false;
+   private final Object                                  _startStopMutex      = new Object();
 
-   private G3MContext _context;
+   private G3MContext                                    _context;
 
 
    Downloader_Android(final int maxConcurrentOperationCount,
@@ -249,7 +237,7 @@ public final class Downloader_Android
       synchronized (this) {
          _cancelsCounter++;
 
-         for (final Iterator<Entry<String, Downloader_Android_Handler>> iterator = _queuedHandlers.entrySet().iterator(); iterator.hasNext();) {
+         for (final Iterator<Map.Entry<String, Downloader_Android_Handler>> iterator = _queuedHandlers.entrySet().iterator(); iterator.hasNext();) {
             final Map.Entry<String, Downloader_Android_Handler> entry = iterator.next();
 
             final Downloader_Android_Handler handler = entry.getValue();

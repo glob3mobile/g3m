@@ -241,7 +241,8 @@ _renderTileMeshes(renderTileMeshes),
 _logTilesPetitions(logTilesPetitions),
 _touchEventTypeOfTerrainTouchListener(touchEventTypeOfTerrainTouchListener),
 _tileLODTester(tileLODTester),
-_tileVisibilityTester(tileVisibilityTester)
+_tileVisibilityTester(tileVisibilityTester),
+_tileVisitor(NULL)
 {
   _context = NULL;
   _changedInfoListener = changedInfoListener;

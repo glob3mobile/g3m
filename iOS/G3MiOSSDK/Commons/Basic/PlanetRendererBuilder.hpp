@@ -93,7 +93,7 @@ private:
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener() const;
   
-  mutable IImageBuilder* _defaultTileBackgroundImage = NULL;
+  mutable IImageBuilder* _defaultTileBackgroundImage;
   
   IImageBuilder* getDefaultTileBackgroundImageBuilder() const;
   

@@ -10,7 +10,8 @@
 
 Mesh::Mesh() :
 _enable(true),
-_userData(NULL)
+_userData(NULL),
+_token("")
 {
 }
 
