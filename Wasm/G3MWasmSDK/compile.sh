@@ -24,6 +24,7 @@ mkdir WASM
 G3M_COMMONS_SOURCES=$(find "${G3M_COMMONS_SOURCE_DIRECTORY}" -iname "*.cpp")
 
 em++ \
+    -O0 \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic       \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras     \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/DEM         \
