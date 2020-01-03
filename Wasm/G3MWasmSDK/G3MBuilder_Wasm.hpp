@@ -5,6 +5,7 @@
 class IThreadUtils;
 class IStorage;
 class IDownloader;
+class G3MWidget_Wasm;
 
 
 class G3MBuilder_Wasm : public IG3MBuilder {
