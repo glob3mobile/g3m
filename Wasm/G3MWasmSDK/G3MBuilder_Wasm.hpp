@@ -1,4 +1,7 @@
 
+#ifndef G3MBuilder_Wasm_hpp
+#define G3MBuilder_Wasm_hpp
+
 
 #include "IG3MBuilder.hpp"
 
@@ -26,3 +29,5 @@ public:
   G3MWidget_Wasm* createWidget() const;
 
 };
+
+#endif

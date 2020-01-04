@@ -1,27 +1,26 @@
 
-
 #include "G3MBuilder_Wasm.hpp"
 
 #include "ThreadUtils_Wasm.hpp"
-#include "Downloader_Wasm"
+#include "Downloader_Wasm.hpp"
 #include "BasicShadersGL2.hpp"
 
 
-G3MBuilder_Wasm::~G3MBuilder_Wasm() {
+G3MBuilder_Wasm::G3MBuilder_Wasm() {
 }
 
+G3MBuilder_Wasm::~G3MBuilder_Wasm() {
+}
 
 IThreadUtils* G3MBuilder_Wasm::createDefaultThreadUtils() {
   const int delayMillis = 10;
   return new ThreadUtils_Wasm(delayMillis);
 }
 
-
 IStorage* G3MBuilder_Wasm::createDefaultStorage() {
 #warning TODO: Storage_Wasm 
-  return null;
+  return NULL;
 }
-
 
 IDownloader* G3MBuilder_Wasm::createDefaultDownloader() {
   const int maxConcurrentOperationCount = 8;
@@ -29,16 +28,6 @@ IDownloader* G3MBuilder_Wasm::createDefaultDownloader() {
   const boolean verboseErrors = true;
   const std::string proxy = "";
   return new Downloader_Wasm(maxConcurrentOperationCount, delayMillis, proxy, verboseErrors);
-}
-
-G3MBuilder_Wasm::G3MBuilder_Wasm() :
-  _nativeWidget(new G3MWidget_WebGL());
-{
-}
-
-G3MBuilder_Wasm::G3MBuilder_Wasm(G3MWidget_Wasm* nativeWidget) :
-  _nativeWidget(nativeWidget)
-{
 }
 
 void G3MBuilder_Wasm::addGPUProgramSources() {
