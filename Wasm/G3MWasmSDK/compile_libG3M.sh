@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#export EMSDK_DIRECTORY="/Users/dgd/Desktop/emscripten_sandbox/emsdk/"
-export EMSDK_DIRECTORY="/Users/ngd/Documents/Development/Nico/emsdk/"
+export EMSDK_DIRECTORY="/Users/dgd/Desktop/emscripten_sandbox/emsdk/"
+#export EMSDK_DIRECTORY="/Users/ngd/Documents/Development/Nico/emsdk/"
 
 export G3M_COMMONS_SOURCE_DIRECTORY="../../iOS/G3MiOSSDK/Commons/"
 
@@ -16,8 +16,8 @@ emcc -v
 
 echo
 
-rm -rf lib
-mkdir lib
+rm -rf LIB
+mkdir LIB
 
 
 ##export CPLUS_INCLUDE_PATH=$(find ${G3M_COMMONS_SOURCE_DIRECTORY} -type d)
@@ -43,5 +43,5 @@ em++ \
     -DC_CODE \
     -g \
     -std=c++11 \
-    -o lib/libG3M.bc \
+    -o LIB/libG3M.bc \
     || exit 1

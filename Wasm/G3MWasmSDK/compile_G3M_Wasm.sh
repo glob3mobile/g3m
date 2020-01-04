@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#export EMSDK_DIRECTORY="/Users/dgd/Desktop/emscripten_sandbox/emsdk/"
-export EMSDK_DIRECTORY="/Users/ngd/Documents/Development/Nico/emsdk/"
+export EMSDK_DIRECTORY="/Users/dgd/Desktop/emscripten_sandbox/emsdk/"
+#export EMSDK_DIRECTORY="/Users/ngd/Documents/Development/Nico/emsdk/"
 
 export G3M_COMMONS_SOURCE_DIRECTORY="../../iOS/G3MiOSSDK/Commons/"
 
@@ -35,7 +35,7 @@ em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Math        \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh        \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers \
-    lib/libG3M.bc \
+    LIB/libG3M.bc \
     *.cpp \
     -DC_CODE \
     -g \
