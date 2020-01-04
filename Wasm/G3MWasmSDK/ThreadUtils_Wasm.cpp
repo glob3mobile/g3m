@@ -37,7 +37,41 @@ void ThreadUtils_Wasm::invokeInRendererThread(GTask* task,
   }
 }
 
+
+class TaskActivation {
+private:
+  GTask* _task;
+  const bool _autoDelete;
+  G3MContext _context;
+
+public:
+  TaskActivation(GTask*     task,
+		 const bool autoDelete,
+		 G3MContext context) :
+    _task(task),
+    _autoDelete(autoDelete),
+    _context(context)
+  {
+  }
+
+  void doIt() {
+    _task->run( _context );
+    if (_autoDelete) {
+      delete _task;
+      _task = NULL;
+    }
+  }
+};
+
+void __activateTask(void *userData) {
+  TaskActivation* taskActivation = (TaskActivation*) userData;
+  taskActivation->doIt();
+  delete taskActivation;
+}
+
 void ThreadUtils_Wasm::invokeInBackground(GTask* task,
 					  bool autoDelete) const  {
-#error TODO
+  emscripten_set_timeout(__activateTask,
+			 _delayMillis,
+			 (void*) new TaskActivation(task, autoDelete, getContext()));
 }

@@ -6,8 +6,18 @@
 
 
 class Downloader_Wasm : public IDownloader {
+private:
+  const int         _maxConcurrentOperationCount;
+  const int         _delayMillis;
+  const bool        _verboseErrors;
+  const std::string _proxy;
+
 public:
-  
+  Downloader_Wasm(const int          maxConcurrentOperationCount,
+		  const int          delayMillis,
+		  const bool         verboseErrors,
+		  const std::string& proxy);
+ 
   void onResume(const G3MContext* context);
   
   void onPause(const G3MContext* context);
@@ -18,6 +28,30 @@ public:
                   FrameTasksExecutor* frameTasksExecutor);
 
   const std::string statistics();
+
+  void start();
+
+  void stop();
+
+  long long requestBuffer(const URL& url,
+			  long long priority,
+			  const TimeInterval& timeToCache,
+			  bool readExpired,
+			  IBufferDownloadListener* listener,
+			  bool deleteListener,
+			  const std::string& tag);
+
+  long long requestImage(const URL& url,
+			 long long priority,
+			 const TimeInterval& timeToCache,
+			 bool readExpired,
+			 IImageDownloadListener* listener,
+			 bool deleteListener,
+			 const std::string& tag);
+
+  bool cancelRequest(long long requestID);
+
+  void cancelRequestsTagged(const std::string& tag);
 
 };
 
