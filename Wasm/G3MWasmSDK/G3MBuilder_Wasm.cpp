@@ -31,14 +31,14 @@ IDownloader* G3MBuilder_Wasm::createDefaultDownloader() {
   return new Downloader_Wasm(maxConcurrentOperationCount, delayMillis, proxy, verboseErrors);
 }
 
-void G3MBuilder_Wasm::addGPUProgramSources() const {
+void G3MBuilder_Wasm::addGPUProgramSources() {
   const BasicShadersGL2 basicShaders;
   for (int i = 0; i < basicShaders.size(); i++) {
-    addGPUProgramSources(basicShaders.get(i));
+    IG3MBuilder::addGPUProgramSources(basicShaders.get(i));
   }
 }
 
-G3MWidget_Wasm* G3MBuilder_Wasm::createWidget() const {
+G3MWidget_Wasm* G3MBuilder_Wasm::createWidget() {
   G3MWidget_Wasm* nativeWidget = new G3MWidget_Wasm();
   if (nativeWidget->isWebGLSupported()) {
     addGPUProgramSources();

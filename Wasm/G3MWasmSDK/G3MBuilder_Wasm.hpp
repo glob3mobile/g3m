@@ -13,7 +13,7 @@ class G3MWidget_Wasm;
 
 class G3MBuilder_Wasm : public IG3MBuilder {
 private:
-  void addGPUProgramSources() const;
+  void addGPUProgramSources();
 
 protected:
   IThreadUtils* createDefaultThreadUtils();
@@ -26,7 +26,7 @@ public:
   
   ~G3MBuilder_Wasm();
 
-  G3MWidget_Wasm* createWidget() const;
+  G3MWidget_Wasm* createWidget();
 
 };
 
