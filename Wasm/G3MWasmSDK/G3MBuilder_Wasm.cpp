@@ -4,6 +4,7 @@
 #include "ThreadUtils_Wasm.hpp"
 #include "Downloader_Wasm.hpp"
 #include "BasicShadersGL2.hpp"
+#include "G3MWidget_Wasm.hpp"
 
 
 G3MBuilder_Wasm::G3MBuilder_Wasm() {
@@ -25,12 +26,12 @@ IStorage* G3MBuilder_Wasm::createDefaultStorage() {
 IDownloader* G3MBuilder_Wasm::createDefaultDownloader() {
   const int maxConcurrentOperationCount = 8;
   const int delayMillis = 10;
-  const boolean verboseErrors = true;
+  const bool verboseErrors = true;
   const std::string proxy = "";
   return new Downloader_Wasm(maxConcurrentOperationCount, delayMillis, proxy, verboseErrors);
 }
 
-void G3MBuilder_Wasm::addGPUProgramSources() {
+void G3MBuilder_Wasm::addGPUProgramSources() const {
   const BasicShadersGL2 basicShaders;
   for (int i = 0; i < basicShaders.size(); i++) {
     addGPUProgramSources(basicShaders.get(i));
@@ -42,10 +43,10 @@ G3MWidget_Wasm* G3MBuilder_Wasm::createWidget() const {
   if (nativeWidget->isWebGLSupported()) {
     addGPUProgramSources();
 
-    setGL(nativeWidget.getGL());
+    setGL(nativeWidget->getGL());
 
-    nativeWidget.setG3MWidget(create());
-    nativeWidget.startWidget();
+    nativeWidget->setG3MWidget(create());
+    nativeWidget->startWidget();
   }
 
   return nativeWidget;
