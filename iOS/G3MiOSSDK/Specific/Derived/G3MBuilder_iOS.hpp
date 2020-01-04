@@ -11,7 +11,7 @@
 
 #include "IG3MBuilder.hpp"
 #import "G3MWidget_iOS.h"
-#include "GPUProgramFactory.hpp"
+
 
 class G3MBuilder_iOS : public IG3MBuilder {
 private:
@@ -21,9 +21,6 @@ protected:
   IThreadUtils* createDefaultThreadUtils();
   IStorage*     createDefaultStorage();
   IDownloader*  createDefaultDownloader();
-
-  GPUProgramSources loadGPUProgramSources(const std::string& name);
-
 
 public:
   G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);
