@@ -1,6 +1,7 @@
 #!/bin/bash
 
-export EMSDK_DIRECTORY="/Users/dgd/Desktop/emscripten_sandbox/emsdk/"
+#export EMSDK_DIRECTORY="/Users/dgd/Desktop/emscripten_sandbox/emsdk/"
+export EMSDK_DIRECTORY="/Users/ngd/Documents/Development/Nico/emsdk/"
 
 export G3M_COMMONS_SOURCE_DIRECTORY="../../iOS/G3MiOSSDK/Commons/"
 
