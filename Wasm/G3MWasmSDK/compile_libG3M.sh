@@ -25,6 +25,7 @@ mkdir LIB
 G3M_COMMONS_SOURCES=$(find "${G3M_COMMONS_SOURCE_DIRECTORY}" -iname "*.cpp")
 
 em++ \
+    -r \
     -O0 \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic       \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras     \
