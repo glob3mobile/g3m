@@ -7,4 +7,3 @@ G3MWidget_Wasm::G3MWidget_Wasm() {
 
 G3MWidget_Wasm::~G3MWidget_Wasm() {
 }
-
