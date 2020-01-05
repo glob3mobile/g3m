@@ -11,8 +11,6 @@
 #include "IStringBuilder.hpp"
 #import "NSString_CppAdditions.h"
 
-#include <UIKit/UIKit.h>
-
 
 void Downloader_iOS::start() {
   if (!_started) {
