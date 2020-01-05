@@ -2,8 +2,8 @@
 
 #include "ThreadUtils_Wasm.hpp"
 
+#include <emscripten/html5.h>
 
-delayMillis
 
 ThreadUtils_Wasm::ThreadUtils_Wasm(const int delayMillis) :
   _delayMillis(delayMillis)
@@ -55,10 +55,10 @@ public:
   }
 
   void doIt() {
-    _task->run( _context );
-    if (_autoDelete) {
-      delete _task;
-      _task = NULL;
+      _task->run( _context );
+      if (_autoDelete) {
+	delete _task;
+	_task = NULL;
     }
   }
 };

@@ -16,11 +16,16 @@
 
 class Downloader_iOS : public IDownloader {
 private:
-  NSMutableArray*      _workers;
+  NSMutableArray<Downloader_iOS_WorkerThread*>*      _workers;
 
-  NSRecursiveLock*     _lock;                // synchronization helper
-  NSMutableDictionary* _downloadingHandlers; // downloads current in progress
-  NSMutableDictionary* _queuedHandlers;      // queued downloads
+  // synchronization helper
+  NSRecursiveLock* _lock;
+
+  // downloads current in progress
+  NSMutableDictionary<const NSURL*, Downloader_iOS_Handler*>* _downloadingHandlers;
+
+  // queued downloads
+  NSMutableDictionary<const NSURL*, Downloader_iOS_Handler*>* _queuedHandlers;
 
   long long _requestIDCounter;
 
@@ -36,7 +41,7 @@ private:
 
 public:
   
-  void removeDownloadingHandlerForNSURL(const NSURL* url);
+  void removeDownloadingHandlerForNSURL(const NSURL* nsURL);
   
   Downloader_iOS(int maxConcurrentOperationCount);
   

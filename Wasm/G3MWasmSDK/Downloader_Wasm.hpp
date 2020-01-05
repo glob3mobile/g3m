@@ -7,16 +7,18 @@
 
 class Downloader_Wasm : public IDownloader {
 private:
-  const int         _maxConcurrentOperationCount;
-  const int         _delayMillis;
-  const bool        _verboseErrors;
-  const std::string _proxy;
+  const int  _maxConcurrentOperationCount;
+  const int  _delayMillis;
+  const bool _verboseErrors;
+
+  long _timeoutID;
+
+  void queueHeartbeat();
 
 public:
-  Downloader_Wasm(const int          maxConcurrentOperationCount,
-		  const int          delayMillis,
-		  const bool         verboseErrors,
-		  const std::string& proxy);
+  Downloader_Wasm(const int  maxConcurrentOperationCount,
+		  const int  delayMillis,
+		  const bool verboseErrors);
  
   void onResume(const G3MContext* context);
   
@@ -52,6 +54,9 @@ public:
   bool cancelRequest(long long requestID);
 
   void cancelRequestsTagged(const std::string& tag);
+
+
+  void __heartbeat();
 
 };
 
