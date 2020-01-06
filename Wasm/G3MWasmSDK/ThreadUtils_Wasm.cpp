@@ -55,10 +55,10 @@ public:
   }
 
   void doIt() {
-      _task->run( _context );
-      if (_autoDelete) {
-	delete _task;
-	_task = NULL;
+    _task->run( _context );
+    if (_autoDelete) {
+      delete _task;
+      _task = NULL;
     }
   }
 };
@@ -71,6 +71,8 @@ void __activateTask(void *userData) {
 
 void ThreadUtils_Wasm::invokeInBackground(GTask* task,
 					  bool autoDelete) const  {
+#warning TODO: research emscripten_async_queue_XXX
+  
   emscripten_set_timeout(__activateTask,
 			 _delayMillis,
 			 (void*) new TaskActivation(task, autoDelete, getContext()));

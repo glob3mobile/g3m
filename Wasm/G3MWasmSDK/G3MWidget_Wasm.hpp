@@ -14,6 +14,8 @@ public:
   
   ~G3MWidget_Wasm();
 
+  void initSingletons();
+
 };
 
 #endif

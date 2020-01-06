@@ -5,7 +5,6 @@
 #include <emscripten/html5.h>
 
 
-
 Downloader_Wasm::Downloader_Wasm(const int  maxConcurrentOperationCount,
 				 const int  delayMillis,
 				 const bool verboseErrors) :
@@ -80,10 +79,19 @@ void Downloader_Wasm::queueHeartbeat() {
 
 void Downloader_Wasm::__heartbeat() {
   if (_downloadingHandlers.size() < _maxConcurrentOperationCount) {
-    final Downloader_WebGL_Handler handler = getHandlerToRun();
-    if (handler != null) {
-      handler.runWithDownloader(thisDownloader);
+    Downloader_Wasm_Handler* handler = getHandlerToRun();
+    if (handler != NULL) {
+      handler->runWithDownloader(this);
+      delete handler?;
     }
   }
   queueHeartbeat();
+}
+
+void Downloader_Wasm::start() {
+  queueHeartbeat();
+}
+
+void Downloader_Wasm::stop() {
+  emscripten_clear_timeout(_timeoutID);
 }

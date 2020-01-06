@@ -43,6 +43,8 @@ G3MWidget_Wasm* G3MBuilder_Wasm::createWidget() {
   if (nativeWidget->isWebGLSupported()) {
     addGPUProgramSources();
 
+    nativeWidget->initSingletons();
+
     setGL(nativeWidget->getGL());
 
     nativeWidget->setG3MWidget(create());
