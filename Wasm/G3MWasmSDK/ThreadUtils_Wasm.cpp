@@ -63,7 +63,7 @@ public:
   }
 };
 
-void __activateTask(void *userData) {
+void __activateTask(void* userData) {
   TaskActivation* taskActivation = (TaskActivation*) userData;
   taskActivation->doIt();
   delete taskActivation;

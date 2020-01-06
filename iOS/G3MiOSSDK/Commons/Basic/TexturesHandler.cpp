@@ -149,8 +149,6 @@ void TexturesHandler::retainGLTextureID(const IGLTextureID* glTextureID) {
       return;
     }
   }
-
-  ILogger::instance()->logInfo("break (point) on me 6\n");
 }
 
 void TexturesHandler::releaseGLTextureID(const IGLTextureID* glTextureID) {

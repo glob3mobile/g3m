@@ -2,14 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.Arrays;
-import java.util.IllegalFormatException;
-import java.util.Locale;
+import java.util.*;
 
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.LogLevel;
+import org.glob3.mobile.generated.*;
 
-import android.util.Log;
+import android.util.*;
 
 
 public final class Logger_Android

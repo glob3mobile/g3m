@@ -2,13 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.LogLevel;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.regexp.shared.*;
 
 
 public final class Logger_WebGL
@@ -61,19 +59,23 @@ public final class Logger_WebGL
    }
 
 
+   private static final RegExp exp = RegExp.compile("%[sdfib]+");
+
+
    private static String stringFormat(final String format,
                                       final Object... args) {
-      final RegExp exp = RegExp.compile("%[sdf]");
-      int nextSub = 0;
-      String output = "";
-      for (int i = 0; i < exp.split(format).length(); i++) {
-         output = output + exp.split(format).get(i);
-         if (((i + 1) < exp.split(format).length()) && (nextSub < args.length)) {
-            output = output + args[nextSub];
+      final StringBuilder sb = new StringBuilder(2048);
+      final SplitResult splits = exp.split(format);
+
+      int argsI = 0;
+      for (int i = 0; i < splits.length(); i++) {
+         sb.append(splits.get(i));
+         if (((i + 1) < splits.length()) && (argsI < args.length)) {
+            sb.append(args[argsI]);
          }
-         nextSub++;
+         argsI++;
       }
-      return output;
+      return sb.toString();
    }
 
 
