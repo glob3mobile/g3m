@@ -15,14 +15,15 @@
 
 class ListenerEntry {
 private:
-  bool _canceled;
-  
-public:
   IBufferDownloadListener* _bufferListener;
   IImageDownloadListener*  _imageListener;
   const bool               _deleteListener;
-  const long long          _requestID;
-  const std::string        _tag;
+
+  bool _canceled;
+  
+public:
+  const long long   _requestID;
+  const std::string _tag;
   
   ListenerEntry(IBufferDownloadListener* bufferListener,
 		IImageDownloadListener*  imageListener,
@@ -46,6 +47,7 @@ public:
       }
       _bufferListener = NULL;
     }
+    
     if (_imageListener != NULL) {
       _imageListener->onCancel(url);
       if (_deleteListener) {
@@ -63,6 +65,7 @@ public:
       }
       _bufferListener = NULL;
     }
+    
     if (_imageListener != NULL) {
       _imageListener->onError(url);
       if (_deleteListener) {
@@ -121,10 +124,6 @@ public:
 
   const long long getPriority() const {
     return _priority;
-  }
-
-  void runWithDownloader(Downloader_Wasm* downloader) {
-#error TODO
   }
 
   void addListener(IBufferDownloadListener* listener,
@@ -207,6 +206,10 @@ public:
 	listener->cancel();
       }
     }
+  }
+
+  void runWithDownloader(Downloader_Wasm* downloader) {
+#error TODO
   }
 
 };
