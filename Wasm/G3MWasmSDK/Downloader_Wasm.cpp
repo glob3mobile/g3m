@@ -55,7 +55,6 @@ public:
     }
   }
 
-
   void onError(const URL& url) {
     if (_bufferListener != NULL) {
       _bufferListener->onError(url);
@@ -76,7 +75,6 @@ public:
   void cancel() {
     _canceled = true;
   }
-
 
 };
 
@@ -178,6 +176,37 @@ public:
 
   bool hasListener() const {
     return !_listeners.empty();
+  }
+
+  bool removeListenersTagged(const std::string& tag) {
+    bool anyRemoved = false;
+
+    const URL url(_urlPath);
+
+    std::vector<ListenerEntry*>::iterator it = _listeners.begin();
+    while ( it != _listeners.end() ) {
+      ListenerEntry* listener = *it;
+      if (listener->_tag == tag) {
+	listener->onCancel(url);
+
+	it = _listeners.erase(it);
+	anyRemoved = true;
+      }
+      else {
+	++it;
+      }
+    }
+
+    return anyRemoved;
+  }
+
+  void cancelListenersTagged(const std::string& tag) {
+    for (size_t i = 0; i < _listeners.size(); i++) {
+      ListenerEntry* listener = _listeners[i];
+      if (listener->_tag == tag) {
+	listener->cancel();
+      }
+    }
   }
 
 };
@@ -321,7 +350,33 @@ bool Downloader_Wasm::cancelRequest(long long requestID) {
 }
 
 void Downloader_Wasm::cancelRequestsTagged(const std::string& tag) {
-#error TODO
+  if (tag.empty()) {
+    return;
+  }
+
+  _cancelsCounter++;
+
+  std::map<const std::string, Downloader_Wasm_Handler*>::iterator it = _queuedHandlers.begin();
+  while (it != _queuedHandlers.end()) {
+    Downloader_Wasm_Handler* handler = it->second;
+    if (handler->removeListenersTagged(tag)) {
+      if (!handler->hasListener()) {
+	it = _queuedHandlers.erase(it);
+      }
+      else {
+	++it;
+      }
+    }
+    else {
+      ++it;
+    }
+  }
+
+  for (const std::pair<const std::string, Downloader_Wasm_Handler*> element : _downloadingHandlers) {
+    Downloader_Wasm_Handler* handler  = element.second;
+    handler->cancelListenersTagged(tag);
+  }
+
 }
 
 void __downloaderHeartbeat(void *userData) {
