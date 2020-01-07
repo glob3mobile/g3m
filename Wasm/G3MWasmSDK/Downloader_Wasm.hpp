@@ -4,6 +4,11 @@
 
 #include "IDownloader.hpp"
 
+#include <map>
+#include <string>
+
+class Downloader_Wasm_Handler;
+
 
 class Downloader_Wasm : public IDownloader {
 private:
@@ -11,9 +16,18 @@ private:
   const int  _delayMillis;
   const bool _verboseErrors;
 
+  std::map<const std::string, Downloader_Wasm_Handler*> _downloadingHandlers;
+  std::map<const std::string, Downloader_Wasm_Handler*> _queuedHandlers;
+
   long _timeoutID;
 
+  long long _requestIDCounter;
+  long long _requestsCounter;
+  long long _cancelsCounter;
+
   void queueHeartbeat();
+
+  Downloader_Wasm_Handler* getHandlerToRun();
 
 public:
   Downloader_Wasm(const int  maxConcurrentOperationCount,

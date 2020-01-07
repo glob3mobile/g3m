@@ -20,7 +20,7 @@ public final class Downloader_WebGL_Handler_WebkitImpl
 
 
    @Override
-   public native void jsRequest(String url) /*-{
+   public native void jsRequest(final String url) /*-{
 		var that = this;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
@@ -31,7 +31,7 @@ public final class Downloader_WebGL_Handler_WebkitImpl
 				that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
 				var response = null;
 				if (xhr.status === 200) {
-					if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_requestingImage) {
+					if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) {
 						if (@org.glob3.mobile.specific.Downloader_WebGL_Handler_WebkitImpl::_isChrome) {
 							var dataView = new DataView(xhr.response);
 							response = new Blob([ dataView ], {

@@ -2,16 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.*;
 
 
 public class Downloader_WebGL_Handler_DefaultImpl
@@ -19,10 +14,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
             Downloader_WebGL_Handler {
 
 
-   private long                     _priority;
-   private URL                      _url;
-   private ArrayList<ListenerEntry> _listeners;
-   private boolean                  _requestingImage;
+   private long                _priority;
+   private URL                 _url;
+   private List<ListenerEntry> _listeners;
+   private boolean             _isImageRequest;
 
    private Downloader_WebGL _downloader;
 
@@ -42,7 +37,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
       _url = url;
       _listeners = new ArrayList<>();
       _listeners.add(new ListenerEntry(bufferListener, null, deleteListener, requestID, tag));
-      _requestingImage = false;
+      _isImageRequest = false;
    }
 
 
@@ -57,13 +52,13 @@ public class Downloader_WebGL_Handler_DefaultImpl
       _url = url;
       _listeners = new ArrayList<>();
       _listeners.add(new ListenerEntry(null, imageListener, deleteListener, requestID, tag));
-      _requestingImage = true;
+      _isImageRequest = true;
    }
 
 
    @Override
-   final public boolean isRequestingImage() {
-      return _requestingImage;
+   final public boolean isImageRequest() {
+      return _isImageRequest;
    }
 
 
@@ -207,14 +202,14 @@ public class Downloader_WebGL_Handler_DefaultImpl
 		var that = this;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
-		xhr.responseType = (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_requestingImage) ? "blob"
+		xhr.responseType = (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) ? "blob"
 				: "arraybuffer";
 		xhr.onload = function() {
 			if (xhr.readyState == 4) {
 				// inform downloader to remove myself, to avoid adding new Listener
 				that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
 				if (xhr.status === 200) {
-					if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_requestingImage) {
+					if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) {
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
 					} else {
 						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
