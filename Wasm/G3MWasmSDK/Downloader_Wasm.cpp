@@ -9,6 +9,8 @@
 #include <vector>
 
 #include "URL.hpp"
+#include "IBufferDownloadListener.hpp"
+#include "IImageDownloadListener.hpp"
 
 
 class ListenerEntry {
@@ -35,6 +37,46 @@ public:
     _canceled(false)
   {
   }
+
+  void onCancel(const URL& url) {
+    if (_bufferListener != NULL) {
+      _bufferListener->onCancel(url);
+      if (_deleteListener) {
+	delete _bufferListener;
+      }
+      _bufferListener = NULL;
+    }
+    if (_imageListener != NULL) {
+      _imageListener->onCancel(url);
+      if (_deleteListener) {
+	delete _imageListener;
+      }
+      _imageListener = NULL;
+    }
+  }
+
+
+  void onError(const URL& url) {
+    if (_bufferListener != NULL) {
+      _bufferListener->onError(url);
+      if (_deleteListener) {
+	delete _bufferListener;
+      }
+      _bufferListener = NULL;
+    }
+    if (_imageListener != NULL) {
+      _imageListener->onError(url);
+      if (_deleteListener) {
+	delete _imageListener;
+      }
+      _imageListener = NULL;
+    }
+  }
+
+  void cancel() {
+    _canceled = true;
+  }
+
 
 };
 
@@ -107,6 +149,35 @@ public:
     if (priority > _priority) {
       _priority = priority;
     }
+  }
+
+  bool removeListenerForRequestId(const long long requestID) {
+    for (size_t i = 0; i < _listeners.size(); i++) {
+      ListenerEntry* listener = _listeners[i];
+      if (listener->_requestID == requestID) {
+	listener->onCancel( URL(_urlPath) );
+	delete listener;
+	return true;
+      }
+    }
+    
+    return false;
+  }
+
+  bool cancelListenerForRequestId(const long long requestID) {
+    for (size_t i = 0; i < _listeners.size(); i++) {
+      ListenerEntry* listener = _listeners[i];
+      if (listener->_requestID == requestID) {
+	listener->cancel();
+	return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool hasListener() const {
+    return !_listeners.empty();
   }
 
 };
@@ -223,7 +294,30 @@ long long Downloader_Wasm::requestImage(const URL& url,
 }
 
 bool Downloader_Wasm::cancelRequest(long long requestID) {
-#error TODO
+  if (requestID < 0) {
+    return false;
+  }
+
+  _cancelsCounter++;
+
+  for (const std::pair<const std::string, Downloader_Wasm_Handler*> element : _queuedHandlers) {
+    Downloader_Wasm_Handler* handler  = element.second;
+    if (handler->removeListenerForRequestId(requestID)) {
+      if (!handler->hasListener()) {
+	_queuedHandlers.erase( handler->_urlPath );
+      }
+      return true;
+    }
+  }
+  
+  for (const std::pair<const std::string, Downloader_Wasm_Handler*> element : _downloadingHandlers) {
+    Downloader_Wasm_Handler* handler  = element.second;
+    if (handler->cancelListenerForRequestId(requestID)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void Downloader_Wasm::cancelRequestsTagged(const std::string& tag) {

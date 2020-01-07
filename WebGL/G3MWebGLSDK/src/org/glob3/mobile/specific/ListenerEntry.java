@@ -2,20 +2,14 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.*;
 
 
 public final class ListenerEntry {
 
-   final static String                   TAG = "ListenerEntry";
+   final static String TAG = "ListenerEntry";
 
    private final IBufferDownloadListener _bufferListener;
    private final IImageDownloadListener  _imageListener;
@@ -23,7 +17,7 @@ public final class ListenerEntry {
    private final long                    _requestID;
    private boolean                       _canceled;
 
-   private final String                  _tag;
+   private final String _tag;
 
 
    public ListenerEntry(final IBufferDownloadListener bufferListener,
