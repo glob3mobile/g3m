@@ -63,6 +63,19 @@ public:
     _listeners.push_back(new ListenerEntry(bufferListener, NULL, deleteListener, requestID, tag));
   }
 
+  Downloader_Wasm_Handler(const std::string&      urlPath,
+			  IImageDownloadListener* imageListener,
+                          const bool              deleteListener,
+                          const long long         priority,
+                          const long long         requestID,
+                          const std::string&      tag) :
+    _urlPath(urlPath),
+    _priority(priority),
+    _isImageRequest(false)
+  {
+    _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
+  }
+
   ~Downloader_Wasm_Handler() {
   }
 
@@ -182,7 +195,31 @@ long long Downloader_Wasm::requestImage(const URL& url,
 					IImageDownloadListener* listener,
 					bool deleteListener,
 					const std::string& tag) {
-#error TODO
+  _requestsCounter++;
+
+  const std::string urlPath = url._path;
+  Downloader_Wasm_Handler* handler =  _downloadingHandlers.count(urlPath) ? _downloadingHandlers[urlPath] : NULL;
+
+  const long long requestID = _requestIDCounter++;
+
+  if ((handler != NULL) && !handler->_isImageRequest) {
+    // the URL is being downloaded, just add the new listener
+    handler->addListener(listener, deleteListener, priority, requestID, tag);
+  }
+  else {
+    handler = _queuedHandlers.count(urlPath) ? _queuedHandlers[urlPath] : NULL;
+    if ((handler != NULL) && !handler->_isImageRequest) {
+      // the URL is queued for future download, just add the new listener
+      handler->addListener(listener, deleteListener, priority, requestID, tag);
+    }
+    else {
+      // new handler, queue it
+      handler = new Downloader_Wasm_Handler(urlPath, listener, deleteListener, priority, requestID, tag);
+      _queuedHandlers[urlPath] = handler;
+    }
+  }
+
+  return requestID;
 }
 
 bool Downloader_Wasm::cancelRequest(long long requestID) {
