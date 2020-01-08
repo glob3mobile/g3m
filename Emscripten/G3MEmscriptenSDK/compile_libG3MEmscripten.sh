@@ -14,11 +14,12 @@ emcc -v
 
 echo
 
-rm -rf WASM
-mkdir WASM
+#rm -rf Emscripten
+#mkdir Emscripten
 
 
 em++ \
+    -r \
     -O0 \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic       \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras     \
@@ -39,5 +40,5 @@ em++ \
     -g \
     -std=c++11 \
     -s WASM=1 \
-    -o WASM/G3M.wasm \
+    -o LIB/libG3MEmscripten.bc \
     || exit 1

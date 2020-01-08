@@ -1,6 +1,6 @@
 
 
-#include "Downloader_Wasm.hpp"
+#include "Downloader_Emscripten.hpp"
 
 #include <emscripten/html5.h>
 #include <emscripten/fetch.h>
@@ -88,7 +88,7 @@ void __downloadSucceeded(emscripten_fetch_t* fetch);
 void __downloadFailed(emscripten_fetch_t* fetch);
 
 
-class Downloader_Wasm_Handler {
+class Downloader_Emscripten_Handler {
 private:
   long long _priority;
 
@@ -99,12 +99,12 @@ public:
   const std::string _urlPath;
   const bool        _isImageRequest;
   
-  Downloader_Wasm_Handler(const std::string&       urlPath,
-			  IBufferDownloadListener* bufferListener,
-                          const bool               deleteListener,
-                          const long long          priority,
-                          const long long          requestID,
-                          const std::string&       tag) :
+  Downloader_Emscripten_Handler(const std::string&       urlPath,
+				IBufferDownloadListener* bufferListener,
+				const bool               deleteListener,
+				const long long          priority,
+				const long long          requestID,
+				const std::string&       tag) :
     _urlPath(urlPath),
     _priority(priority),
     _isImageRequest(false)
@@ -112,12 +112,12 @@ public:
     _listeners.push_back(new ListenerEntry(bufferListener, NULL, deleteListener, requestID, tag));
   }
 
-  Downloader_Wasm_Handler(const std::string&      urlPath,
-			  IImageDownloadListener* imageListener,
-                          const bool              deleteListener,
-                          const long long         priority,
-                          const long long         requestID,
-                          const std::string&      tag) :
+  Downloader_Emscripten_Handler(const std::string&      urlPath,
+				IImageDownloadListener* imageListener,
+				const bool              deleteListener,
+				const long long         priority,
+				const long long         requestID,
+				const std::string&      tag) :
     _urlPath(urlPath),
     _priority(priority),
     _isImageRequest(false)
@@ -125,7 +125,7 @@ public:
     _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
   }
 
-  ~Downloader_Wasm_Handler() {
+  ~Downloader_Emscripten_Handler() {
   }
 
   const long long getPriority() const {
@@ -214,7 +214,7 @@ public:
     }
   }
 
-  void runWithDownloader(Downloader_Wasm* downloader) {
+  void runWithDownloader(Downloader_Emscripten* downloader) {
     emscripten_fetch_attr_t attr;
     emscripten_fetch_attr_init(&attr);
     strcpy(attr.requestMethod, "GET");
@@ -266,19 +266,19 @@ public:
 
 
 void __downloadSucceeded(emscripten_fetch_t* fetch) {
-  Downloader_Wasm_Handler* handler = (Downloader_Wasm_Handler*) fetch->userData;
+  Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) fetch->userData;
   handler->onFetchDownloadSucceeded(fetch);
 }
 
 void __downloadFailed(emscripten_fetch_t* fetch) {
-  Downloader_Wasm_Handler* handler = (Downloader_Wasm_Handler*) fetch->userData;
+  Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) fetch->userData;
   handler->onFetchDownloadFailed(fetch);
 }
 
 
-Downloader_Wasm::Downloader_Wasm(const int  maxConcurrentOperationCount,
-				 const int  delayMillis,
-				 const bool verboseErrors) :
+Downloader_Emscripten::Downloader_Emscripten(const int  maxConcurrentOperationCount,
+					     const int  delayMillis,
+					     const bool verboseErrors) :
   _maxConcurrentOperationCount(maxConcurrentOperationCount),
   _requestIDCounter(1),
   _requestsCounter(0),
@@ -289,27 +289,27 @@ Downloader_Wasm::Downloader_Wasm(const int  maxConcurrentOperationCount,
 {
 }
 
-void Downloader_Wasm::onResume(const G3MContext* context) {
+void Downloader_Emscripten::onResume(const G3MContext* context) {
   // do nothing    
 }
   
-void Downloader_Wasm::onPause(const G3MContext* context) {
+void Downloader_Emscripten::onPause(const G3MContext* context) {
   // do nothing    
 }
   
-void Downloader_Wasm::onDestroy(const G3MContext* context) {
+void Downloader_Emscripten::onDestroy(const G3MContext* context) {
   // do nothing    
 }
 
-void Downloader_Wasm::initialize(const G3MContext* context,
-				 FrameTasksExecutor* frameTasksExecutor) {
+void Downloader_Emscripten::initialize(const G3MContext* context,
+				       FrameTasksExecutor* frameTasksExecutor) {
   // do nothing    
 }
 
-const std::string Downloader_Wasm::statistics() {
+const std::string Downloader_Emscripten::statistics() {
   std::ostringstream oss;
 
-  oss << "Downloader_Wasm ";
+  oss << "Downloader_Emscripten ";
   oss << "downloading="     << _downloadingHandlers.size();
   oss << ", queued="        << _queuedHandlers.size();
   oss << ", totalRequests=" << _requestsCounter;
@@ -318,17 +318,17 @@ const std::string Downloader_Wasm::statistics() {
   return oss.str();
 }
 
-long long Downloader_Wasm::requestBuffer(const URL& url,
-					 long long priority,
-					 const TimeInterval& timeToCache,
-					 bool readExpired,
-					 IBufferDownloadListener* listener,
-					 bool deleteListener,
-					 const std::string& tag) {
+long long Downloader_Emscripten::requestBuffer(const URL& url,
+					       long long priority,
+					       const TimeInterval& timeToCache,
+					       bool readExpired,
+					       IBufferDownloadListener* listener,
+					       bool deleteListener,
+					       const std::string& tag) {
   _requestsCounter++;
 
   const std::string urlPath = url._path;
-  Downloader_Wasm_Handler* handler =  _downloadingHandlers.count(urlPath) ? _downloadingHandlers[urlPath] : NULL;
+  Downloader_Emscripten_Handler* handler =  _downloadingHandlers.count(urlPath) ? _downloadingHandlers[urlPath] : NULL;
 
   const long long requestID = _requestIDCounter++;
 
@@ -344,7 +344,7 @@ long long Downloader_Wasm::requestBuffer(const URL& url,
     }
     else {
       // new handler, queue it
-      handler = new Downloader_Wasm_Handler(urlPath, listener, deleteListener, priority, requestID, tag);
+      handler = new Downloader_Emscripten_Handler(urlPath, listener, deleteListener, priority, requestID, tag);
       _queuedHandlers[urlPath] = handler;
     }
   }
@@ -352,17 +352,17 @@ long long Downloader_Wasm::requestBuffer(const URL& url,
   return requestID;
 }
 
-long long Downloader_Wasm::requestImage(const URL& url,
-					long long priority,
-					const TimeInterval& timeToCache,
-					bool readExpired,
-					IImageDownloadListener* listener,
-					bool deleteListener,
-					const std::string& tag) {
+long long Downloader_Emscripten::requestImage(const URL& url,
+					      long long priority,
+					      const TimeInterval& timeToCache,
+					      bool readExpired,
+					      IImageDownloadListener* listener,
+					      bool deleteListener,
+					      const std::string& tag) {
   _requestsCounter++;
 
   const std::string urlPath = url._path;
-  Downloader_Wasm_Handler* handler =  _downloadingHandlers.count(urlPath) ? _downloadingHandlers[urlPath] : NULL;
+  Downloader_Emscripten_Handler* handler =  _downloadingHandlers.count(urlPath) ? _downloadingHandlers[urlPath] : NULL;
 
   const long long requestID = _requestIDCounter++;
 
@@ -378,7 +378,7 @@ long long Downloader_Wasm::requestImage(const URL& url,
     }
     else {
       // new handler, queue it
-      handler = new Downloader_Wasm_Handler(urlPath, listener, deleteListener, priority, requestID, tag);
+      handler = new Downloader_Emscripten_Handler(urlPath, listener, deleteListener, priority, requestID, tag);
       _queuedHandlers[urlPath] = handler;
     }
   }
@@ -386,15 +386,15 @@ long long Downloader_Wasm::requestImage(const URL& url,
   return requestID;
 }
 
-bool Downloader_Wasm::cancelRequest(long long requestID) {
+bool Downloader_Emscripten::cancelRequest(long long requestID) {
   if (requestID < 0) {
     return false;
   }
 
   _cancelsCounter++;
 
-  for (const std::pair<const std::string, Downloader_Wasm_Handler*> element : _queuedHandlers) {
-    Downloader_Wasm_Handler* handler  = element.second;
+  for (const std::pair<const std::string, Downloader_Emscripten_Handler*> element : _queuedHandlers) {
+    Downloader_Emscripten_Handler* handler  = element.second;
     if (handler->removeListenerForRequestId(requestID)) {
       if (!handler->hasListener()) {
 	_queuedHandlers.erase( handler->_urlPath );
@@ -403,8 +403,8 @@ bool Downloader_Wasm::cancelRequest(long long requestID) {
     }
   }
   
-  for (const std::pair<const std::string, Downloader_Wasm_Handler*> element : _downloadingHandlers) {
-    Downloader_Wasm_Handler* handler  = element.second;
+  for (const std::pair<const std::string, Downloader_Emscripten_Handler*> element : _downloadingHandlers) {
+    Downloader_Emscripten_Handler* handler  = element.second;
     if (handler->cancelListenerForRequestId(requestID)) {
       return true;
     }
@@ -413,16 +413,16 @@ bool Downloader_Wasm::cancelRequest(long long requestID) {
   return false;
 }
 
-void Downloader_Wasm::cancelRequestsTagged(const std::string& tag) {
+void Downloader_Emscripten::cancelRequestsTagged(const std::string& tag) {
   if (tag.empty()) {
     return;
   }
 
   _cancelsCounter++;
 
-  std::map<const std::string, Downloader_Wasm_Handler*>::iterator it = _queuedHandlers.begin();
+  std::map<const std::string, Downloader_Emscripten_Handler*>::iterator it = _queuedHandlers.begin();
   while (it != _queuedHandlers.end()) {
-    Downloader_Wasm_Handler* handler = it->second;
+    Downloader_Emscripten_Handler* handler = it->second;
     if (handler->removeListenersTagged(tag)) {
       if (!handler->hasListener()) {
 	it = _queuedHandlers.erase(it);
@@ -436,27 +436,27 @@ void Downloader_Wasm::cancelRequestsTagged(const std::string& tag) {
     }
   }
 
-  for (const std::pair<const std::string, Downloader_Wasm_Handler*> element : _downloadingHandlers) {
-    Downloader_Wasm_Handler* handler  = element.second;
+  for (const std::pair<const std::string, Downloader_Emscripten_Handler*> element : _downloadingHandlers) {
+    Downloader_Emscripten_Handler* handler  = element.second;
     handler->cancelListenersTagged(tag);
   }
 
 }
 
 void __downloaderHeartbeat(void *userData) {
-  Downloader_Wasm* downloader = (Downloader_Wasm*) userData;
+  Downloader_Emscripten* downloader = (Downloader_Emscripten*) userData;
   downloader->__heartbeat();
 }
 
-void Downloader_Wasm::queueHeartbeat() {
+void Downloader_Emscripten::queueHeartbeat() {
   _timeoutID = emscripten_set_timeout(__downloaderHeartbeat,
 				      _delayMillis,
 				      (void*) this);
 }
 
-void Downloader_Wasm::__heartbeat() {
+void Downloader_Emscripten::__heartbeat() {
   if (_downloadingHandlers.size() < _maxConcurrentOperationCount) {
-    Downloader_Wasm_Handler* handler = getHandlerToRun();
+    Downloader_Emscripten_Handler* handler = getHandlerToRun();
     if (handler != NULL) {
       handler->runWithDownloader(this);
       delete handler;
@@ -465,15 +465,15 @@ void Downloader_Wasm::__heartbeat() {
   queueHeartbeat();
 }
 
-void Downloader_Wasm::start() {
+void Downloader_Emscripten::start() {
   queueHeartbeat();
 }
 
-void Downloader_Wasm::stop() {
+void Downloader_Emscripten::stop() {
   emscripten_clear_timeout(_timeoutID);
 }
 
-Downloader_Wasm_Handler* Downloader_Wasm::getHandlerToRun() {
+Downloader_Emscripten_Handler* Downloader_Emscripten::getHandlerToRun() {
   if (_downloadingHandlers.size() >= _maxConcurrentOperationCount) {
     return NULL;
   }
@@ -481,10 +481,10 @@ Downloader_Wasm_Handler* Downloader_Wasm::getHandlerToRun() {
     return NULL;
   }
 
-  Downloader_Wasm_Handler* selectedHandler  = NULL;
+  Downloader_Emscripten_Handler* selectedHandler  = NULL;
   long long                selectedPriority = -(std::numeric_limits<long long>::max());
-  for (std::pair<const std::string, Downloader_Wasm_Handler*> element : _queuedHandlers) {
-    Downloader_Wasm_Handler* candidateHandler  = element.second;
+  for (std::pair<const std::string, Downloader_Emscripten_Handler*> element : _queuedHandlers) {
+    Downloader_Emscripten_Handler* candidateHandler  = element.second;
     const long long          candidatePriority = candidateHandler->getPriority();
 
     if (candidatePriority > selectedPriority) {

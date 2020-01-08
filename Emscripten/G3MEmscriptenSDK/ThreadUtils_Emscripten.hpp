@@ -1,19 +1,19 @@
 
-#ifndef ThreadUtils_Wasm_hpp
-#define ThreadUtils_Wasm_hpp
+#ifndef ThreadUtils_Emscripten_hpp
+#define ThreadUtils_Emscripten_hpp
 
 #include "IThreadUtils.hpp"
 
 
-class ThreadUtils_Wasm : public IThreadUtils {
+class ThreadUtils_Emscripten : public IThreadUtils {
 private:
   const int _delayMillis;
   
 public:
 
-  ThreadUtils_Wasm(const int delayMillis);
+  ThreadUtils_Emscripten(const int delayMillis);
 
-  ~ThreadUtils_Wasm();
+  ~ThreadUtils_Emscripten();
 
   void justInitialized();
 

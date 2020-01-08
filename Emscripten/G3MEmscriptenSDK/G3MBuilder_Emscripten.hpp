@@ -1,6 +1,6 @@
 
-#ifndef G3MBuilder_Wasm_hpp
-#define G3MBuilder_Wasm_hpp
+#ifndef G3MBuilder_Emscripten_hpp
+#define G3MBuilder_Emscripten_hpp
 
 
 #include "IG3MBuilder.hpp"
@@ -8,10 +8,10 @@
 class IThreadUtils;
 class IStorage;
 class IDownloader;
-class G3MWidget_Wasm;
+class G3MWidget_Emscripten;
 
 
-class G3MBuilder_Wasm : public IG3MBuilder {
+class G3MBuilder_Emscripten : public IG3MBuilder {
 private:
   void addGPUProgramSources();
 
@@ -22,11 +22,11 @@ protected:
 
 
 public:
-  G3MBuilder_Wasm();
+  G3MBuilder_Emscripten();
   
-  ~G3MBuilder_Wasm();
+  ~G3MBuilder_Emscripten();
 
-  G3MWidget_Wasm* createWidget();
+  G3MWidget_Emscripten* createWidget();
 
 };
 

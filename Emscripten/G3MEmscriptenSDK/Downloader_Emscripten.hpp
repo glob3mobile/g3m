@@ -1,23 +1,23 @@
 
-#ifndef Downloader_Wasm_hpp
-#define Downloader_Wasm_hpp
+#ifndef Downloader_Emscripten_hpp
+#define Downloader_Emscripten_hpp
 
 #include "IDownloader.hpp"
 
 #include <map>
 #include <string>
 
-class Downloader_Wasm_Handler;
+class Downloader_Emscripten_Handler;
 
 
-class Downloader_Wasm : public IDownloader {
+class Downloader_Emscripten : public IDownloader {
 private:
   const int  _maxConcurrentOperationCount;
   const int  _delayMillis;
   const bool _verboseErrors;
 
-  std::map<const std::string, Downloader_Wasm_Handler*> _downloadingHandlers;
-  std::map<const std::string, Downloader_Wasm_Handler*> _queuedHandlers;
+  std::map<const std::string, Downloader_Emscripten_Handler*> _downloadingHandlers;
+  std::map<const std::string, Downloader_Emscripten_Handler*> _queuedHandlers;
 
   long _timeoutID;
 
@@ -27,12 +27,12 @@ private:
 
   void queueHeartbeat();
 
-  Downloader_Wasm_Handler* getHandlerToRun();
+  Downloader_Emscripten_Handler* getHandlerToRun();
 
 public:
-  Downloader_Wasm(const int  maxConcurrentOperationCount,
-		  const int  delayMillis,
-		  const bool verboseErrors);
+  Downloader_Emscripten(const int  maxConcurrentOperationCount,
+			const int  delayMillis,
+			const bool verboseErrors);
  
   void onResume(const G3MContext* context);
   
