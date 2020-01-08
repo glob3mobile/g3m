@@ -16,8 +16,8 @@ emcc -v
 
 echo
 
-rm -rf HTML
-mkdir HTML
+rm -rf deploy
+mkdir deploy
 
 #    ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}/LIB/libG3MEmscripten.bc \
 
@@ -42,5 +42,10 @@ em++ \
     -DC_CODE \
     -g \
     -std=c++11 \
-    -o HTML/G3MEmscriptenDemo.html \
+    -o deploy/G3MEmscriptenDemo.js \
     || exit 1
+
+cp -rv html/ deploy/
+
+cd deploy
+python -m SimpleHTTPServer 8080
