@@ -21,7 +21,7 @@ G3MWidget_Emscripten::G3MWidget_Emscripten() :
   _canvas(val::null()),
   _webGLContext(val::null())
 {
-  var document = val::global("document");
+  val document = val::global("document");
   
   _canvas = document.call<val>("createElement", "canvas");
 
