@@ -28,10 +28,10 @@ G3MWidget_Emscripten::G3MWidget_Emscripten() :
   _canvas.call<void>("setId", "_g3m_canvas");
 
   val webGLContextArguments = val::object();
-  //webGLContextArguments["preserveDrawingBuffer"]           = val::true();
-  webGLContextArguments["alpha"]                           = val::false();
-  webGLContextArguments["preferLowPowerToHighPerformance"] = val::true();
-  webGLContextArguments["antialias"]                       = val::false();
+  //webGLContextArguments["preserveDrawingBuffer"]           = val(true);
+  webGLContextArguments["alpha"]                           = val(false);
+  webGLContextArguments["preferLowPowerToHighPerformance"] = val(true);
+  webGLContextArguments["antialias"]                       = val(false);
   _webGLContext = _canvas.call<val>("getContext", "webgl", webGLContextArguments);
 
   // jsCanvas.addEventListener("webglcontextlost", function(
@@ -40,7 +40,7 @@ G3MWidget_Emscripten::G3MWidget_Emscripten() :
   // 	$wnd.alert("webglcontextlost");
   // }, false);
 
-  final INativeGL nativeGL = new NativeGL_Emscripten(_webGLContext);
+  INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
   _gl = new GL(nativeGL);
 
 }
