@@ -3,6 +3,7 @@
 #include "Downloader_Wasm.hpp"
 
 #include <emscripten/html5.h>
+#include <emscripten/fetch.h>
 
 #include <limits>
 #include <sstream>
@@ -80,6 +81,11 @@ public:
   }
 
 };
+
+
+void __downloadSucceeded(emscripten_fetch_t* fetch);
+
+void __downloadFailed(emscripten_fetch_t* fetch);
 
 
 class Downloader_Wasm_Handler {
@@ -209,10 +215,65 @@ public:
   }
 
   void runWithDownloader(Downloader_Wasm* downloader) {
-#error TODO
+    emscripten_fetch_attr_t attr;
+    emscripten_fetch_attr_init(&attr);
+    strcpy(attr.requestMethod, "GET");
+    attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
+    attr.onsuccess  = __downloadSucceeded;
+    attr.onerror    = __downloadFailed;
+    attr.userData   = this;
+
+    // pub struct emscripten_fetch_attr_t {
+    //    pub requestMethod: [c_char; 32],
+    // 	  pub userData: *mut c_void,
+    // 	  pub onsuccess: Option<unsafe extern fn(_: *mut emscripten_fetch_t)>,
+    // 	  pub onerror: Option<unsafe extern fn(_: *mut emscripten_fetch_t)>,
+    // 	  pub onprogress: Option<unsafe extern fn(_: *mut emscripten_fetch_t)>,
+    // 	  pub attributes: u32,
+    // 	  pub timeoutMSecs: c_ulong,
+    // 	  pub withCredentials: c_int,
+    // 	  pub destinationPath: *const c_char,
+    // 	  pub userName: *const c_char,
+    // 	  pub password: *const c_char,
+    // 	  pub requestHeaders: *const *const c_char,
+    // 	  pub overriddenMimeType: *const c_char,
+    // 	  pub requestData: *const c_char,
+    // 	  pub requestDataSize: usize,
+    // }
+
+    emscripten_fetch(&attr, _urlPath.c_str());
+  }
+
+  void onFetchDownloadSucceeded(emscripten_fetch_t* fetch) {  
+    printf("Finished downloading %llu bytes from URL %s.\n", fetch->numBytes, fetch->url);
+    
+    // The data is now available at fetch->data[0] through fetch->data[fetch->numBytes-1];
+
+#error TODO create image or create buffer
+    
+    emscripten_fetch_close(fetch); // Free data associated with the fetch.
+  }
+  
+  void onFetchDownloadFailed(emscripten_fetch_t* fetch) {
+    printf("Downloading %s failed, HTTP failure status code: %d.\n", fetch->url, fetch->status);
+
+#error TODO inform error
+
+    emscripten_fetch_close(fetch); // Also free data on failure.
   }
 
 };
+
+
+void __downloadSucceeded(emscripten_fetch_t* fetch) {
+  Downloader_Wasm_Handler* handler = (Downloader_Wasm_Handler*) fetch->userData;
+  handler->onFetchDownloadSucceeded(fetch);
+}
+
+void __downloadFailed(emscripten_fetch_t* fetch) {
+  Downloader_Wasm_Handler* handler = (Downloader_Wasm_Handler*) fetch->userData;
+  handler->onFetchDownloadFailed(fetch);
+}
 
 
 Downloader_Wasm::Downloader_Wasm(const int  maxConcurrentOperationCount,

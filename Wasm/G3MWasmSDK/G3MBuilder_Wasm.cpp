@@ -24,11 +24,10 @@ IStorage* G3MBuilder_Wasm::createDefaultStorage() {
 }
 
 IDownloader* G3MBuilder_Wasm::createDefaultDownloader() {
-  const int maxConcurrentOperationCount = 8;
-  const int delayMillis = 10;
-  const bool verboseErrors = true;
-  const std::string proxy = "";
-  return new Downloader_Wasm(maxConcurrentOperationCount, delayMillis, proxy, verboseErrors);
+  const int  maxConcurrentOperationCount = 8;
+  const int  delayMillis                 = 10;
+  const bool verboseErrors               = true;
+  return new Downloader_Wasm(maxConcurrentOperationCount, delayMillis, verboseErrors);
 }
 
 void G3MBuilder_Wasm::addGPUProgramSources() {
