@@ -1,9 +1,23 @@
 
-#include <stdio.h>
+//#include <stdio.h>
+
+#include <emscripten/html5.h>
+
+#include "G3MBuilder_Emscripten.hpp"
 
 
 int main() {
-  printf("hello, world!\n");
+  //printf("hello, world!\n");
+
+  emscripten_console_log("Hello from emscripten_console_log (1)");
+  emscripten_console_warn("Hello from emscripten_console_warn (2)");
+  //emscripten_console_error("Hello from emscripten_console_error (3)");
+  
+  //  G3MBuilder_Emscripten builder;
+  //  G3MWidget_Emscripten* widget = builder.createWidget();
+
+  // final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
+  // g3mWidgetHolder.add(_widget);
+
   return 0;
 }
-

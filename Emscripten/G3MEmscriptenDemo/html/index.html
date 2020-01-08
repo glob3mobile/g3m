@@ -5,20 +5,31 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Emscripten-Generated Code</title>
     <link rel="stylesheet" href="css/main.css">
+
+    <script>
+    var Module = {
+        onRuntimeInitialized: function() {
+//           G3MBuilder_Emscripten builder = new G3MBuilder_Emscripten();
+//           G3MWidget_Emscripten widget = builder.createWidget();
+      }
+    };
+    </script>
+
   </head>
 
   <body>
     <div class="spinner" id="spinner"></div>
     <div class="emscripten" id="status">Downloading...</div>
-
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>
     </div>
     
-    <div class="emscripten_border">
-      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
-    </div>
-    <textarea id="output" rows="8"></textarea>
+    <!-- <div class="emscripten_border"> -->
+    <!--   <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas> -->
+    <!-- </div> -->
+    <!-- <textarea id="output" rows="8"></textarea> -->
+
+    <div id="g3mWidgetHolder"></div>
 
     <script type="text/javascript" src="js/main.js"></script>
     <script async type="text/javascript" src="G3MEmscriptenDemo.js"></script>

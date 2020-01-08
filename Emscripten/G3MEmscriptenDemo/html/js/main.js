@@ -36,23 +36,25 @@ var Module = {
         console.error(text);
     },
     
-    canvas: (function() {
-        var canvas = document.getElementById('canvas');
+    // canvas: (function() {
+    //     var canvas = document.getElementById('canvas');
 
-        // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-        // application robust, you may want to override this behavior before shipping!
-        // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-        canvas.addEventListener("webglcontextlost",
-				function(e) {
-				    alert('WebGL context lost. You will need to reload the page.');
-				    e.preventDefault();
-				},
-				false);
+    //     // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+    //     // application robust, you may want to override this behavior before shipping!
+    //     // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+    //     canvas.addEventListener("webglcontextlost",
+    // 				function(e) {
+    // 				    alert('WebGL context lost. You will need to reload the page.');
+    // 				    e.preventDefault();
+    // 				},
+    // 				false);
 
-        return canvas;
-    })(),
+    //     return canvas;
+    // })(),
     
     setStatus: function(text) {
+	console.log("Status: " + text);
+
         if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
         if (text === Module.setStatus.last.text) return;
         var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
@@ -74,11 +76,23 @@ var Module = {
             if (!text) spinnerElement.style.display = 'none';
         }
         statusElement.innerHTML = text;
+	if (text.length == 0) {
+	    statusElement.style.display = 'none';
+	}
+	else {
+	    statusElement.style.display = 'inline-block';
+	}
     },
+    
     totalDependencies: 0,
+    
     monitorRunDependencies: function(left) {
         this.totalDependencies = Math.max(this.totalDependencies, left);
         Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+    },
+
+    onRuntimeInitialized: function() {
+	console.log("Runtime Initialized!");
     }
 };
 

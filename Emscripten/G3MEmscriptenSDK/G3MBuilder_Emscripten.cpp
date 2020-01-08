@@ -6,6 +6,8 @@
 #include "BasicShadersGL2.hpp"
 #include "G3MWidget_Emscripten.hpp"
 
+//#include <emscripten/bind.h>
+
 
 G3MBuilder_Emscripten::G3MBuilder_Emscripten() {
 }
@@ -52,3 +54,47 @@ G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget() {
 
   return nativeWidget;
 }
+
+
+
+
+
+
+// class BaseClass {
+// public:
+//   BaseClass() {}
+//
+//   void basePrint() {
+//     printf("base print\n");
+//   }
+//
+//   virtual void subPrint() = 0;
+// };
+//
+//
+// class SubClass : public BaseClass {
+// public:
+//   SubClass() : BaseClass() {}
+//
+//   void subPrint() {
+//     printf("sub print\n");
+//   }
+// };
+
+
+
+
+// https://github.com/emscripten-core/emscripten/issues/627
+
+// using namespace emscripten;
+
+// EMSCRIPTEN_BINDINGS() {
+//   class_<IG3MBuilder>("IG3MBuilder")
+//     //.function("basePrint", &IG3MBuilder::basePrint)
+//     ;
+  
+//   class_<G3MBuilder_Emscripten, base<IG3MBuilder>>("G3MBuilder_Emscripten")
+//     .constructor()
+//     .function("createWidget", &G3MBuilder_Emscripten::createWidget, allow_raw_pointers())
+//     ;
+// }

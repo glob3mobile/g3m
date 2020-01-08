@@ -2,7 +2,7 @@
 #include "G3MWidget_Emscripten.hpp"
 
 #include "G3MWidget.hpp"
-#include "Logger_WebGL.hpp"
+#include "Logger_Emscripten.hpp"
 #include "Factory_Emscripten.hpp"
 #include "StringUtils_Emscripten.hpp"
 #include "StringBuilder_Emscripten.hpp"
@@ -11,12 +11,58 @@
 #include "TextUtils_Emscripten.hpp"
 #include "DeviceAttitude_Emscripten.hpp"
 #include "DeviceLocation_Emscripten.hpp"
+#include "NativeGL_Emscripten.hpp"
+#include "GL.hpp"
 
 
-G3MWidget_Emscripten::G3MWidget_Emscripten() {
+using namespace emscripten;
+
+G3MWidget_Emscripten::G3MWidget_Emscripten() :
+  _canvas(val::null()),
+  _webGLContext(val::null())
+{
+  var document = val::global("document");
+  
+  _canvas = document.call<val>("createElement", "canvas");
+
+  _canvas.call<void>("setId", "_g3m_canvas");
+
+  val webGLContextArguments = val::object();
+  //webGLContextArguments["preserveDrawingBuffer"]           = val::true();
+  webGLContextArguments["alpha"]                           = val::false();
+  webGLContextArguments["preferLowPowerToHighPerformance"] = val::true();
+  webGLContextArguments["antialias"]                       = val::false();
+  _webGLContext = _canvas.call<val>("getContext", "webgl", webGLContextArguments);
+
+  // jsCanvas.addEventListener("webglcontextlost", function(
+  // 		event) {
+  // 	event.preventDefault();
+  // 	$wnd.alert("webglcontextlost");
+  // }, false);
+
+  final INativeGL nativeGL = new NativeGL_Emscripten(_webGLContext);
+  _gl = new GL(nativeGL);
+
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
+}
+
+GL* G3MWidget_Emscripten::getGL() const {
+  return _gl;
+}
+
+void G3MWidget_Emscripten::setG3MWidget(G3MWidget* g3mWidget) {
+  _g3mWidget = g3mWidget;
+}
+
+void G3MWidget_Emscripten::startWidget() {
+  if (_g3mWidget != NULL) {
+    _motionEventProcessor = new MotionEventProcessor(this, _canvas.getCanvasElement());
+    jsAddResizeHandler(_canvas.getCanvasElement());
+
+    jsStartRenderLoop();
+  }
 }
 
 void G3MWidget_Emscripten::initSingletons() {
@@ -39,4 +85,8 @@ void G3MWidget_Emscripten::initSingletons() {
 			    textUtils,
 			    deviceAttitude,
 			    deviceLocation);
+}
+
+bool G3MWidget_Emscripten::isWebGLSupported() const {
+  return (!_canvas.isNull() && !_webGLContext.isNull());
 }

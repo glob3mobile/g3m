@@ -249,7 +249,13 @@ public:
     
     // The data is now available at fetch->data[0] through fetch->data[fetch->numBytes-1];
 
-#error TODO create image or create buffer
+    URL url(fetch->url);
+
+#warning TODO create image or create buffer
+    for (size_t i = 0; i < _listeners.size(); i++) {
+      ListenerEntry* listener = _listeners[i];
+      listener->onError(url);
+    }
     
     emscripten_fetch_close(fetch); // Free data associated with the fetch.
   }
@@ -257,9 +263,13 @@ public:
   void onFetchDownloadFailed(emscripten_fetch_t* fetch) {
     printf("Downloading %s failed, HTTP failure status code: %d.\n", fetch->url, fetch->status);
 
-#error TODO inform error
-
+    URL url(fetch->url);
     emscripten_fetch_close(fetch); // Also free data on failure.
+
+    for (size_t i = 0; i < _listeners.size(); i++) {
+      ListenerEntry* listener = _listeners[i];
+      listener->onError(url);
+    }
   }
 
 };
