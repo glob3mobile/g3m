@@ -49,6 +49,8 @@
 		CF920C5423C730ED005A10ED /* ByteBuffer_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF920C4C23C730ED005A10ED /* ByteBuffer_Emscripten.cpp */; };
 		CF920C5523C730ED005A10ED /* FloatBuffer_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF920C4D23C730ED005A10ED /* FloatBuffer_Emscripten.cpp */; };
 		CF920C5623C730ED005A10ED /* IntBuffer_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF920C4E23C730ED005A10ED /* IntBuffer_Emscripten.cpp */; };
+		CF920C5823C73228005A10ED /* Canvas_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF920C5723C73228005A10ED /* Canvas_Emscripten.cpp */; };
+		CF920C5A23C7323D005A10ED /* Canvas_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF920C5923C7323D005A10ED /* Canvas_Emscripten.hpp */; };
 		CFEB964923C72E5700487426 /* Image_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEB964723C72E5700487426 /* Image_Emscripten.cpp */; };
 		CFEB964A23C72E5700487426 /* Image_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFEB964823C72E5700487426 /* Image_Emscripten.hpp */; };
 /* End PBXBuildFile section */
@@ -97,6 +99,8 @@
 		CF920C4C23C730ED005A10ED /* ByteBuffer_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ByteBuffer_Emscripten.cpp; sourceTree = "<group>"; };
 		CF920C4D23C730ED005A10ED /* FloatBuffer_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloatBuffer_Emscripten.cpp; sourceTree = "<group>"; };
 		CF920C4E23C730ED005A10ED /* IntBuffer_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntBuffer_Emscripten.cpp; sourceTree = "<group>"; };
+		CF920C5723C73228005A10ED /* Canvas_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas_Emscripten.cpp; sourceTree = "<group>"; };
+		CF920C5923C7323D005A10ED /* Canvas_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Canvas_Emscripten.hpp; sourceTree = "<group>"; };
 		CFEB964723C72E5700487426 /* Image_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Image_Emscripten.cpp; sourceTree = "<group>"; };
 		CFEB964823C72E5700487426 /* Image_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Image_Emscripten.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,7 +136,9 @@
 			isa = PBXGroup;
 			children = (
 				CF920C4C23C730ED005A10ED /* ByteBuffer_Emscripten.cpp */,
+				CF920C5723C73228005A10ED /* Canvas_Emscripten.cpp */,
 				CF920C4923C730ED005A10ED /* ByteBuffer_Emscripten.hpp */,
+				CF920C5923C7323D005A10ED /* Canvas_Emscripten.hpp */,
 				CF75D0F623C71F6900D85E10 /* DeviceAttitude_Emscripten.cpp */,
 				CF75D10823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp */,
 				CF3FF6E523C72FC5001D8E9A /* DeviceInfo_Emscripten.cpp */,
@@ -194,6 +200,7 @@
 				CF920C4F23C730ED005A10ED /* FloatBuffer_Emscripten.hpp in Headers */,
 				CF75D12123C71F6B00D85E10 /* NativeGL_Emscripten.hpp in Headers */,
 				CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */,
+				CF920C5A23C7323D005A10ED /* Canvas_Emscripten.hpp in Headers */,
 				CF3FF6E623C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp in Headers */,
 				CF75D11E23C71F6B00D85E10 /* Factory_Emscripten.hpp in Headers */,
 				CF920C5223C730ED005A10ED /* IntBuffer_Emscripten.hpp in Headers */,
@@ -271,6 +278,7 @@
 				CF75D12A23C71F6B00D85E10 /* WebSocket_Emscripten.cpp in Sources */,
 				CF75D12223C71F6B00D85E10 /* Timer_Emscripten.cpp in Sources */,
 				CF75D11523C71F6B00D85E10 /* DeviceLocation_Emscripten.cpp in Sources */,
+				CF920C5823C73228005A10ED /* Canvas_Emscripten.cpp in Sources */,
 				CF920C5623C730ED005A10ED /* IntBuffer_Emscripten.cpp in Sources */,
 				CF920C5523C730ED005A10ED /* FloatBuffer_Emscripten.cpp in Sources */,
 				CF75D11823C71F6B00D85E10 /* MathUtils_Emscripten.cpp in Sources */,
