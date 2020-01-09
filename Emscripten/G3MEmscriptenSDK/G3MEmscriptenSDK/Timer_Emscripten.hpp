@@ -4,6 +4,7 @@
 
 #include "ITimer.hpp"
 
+
 class Timer_Emscripten : public ITimer {
 private:
   long _startTimeInMilliseconds;

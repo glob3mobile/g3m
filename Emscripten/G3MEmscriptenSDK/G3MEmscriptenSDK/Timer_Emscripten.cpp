@@ -7,46 +7,45 @@
 
 using namespace emscripten;
 
-long long __currentTimeMillis() {
-  val date = val::global("Date");
-  val timeVal = date.call<val>("now");
-  
-  if(!timeVal.as<bool>()) {
-    date = val::global("Date").new_();
-    timeVal = date.call<val>("getTime");
+long long Timer_Emscripten::nowInMilliseconds() const {
+  val Date = val::global("Date");
+
+  val Date_now = Date["now"];
+  if(Date_now.as<bool>()) {
+    val now = Date_now();
+    return now.as<long long>();
   }
-  
-  return timeVal.as<long long>();
+  else {
+    val date = Date.new_();
+    val time = date.call<val>("getTime");
+    return time.as<long long>();
+  }
 }
 
 TimeInterval Timer_Emscripten::now() const {
-  return TimeInterval::fromMilliseconds(__currentTimeMillis());
+  return TimeInterval::fromMilliseconds(nowInMilliseconds());
 }
 
 TimeInterval Timer_Emscripten::fromDaysFromNow(const double days) const {
-  const long daysInMilliseconds = round(days //
-                                        * 24 /* hours */
-                                        * 60 /* minutes */
-                                        * 60 /* seconds */
+  const long daysInMilliseconds = round(days
+                                        * 24   /* hours        */
+                                        * 60   /* minutes      */
+                                        * 60   /* seconds      */
                                         * 1000 /* milliseconds */ );
   
-  const long milliseconds = __currentTimeMillis() + daysInMilliseconds;
+  const long milliseconds = nowInMilliseconds() + daysInMilliseconds;
   
   return TimeInterval::fromMilliseconds(milliseconds);
 }
 
-long long Timer_Emscripten::nowInMilliseconds() const {
-  return __currentTimeMillis();
-}
-
 void Timer_Emscripten::start() {
-  _startTimeInMilliseconds = __currentTimeMillis();
+  _startTimeInMilliseconds = nowInMilliseconds();
 }
 
 TimeInterval Timer_Emscripten::elapsedTime() const {
-  return TimeInterval::fromMilliseconds(__currentTimeMillis() - _startTimeInMilliseconds);
+  return TimeInterval::fromMilliseconds(nowInMilliseconds() - _startTimeInMilliseconds);
 }
 
 long long Timer_Emscripten::elapsedTimeInMilliseconds() const {
-  return __currentTimeMillis() - _startTimeInMilliseconds;
+  return nowInMilliseconds() - _startTimeInMilliseconds;
 }
