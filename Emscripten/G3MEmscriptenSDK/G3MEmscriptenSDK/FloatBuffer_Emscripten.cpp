@@ -109,12 +109,14 @@ void FloatBuffer_Emscripten::rawPut(const size_t i,
 
 void FloatBuffer_Emscripten::rawAdd(const size_t i,
                                     float value) {
-#error TODO
+  _buffer.set(i, _buffer[i].as<float>() + value);
 }
 
 void FloatBuffer_Emscripten::rawPut(const size_t i,
                                     const IFloatBuffer* srcBuffer,
                                     const size_t srcFromIndex,
                                     const size_t count) {
-#error TODO
+  for (int j = 0; j < count; j++) {
+    rawPut(i + j, srcBuffer->get(srcFromIndex + j));
+  }
 }
