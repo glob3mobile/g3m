@@ -7,5 +7,4 @@
 class TextUtils_Emscripten : public ITextUtils {
 };
 
-
 #endif

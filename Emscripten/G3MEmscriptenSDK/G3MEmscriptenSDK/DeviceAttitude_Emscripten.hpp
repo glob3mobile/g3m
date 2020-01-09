@@ -5,7 +5,7 @@
 #include "IDeviceAttitude.hpp"
 
 class DeviceAttitude_Emscripten : public IDeviceAttitude {
-};
 
+};
 
 #endif

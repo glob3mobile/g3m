@@ -7,5 +7,4 @@
 class Timer_Emscripten : public ITimer {
 };
 
-
 #endif

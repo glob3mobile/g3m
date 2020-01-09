@@ -7,5 +7,4 @@
 class StringBuilder_Emscripten : public IStringBuilder {
 };
 
-
 #endif

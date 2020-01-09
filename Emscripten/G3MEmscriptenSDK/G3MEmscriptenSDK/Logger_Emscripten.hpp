@@ -7,5 +7,4 @@
 class Logger_Emscripten : public ILogger {
 };
 
-
 #endif

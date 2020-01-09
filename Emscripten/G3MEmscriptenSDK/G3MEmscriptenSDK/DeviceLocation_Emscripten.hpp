@@ -7,5 +7,4 @@
 class DeviceLocation_Emscripten : public IDeviceLocation {
 };
 
-
 #endif

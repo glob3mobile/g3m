@@ -11,7 +11,7 @@
 
 
 ThreadUtils_Emscripten::ThreadUtils_Emscripten(const int delayMillis) :
-  _delayMillis(delayMillis)
+_delayMillis(delayMillis)
 {
 }
 
@@ -35,7 +35,7 @@ void ThreadUtils_Emscripten::onDestroy(const G3MContext* context) {
 }
 
 void ThreadUtils_Emscripten::invokeInRendererThread(GTask* task,
-					      bool autoDelete) const {
+                                                    bool autoDelete) const {
   task->run(getContext());
   if (autoDelete) {
     delete task;
@@ -51,11 +51,11 @@ private:
 
 public:
   TaskActivation(GTask*     task,
-		 const bool autoDelete,
-		 const G3MContext* context) :
-    _task(task),
-    _autoDelete(autoDelete),
-    _context(context)
+                 const bool autoDelete,
+                 const G3MContext* context) :
+  _task(task),
+  _autoDelete(autoDelete),
+  _context(context)
   {
   }
 
@@ -75,10 +75,10 @@ void __activateTask(void* userData) {
 }
 
 void ThreadUtils_Emscripten::invokeInBackground(GTask* task,
-					  bool autoDelete) const  {
+                                                bool autoDelete) const  {
 #warning TODO: research emscripten_async_queue_XXX
   
   emscripten_set_timeout(__activateTask,
-			 _delayMillis,
-			 (void*) new TaskActivation(task, autoDelete, getContext()));
+                         _delayMillis,
+                         (void*) new TaskActivation(task, autoDelete, getContext()));
 }

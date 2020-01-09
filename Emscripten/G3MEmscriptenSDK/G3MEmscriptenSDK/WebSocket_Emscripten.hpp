@@ -7,5 +7,4 @@
 class WebSocket_Emscripten : public IWebSocket {
 };
 
-
 #endif

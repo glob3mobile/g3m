@@ -18,31 +18,31 @@
 using namespace emscripten;
 
 G3MWidget_Emscripten::G3MWidget_Emscripten() :
-  _canvas(val::null()),
-  _webGLContext(val::null())
+_canvas(val::null()),
+_webGLContext(val::null())
 {
   val document = val::global("document");
   
   _canvas = document.call<val>("createElement", "canvas");
-
+  
   _canvas.call<void>("setId", "_g3m_canvas");
-
+  
   val webGLContextArguments = val::object();
   //webGLContextArguments["preserveDrawingBuffer"]           = val(true);
   webGLContextArguments["alpha"]                           = val(false);
   webGLContextArguments["preferLowPowerToHighPerformance"] = val(true);
   webGLContextArguments["antialias"]                       = val(false);
   _webGLContext = _canvas.call<val>("getContext", "webgl", webGLContextArguments);
-
+  
   // jsCanvas.addEventListener("webglcontextlost", function(
   // 		event) {
   // 	event.preventDefault();
   // 	$wnd.alert("webglcontextlost");
   // }, false);
-
+  
   INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
   _gl = new GL(nativeGL);
-
+  
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
@@ -60,7 +60,7 @@ void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
     _motionEventProcessor = new MotionEventProcessor(this, _canvas.getCanvasElement());
     jsAddResizeHandler(_canvas.getCanvasElement());
-
+    
     jsStartRenderLoop();
   }
 }
@@ -75,16 +75,16 @@ void G3MWidget_Emscripten::initSingletons() {
   ITextUtils*      textUtils      = new TextUtils_Emscripten();
   IDeviceAttitude* deviceAttitude = new DeviceAttitude_Emscripten();
   IDeviceLocation* deviceLocation = new DeviceLocation_Emscripten();
-
+  
   G3MWidget::initSingletons(logger,
-			    factory,
-			    stringUtils,
-			    stringBuilder,
-			    mathUtils,
-			    jsonParser,
-			    textUtils,
-			    deviceAttitude,
-			    deviceLocation);
+                            factory,
+                            stringUtils,
+                            stringBuilder,
+                            mathUtils,
+                            jsonParser,
+                            textUtils,
+                            deviceAttitude,
+                            deviceLocation);
 }
 
 bool G3MWidget_Emscripten::isWebGLSupported() const {

@@ -31,9 +31,9 @@ private:
 
 public:
   Downloader_Emscripten(const int  maxConcurrentOperationCount,
-			const int  delayMillis,
-			const bool verboseErrors);
- 
+                        const int  delayMillis,
+                        const bool verboseErrors);
+
   void onResume(const G3MContext* context);
   
   void onPause(const G3MContext* context);
@@ -50,20 +50,20 @@ public:
   void stop();
 
   long long requestBuffer(const URL& url,
-			  long long priority,
-			  const TimeInterval& timeToCache,
-			  bool readExpired,
-			  IBufferDownloadListener* listener,
-			  bool deleteListener,
-			  const std::string& tag);
+                          long long priority,
+                          const TimeInterval& timeToCache,
+                          bool readExpired,
+                          IBufferDownloadListener* listener,
+                          bool deleteListener,
+                          const std::string& tag);
 
   long long requestImage(const URL& url,
-			 long long priority,
-			 const TimeInterval& timeToCache,
-			 bool readExpired,
-			 IImageDownloadListener* listener,
-			 bool deleteListener,
-			 const std::string& tag);
+                         long long priority,
+                         const TimeInterval& timeToCache,
+                         bool readExpired,
+                         IImageDownloadListener* listener,
+                         bool deleteListener,
+                         const std::string& tag);
 
   bool cancelRequest(long long requestID);
 

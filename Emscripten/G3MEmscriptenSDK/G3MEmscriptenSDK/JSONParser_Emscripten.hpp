@@ -7,5 +7,4 @@
 class JSONParser_Emscripten : public IJSONParser {
 };
 
-
 #endif

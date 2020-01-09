@@ -7,5 +7,4 @@
 class Factory_Emscripten : public IFactory {
 };
 
-
 #endif

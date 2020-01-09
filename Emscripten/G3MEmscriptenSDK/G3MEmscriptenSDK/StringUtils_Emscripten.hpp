@@ -7,5 +7,4 @@
 class StringUtils_Emscripten : public IStringUtils {
 };
 
-
 #endif

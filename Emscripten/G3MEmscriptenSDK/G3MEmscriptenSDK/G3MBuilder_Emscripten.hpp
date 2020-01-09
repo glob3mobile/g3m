@@ -14,20 +14,20 @@ class G3MWidget_Emscripten;
 class G3MBuilder_Emscripten : public IG3MBuilder {
 private:
   void addGPUProgramSources();
-
+  
 protected:
   IThreadUtils* createDefaultThreadUtils();
   IStorage*     createDefaultStorage();
   IDownloader*  createDefaultDownloader();
-
-
+  
+  
 public:
   G3MBuilder_Emscripten();
   
   ~G3MBuilder_Emscripten();
-
+  
   G3MWidget_Emscripten* createWidget();
-
+  
 };
 
 #endif

@@ -27,16 +27,16 @@ public:
   const std::string _tag;
   
   ListenerEntry(IBufferDownloadListener* bufferListener,
-		IImageDownloadListener*  imageListener,
-		const bool               deleteListener,
-		const long long          requestID,
-		const std::string&       tag) :
-    _bufferListener(bufferListener),
-    _imageListener(imageListener),
-    _deleteListener(deleteListener),
-    _requestID(requestID),
-    _tag(tag),
-    _canceled(false)
+                IImageDownloadListener*  imageListener,
+                const bool               deleteListener,
+                const long long          requestID,
+                const std::string&       tag) :
+  _bufferListener(bufferListener),
+  _imageListener(imageListener),
+  _deleteListener(deleteListener),
+  _requestID(requestID),
+  _tag(tag),
+  _canceled(false)
   {
   }
 
@@ -44,7 +44,7 @@ public:
     if (_bufferListener != NULL) {
       _bufferListener->onCancel(url);
       if (_deleteListener) {
-	delete _bufferListener;
+        delete _bufferListener;
       }
       _bufferListener = NULL;
     }
@@ -52,7 +52,7 @@ public:
     if (_imageListener != NULL) {
       _imageListener->onCancel(url);
       if (_deleteListener) {
-	delete _imageListener;
+        delete _imageListener;
       }
       _imageListener = NULL;
     }
@@ -62,7 +62,7 @@ public:
     if (_bufferListener != NULL) {
       _bufferListener->onError(url);
       if (_deleteListener) {
-	delete _bufferListener;
+        delete _bufferListener;
       }
       _bufferListener = NULL;
     }
@@ -70,7 +70,7 @@ public:
     if (_imageListener != NULL) {
       _imageListener->onError(url);
       if (_deleteListener) {
-	delete _imageListener;
+        delete _imageListener;
       }
       _imageListener = NULL;
     }
@@ -100,27 +100,27 @@ public:
   const bool        _isImageRequest;
   
   Downloader_Emscripten_Handler(const std::string&       urlPath,
-				IBufferDownloadListener* bufferListener,
-				const bool               deleteListener,
-				const long long          priority,
-				const long long          requestID,
-				const std::string&       tag) :
-    _urlPath(urlPath),
-    _priority(priority),
-    _isImageRequest(false)
+                                IBufferDownloadListener* bufferListener,
+                                const bool               deleteListener,
+                                const long long          priority,
+                                const long long          requestID,
+                                const std::string&       tag) :
+  _urlPath(urlPath),
+  _priority(priority),
+  _isImageRequest(false)
   {
     _listeners.push_back(new ListenerEntry(bufferListener, NULL, deleteListener, requestID, tag));
   }
 
   Downloader_Emscripten_Handler(const std::string&      urlPath,
-				IImageDownloadListener* imageListener,
-				const bool              deleteListener,
-				const long long         priority,
-				const long long         requestID,
-				const std::string&      tag) :
-    _urlPath(urlPath),
-    _priority(priority),
-    _isImageRequest(false)
+                                IImageDownloadListener* imageListener,
+                                const bool              deleteListener,
+                                const long long         priority,
+                                const long long         requestID,
+                                const std::string&      tag) :
+  _urlPath(urlPath),
+  _priority(priority),
+  _isImageRequest(false)
   {
     _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
   }
@@ -133,10 +133,10 @@ public:
   }
 
   void addListener(IBufferDownloadListener* listener,
-		   const bool               deleteListener,
-		   const long long          priority,
-		   const long long          requestID,
-		   const std::string&       tag) {
+                   const bool               deleteListener,
+                   const long long          priority,
+                   const long long          requestID,
+                   const std::string&       tag) {
     _listeners.push_back(new ListenerEntry(listener, NULL, deleteListener, requestID, tag));
     if (priority > _priority) {
       _priority = priority;
@@ -144,10 +144,10 @@ public:
   }
 
   void addListener(IImageDownloadListener*  listener,
-		   const bool               deleteListener,
-		   const long long          priority,
-		   const long long          requestID,
-		   const std::string&       tag) {
+                   const bool               deleteListener,
+                   const long long          priority,
+                   const long long          requestID,
+                   const std::string&       tag) {
     _listeners.push_back(new ListenerEntry(NULL, listener, deleteListener, requestID, tag));
     if (priority > _priority) {
       _priority = priority;
@@ -158,9 +158,9 @@ public:
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
       if (listener->_requestID == requestID) {
-	listener->onCancel( URL(_urlPath) );
-	delete listener;
-	return true;
+        listener->onCancel( URL(_urlPath) );
+        delete listener;
+        return true;
       }
     }
     
@@ -171,8 +171,8 @@ public:
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
       if (listener->_requestID == requestID) {
-	listener->cancel();
-	return true;
+        listener->cancel();
+        return true;
       }
     }
 
@@ -192,13 +192,13 @@ public:
     while ( it != _listeners.end() ) {
       ListenerEntry* listener = *it;
       if (listener->_tag == tag) {
-	listener->onCancel(url);
+        listener->onCancel(url);
 
-	it = _listeners.erase(it);
-	anyRemoved = true;
+        it = _listeners.erase(it);
+        anyRemoved = true;
       }
       else {
-	++it;
+        ++it;
       }
     }
 
@@ -209,7 +209,7 @@ public:
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
       if (listener->_tag == tag) {
-	listener->cancel();
+        listener->cancel();
       }
     }
   }
@@ -244,7 +244,7 @@ public:
     emscripten_fetch(&attr, _urlPath.c_str());
   }
 
-  void onFetchDownloadSucceeded(emscripten_fetch_t* fetch) {  
+  void onFetchDownloadSucceeded(emscripten_fetch_t* fetch) {
     printf("Finished downloading %llu bytes from URL %s.\n", fetch->numBytes, fetch->url);
     
     // The data is now available at fetch->data[0] through fetch->data[fetch->numBytes-1];
@@ -287,33 +287,33 @@ void __downloadFailed(emscripten_fetch_t* fetch) {
 
 
 Downloader_Emscripten::Downloader_Emscripten(const int  maxConcurrentOperationCount,
-					     const int  delayMillis,
-					     const bool verboseErrors) :
-  _maxConcurrentOperationCount(maxConcurrentOperationCount),
-  _requestIDCounter(1),
-  _requestsCounter(0),
-  _cancelsCounter(0),
-  _delayMillis(delayMillis),
-  _verboseErrors(verboseErrors),
-  _timeoutID(0)
+                                             const int  delayMillis,
+                                             const bool verboseErrors) :
+_maxConcurrentOperationCount(maxConcurrentOperationCount),
+_requestIDCounter(1),
+_requestsCounter(0),
+_cancelsCounter(0),
+_delayMillis(delayMillis),
+_verboseErrors(verboseErrors),
+_timeoutID(0)
 {
 }
 
 void Downloader_Emscripten::onResume(const G3MContext* context) {
-  // do nothing    
+  // do nothing
 }
-  
+
 void Downloader_Emscripten::onPause(const G3MContext* context) {
-  // do nothing    
+  // do nothing
 }
-  
+
 void Downloader_Emscripten::onDestroy(const G3MContext* context) {
-  // do nothing    
+  // do nothing
 }
 
 void Downloader_Emscripten::initialize(const G3MContext* context,
-				       FrameTasksExecutor* frameTasksExecutor) {
-  // do nothing    
+                                       FrameTasksExecutor* frameTasksExecutor) {
+  // do nothing
 }
 
 const std::string Downloader_Emscripten::statistics() {
@@ -329,12 +329,12 @@ const std::string Downloader_Emscripten::statistics() {
 }
 
 long long Downloader_Emscripten::requestBuffer(const URL& url,
-					       long long priority,
-					       const TimeInterval& timeToCache,
-					       bool readExpired,
-					       IBufferDownloadListener* listener,
-					       bool deleteListener,
-					       const std::string& tag) {
+                                               long long priority,
+                                               const TimeInterval& timeToCache,
+                                               bool readExpired,
+                                               IBufferDownloadListener* listener,
+                                               bool deleteListener,
+                                               const std::string& tag) {
   _requestsCounter++;
 
   const std::string urlPath = url._path;
@@ -363,12 +363,12 @@ long long Downloader_Emscripten::requestBuffer(const URL& url,
 }
 
 long long Downloader_Emscripten::requestImage(const URL& url,
-					      long long priority,
-					      const TimeInterval& timeToCache,
-					      bool readExpired,
-					      IImageDownloadListener* listener,
-					      bool deleteListener,
-					      const std::string& tag) {
+                                              long long priority,
+                                              const TimeInterval& timeToCache,
+                                              bool readExpired,
+                                              IImageDownloadListener* listener,
+                                              bool deleteListener,
+                                              const std::string& tag) {
   _requestsCounter++;
 
   const std::string urlPath = url._path;
@@ -407,7 +407,7 @@ bool Downloader_Emscripten::cancelRequest(long long requestID) {
     Downloader_Emscripten_Handler* handler  = element.second;
     if (handler->removeListenerForRequestId(requestID)) {
       if (!handler->hasListener()) {
-	_queuedHandlers.erase( handler->_urlPath );
+        _queuedHandlers.erase( handler->_urlPath );
       }
       return true;
     }
@@ -435,10 +435,10 @@ void Downloader_Emscripten::cancelRequestsTagged(const std::string& tag) {
     Downloader_Emscripten_Handler* handler = it->second;
     if (handler->removeListenersTagged(tag)) {
       if (!handler->hasListener()) {
-	it = _queuedHandlers.erase(it);
+        it = _queuedHandlers.erase(it);
       }
       else {
-	++it;
+        ++it;
       }
     }
     else {
@@ -460,8 +460,8 @@ void __downloaderHeartbeat(void *userData) {
 
 void Downloader_Emscripten::queueHeartbeat() {
   _timeoutID = emscripten_set_timeout(__downloaderHeartbeat,
-				      _delayMillis,
-				      (void*) this);
+                                      _delayMillis,
+                                      (void*) this);
 }
 
 void Downloader_Emscripten::__heartbeat() {
@@ -492,10 +492,10 @@ Downloader_Emscripten_Handler* Downloader_Emscripten::getHandlerToRun() {
   }
 
   Downloader_Emscripten_Handler* selectedHandler  = NULL;
-  long long                selectedPriority = -(std::numeric_limits<long long>::max());
-  for (std::pair<const std::string, Downloader_Emscripten_Handler*> element : _queuedHandlers) {
+  long long                      selectedPriority = -(std::numeric_limits<long long>::max());
+  for (std::pair<const std::string, Downloader_Emscripten_Handler*>& element : _queuedHandlers) {
     Downloader_Emscripten_Handler* candidateHandler  = element.second;
-    const long long          candidatePriority = candidateHandler->getPriority();
+    const long long                candidatePriority = candidateHandler->getPriority();
 
     if (candidatePriority > selectedPriority) {
       const std::string urlPath = element.first;

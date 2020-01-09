@@ -7,5 +7,4 @@
 class NativeGL_Emscripten : public INativeGL {
 };
 
-
 #endif

@@ -92,7 +92,7 @@ G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget() {
 //   class_<IG3MBuilder>("IG3MBuilder")
 //     //.function("basePrint", &IG3MBuilder::basePrint)
 //     ;
-  
+
 //   class_<G3MBuilder_Emscripten, base<IG3MBuilder>>("G3MBuilder_Emscripten")
 //     .constructor()
 //     .function("createWidget", &G3MBuilder_Emscripten::createWidget, allow_raw_pointers())

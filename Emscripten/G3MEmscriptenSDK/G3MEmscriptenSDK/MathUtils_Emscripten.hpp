@@ -7,5 +7,4 @@
 class MathUtils_Emscripten : public IMathUtils {
 };
 
-
 #endif
