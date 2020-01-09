@@ -45,7 +45,16 @@ GL_TRIANGLE_FAN                 ( gl["TRIANGLE_FAN"                  ].as<int>()
 GL_LINES                        ( gl["LINES"                         ].as<int>() ),
 GL_LINE_STRIP                   ( gl["LINE_STRIP"                    ].as<int>() ),
 GL_LINE_LOOP                    ( gl["LINE_LOOP"                     ].as<int>() ),
-GL_POINTS                       ( gl["POINTS"                        ].as<int>() )
+GL_POINTS                       ( gl["POINTS"                        ].as<int>() ),
+GL_UNSIGNED_BYTE                ( gl["UNSIGNED_BYTE"                 ].as<int>() ),
+GL_UNSIGNED_INT                 ( gl["UNSIGNED_INT"                  ].as<int>() ),
+GL_INT                          ( gl["INT"                           ].as<int>() ),
+GL_FLOAT_VEC2                   ( gl["FLOAT_VEC2"                    ].as<int>() ),
+GL_FLOAT_VEC3                   ( gl["FLOAT_VEC3"                    ].as<int>() ),
+GL_FLOAT_VEC4                   ( gl["FLOAT_VEC4"                    ].as<int>() ),
+GL_BOOL                         ( gl["BOOL"                          ].as<int>() ),
+GL_FLOAT_MAT4                   ( gl["FLOAT_MAT4"                    ].as<int>() )
+
 {
 
 }

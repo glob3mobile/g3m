@@ -39,6 +39,14 @@ private:
   const int GL_LINE_STRIP;
   const int GL_LINE_LOOP;
   const int GL_POINTS;
+  const int GL_UNSIGNED_BYTE;
+  const int GL_UNSIGNED_INT;
+  const int GL_INT;
+  const int GL_FLOAT_VEC2;
+  const int GL_FLOAT_VEC3;
+  const int GL_FLOAT_VEC4;
+  const int GL_BOOL;
+  const int GL_FLOAT_MAT4;
 
 
   std::vector<emscripten::val> _shaderList;
