@@ -82,7 +82,7 @@ public:
   _vertexBuffer(-1),
   _vertexBufferTimestamp(-1),
   _vertexBufferCreated(false),
-  _id(_nextID)
+  _id(_nextID++)
   {
     _values = new float[16];
     _values[ 0] = f0;
