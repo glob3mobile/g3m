@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e # Script exists on first failure
+#set -x # For debugging purpose
+
 export EMSDK_DIRECTORY="../../../emsdk/"
 export G3M_COMMONS_SOURCE_DIRECTORY="../../iOS/G3MiOSSDK/Commons/"
 
