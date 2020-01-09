@@ -9,10 +9,12 @@
 
 class NativeGL_Emscripten : public INativeGL {
 private:
-  emscripten::val _webGLContext;
+  emscripten::val _gl;
+
+  const unsigned long GL_FLOAT;
 
 public:
-  NativeGL_Emscripten(const emscripten::val& webGLContext);
+  NativeGL_Emscripten(const emscripten::val& gl);
 
   void useProgram(GPUProgram* program) const;
 

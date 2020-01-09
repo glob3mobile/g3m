@@ -2,8 +2,14 @@
 
 #include "NativeGL_Emscripten.hpp"
 
-NativeGL_Emscripten::NativeGL_Emscripten(const emscripten::val& webGLContext) :
-_webGLContext(webGLContext)
+#include "FloatBuffer_Emscripten.hpp"
+
+using namespace emscripten;
+
+
+NativeGL_Emscripten::NativeGL_Emscripten(const emscripten::val& gl) :
+_gl(gl),
+GL_FLOAT( gl["FLOAT"].as<unsigned long>() )
 {
 
 }
@@ -78,7 +84,9 @@ void NativeGL_Emscripten::vertexAttribPointer(int index,
                                               bool normalized,
                                               int stride,
                                               const IFloatBuffer* buffer) const {
-#error TODO
+  val webGLBuffer = ((FloatBuffer_Emscripten*) buffer)->bindVBO(_gl);
+
+  _gl.call<void>("vertexAttribPointer", index, size, GL_FLOAT, normalized, stride, 0);
 }
 
 void NativeGL_Emscripten::drawElements(int mode,
