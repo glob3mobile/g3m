@@ -1,0 +1,435 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CF75D0E423C71F4700D85E10 /* G3MEmscriptenSDK.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0E323C71F4700D85E10 /* G3MEmscriptenSDK.hpp */; };
+		CF75D0E623C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0E523C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp */; };
+		CF75D0E823C71F4700D85E10 /* G3MEmscriptenSDK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0E723C71F4700D85E10 /* G3MEmscriptenSDK.cpp */; };
+		CF75D10E23C71F6B00D85E10 /* Downloader_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */; };
+		CF75D10F23C71F6B00D85E10 /* G3MWidget_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */; };
+		CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0F023C71F6800D85E10 /* Timer_Emscripten.hpp */; };
+		CF75D11123C71F6B00D85E10 /* Factory_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0F123C71F6800D85E10 /* Factory_Emscripten.cpp */; };
+		CF75D11223C71F6B00D85E10 /* JSONParser_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0F223C71F6800D85E10 /* JSONParser_Emscripten.cpp */; };
+		CF75D11323C71F6B00D85E10 /* StringUtils_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0F323C71F6800D85E10 /* StringUtils_Emscripten.cpp */; };
+		CF75D11423C71F6B00D85E10 /* ThreadUtils_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0F423C71F6900D85E10 /* ThreadUtils_Emscripten.cpp */; };
+		CF75D11523C71F6B00D85E10 /* DeviceLocation_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0F523C71F6900D85E10 /* DeviceLocation_Emscripten.cpp */; };
+		CF75D11623C71F6B00D85E10 /* DeviceAttitude_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0F623C71F6900D85E10 /* DeviceAttitude_Emscripten.cpp */; };
+		CF75D11723C71F6B00D85E10 /* JSONParser_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0F723C71F6900D85E10 /* JSONParser_Emscripten.hpp */; };
+		CF75D11823C71F6B00D85E10 /* MathUtils_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0F823C71F6900D85E10 /* MathUtils_Emscripten.cpp */; };
+		CF75D11923C71F6B00D85E10 /* G3MBuilder_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0F923C71F6900D85E10 /* G3MBuilder_Emscripten.hpp */; };
+		CF75D11A23C71F6B00D85E10 /* TextUtils_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0FA23C71F6900D85E10 /* TextUtils_Emscripten.cpp */; };
+		CF75D11B23C71F6B00D85E10 /* StringUtils_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0FB23C71F6900D85E10 /* StringUtils_Emscripten.hpp */; };
+		CF75D11C23C71F6B00D85E10 /* G3MBuilder_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0FC23C71F6900D85E10 /* G3MBuilder_Emscripten.cpp */; };
+		CF75D11D23C71F6B00D85E10 /* Downloader_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0FD23C71F6A00D85E10 /* Downloader_Emscripten.hpp */; };
+		CF75D11E23C71F6B00D85E10 /* Factory_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0FE23C71F6A00D85E10 /* Factory_Emscripten.hpp */; };
+		CF75D11F23C71F6B00D85E10 /* G3MWidget_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0FF23C71F6A00D85E10 /* G3MWidget_Emscripten.hpp */; };
+		CF75D12023C71F6B00D85E10 /* ThreadUtils_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10023C71F6A00D85E10 /* ThreadUtils_Emscripten.hpp */; };
+		CF75D12123C71F6B00D85E10 /* NativeGL_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10123C71F6A00D85E10 /* NativeGL_Emscripten.hpp */; };
+		CF75D12223C71F6B00D85E10 /* Timer_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D10223C71F6A00D85E10 /* Timer_Emscripten.cpp */; };
+		CF75D12323C71F6B00D85E10 /* StringBuilder_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10323C71F6A00D85E10 /* StringBuilder_Emscripten.hpp */; };
+		CF75D12423C71F6B00D85E10 /* MathUtils_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10423C71F6A00D85E10 /* MathUtils_Emscripten.hpp */; };
+		CF75D12523C71F6B00D85E10 /* Logger_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10523C71F6A00D85E10 /* Logger_Emscripten.hpp */; };
+		CF75D12623C71F6B00D85E10 /* Logger_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D10623C71F6B00D85E10 /* Logger_Emscripten.cpp */; };
+		CF75D12723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp */; };
+		CF75D12823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp */; };
+		CF75D12923C71F6B00D85E10 /* TextUtils_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10923C71F6B00D85E10 /* TextUtils_Emscripten.hpp */; };
+		CF75D12A23C71F6B00D85E10 /* WebSocket_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D10A23C71F6B00D85E10 /* WebSocket_Emscripten.cpp */; };
+		CF75D12B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D10B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp */; };
+		CF75D12C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp */; };
+		CF75D12D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D10D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		CF75D0E023C71F4700D85E10 /* libG3MEmscriptenSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MEmscriptenSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF75D0E323C71F4700D85E10 /* G3MEmscriptenSDK.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MEmscriptenSDK.hpp; sourceTree = "<group>"; };
+		CF75D0E523C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MEmscriptenSDKPriv.hpp; sourceTree = "<group>"; };
+		CF75D0E723C71F4700D85E10 /* G3MEmscriptenSDK.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MEmscriptenSDK.cpp; sourceTree = "<group>"; };
+		CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Downloader_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MWidget_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0F023C71F6800D85E10 /* Timer_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Timer_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D0F123C71F6800D85E10 /* Factory_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Factory_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0F223C71F6800D85E10 /* JSONParser_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONParser_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0F323C71F6800D85E10 /* StringUtils_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0F423C71F6900D85E10 /* ThreadUtils_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadUtils_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0F523C71F6900D85E10 /* DeviceLocation_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceLocation_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0F623C71F6900D85E10 /* DeviceAttitude_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceAttitude_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0F723C71F6900D85E10 /* JSONParser_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONParser_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D0F823C71F6900D85E10 /* MathUtils_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0F923C71F6900D85E10 /* G3MBuilder_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MBuilder_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D0FA23C71F6900D85E10 /* TextUtils_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextUtils_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0FB23C71F6900D85E10 /* StringUtils_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StringUtils_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D0FC23C71F6900D85E10 /* G3MBuilder_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MBuilder_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D0FD23C71F6A00D85E10 /* Downloader_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Downloader_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D0FE23C71F6A00D85E10 /* Factory_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Factory_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D0FF23C71F6A00D85E10 /* G3MWidget_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MWidget_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10023C71F6A00D85E10 /* ThreadUtils_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadUtils_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10123C71F6A00D85E10 /* NativeGL_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NativeGL_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10223C71F6A00D85E10 /* Timer_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D10323C71F6A00D85E10 /* StringBuilder_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StringBuilder_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10423C71F6A00D85E10 /* MathUtils_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MathUtils_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10523C71F6A00D85E10 /* Logger_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10623C71F6B00D85E10 /* Logger_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D10723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeviceLocation_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeviceAttitude_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10923C71F6B00D85E10 /* TextUtils_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TextUtils_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10A23C71F6B00D85E10 /* WebSocket_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WebSocket_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D10B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringBuilder_Emscripten.cpp; sourceTree = "<group>"; };
+		CF75D10C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WebSocket_Emscripten.hpp; sourceTree = "<group>"; };
+		CF75D10D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NativeGL_Emscripten.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CF75D0DE23C71F4700D85E10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CF75D0D723C71F4700D85E10 = {
+			isa = PBXGroup;
+			children = (
+				CF75D0E223C71F4700D85E10 /* G3MEmscriptenSDK */,
+				CF75D0E123C71F4700D85E10 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CF75D0E123C71F4700D85E10 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CF75D0E023C71F4700D85E10 /* libG3MEmscriptenSDK.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CF75D0E223C71F4700D85E10 /* G3MEmscriptenSDK */ = {
+			isa = PBXGroup;
+			children = (
+				CF75D0E323C71F4700D85E10 /* G3MEmscriptenSDK.hpp */,
+				CF75D0E523C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp */,
+				CF75D0E723C71F4700D85E10 /* G3MEmscriptenSDK.cpp */,
+				CF75D0F623C71F6900D85E10 /* DeviceAttitude_Emscripten.cpp */,
+				CF75D10823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp */,
+				CF75D0F523C71F6900D85E10 /* DeviceLocation_Emscripten.cpp */,
+				CF75D10723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp */,
+				CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */,
+				CF75D0FD23C71F6A00D85E10 /* Downloader_Emscripten.hpp */,
+				CF75D0F123C71F6800D85E10 /* Factory_Emscripten.cpp */,
+				CF75D0FE23C71F6A00D85E10 /* Factory_Emscripten.hpp */,
+				CF75D0FC23C71F6900D85E10 /* G3MBuilder_Emscripten.cpp */,
+				CF75D0F923C71F6900D85E10 /* G3MBuilder_Emscripten.hpp */,
+				CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */,
+				CF75D0FF23C71F6A00D85E10 /* G3MWidget_Emscripten.hpp */,
+				CF75D0F223C71F6800D85E10 /* JSONParser_Emscripten.cpp */,
+				CF75D0F723C71F6900D85E10 /* JSONParser_Emscripten.hpp */,
+				CF75D10623C71F6B00D85E10 /* Logger_Emscripten.cpp */,
+				CF75D10523C71F6A00D85E10 /* Logger_Emscripten.hpp */,
+				CF75D0F823C71F6900D85E10 /* MathUtils_Emscripten.cpp */,
+				CF75D10423C71F6A00D85E10 /* MathUtils_Emscripten.hpp */,
+				CF75D10D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp */,
+				CF75D10123C71F6A00D85E10 /* NativeGL_Emscripten.hpp */,
+				CF75D10B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp */,
+				CF75D10323C71F6A00D85E10 /* StringBuilder_Emscripten.hpp */,
+				CF75D0F323C71F6800D85E10 /* StringUtils_Emscripten.cpp */,
+				CF75D0FB23C71F6900D85E10 /* StringUtils_Emscripten.hpp */,
+				CF75D0FA23C71F6900D85E10 /* TextUtils_Emscripten.cpp */,
+				CF75D10923C71F6B00D85E10 /* TextUtils_Emscripten.hpp */,
+				CF75D0F423C71F6900D85E10 /* ThreadUtils_Emscripten.cpp */,
+				CF75D10023C71F6A00D85E10 /* ThreadUtils_Emscripten.hpp */,
+				CF75D10223C71F6A00D85E10 /* Timer_Emscripten.cpp */,
+				CF75D0F023C71F6800D85E10 /* Timer_Emscripten.hpp */,
+				CF75D10A23C71F6B00D85E10 /* WebSocket_Emscripten.cpp */,
+				CF75D10C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp */,
+			);
+			path = G3MEmscriptenSDK;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CF75D0DC23C71F4700D85E10 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF75D12823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp in Headers */,
+				CF75D0E623C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp in Headers */,
+				CF75D11B23C71F6B00D85E10 /* StringUtils_Emscripten.hpp in Headers */,
+				CF75D11923C71F6B00D85E10 /* G3MBuilder_Emscripten.hpp in Headers */,
+				CF75D12C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp in Headers */,
+				CF75D0E423C71F4700D85E10 /* G3MEmscriptenSDK.hpp in Headers */,
+				CF75D12123C71F6B00D85E10 /* NativeGL_Emscripten.hpp in Headers */,
+				CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */,
+				CF75D11E23C71F6B00D85E10 /* Factory_Emscripten.hpp in Headers */,
+				CF75D12723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp in Headers */,
+				CF75D11F23C71F6B00D85E10 /* G3MWidget_Emscripten.hpp in Headers */,
+				CF75D11D23C71F6B00D85E10 /* Downloader_Emscripten.hpp in Headers */,
+				CF75D12323C71F6B00D85E10 /* StringBuilder_Emscripten.hpp in Headers */,
+				CF75D12423C71F6B00D85E10 /* MathUtils_Emscripten.hpp in Headers */,
+				CF75D12023C71F6B00D85E10 /* ThreadUtils_Emscripten.hpp in Headers */,
+				CF75D12523C71F6B00D85E10 /* Logger_Emscripten.hpp in Headers */,
+				CF75D12923C71F6B00D85E10 /* TextUtils_Emscripten.hpp in Headers */,
+				CF75D11723C71F6B00D85E10 /* JSONParser_Emscripten.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		CF75D0DF23C71F4700D85E10 /* G3MEmscriptenSDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CF75D0EB23C71F4700D85E10 /* Build configuration list for PBXNativeTarget "G3MEmscriptenSDK" */;
+			buildPhases = (
+				CF75D0DC23C71F4700D85E10 /* Headers */,
+				CF75D0DD23C71F4700D85E10 /* Sources */,
+				CF75D0DE23C71F4700D85E10 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = G3MEmscriptenSDK;
+			productName = G3MEmscriptenSDK;
+			productReference = CF75D0E023C71F4700D85E10 /* libG3MEmscriptenSDK.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CF75D0D823C71F4700D85E10 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "DIEGO RAMIRO GOMEZ-DECK";
+				TargetAttributes = {
+					CF75D0DF23C71F4700D85E10 = {
+						CreatedOnToolsVersion = 11.3;
+					};
+				};
+			};
+			buildConfigurationList = CF75D0DB23C71F4700D85E10 /* Build configuration list for PBXProject "G3MEmscriptenSDK" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CF75D0D723C71F4700D85E10;
+			productRefGroup = CF75D0E123C71F4700D85E10 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CF75D0DF23C71F4700D85E10 /* G3MEmscriptenSDK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CF75D0DD23C71F4700D85E10 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF75D12A23C71F6B00D85E10 /* WebSocket_Emscripten.cpp in Sources */,
+				CF75D12223C71F6B00D85E10 /* Timer_Emscripten.cpp in Sources */,
+				CF75D11523C71F6B00D85E10 /* DeviceLocation_Emscripten.cpp in Sources */,
+				CF75D11823C71F6B00D85E10 /* MathUtils_Emscripten.cpp in Sources */,
+				CF75D12B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp in Sources */,
+				CF75D11423C71F6B00D85E10 /* ThreadUtils_Emscripten.cpp in Sources */,
+				CF75D11A23C71F6B00D85E10 /* TextUtils_Emscripten.cpp in Sources */,
+				CF75D11323C71F6B00D85E10 /* StringUtils_Emscripten.cpp in Sources */,
+				CF75D12D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp in Sources */,
+				CF75D11C23C71F6B00D85E10 /* G3MBuilder_Emscripten.cpp in Sources */,
+				CF75D12623C71F6B00D85E10 /* Logger_Emscripten.cpp in Sources */,
+				CF75D11123C71F6B00D85E10 /* Factory_Emscripten.cpp in Sources */,
+				CF75D10E23C71F6B00D85E10 /* Downloader_Emscripten.cpp in Sources */,
+				CF75D11223C71F6B00D85E10 /* JSONParser_Emscripten.cpp in Sources */,
+				CF75D0E823C71F4700D85E10 /* G3MEmscriptenSDK.cpp in Sources */,
+				CF75D11623C71F6B00D85E10 /* DeviceAttitude_Emscripten.cpp in Sources */,
+				CF75D10F23C71F6B00D85E10 /* G3MWidget_Emscripten.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CF75D0E923C71F4700D85E10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		CF75D0EA23C71F4700D85E10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		CF75D0EC23C71F4700D85E10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G5L97KSDHR;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					C_CODE,
+					"DEBUG=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"/Users/dgd/Documents/Development/IGO-GIT-Repository/g3m/iOS/G3MiOSSDK/Commons/**",
+					"/Users/dgd/Documents/Development/IGO-GIT-Repository/emsdk//upstream/emscripten/system/include/",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		CF75D0ED23C71F4700D85E10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G5L97KSDHR;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
+				HEADER_SEARCH_PATHS = (
+					"/Users/dgd/Documents/Development/IGO-GIT-Repository/g3m/iOS/G3MiOSSDK/Commons/**",
+					"/Users/dgd/Documents/Development/IGO-GIT-Repository/emsdk//upstream/emscripten/system/include/",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CF75D0DB23C71F4700D85E10 /* Build configuration list for PBXProject "G3MEmscriptenSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF75D0E923C71F4700D85E10 /* Debug */,
+				CF75D0EA23C71F4700D85E10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CF75D0EB23C71F4700D85E10 /* Build configuration list for PBXNativeTarget "G3MEmscriptenSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF75D0EC23C71F4700D85E10 /* Debug */,
+				CF75D0ED23C71F4700D85E10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CF75D0D823C71F4700D85E10 /* Project object */;
+}

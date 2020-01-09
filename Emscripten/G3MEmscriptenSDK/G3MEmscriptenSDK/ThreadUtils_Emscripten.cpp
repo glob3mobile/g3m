@@ -1,35 +1,40 @@
 
 
-#include "ThreadUtils_Wasm.hpp"
+#include "ThreadUtils_Emscripten.hpp"
+
+#include <stddef.h>
 
 #include <emscripten/html5.h>
 
+#include "GTask.hpp"
 
-ThreadUtils_Wasm::ThreadUtils_Wasm(const int delayMillis) :
+
+
+ThreadUtils_Emscripten::ThreadUtils_Emscripten(const int delayMillis) :
   _delayMillis(delayMillis)
 {
 }
 
-ThreadUtils_Wasm::~ThreadUtils_Wasm() {
+ThreadUtils_Emscripten::~ThreadUtils_Emscripten() {
 }
 
-void ThreadUtils_Wasm::justInitialized()  {
+void ThreadUtils_Emscripten::justInitialized()  {
   // do nothing
 }
 
-void ThreadUtils_Wasm::onResume(const G3MContext* context) {
+void ThreadUtils_Emscripten::onResume(const G3MContext* context) {
   // do nothing
 }
 
-void ThreadUtils_Wasm::onPause(const G3MContext* context) {
+void ThreadUtils_Emscripten::onPause(const G3MContext* context) {
   // do nothing
 }
 
-void ThreadUtils_Wasm::onDestroy(const G3MContext* context) {
+void ThreadUtils_Emscripten::onDestroy(const G3MContext* context) {
   // do nothing
 }
 
-void ThreadUtils_Wasm::invokeInRendererThread(GTask* task,
+void ThreadUtils_Emscripten::invokeInRendererThread(GTask* task,
 					      bool autoDelete) const {
   task->run(getContext());
   if (autoDelete) {
@@ -42,12 +47,12 @@ class TaskActivation {
 private:
   GTask* _task;
   const bool _autoDelete;
-  G3MContext _context;
+  const G3MContext* _context;
 
 public:
   TaskActivation(GTask*     task,
 		 const bool autoDelete,
-		 G3MContext context) :
+		 const G3MContext* context) :
     _task(task),
     _autoDelete(autoDelete),
     _context(context)
@@ -69,7 +74,7 @@ void __activateTask(void* userData) {
   delete taskActivation;
 }
 
-void ThreadUtils_Wasm::invokeInBackground(GTask* task,
+void ThreadUtils_Emscripten::invokeInBackground(GTask* task,
 					  bool autoDelete) const  {
 #warning TODO: research emscripten_async_queue_XXX
   
