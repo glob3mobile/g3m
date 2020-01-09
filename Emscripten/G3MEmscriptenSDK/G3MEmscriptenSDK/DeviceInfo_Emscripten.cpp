@@ -1,3 +1,3 @@
 
 
-#include "Image_Emscripten.hpp"
+#include "DeviceInfo_Emscripten.hpp"

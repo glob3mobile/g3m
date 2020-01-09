@@ -4,14 +4,12 @@
 
 #include "DeviceInfo_Emscripten.hpp"
 #include "Timer_Emscripten.hpp"
-//#include "ByteBuffer_Emscripten.hpp"
-//#include "FloatBuffer_Emscripten.hpp"
-//#include "Image_Emscripten.hpp"
-//#include "IntBuffer_Emscripten.hpp"
-//#include "ShortBuffer_Emscripten.hpp"
-//#include "IImageListener.hpp"
-//#include "Canvas_Emscripten.hpp"
-//#include "WebSocket_Emscripten.hpp"
+#include "ByteBuffer_Emscripten.hpp"
+#include "FloatBuffer_Emscripten.hpp"
+#include "IntBuffer_Emscripten.hpp"
+#include "ShortBuffer_Emscripten.hpp"
+#include "Canvas_Emscripten.hpp"
+#include "WebSocket_Emscripten.hpp"
 
 
 IDeviceInfo* Factory_Emscripten::createDeviceInfo() const {
