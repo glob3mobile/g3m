@@ -382,8 +382,8 @@
 					"DEBUG=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					"/Users/dgd/Documents/Development/IGO-GIT-Repository/g3m/iOS/G3MiOSSDK/Commons/**",
-					"/Users/dgd/Documents/Development/IGO-GIT-Repository/emsdk//upstream/emscripten/system/include/",
+					"$SRCROOT/../../iOS/G3MiOSSDK/Commons/**",
+					$SRCROOT/../../../emsdk/upstream/emscripten/system/include/,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -400,8 +400,8 @@
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
 				HEADER_SEARCH_PATHS = (
-					"/Users/dgd/Documents/Development/IGO-GIT-Repository/g3m/iOS/G3MiOSSDK/Commons/**",
-					"/Users/dgd/Documents/Development/IGO-GIT-Repository/emsdk//upstream/emscripten/system/include/",
+					"$SRCROOT/../../iOS/G3MiOSSDK/Commons/**",
+					$SRCROOT/../../../emsdk/upstream/emscripten/system/include/,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
