@@ -28,10 +28,10 @@ _webGLContext(val::null())
   _canvas.call<void>("setId", "_g3m_canvas");
   
   val webGLContextArguments = val::object();
-  //webGLContextArguments["preserveDrawingBuffer"]           = val(true);
-  webGLContextArguments["alpha"]                           = val(false);
-  webGLContextArguments["preferLowPowerToHighPerformance"] = val(true);
-  webGLContextArguments["antialias"]                       = val(false);
+  //webGLContextArguments.set("preserveDrawingBuffer",           val(true));
+  webGLContextArguments.set("alpha",                           val(false));
+  webGLContextArguments.set("preferLowPowerToHighPerformance", val(true));
+  webGLContextArguments.set("antialias",                       val(false));
   _webGLContext = _canvas.call<val>("getContext", "webgl", webGLContextArguments);
   
   // jsCanvas.addEventListener("webglcontextlost", function(
