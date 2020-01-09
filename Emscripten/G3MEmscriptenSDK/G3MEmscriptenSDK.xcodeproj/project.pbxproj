@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF3FF6E623C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3FF6E423C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp */; };
+		CF3FF6E723C72FC5001D8E9A /* DeviceInfo_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3FF6E523C72FC5001D8E9A /* DeviceInfo_Emscripten.cpp */; };
 		CF75D10E23C71F6B00D85E10 /* Downloader_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */; };
 		CF75D10F23C71F6B00D85E10 /* G3MWidget_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */; };
 		CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0F023C71F6800D85E10 /* Timer_Emscripten.hpp */; };
@@ -44,6 +46,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CF3FF6E423C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeviceInfo_Emscripten.hpp; sourceTree = "<group>"; };
+		CF3FF6E523C72FC5001D8E9A /* DeviceInfo_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceInfo_Emscripten.cpp; sourceTree = "<group>"; };
 		CF75D0E023C71F4700D85E10 /* libG3MEmscriptenSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MEmscriptenSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Downloader_Emscripten.cpp; sourceTree = "<group>"; };
 		CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MWidget_Emscripten.cpp; sourceTree = "<group>"; };
@@ -115,6 +119,8 @@
 				CF75D10823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp */,
 				CF75D0F523C71F6900D85E10 /* DeviceLocation_Emscripten.cpp */,
 				CF75D10723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp */,
+				CF3FF6E523C72FC5001D8E9A /* DeviceInfo_Emscripten.cpp */,
+				CF3FF6E423C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp */,
 				CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */,
 				CF75D0FD23C71F6A00D85E10 /* Downloader_Emscripten.hpp */,
 				CF75D0F123C71F6800D85E10 /* Factory_Emscripten.cpp */,
@@ -162,6 +168,7 @@
 				CF75D12C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp in Headers */,
 				CF75D12123C71F6B00D85E10 /* NativeGL_Emscripten.hpp in Headers */,
 				CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */,
+				CF3FF6E623C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp in Headers */,
 				CF75D11E23C71F6B00D85E10 /* Factory_Emscripten.hpp in Headers */,
 				CF75D12723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp in Headers */,
 				CFEB964A23C72E5700487426 /* Image_Emscripten.hpp in Headers */,
@@ -242,6 +249,7 @@
 				CF75D11A23C71F6B00D85E10 /* TextUtils_Emscripten.cpp in Sources */,
 				CF75D11323C71F6B00D85E10 /* StringUtils_Emscripten.cpp in Sources */,
 				CFEB964923C72E5700487426 /* Image_Emscripten.cpp in Sources */,
+				CF3FF6E723C72FC5001D8E9A /* DeviceInfo_Emscripten.cpp in Sources */,
 				CF75D12D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp in Sources */,
 				CF75D11C23C71F6B00D85E10 /* G3MBuilder_Emscripten.cpp in Sources */,
 				CF75D12623C71F6B00D85E10 /* Logger_Emscripten.cpp in Sources */,
