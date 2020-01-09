@@ -3,13 +3,20 @@
 #include "NativeGL_Emscripten.hpp"
 
 #include "FloatBuffer_Emscripten.hpp"
+#include "ShortBuffer_Emscripten.hpp"
+
 
 using namespace emscripten;
 
 
 NativeGL_Emscripten::NativeGL_Emscripten(const emscripten::val& gl) :
 _gl(gl),
-GL_FLOAT( gl["FLOAT"].as<unsigned long>() )
+
+GL_FLOAT               ( gl["FLOAT"                ].as<unsigned long>() ),
+GL_ARRAY_BUFFER        ( gl["ARRAY_BUFFER"         ].as<unsigned long>() ),
+GL_STATIC_DRAW         ( gl["STATIC_DRAW"          ].as<unsigned long>() ),
+GL_ELEMENT_ARRAY_BUFFER( gl["ELEMENT_ARRAY_BUFFER" ].as<unsigned long>() ),
+GL_UNSIGNED_SHORT      ( gl["UNSIGNED_SHORT"       ].as<unsigned long>() )
 {
 
 }
@@ -79,12 +86,28 @@ void NativeGL_Emscripten::polygonOffset(float factor,
 #error TODO
 }
 
+emscripten::val NativeGL_Emscripten::createBuffer() const {
+  return _gl.call<emscripten::val>("createBuffer");
+}
+
+void NativeGL_Emscripten::bindBuffer(const emscripten::val& webGLBuffer) const {
+  _gl.call<void>("bindBuffer", GL_ARRAY_BUFFER, webGLBuffer);
+}
+
+void NativeGL_Emscripten::bufferData(const emscripten::val& webGLBuffer) const {
+  _gl.call<void>("bufferData", GL_ARRAY_BUFFER, webGLBuffer, GL_STATIC_DRAW);
+}
+
+void NativeGL_Emscripten::deleteBuffer(const emscripten::val& webGLBuffer) const {
+  _gl.call<void>("deleteBuffer", webGLBuffer);
+}
+
 void NativeGL_Emscripten::vertexAttribPointer(int index,
                                               int size,
                                               bool normalized,
                                               int stride,
                                               const IFloatBuffer* buffer) const {
-  val webGLBuffer = ((FloatBuffer_Emscripten*) buffer)->bindVBO(_gl);
+  val webGLBuffer = ((FloatBuffer_Emscripten*) buffer)->bindVBO(this);
 
   _gl.call<void>("vertexAttribPointer", index, size, GL_FLOAT, normalized, stride, 0);
 }
@@ -92,7 +115,15 @@ void NativeGL_Emscripten::vertexAttribPointer(int index,
 void NativeGL_Emscripten::drawElements(int mode,
                                        int count,
                                        IShortBuffer* indices) const {
-#error TODO
+  ShortBuffer_Emscripten* indicesEM = (ShortBuffer_Emscripten*) indices;
+  val webGLBuffer = indicesEM->getWebGLBuffer(this);
+
+  _gl.call<void>("bindBuffer", GL_ELEMENT_ARRAY_BUFFER, webGLBuffer);
+
+  val array = indicesEM->getBuffer();
+  _gl.call<void>("bufferData", GL_ELEMENT_ARRAY_BUFFER, array, GL_STATIC_DRAW);
+
+  _gl.call<void>("drawElements", mode, count, GL_UNSIGNED_SHORT, 0);
 }
 
 void NativeGL_Emscripten::lineWidth(float width) const {
@@ -164,222 +195,222 @@ void NativeGL_Emscripten::getIntegerv(int v, int i[]) const {
 }
 
 
-int CullFace_Front() const {
+int NativeGL_Emscripten::CullFace_Front() const {
 #error TODO
 }
-int CullFace_Back() const {
+int NativeGL_Emscripten::CullFace_Back() const {
 #error TODO
 }
-int CullFace_FrontAndBack() const {
-#error TODO
-}
-
-int BufferType_ColorBuffer() const {
-#error TODO
-}
-int BufferType_DepthBuffer() const {
+int NativeGL_Emscripten::CullFace_FrontAndBack() const {
 #error TODO
 }
 
-int Feature_PolygonOffsetFill() const {
+int NativeGL_Emscripten::BufferType_ColorBuffer() const {
 #error TODO
 }
-int Feature_DepthTest() const {
-#error TODO
-}
-int Feature_Blend() const {
-#error TODO
-}
-int Feature_CullFace() const {
+int NativeGL_Emscripten::BufferType_DepthBuffer() const {
 #error TODO
 }
 
-int Type_Float() const {
+int NativeGL_Emscripten::Feature_PolygonOffsetFill() const {
 #error TODO
 }
-int Type_UnsignedByte() const {
+int NativeGL_Emscripten::Feature_DepthTest() const {
 #error TODO
 }
-int Type_UnsignedInt() const {
+int NativeGL_Emscripten::Feature_Blend() const {
 #error TODO
 }
-int Type_Int() const {
-#error TODO
-}
-int Type_Vec2Float() const {
-#error TODO
-}
-int Type_Vec3Float() const {
-#error TODO
-}
-int Type_Vec4Float() const {
-#error TODO
-}
-int Type_Bool() const {
-#error TODO
-}
-int Type_Matrix4Float() const {
+int NativeGL_Emscripten::Feature_CullFace() const {
 #error TODO
 }
 
-int Primitive_Triangles() const {
+int NativeGL_Emscripten::Type_Float() const {
 #error TODO
 }
-int Primitive_TriangleStrip() const {
+int NativeGL_Emscripten::Type_UnsignedByte() const {
 #error TODO
 }
-int Primitive_TriangleFan() const {
+int NativeGL_Emscripten::Type_UnsignedInt() const {
 #error TODO
 }
-int Primitive_Lines() const {
+int NativeGL_Emscripten::Type_Int() const {
 #error TODO
 }
-int Primitive_LineStrip() const {
+int NativeGL_Emscripten::Type_Vec2Float() const {
 #error TODO
 }
-int Primitive_LineLoop() const {
+int NativeGL_Emscripten::Type_Vec3Float() const {
 #error TODO
 }
-int Primitive_Points() const {
+int NativeGL_Emscripten::Type_Vec4Float() const {
 #error TODO
 }
-
-int BlendFactor_One() const {
+int NativeGL_Emscripten::Type_Bool() const {
 #error TODO
 }
-int BlendFactor_Zero() const {
-#error TODO
-}
-int BlendFactor_SrcAlpha() const {
-#error TODO
-}
-int BlendFactor_OneMinusSrcAlpha() const {
+int NativeGL_Emscripten::Type_Matrix4Float() const {
 #error TODO
 }
 
-int TextureType_Texture2D() const {
+int NativeGL_Emscripten::Primitive_Triangles() const {
+#error TODO
+}
+int NativeGL_Emscripten::Primitive_TriangleStrip() const {
+#error TODO
+}
+int NativeGL_Emscripten::Primitive_TriangleFan() const {
+#error TODO
+}
+int NativeGL_Emscripten::Primitive_Lines() const {
+#error TODO
+}
+int NativeGL_Emscripten::Primitive_LineStrip() const {
+#error TODO
+}
+int NativeGL_Emscripten::Primitive_LineLoop() const {
+#error TODO
+}
+int NativeGL_Emscripten::Primitive_Points() const {
 #error TODO
 }
 
-int TextureParameter_MinFilter() const {
+int NativeGL_Emscripten::BlendFactor_One() const {
 #error TODO
 }
-int TextureParameter_MagFilter() const {
+int NativeGL_Emscripten::BlendFactor_Zero() const {
 #error TODO
 }
-int TextureParameter_WrapS() const {
+int NativeGL_Emscripten::BlendFactor_SrcAlpha() const {
 #error TODO
 }
-int TextureParameter_WrapT() const {
+int NativeGL_Emscripten::BlendFactor_OneMinusSrcAlpha() const {
 #error TODO
 }
 
-int TextureParameterValue_Nearest() const {
+int NativeGL_Emscripten::TextureType_Texture2D() const {
 #error TODO
 }
-int TextureParameterValue_Linear() const {
+
+int NativeGL_Emscripten::TextureParameter_MinFilter() const {
 #error TODO
 }
-int TextureParameterValue_NearestMipmapNearest() const {
+int NativeGL_Emscripten::TextureParameter_MagFilter() const {
 #error TODO
 }
-int TextureParameterValue_NearestMipmapLinear() const {
+int NativeGL_Emscripten::TextureParameter_WrapS() const {
 #error TODO
 }
-int TextureParameterValue_LinearMipmapNearest() const {
+int NativeGL_Emscripten::TextureParameter_WrapT() const {
 #error TODO
 }
-int TextureParameterValue_LinearMipmapLinear() const {
+
+int NativeGL_Emscripten::TextureParameterValue_Nearest() const {
+#error TODO
+}
+int NativeGL_Emscripten::TextureParameterValue_Linear() const {
+#error TODO
+}
+int NativeGL_Emscripten::TextureParameterValue_NearestMipmapNearest() const {
+#error TODO
+}
+int NativeGL_Emscripten::TextureParameterValue_NearestMipmapLinear() const {
+#error TODO
+}
+int NativeGL_Emscripten::TextureParameterValue_LinearMipmapNearest() const {
+#error TODO
+}
+int NativeGL_Emscripten::TextureParameterValue_LinearMipmapLinear() const {
 #error TODO
 }
 
 /* TextureWrapMode */
-int TextureParameterValue_Repeat() const {
+int NativeGL_Emscripten::TextureParameterValue_Repeat() const {
 #error TODO
 }
-int TextureParameterValue_ClampToEdge() const {
+int NativeGL_Emscripten::TextureParameterValue_ClampToEdge() const {
 #error TODO
 }
-int TextureParameterValue_MirroredRepeat() const {
-#error TODO
-}
-
-int Alignment_Pack() const {
-#error TODO
-}
-int Alignment_Unpack() const {
+int NativeGL_Emscripten::TextureParameterValue_MirroredRepeat() const {
 #error TODO
 }
 
-int Format_RGBA() const {
+int NativeGL_Emscripten::Alignment_Pack() const {
+#error TODO
+}
+int NativeGL_Emscripten::Alignment_Unpack() const {
 #error TODO
 }
 
-int Variable_Viewport() const {
-#error TODO
-}
-int Variable_ActiveAttributes() const {
-#error TODO
-}
-int Variable_ActiveUniforms() const {
+int NativeGL_Emscripten::Format_RGBA() const {
 #error TODO
 }
 
-int Error_NoError() const {
+int NativeGL_Emscripten::Variable_Viewport() const {
+#error TODO
+}
+int NativeGL_Emscripten::Variable_ActiveAttributes() const {
+#error TODO
+}
+int NativeGL_Emscripten::Variable_ActiveUniforms() const {
 #error TODO
 }
 
-int createProgram() const {
-#error TODO
-}
-bool deleteProgram(int program) const {
-#error TODO
-}
-void attachShader(int program, int shader) const {
-#error TODO
-}
-int createShader(ShaderType type) const {
-#error TODO
-}
-bool compileShader (int shader, const std::string& source) const {
-#error TODO
-}
-bool deleteShader(int shader) const {
-#error TODO
-}
-void printShaderInfoLog(int shader) const {
-#error TODO
-}
-bool linkProgram(int program) const {
-#error TODO
-}
-void printProgramInfoLog(int program) const {
+int NativeGL_Emscripten::Error_NoError() const {
 #error TODO
 }
 
-void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
+int NativeGL_Emscripten::createProgram() const {
+#error TODO
+}
+bool NativeGL_Emscripten::deleteProgram(int program) const {
+#error TODO
+}
+void NativeGL_Emscripten::attachShader(int program, int shader) const {
+#error TODO
+}
+int NativeGL_Emscripten::createShader(ShaderType type) const {
+#error TODO
+}
+bool NativeGL_Emscripten::compileShader (int shader, const std::string& source) const {
+#error TODO
+}
+bool NativeGL_Emscripten::deleteShader(int shader) const {
+#error TODO
+}
+void NativeGL_Emscripten::printShaderInfoLog(int shader) const {
+#error TODO
+}
+bool NativeGL_Emscripten::linkProgram(int program) const {
+#error TODO
+}
+void NativeGL_Emscripten::printProgramInfoLog(int program) const {
 #error TODO
 }
 
-int getProgramiv(const GPUProgram* program, int param) const {
+void NativeGL_Emscripten::bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
 #error TODO
 }
 
-GPUUniform* getActiveUniform(const GPUProgram* program, int i) const {
-#error TODO
-}
-GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const {
+int NativeGL_Emscripten::getProgramiv(const GPUProgram* program, int param) const {
 #error TODO
 }
 
-void depthMask(bool v) const {
+GPUUniform* NativeGL_Emscripten::getActiveUniform(const GPUProgram* program, int i) const {
+#error TODO
+}
+GPUAttribute* NativeGL_Emscripten::getActiveAttribute(const GPUProgram* program, int i) const {
 #error TODO
 }
 
-void setActiveTexture(int i) const {
+void NativeGL_Emscripten::depthMask(bool v) const {
 #error TODO
 }
 
-void viewport(int x, int y, int width, int height) const {
+void NativeGL_Emscripten::setActiveTexture(int i) const {
+#error TODO
+}
+
+void NativeGL_Emscripten::viewport(int x, int y, int width, int height) const {
 #error TODO
 }

@@ -4,19 +4,22 @@
 
 #include <sstream>
 
+#include "NativeGL_Emscripten.hpp"
+
 using namespace emscripten;
 
 long long FloatBuffer_Emscripten::_nextID = 0;
 
 
 FloatBuffer_Emscripten::FloatBuffer_Emscripten(size_t size) :
-_buffer(val::null()),
+_buffer( val::global("Float32Array").new_(val(size)) ),
 _timestamp(0),
-_id(_nextID++)
+_id(_nextID++),
+_webGLBuffer(val::null()),
+_webGLBufferTimeStamp(-1),
+_nativeGL(NULL)
 {
-  val Float32Array = val::global("Float32Array");
 
-  _buffer = Float32Array.new_(val(size));
 }
 
 FloatBuffer_Emscripten::FloatBuffer_Emscripten(float f0,
@@ -35,13 +38,13 @@ FloatBuffer_Emscripten::FloatBuffer_Emscripten(float f0,
                                                float f13,
                                                float f14,
                                                float f15) :
-_buffer(val::null()),
+_buffer( val::global("Float32Array").new_(val(16)) ),
 _timestamp(0),
-_id(_nextID++)
+_id(_nextID++),
+_webGLBuffer(val::null()),
+_webGLBufferTimeStamp(-1),
+_nativeGL(NULL)
 {
-  val Float32Array = val::global("Float32Array");
-
-  _buffer = Float32Array.new_(val(16));
   _buffer.set( 0, f0);
   _buffer.set( 1, f1);
   _buffer.set( 2, f2);
@@ -118,5 +121,29 @@ void FloatBuffer_Emscripten::rawPut(const size_t i,
                                     const size_t count) {
   for (int j = 0; j < count; j++) {
     rawPut(i + j, srcBuffer->get(srcFromIndex + j));
+  }
+}
+
+emscripten::val FloatBuffer_Emscripten::bindVBO(const NativeGL_Emscripten* nativeGL) {
+  if (_webGLBuffer.isNull()) {
+    _nativeGL = nativeGL;
+    _webGLBuffer = _nativeGL->createBuffer();
+  }
+
+  _nativeGL->bindBuffer(_webGLBuffer);
+
+  if (_webGLBufferTimeStamp != _timestamp) {
+    _webGLBufferTimeStamp = _timestamp;
+    _nativeGL->bufferData(_webGLBuffer);
+  }
+
+  return _webGLBuffer;
+}
+
+FloatBuffer_Emscripten::~FloatBuffer_Emscripten() {
+  if (!_webGLBuffer.isNull()) {
+    _nativeGL->deleteBuffer(_webGLBuffer);
+    _webGLBuffer = val::null();
+    _nativeGL = NULL;
   }
 }

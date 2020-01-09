@@ -12,6 +12,10 @@ private:
   emscripten::val _gl;
 
   const unsigned long GL_FLOAT;
+  const unsigned long GL_ARRAY_BUFFER;
+  const unsigned long GL_STATIC_DRAW;
+  const unsigned long GL_ELEMENT_ARRAY_BUFFER;
+  const unsigned long GL_UNSIGNED_SHORT;
 
 public:
   NativeGL_Emscripten(const emscripten::val& gl);
@@ -193,6 +197,15 @@ public:
   void setActiveTexture(int i) const;
 
   void viewport(int x, int y, int width, int height) const;
+
+
+  emscripten::val createBuffer() const;
+
+  void bindBuffer(const emscripten::val& webGLBuffer) const;
+
+  void bufferData(const emscripten::val& webGLBuffer) const;
+
+  void deleteBuffer(const emscripten::val& webGLBuffer) const;
 
 };
 

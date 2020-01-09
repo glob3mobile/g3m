@@ -6,6 +6,8 @@
 
 #include <emscripten/val.h>
 
+class NativeGL_Emscripten;
+
 
 class FloatBuffer_Emscripten : public IFloatBuffer {
 private:
@@ -15,6 +17,11 @@ private:
 
   const long long _id;
   static long long _nextID;
+
+  const NativeGL_Emscripten* _nativeGL;
+  emscripten::val _webGLBuffer;
+  int             _webGLBufferTimeStamp;
+
 
 public:
 
@@ -36,6 +43,8 @@ public:
                          float f13,
                          float f14,
                          float f15);
+
+  ~FloatBuffer_Emscripten();
 
   long long getID() const;
 
@@ -60,6 +69,8 @@ public:
               const IFloatBuffer* srcBuffer,
               const size_t srcFromIndex,
               const size_t count);
+
+  emscripten::val bindVBO(const NativeGL_Emscripten* nativeGL);
 
 };
 
