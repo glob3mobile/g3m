@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CF75D0E423C71F4700D85E10 /* G3MEmscriptenSDK.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0E323C71F4700D85E10 /* G3MEmscriptenSDK.hpp */; };
-		CF75D0E623C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0E523C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp */; };
-		CF75D0E823C71F4700D85E10 /* G3MEmscriptenSDK.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0E723C71F4700D85E10 /* G3MEmscriptenSDK.cpp */; };
 		CF75D10E23C71F6B00D85E10 /* Downloader_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */; };
 		CF75D10F23C71F6B00D85E10 /* G3MWidget_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */; };
 		CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D0F023C71F6800D85E10 /* Timer_Emscripten.hpp */; };
@@ -46,9 +43,6 @@
 
 /* Begin PBXFileReference section */
 		CF75D0E023C71F4700D85E10 /* libG3MEmscriptenSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MEmscriptenSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		CF75D0E323C71F4700D85E10 /* G3MEmscriptenSDK.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MEmscriptenSDK.hpp; sourceTree = "<group>"; };
-		CF75D0E523C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MEmscriptenSDKPriv.hpp; sourceTree = "<group>"; };
-		CF75D0E723C71F4700D85E10 /* G3MEmscriptenSDK.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MEmscriptenSDK.cpp; sourceTree = "<group>"; };
 		CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Downloader_Emscripten.cpp; sourceTree = "<group>"; };
 		CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MWidget_Emscripten.cpp; sourceTree = "<group>"; };
 		CF75D0F023C71F6800D85E10 /* Timer_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Timer_Emscripten.hpp; sourceTree = "<group>"; };
@@ -113,9 +107,6 @@
 		CF75D0E223C71F4700D85E10 /* G3MEmscriptenSDK */ = {
 			isa = PBXGroup;
 			children = (
-				CF75D0E323C71F4700D85E10 /* G3MEmscriptenSDK.hpp */,
-				CF75D0E523C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp */,
-				CF75D0E723C71F4700D85E10 /* G3MEmscriptenSDK.cpp */,
 				CF75D0F623C71F6900D85E10 /* DeviceAttitude_Emscripten.cpp */,
 				CF75D10823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp */,
 				CF75D0F523C71F6900D85E10 /* DeviceLocation_Emscripten.cpp */,
@@ -160,11 +151,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF75D12823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp in Headers */,
-				CF75D0E623C71F4700D85E10 /* G3MEmscriptenSDKPriv.hpp in Headers */,
 				CF75D11B23C71F6B00D85E10 /* StringUtils_Emscripten.hpp in Headers */,
 				CF75D11923C71F6B00D85E10 /* G3MBuilder_Emscripten.hpp in Headers */,
 				CF75D12C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp in Headers */,
-				CF75D0E423C71F4700D85E10 /* G3MEmscriptenSDK.hpp in Headers */,
 				CF75D12123C71F6B00D85E10 /* NativeGL_Emscripten.hpp in Headers */,
 				CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */,
 				CF75D11E23C71F6B00D85E10 /* Factory_Emscripten.hpp in Headers */,
@@ -251,7 +240,6 @@
 				CF75D11123C71F6B00D85E10 /* Factory_Emscripten.cpp in Sources */,
 				CF75D10E23C71F6B00D85E10 /* Downloader_Emscripten.cpp in Sources */,
 				CF75D11223C71F6B00D85E10 /* JSONParser_Emscripten.cpp in Sources */,
-				CF75D0E823C71F4700D85E10 /* G3MEmscriptenSDK.cpp in Sources */,
 				CF75D11623C71F6B00D85E10 /* DeviceAttitude_Emscripten.cpp in Sources */,
 				CF75D10F23C71F6B00D85E10 /* G3MWidget_Emscripten.cpp in Sources */,
 			);
