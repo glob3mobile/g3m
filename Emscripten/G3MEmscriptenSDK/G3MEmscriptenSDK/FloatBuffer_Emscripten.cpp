@@ -147,3 +147,7 @@ FloatBuffer_Emscripten::~FloatBuffer_Emscripten() {
     _nativeGL = NULL;
   }
 }
+
+emscripten::val FloatBuffer_Emscripten::getBuffer() const {
+  return _buffer;
+}

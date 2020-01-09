@@ -25,14 +25,14 @@ public:
 
   void useProgram(GPUProgram* program) const;
 
-  void uniform2f(const IGLUniformID* loc,
+  void uniform2f(const IGLUniformID* location,
                  float x,
                  float y) const;
 
-  void uniform1f(const IGLUniformID* loc,
+  void uniform1f(const IGLUniformID* location,
                  float x) const;
 
-  void uniform1i(const IGLUniformID* loc,
+  void uniform1i(const IGLUniformID* location,
                  int v) const;
 
   void uniformMatrix4fv(const IGLUniformID* location,

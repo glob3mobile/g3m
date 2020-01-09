@@ -72,6 +72,8 @@ public:
 
   emscripten::val bindVBO(const NativeGL_Emscripten* nativeGL);
 
+  emscripten::val getBuffer() const;
+
 };
 
 #endif

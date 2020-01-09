@@ -7,6 +7,7 @@
 #include "GLUniformID_Emscripten.hpp"
 
 #include "GPUProgram.hpp"
+#include "Matrix44D.hpp"
 
 
 using namespace emscripten;
@@ -31,43 +32,48 @@ void NativeGL_Emscripten::useProgram(GPUProgram* program) const {
   _gl.call<void>("useProgram", jsoProgram);
 }
 
-void NativeGL_Emscripten::uniform2f(const IGLUniformID* loc,
+void NativeGL_Emscripten::uniform2f(const IGLUniformID* location,
                                     float x,
                                     float y) const {
-  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) loc;
-  val locId = locEM->getId();
-  _gl.call<void>("uniform2f", locId, x, y);
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
+  val id = locEM->getId();
+  _gl.call<void>("uniform2f", id, x, y);
 }
 
-void NativeGL_Emscripten::uniform1f(const IGLUniformID* loc,
+void NativeGL_Emscripten::uniform1f(const IGLUniformID* location,
                                     float x) const {
-  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) loc;
-  val locId = locEM->getId();
-  _gl.call<void>("uniform1f", locId, x);
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
+  val id = locEM->getId();
+  _gl.call<void>("uniform1f", id, x);
 }
 
-void NativeGL_Emscripten::uniform1i(const IGLUniformID* loc,
+void NativeGL_Emscripten::uniform1i(const IGLUniformID* location,
                                     int v) const {
-  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) loc;
-  val locId = locEM->getId();
-  _gl.call<void>("uniform1i", locId, v);
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
+  val id = locEM->getId();
+  _gl.call<void>("uniform1i", id, v);
 }
 
 void NativeGL_Emscripten::uniformMatrix4fv(const IGLUniformID* location,
                                            bool transpose,
                                            const Matrix44D* matrix) const {
-#error TODO
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
+  val id = locEM->getId();
+
+  const FloatBuffer_Emscripten* floatBuffer = (FloatBuffer_Emscripten*) matrix->getColumnMajorFloatBuffer();
+  val buffer = floatBuffer->getBuffer();
+  _gl.call<void>("uniformMatrix4fv", id, transpose, buffer);
 }
 
 void NativeGL_Emscripten::clearColor(float red,
                                      float green,
                                      float blue,
                                      float alpha) const {
-#error TODO
+  _gl.call<void>("clearColor", red, green, blue, alpha);
 }
 
 void NativeGL_Emscripten::clear(int buffers) const {
-#error TODO
+  _gl.call<void>("clear", buffers);
 }
 
 void NativeGL_Emscripten::uniform4f(const IGLUniformID* location,
@@ -75,14 +81,18 @@ void NativeGL_Emscripten::uniform4f(const IGLUniformID* location,
                                     float v1,
                                     float v2,
                                     float v3) const {
-#error TODO
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
+  val id = locEM->getId();
+  _gl.call<void>("uniform4f", id, v0, v1, v2, v3);
 }
 
 void NativeGL_Emscripten::uniform3f(const IGLUniformID* location,
                                     float v0,
                                     float v1,
                                     float v2) const {
-#error TODO
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
+  val id = locEM->getId();
+  _gl.call<void>("uniform3f", id, v0, v1, v2);
 }
 
 void NativeGL_Emscripten::enable(int feature) const {
@@ -188,7 +198,7 @@ void NativeGL_Emscripten::texImage2D(const IImage* image, int format) const {
 #error TODO
 }
 
-void gNativeGL_Emscripten::enerateMipmap(int target) const {
+void NativeGL_Emscripten::generateMipmap(int target) const {
 #error TODO
 }
 
