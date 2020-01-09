@@ -53,6 +53,8 @@
 		CF920C5623C730ED005A10ED /* IntBuffer_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF920C4E23C730ED005A10ED /* IntBuffer_Emscripten.cpp */; };
 		CF920C5823C73228005A10ED /* Canvas_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF920C5723C73228005A10ED /* Canvas_Emscripten.cpp */; };
 		CF920C5A23C7323D005A10ED /* Canvas_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF920C5923C7323D005A10ED /* Canvas_Emscripten.hpp */; };
+		CFD577CE23C7A59500D41115 /* GLTextureID_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD577CC23C7A59500D41115 /* GLTextureID_Emscripten.cpp */; };
+		CFD577CF23C7A59500D41115 /* GLTextureID_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD577CD23C7A59500D41115 /* GLTextureID_Emscripten.hpp */; };
 		CFEB964923C72E5700487426 /* Image_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEB964723C72E5700487426 /* Image_Emscripten.cpp */; };
 		CFEB964A23C72E5700487426 /* Image_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFEB964823C72E5700487426 /* Image_Emscripten.hpp */; };
 /* End PBXBuildFile section */
@@ -105,6 +107,8 @@
 		CF920C4E23C730ED005A10ED /* IntBuffer_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntBuffer_Emscripten.cpp; sourceTree = "<group>"; };
 		CF920C5723C73228005A10ED /* Canvas_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas_Emscripten.cpp; sourceTree = "<group>"; };
 		CF920C5923C7323D005A10ED /* Canvas_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Canvas_Emscripten.hpp; sourceTree = "<group>"; };
+		CFD577CC23C7A59500D41115 /* GLTextureID_Emscripten.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureID_Emscripten.cpp; sourceTree = "<group>"; };
+		CFD577CD23C7A59500D41115 /* GLTextureID_Emscripten.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureID_Emscripten.hpp; sourceTree = "<group>"; };
 		CFEB964723C72E5700487426 /* Image_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Image_Emscripten.cpp; sourceTree = "<group>"; };
 		CFEB964823C72E5700487426 /* Image_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Image_Emscripten.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,6 +156,8 @@
 				CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */,
 				CF75D0FD23C71F6A00D85E10 /* Downloader_Emscripten.hpp */,
 				CF80656B23C793780034CE14 /* GLUniformID_Emscripten.cpp */,
+				CFD577CC23C7A59500D41115 /* GLTextureID_Emscripten.cpp */,
+				CFD577CD23C7A59500D41115 /* GLTextureID_Emscripten.hpp */,
 				CF80656C23C793780034CE14 /* GLUniformID_Emscripten.hpp */,
 				CF75D0F123C71F6800D85E10 /* Factory_Emscripten.cpp */,
 				CF75D0FE23C71F6A00D85E10 /* Factory_Emscripten.hpp */,
@@ -206,6 +212,7 @@
 				CF920C4F23C730ED005A10ED /* FloatBuffer_Emscripten.hpp in Headers */,
 				CF75D12123C71F6B00D85E10 /* NativeGL_Emscripten.hpp in Headers */,
 				CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */,
+				CFD577CF23C7A59500D41115 /* GLTextureID_Emscripten.hpp in Headers */,
 				CF920C5A23C7323D005A10ED /* Canvas_Emscripten.hpp in Headers */,
 				CF80656E23C793780034CE14 /* GLUniformID_Emscripten.hpp in Headers */,
 				CF3FF6E623C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp in Headers */,
@@ -290,6 +297,7 @@
 				CF920C5523C730ED005A10ED /* FloatBuffer_Emscripten.cpp in Sources */,
 				CF75D11823C71F6B00D85E10 /* MathUtils_Emscripten.cpp in Sources */,
 				CF75D12B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp in Sources */,
+				CFD577CE23C7A59500D41115 /* GLTextureID_Emscripten.cpp in Sources */,
 				CF75D11423C71F6B00D85E10 /* ThreadUtils_Emscripten.cpp in Sources */,
 				CF75D11A23C71F6B00D85E10 /* TextUtils_Emscripten.cpp in Sources */,
 				CF75D11323C71F6B00D85E10 /* StringUtils_Emscripten.cpp in Sources */,

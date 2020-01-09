@@ -7,6 +7,7 @@
 #include "FloatBuffer_Emscripten.hpp"
 #include "ShortBuffer_Emscripten.hpp"
 #include "GLUniformID_Emscripten.hpp"
+#include "GLTextureID_Emscripten.hpp"
 
 #include "GPUProgram.hpp"
 #include "Matrix44D.hpp"
@@ -189,7 +190,9 @@ void NativeGL_Emscripten::blendFunc(int sfactor,
 
 void NativeGL_Emscripten::bindTexture(int target,
                                       const IGLTextureID* texture) const {
-#error TODO
+  GLTextureID_Emscripten* textureEM = (GLTextureID_Emscripten*) texture;
+  var id = textureEM->getWebGLTexture();
+  _gl.call<void>("bindTexture", target, id);
 }
 
 /* Delete Texture from GPU, and answer if the TextureID can be reused */
