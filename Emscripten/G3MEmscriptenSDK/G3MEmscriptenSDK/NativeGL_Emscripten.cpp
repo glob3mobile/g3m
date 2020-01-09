@@ -31,12 +31,12 @@ GL_INVALID_FRAMEBUFFER_OPERATION( gl["INVALID_FRAMEBUFFER_OPERATION" ].as<unsign
 GL_OUT_OF_MEMORY                ( gl["OUT_OF_MEMORY"                 ].as<unsigned long>() ),
 GL_CONTEXT_LOST_WEBGL           ( gl["CONTEXT_LOST_WEBGL"            ].as<unsigned long>() )
 {
-
+  
 }
 
 void NativeGL_Emscripten::useProgram(GPUProgram* program) const {
   //Check: On WEBGL FloatBuffers do not check if they are already bound
-
+  
   val jsoProgram = _shaderList[ program->getProgramID() ];
   _gl.call<void>("useProgram", jsoProgram);
 }
@@ -68,7 +68,7 @@ void NativeGL_Emscripten::uniformMatrix4fv(const IGLUniformID* location,
                                            const Matrix44D* matrix) const {
   GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
   val id = locEM->getId();
-
+  
   const FloatBuffer_Emscripten* floatBuffer = (FloatBuffer_Emscripten*) matrix->getColumnMajorFloatBuffer();
   val buffer = floatBuffer->getBuffer();
   _gl.call<void>("uniformMatrix4fv", id, transpose, buffer);
@@ -139,7 +139,7 @@ void NativeGL_Emscripten::vertexAttribPointer(int index,
                                               int stride,
                                               const IFloatBuffer* buffer) const {
   val webGLBuffer = ((FloatBuffer_Emscripten*) buffer)->bindVBO(this);
-
+  
   _gl.call<void>("vertexAttribPointer", index, size, GL_FLOAT, normalized, stride, 0);
 }
 
@@ -148,12 +148,12 @@ void NativeGL_Emscripten::drawElements(int mode,
                                        IShortBuffer* indices) const {
   ShortBuffer_Emscripten* indicesEM = (ShortBuffer_Emscripten*) indices;
   val webGLBuffer = indicesEM->getWebGLBuffer(this);
-
+  
   _gl.call<void>("bindBuffer", GL_ELEMENT_ARRAY_BUFFER, webGLBuffer);
-
+  
   val array = indicesEM->getBuffer();
   _gl.call<void>("bufferData", GL_ELEMENT_ARRAY_BUFFER, array, GL_STATIC_DRAW);
-
+  
   _gl.call<void>("drawElements", mode, count, GL_UNSIGNED_SHORT, 0);
 }
 
@@ -163,7 +163,7 @@ void NativeGL_Emscripten::lineWidth(float width) const {
 
 int NativeGL_Emscripten::getError() const {
   const int e = _gl.call<int>("getError");
-
+  
   if (e == GL_INVALID_ENUM) {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_ENUM");
   }
@@ -179,7 +179,7 @@ int NativeGL_Emscripten::getError() const {
   else if (e == GL_CONTEXT_LOST_WEBGL) {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: CONTEXT_LOST_WEBGL");
   }
-
+  
   return e;
 }
 
@@ -191,13 +191,16 @@ void NativeGL_Emscripten::blendFunc(int sfactor,
 void NativeGL_Emscripten::bindTexture(int target,
                                       const IGLTextureID* texture) const {
   GLTextureID_Emscripten* textureEM = (GLTextureID_Emscripten*) texture;
-  var id = textureEM->getWebGLTexture();
-  _gl.call<void>("bindTexture", target, id);
+  val textureID = textureEM->getWebGLTexture();
+  _gl.call<void>("bindTexture", target, textureID);
 }
 
 /* Delete Texture from GPU, and answer if the TextureID can be reused */
 bool NativeGL_Emscripten::deleteTexture(const IGLTextureID* texture) const {
-#error TODO
+  GLTextureID_Emscripten* textureEM = (GLTextureID_Emscripten*) texture;
+  val textureID = textureEM->getWebGLTexture();
+  _gl.call<void>("deleteTexture", textureID);
+  return false;
 }
 
 void NativeGL_Emscripten::enableVertexAttribArray(int location) const {
