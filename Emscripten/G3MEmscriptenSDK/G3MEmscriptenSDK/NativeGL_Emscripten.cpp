@@ -41,12 +41,16 @@ void NativeGL_Emscripten::uniform2f(const IGLUniformID* loc,
 
 void NativeGL_Emscripten::uniform1f(const IGLUniformID* loc,
                                     float x) const {
-#error TODO
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) loc;
+  val locId = locEM->getId();
+  _gl.call<void>("uniform1f", locId, x);
 }
 
 void NativeGL_Emscripten::uniform1i(const IGLUniformID* loc,
                                     int v) const {
-#error TODO
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) loc;
+  val locId = locEM->getId();
+  _gl.call<void>("uniform1i", locId, v);
 }
 
 void NativeGL_Emscripten::uniformMatrix4fv(const IGLUniformID* location,

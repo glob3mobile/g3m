@@ -41,6 +41,8 @@
 		CF75D12B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D10B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp */; };
 		CF75D12C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF75D10C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp */; };
 		CF75D12D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF75D10D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp */; };
+		CF80656D23C793780034CE14 /* GLUniformID_Emscripten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF80656B23C793780034CE14 /* GLUniformID_Emscripten.cpp */; };
+		CF80656E23C793780034CE14 /* GLUniformID_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF80656C23C793780034CE14 /* GLUniformID_Emscripten.hpp */; };
 		CF920C4F23C730ED005A10ED /* FloatBuffer_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF920C4723C730ED005A10ED /* FloatBuffer_Emscripten.hpp */; };
 		CF920C5023C730ED005A10ED /* ShortBuffer_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF920C4823C730ED005A10ED /* ShortBuffer_Emscripten.hpp */; };
 		CF920C5123C730ED005A10ED /* ByteBuffer_Emscripten.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF920C4923C730ED005A10ED /* ByteBuffer_Emscripten.hpp */; };
@@ -91,6 +93,8 @@
 		CF75D10B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringBuilder_Emscripten.cpp; sourceTree = "<group>"; };
 		CF75D10C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WebSocket_Emscripten.hpp; sourceTree = "<group>"; };
 		CF75D10D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NativeGL_Emscripten.cpp; sourceTree = "<group>"; };
+		CF80656B23C793780034CE14 /* GLUniformID_Emscripten.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLUniformID_Emscripten.cpp; sourceTree = "<group>"; };
+		CF80656C23C793780034CE14 /* GLUniformID_Emscripten.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLUniformID_Emscripten.hpp; sourceTree = "<group>"; };
 		CF920C4723C730ED005A10ED /* FloatBuffer_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FloatBuffer_Emscripten.hpp; sourceTree = "<group>"; };
 		CF920C4823C730ED005A10ED /* ShortBuffer_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShortBuffer_Emscripten.hpp; sourceTree = "<group>"; };
 		CF920C4923C730ED005A10ED /* ByteBuffer_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ByteBuffer_Emscripten.hpp; sourceTree = "<group>"; };
@@ -147,6 +151,8 @@
 				CF75D10723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp */,
 				CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */,
 				CF75D0FD23C71F6A00D85E10 /* Downloader_Emscripten.hpp */,
+				CF80656B23C793780034CE14 /* GLUniformID_Emscripten.cpp */,
+				CF80656C23C793780034CE14 /* GLUniformID_Emscripten.hpp */,
 				CF75D0F123C71F6800D85E10 /* Factory_Emscripten.cpp */,
 				CF75D0FE23C71F6A00D85E10 /* Factory_Emscripten.hpp */,
 				CF920C4D23C730ED005A10ED /* FloatBuffer_Emscripten.cpp */,
@@ -201,6 +207,7 @@
 				CF75D12123C71F6B00D85E10 /* NativeGL_Emscripten.hpp in Headers */,
 				CF75D11023C71F6B00D85E10 /* Timer_Emscripten.hpp in Headers */,
 				CF920C5A23C7323D005A10ED /* Canvas_Emscripten.hpp in Headers */,
+				CF80656E23C793780034CE14 /* GLUniformID_Emscripten.hpp in Headers */,
 				CF3FF6E623C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp in Headers */,
 				CF75D11E23C71F6B00D85E10 /* Factory_Emscripten.hpp in Headers */,
 				CF920C5223C730ED005A10ED /* IntBuffer_Emscripten.hpp in Headers */,
@@ -295,6 +302,7 @@
 				CF75D10E23C71F6B00D85E10 /* Downloader_Emscripten.cpp in Sources */,
 				CF75D11223C71F6B00D85E10 /* JSONParser_Emscripten.cpp in Sources */,
 				CF75D11623C71F6B00D85E10 /* DeviceAttitude_Emscripten.cpp in Sources */,
+				CF80656D23C793780034CE14 /* GLUniformID_Emscripten.cpp in Sources */,
 				CF920C5423C730ED005A10ED /* ByteBuffer_Emscripten.cpp in Sources */,
 				CF75D10F23C71F6B00D85E10 /* G3MWidget_Emscripten.cpp in Sources */,
 				CF920C5323C730ED005A10ED /* ShortBuffer_Emscripten.cpp in Sources */,
