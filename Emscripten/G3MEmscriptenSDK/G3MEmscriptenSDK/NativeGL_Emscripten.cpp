@@ -18,25 +18,41 @@ using namespace emscripten;
 
 NativeGL_Emscripten::NativeGL_Emscripten(const emscripten::val& gl) :
 _gl(gl),
-GL_FLOAT                        ( gl["FLOAT"                         ].as<unsigned long>() ),
-GL_ARRAY_BUFFER                 ( gl["ARRAY_BUFFER"                  ].as<unsigned long>() ),
-GL_STATIC_DRAW                  ( gl["STATIC_DRAW"                   ].as<unsigned long>() ),
-GL_ELEMENT_ARRAY_BUFFER         ( gl["ELEMENT_ARRAY_BUFFER"          ].as<unsigned long>() ),
-GL_UNSIGNED_SHORT               ( gl["UNSIGNED_SHORT"                ].as<unsigned long>() ),
-GL_NO_ERROR                     ( gl["NO_ERROR"                      ].as<unsigned long>() ),
-GL_INVALID_ENUM                 ( gl["INVALID_ENUM"                  ].as<unsigned long>() ),
-GL_INVALID_VALUE                ( gl["INVALID_VALUE"                 ].as<unsigned long>() ),
-GL_INVALID_OPERATION            ( gl["INVALID_OPERATION"             ].as<unsigned long>() ),
-GL_INVALID_FRAMEBUFFER_OPERATION( gl["INVALID_FRAMEBUFFER_OPERATION" ].as<unsigned long>() ),
-GL_OUT_OF_MEMORY                ( gl["OUT_OF_MEMORY"                 ].as<unsigned long>() ),
-GL_CONTEXT_LOST_WEBGL           ( gl["CONTEXT_LOST_WEBGL"            ].as<unsigned long>() )
+GL_FLOAT                        ( gl["FLOAT"                         ].as<int>() ),
+GL_ARRAY_BUFFER                 ( gl["ARRAY_BUFFER"                  ].as<int>() ),
+GL_STATIC_DRAW                  ( gl["STATIC_DRAW"                   ].as<int>() ),
+GL_ELEMENT_ARRAY_BUFFER         ( gl["ELEMENT_ARRAY_BUFFER"          ].as<int>() ),
+GL_UNSIGNED_SHORT               ( gl["UNSIGNED_SHORT"                ].as<int>() ),
+GL_NO_ERROR                     ( gl["NO_ERROR"                      ].as<int>() ),
+GL_INVALID_ENUM                 ( gl["INVALID_ENUM"                  ].as<int>() ),
+GL_INVALID_VALUE                ( gl["INVALID_VALUE"                 ].as<int>() ),
+GL_INVALID_OPERATION            ( gl["INVALID_OPERATION"             ].as<int>() ),
+GL_INVALID_FRAMEBUFFER_OPERATION( gl["INVALID_FRAMEBUFFER_OPERATION" ].as<int>() ),
+GL_OUT_OF_MEMORY                ( gl["OUT_OF_MEMORY"                 ].as<int>() ),
+GL_CONTEXT_LOST_WEBGL           ( gl["CONTEXT_LOST_WEBGL"            ].as<int>() ),
+GL_FRONT                        ( gl["FRONT"                         ].as<int>() ),
+GL_BACK                         ( gl["BACK"                          ].as<int>() ),
+GL_FRONT_AND_BACK               ( gl["FRONT_AND_BACK"                ].as<int>() ),
+GL_COLOR_BUFFER_BIT             ( gl["COLOR_BUFFER_BIT"              ].as<int>() ),
+GL_DEPTH_BUFFER_BIT             ( gl["DEPTH_BUFFER_BIT"              ].as<int>() ),
+GL_POLYGON_OFFSET_FILL          ( gl["POLYGON_OFFSET_FILL"           ].as<int>() ),
+GL_DEPTH_TEST                   ( gl["DEPTH_TEST"                    ].as<int>() ),
+GL_BLEND                        ( gl["BLEND"                         ].as<int>() ),
+GL_CULL_FACE                    ( gl["CULL_FACE"                     ].as<int>() ),
+GL_TRIANGLES                    ( gl["TRIANGLES"                     ].as<int>() ),
+GL_TRIANGLE_STRIP               ( gl["TRIANGLE_STRIP"                ].as<int>() ),
+GL_TRIANGLE_FAN                 ( gl["TRIANGLE_FAN"                  ].as<int>() ),
+GL_LINES                        ( gl["LINES"                         ].as<int>() ),
+GL_LINE_STRIP                   ( gl["LINE_STRIP"                    ].as<int>() ),
+GL_LINE_LOOP                    ( gl["LINE_LOOP"                     ].as<int>() ),
+GL_POINTS                       ( gl["POINTS"                        ].as<int>() )
 {
-  
+
 }
 
 void NativeGL_Emscripten::useProgram(GPUProgram* program) const {
   //Check: On WEBGL FloatBuffers do not check if they are already bound
-  
+
   val jsoProgram = _shaderList[ program->getProgramID() ];
   _gl.call<void>("useProgram", jsoProgram);
 }
@@ -68,7 +84,7 @@ void NativeGL_Emscripten::uniformMatrix4fv(const IGLUniformID* location,
                                            const Matrix44D* matrix) const {
   GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
   val id = locEM->getId();
-  
+
   const FloatBuffer_Emscripten* floatBuffer = (FloatBuffer_Emscripten*) matrix->getColumnMajorFloatBuffer();
   val buffer = floatBuffer->getBuffer();
   _gl.call<void>("uniformMatrix4fv", id, transpose, buffer);
@@ -139,7 +155,7 @@ void NativeGL_Emscripten::vertexAttribPointer(int index,
                                               int stride,
                                               const IFloatBuffer* buffer) const {
   val webGLBuffer = ((FloatBuffer_Emscripten*) buffer)->bindVBO(this);
-  
+
   _gl.call<void>("vertexAttribPointer", index, size, GL_FLOAT, normalized, stride, 0);
 }
 
@@ -148,12 +164,12 @@ void NativeGL_Emscripten::drawElements(int mode,
                                        IShortBuffer* indices) const {
   ShortBuffer_Emscripten* indicesEM = (ShortBuffer_Emscripten*) indices;
   val webGLBuffer = indicesEM->getWebGLBuffer(this);
-  
+
   _gl.call<void>("bindBuffer", GL_ELEMENT_ARRAY_BUFFER, webGLBuffer);
-  
+
   val array = indicesEM->getBuffer();
   _gl.call<void>("bufferData", GL_ELEMENT_ARRAY_BUFFER, array, GL_STATIC_DRAW);
-  
+
   _gl.call<void>("drawElements", mode, count, GL_UNSIGNED_SHORT, 0);
 }
 
@@ -163,7 +179,7 @@ void NativeGL_Emscripten::lineWidth(float width) const {
 
 int NativeGL_Emscripten::getError() const {
   const int e = _gl.call<int>("getError");
-  
+
   if (e == GL_INVALID_ENUM) {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_ENUM");
   }
@@ -179,7 +195,7 @@ int NativeGL_Emscripten::getError() const {
   else if (e == GL_CONTEXT_LOST_WEBGL) {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: CONTEXT_LOST_WEBGL");
   }
-  
+
   return e;
 }
 
@@ -204,16 +220,16 @@ bool NativeGL_Emscripten::deleteTexture(const IGLTextureID* texture) const {
 }
 
 void NativeGL_Emscripten::enableVertexAttribArray(int location) const {
-#error TODO
+  _gl.call<void>("enableVertexAttribArray", location);
 }
 
 void NativeGL_Emscripten::disableVertexAttribArray(int location) const {
-#error TODO
+  _gl.call<void>("disableVertexAttribArray", location);
 }
 
 void NativeGL_Emscripten::pixelStorei(int pname,
                                       int param) const {
-#error TODO
+  _gl.call<void>("pixelStorei", pname, param);
 }
 
 std::vector<IGLTextureID*> NativeGL_Emscripten::genTextures(int  n) const {
@@ -223,7 +239,7 @@ std::vector<IGLTextureID*> NativeGL_Emscripten::genTextures(int  n) const {
 void NativeGL_Emscripten::texParameteri(int target,
                                         int par,
                                         int v) const {
-#error TODO
+  _gl.call<void>("texParameteri", target, par, v);
 }
 
 void NativeGL_Emscripten::texImage2D(const IImage* image, int format) const {
@@ -231,17 +247,17 @@ void NativeGL_Emscripten::texImage2D(const IImage* image, int format) const {
 }
 
 void NativeGL_Emscripten::generateMipmap(int target) const {
-#error TODO
+  _gl.call<void>("generateMipmap", target);
 }
 
 void NativeGL_Emscripten::drawArrays(int mode,
                                      int first,
                                      int count) const {
-#error TODO
+  _gl.call<void>("drawArrays", mode, first, count);
 }
 
 void NativeGL_Emscripten::cullFace(int c) const {
-#error TODO
+  _gl.call<void>("cullFace", c);
 }
 
 void NativeGL_Emscripten::getIntegerv(int v, int i[]) const {
@@ -250,83 +266,83 @@ void NativeGL_Emscripten::getIntegerv(int v, int i[]) const {
 
 
 int NativeGL_Emscripten::CullFace_Front() const {
-#error TODO
+  return GL_FRONT;
 }
 int NativeGL_Emscripten::CullFace_Back() const {
-#error TODO
+  return GL_BACK;
 }
 int NativeGL_Emscripten::CullFace_FrontAndBack() const {
-#error TODO
+  return GL_FRONT_AND_BACK;
 }
 
 int NativeGL_Emscripten::BufferType_ColorBuffer() const {
-#error TODO
+  return GL_COLOR_BUFFER_BIT;
 }
 int NativeGL_Emscripten::BufferType_DepthBuffer() const {
-#error TODO
+  return GL_DEPTH_BUFFER_BIT;
 }
 
 int NativeGL_Emscripten::Feature_PolygonOffsetFill() const {
-#error TODO
+  return GL_POLYGON_OFFSET_FILL;
 }
 int NativeGL_Emscripten::Feature_DepthTest() const {
-#error TODO
+  return GL_DEPTH_TEST;
 }
 int NativeGL_Emscripten::Feature_Blend() const {
-#error TODO
+  return GL_BLEND;
 }
 int NativeGL_Emscripten::Feature_CullFace() const {
-#error TODO
+  return GL_CULL_FACE;
 }
 
 int NativeGL_Emscripten::Type_Float() const {
-#error TODO
+  return GL_FLOAT;
 }
 int NativeGL_Emscripten::Type_UnsignedByte() const {
-#error TODO
+  return GL_UNSIGNED_BYTE;
 }
 int NativeGL_Emscripten::Type_UnsignedInt() const {
-#error TODO
+  return GL_UNSIGNED_INT;
 }
 int NativeGL_Emscripten::Type_Int() const {
-#error TODO
+  return GL_INT;
 }
 int NativeGL_Emscripten::Type_Vec2Float() const {
-#error TODO
+  return GL_FLOAT_VEC2;
 }
 int NativeGL_Emscripten::Type_Vec3Float() const {
-#error TODO
+  return GL_FLOAT_VEC3;
 }
 int NativeGL_Emscripten::Type_Vec4Float() const {
-#error TODO
+  return GL_FLOAT_VEC4;
 }
 int NativeGL_Emscripten::Type_Bool() const {
-#error TODO
+  return GL_BOOL;
 }
 int NativeGL_Emscripten::Type_Matrix4Float() const {
-#error TODO
+  return GL_FLOAT_MAT4;
 }
 
 int NativeGL_Emscripten::Primitive_Triangles() const {
-#error TODO
+  return GL_TRIANGLES;
 }
 int NativeGL_Emscripten::Primitive_TriangleStrip() const {
-#error TODO
+  return GL_TRIANGLE_STRIP;
 }
 int NativeGL_Emscripten::Primitive_TriangleFan() const {
-#error TODO
+  return GL_TRIANGLE_FAN;
 }
 int NativeGL_Emscripten::Primitive_Lines() const {
-#error TODO
+  return GL_LINES;
 }
 int NativeGL_Emscripten::Primitive_LineStrip() const {
-#error TODO
+  return GL_LINE_STRIP;
 }
 int NativeGL_Emscripten::Primitive_LineLoop() const {
-#error TODO
+  return GL_LINE_LOOP;
 }
 int NativeGL_Emscripten::Primitive_Points() const {
-#error TODO
+  return GL_POINTS;
 }
 
 int NativeGL_Emscripten::BlendFactor_One() const {
@@ -378,7 +394,6 @@ int NativeGL_Emscripten::TextureParameterValue_LinearMipmapLinear() const {
 #error TODO
 }
 
-/* TextureWrapMode */
 int NativeGL_Emscripten::TextureParameterValue_Repeat() const {
 #error TODO
 }

@@ -11,18 +11,35 @@ class NativeGL_Emscripten : public INativeGL {
 private:
   emscripten::val _gl;
 
-  const unsigned long GL_FLOAT;
-  const unsigned long GL_ARRAY_BUFFER;
-  const unsigned long GL_STATIC_DRAW;
-  const unsigned long GL_ELEMENT_ARRAY_BUFFER;
-  const unsigned long GL_UNSIGNED_SHORT;
-  const unsigned long GL_NO_ERROR;
-  const unsigned long GL_INVALID_ENUM;
-  const unsigned long GL_INVALID_VALUE;
-  const unsigned long GL_INVALID_OPERATION;
-  const unsigned long GL_INVALID_FRAMEBUFFER_OPERATION;
-  const unsigned long GL_OUT_OF_MEMORY;
-  const unsigned long GL_CONTEXT_LOST_WEBGL;
+  const int GL_FLOAT;
+  const int GL_ARRAY_BUFFER;
+  const int GL_STATIC_DRAW;
+  const int GL_ELEMENT_ARRAY_BUFFER;
+  const int GL_UNSIGNED_SHORT;
+  const int GL_NO_ERROR;
+  const int GL_INVALID_ENUM;
+  const int GL_INVALID_VALUE;
+  const int GL_INVALID_OPERATION;
+  const int GL_INVALID_FRAMEBUFFER_OPERATION;
+  const int GL_OUT_OF_MEMORY;
+  const int GL_CONTEXT_LOST_WEBGL;
+  const int GL_FRONT;
+  const int GL_BACK;
+  const int GL_FRONT_AND_BACK;
+  const int GL_COLOR_BUFFER_BIT;
+  const int GL_DEPTH_BUFFER_BIT;
+  const int GL_POLYGON_OFFSET_FILL;
+  const int GL_DEPTH_TEST;
+  const int GL_BLEND;
+  const int GL_CULL_FACE;
+  const int GL_TRIANGLES;
+  const int GL_TRIANGLE_STRIP;
+  const int GL_TRIANGLE_FAN;
+  const int GL_LINES;
+  const int GL_LINE_STRIP;
+  const int GL_LINE_LOOP;
+  const int GL_POINTS;
+
 
   std::vector<emscripten::val> _shaderList;
 
