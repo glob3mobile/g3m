@@ -58,15 +58,15 @@ void G3MWidget_Emscripten::setG3MWidget(G3MWidget* g3mWidget) {
 
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
-    _motionEventProcessor = new MotionEventProcessor(this, _canvas.getCanvasElement());
-    jsAddResizeHandler(_canvas.getCanvasElement());
+    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
+    jsAddResizeHandler(_canvas);
     
     jsStartRenderLoop();
   }
 }
 
 void G3MWidget_Emscripten::initSingletons() {
-  ILogger*         logger         = new Logger_Emscripten(LogLevel.InfoLevel);
+  ILogger*         logger         = new Logger_Emscripten(LogLevel::InfoLevel);
   IFactory*        factory        = new Factory_Emscripten();
   IStringUtils*    stringUtils    = new StringUtils_Emscripten();
   IStringBuilder*  stringBuilder  = new StringBuilder_Emscripten(IStringBuilder::DEFAULT_FLOAT_PRECISION);

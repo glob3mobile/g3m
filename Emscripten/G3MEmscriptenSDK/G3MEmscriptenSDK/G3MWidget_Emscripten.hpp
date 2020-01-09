@@ -2,7 +2,7 @@
 #ifndef G3MWidget_Emscripten_hpp
 #define G3MWidget_Emscripten_hpp
 
-#include "emscripten/val.h"
+#include <emscripten/val.h>
 
 class GL;
 class G3MWidget;

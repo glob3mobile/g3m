@@ -4,7 +4,7 @@
 
 #include "INativeGL.hpp"
 
-#include "emscripten/val.h"
+#include <emscripten/val.h>
 
 
 class NativeGL_Emscripten : public INativeGL {

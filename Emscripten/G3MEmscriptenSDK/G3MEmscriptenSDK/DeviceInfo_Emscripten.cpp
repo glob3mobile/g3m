@@ -2,7 +2,7 @@
 
 #include "DeviceInfo_Emscripten.hpp"
 
-#include "emscripten/val.h"
+#include <emscripten/val.h>
 
 using namespace emscripten;
 

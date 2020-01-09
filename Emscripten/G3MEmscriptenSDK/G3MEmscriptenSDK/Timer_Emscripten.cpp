@@ -2,7 +2,7 @@
 
 #include "Timer_Emscripten.hpp"
 
-#include "emscripten/val.h"
+#include <emscripten/val.h>
 #include <math.h>
 
 using namespace emscripten;
