@@ -16,6 +16,13 @@ private:
   const unsigned long GL_STATIC_DRAW;
   const unsigned long GL_ELEMENT_ARRAY_BUFFER;
   const unsigned long GL_UNSIGNED_SHORT;
+  const unsigned long GL_NO_ERROR;
+  const unsigned long GL_INVALID_ENUM;
+  const unsigned long GL_INVALID_VALUE;
+  const unsigned long GL_INVALID_OPERATION;
+  const unsigned long GL_INVALID_FRAMEBUFFER_OPERATION;
+  const unsigned long GL_OUT_OF_MEMORY;
+  const unsigned long GL_CONTEXT_LOST_WEBGL;
 
   std::vector<emscripten::val> _shaderList;
 

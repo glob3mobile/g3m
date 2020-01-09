@@ -2,6 +2,8 @@
 
 #include "NativeGL_Emscripten.hpp"
 
+#include <emscripten/emscripten.h>
+
 #include "FloatBuffer_Emscripten.hpp"
 #include "ShortBuffer_Emscripten.hpp"
 #include "GLUniformID_Emscripten.hpp"
@@ -15,12 +17,18 @@ using namespace emscripten;
 
 NativeGL_Emscripten::NativeGL_Emscripten(const emscripten::val& gl) :
 _gl(gl),
-
-GL_FLOAT               ( gl["FLOAT"                ].as<unsigned long>() ),
-GL_ARRAY_BUFFER        ( gl["ARRAY_BUFFER"         ].as<unsigned long>() ),
-GL_STATIC_DRAW         ( gl["STATIC_DRAW"          ].as<unsigned long>() ),
-GL_ELEMENT_ARRAY_BUFFER( gl["ELEMENT_ARRAY_BUFFER" ].as<unsigned long>() ),
-GL_UNSIGNED_SHORT      ( gl["UNSIGNED_SHORT"       ].as<unsigned long>() )
+GL_FLOAT                        ( gl["FLOAT"                         ].as<unsigned long>() ),
+GL_ARRAY_BUFFER                 ( gl["ARRAY_BUFFER"                  ].as<unsigned long>() ),
+GL_STATIC_DRAW                  ( gl["STATIC_DRAW"                   ].as<unsigned long>() ),
+GL_ELEMENT_ARRAY_BUFFER         ( gl["ELEMENT_ARRAY_BUFFER"          ].as<unsigned long>() ),
+GL_UNSIGNED_SHORT               ( gl["UNSIGNED_SHORT"                ].as<unsigned long>() ),
+GL_NO_ERROR                     ( gl["NO_ERROR"                      ].as<unsigned long>() ),
+GL_INVALID_ENUM                 ( gl["INVALID_ENUM"                  ].as<unsigned long>() ),
+GL_INVALID_VALUE                ( gl["INVALID_VALUE"                 ].as<unsigned long>() ),
+GL_INVALID_OPERATION            ( gl["INVALID_OPERATION"             ].as<unsigned long>() ),
+GL_INVALID_FRAMEBUFFER_OPERATION( gl["INVALID_FRAMEBUFFER_OPERATION" ].as<unsigned long>() ),
+GL_OUT_OF_MEMORY                ( gl["OUT_OF_MEMORY"                 ].as<unsigned long>() ),
+GL_CONTEXT_LOST_WEBGL           ( gl["CONTEXT_LOST_WEBGL"            ].as<unsigned long>() )
 {
 
 }
@@ -96,16 +104,16 @@ void NativeGL_Emscripten::uniform3f(const IGLUniformID* location,
 }
 
 void NativeGL_Emscripten::enable(int feature) const {
-#error TODO
+  _gl.call<void>("enable", feature);
 }
 
 void NativeGL_Emscripten::disable(int feature) const {
-#error TODO
+  _gl.call<void>("disable", feature);
 }
 
 void NativeGL_Emscripten::polygonOffset(float factor,
                                         float units) const {
-#error TODO
+  _gl.call<void>("polygonOffset", factor, units);
 }
 
 emscripten::val NativeGL_Emscripten::createBuffer() const {
@@ -149,16 +157,34 @@ void NativeGL_Emscripten::drawElements(int mode,
 }
 
 void NativeGL_Emscripten::lineWidth(float width) const {
-#error TODO
+  _gl.call<void>("lineWidth", width);
 }
 
 int NativeGL_Emscripten::getError() const {
-#error TODO
+  const int e = _gl.call<int>("getError");
+
+  if (e == GL_INVALID_ENUM) {
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_ENUM");
+  }
+  else if (e == GL_INVALID_VALUE) {
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_VALUE");
+  }
+  else if (e == GL_INVALID_OPERATION) {
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_OPERATION");
+  }
+  else if (e == GL_OUT_OF_MEMORY) {
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_OPERATION");
+  }
+  else if (e == GL_CONTEXT_LOST_WEBGL) {
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: CONTEXT_LOST_WEBGL");
+  }
+
+  return e;
 }
 
 void NativeGL_Emscripten::blendFunc(int sfactor,
                                     int dfactor) const {
-#error TODO
+  _gl.call<void>("blendFunc", sfactor, dfactor);
 }
 
 void NativeGL_Emscripten::bindTexture(int target,
