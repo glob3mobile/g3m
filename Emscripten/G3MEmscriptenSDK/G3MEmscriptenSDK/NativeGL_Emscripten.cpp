@@ -4,6 +4,9 @@
 
 #include "FloatBuffer_Emscripten.hpp"
 #include "ShortBuffer_Emscripten.hpp"
+#include "GLUniformID_Emscripten.hpp"
+
+#include "GPUProgram.hpp"
 
 
 using namespace emscripten;
@@ -22,13 +25,18 @@ GL_UNSIGNED_SHORT      ( gl["UNSIGNED_SHORT"       ].as<unsigned long>() )
 }
 
 void NativeGL_Emscripten::useProgram(GPUProgram* program) const {
-#error TODO
+  //Check: On WEBGL FloatBuffers do not check if they are already bound
+
+  val jsoProgram = _shaderList[ program->getProgramID() ];
+  _gl.call<void>("useProgram", jsoProgram);
 }
 
 void NativeGL_Emscripten::uniform2f(const IGLUniformID* loc,
                                     float x,
                                     float y) const {
-#error TODO
+  GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) loc;
+  val locId = locEM->getId();
+  _gl.call<void>("uniform2f", locId, x, y);
 }
 
 void NativeGL_Emscripten::uniform1f(const IGLUniformID* loc,

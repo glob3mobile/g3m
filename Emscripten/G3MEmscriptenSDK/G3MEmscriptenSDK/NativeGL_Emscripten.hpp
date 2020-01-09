@@ -17,6 +17,9 @@ private:
   const unsigned long GL_ELEMENT_ARRAY_BUFFER;
   const unsigned long GL_UNSIGNED_SHORT;
 
+  std::vector<emscripten::val> _shaderList;
+
+
 public:
   NativeGL_Emscripten(const emscripten::val& gl);
 
