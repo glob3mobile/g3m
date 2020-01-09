@@ -16,18 +16,12 @@ std::string StringUtils_Emscripten::createString(unsigned char* data,
 }
 
 std::vector<std::string> StringUtils_Emscripten::splitLines(const std::string& string) const {
-//  NSString* nsString = [NSString stringWithCppString: string];
-//
-//  NSArray* nsLines = [nsString componentsSeparatedByString:@"\n"];
-//
-//
-//  std::vector<std::string> lines;
-//
-//  for (NSString* line in nsLines) {
-//    lines.push_back( [line cStringUsingEncoding:NSUTF8StringEncoding]  );
-//  }
-//
-//  return lines;
+  std::stringstream ss(string);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> result(begin, end);
+
+  return result;
 }
 
 bool StringUtils_Emscripten::beginsWith(const std::string& string,
@@ -198,6 +192,7 @@ std::string StringUtils_Emscripten::replaceAll(const std::string& originalString
 }
 
 std::string StringUtils_Emscripten::capitalize(const std::string& string) const {
-//  NSString* nsString = [NSString stringWithCppString: string];
-//  return std::string([[nsString capitalizedString] UTF8String]);
+  std::string str = string;
+  std::use_facet<std::ctype<char>>(std::locale()).toupper(&str[0], &str[0] + str.size());
+  return str;
 }
