@@ -136,8 +136,8 @@
 			isa = PBXGroup;
 			children = (
 				CF920C4C23C730ED005A10ED /* ByteBuffer_Emscripten.cpp */,
-				CF920C5723C73228005A10ED /* Canvas_Emscripten.cpp */,
 				CF920C4923C730ED005A10ED /* ByteBuffer_Emscripten.hpp */,
+				CF920C5723C73228005A10ED /* Canvas_Emscripten.cpp */,
 				CF920C5923C7323D005A10ED /* Canvas_Emscripten.hpp */,
 				CF75D0F623C71F6900D85E10 /* DeviceAttitude_Emscripten.cpp */,
 				CF75D10823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp */,
