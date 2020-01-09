@@ -96,12 +96,15 @@ float FloatBuffer_Emscripten::get(const size_t i) const {
 
 void FloatBuffer_Emscripten::put(const size_t i,
                                  float value) {
-#error TODO
+  if (_buffer[i].as<float>() != value) {
+    _buffer.set(i, value);
+    _timestamp++;
+  }
 }
 
 void FloatBuffer_Emscripten::rawPut(const size_t i,
                                     float value) {
-#error TODO
+  _buffer.set(i, value);
 }
 
 void FloatBuffer_Emscripten::rawAdd(const size_t i,

@@ -6,6 +6,7 @@
 
 #include <emscripten/val.h>
 
+
 class FloatBuffer_Emscripten : public IFloatBuffer {
 private:
 
@@ -36,7 +37,6 @@ public:
                          float f14,
                          float f15);
 
-
   long long getID() const;
 
   const size_t size() const;
@@ -44,7 +44,6 @@ public:
   int timestamp() const;
 
   const std::string description() const;
-
 
   float get(const size_t i) const;
 
