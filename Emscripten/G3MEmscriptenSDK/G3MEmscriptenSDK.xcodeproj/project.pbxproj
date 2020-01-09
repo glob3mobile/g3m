@@ -131,6 +131,8 @@
 		CF75D0E223C71F4700D85E10 /* G3MEmscriptenSDK */ = {
 			isa = PBXGroup;
 			children = (
+				CF920C4C23C730ED005A10ED /* ByteBuffer_Emscripten.cpp */,
+				CF920C4923C730ED005A10ED /* ByteBuffer_Emscripten.hpp */,
 				CF75D0F623C71F6900D85E10 /* DeviceAttitude_Emscripten.cpp */,
 				CF75D10823C71F6B00D85E10 /* DeviceAttitude_Emscripten.hpp */,
 				CF3FF6E523C72FC5001D8E9A /* DeviceInfo_Emscripten.cpp */,
@@ -141,12 +143,16 @@
 				CF75D0FD23C71F6A00D85E10 /* Downloader_Emscripten.hpp */,
 				CF75D0F123C71F6800D85E10 /* Factory_Emscripten.cpp */,
 				CF75D0FE23C71F6A00D85E10 /* Factory_Emscripten.hpp */,
+				CF920C4D23C730ED005A10ED /* FloatBuffer_Emscripten.cpp */,
+				CF920C4723C730ED005A10ED /* FloatBuffer_Emscripten.hpp */,
 				CF75D0FC23C71F6900D85E10 /* G3MBuilder_Emscripten.cpp */,
 				CF75D0F923C71F6900D85E10 /* G3MBuilder_Emscripten.hpp */,
 				CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */,
 				CF75D0FF23C71F6A00D85E10 /* G3MWidget_Emscripten.hpp */,
 				CFEB964723C72E5700487426 /* Image_Emscripten.cpp */,
 				CFEB964823C72E5700487426 /* Image_Emscripten.hpp */,
+				CF920C4E23C730ED005A10ED /* IntBuffer_Emscripten.cpp */,
+				CF920C4A23C730ED005A10ED /* IntBuffer_Emscripten.hpp */,
 				CF75D0F223C71F6800D85E10 /* JSONParser_Emscripten.cpp */,
 				CF75D0F723C71F6900D85E10 /* JSONParser_Emscripten.hpp */,
 				CF75D10623C71F6B00D85E10 /* Logger_Emscripten.cpp */,
@@ -155,6 +161,8 @@
 				CF75D10423C71F6A00D85E10 /* MathUtils_Emscripten.hpp */,
 				CF75D10D23C71F6B00D85E10 /* NativeGL_Emscripten.cpp */,
 				CF75D10123C71F6A00D85E10 /* NativeGL_Emscripten.hpp */,
+				CF920C4B23C730ED005A10ED /* ShortBuffer_Emscripten.cpp */,
+				CF920C4823C730ED005A10ED /* ShortBuffer_Emscripten.hpp */,
 				CF75D10B23C71F6B00D85E10 /* StringBuilder_Emscripten.cpp */,
 				CF75D10323C71F6A00D85E10 /* StringBuilder_Emscripten.hpp */,
 				CF75D0F323C71F6800D85E10 /* StringUtils_Emscripten.cpp */,
@@ -167,14 +175,6 @@
 				CF75D0F023C71F6800D85E10 /* Timer_Emscripten.hpp */,
 				CF75D10A23C71F6B00D85E10 /* WebSocket_Emscripten.cpp */,
 				CF75D10C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp */,
-				CF920C4C23C730ED005A10ED /* ByteBuffer_Emscripten.cpp */,
-				CF920C4923C730ED005A10ED /* ByteBuffer_Emscripten.hpp */,
-				CF920C4D23C730ED005A10ED /* FloatBuffer_Emscripten.cpp */,
-				CF920C4723C730ED005A10ED /* FloatBuffer_Emscripten.hpp */,
-				CF920C4E23C730ED005A10ED /* IntBuffer_Emscripten.cpp */,
-				CF920C4A23C730ED005A10ED /* IntBuffer_Emscripten.hpp */,
-				CF920C4B23C730ED005A10ED /* ShortBuffer_Emscripten.cpp */,
-				CF920C4823C730ED005A10ED /* ShortBuffer_Emscripten.hpp */,
 			);
 			path = G3MEmscriptenSDK;
 			sourceTree = "<group>";
