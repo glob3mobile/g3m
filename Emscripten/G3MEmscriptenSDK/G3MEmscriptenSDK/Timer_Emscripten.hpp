@@ -6,21 +6,21 @@
 
 class Timer_Emscripten : public ITimer {
 private:
-    long _startTimeInMilliseconds;
-    
+  long _startTimeInMilliseconds;
+  
 public:
   TimeInterval now() const;
-
+  
   TimeInterval fromDaysFromNow(const double days) const;
-
+  
   long long nowInMilliseconds() const;
-
+  
   void start();
-
+  
   TimeInterval elapsedTime() const;
-
+  
   long long elapsedTimeInMilliseconds() const;
-
+  
 };
 
 #endif
