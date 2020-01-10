@@ -21,9 +21,9 @@ private:
 public:
   GLUniformID_Emscripten(const emscripten::val& id);
 
-  emscripten::val getId();
+  const emscripten::val getId() const;
 
-  bool isValid();
+  bool isValid() const;
 
   ~GLUniformID_Emscripten();
 

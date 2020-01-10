@@ -76,7 +76,7 @@ private:
   const int GL_FRAGMENT_SHADER;
   const int GL_COMPILE_STATUS;
   const int GL_LINK_STATUS;
-
+  const int GL_SAMPLER_2D;
 
   mutable std::vector<emscripten::val> _shaderList;
 

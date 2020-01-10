@@ -12,6 +12,7 @@
 
 #include "GPUProgram.hpp"
 #include "Matrix44D.hpp"
+#include "GPUUniform.hpp"
 
 
 using namespace emscripten;
@@ -83,7 +84,8 @@ GL_TEXTURE0                     ( gl["TEXTURE0"                      ].as<int>()
 GL_VERTEX_SHADER                ( gl["VERTEX_SHADER"                 ].as<int>() ),
 GL_FRAGMENT_SHADER              ( gl["FRAGMENT_SHADER"               ].as<int>() ),
 GL_COMPILE_STATUS               ( gl["COMPILE_STATUS"                ].as<int>() ),
-GL_LINK_STATUS                  ( gl["LINK_STATUS"                   ].as<int>() )
+GL_LINK_STATUS                  ( gl["LINK_STATUS"                   ].as<int>() ),
+GL_SAMPLER_2D                   ( gl["SAMPLER_2D"                    ].as<int>() )
 {
 
 }
@@ -588,8 +590,44 @@ int NativeGL_Emscripten::getProgramiv(const GPUProgram* program, int param) cons
 }
 
 GPUUniform* NativeGL_Emscripten::getActiveUniform(const GPUProgram* program, int i) const {
-#error TODO
+  const int programID = program->getProgramID();
+  const val jsoProgram = _shaderList[programID];
+
+  const val info = _gl.call<val>("getActiveUniform", jsoProgram, i);
+
+  const std::string infoName = info["name"].as<std::string>();
+
+  const val id = _gl.call<val>("getUniformLocation", jsoProgram, infoName);
+
+  GLUniformID_Emscripten* glUniformID = new GLUniformID_Emscripten(id);
+
+  const int infoType = info["type"].as<int>();
+  if (infoType == GL_FLOAT_MAT4) {
+    return new GPUUniformMatrix4Float(infoName, glUniformID);
+  }
+  else if (infoType == GL_FLOAT_VEC4) {
+    return new GPUUniformVec4Float(infoName, glUniformID);
+  }
+  else if (infoType == GL_FLOAT) {
+    return new GPUUniformFloat(infoName, glUniformID);
+  }
+  else if (infoType == GL_FLOAT_VEC2) {
+    return new GPUUniformVec2Float(infoName, glUniformID);
+  }
+  else if (infoType == GL_FLOAT_VEC3) {
+    return new GPUUniformVec3Float(infoName, glUniformID);
+  }
+  else if (infoType == GL_BOOL) {
+    return new GPUUniformBool(infoName, glUniformID);
+  }
+  else if (infoType == GL_SAMPLER_2D) {
+    return new GPUUniformSampler2D(infoName, glUniformID);
+  }
+  else {
+    return NULL;
+  }
 }
+
 GPUAttribute* NativeGL_Emscripten::getActiveAttribute(const GPUProgram* program, int i) const {
 #error TODO
 }

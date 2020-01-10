@@ -14,11 +14,11 @@ _id(id)
 
 }
 
-emscripten::val GLUniformID_Emscripten::getId() {
+const emscripten::val GLUniformID_Emscripten::getId() const {
   return _id;
 }
 
-bool GLUniformID_Emscripten::isValid() {
+bool GLUniformID_Emscripten::isValid() const {
   return !_id.isNull();
 }
 
