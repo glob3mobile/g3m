@@ -573,11 +573,18 @@ void NativeGL_Emscripten::printProgramInfoLog(int program) const {
 }
 
 void NativeGL_Emscripten::bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
-#error TODO
+  const int programID = program->getProgramID();
+  const val jsoProgram = _shaderList[programID];
+  
+  _gl.call<void>("bindAttribLocation", jsoProgram, loc, name);
 }
 
 int NativeGL_Emscripten::getProgramiv(const GPUProgram* program, int param) const {
-#error TODO
+  const int programID = program->getProgramID();
+  const val jsoProgram = _shaderList[programID];
+
+  // Return the value for the passed pname given the passed program. The type returned is the natural type for the requested pname
+  return _gl.call<int>("getProgramParameter", jsoProgram, param);
 }
 
 GPUUniform* NativeGL_Emscripten::getActiveUniform(const GPUProgram* program, int i) const {
