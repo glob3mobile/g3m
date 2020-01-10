@@ -72,9 +72,11 @@ private:
   const int GL_ACTIVE_ATTRIBUTES;
   const int GL_ACTIVE_UNIFORMS;
   const int GL_TEXTURE0;
+  const int GL_VERTEX_SHADER;
+  const int GL_FRAGMENT_SHADER;
 
 
-  std::vector<emscripten::val> _shaderList;
+  mutable std::vector<emscripten::val> _shaderList;
 
 
 public:

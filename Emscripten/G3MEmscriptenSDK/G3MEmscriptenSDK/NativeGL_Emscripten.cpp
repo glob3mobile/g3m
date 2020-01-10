@@ -79,7 +79,9 @@ GL_RGBA                         ( gl["RGBA"                          ].as<int>()
 GL_VIEWPORT                     ( gl["VIEWPORT"                      ].as<int>() ),
 GL_ACTIVE_ATTRIBUTES            ( gl["ACTIVE_ATTRIBUTES"             ].as<int>() ),
 GL_ACTIVE_UNIFORMS              ( gl["ACTIVE_UNIFORMS"               ].as<int>() ),
-GL_TEXTURE0                     ( gl["TEXTURE0"                      ].as<int>() )
+GL_TEXTURE0                     ( gl["TEXTURE0"                      ].as<int>() ),
+GL_VERTEX_SHADER                ( gl["VERTEX_SHADER"                 ].as<int>() ),
+GL_FRAGMENT_SHADER              ( gl["FRAGMENT_SHADER"               ].as<int>() )
 {
 
 }
@@ -481,17 +483,51 @@ int NativeGL_Emscripten::Error_NoError() const {
 }
 
 int NativeGL_Emscripten::createProgram() const {
-#error TODO
+  const int id = _shaderList.size();
+
+  const val jsoProgram = _gl.call<val>("createProgram");
+  _shaderList.push_back(jsoProgram);
+
+  return id;
 }
+
 bool NativeGL_Emscripten::deleteProgram(int program) const {
-#error TODO
+  const val jsoProgram = _shaderList[program];
+  _gl.call<void>("deleteProgram", jsoProgram);
 }
+
 void NativeGL_Emscripten::attachShader(int program, int shader) const {
-#error TODO
+  const val jsoProgram = _shaderList[program];
+  const val jsoShader  = _shaderList[shader];
+
+  _gl.call<void>("attachShader", jsoProgram, jsoShader);
 }
+
 int NativeGL_Emscripten::createShader(ShaderType type) const {
-#error TODO
+
+  int shaderType;
+  switch (type) {
+    case ShaderType::VERTEX_SHADER:
+      shaderType = GL_VERTEX_SHADER;
+      break;
+
+    case ShaderType::FRAGMENT_SHADER:
+      shaderType = GL_FRAGMENT_SHADER;
+      break;
+
+    default:
+      emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "Unknown shader type");
+      return 0;
+  }
+
+  const int id = _shaderList.size();
+
+  val shader = _gl.call<val>("createShader", shaderType);
+  _shaderList.push_back(shader);
+
+  return id;
 }
+
 bool NativeGL_Emscripten::compileShader (int shader, const std::string& source) const {
 #error TODO
 }
