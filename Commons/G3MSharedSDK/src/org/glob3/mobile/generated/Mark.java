@@ -80,7 +80,7 @@ public class Mark implements SurfaceElevationListener
    */
   private final boolean _autoDeleteListener;
 
-  private String _token = "";
+  private String _token;
 
   private TextureIDReference _textureID;
 
@@ -294,6 +294,7 @@ public class Mark implements SurfaceElevationListener
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
      _zoomOutDisappearsStarted = false;
+     _token = "";
   
   }
 
@@ -379,6 +380,7 @@ public class Mark implements SurfaceElevationListener
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
      _zoomOutDisappearsStarted = false;
+     _token = "";
   
   }
 
@@ -452,6 +454,7 @@ public class Mark implements SurfaceElevationListener
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
      _zoomOutDisappearsStarted = false;
+     _token = "";
   
   }
 
@@ -524,6 +527,7 @@ public class Mark implements SurfaceElevationListener
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
      _zoomOutDisappearsStarted = false;
+     _token = "";
   
   }
 
@@ -596,6 +600,7 @@ public class Mark implements SurfaceElevationListener
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
      _zoomOutDisappearsStarted = false;
+     _token = "";
     if (_imageBuilder.isMutable())
     {
       ILogger.instance().logError("Marks doesn't support mutable image builders");

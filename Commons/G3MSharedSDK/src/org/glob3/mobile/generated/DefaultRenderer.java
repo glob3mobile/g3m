@@ -42,21 +42,25 @@ public abstract class DefaultRenderer implements Renderer
   }
 
 
-  protected ChangedRendererInfoListener _changedInfoListener = null;
+  protected ChangedRendererInfoListener _changedInfoListener;
 
-  protected int _rendererID = 0;
+  protected int _rendererID;
 
   protected G3MContext _context;
 
   protected DefaultRenderer()
   {
      _enable = true;
+     _changedInfoListener = null;
+     _rendererID = 0;
 
   }
 
   protected DefaultRenderer(boolean enable)
   {
      _enable = enable;
+     _changedInfoListener = null;
+     _rendererID = 0;
 
   }
 

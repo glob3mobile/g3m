@@ -10,7 +10,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   private TilesRenderParameters _tilesRenderParameters;
   private boolean _showStatistics;
   private final boolean _logTilesPetitions;
-  private ITileVisitor _tileVisitor = null;
+  private ITileVisitor _tileVisitor;
   private TileLODTester _tileLODTester;
   private TileVisibilityTester _tileVisibilityTester;
 
@@ -349,6 +349,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
      _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
      _tileLODTester = tileLODTester;
      _tileVisibilityTester = tileVisibilityTester;
+     _tileVisitor = null;
     _context = null;
     _changedInfoListener = changedInfoListener;
   

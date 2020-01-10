@@ -251,7 +251,7 @@ public class PlanetRendererBuilder
     return _touchEventTypeOfTerrainTouchListener;
   }
 
-  private IImageBuilder _defaultTileBackgroundImage = null;
+  private IImageBuilder _defaultTileBackgroundImage;
 
   private IImageBuilder getDefaultTileBackgroundImageBuilder()
   {
@@ -308,6 +308,7 @@ public class PlanetRendererBuilder
      _tileLODTester = null;
      _tileVisibilityTester = null;
      _verboseTileTexturizerErrors = true;
+     _defaultTileBackgroundImage = null;
   }
   public void dispose()
   {

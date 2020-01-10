@@ -111,7 +111,5 @@ public class TexturesHandler
         return;
       }
     }
-  
-    ILogger.instance().logInfo("break (point) on me 6\n");
   }
 }
