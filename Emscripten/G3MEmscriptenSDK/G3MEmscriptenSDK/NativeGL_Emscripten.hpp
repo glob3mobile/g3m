@@ -75,6 +75,7 @@ private:
   const int GL_VERTEX_SHADER;
   const int GL_FRAGMENT_SHADER;
   const int GL_COMPILE_STATUS;
+  const int GL_LINK_STATUS;
 
 
   mutable std::vector<emscripten::val> _shaderList;
