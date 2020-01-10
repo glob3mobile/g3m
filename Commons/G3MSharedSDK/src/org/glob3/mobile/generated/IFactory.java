@@ -75,8 +75,6 @@ public abstract class IFactory
 
   public abstract IByteBuffer createByteBuffer(int length);
 
-  public abstract IByteBuffer createByteBuffer(byte[] data, int length);
-
   public abstract ICanvas createCanvas(boolean retina);
 
   public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
