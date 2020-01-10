@@ -85,12 +85,12 @@ GL_FRAGMENT_SHADER              ( gl["FRAGMENT_SHADER"               ].as<int>()
 GL_COMPILE_STATUS               ( gl["COMPILE_STATUS"                ].as<int>() ),
 GL_LINK_STATUS                  ( gl["LINK_STATUS"                   ].as<int>() )
 {
-  
+
 }
 
 void NativeGL_Emscripten::useProgram(GPUProgram* program) const {
   //Check: On WEBGL FloatBuffers do not check if they are already bound
-  
+
   val jsoProgram = _shaderList[ program->getProgramID() ];
   _gl.call<void>("useProgram", jsoProgram);
 }
@@ -122,7 +122,7 @@ void NativeGL_Emscripten::uniformMatrix4fv(const IGLUniformID* location,
                                            const Matrix44D* matrix) const {
   GLUniformID_Emscripten* locEM = (GLUniformID_Emscripten*) location;
   val id = locEM->getId();
-  
+
   const FloatBuffer_Emscripten* floatBuffer = (FloatBuffer_Emscripten*) matrix->getColumnMajorFloatBuffer();
   val buffer = floatBuffer->getBuffer();
   _gl.call<void>("uniformMatrix4fv", id, transpose, buffer);
@@ -193,7 +193,7 @@ void NativeGL_Emscripten::vertexAttribPointer(int index,
                                               int stride,
                                               const IFloatBuffer* buffer) const {
   val webGLBuffer = ((FloatBuffer_Emscripten*) buffer)->bindVBO(this);
-  
+
   _gl.call<void>("vertexAttribPointer", index, size, GL_FLOAT, normalized, stride, 0);
 }
 
@@ -202,12 +202,12 @@ void NativeGL_Emscripten::drawElements(int mode,
                                        IShortBuffer* indices) const {
   ShortBuffer_Emscripten* indicesEM = (ShortBuffer_Emscripten*) indices;
   val webGLBuffer = indicesEM->getWebGLBuffer(this);
-  
+
   _gl.call<void>("bindBuffer", GL_ELEMENT_ARRAY_BUFFER, webGLBuffer);
-  
+
   val array = indicesEM->getBuffer();
   _gl.call<void>("bufferData", GL_ELEMENT_ARRAY_BUFFER, array, GL_STATIC_DRAW);
-  
+
   _gl.call<void>("drawElements", mode, count, GL_UNSIGNED_SHORT, 0);
 }
 
@@ -217,7 +217,7 @@ void NativeGL_Emscripten::lineWidth(float width) const {
 
 int NativeGL_Emscripten::getError() const {
   const int e = _gl.call<int>("getError");
-  
+
   if (e == GL_INVALID_ENUM) {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_ENUM");
   }
@@ -233,7 +233,7 @@ int NativeGL_Emscripten::getError() const {
   else if (e == GL_CONTEXT_LOST_WEBGL) {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: CONTEXT_LOST_WEBGL");
   }
-  
+
   return e;
 }
 
@@ -289,9 +289,9 @@ void NativeGL_Emscripten::texParameteri(int target,
 
 void NativeGL_Emscripten::texImage2D(const IImage* image, int format) const {
   Image_Emscripten* imageEM = (Image_Emscripten*) image;
-  
+
   val domImage = imageEM->getDOMImage();
-  
+
   _gl.call<void>("texImage2D", GL_TEXTURE_2D, 0, format, format, GL_UNSIGNED_BYTE, domImage);
 }
 
@@ -311,9 +311,9 @@ void NativeGL_Emscripten::cullFace(int c) const {
 
 void NativeGL_Emscripten::getIntegerv(int v, int i[]) const {
   // TODO Warning: getIntegerv is not implemented in WebGL.
-  
+
   val result = _gl.call<val>("getParameter", v);
-  
+
   const int length = result["length"].as<int>();
   for (int index = 0; index < length; index++) {
     i[index] = result[index].as<int>();
@@ -486,10 +486,10 @@ int NativeGL_Emscripten::Error_NoError() const {
 
 int NativeGL_Emscripten::createProgram() const {
   const int id = _shaderList.size();
-  
+
   const val jsoProgram = _gl.call<val>("createProgram");
   _shaderList.push_back(jsoProgram);
-  
+
   return id;
 }
 
@@ -501,41 +501,41 @@ bool NativeGL_Emscripten::deleteProgram(int program) const {
 void NativeGL_Emscripten::attachShader(int program, int shader) const {
   const val jsoProgram = _shaderList[program];
   const val jsoShader  = _shaderList[shader];
-  
+
   _gl.call<void>("attachShader", jsoProgram, jsoShader);
 }
 
 int NativeGL_Emscripten::createShader(ShaderType type) const {
-  
+
   int shaderType;
   switch (type) {
     case ShaderType::VERTEX_SHADER:
       shaderType = GL_VERTEX_SHADER;
       break;
-      
+
     case ShaderType::FRAGMENT_SHADER:
       shaderType = GL_FRAGMENT_SHADER;
       break;
-      
+
     default:
       emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "Unknown shader type");
       return 0;
   }
-  
+
   const int id = _shaderList.size();
-  
+
   val shader = _gl.call<val>("createShader", shaderType);
   _shaderList.push_back(shader);
-  
+
   return id;
 }
 
 bool NativeGL_Emscripten::compileShader(int shader, const std::string& source) const {
   const val jsoShader = _shaderList[shader];
-  
+
   _gl.call<void>("shaderSource", jsoShader, source);
   _gl.call<void>("compileShader", jsoShader);
-  
+
   return _gl.call<bool>("getShaderParameter", jsoShader, GL_COMPILE_STATUS);
 }
 
@@ -548,10 +548,11 @@ bool NativeGL_Emscripten::deleteShader(int shader) const {
 
 void NativeGL_Emscripten::printShaderInfoLog(int shader) const {
   const val jsoShader = _shaderList[shader];
-  
+
   if (!_gl.call<bool>("getShaderParameter", jsoShader, GL_COMPILE_STATUS)) {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR,
-                   ("Error compiling shaders: " + _gl.call<std::string>("getShaderInfoLog", jsoShader)).c_str());
+                   "Error compiling shaders: %s",
+                   _gl.call<std::string>("getShaderInfoLog", jsoShader).c_str());
   }
 }
 
@@ -562,7 +563,13 @@ bool NativeGL_Emscripten::linkProgram(int program) const {
 }
 
 void NativeGL_Emscripten::printProgramInfoLog(int program) const {
-#error TODO
+  const val jsoProgram = _shaderList[program];
+
+  if (!_gl.call<bool>("getProgramParameter", jsoProgram, GL_LINK_STATUS)) {
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR,
+                   "Error linking program: %s",
+                   _gl.call<std::string>("getProgramInfoLog", jsoProgram).c_str());
+  }
 }
 
 void NativeGL_Emscripten::bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
