@@ -77,7 +77,8 @@ GL_UNPACK_ALIGNMENT             ( gl["UNPACK_ALIGNMENT"              ].as<int>()
 GL_RGBA                         ( gl["RGBA"                          ].as<int>() ),
 GL_VIEWPORT                     ( gl["VIEWPORT"                      ].as<int>() ),
 GL_ACTIVE_ATTRIBUTES            ( gl["ACTIVE_ATTRIBUTES"             ].as<int>() ),
-GL_ACTIVE_UNIFORMS              ( gl["ACTIVE_UNIFORMS"               ].as<int>() )
+GL_ACTIVE_UNIFORMS              ( gl["ACTIVE_UNIFORMS"               ].as<int>() ),
+GL_TEXTURE0                     ( gl["TEXTURE0"                      ].as<int>() )
 {
 
 }
@@ -504,14 +505,14 @@ GPUAttribute* NativeGL_Emscripten::getActiveAttribute(const GPUProgram* program,
 #error TODO
 }
 
-void NativeGL_Emscripten::depthMask(bool v) const {
-#error TODO
+void NativeGL_Emscripten::depthMask(bool depthMask) const {
+  _gl.call<void>("depthMask", depthMask);
 }
 
 void NativeGL_Emscripten::setActiveTexture(int i) const {
-#error TODO
+  _gl.call<void>("activeTexture", GL_TEXTURE0 + i);
 }
 
 void NativeGL_Emscripten::viewport(int x, int y, int width, int height) const {
-#error TODO
+  _gl.call<void>("viewport", x, y, width, height);
 }

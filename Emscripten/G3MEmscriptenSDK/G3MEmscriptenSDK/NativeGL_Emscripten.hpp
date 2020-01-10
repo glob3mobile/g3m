@@ -71,6 +71,7 @@ private:
   const int GL_VIEWPORT;
   const int GL_ACTIVE_ATTRIBUTES;
   const int GL_ACTIVE_UNIFORMS;
+  const int GL_TEXTURE0;
 
 
   std::vector<emscripten::val> _shaderList;
@@ -251,7 +252,7 @@ public:
   GPUUniform* getActiveUniform(const GPUProgram* program, int i) const;
   GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const;
 
-  void depthMask(bool v) const;
+  void depthMask(bool depthMask) const;
 
   void setActiveTexture(int i) const;
 
