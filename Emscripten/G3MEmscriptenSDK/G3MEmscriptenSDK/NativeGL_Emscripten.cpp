@@ -306,9 +306,15 @@ void NativeGL_Emscripten::cullFace(int c) const {
 }
 
 void NativeGL_Emscripten::getIntegerv(int v, int i[]) const {
-#error TODO
-}
+  // TODO Warning: getIntegerv is not implemented in WebGL.
 
+  val result = _gl.call<val>("getParameter", v);
+
+  const int length = result["length"].as<int>();
+  for (int index = 0; index < length; index++) {
+    i[index] = result[index].as<int>();
+  }
+}
 
 int NativeGL_Emscripten::CullFace_Front() const {
   return GL_FRONT;
