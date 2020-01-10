@@ -13,7 +13,9 @@
 #include "GPUProgram.hpp"
 #include "Matrix44D.hpp"
 #include "GPUUniform.hpp"
-
+#include "GPUAttributeVec3Float.hpp"
+#include "GPUAttributeVec4Float.hpp"
+#include "GPUAttributeVec2Float.hpp"
 
 using namespace emscripten;
 
@@ -629,7 +631,28 @@ GPUUniform* NativeGL_Emscripten::getActiveUniform(const GPUProgram* program, int
 }
 
 GPUAttribute* NativeGL_Emscripten::getActiveAttribute(const GPUProgram* program, int i) const {
-#error TODO
+  const int programID = program->getProgramID();
+  const val jsoProgram = _shaderList[programID];
+
+  const val info = _gl.call<val>("getActiveAttrib", jsoProgram, i);
+
+  const std::string infoName = info["name"].as<std::string>();
+
+  const int id = _gl.call<int>("getAttribLocation", jsoProgram, infoName);
+
+  const int infoType = info["type"].as<int>();
+  if (infoType == GL_FLOAT_VEC3) {
+    return new GPUAttributeVec3Float(infoName, id);
+  }
+  else if (infoType == GL_FLOAT_VEC4) {
+    return new GPUAttributeVec4Float(infoName, id);
+  }
+  else if (infoType == GL_FLOAT_VEC2) {
+    return new GPUAttributeVec2Float(infoName, id);
+  }
+  else {
+    return NULL;
+  }
 }
 
 void NativeGL_Emscripten::depthMask(bool depthMask) const {
