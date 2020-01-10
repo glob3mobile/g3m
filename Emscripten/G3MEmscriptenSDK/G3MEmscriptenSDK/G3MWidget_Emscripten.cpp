@@ -56,6 +56,10 @@ void G3MWidget_Emscripten::setG3MWidget(G3MWidget* g3mWidget) {
   _g3mWidget = g3mWidget;
 }
 
+bool G3MWidget_Emscripten::isWebGLSupported() const {
+  return (!_canvas.isNull() && !_webGLContext.isNull());
+}
+
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
     _motionEventProcessor = new MotionEventProcessor(this, _canvas);
@@ -85,8 +89,4 @@ void G3MWidget_Emscripten::initSingletons() {
                             textUtils,
                             deviceAttitude,
                             deviceLocation);
-}
-
-bool G3MWidget_Emscripten::isWebGLSupported() const {
-  return (!_canvas.isNull() && !_webGLContext.isNull());
 }
