@@ -8,6 +8,7 @@
 #include "ShortBuffer_Emscripten.hpp"
 #include "GLUniformID_Emscripten.hpp"
 #include "GLTextureID_Emscripten.hpp"
+#include "Image_Emscripten.hpp"
 
 #include "GPUProgram.hpp"
 #include "Matrix44D.hpp"
@@ -266,7 +267,14 @@ void NativeGL_Emscripten::pixelStorei(int pname,
 }
 
 std::vector<IGLTextureID*> NativeGL_Emscripten::genTextures(int  n) const {
-#error TODO
+  std::vector<IGLTextureID*> result;
+  result.reserve(n);
+  for (size_t i = 0; i < n; i++) {
+    val texture = _gl.call<val>("createTexture");
+    GLTextureID_Emscripten* textureID = new GLTextureID_Emscripten(texture);
+    result[0] = textureID;
+  }
+  return result;
 }
 
 void NativeGL_Emscripten::texParameteri(int target,
@@ -276,7 +284,11 @@ void NativeGL_Emscripten::texParameteri(int target,
 }
 
 void NativeGL_Emscripten::texImage2D(const IImage* image, int format) const {
-#error TODO
+  Image_Emscripten* imageEM = (Image_Emscripten*) image;
+
+  val domImage = imageEM->getDOMImage();
+
+  _gl.call<void>("texImage2D", GL_TEXTURE_2D, 0, format, format, GL_UNSIGNED_BYTE, domImage);
 }
 
 void NativeGL_Emscripten::generateMipmap(int target) const {
