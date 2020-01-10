@@ -20,10 +20,6 @@ ITimer* Factory_Emscripten::createTimer() const {
   return new Timer_Emscripten();
 }
 
-IByteBuffer* Factory_Emscripten::createByteBuffer(unsigned char data[], size_t length) const {
-  return new ByteBuffer_Emscripten(data, length);
-}
-
 IByteBuffer* Factory_Emscripten::createByteBuffer(size_t size) const {
   return new ByteBuffer_Emscripten(size);
 }

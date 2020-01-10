@@ -2,24 +2,14 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IDeviceInfo;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IIntBuffer;
-import org.glob3.mobile.generated.IShortBuffer;
-import org.glob3.mobile.generated.ITimer;
-import org.glob3.mobile.generated.IWebSocket;
-import org.glob3.mobile.generated.IWebSocketListener;
-import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.*;
 
-import android.content.Context;
+import android.content.*;
 
 
 public final class Factory_Android
-   extends
-      IFactory {
+         extends
+            IFactory {
 
 
    private final Context _context;
@@ -39,13 +29,6 @@ public final class Factory_Android
    @Override
    public IFloatBuffer createFloatBuffer(final int size) {
       return new FloatBuffer_Android(size);
-   }
-
-
-   @Override
-   public IByteBuffer createByteBuffer(final byte[] data,
-                                       final int length) {
-      return new ByteBuffer_Android(data);
    }
 
 

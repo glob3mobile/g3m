@@ -2,22 +2,12 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IDeviceInfo;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IIntBuffer;
-import org.glob3.mobile.generated.IShortBuffer;
-import org.glob3.mobile.generated.ITimer;
-import org.glob3.mobile.generated.IWebSocket;
-import org.glob3.mobile.generated.IWebSocketListener;
-import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.*;
 
 
 public class Factory_JavaDesktop
-   extends
-      IFactory {
+         extends
+            IFactory {
 
 
    @Override
@@ -68,13 +58,6 @@ public class Factory_JavaDesktop
    @Override
    public IByteBuffer createByteBuffer(final int length) {
       return new ByteBuffer_JavaDesktop(length);
-   }
-
-
-   @Override
-   public IByteBuffer createByteBuffer(final byte[] data,
-                                       final int length) {
-      return new ByteBuffer_JavaDesktop(data);
    }
 
 

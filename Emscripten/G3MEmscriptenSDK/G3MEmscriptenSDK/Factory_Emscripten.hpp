@@ -13,8 +13,6 @@ public:
 
   ITimer* createTimer() const;
 
-  IByteBuffer* createByteBuffer(unsigned char data[], size_t length) const;
-
   IByteBuffer* createByteBuffer(size_t size) const;
 
   IFloatBuffer* createFloatBuffer(size_t size) const;

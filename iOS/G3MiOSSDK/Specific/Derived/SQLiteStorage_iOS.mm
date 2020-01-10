@@ -8,7 +8,6 @@
 
 #include "SQLiteStorage_iOS.hpp"
 
-#include "IFactory.hpp"
 #include "ByteBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
 #include "ILogger.hpp"
@@ -294,7 +293,7 @@ IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
       [nsData getBytes: bytes
                 length: length];
 
-      buffer = IFactory::instance()->createByteBuffer(bytes, length);
+      buffer = new ByteBuffer_iOS(bytes, length);
     }
   }
 

@@ -34,10 +34,6 @@ public:
     return new Timer_iOS();
   }
 
-  IByteBuffer* createByteBuffer(unsigned char data[], size_t length) const {
-    return new ByteBuffer_iOS(data, length);
-  }
-
   IByteBuffer* createByteBuffer(size_t size) const {
     return new ByteBuffer_iOS(size);
   }
