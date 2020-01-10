@@ -79,9 +79,9 @@ public:
     _values[i] = value;
   }
   
-  int* getPointer() const {
-    return _values;
-  }
+//  int* getPointer() const {
+//    return _values;
+//  }
 
   const std::string description() const;
 
