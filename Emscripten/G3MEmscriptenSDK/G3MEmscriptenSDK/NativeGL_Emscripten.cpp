@@ -81,7 +81,8 @@ GL_ACTIVE_ATTRIBUTES            ( gl["ACTIVE_ATTRIBUTES"             ].as<int>()
 GL_ACTIVE_UNIFORMS              ( gl["ACTIVE_UNIFORMS"               ].as<int>() ),
 GL_TEXTURE0                     ( gl["TEXTURE0"                      ].as<int>() ),
 GL_VERTEX_SHADER                ( gl["VERTEX_SHADER"                 ].as<int>() ),
-GL_FRAGMENT_SHADER              ( gl["FRAGMENT_SHADER"               ].as<int>() )
+GL_FRAGMENT_SHADER              ( gl["FRAGMENT_SHADER"               ].as<int>() ),
+GL_COMPILE_STATUS               ( gl["COMPILE_STATUS"                ].as<int>() )
 {
 
 }
@@ -528,15 +529,31 @@ int NativeGL_Emscripten::createShader(ShaderType type) const {
   return id;
 }
 
-bool NativeGL_Emscripten::compileShader (int shader, const std::string& source) const {
-#error TODO
+bool NativeGL_Emscripten::compileShader(int shader, const std::string& source) const {
+  const val jsoShader = _shaderList[shader];
+
+  _gl.call<void>("shaderSource", jsoShader, source);
+  _gl.call<void>("compileShader", jsoShader);
+
+  return _gl.call<bool>("getShaderParameter", jsoShader, GL_COMPILE_STATUS);
 }
+
 bool NativeGL_Emscripten::deleteShader(int shader) const {
-#error TODO
+#warning TODO: deleteShader(int shader) implementation fails
+  const val jsoShader = _shaderList[shader];
+  return true;
+  // return _gl.call<bool>("deleteShader", jsoShader);
 }
+
 void NativeGL_Emscripten::printShaderInfoLog(int shader) const {
-#error TODO
+  const val jsoShader = _shaderList[shader];
+
+  if (!_gl.call<bool>("getShaderParameter", jsoShader, GL_COMPILE_STATUS)) {
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR,
+                   ("Error compiling shaders: " + _gl.call<std::string>("getShaderInfoLog", jsoShader)).c_str());
+  }
 }
+
 bool NativeGL_Emscripten::linkProgram(int program) const {
 #error TODO
 }

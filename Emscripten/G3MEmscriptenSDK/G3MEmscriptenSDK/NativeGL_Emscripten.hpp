@@ -74,6 +74,7 @@ private:
   const int GL_TEXTURE0;
   const int GL_VERTEX_SHADER;
   const int GL_FRAGMENT_SHADER;
+  const int GL_COMPILE_STATUS;
 
 
   mutable std::vector<emscripten::val> _shaderList;
@@ -241,7 +242,7 @@ public:
   bool deleteProgram(int program) const;
   void attachShader(int program, int shader) const;
   int createShader(ShaderType type) const;
-  bool compileShader (int shader, const std::string& source) const;
+  bool compileShader(int shader, const std::string& source) const;
   bool deleteShader(int shader) const;
   void printShaderInfoLog(int shader) const;
   bool linkProgram(int program) const;
