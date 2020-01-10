@@ -2,23 +2,35 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.IDeviceLocation;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.*;
 
 
 public class DeviceLocation_WebGL
-   extends
-      IDeviceLocation {
+         extends
+            IDeviceLocation {
 
-   static private double _lat        = Double.NaN;
-   static private double _lon        = Double.NaN;
-   static private double _altitude   = Double.NaN;
+   private double _lat;
+   private double _lon;
+   private double _altitude;
 
-   int                   _watchId    = -1;
+   private int     _watchId;
+   private boolean _isTracking;
 
-   boolean               _isTracking = false;
+
+   public DeviceLocation_WebGL() {
+      reset();
+   }
+
+
+   private void reset() {
+      _watchId = -1;
+      _isTracking = false;
+      _lat = Double.NaN;
+      _lon = Double.NaN;
+      _altitude = Double.NaN;
+   }
 
 
    private native boolean onPositionChanged(JavaScriptObject location)/*-{
@@ -39,7 +51,7 @@ public class DeviceLocation_WebGL
    }-*/;
 
 
-   native boolean startTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
+   private native boolean startTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
 		if ("geolocation" in navigator) {
 	    	// Request repeated updates.
 			devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId = 
@@ -52,7 +64,7 @@ public class DeviceLocation_WebGL
 	}-*/;
 
 
-   native void stopTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
+   private native void stopTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
 		if ("geolocation" in navigator) {
 			navigator.geolocation
 					.clearWatch(devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId);
@@ -71,10 +83,8 @@ public class DeviceLocation_WebGL
    @Override
    public void stopTrackingLocation() {
       stopTrackingLocationJS(this);
-      _isTracking = false;
-      _lat = Double.NaN;
-      _lon = Double.NaN;
-      _altitude = Double.NaN;
+
+      reset();
    }
 
 
@@ -86,8 +96,8 @@ public class DeviceLocation_WebGL
 
    @Override
    public Geodetic3D getLocation() {
-
       return Geodetic3D.fromDegrees(_lat, _lon, _altitude);
    }
+
 
 }
