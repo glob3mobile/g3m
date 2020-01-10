@@ -53,8 +53,31 @@ GL_FLOAT_VEC2                   ( gl["FLOAT_VEC2"                    ].as<int>()
 GL_FLOAT_VEC3                   ( gl["FLOAT_VEC3"                    ].as<int>() ),
 GL_FLOAT_VEC4                   ( gl["FLOAT_VEC4"                    ].as<int>() ),
 GL_BOOL                         ( gl["BOOL"                          ].as<int>() ),
-GL_FLOAT_MAT4                   ( gl["FLOAT_MAT4"                    ].as<int>() )
-
+GL_FLOAT_MAT4                   ( gl["FLOAT_MAT4"                    ].as<int>() ),
+GL_ONE                          ( gl["ONE"                           ].as<int>() ),
+GL_ZERO                         ( gl["ZERO"                          ].as<int>() ),
+GL_SRC_ALPHA                    ( gl["SRC_ALPHA"                     ].as<int>() ),
+GL_ONE_MINUS_SRC_ALPHA          ( gl["ONE_MINUS_SRC_ALPHA"           ].as<int>() ),
+GL_TEXTURE_2D                   ( gl["TEXTURE_2D"                    ].as<int>() ),
+GL_TEXTURE_MIN_FILTER           ( gl["TEXTURE_MIN_FILTER"            ].as<int>() ),
+GL_TEXTURE_MAG_FILTER           ( gl["TEXTURE_MAG_FILTER"            ].as<int>() ),
+GL_TEXTURE_WRAP_S               ( gl["TEXTURE_WRAP_S"                ].as<int>() ),
+GL_TEXTURE_WRAP_T               ( gl["TEXTURE_WRAP_T"                ].as<int>() ),
+GL_NEAREST                      ( gl["NEAREST"                       ].as<int>() ),
+GL_LINEAR                       ( gl["LINEAR"                        ].as<int>() ),
+GL_NEAREST_MIPMAP_NEAREST       ( gl["NEAREST_MIPMAP_NEAREST"        ].as<int>() ),
+GL_NEAREST_MIPMAP_LINEAR        ( gl["NEAREST_MIPMAP_LINEAR"         ].as<int>() ),
+GL_LINEAR_MIPMAP_NEAREST        ( gl["LINEAR_MIPMAP_NEAREST"         ].as<int>() ),
+GL_LINEAR_MIPMAP_LINEAR         ( gl["LINEAR_MIPMAP_LINEAR"          ].as<int>() ),
+GL_REPEAT                       ( gl["REPEAT"                        ].as<int>() ),
+GL_CLAMP_TO_EDGE                ( gl["CLAMP_TO_EDGE"                 ].as<int>() ),
+GL_MIRRORED_REPEAT              ( gl["MIRRORED_REPEAT"               ].as<int>() ),
+GL_PACK_ALIGNMENT               ( gl["PACK_ALIGNMENT"                ].as<int>() ),
+GL_UNPACK_ALIGNMENT             ( gl["UNPACK_ALIGNMENT"              ].as<int>() ),
+GL_RGBA                         ( gl["RGBA"                          ].as<int>() ),
+GL_VIEWPORT                     ( gl["VIEWPORT"                      ].as<int>() ),
+GL_ACTIVE_ATTRIBUTES            ( gl["ACTIVE_ATTRIBUTES"             ].as<int>() ),
+GL_ACTIVE_UNIFORMS              ( gl["ACTIVE_UNIFORMS"               ].as<int>() )
 {
 
 }
@@ -355,87 +378,87 @@ int NativeGL_Emscripten::Primitive_Points() const {
 }
 
 int NativeGL_Emscripten::BlendFactor_One() const {
-#error TODO
+  return GL_ONE;
 }
 int NativeGL_Emscripten::BlendFactor_Zero() const {
-#error TODO
+  return GL_ZERO;
 }
 int NativeGL_Emscripten::BlendFactor_SrcAlpha() const {
-#error TODO
+  return GL_SRC_ALPHA;
 }
 int NativeGL_Emscripten::BlendFactor_OneMinusSrcAlpha() const {
-#error TODO
+  return GL_ONE_MINUS_SRC_ALPHA;
 }
 
 int NativeGL_Emscripten::TextureType_Texture2D() const {
-#error TODO
+  return GL_TEXTURE_2D;
 }
 
 int NativeGL_Emscripten::TextureParameter_MinFilter() const {
-#error TODO
+  return GL_TEXTURE_MIN_FILTER;
 }
 int NativeGL_Emscripten::TextureParameter_MagFilter() const {
-#error TODO
+  return GL_TEXTURE_MAG_FILTER;
 }
 int NativeGL_Emscripten::TextureParameter_WrapS() const {
-#error TODO
+  return GL_TEXTURE_WRAP_S;
 }
 int NativeGL_Emscripten::TextureParameter_WrapT() const {
-#error TODO
+  return GL_TEXTURE_WRAP_T;
 }
 
 int NativeGL_Emscripten::TextureParameterValue_Nearest() const {
-#error TODO
+  return GL_NEAREST;
 }
 int NativeGL_Emscripten::TextureParameterValue_Linear() const {
-#error TODO
+  return GL_LINEAR;
 }
 int NativeGL_Emscripten::TextureParameterValue_NearestMipmapNearest() const {
-#error TODO
+  return GL_NEAREST_MIPMAP_NEAREST;
 }
 int NativeGL_Emscripten::TextureParameterValue_NearestMipmapLinear() const {
-#error TODO
+  return GL_NEAREST_MIPMAP_LINEAR;
 }
 int NativeGL_Emscripten::TextureParameterValue_LinearMipmapNearest() const {
-#error TODO
+  return GL_LINEAR_MIPMAP_NEAREST;
 }
 int NativeGL_Emscripten::TextureParameterValue_LinearMipmapLinear() const {
-#error TODO
+  return GL_LINEAR_MIPMAP_LINEAR;
 }
 
 int NativeGL_Emscripten::TextureParameterValue_Repeat() const {
-#error TODO
+  return GL_REPEAT;
 }
 int NativeGL_Emscripten::TextureParameterValue_ClampToEdge() const {
-#error TODO
+  return GL_CLAMP_TO_EDGE;
 }
 int NativeGL_Emscripten::TextureParameterValue_MirroredRepeat() const {
-#error TODO
+  return GL_MIRRORED_REPEAT;
 }
 
 int NativeGL_Emscripten::Alignment_Pack() const {
-#error TODO
+  return GL_PACK_ALIGNMENT;
 }
 int NativeGL_Emscripten::Alignment_Unpack() const {
-#error TODO
+  return GL_UNPACK_ALIGNMENT;
 }
 
 int NativeGL_Emscripten::Format_RGBA() const {
-#error TODO
+  return GL_RGBA;
 }
 
 int NativeGL_Emscripten::Variable_Viewport() const {
-#error TODO
+  return GL_VIEWPORT;
 }
 int NativeGL_Emscripten::Variable_ActiveAttributes() const {
-#error TODO
+  return GL_ACTIVE_ATTRIBUTES;
 }
 int NativeGL_Emscripten::Variable_ActiveUniforms() const {
-#error TODO
+  return GL_ACTIVE_UNIFORMS;
 }
 
 int NativeGL_Emscripten::Error_NoError() const {
-#error TODO
+  return GL_NO_ERROR;
 }
 
 int NativeGL_Emscripten::createProgram() const {

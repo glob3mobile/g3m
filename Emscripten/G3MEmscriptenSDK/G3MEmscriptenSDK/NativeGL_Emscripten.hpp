@@ -47,6 +47,30 @@ private:
   const int GL_FLOAT_VEC4;
   const int GL_BOOL;
   const int GL_FLOAT_MAT4;
+  const int GL_ONE;
+  const int GL_ZERO;
+  const int GL_SRC_ALPHA;
+  const int GL_ONE_MINUS_SRC_ALPHA;
+  const int GL_TEXTURE_2D;
+  const int GL_TEXTURE_MIN_FILTER;
+  const int GL_TEXTURE_MAG_FILTER;
+  const int GL_TEXTURE_WRAP_S;
+  const int GL_TEXTURE_WRAP_T;
+  const int GL_NEAREST;
+  const int GL_LINEAR;
+  const int GL_NEAREST_MIPMAP_NEAREST;
+  const int GL_NEAREST_MIPMAP_LINEAR;
+  const int GL_LINEAR_MIPMAP_NEAREST;
+  const int GL_LINEAR_MIPMAP_LINEAR;
+  const int GL_REPEAT;
+  const int GL_CLAMP_TO_EDGE;
+  const int GL_MIRRORED_REPEAT;
+  const int GL_PACK_ALIGNMENT;
+  const int GL_UNPACK_ALIGNMENT;
+  const int GL_RGBA;
+  const int GL_VIEWPORT;
+  const int GL_ACTIVE_ATTRIBUTES;
+  const int GL_ACTIVE_UNIFORMS;
 
 
   std::vector<emscripten::val> _shaderList;
