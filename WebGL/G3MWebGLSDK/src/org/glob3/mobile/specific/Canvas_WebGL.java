@@ -14,11 +14,11 @@ public final class Canvas_WebGL
    private final JavaScriptObject _domCanvas;
    private final JavaScriptObject _domCanvasContext;
 
-   private String                 _currentDOMFont;
-   private int                    _currentFontSize;
+   private String _currentDOMFont;
+   private int    _currentFontSize;
 
-   private int                    _width;
-   private int                    _height;
+   private int _width;
+   private int _height;
 
 
    Canvas_WebGL(final boolean retina) {
