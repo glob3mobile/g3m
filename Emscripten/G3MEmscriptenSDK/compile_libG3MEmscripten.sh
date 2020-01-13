@@ -21,6 +21,9 @@ echo
 #    ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}/LIB/libG3MEmscripten.bc \
 
 #emcc --show-ports
+
+SOURCES="$(find . -name '*.cpp')" 
+
     
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
@@ -36,12 +39,13 @@ em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Math         \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh         \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
-    LIB/libG3M.bc                                   \
-    *.cpp \
+    LIB/libG3MShared.bc                             \
+    ${SOURCES} \
     -DC_CODE \
     -O0 \
     -g \
     -std=c++11 \
+    -r \
     -o LIB/libG3MEmscripten.bc \
     || exit 1
 
