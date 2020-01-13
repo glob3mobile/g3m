@@ -41,6 +41,8 @@ em++ \
     -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}           \
     ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
     *.cpp \
+    -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=10 \
+    -s EXPORTED_FUNCTIONS='["_invoke_function_pointer", "_main"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     -s WASM=1 \
     -DC_CODE \
     -O0 \

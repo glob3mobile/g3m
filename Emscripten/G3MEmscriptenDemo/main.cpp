@@ -5,6 +5,13 @@
 
 #include "G3MBuilder_Emscripten.hpp"
 
+extern "C" {
+
+void invoke_function_pointer(void(*f)(void)) {
+  (*f)();
+}
+
+}
 
 int main() {
   //printf("hello, world!\n");

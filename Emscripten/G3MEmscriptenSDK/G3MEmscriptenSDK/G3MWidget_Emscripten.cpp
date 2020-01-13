@@ -65,7 +65,8 @@ void G3MWidget_Emscripten::startWidget() {
 //    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
 //    jsAddResizeHandler(_canvas);
 //    
-//    jsStartRenderLoop();
+//    jsStartRenderLoop();
+    emscripten_set_main_loop(one_iter, 60, 1);
   }
 }
 
@@ -77,8 +78,8 @@ void G3MWidget_Emscripten::initSingletons() {
   IMathUtils*      mathUtils      = new MathUtils_Emscripten();
   IJSONParser*     jsonParser     = new JSONParser_Emscripten();
   ITextUtils*      textUtils      = new TextUtils_Emscripten();
-  IDeviceAttitude* deviceAttitude = NULL; // new DeviceAttitude_Emscripten();
-  IDeviceLocation* deviceLocation = NULL; // new DeviceLocation_Emscripten();
+  IDeviceAttitude* deviceAttitude = new DeviceAttitude_Emscripten();
+  IDeviceLocation* deviceLocation = new DeviceLocation_Emscripten();
   
   G3MWidget::initSingletons(logger,
                             factory,
