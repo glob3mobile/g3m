@@ -53,7 +53,7 @@ var Module = {
     // })(),
     
     setStatus: function(text) {
-	console.log("Status: " + text);
+	//console.log("Status: " + text);
 
         if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
         if (text === Module.setStatus.last.text) return;
@@ -93,12 +93,6 @@ var Module = {
 
     onRuntimeInitialized: function() {
 	console.log("Runtime Initialized!");
-
-	var pointer = addFunction(function() { 
-	    console.log('I was called from C world!'); 
-	}, "v");
-	Module.ccall('invoke_function_pointer', 'void', ['number'], [pointer]);
-	removeFunction(pointer);
     }
 };
 

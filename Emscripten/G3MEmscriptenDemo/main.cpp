@@ -1,17 +1,20 @@
 
 //#include <stdio.h>
 
+#include <emscripten.h>
 #include <emscripten/html5.h>
 
 #include "G3MBuilder_Emscripten.hpp"
 
+
 extern "C" {
 
-void invoke_function_pointer(void(*f)(void)) {
-  (*f)();
-}
+  void invoke_function_pointer(void(*f)(void)) {
+    (*f)();
+  }
 
 }
+
 
 int main() {
   //printf("hello, world!\n");
@@ -26,5 +29,13 @@ int main() {
   // final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
   // g3mWidgetHolder.add(_widget);
 
+  EM_ASM( {
+      var pointer = addFunction(function() { 
+	  console.log('I was called from C world!'); 
+	}, "v");
+      Module.ccall('invoke_function_pointer', 'void', ['number'], [pointer]);
+      removeFunction(pointer);
+    } );
+  
   return 0;
 }

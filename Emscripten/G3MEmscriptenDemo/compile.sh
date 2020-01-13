@@ -52,6 +52,7 @@ em++ \
     || exit 1
 
 cp -rv html/ deploy/
+find . -name ".DS_Store" -exec rm -rf {} \;
 
 cd deploy
 #emrun --no_browser --port 8080 .
