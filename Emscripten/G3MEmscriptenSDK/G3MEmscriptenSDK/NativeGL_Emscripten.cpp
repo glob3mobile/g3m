@@ -500,6 +500,7 @@ int NativeGL_Emscripten::createProgram() const {
 bool NativeGL_Emscripten::deleteProgram(int program) const {
   const val jsoProgram = _shaderList[program];
   _gl.call<void>("deleteProgram", jsoProgram);
+  return true;
 }
 
 void NativeGL_Emscripten::attachShader(int program, int shader) const {

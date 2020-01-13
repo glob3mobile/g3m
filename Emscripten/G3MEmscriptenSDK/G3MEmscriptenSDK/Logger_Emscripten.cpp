@@ -2,6 +2,8 @@
 
 #include "Logger_Emscripten.hpp"
 
+#include <stdarg.h>
+
 #include <emscripten/emscripten.h>
 
 
