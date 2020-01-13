@@ -19,26 +19,54 @@ rm -rf LIB
 mkdir LIB
 
 #emcc --show-ports
-    
+
+
+GM3_COMMONS_SOURCES="$(find ${G3M_COMMONS_SOURCE_DIRECTORY} -name '*.cpp')" 
+
+#echo ${GM3_COMMONS_SOURCES}
+
 em++ \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras      \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/DEM          \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Downloader   \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GEO          \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GL           \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Geometry     \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Interfaces   \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/JSON         \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Layers       \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Math         \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh         \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
-    G3M_COMMONS_SOURCE_DIRECTORY/*.cpp \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras      \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/DEM          \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Downloader   \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GEO          \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GL           \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Geometry     \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Interfaces   \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/JSON         \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Layers       \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Math         \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh         \
+     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
+    ${GM3_COMMONS_SOURCES} \
     -DC_CODE \
     -O0 \
     -g \
     -std=c++11 \
-    -o LIB/libG3M.bc \
+    -r \
+    -o LIB/libG3MShared.bc \
     || exit 1
+
+# em++ \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras      \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/DEM          \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Downloader   \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GEO          \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GL           \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Geometry     \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Interfaces   \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/JSON         \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Layers       \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Math         \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh         \
+#     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
+#     ${G3M_COMMONS_SOURCE_DIRECTORY}/*.cpp \
+#     -DC_CODE \
+#     -O0 \
+#     -g \
+#     -std=c++11 \
+#     -o LIB/libG3MShared.bc \
+#     || exit 1
 
