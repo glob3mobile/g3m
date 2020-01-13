@@ -20,8 +20,6 @@ echo
 rm -rf deploy
 mkdir deploy
 
-#    ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}/LIB/libG3MEmscripten.bc \
-
 #emcc --show-ports
     
 em++ \
@@ -54,3 +52,4 @@ cp -rv html/ deploy/
 cd deploy
 #emrun --no_browser --port 8080 .
 python -m SimpleHTTPServer 8080
+
