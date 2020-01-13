@@ -12,7 +12,7 @@ long long FloatBuffer_Emscripten::_nextID = 0;
 
 
 FloatBuffer_Emscripten::FloatBuffer_Emscripten(size_t size) :
-_buffer( val::global("Float32Array").new_(val(size)) ),
+_buffer( val::global("Float32Array").new_( val(size) ) ),
 _timestamp(0),
 _id(_nextID++),
 _webGLBuffer(val::null()),
@@ -38,7 +38,7 @@ FloatBuffer_Emscripten::FloatBuffer_Emscripten(float f0,
                                                float f13,
                                                float f14,
                                                float f15) :
-_buffer( val::global("Float32Array").new_(val(16)) ),
+_buffer( val::global("Float32Array").new_( val(16) ) ),
 _timestamp(0),
 _id(_nextID++),
 _webGLBuffer(val::null()),

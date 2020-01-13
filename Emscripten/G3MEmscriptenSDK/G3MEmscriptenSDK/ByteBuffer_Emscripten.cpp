@@ -9,7 +9,7 @@ using namespace emscripten;
 
 
 ByteBuffer_Emscripten::ByteBuffer_Emscripten(const size_t size) :
-_buffer( val::global("Int8Array").new_(size) ),
+_buffer( val::global("Int8Array").new_( val(size) ) ),
 _timestamp(0)
 {
 

@@ -12,7 +12,7 @@ using namespace emscripten;
 long long ShortBuffer_Emscripten::_nextID = 0;
 
 ShortBuffer_Emscripten::ShortBuffer_Emscripten(size_t size) :
-_buffer( val::global("Uint16Array").new_(val(size)) ),
+_buffer( val::global("Uint16Array").new_( val(size) ) ),
 _id(_nextID++),
 _timestamp(0),
 _nativeGL(NULL),

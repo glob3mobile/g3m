@@ -5,12 +5,14 @@ set -e # Script exists on first failure
 
 export EMSDK_DIRECTORY="../../../emsdk/"
 export G3M_COMMONS_SOURCE_DIRECTORY="../../iOS/G3MiOSSDK/Commons/"
-export G3M_EMSCRIPTEN_SOURCE_DIRECTORY="../G3MEmscriptenSDK/"
+export G3M_EMSCRIPTEN_SOURCE_DIRECTORY="../G3MEmscriptenSDK/G3MEmscriptenSDK/"
+export G3M_LIBS_DIRECTORY="../G3MEmscriptenSDK/LIB/"
 
 
 if [[ -z $EMSDK_DIRECTORY                 ]]; then echo - Missing mandatory variable EMSDK_DIRECTORY;                 exit 1; fi
 if [[ -z $G3M_COMMONS_SOURCE_DIRECTORY    ]]; then echo - Missing mandatory variable G3M_COMMONS_SOURCE_DIRECTORY;    exit 1; fi
 if [[ -z $G3M_EMSCRIPTEN_SOURCE_DIRECTORY ]]; then echo - Missing mandatory variable G3M_EMSCRIPTEN_SOURCE_DIRECTORY; exit 1; fi
+if [[ -z $G3M_LIBS_DIRECTORY              ]]; then echo - Missing mandatory variable G3M_LIBS_DIRECTORY;              exit 1; fi
 
 
 source ${EMSDK_DIRECTORY}/emsdk_env.sh
@@ -20,26 +22,26 @@ echo
 rm -rf deploy
 mkdir deploy
 
-#emcc --show-ports
-    
+#  ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}/LIB/libG3MEmscripten.bc  \
+
 em++ \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic                    \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras                  \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/DEM                      \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Downloader               \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GEO                      \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GL                       \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Geometry                 \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Interfaces               \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/JSON                     \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Layers                   \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Math                     \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh                     \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers              \
-    -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}                       \
-    ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}/LIB/libG3M.bc            \
-    ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}/LIB/libG3MEmscripten.bc  \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras      \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/DEM          \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Downloader   \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GEO          \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GL           \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Geometry     \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Interfaces   \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/JSON         \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Layers       \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Math         \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh         \
+    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
+    -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}           \
+    ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
     *.cpp \
+    -s WASM=1 \
     -DC_CODE \
     -O0 \
     -g \

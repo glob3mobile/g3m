@@ -25,13 +25,13 @@ _webGLContext(val::null())
   
   _canvas = document.call<val>("createElement", val("canvas"));
   
-  _canvas.set("id", val("_g3m_canvas"));
+  _canvas.set("id", "_g3m_canvas");
   
   val webGLContextArguments = val::object();
-  //webGLContextArguments.set("preserveDrawingBuffer",           val(true));
-  webGLContextArguments.set("alpha",                           val(false));
-  webGLContextArguments.set("preferLowPowerToHighPerformance", val(true));
-  webGLContextArguments.set("antialias",                       val(false));
+  //webGLContextArguments.set("preserveDrawingBuffer",           true);
+  webGLContextArguments.set("alpha",                           false);
+  webGLContextArguments.set("preferLowPowerToHighPerformance", true);
+  webGLContextArguments.set("antialias",                       false);
   _webGLContext = _canvas.call<val>("getContext", val("webgl"), webGLContextArguments);
   
   // jsCanvas.addEventListener("webglcontextlost", function(
@@ -62,10 +62,10 @@ bool G3MWidget_Emscripten::isWebGLSupported() const {
 
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
-    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
-    jsAddResizeHandler(_canvas);
-    
-    jsStartRenderLoop();
+//    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
+//    jsAddResizeHandler(_canvas);
+//    
+//    jsStartRenderLoop();
   }
 }
 
@@ -77,8 +77,8 @@ void G3MWidget_Emscripten::initSingletons() {
   IMathUtils*      mathUtils      = new MathUtils_Emscripten();
   IJSONParser*     jsonParser     = new JSONParser_Emscripten();
   ITextUtils*      textUtils      = new TextUtils_Emscripten();
-  IDeviceAttitude* deviceAttitude = new DeviceAttitude_Emscripten();
-  IDeviceLocation* deviceLocation = new DeviceLocation_Emscripten();
+  IDeviceAttitude* deviceAttitude = NULL; // new DeviceAttitude_Emscripten();
+  IDeviceLocation* deviceLocation = NULL; // new DeviceLocation_Emscripten();
   
   G3MWidget::initSingletons(logger,
                             factory,

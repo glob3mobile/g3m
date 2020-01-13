@@ -15,11 +15,6 @@ source ${EMSDK_DIRECTORY}/emsdk_env.sh
 emcc -v
 echo
 
-#rm -rf deploy
-#mkdir deploy
-
-#    ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}/LIB/libG3MEmscripten.bc \
-
 #emcc --show-ports
 
 SOURCES="$(find . -name '*.cpp')" 
@@ -41,6 +36,7 @@ em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
     LIB/libG3MShared.bc                             \
     ${SOURCES} \
+    -s WASM=1 \
     -DC_CODE \
     -O0 \
     -g \
