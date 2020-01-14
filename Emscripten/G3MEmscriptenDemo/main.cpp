@@ -9,26 +9,77 @@
 
 using namespace emscripten;
 
-extern "C" {
+val takeoutFromStorage(int id) {
+  val MyStorage =  val::global("document")["MyStorage"];
 
-  void invoke_function_pointer(void(*f)(int), int i) {
-    (*f)(i);
-  }
-
+  val result = MyStorage[id];
+  
+  EM_ASM({ delete document.MyStorage[$0]; }, id);
+  
+  return result;
 }
 
+EM_JS(void, initStorage, (), {
+    if (typeof document.MyStorage === 'undefined') {
+      document.MyStorage = {
+	"__idCounter" : 0
+      };
 
-EM_JS(void, call_alert, (val img), {
-  alert('hello world!' + img);
+      document.MyStorage["_store"] = function(obj) {
+	var self = document.MyStorage;
+	var id = self.__idCounter + 1;
+	self.__idCounter = id;
+	self[id] = obj;
+	return id;
+      };
+    }
 });
 
 
+extern "C" {
+
+  void EMSCRIPTEN_KEEPALIVE invoke_function_pointer(void(*f)(int), int i) {
+    (*f)(i);
+  }
+
+  void EMSCRIPTEN_KEEPALIVE processDOMImage(int domImageID) {
+    val domImage = takeoutFromStorage(domImageID);
+    
+    val document = val::global("document");
+    //emscripten_console_log( document.call<std::string>("toString").c_str() );
+    val body = document["body"].as<emscripten::val>();
+    
+    body.call<void>("appendChild", domImage);
+  };
+  
+}
+
+
+EM_JS(void, createDOMImage, (), {
+    var img = new Image();
+    
+    img.onload = function() {
+      console.log("** IMAGE LOADED!!!!");
+      Module.ccall('processDOMImage', 'void', ['int'], [ document.MyStorage._store(img) ]);
+    };
+    img.onerror = function() {
+      console.log("** ERRORR!!!!");
+    };
+    
+    img.src = "https://emscripten.org/_static/Emscripten_logo_full.png";
+  });
+
+
 int main() {
+  initStorage();
+  
   //printf("hello, world!\n");
 
-  val domImage = val::global("Image").new_();
+  //val domImage = val::global("Image").new_();
+  //emscripten_console_log( domImage.call<std::string>("toString").c_str() );
 
-  
+  createDOMImage();
+
   emscripten_console_log("Hello from emscripten_console_log (1)");
   emscripten_console_warn("Hello from emscripten_console_warn (2)");
   //emscripten_console_error("Hello from emscripten_console_error (3)");
@@ -52,7 +103,6 @@ int main() {
       removeFunction(pointer);
     } );
 
-  //  call_alert(domImage);
   
   return 0;
 }

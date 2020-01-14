@@ -53,7 +53,7 @@ var Module = {
     // })(),
     
     setStatus: function(text) {
-	console.log("Status: " + text);
+	//console.log("Status: " + text);
 
         if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
         if (text === Module.setStatus.last.text) return;

@@ -23,6 +23,9 @@ rm -rf deploy
 mkdir deploy
 
 #  ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}/LIB/libG3MEmscripten.bc  \
+#  -s EXPORTED_FUNCTIONS='["_invoke_function_pointer", "_main", "_processDOMImage"]' \
+#     -s EXIT_RUNTIME=0 \
+
 
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
@@ -42,7 +45,7 @@ em++ \
     ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
     *.cpp \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=1 \
-    -s EXPORTED_FUNCTIONS='["_invoke_function_pointer", "_main"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
+    -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     -s WASM=1 \
     --bind \
     -Wall -Werror \
