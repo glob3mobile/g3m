@@ -8,6 +8,8 @@
 #include "IMathUtils.hpp"
 #include "Color.hpp"
 
+#include "Image_Emscripten.hpp"
+
 #include <emscripten/val.h>
 
 using namespace emscripten;
@@ -111,15 +113,7 @@ void TextUtils_Emscripten::createLabelImage(const std::string& label,
 
   const std::string imageDataURL = canvas.call<std::string>("toDataURL");
 
-//  EM_ASM({
-//    console.log('I received: ' + $0);
-//  }, imageDataURL);
-
-
-  val jsResult = val::global("Image").new_();
-  jsResult.onload = function() {
-    var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
-    listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
-  };
-  jsResult.set("src", imageDataURL);
+  Image_Emscripten::createFromURL(imageDataURL,
+                                  listener,
+                                  autodelete);
 }
