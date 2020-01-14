@@ -18,15 +18,15 @@ extern "C" {
 }
 
 
-// EM_JS(void, call_alert, (val img), {
-//   alert('hello world!' + img);
-// });
+EM_JS(void, call_alert, (val img), {
+  alert('hello world!' + img);
+});
 
 
 int main() {
   //printf("hello, world!\n");
 
-  //  val domImage = val::global("Image").new_();
+  val domImage = val::global("Image").new_();
 
   
   emscripten_console_log("Hello from emscripten_console_log (1)");
@@ -43,9 +43,12 @@ int main() {
       var pointer = addFunction(function(i) { 
 	  console.log('I was called from C world! ' + i); 
 	}, "vi");
+
       Module.ccall('invoke_function_pointer', 'void', ['number', 'int'], [pointer, 42]);
+
       var jsInvokeFunctionPointer = Module.cwrap('invoke_function_pointer', 'void', ['number', 'int']);
       jsInvokeFunctionPointer(pointer, 64);
+      
       removeFunction(pointer);
     } );
 

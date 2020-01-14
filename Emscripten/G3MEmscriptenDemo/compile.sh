@@ -44,6 +44,8 @@ em++ \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=1 \
     -s EXPORTED_FUNCTIONS='["_invoke_function_pointer", "_main"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     -s WASM=1 \
+    --bind \
+    -Wall -Werror \
     -DC_CODE \
     -O0 \
     -g \
