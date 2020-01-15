@@ -48,17 +48,17 @@ EMStorage* EMStorage::instance() {
   return _instance;
 }
 
-emscripten::val EMStorage::take(const int id) {
-  val jsEMStorage = val::global("document")["EMStorage"];
-  val obj = jsEMStorage[id];
-  EM_ASM({ delete document.EMStorage[$0]; }, id);
-  return obj;
-}
-
 int EMStorage::put(const emscripten::val& value) {
   val jsEMStorage = val::global("document")["EMStorage"];
   const int id = jsEMStorage["__idCounter"].as<int>() + 1;
   jsEMStorage.set("__idCounter", id);
   jsEMStorage.set(id, value);
   return id;
+}
+
+emscripten::val EMStorage::take(const int id) {
+  val jsEMStorage = val::global("document")["EMStorage"];
+  val obj = jsEMStorage[id];
+  EM_ASM({ delete document.EMStorage[$0]; }, id);
+  return obj;
 }

@@ -28,6 +28,8 @@ mkdir deploy
 
 G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'EM*.cpp')" 
 
+G3M_EMSCRIPTEN_SOURCES2="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'Image_Emscripten.cpp')" 
+
 
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
@@ -46,6 +48,7 @@ em++ \
     -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}           \
     ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
     ${G3M_EMSCRIPTEN_SOURCES} \
+    ${G3M_EMSCRIPTEN_SOURCES2} \
     *.cpp \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=1 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \

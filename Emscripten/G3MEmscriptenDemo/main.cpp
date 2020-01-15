@@ -7,8 +7,9 @@
 
 //#include "G3MBuilder_Emscripten.hpp"
 
-
 #include "EMStorage.hpp"
+#include "Image_Emscripten.hpp"
+#include "IImageListener.hpp"
 
 
 using namespace emscripten;
@@ -51,6 +52,24 @@ EM_JS(void, createDOMImage, (const int urlID), {
   });
 
 
+
+class PvtListener : public IImageListener {
+public:
+  void imageCreated(const IImage* image) {
+    //emscripten_console_log(image->description().c_str());
+
+    val document = val::global("document");
+    val body = document["body"].as<emscripten::val>();
+    
+    body.call<void>("appendChild", ((Image_Emscripten*) image)->getDOMImage() );
+
+    delete image;
+  }
+
+};
+
+
+
 int main() {
   //initStorage();
   EMStorage::instance();
@@ -85,6 +104,10 @@ int main() {
       
       removeFunction(pointer);
     } );
+
+  Image_Emscripten::createFromURL("https://emscripten.org/_static/Emscripten_logo_full.png",
+                                  new PvtListener(),
+                                  true);
   
   return 0;
 }
