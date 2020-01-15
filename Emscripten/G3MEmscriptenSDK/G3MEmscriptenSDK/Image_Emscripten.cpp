@@ -59,20 +59,20 @@ IImage* Image_Emscripten::shallowCopy() const {
   return new Image_Emscripten(_domImage);
 }
 
-emscripten::val Image_Emscripten::createImageData() const {
+val Image_Emscripten::createImageData() const {
   val document = val::global("document");
 
-  val domCanvas        = document.call<val>("createElement", val("canvas"));
-  val domCanvasContext = domCanvas.call<val>("getContext", val("2d"));
+  val canvas        = document.call<val>("createElement", val("canvas"));
+  val canvasContext = canvas.call<val>("getContext", val("2d"));
 
   const int w = getWidth();
   const int h = getHeight();
-  domCanvas.set("width",  w);
-  domCanvas.set("height", h);
+  canvas.set("width",  w);
+  canvas.set("height", h);
 
-  domCanvasContext.call<void>("drawImage", _domImage, 0, 0, w, h);
+  canvasContext.call<void>("drawImage", _domImage, 0, 0, w, h);
 
-  return domCanvasContext.call<val>("getImageData", 0, 0, w, h);
+  return canvasContext.call<val>("getImageData", 0, 0, w, h);
 }
 
 void Image_Emscripten::getPixel(int x, int y,
@@ -114,11 +114,7 @@ void Image_Emscripten::createFromURL(const std::string& url,
     var img = new Image();
 
     img.onload = function() {
-      console.log("** IMAGE LOADED!!!!");
       Module.ccall('Image_Emscripten_imageCreated', 'void', ['int', 'number', 'bool'], [ document.EMStorage.put(img), $1, $2 ]);
-    };
-    img.onerror = function() {
-      console.log("** ERRORR!!!!");
     };
 
     var url = document.EMStorage.take($0);

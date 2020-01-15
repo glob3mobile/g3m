@@ -20,7 +20,7 @@
 using namespace emscripten;
 
 
-NativeGL_Emscripten::NativeGL_Emscripten(const emscripten::val& gl) :
+NativeGL_Emscripten::NativeGL_Emscripten(const val& gl) :
 _gl(gl),
 GL_FLOAT                        ( gl["FLOAT"                         ].as<int>() ),
 GL_ARRAY_BUFFER                 ( gl["ARRAY_BUFFER"                  ].as<int>() ),
@@ -175,19 +175,19 @@ void NativeGL_Emscripten::polygonOffset(float factor,
   _gl.call<void>("polygonOffset", factor, units);
 }
 
-emscripten::val NativeGL_Emscripten::createBuffer() const {
-  return _gl.call<emscripten::val>("createBuffer");
+val NativeGL_Emscripten::createBuffer() const {
+  return _gl.call<val>("createBuffer");
 }
 
-void NativeGL_Emscripten::bindBuffer(const emscripten::val& webGLBuffer) const {
+void NativeGL_Emscripten::bindBuffer(const val& webGLBuffer) const {
   _gl.call<void>("bindBuffer", GL_ARRAY_BUFFER, webGLBuffer);
 }
 
-void NativeGL_Emscripten::bufferData(const emscripten::val& webGLBuffer) const {
+void NativeGL_Emscripten::bufferData(const val& webGLBuffer) const {
   _gl.call<void>("bufferData", GL_ARRAY_BUFFER, webGLBuffer, GL_STATIC_DRAW);
 }
 
-void NativeGL_Emscripten::deleteBuffer(const emscripten::val& webGLBuffer) const {
+void NativeGL_Emscripten::deleteBuffer(const val& webGLBuffer) const {
   _gl.call<void>("deleteBuffer", webGLBuffer);
 }
 

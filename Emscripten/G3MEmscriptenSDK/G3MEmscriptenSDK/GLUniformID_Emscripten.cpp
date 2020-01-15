@@ -8,13 +8,16 @@
 
 #include "GLUniformID_Emscripten.hpp"
 
-GLUniformID_Emscripten::GLUniformID_Emscripten(const emscripten::val& id) :
+using namespace emscripten;
+
+
+GLUniformID_Emscripten::GLUniformID_Emscripten(const val& id) :
 _id(id)
 {
 
 }
 
-const emscripten::val GLUniformID_Emscripten::getId() const {
+const val GLUniformID_Emscripten::getId() const {
   return _id;
 }
 

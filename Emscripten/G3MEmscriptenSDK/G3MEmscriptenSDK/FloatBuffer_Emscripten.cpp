@@ -124,7 +124,7 @@ void FloatBuffer_Emscripten::rawPut(const size_t i,
   }
 }
 
-emscripten::val FloatBuffer_Emscripten::bindVBO(const NativeGL_Emscripten* nativeGL) {
+val FloatBuffer_Emscripten::bindVBO(const NativeGL_Emscripten* nativeGL) {
   if (_webGLBuffer.isNull()) {
     _nativeGL = nativeGL;
     _webGLBuffer = _nativeGL->createBuffer();
@@ -148,6 +148,6 @@ FloatBuffer_Emscripten::~FloatBuffer_Emscripten() {
   }
 }
 
-emscripten::val FloatBuffer_Emscripten::getBuffer() const {
+val FloatBuffer_Emscripten::getBuffer() const {
   return _buffer;
 }

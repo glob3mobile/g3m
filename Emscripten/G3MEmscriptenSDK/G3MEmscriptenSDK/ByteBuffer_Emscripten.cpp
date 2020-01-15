@@ -15,7 +15,7 @@ _timestamp(0)
 
 }
 
-ByteBuffer_Emscripten::ByteBuffer_Emscripten(const emscripten::val& buffer) :
+ByteBuffer_Emscripten::ByteBuffer_Emscripten(const val& buffer) :
 _buffer(buffer),
 _timestamp(0)
 {

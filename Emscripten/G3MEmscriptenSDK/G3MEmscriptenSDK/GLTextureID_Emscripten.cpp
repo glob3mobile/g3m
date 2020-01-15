@@ -9,7 +9,9 @@
 #include "GLTextureID_Emscripten.hpp"
 
 
-GLTextureID_Emscripten::GLTextureID_Emscripten(const emscripten::val& webGLTexture) :
+using namespace emscripten;
+
+GLTextureID_Emscripten::GLTextureID_Emscripten(const val& webGLTexture) :
 _webGLTexture(webGLTexture)
 {
 }
@@ -19,7 +21,7 @@ bool GLTextureID_Emscripten::isEquals(const IGLTextureID* that) const {
   return _webGLTexture.equals(thatEM->getWebGLTexture());
 }
 
-const emscripten::val GLTextureID_Emscripten::getWebGLTexture() const {
+const val GLTextureID_Emscripten::getWebGLTexture() const {
   return _webGLTexture;
 }
 

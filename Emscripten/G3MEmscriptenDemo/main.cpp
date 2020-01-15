@@ -105,7 +105,8 @@ int main() {
       removeFunction(pointer);
     } );
 
-  Image_Emscripten::createFromURL("https://emscripten.org/_static/Emscripten_logo_full.png",
+  Image_Emscripten::createFromURL("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAZ0lEQVR42u3QgRAAQAgAsA/hQWKMOIc4ujaExc+ud1gIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAAB+w2uJmrBDxPwrwAAAABJRU5ErkJggg==",
+				  // "https://emscripten.org/_static/Emscripten_logo_full.png",
                                   new PvtListener(),
                                   true);
   

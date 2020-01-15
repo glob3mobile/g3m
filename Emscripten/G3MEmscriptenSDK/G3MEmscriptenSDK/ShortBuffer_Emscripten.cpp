@@ -73,7 +73,7 @@ void ShortBuffer_Emscripten::rawPut(const size_t i,
   _buffer.set(i, value);
 }
 
-emscripten::val ShortBuffer_Emscripten::getWebGLBuffer(const NativeGL_Emscripten* nativeGL) {
+val ShortBuffer_Emscripten::getWebGLBuffer(const NativeGL_Emscripten* nativeGL) {
   if (_webGLBuffer.isNull()) {
     _nativeGL = nativeGL;
     _webGLBuffer = _nativeGL->createBuffer();
@@ -81,6 +81,6 @@ emscripten::val ShortBuffer_Emscripten::getWebGLBuffer(const NativeGL_Emscripten
   return _webGLBuffer;
 }
 
-emscripten::val ShortBuffer_Emscripten::getBuffer() {
+val ShortBuffer_Emscripten::getBuffer() {
   return _buffer;
 }
