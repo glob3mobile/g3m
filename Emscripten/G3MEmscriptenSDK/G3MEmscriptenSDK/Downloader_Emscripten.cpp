@@ -34,9 +34,9 @@ public:
   _bufferListener(bufferListener),
   _imageListener(imageListener),
   _deleteListener(deleteListener),
+  _canceled(false),
   _requestID(requestID),
-  _tag(tag),
-  _canceled(false)
+  _tag(tag)
   {
   }
 
@@ -289,11 +289,11 @@ void __downloadFailed(emscripten_fetch_t* fetch) {
 Downloader_Emscripten::Downloader_Emscripten(const int  maxConcurrentOperationCount,
                                              const int  delayMillis) :
 _maxConcurrentOperationCount(maxConcurrentOperationCount),
+_delayMillis(delayMillis),
+_timeoutID(0),
 _requestIDCounter(1),
 _requestsCounter(0),
-_cancelsCounter(0),
-_delayMillis(delayMillis),
-_timeoutID(0)
+_cancelsCounter(0)
 {
 }
 

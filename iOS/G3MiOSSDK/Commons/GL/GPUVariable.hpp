@@ -36,8 +36,8 @@ public:
 
   virtual ~GPUVariable() {}
 
-  const GPUVariableType _variableType;
   const std::string     _name;
+  const GPUVariableType _variableType;
 
   GPUVariable(const std::string& name,
               GPUVariableType type) :

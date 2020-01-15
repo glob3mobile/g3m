@@ -55,10 +55,10 @@ class GPUProgram {
   void getVariables(GL* gl);
 
   GPUProgram():
-  _createdAttributes(NULL),
-  _createdUniforms(NULL),
-  _nUniforms(0),
   _nAttributes(0),
+  _nUniforms(0),
+  _createdUniforms(NULL),
+  _createdAttributes(NULL),
   _uniformsCode(0),
   _attributesCode(0),
   _gl(NULL),

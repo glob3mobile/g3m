@@ -53,8 +53,8 @@ public:
 
   GL(INativeGL* const nativeGL) :
   _nativeGL(nativeGL),
-  _texturesIDAllocationCounter(0),
   _currentGPUProgram(NULL),
+  _texturesIDAllocationCounter(0),
   _clearScreenState(NULL)
   {
     //Init Constants

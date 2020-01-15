@@ -15,9 +15,9 @@ FloatBuffer_Emscripten::FloatBuffer_Emscripten(size_t size) :
 _buffer( val::global("Float32Array").new_( val(size) ) ),
 _timestamp(0),
 _id(_nextID++),
+_nativeGL(NULL),
 _webGLBuffer(val::null()),
-_webGLBufferTimeStamp(-1),
-_nativeGL(NULL)
+_webGLBufferTimeStamp(-1)
 {
 
 }
@@ -41,9 +41,9 @@ FloatBuffer_Emscripten::FloatBuffer_Emscripten(float f0,
 _buffer( val::global("Float32Array").new_( val(16) ) ),
 _timestamp(0),
 _id(_nextID++),
+_nativeGL(NULL),
 _webGLBuffer(val::null()),
-_webGLBufferTimeStamp(-1),
-_nativeGL(NULL)
+_webGLBufferTimeStamp(-1)
 {
   _buffer.set( 0, f0);
   _buffer.set( 1, f1);

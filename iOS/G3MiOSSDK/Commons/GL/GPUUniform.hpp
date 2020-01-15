@@ -76,9 +76,9 @@ public:
              IGLUniformID* id,
              int type) :
   GPUVariable(name, UNIFORM),
-  _id(id),
   _dirty(false),
   _value(NULL),
+  _id(id),
   _type(type),
   _key(getUniformKey(name))
   {
