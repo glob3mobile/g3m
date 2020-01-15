@@ -105,8 +105,8 @@ public:
                                 const long long          priority,
                                 const long long          requestID,
                                 const std::string&       tag) :
-  _urlPath(urlPath),
   _priority(priority),
+  _urlPath(urlPath),
   _isImageRequest(false)
   {
     _listeners.push_back(new ListenerEntry(bufferListener, NULL, deleteListener, requestID, tag));
@@ -118,8 +118,8 @@ public:
                                 const long long         priority,
                                 const long long         requestID,
                                 const std::string&      tag) :
-  _urlPath(urlPath),
   _priority(priority),
+  _urlPath(urlPath),
   _isImageRequest(false)
   {
     _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
@@ -287,14 +287,12 @@ void __downloadFailed(emscripten_fetch_t* fetch) {
 
 
 Downloader_Emscripten::Downloader_Emscripten(const int  maxConcurrentOperationCount,
-                                             const int  delayMillis,
-                                             const bool verboseErrors) :
+                                             const int  delayMillis) :
 _maxConcurrentOperationCount(maxConcurrentOperationCount),
 _requestIDCounter(1),
 _requestsCounter(0),
 _cancelsCounter(0),
 _delayMillis(delayMillis),
-_verboseErrors(verboseErrors),
 _timeoutID(0)
 {
 }

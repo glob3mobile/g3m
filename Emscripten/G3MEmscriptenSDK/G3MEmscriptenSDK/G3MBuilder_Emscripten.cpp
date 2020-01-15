@@ -28,8 +28,7 @@ IStorage* G3MBuilder_Emscripten::createDefaultStorage() {
 IDownloader* G3MBuilder_Emscripten::createDefaultDownloader() {
   const int  maxConcurrentOperationCount = 8;
   const int  delayMillis                 = 10;
-  const bool verboseErrors               = true;
-  return new Downloader_Emscripten(maxConcurrentOperationCount, delayMillis, verboseErrors);
+  return new Downloader_Emscripten(maxConcurrentOperationCount, delayMillis);
 }
 
 void G3MBuilder_Emscripten::addGPUProgramSources() {

@@ -54,6 +54,8 @@ const std::string ShortBuffer_Emscripten::description() const {
   oss << ")";
 
   oss << ")";
+
+  return oss.str();
 }
 
 short ShortBuffer_Emscripten::get(const size_t i) const {

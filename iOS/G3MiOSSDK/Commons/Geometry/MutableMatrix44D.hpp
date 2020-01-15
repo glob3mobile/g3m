@@ -46,9 +46,10 @@ private:
   double _m32;
   double _m33;
 
+  bool _isValid;
+
   mutable Matrix44D* _matrix44D;
 
-  bool _isValid;
 
 
   MutableMatrix44D(bool isValid) :

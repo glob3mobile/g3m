@@ -14,7 +14,6 @@ class Downloader_Emscripten : public IDownloader {
 private:
   const int  _maxConcurrentOperationCount;
   const int  _delayMillis;
-  const bool _verboseErrors;
 
   std::map<const std::string, Downloader_Emscripten_Handler*> _downloadingHandlers;
   std::map<const std::string, Downloader_Emscripten_Handler*> _queuedHandlers;
@@ -31,8 +30,7 @@ private:
 
 public:
   Downloader_Emscripten(const int  maxConcurrentOperationCount,
-                        const int  delayMillis,
-                        const bool verboseErrors);
+                        const int  delayMillis);
 
   void onResume(const G3MContext* context);
   

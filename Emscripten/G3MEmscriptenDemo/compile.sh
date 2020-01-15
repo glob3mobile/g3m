@@ -27,14 +27,24 @@ mkdir deploy
 #    -s EXIT_RUNTIME=0 \
 #    -s NO_EXIT_RUNTIME=0 \
 
-G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'EM*.cpp')" 
+#G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'EM*.cpp')" 
+#G3M_EMSCRIPTEN_SOURCES2="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'Image_Emscripten.cpp')" 
+#G3M_EMSCRIPTEN_SOURCES3="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'StringBuilder_Emscripten.cpp')" 
+#G3M_EMSCRIPTEN_SOURCES4="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'TextUtils_Emscripten.cpp')" 
+#G3M_EMSCRIPTEN_SOURCES5="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'MathUtils_Emscripten.cpp')" 
+#G3M_EMSCRIPTEN_SOURCES6="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'StringUtils_Emscripten.cpp')" 
 
-G3M_EMSCRIPTEN_SOURCES2="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'Image_Emscripten.cpp')" 
-G3M_EMSCRIPTEN_SOURCES3="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'StringBuilder_Emscripten.cpp')" 
-G3M_EMSCRIPTEN_SOURCES4="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'TextUtils_Emscripten.cpp')" 
-G3M_EMSCRIPTEN_SOURCES5="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'MathUtils_Emscripten.cpp')" 
-G3M_EMSCRIPTEN_SOURCES6="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'StringUtils_Emscripten.cpp')" 
+#    ${G3M_EMSCRIPTEN_SOURCES} \
+#    ${G3M_EMSCRIPTEN_SOURCES2} \
+#    ${G3M_EMSCRIPTEN_SOURCES3} \
+#    ${G3M_EMSCRIPTEN_SOURCES4} \
+#    ${G3M_EMSCRIPTEN_SOURCES5} \
+#    ${G3M_EMSCRIPTEN_SOURCES6} \
+#    ${G3M_LIBS_DIRECTORY}/libG3MEmscripten.bc       \
 
+G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')" 
+
+#    -Wall -Werror \
 
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
@@ -51,19 +61,14 @@ em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh         \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
     -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}           \
-    ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
     ${G3M_EMSCRIPTEN_SOURCES} \
-    ${G3M_EMSCRIPTEN_SOURCES2} \
-    ${G3M_EMSCRIPTEN_SOURCES3} \
-    ${G3M_EMSCRIPTEN_SOURCES4} \
-    ${G3M_EMSCRIPTEN_SOURCES5} \
-    ${G3M_EMSCRIPTEN_SOURCES6} \
+    ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
     *.cpp \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=1 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     -s WASM=1 \
     --bind \
-    -Wall -Werror \
+    -Wall \
     -DC_CODE \
     -O0 \
     -g \
