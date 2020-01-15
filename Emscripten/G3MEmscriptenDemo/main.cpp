@@ -126,9 +126,16 @@ int main() {
   TextUtils_Emscripten* tu = new TextUtils_Emscripten();
 
   tu->createLabelImage("Hello world from TextUtils!",
-		       42, // fontSize,
+		       24, // fontSize,
 		       Color::newFromRGBA(1,0,0,1),
 		       NULL, // const Color* shadowColor,
+		       new PvtListener(),
+		       true);
+
+  tu->createLabelImage(":)",
+		       80, // fontSize,
+		       Color::newFromRGBA(1,1,0,1),
+		       Color::newFromRGBA(0,0,0,0.8),
 		       new PvtListener(),
 		       true);
 
