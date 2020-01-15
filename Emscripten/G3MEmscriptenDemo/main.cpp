@@ -25,7 +25,7 @@ EM_JS(void, initStorage, (), {
 	"__idCounter" : 0
       };
 
-      document.MyStorage["_store"] = function(obj) {
+      document.MyStorage["put"] = function(obj) {
 	var self = document.MyStorage;
 	var id = self.__idCounter + 1;
 	self.__idCounter = id;
@@ -60,7 +60,7 @@ EM_JS(void, createDOMImage, (), {
     
     img.onload = function() {
       console.log("** IMAGE LOADED!!!!");
-      Module.ccall('processDOMImage', 'void', ['int'], [ document.MyStorage._store(img) ]);
+      Module.ccall('processDOMImage', 'void', ['int'], [ document.MyStorage.put(img) ]);
     };
     img.onerror = function() {
       console.log("** ERRORR!!!!");

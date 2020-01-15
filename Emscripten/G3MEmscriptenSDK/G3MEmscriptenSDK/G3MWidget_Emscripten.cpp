@@ -79,7 +79,7 @@ void G3MWidget_Emscripten::initSingletons() {
   IJSONParser*     jsonParser     = new JSONParser_Emscripten();
   ITextUtils*      textUtils      = new TextUtils_Emscripten();
   IDeviceAttitude* deviceAttitude = new DeviceAttitude_Emscripten();
-  IDeviceLocation* deviceLocation = new DeviceLocation_Emscripten();
+  IDeviceLocation* deviceLocation = new DeviceLocation_Emscripten();
   
   G3MWidget::initSingletons(logger,
                             factory,
