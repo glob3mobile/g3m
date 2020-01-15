@@ -43,7 +43,7 @@ const std::string Image_Emscripten::description() const {
   isb->addInt(getWidth());
   isb->addString("x");
   isb->addInt(getHeight());
-  isb->addString(", _image=(");
+  isb->addString(", _domImage=(");
   isb->addString( _domImage.call<std::string>("toString") );
   isb->addString(")");
   const std::string s = isb->getString();

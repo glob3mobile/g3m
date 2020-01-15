@@ -10,6 +10,12 @@
 #include "EMStorage.hpp"
 #include "Image_Emscripten.hpp"
 #include "IImageListener.hpp"
+#include "StringBuilder_Emscripten.hpp"
+#include "TextUtils_Emscripten.hpp"
+#include "Color.hpp"
+
+#include "MathUtils_Emscripten.hpp"
+#include "StringUtils_Emscripten.hpp"
 
 
 using namespace emscripten;
@@ -55,7 +61,7 @@ EM_JS(void, createDOMImage, (const int urlID), {
 class PvtListener : public IImageListener {
 public:
   void imageCreated(const IImage* image) {
-    //emscripten_console_log(image->description().c_str());
+    emscripten_console_log( image->description().c_str() );
 
     val document = val::global("document");
     val body = document["body"].as<val>();
@@ -70,7 +76,11 @@ public:
 
 
 int main() {
-  //initStorage();
+  IStringBuilder::setInstance( new StringBuilder_Emscripten(IStringBuilder::DEFAULT_FLOAT_PRECISION) );
+  IMathUtils::setInstance( new MathUtils_Emscripten() );
+  IStringUtils::setInstance( new StringUtils_Emscripten() );
+
+  
   EMStorage::initialize();
   
   //printf("hello, world!\n");
@@ -104,10 +114,25 @@ int main() {
       removeFunction(pointer);
     } );
 
-  Image_Emscripten::createFromURL("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAZ0lEQVR42u3QgRAAQAgAsA/hQWKMOIc4ujaExc+ud1gIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAAB+w2uJmrBDxPwrwAAAABJRU5ErkJggg==",
-				  // "https://emscripten.org/_static/Emscripten_logo_full.png",
+  Image_Emscripten::createFromURL("https://emscripten.org/_static/Emscripten_logo_full.png",
                                   new PvtListener(),
                                   true);
+
+  Image_Emscripten::createFromURL("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAZ0lEQVR42u3QgRAAQAgAsA/hQWKMOIc4ujaExc+ud1gIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAAB+w2uJmrBDxPwrwAAAABJRU5ErkJggg==",
+                                  new PvtListener(),
+                                  true);
+
+
+  TextUtils_Emscripten* tu = new TextUtils_Emscripten();
+
+  tu->createLabelImage("Hello world from TextUtils!",
+		       42, // fontSize,
+		       Color::newFromRGBA(1,0,0,1),
+		       NULL, // const Color* shadowColor,
+		       new PvtListener(),
+		       true);
+
+  delete tu;
   
   return 0;
 }
