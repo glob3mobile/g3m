@@ -25,18 +25,16 @@ EMStorage::EMStorage() {
       };
 
       document.MyStorage["put"] = function(obj) {
-        var self = document.MyStorage;
-        var id = self.__idCounter + 1;
-        self.__idCounter = id;
-        self[id] = obj;
+        var id = this.__idCounter + 1;
+        this.__idCounter = id;
+        this[id] = obj;
         return id;
       };
 
       document.MyStorage["take"] = function(id) {
-        var self = document.MyStorage;
-        var result = self[id];
-        delete self[id];
-        return result;
+        var obj = this[id];
+        delete this[id];
+        return obj;
       };
 
     }
@@ -50,22 +48,17 @@ EMStorage* EMStorage::instance() {
   return _instance;
 }
 
-emscripten::val EMStorage::take(int id) {
+emscripten::val EMStorage::take(const int id) {
   val MyStorage = val::global("document")["MyStorage"];
-
-  val result = MyStorage[id];
-
+  val obj = MyStorage[id];
   EM_ASM({ delete document.MyStorage[$0]; }, id);
-
-  return result;
+  return obj;
 }
 
 int EMStorage::put(const emscripten::val& value) {
   val MyStorage = val::global("document")["MyStorage"];
-
   const int id = MyStorage["__idCounter"].as<int>() + 1;
   MyStorage.set("__idCounter", id);
   MyStorage.set(id, value);
-
   return id;
 }

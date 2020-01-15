@@ -21,7 +21,7 @@ private:
 public:
   static EMStorage* instance();
 
-  emscripten::val take(int id);
+  emscripten::val take(const int id);
 
   int put(const emscripten::val& value);
 

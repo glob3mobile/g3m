@@ -88,7 +88,7 @@ int main() {
   //val domImage = val::global("Image").new_();
   //emscripten_console_log( domImage.call<std::string>("toString").c_str() );
 
-  const int urlID = EMStorage::instance()->put(val("https://emscripten.org/_static/Emscripten_logo_full.png"));
+  const int urlID = EMStorage::instance()->put( val("https://emscripten.org/_static/Emscripten_logo_full.png") );
   createDOMImage(urlID);
 
   emscripten_console_log("Hello from emscripten_console_log (1)");
