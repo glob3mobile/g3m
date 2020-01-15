@@ -20,7 +20,7 @@ const val Image_Emscripten::getDOMImage() const {
 
 
 
-void Image_Emscripten::createFromURL(const std::string& imageDataURL,
+void Image_Emscripten::createFromURL(const std::string& url,
                                      IImageListener* listener,
                                      bool autodelete) {
 
@@ -32,7 +32,7 @@ void Image_Emscripten::createFromURL(const std::string& imageDataURL,
 
     };
 
-  }, domImage);
+  }, url);
 
 
   jsResult.onload = function() {

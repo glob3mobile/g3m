@@ -15,7 +15,7 @@ private:
 
 public:
 
-  static void createFromURL(const std::string& imageDataURL,
+  static void createFromURL(const std::string& url,
                             IImageListener* listener,
                             bool autodelete);
 

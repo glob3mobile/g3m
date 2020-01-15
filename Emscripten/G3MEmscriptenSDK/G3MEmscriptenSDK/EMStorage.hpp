@@ -23,6 +23,8 @@ public:
 
   emscripten::val take(int id);
 
+  int put(const emscripten::val& value);
+
 };
 
 #endif

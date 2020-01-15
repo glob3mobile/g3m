@@ -31,6 +31,14 @@ EMStorage::EMStorage() {
         self[id] = obj;
         return id;
       };
+
+      document.MyStorage["take"] = function(id) {
+        var self = document.MyStorage;
+        var result = self[id];
+        delete self[id];
+        return result;
+      };
+
     }
   });
 }
@@ -50,4 +58,14 @@ emscripten::val EMStorage::take(int id) {
   EM_ASM({ delete document.MyStorage[$0]; }, id);
 
   return result;
+}
+
+int EMStorage::put(const emscripten::val& value) {
+  val MyStorage = val::global("document")["MyStorage"];
+
+  const int id = MyStorage["__idCounter"].as<int>() + 1;
+  MyStorage.set("__idCounter", id);
+  MyStorage.set(id, value);
+
+  return id;
 }

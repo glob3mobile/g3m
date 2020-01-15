@@ -42,11 +42,13 @@ using namespace emscripten;
 
 extern "C" {
 
-  void EMSCRIPTEN_KEEPALIVE invoke_function_pointer(void(*f)(int), int i) {
+  EMSCRIPTEN_KEEPALIVE
+  void invoke_function_pointer(void(*f)(int), int i) {
     (*f)(i);
   }
 
-  void EMSCRIPTEN_KEEPALIVE processDOMImage(int domImageID) {
+  EMSCRIPTEN_KEEPALIVE
+  void processDOMImage(int domImageID) {
     //val domImage = takeoutFromStorage(domImageID);
     val domImage = EMStorage::instance()->take(domImageID);
     
@@ -60,7 +62,7 @@ extern "C" {
 }
 
 
-EM_JS(void, createDOMImage, (), {
+EM_JS(void, createDOMImage, (const int urlID), {
     var img = new Image();
     
     img.onload = function() {
@@ -70,8 +72,10 @@ EM_JS(void, createDOMImage, (), {
     img.onerror = function() {
       console.log("** ERRORR!!!!");
     };
-    
-    img.src = "https://emscripten.org/_static/Emscripten_logo_full.png";
+
+    var url = document.MyStorage.take(urlID);
+    img.src = url;
+    //img.src = "https://emscripten.org/_static/Emscripten_logo_full.png";
   });
 
 
@@ -84,7 +88,8 @@ int main() {
   //val domImage = val::global("Image").new_();
   //emscripten_console_log( domImage.call<std::string>("toString").c_str() );
 
-  createDOMImage();
+  const int urlID = EMStorage::instance()->put(val("https://emscripten.org/_static/Emscripten_logo_full.png"));
+  createDOMImage(urlID);
 
   emscripten_console_log("Hello from emscripten_console_log (1)");
   emscripten_console_warn("Hello from emscripten_console_warn (2)");
