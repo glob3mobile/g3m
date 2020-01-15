@@ -14,6 +14,8 @@
 #include "NativeGL_Emscripten.hpp"
 #include "GL.hpp"
 
+#include <emscripten/emscripten.h>
+
 
 using namespace emscripten;
 
@@ -25,7 +27,7 @@ _webGLContext(val::null())
   
   _canvas = document.call<val>("createElement", val("canvas"));
   
-  _canvas.set("id", "_g3m_canvas");
+  _canvas.set("id", val("_g3m_canvas"));
   
   val webGLContextArguments = val::object();
   //webGLContextArguments.set("preserveDrawingBuffer",           true);
@@ -60,13 +62,21 @@ bool G3MWidget_Emscripten::isWebGLSupported() const {
   return (!_canvas.isNull() && !_webGLContext.isNull());
 }
 
+void one_iter(void* vp) {
+  G3MWidget_Emscripten* widget = (G3MWidget_Emscripten*) vp;
+}
+
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
 //    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
 //    jsAddResizeHandler(_canvas);
 //    
 //    jsStartRenderLoop();
-    emscripten_set_main_loop(one_iter, 60, 1);
+    emscripten_set_main_loop_arg(one_iter,     // em_arg_callback_func func
+                                 (void*) this, // void *arg
+                                 60,           // int fps
+                                 1             // int simulate_infinite_loop
+                                 );
   }
 }
 

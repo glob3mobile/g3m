@@ -11,6 +11,8 @@
 #include "Canvas_Emscripten.hpp"
 #include "WebSocket_Emscripten.hpp"
 
+#include "ErrorHandling.hpp"
+
 
 IDeviceInfo* Factory_Emscripten::createDeviceInfo() const {
   return new DeviceInfo_Emscripten();
@@ -72,15 +74,19 @@ IShortBuffer* Factory_Emscripten::createShortBuffer(size_t size) const {
 }
 
 ICanvas* Factory_Emscripten::createCanvas(bool retina) const {
-  return new Canvas_Emscripten(retina);
+  #warning TODO!!!!!!
+  THROW_EXCEPTION("TODO!");
+  //return new Canvas_Emscripten(retina);
 }
 
 IWebSocket* Factory_Emscripten::createWebSocket(const URL& url,
                                                 IWebSocketListener* listener,
                                                 bool autodeleteListener,
                                                 bool autodeleteWebSocket) const {
-  return new WebSocket_Emscripten(url,
-                                  listener,
-                                  autodeleteListener,
-                                  autodeleteWebSocket);
+  #warning TODO!!!!!!
+  THROW_EXCEPTION("TODO!");
+//  return new WebSocket_Emscripten(url,
+//                                  listener,
+//                                  autodeleteListener,
+//                                  autodeleteWebSocket);
 }

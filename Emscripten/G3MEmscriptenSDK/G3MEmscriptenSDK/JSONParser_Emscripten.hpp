@@ -4,6 +4,7 @@
 
 #include "IJSONParser.hpp"
 
+
 class JSONParser_Emscripten : public IJSONParser {
 
 public:

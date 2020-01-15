@@ -449,6 +449,11 @@
 					C_CODE,
 					"DEBUG=1",
 				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = (
+					C_CODE,
+					__EMSCRIPTEN__,
+					"DEBUG=1",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$SRCROOT/../../iOS/G3MiOSSDK/Commons/**",
 					$SRCROOT/../../../emsdk/upstream/emscripten/system/include/,
@@ -466,7 +471,10 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					C_CODE,
+					__EMSCRIPTEN__,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$SRCROOT/../../iOS/G3MiOSSDK/Commons/**",
 					$SRCROOT/../../../emsdk/upstream/emscripten/system/include/,
