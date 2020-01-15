@@ -9,6 +9,8 @@
 #ifndef EMStorage_hpp
 #define EMStorage_hpp
 
+#include <emscripten/val.h>
+
 
 class EMStorage {
 private:
@@ -18,6 +20,8 @@ private:
 
 public:
   static EMStorage* instance();
+
+  emscripten::val take(int id);
 
 };
 

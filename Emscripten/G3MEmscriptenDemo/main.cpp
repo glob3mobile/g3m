@@ -7,33 +7,37 @@
 
 //#include "G3MBuilder_Emscripten.hpp"
 
+
+#include "EMStorage.hpp"
+
+
 using namespace emscripten;
 
-val takeoutFromStorage(int id) {
-  val MyStorage =  val::global("document")["MyStorage"];
+// val takeoutFromStorage(int id) {
+//   val MyStorage =  val::global("document")["MyStorage"];
 
-  val result = MyStorage[id];
+//   val result = MyStorage[id];
   
-  EM_ASM({ delete document.MyStorage[$0]; }, id);
+//   EM_ASM({ delete document.MyStorage[$0]; }, id);
   
-  return result;
-}
+//   return result;
+// }
 
-EM_JS(void, initStorage, (), {
-    if (typeof document.MyStorage === 'undefined') {
-      document.MyStorage = {
-	"__idCounter" : 0
-      };
+// EM_JS(void, initStorage, (), {
+//     if (typeof document.MyStorage === 'undefined') {
+//       document.MyStorage = {
+// 	"__idCounter" : 0
+//       };
 
-      document.MyStorage["put"] = function(obj) {
-	var self = document.MyStorage;
-	var id = self.__idCounter + 1;
-	self.__idCounter = id;
-	self[id] = obj;
-	return id;
-      };
-    }
-});
+//       document.MyStorage["put"] = function(obj) {
+// 	var self = document.MyStorage;
+// 	var id = self.__idCounter + 1;
+// 	self.__idCounter = id;
+// 	self[id] = obj;
+// 	return id;
+//       };
+//     }
+// });
 
 
 extern "C" {
@@ -43,7 +47,8 @@ extern "C" {
   }
 
   void EMSCRIPTEN_KEEPALIVE processDOMImage(int domImageID) {
-    val domImage = takeoutFromStorage(domImageID);
+    //val domImage = takeoutFromStorage(domImageID);
+    val domImage = EMStorage::instance()->take(domImageID);
     
     val document = val::global("document");
     //emscripten_console_log( document.call<std::string>("toString").c_str() );
@@ -71,7 +76,8 @@ EM_JS(void, createDOMImage, (), {
 
 
 int main() {
-  initStorage();
+  //initStorage();
+  EMStorage::instance();
   
   //printf("hello, world!\n");
 

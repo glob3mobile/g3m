@@ -26,6 +26,8 @@ mkdir deploy
 #  -s EXPORTED_FUNCTIONS='["_invoke_function_pointer", "_main", "_processDOMImage"]' \
 #     -s EXIT_RUNTIME=0 \
 
+G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'EM*.cpp')" 
+
 
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
@@ -43,6 +45,7 @@ em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
     -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}           \
     ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
+    ${G3M_EMSCRIPTEN_SOURCES} \
     *.cpp \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=1 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
