@@ -13,32 +13,6 @@
 
 using namespace emscripten;
 
-// val takeoutFromStorage(int id) {
-//   val MyStorage =  val::global("document")["MyStorage"];
-
-//   val result = MyStorage[id];
-  
-//   EM_ASM({ delete document.MyStorage[$0]; }, id);
-  
-//   return result;
-// }
-
-// EM_JS(void, initStorage, (), {
-//     if (typeof document.MyStorage === 'undefined') {
-//       document.MyStorage = {
-// 	"__idCounter" : 0
-//       };
-
-//       document.MyStorage["put"] = function(obj) {
-// 	var self = document.MyStorage;
-// 	var id = self.__idCounter + 1;
-// 	self.__idCounter = id;
-// 	self[id] = obj;
-// 	return id;
-//       };
-//     }
-// });
-
 
 extern "C" {
 
@@ -49,7 +23,6 @@ extern "C" {
 
   EMSCRIPTEN_KEEPALIVE
   void processDOMImage(int domImageID) {
-    //val domImage = takeoutFromStorage(domImageID);
     val domImage = EMStorage::instance()->take(domImageID);
     
     val document = val::global("document");
@@ -67,15 +40,14 @@ EM_JS(void, createDOMImage, (const int urlID), {
     
     img.onload = function() {
       console.log("** IMAGE LOADED!!!!");
-      Module.ccall('processDOMImage', 'void', ['int'], [ document.MyStorage.put(img) ]);
+      Module.ccall('processDOMImage', 'void', ['int'], [ document.EMStorage.put(img) ]);
     };
     img.onerror = function() {
       console.log("** ERRORR!!!!");
     };
 
-    var url = document.MyStorage.take(urlID);
+    var url = document.EMStorage.take(urlID);
     img.src = url;
-    //img.src = "https://emscripten.org/_static/Emscripten_logo_full.png";
   });
 
 
@@ -113,7 +85,6 @@ int main() {
       
       removeFunction(pointer);
     } );
-
   
   return 0;
 }

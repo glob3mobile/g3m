@@ -19,19 +19,19 @@ EMStorage* EMStorage::_instance = NULL;
 
 EMStorage::EMStorage() {
   EM_ASM({
-    if (typeof document.MyStorage === 'undefined') {
-      document.MyStorage = {
+    if (typeof document.EMStorage === 'undefined') {
+      document.EMStorage = {
         "__idCounter" : 0
       };
 
-      document.MyStorage["put"] = function(obj) {
+      document.EMStorage["put"] = function(obj) {
         var id = this.__idCounter + 1;
         this.__idCounter = id;
         this[id] = obj;
         return id;
       };
 
-      document.MyStorage["take"] = function(id) {
+      document.EMStorage["take"] = function(id) {
         var obj = this[id];
         delete this[id];
         return obj;
@@ -49,16 +49,16 @@ EMStorage* EMStorage::instance() {
 }
 
 emscripten::val EMStorage::take(const int id) {
-  val MyStorage = val::global("document")["MyStorage"];
-  val obj = MyStorage[id];
-  EM_ASM({ delete document.MyStorage[$0]; }, id);
+  val jsEMStorage = val::global("document")["EMStorage"];
+  val obj = jsEMStorage[id];
+  EM_ASM({ delete document.EMStorage[$0]; }, id);
   return obj;
 }
 
 int EMStorage::put(const emscripten::val& value) {
-  val MyStorage = val::global("document")["MyStorage"];
-  const int id = MyStorage["__idCounter"].as<int>() + 1;
-  MyStorage.set("__idCounter", id);
-  MyStorage.set(id, value);
+  val jsEMStorage = val::global("document")["EMStorage"];
+  const int id = jsEMStorage["__idCounter"].as<int>() + 1;
+  jsEMStorage.set("__idCounter", id);
+  jsEMStorage.set(id, value);
   return id;
 }
