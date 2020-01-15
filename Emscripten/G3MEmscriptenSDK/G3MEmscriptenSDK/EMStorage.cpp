@@ -15,9 +15,10 @@
 using namespace emscripten;
 
 
-EMStorage* EMStorage::_instance = NULL;
-
 EMStorage::EMStorage() {
+}
+
+void EMStorage::initialize() {
   EM_ASM({
     if (typeof document.EMStorage === 'undefined') {
       document.EMStorage = {
@@ -39,13 +40,6 @@ EMStorage::EMStorage() {
 
     }
   });
-}
-
-EMStorage* EMStorage::instance() {
-  if (_instance == NULL) {
-    _instance = new EMStorage();
-  }
-  return _instance;
 }
 
 int EMStorage::put(const val& value) {

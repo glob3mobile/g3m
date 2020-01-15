@@ -24,11 +24,10 @@ extern "C" {
 
   EMSCRIPTEN_KEEPALIVE
   void processDOMImage(int domImageID) {
-    val domImage = EMStorage::instance()->take(domImageID);
+    val domImage = EMStorage::take(domImageID);
     
     val document = val::global("document");
-    //emscripten_console_log( document.call<std::string>("toString").c_str() );
-    val body = document["body"].as<emscripten::val>();
+    val body = document["body"].as<val>();
     
     body.call<void>("appendChild", domImage);
   };
@@ -59,7 +58,7 @@ public:
     //emscripten_console_log(image->description().c_str());
 
     val document = val::global("document");
-    val body = document["body"].as<emscripten::val>();
+    val body = document["body"].as<val>();
     
     body.call<void>("appendChild", ((Image_Emscripten*) image)->getDOMImage() );
 
@@ -72,14 +71,14 @@ public:
 
 int main() {
   //initStorage();
-  EMStorage::instance();
+  EMStorage::initialize();
   
   //printf("hello, world!\n");
 
   //val domImage = val::global("Image").new_();
   //emscripten_console_log( domImage.call<std::string>("toString").c_str() );
 
-  const int urlID = EMStorage::instance()->put( val("https://emscripten.org/_static/Emscripten_logo_full.png") );
+  const int urlID = EMStorage::put( val("https://emscripten.org/_static/Emscripten_logo_full.png") );
   createDOMImage(urlID);
 
   emscripten_console_log("Hello from emscripten_console_log (1)");

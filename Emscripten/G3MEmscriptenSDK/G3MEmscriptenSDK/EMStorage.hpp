@@ -14,16 +14,14 @@
 
 class EMStorage {
 private:
-  static EMStorage* _instance;
-  
   EMStorage();
   
 public:
-  static EMStorage* instance();
+  static void initialize();
   
-  int put(const emscripten::val& value);
+  static int put(const emscripten::val& value);
   
-  emscripten::val take(const int id);
+  static emscripten::val take(const int id);
   
 };
 

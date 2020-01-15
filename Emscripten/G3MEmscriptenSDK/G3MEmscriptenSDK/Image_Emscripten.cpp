@@ -94,7 +94,7 @@ extern "C" {
 EMSCRIPTEN_KEEPALIVE
 void Image_Emscripten_imageCreated(int domImageID, void* voidListener, bool autodelete) {
   IImageListener* listener = (IImageListener*) voidListener;
-  val domImage = EMStorage::instance()->take(domImageID);
+  val domImage = EMStorage::take(domImageID);
 
   IImage* image = new Image_Emscripten(domImage);
   listener->imageCreated(image);
@@ -108,7 +108,7 @@ void Image_Emscripten::createFromURL(const std::string& url,
                                      IImageListener* listener,
                                      bool autodelete) {
 
-  const int urlID = EMStorage::instance()->put( val(url) );
+  const int urlID = EMStorage::put( val(url) );
 
   EM_ASM({
     var img = new Image();
