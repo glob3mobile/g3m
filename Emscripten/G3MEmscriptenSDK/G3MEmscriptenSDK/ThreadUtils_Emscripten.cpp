@@ -68,7 +68,7 @@ public:
   }
 };
 
-void __activateTask(void* userData) {
+void ThreadUtils_Emscripten__activateTask(void* userData) {
   TaskActivation* taskActivation = (TaskActivation*) userData;
   taskActivation->doIt();
   delete taskActivation;
@@ -78,7 +78,7 @@ void ThreadUtils_Emscripten::invokeInBackground(GTask* task,
                                                 bool autoDelete) const  {
 #warning TODO: research emscripten_async_queue_XXX
   
-  emscripten_set_timeout(__activateTask,
+  emscripten_set_timeout(ThreadUtils_Emscripten__activateTask,
                          _delayMillis,
                          (void*) new TaskActivation(task, autoDelete, getContext()));
 }

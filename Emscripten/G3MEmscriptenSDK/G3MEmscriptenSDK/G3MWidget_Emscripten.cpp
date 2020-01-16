@@ -14,14 +14,23 @@
 #include "NativeGL_Emscripten.hpp"
 #include "GL.hpp"
 
+#include <math.h>
+
 #include <emscripten/emscripten.h>
+#include <emscripten/html5.h>
 
 
 using namespace emscripten;
 
 G3MWidget_Emscripten::G3MWidget_Emscripten() :
 _canvas(val::null()),
-_webGLContext(val::null())
+_webGLContext(val::null()),
+_resizerIntervalID(0),
+_width(0),
+_height(0),
+_physicalWidth(0),
+_physicalHeight(0),
+_devicePixelRatio(1)
 {
   val document = val::global("document");
   
@@ -44,7 +53,13 @@ _webGLContext(val::null())
   
   INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
   _gl = new GL(nativeGL);
-  
+
+//  jsDefineG3MBrowserObjects();
+//
+//  sinkEvents(Event.TOUCHEVENTS | Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
+//
+//  exportJSFunctions();
+
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
@@ -62,20 +77,71 @@ bool G3MWidget_Emscripten::isWebGLSupported() const {
   return (!_canvas.isNull() && !_webGLContext.isNull());
 }
 
-void one_iter(void* vp) {
-  G3MWidget_Emscripten* widget = (G3MWidget_Emscripten*) vp;
+void G3MWidget_Emscripten_loopStep(void* userData) {
+  G3MWidget_Emscripten* widget = (G3MWidget_Emscripten*) userData;
+  widget->_loopStep();
+}
+
+void G3MWidget_Emscripten::_loopStep() {
+  _g3mWidget->render(_physicalWidth, _physicalHeight);
+}
+
+void G3MWidget_Emscripten_resizerStep(void* userData) {
+  G3MWidget_Emscripten* widget = (G3MWidget_Emscripten*) userData;
+  widget->_resizerStep();
+}
+
+void G3MWidget_Emscripten::addResizeHandler() {
+  _resizerIntervalID =  emscripten_set_interval(G3MWidget_Emscripten_resizerStep,
+                                                200,  // double intervalMsecs
+                                                this  // void *userData
+                                                );
+}
+
+void G3MWidget_Emscripten::_resizerStep() {
+  const int canvasWidth  = _canvas["clientWidth"].as<int>();
+  const int canvasHeight = _canvas["clientHeight"].as<int>();
+
+  const val canvasParent = _canvas["parentNode"];
+  const int canvasParentWidth  = canvasParent["clientWidth"].as<int>();
+  const int canvasParentHeight = canvasParent["clientHeight"].as<int>();
+
+  if ((canvasWidth != canvasParentWidth) || (canvasHeight != canvasParentHeight)) {
+    onSizeChanged(canvasParentWidth, canvasParentHeight);
+  }
+}
+
+void G3MWidget_Emscripten::onSizeChanged(const int width,
+                                         const int height) {
+  if ((_width != width) || (_height != height)) {
+    _width  = width;
+    _height = height;
+//    setPixelSize(_width, _height);
+
+    val window = val::global("window");
+    val valDevicePixelRatio = window["devicePixelRatio"];
+    _devicePixelRatio = valDevicePixelRatio.as<bool>() ? valDevicePixelRatio.as<float>() : 1;
+
+    _physicalWidth  = round(_width  * _devicePixelRatio);
+    _physicalHeight = round(_height * _devicePixelRatio);
+
+//    _canvas.setCoordinateSpaceWidth(_physicalWidth);
+//    _canvas.setCoordinateSpaceHeight(_physicalHeight);
+    _canvas.set("width",  _physicalWidth);
+    _canvas.set("height", _physicalHeight);
+  }
 }
 
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
 //    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
-//    jsAddResizeHandler(_canvas);
-//    
+    addResizeHandler();
+
 //    jsStartRenderLoop();
-    emscripten_set_main_loop_arg(one_iter,     // em_arg_callback_func func
-                                 (void*) this, // void *arg
-                                 60,           // int fps
-                                 1             // int simulate_infinite_loop
+    emscripten_set_main_loop_arg(G3MWidget_Emscripten_loopStep, // em_arg_callback_func func
+                                 (void*) this,                  // void *arg
+                                 60,                            // int fps
+                                 1                              // int simulate_infinite_loop
                                  );
   }
 }

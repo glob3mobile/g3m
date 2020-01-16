@@ -54,11 +54,6 @@ G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget() {
   return nativeWidget;
 }
 
-
-
-
-
-
 // class BaseClass {
 // public:
 //   BaseClass() {}

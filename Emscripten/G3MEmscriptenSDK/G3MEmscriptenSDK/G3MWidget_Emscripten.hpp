@@ -14,7 +14,21 @@ private:
   
   GL* _gl;
   G3MWidget* _g3mWidget;
+
+  int _width;
+  int _height;
+  int _physicalWidth;
+  int _physicalHeight;
+
+  long _resizerIntervalID;
+
+  float _devicePixelRatio;
   
+  void addResizeHandler();
+
+  void onSizeChanged(const int width,
+                     const int height);
+
 protected:
   
 public:
@@ -31,7 +45,11 @@ public:
   void setG3MWidget(G3MWidget* g3mWidget);
   
   void startWidget();
-  
+
+
+  void _loopStep();
+  void _resizerStep();
+
 };
 
 #endif
