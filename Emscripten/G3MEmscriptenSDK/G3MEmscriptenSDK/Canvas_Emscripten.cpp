@@ -298,27 +298,57 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
                                    float destLeft, float destTop, float destWidth, float destHeight) {
-#error TODO
+  val domImage = ((Image_Emscripten*) image)->getDOMImage();
+
+  _domCanvasContext.call<void>("drawImage",
+                               domImage,
+                               destLeft,
+                               destTop,
+                               destWidth,
+                               destHeight);
 }
 
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
                                    float destLeft, float destTop, float destWidth, float destHeight,
                                    float transparency) {
-#error TODO
+  val domImage = ((Image_Emscripten*) image)->getDOMImage();
+
+  const float currentGlobalAlpha = _domCanvasContext["globalAlpha"].as<float>();
+  _domCanvasContext.set("globalAlpha", transparency);
+  _domCanvasContext.call<void>("drawImage",
+                               domImage,
+                               destLeft,
+                               destTop,
+                               destWidth,
+                               destHeight);
+  _domCanvasContext.set("globalAlpha", currentGlobalAlpha);
 }
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
                                    float srcLeft, float srcTop, float srcWidth, float srcHeight,
                                    float destLeft, float destTop, float destWidth, float destHeight) {
-#error TODO
+  val domImage = ((Image_Emscripten*) image)->getDOMImage();
+
+  _domCanvasContext.call<void>("drawImage",
+                               domImage,
+                               srcLeft,  srcTop,  srcWidth,  srcHeight,
+                               destLeft, destTop, destWidth, destHeight);
 }
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
                                    float srcLeft, float srcTop, float srcWidth, float srcHeight,
                                    float destLeft, float destTop, float destWidth, float destHeight,
                                    float transparency) {
-#error TODO
+  val domImage = ((Image_Emscripten*) image)->getDOMImage();
+
+  const float currentGlobalAlpha = _domCanvasContext["globalAlpha"].as<float>();
+  _domCanvasContext.set("globalAlpha", transparency);
+  _domCanvasContext.call<void>("drawImage",
+                               domImage,
+                               srcLeft,  srcTop,  srcWidth,  srcHeight,
+                               destLeft, destTop, destWidth, destHeight);
+  _domCanvasContext.set("globalAlpha", currentGlobalAlpha);
 }
 
 
