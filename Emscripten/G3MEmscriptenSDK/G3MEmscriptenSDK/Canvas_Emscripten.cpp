@@ -82,32 +82,63 @@ void Canvas_Emscripten::_setLineWidth(float width) {
 }
 
 void Canvas_Emscripten::_setLineCap(StrokeCap cap) {
-#error TODO
+  switch (cap) {
+    case CAP_BUTT:
+      _domCanvasContext.set("lineCap", "butt");
+      break;
+    case CAP_ROUND:
+      _domCanvasContext.set("lineCap", "round");
+      break;
+    case CAP_SQUARE:
+      _domCanvasContext.set("lineCap", "square");
+      break;
+  }
 }
 
 void Canvas_Emscripten::_setLineJoin(StrokeJoin join) {
-#error TODO
+  switch (join) {
+    case JOIN_MITER:
+      _domCanvasContext.set("lineJoin", "miter");
+      break;
+    case JOIN_ROUND:
+      _domCanvasContext.set("lineJoin", "round");
+      break;
+    case JOIN_BEVEL:
+      _domCanvasContext.set("lineJoin", "bevel");
+      break;
+  }
 }
 
 void Canvas_Emscripten::_setLineMiterLimit(float limit) {
-#error TODO
+  _domCanvasContext.set("miterLimit", limit);
 }
 
 void Canvas_Emscripten::_setLineDash(float lengths[],
                                      int count,
                                      float phase) {
-#error TODO
+  val jsArray = val::array();
+  for (int i = 0; i < count; i++) {
+    jsArray.set(i, lengths[i]);
+  }
+  _domCanvasContext.call<void>("setLineDash", lengths);
+  _domCanvasContext.set("lineDashOffset", phase);
 }
 
 void Canvas_Emscripten::_setShadow(const Color& color,
                                    float blur,
                                    float offsetX,
                                    float offsetY) {
-#error TODO
+  _domCanvasContext.set("shadowColor",   createDOMColor(color));
+  _domCanvasContext.set("shadowBlur",    blur);
+  _domCanvasContext.set("shadowOffsetX", offsetX);
+  _domCanvasContext.set("shadowOffsetY", offsetY);
 }
 
 void Canvas_Emscripten::_removeShadow() {
-#error TODO
+  _domCanvasContext.set("shadowColor",   "rgba(0,0,0,0)");
+  _domCanvasContext.set("shadowBlur",    0);
+  _domCanvasContext.set("shadowOffsetX", 0);
+  _domCanvasContext.set("shadowOffsetY", 0);
 }
 
 void Canvas_Emscripten::_clearRect(float left, float top,
