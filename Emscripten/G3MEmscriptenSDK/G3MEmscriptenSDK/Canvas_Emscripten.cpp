@@ -5,6 +5,8 @@
 using namespace emscripten;
 
 #include "IMathUtils.hpp"
+#include "IStringUtils.hpp"
+#include "Color.hpp"
 
 
 Canvas_Emscripten::Canvas_Emscripten(bool retina) :
@@ -22,10 +24,6 @@ Canvas_Emscripten::~Canvas_Emscripten() {
 }
 
 void Canvas_Emscripten::_initialize(int width, int height) {
-//  const val document = val::global("document");
-//  val canvas = document.call<val>("createElement", val("canvas"));
-//  val context = canvas.call<val>("getContext", val("2d"));
-
   val window = val::global("window");
   val valDevicePixelRatio = window["devicePixelRatio"];
   const float ratio = ( _retina && valDevicePixelRatio.as<bool>() ) ? valDevicePixelRatio.as<float>() : 1;
@@ -54,16 +52,33 @@ void Canvas_Emscripten::tryToSetCurrentFontToContext() {
   }
 }
 
+const std::string createDOMColor(const Color& color) {
+  const IMathUtils*   mu = IMathUtils::instance();
+  const IStringUtils* su = IStringUtils::instance();
+
+  const int   r = mu->round(255 * color._red);
+  const int   g = mu->round(255 * color._green);
+  const int   b = mu->round(255 * color._blue);
+  const float a = color._alpha;
+
+  return ("rgba(" +
+          su->toString(r) + "," +
+          su->toString(g) + "," +
+          su->toString(b) + "," +
+          su->toString(a) +
+          ")");
+}
+
 void Canvas_Emscripten::_setFillColor(const Color& color) {
-#error TODO
+  _domCanvasContext.set("fillStyle", createDOMColor(color));
 }
 
 void Canvas_Emscripten::_setLineColor(const Color& color) {
-#error TODO
+  _domCanvasContext.set("strokeStyle", createDOMColor(color));
 }
 
 void Canvas_Emscripten::_setLineWidth(float width) {
-#error TODO
+  _domCanvasContext.set("lineWidth", width);
 }
 
 void Canvas_Emscripten::_setLineCap(StrokeCap cap) {
