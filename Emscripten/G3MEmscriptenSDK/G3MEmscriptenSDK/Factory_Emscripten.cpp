@@ -74,9 +74,7 @@ IShortBuffer* Factory_Emscripten::createShortBuffer(size_t size) const {
 }
 
 ICanvas* Factory_Emscripten::createCanvas(bool retina) const {
-  #warning TODO!!!!!!
-  THROW_EXCEPTION("TODO!");
-  //return new Canvas_Emscripten(retina);
+  return new Canvas_Emscripten(retina);
 }
 
 IWebSocket* Factory_Emscripten::createWebSocket(const URL& url,
