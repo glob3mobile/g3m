@@ -25,11 +25,11 @@ using namespace emscripten;
 G3MWidget_Emscripten::G3MWidget_Emscripten() :
 _canvas(val::null()),
 _webGLContext(val::null()),
-_resizerIntervalID(0),
 _width(0),
 _height(0),
 _physicalWidth(0),
 _physicalHeight(0),
+_resizerIntervalID(0),
 _devicePixelRatio(1)
 {
   val document = val::global("document");
@@ -54,11 +54,11 @@ _devicePixelRatio(1)
   INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
   _gl = new GL(nativeGL);
 
-//  jsDefineG3MBrowserObjects();
-//
-//  sinkEvents(Event.TOUCHEVENTS | Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
-//
-//  exportJSFunctions();
+  //  jsDefineG3MBrowserObjects();
+  //
+  //  sinkEvents(Event.TOUCHEVENTS | Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
+  //
+  //  exportJSFunctions();
 
 }
 
@@ -116,7 +116,7 @@ void G3MWidget_Emscripten::onSizeChanged(const int width,
   if ((_width != width) || (_height != height)) {
     _width  = width;
     _height = height;
-//    setPixelSize(_width, _height);
+    //    setPixelSize(_width, _height);
 
     val window = val::global("window");
     val valDevicePixelRatio = window["devicePixelRatio"];
@@ -125,8 +125,8 @@ void G3MWidget_Emscripten::onSizeChanged(const int width,
     _physicalWidth  = round(_width  * _devicePixelRatio);
     _physicalHeight = round(_height * _devicePixelRatio);
 
-//    _canvas.setCoordinateSpaceWidth(_physicalWidth);
-//    _canvas.setCoordinateSpaceHeight(_physicalHeight);
+    //    _canvas.setCoordinateSpaceWidth(_physicalWidth);
+    //    _canvas.setCoordinateSpaceHeight(_physicalHeight);
     _canvas.set("width",  _physicalWidth);
     _canvas.set("height", _physicalHeight);
   }
@@ -134,10 +134,10 @@ void G3MWidget_Emscripten::onSizeChanged(const int width,
 
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
-//    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
+    //    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
     addResizeHandler();
 
-//    jsStartRenderLoop();
+    //    jsStartRenderLoop();
     emscripten_set_main_loop_arg(G3MWidget_Emscripten_loopStep, // em_arg_callback_func func
                                  (void*) this,                  // void *arg
                                  60,                            // int fps
@@ -166,4 +166,12 @@ void G3MWidget_Emscripten::initSingletons() {
                             textUtils,
                             deviceAttitude,
                             deviceLocation);
+}
+
+void G3MWidget_Emscripten::addInto(const std::string& containerID) {
+  val document = val::global("document");
+
+  val container = document.call<val>("getElementById", containerID);
+
+  container.call<void>("appendChild", _canvas);
 }

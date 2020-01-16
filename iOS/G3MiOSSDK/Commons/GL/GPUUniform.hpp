@@ -122,7 +122,8 @@ public:
       }
     }
     else {
-      THROW_EXCEPTION("Attempting to set uniform \"" + _name + "\" with invalid value type.");
+//      THROW_EXCEPTION("Attempting to set uniform \"" + _name + "\" with invalid value type.");
+      THROW_EXCEPTION("Attempting to set uniform with invalid value type.");
     }
   }
 

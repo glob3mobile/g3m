@@ -11,6 +11,11 @@ html, body {
     overflow: hidden;
 }
 
+canvas:focus {
+    border: none !important;
+    outline: none !important;
+}
+
 /* sample css properties */
 .game {
     position: absolute;
@@ -24,10 +29,6 @@ html, body {
     display: block;
 }
 
-canvas:focus {
-    border: none !important;
-    outline: none !important;
-}
 
 .emscripten {
     padding-right: 0;

@@ -45,6 +45,14 @@ mkdir deploy
 G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')" 
 
 #    -Wall -Werror \
+#    -s DISABLE_EXCEPTION_CATCHING=2 \
+#    -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
+
+#    -s WASM=1 \
+#    --source-map-base http://localhost:8080/ \
+#    -g4 \
+
+# --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js
 
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
@@ -67,11 +75,18 @@ em++ \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=1 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     -s WASM=1 \
+    -s FETCH=1 \
+    -s ASSERTIONS=2 \
+    -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
+    -s DISABLE_EXCEPTION_CATCHING=2 \
+    -s DEMANGLE_SUPPORT=1 \
     --bind \
     -Wall \
     -DC_CODE \
     -O0 \
-    -g \
+    -g4 \
+    --source-map-base http://localhost:8080/ \
+    --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
     -std=c++11 \
     -o deploy/G3MEmscriptenDemo.js \
     || exit 1

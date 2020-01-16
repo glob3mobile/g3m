@@ -50,6 +50,8 @@ public:
   void _loopStep();
   void _resizerStep();
 
+  void addInto(const std::string& containerID);
+
 };
 
 #endif

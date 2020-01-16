@@ -23,7 +23,8 @@ void GPUUniform::applyChanges(GL* gl) {
   }
   else {
     if (_value == NULL) {
-      THROW_EXCEPTION("Uniform \"" + _name + "\" was not set.");
+//      THROW_EXCEPTION("Uniform \"" + _name + "\" was not set.");
+      THROW_EXCEPTION("Uniform was not set.");
     }
   }
 }
