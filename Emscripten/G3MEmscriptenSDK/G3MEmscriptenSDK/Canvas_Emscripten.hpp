@@ -16,8 +16,16 @@ private:
   int _height;
 
   std::string _currentDOMFont;
+  int         _currentFontSize;
 
   void tryToSetCurrentFontToContext();
+
+  void roundRect(float x, float y,
+                 float width, float height,
+                 float radius,
+                 bool fill,
+                 bool stroke);
+
 
 protected:
   void _initialize(int width, int height);

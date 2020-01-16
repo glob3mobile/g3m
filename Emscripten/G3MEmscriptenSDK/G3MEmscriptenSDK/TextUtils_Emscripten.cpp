@@ -85,7 +85,7 @@ void TextUtils_Emscripten::createLabelImage(const std::string& label,
 
   const val textMetrics = context.call<val>("measureText", label);
 
-  int width  = textMetrics["width"].as<int>();
+  int width  = mu->ceil(textMetrics["width"].as<float>());
   int height = mu->ceil(fontSize);
   if (shadowColor) {
     width  += 2;
@@ -136,7 +136,7 @@ void TextUtils_Emscripten::nativeLabelImage(const IImage* image,
 
   const val textMetrics = context.call<val>("measureText", label);
 
-  int textWidth  = textMetrics["width"].as<int>();
+  int textWidth  = mu->ceil(textMetrics["width"].as<float>());
   int textHeight = mu->ceil(fontSize);
   if (shadowColor) {
     textWidth  += 2;
