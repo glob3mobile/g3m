@@ -3,6 +3,7 @@
 #include "Image_Emscripten.hpp"
 
 #include <emscripten.h>
+#include <emscripten/html5.h>
 
 #include "IImageListener.hpp"
 #include "IStringBuilder.hpp"
@@ -18,7 +19,8 @@ Image_Emscripten::Image_Emscripten(const val& domImage) :
 _domImage(domImage),
 _imageData( val::null() )
 {
-
+  emscripten_console_log( "Image_Emscripten");
+  emscripten_console_log( domImage.call<std::string>("toString").c_str() );
 }
 
 const val Image_Emscripten::getDOMImage() const {

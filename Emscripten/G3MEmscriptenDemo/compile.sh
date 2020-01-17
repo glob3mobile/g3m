@@ -78,16 +78,19 @@ em++ \
     *.cpp \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=10 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
-    -s WASM=0 \
+    -s WASM=1 \
     -s ASSERTIONS=2 \
-    -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
+    -s SAFE_HEAP=0 -s ALIASING_FUNCTION_POINTERS=0 \
     -s DISABLE_EXCEPTION_CATCHING=2 \
     -s DEMANGLE_SUPPORT=1 \
+    -s ALLOW_MEMORY_GROWTH=1 \
+    -fsanitize=undefined \
+    -fsanitize=address \
     --bind \
     -Wall \
     -DC_CODE \
     -O0 \
-    -g3 \
+    -g4 \
     --source-map-base http://localhost:8080/ \
     --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
     -std=c++11 \

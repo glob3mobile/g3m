@@ -145,7 +145,6 @@ public:
 
       if (image->getDOMImage().as<bool>()) {
         _imageListener->onDownload(url, image, false);
-        //IFactory.instance().deleteImage(image);
       }
       else {
         emscripten_console_error("Can't create image from data (2)");
@@ -206,7 +205,7 @@ public:
                                 const std::string&      tag) :
   _priority(priority),
   _urlPath(urlPath),
-  _isImageRequest(false)
+  _isImageRequest(true)
   {
 #ifdef __USE_VAL__
     _downloader = NULL;
@@ -214,8 +213,11 @@ public:
     _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
   }
 
+private:
   ~Downloader_Emscripten_Handler() {
+    emscripten_console_log("### ~Downloader_Emscripten_Handler()");
   }
+public:
 
   const long long getPriority() const {
     return _priority;
@@ -422,6 +424,7 @@ public:
   void jsCreateImageFromBlob(int xhrStatus,
                              const val& blob) {
     emscripten_console_warn("jsCreateImageFromBlob");
+#error DIEGO AT WORK!
     //    var that = this;
     //
     //    var auxImg = new Image();
@@ -447,7 +450,7 @@ public:
               const val& xhrResponse) {
     emscripten_console_log( xhrResponse.call<std::string>("toString").c_str() );
 
-    emscripten_console_log("===> onLoad 1");
+    emscripten_console_log("===> onLoad 1" );
     _downloader->removeDownloadingHandlerForURLPath(_urlPath);
 
     if (xhrStatus == 200) {
@@ -718,7 +721,8 @@ void Downloader_Emscripten::__heartbeat() {
     Downloader_Emscripten_Handler* handler = getHandlerToRun();
     if (handler != NULL) {
       handler->runWithDownloader(this);
-      delete handler;
+#warning FIX MEMORY LEAK
+//      delete handler;
     }
   }
   queueHeartbeat();
@@ -765,6 +769,5 @@ Downloader_Emscripten_Handler* Downloader_Emscripten::getHandlerToRun() {
 }
 
 void Downloader_Emscripten::removeDownloadingHandlerForURLPath(const std::string& urlPath) {
-#warning TODO
-  //_downloadingHandlers.erase(urlPath);
+  _downloadingHandlers.erase(urlPath);
 }
