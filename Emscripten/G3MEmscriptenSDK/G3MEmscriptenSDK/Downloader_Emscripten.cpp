@@ -9,6 +9,15 @@
 #include <emscripten/fetch.h>
 #endif
 
+#define __USE_VAL__
+#ifdef __USE_VAL__
+#include <emscripten.h>
+#include <emscripten/val.h>
+using namespace emscripten;
+
+#include "EMStorage.hpp"
+#endif
+
 #include <limits>
 #include <sstream>
 #include <vector>
@@ -16,6 +25,13 @@
 #include "URL.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "IImageDownloadListener.hpp"
+
+extern "C" {
+EMSCRIPTEN_KEEPALIVE
+void Downloader_Emscripten_Handler_onLoad(int xhrStatus,
+                                          int xhrResponseID,
+                                          void* voidHandler);
+};
 
 
 class ListenerEntry {
@@ -226,13 +242,6 @@ public:
 
 #ifdef __USE_FETCH__
   void runWithDownloader(Downloader_Emscripten* downloader) {
-//#error TODO
-//
-//    val window = val::global("window");
-//
-//    val xhr = val::global("XMLHttpRequest").new_();
-//    xhr.call<void>("open", std::string("GET"), std::string("http://url"));
-
     emscripten_fetch_attr_t attr;
     emscripten_fetch_attr_init(&attr);
     strcpy(attr.requestMethod, "GET");
@@ -263,10 +272,40 @@ public:
   }
 #endif
 
-#ifndef __USE_FETCH__
+
+#ifdef __USE_VAL__
   void runWithDownloader(Downloader_Emscripten* downloader) {
-#error TODO
+    const int urlID = EMStorage::put( val(_urlPath) );
+
+    EM_ASM({
+      var xhr = new XMLHttpRequest();
+
+      var url = document.EMStorage.take($0);
+      xhr.open("GET", url, true);
+
+      var isImageRequest = $1;
+      xhr.responseType = isImageRequest ? "blob" : "arraybuffer";
+
+      xhr.onload = function() {
+        if (xhr.readyState == 4) {
+          final int xhrStatus = xhr.status
+          Module.ccall('Downloader_Emscripten_Handler_onLoad',
+                       'void',
+                       [ 'int',      'int',                                'number' ],
+                       [ xhr.status, document.EMStorage.put(xhr.response), $2       ]);
+        }
+      };
+
+      xhr.send();
+
+    }, urlID, _isImageRequest, this);
   }
+
+
+  void onLoad(int xhrStatus, const val& xhrResponse) {
+#error <#message#>
+  }
+
 #endif
 
 
@@ -311,6 +350,16 @@ public:
   }
 #endif
 };
+
+void Downloader_Emscripten_Handler_onLoad(int xhrStatus,
+                                          int xhrResponseID,
+                                          void* voidHandler) {
+  val xhrResponse = EMStorage::take(xhrResponseID);
+
+  Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;
+
+  handler->onLoad(xhrStatus, xhrResponse);
+}
 
 #ifdef __USE_FETCH__
 void __downloadSucceeded(emscripten_fetch_t* fetch) {
