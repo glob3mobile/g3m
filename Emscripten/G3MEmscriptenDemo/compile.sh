@@ -72,7 +72,7 @@ em++ \
     ${G3M_EMSCRIPTEN_SOURCES} \
     ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
     *.cpp \
-    -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=1 \
+    -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=10 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     -s WASM=1 \
     -s FETCH=1 \

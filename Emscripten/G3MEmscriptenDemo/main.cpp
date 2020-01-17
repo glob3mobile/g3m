@@ -140,15 +140,14 @@
 // }
 
 
-#include <emscripten/emscripten.h>
+// #include <emscripten/emscripten.h>
 
-void foo(const std::string& x,
-	 const std::vector<int>& array) {
-  emscripten_log(EM_LOG_CONSOLE, x.c_str(), array.size());
-}
+// void foo(const std::string& x,
+// 	 const std::vector<int>& array) {
+//   emscripten_log(EM_LOG_CONSOLE, x.c_str(), array.size());
+// }
 
 int main() {
-  /*
   emscripten_console_log("Step 1");
   G3MBuilder_Emscripten builder;
 
@@ -158,16 +157,15 @@ int main() {
   emscripten_console_log("Step 3");
 
   emscripten_console_log("WOOOOOOOWWWW!!!");
-  */
 
-  std::vector<int> array;
-  array.push_back( 1 );
-  array.push_back( 2 );
-  array.push_back( 3 );
-  array.push_back( 4 );
+  // std::vector<int> array;
+  // array.push_back( 1 );
+  // array.push_back( 2 );
+  // array.push_back( 3 );
+  // array.push_back( 4 );
 
-  emscripten_log(EM_LOG_CONSOLE, "array.size() = %d", array.size());
+  // emscripten_log(EM_LOG_CONSOLE, "array.size() = %d", array.size());
 
-  foo("array.size() = %d", array);
+  // foo("array.size() = %d", array);
 
 }
