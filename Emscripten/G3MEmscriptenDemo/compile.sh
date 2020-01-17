@@ -54,6 +54,8 @@ G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')
 
 # --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js
 
+#    -s FETCH=1 \
+
 export EMCC_CORES=8
 
 em++ \
@@ -76,8 +78,7 @@ em++ \
     *.cpp \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=10 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
-    -s WASM=1 \
-    -s FETCH=1 \
+    -s WASM=0 \
     -s ASSERTIONS=2 \
     -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
     -s DISABLE_EXCEPTION_CATCHING=2 \
@@ -86,7 +87,7 @@ em++ \
     -Wall \
     -DC_CODE \
     -O0 \
-    -g4 \
+    -g3 \
     --source-map-base http://localhost:8080/ \
     --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
     -std=c++11 \

@@ -174,9 +174,9 @@ private:
 
   std::vector<ListenerEntry*> _listeners;
 
-  #ifdef __USE_VAL__
-    Downloader_Emscripten* _downloader;
-  #endif
+#ifdef __USE_VAL__
+  Downloader_Emscripten* _downloader;
+#endif
 
 public:
   const std::string _urlPath;
@@ -350,12 +350,9 @@ public:
       var url            = document.EMStorage.take($0);
       var isImageRequest = $1;
       var handler        = $2;
-      var downloader     = $3;
 
       var xhr = new XMLHttpRequest();
-
       xhr.open("GET", url, true);
-
       xhr.responseType = isImageRequest ? "blob" : "arraybuffer";
 
       xhr.onload = function() {
@@ -374,19 +371,25 @@ public:
 
   void processResponse(int statusCode,
                        const val& data) {
+    emscripten_console_log("** processResponse (1)");
     const bool dataIsValid = (statusCode == 200) && !data.isNull();
 
+    emscripten_console_log("** processResponse (2)");
     const URL url(_urlPath);
 
     if (dataIsValid) {
+      emscripten_console_log("** processResponse (3)");
       for (size_t i = 0; i < _listeners.size(); i++) {
+        emscripten_console_log("** processResponse (4)");
         ListenerEntry* listener = _listeners[i];
         if (listener != NULL) {
           if (listener->isCanceled()) {
+            emscripten_console_log("** processResponse (5)");
             listener->onCanceledDownload(url, data);
             listener->onCancel(url);
           }
           else {
+            emscripten_console_log("** processResponse (6)");
             listener->onDownload(url, data);
           }
         }
@@ -415,24 +418,54 @@ public:
     }
   }
 
+
+  void jsCreateImageFromBlob(int xhrStatus,
+                             const val& blob) {
+    emscripten_console_warn("jsCreateImageFromBlob");
+    //    var that = this;
+    //
+    //    var auxImg = new Image();
+    //    var imgURL = $wnd.g3mURL.createObjectURL(blob);
+    //
+    //    auxImg.onload = function() {
+    //      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, auxImg);
+    //      $wnd.g3mURL.revokeObjectURL(imgURL);
+    //    };
+    //    auxImg.onerror = function() {
+    //      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, null);
+    //      $wnd.g3mURL.revokeObjectURL(imgURL);
+    //    };
+    //    auxImg.onabort = function() {
+    //      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, null);
+    //      $wnd.g3mURL.revokeObjectURL(imgURL);
+    //    };
+    //
+    //    auxImg.src = imgURL;
+  }
+
   void onLoad(int xhrStatus,
               const val& xhrResponse) {
+    emscripten_console_log( xhrResponse.call<std::string>("toString").c_str() );
+
+    emscripten_console_log("===> onLoad 1");
     _downloader->removeDownloadingHandlerForURLPath(_urlPath);
 
     if (xhrStatus == 200) {
+      emscripten_console_log("===> onLoad 2");
       if (_isImageRequest) {
+        emscripten_console_log("===> onLoad 3");
         jsCreateImageFromBlob(xhrStatus, xhrResponse);
       }
       else {
+        emscripten_console_log("===> onLoad 4");
         processResponse(xhrStatus, xhrResponse);
       }
     }
     else {
+      emscripten_console_log("===> onLoad 5");
       processResponse(xhrStatus, val::null());
     }
   }
-
-
 
 #endif
 
@@ -482,10 +515,13 @@ public:
 void Downloader_Emscripten_Handler_onLoad(int xhrStatus,
                                           int xhrResponseID,
                                           void* voidHandler) {
+  emscripten_console_log("Downloader_Emscripten_Handler_onLoad 1");
   val xhrResponse = EMStorage::take(xhrResponseID);
 
+  emscripten_console_log("Downloader_Emscripten_Handler_onLoad 2");
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;
 
+  emscripten_console_log("Downloader_Emscripten_Handler_onLoad 3");
   handler->onLoad(xhrStatus, xhrResponse);
 }
 
@@ -729,5 +765,6 @@ Downloader_Emscripten_Handler* Downloader_Emscripten::getHandlerToRun() {
 }
 
 void Downloader_Emscripten::removeDownloadingHandlerForURLPath(const std::string& urlPath) {
-  _downloadingHandlers.erase(urlPath);
+#warning TODO
+  //_downloadingHandlers.erase(urlPath);
 }
