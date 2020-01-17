@@ -24,6 +24,7 @@ mkdir LIB
 GM3_COMMONS_SOURCES="$(find ${G3M_COMMONS_SOURCE_DIRECTORY} -name '*.cpp')" 
 
 #echo ${GM3_COMMONS_SOURCES}
+#    -Wall \
 
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
@@ -41,9 +42,13 @@ em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
     ${GM3_COMMONS_SOURCES} \
     -s WASM=1 \
+    -s ASSERTIONS=2 \
+    -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
+    -s DISABLE_EXCEPTION_CATCHING=2 \
+    -s DEMANGLE_SUPPORT=1 \
     -DC_CODE \
     -O0 \
-    -g \
+    -g4 \
     -std=c++11 \
     -r \
     -o LIB/libG3MShared.bc \
