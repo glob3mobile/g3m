@@ -26,6 +26,10 @@ private:
                  bool fill,
                  bool stroke);
 
+  void drawEllipse(float x, float y,
+                   float w, float h,
+                   bool fill,
+                   bool stroke);
 
 protected:
   void _initialize(int width, int height);

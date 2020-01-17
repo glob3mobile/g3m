@@ -212,7 +212,10 @@ void Canvas_Emscripten::roundRect(float x, float y,
 
 void Canvas_Emscripten::_createImage(IImageListener* listener,
                                      bool autodelete) {
-#error TODO
+  const std::string imageDataURL = _domCanvas.call<std::string>("toDataURL");
+  Image_Emscripten::createFromURL(imageDataURL,
+                                  listener,
+                                  autodelete);
 }
 
 const std::string createDOMFont(const GFont& font,
@@ -353,44 +356,71 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
 
 
 void Canvas_Emscripten::_beginPath() {
-#error TODO
+  _domCanvasContext.call<void>("beginPath");
 }
 
 void Canvas_Emscripten::_closePath() {
-#error TODO
+  _domCanvasContext.call<void>("closePath");
 }
 
 void Canvas_Emscripten::_stroke() {
-#error TODO
+  _domCanvasContext.call<void>("stroke");
 }
 
 void Canvas_Emscripten::_fill() {
-#error TODO
+  _domCanvasContext.call<void>("fill");
 }
 
 void Canvas_Emscripten::_fillAndStroke() {
-#error TODO
+  _domCanvasContext.call<void>("fill");
+  _domCanvasContext.call<void>("stroke");
 }
 
 void Canvas_Emscripten::_moveTo(float x, float y) {
-#error TODO
+  _domCanvasContext.call<void>("moveTo", x, y);
 }
 
 void Canvas_Emscripten::_lineTo(float x, float y) {
-#error TODO
+  _domCanvasContext.call<void>("lineTo", x, y);
 }
 
 void Canvas_Emscripten::_fillEllipse(float left, float top,
                                      float width, float height) {
-#error TODO
+  drawEllipse(left, top, width, height, true, false);
 }
 
 void Canvas_Emscripten::_strokeEllipse(float left, float top,
                                        float width, float height) {
-#error TODO
+  drawEllipse(left, top, width, height, false, true);
 }
 
 void Canvas_Emscripten::_fillAndStrokeEllipse(float left, float top,
                                               float width, float height) {
-#error TODO
+  drawEllipse(left, top, width, height, true, true);
+}
+
+void Canvas_Emscripten::drawEllipse(float x, float y,
+                                    float w, float h,
+                                    bool fill,
+                                    bool stroke) {
+  const float kappa = .5522848;
+  const float ox = (w / 2) * kappa;  // control point offset horizontal
+  const float oy = (h / 2) * kappa;  // control point offset vertical
+  const float xe = x + w;            // x-end
+  const float ye = y + h;            // y-end
+  const float xm = x + w / 2;        // x-middle
+  const float ym = y + h / 2;        // y-middle
+
+  _domCanvasContext.call<void>("beginPath");
+  _domCanvasContext.call<void>("moveTo", x, ym);
+  _domCanvasContext.call<void>("bezierCurveTo", x, ym - oy, xm - ox, y, xm, y);
+  _domCanvasContext.call<void>("bezierCurveTo", xm + ox, y, xe, ym - oy, xe, ym);
+  _domCanvasContext.call<void>("bezierCurveTo", xe, ym + oy, xm + ox, ye, xm, ye);
+  _domCanvasContext.call<void>("bezierCurveTo", xm - ox, ye, x, ym + oy, x, ym);
+  if (fill) {
+    _domCanvasContext.call<void>("fill");
+  }
+  if (stroke) {
+    _domCanvasContext.call<void>("stroke");
+  }
 }
