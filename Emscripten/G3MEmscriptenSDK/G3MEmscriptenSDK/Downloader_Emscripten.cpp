@@ -25,6 +25,9 @@ using namespace emscripten;
 #include "URL.hpp"
 #include "IBufferDownloadListener.hpp"
 #include "IImageDownloadListener.hpp"
+#include "ByteBuffer_Emscripten.hpp"
+#include "Image_Emscripten.hpp"
+
 
 extern "C" {
 EMSCRIPTEN_KEEPALIVE
@@ -41,7 +44,7 @@ private:
   const bool               _deleteListener;
 
   bool _canceled;
-  
+
 public:
   const long long   _requestID;
   const std::string _tag;
@@ -58,6 +61,7 @@ public:
   _requestID(requestID),
   _tag(tag)
   {
+
   }
 
   void onCancel(const URL& url) {
@@ -100,6 +104,60 @@ public:
     _canceled = true;
   }
 
+  bool isCanceled() const {
+    return _canceled;
+  }
+
+  void onCanceledDownload(const URL& url,
+                          const val& data) {
+    if (_bufferListener != NULL) {
+      IByteBuffer* byteBuffer = new ByteBuffer_Emscripten(data);
+
+      _bufferListener->onCanceledDownload(url, byteBuffer, false);
+    }
+
+    if (_imageListener != NULL) {
+      Image_Emscripten* image = new Image_Emscripten(data);
+
+      if (image->getDOMImage().as<bool>()) {
+        _imageListener->onCanceledDownload(url, image, false);
+      }
+      else {
+        emscripten_console_error("Can't create image from data (1)");
+      }
+      delete image;
+    }
+  }
+
+  void onDownload(const URL& url,
+                  const val& data) {
+    if (_bufferListener != NULL) {
+      IByteBuffer* byteBuffer = new ByteBuffer_Emscripten(data);
+
+      _bufferListener->onDownload(url, byteBuffer, false);
+      if (_deleteListener) {
+        delete _bufferListener;
+      }
+    }
+
+    if (_imageListener != NULL) {
+      Image_Emscripten* image = new Image_Emscripten(data);
+
+      if (image->getDOMImage().as<bool>()) {
+        _imageListener->onDownload(url, image, false);
+        //IFactory.instance().deleteImage(image);
+      }
+      else {
+        emscripten_console_error("Can't create image from data (2)");
+        _imageListener->onError(url);
+      }
+
+      if (_deleteListener) {
+        delete _imageListener;
+      }
+    }
+  }
+
 };
 
 
@@ -116,7 +174,10 @@ private:
 
   std::vector<ListenerEntry*> _listeners;
 
-  
+  #ifdef __USE_VAL__
+    Downloader_Emscripten* _downloader;
+  #endif
+
 public:
   const std::string _urlPath;
   const bool        _isImageRequest;
@@ -131,6 +192,9 @@ public:
   _urlPath(urlPath),
   _isImageRequest(false)
   {
+#ifdef __USE_VAL__
+    _downloader = NULL;
+#endif
     _listeners.push_back(new ListenerEntry(bufferListener, NULL, deleteListener, requestID, tag));
   }
 
@@ -144,6 +208,9 @@ public:
   _urlPath(urlPath),
   _isImageRequest(false)
   {
+#ifdef __USE_VAL__
+    _downloader = NULL;
+#endif
     _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
   }
 
@@ -182,7 +249,7 @@ public:
       if ((listener != NULL) && (listener->_requestID == requestID)) {
         listener->onCancel( URL(_urlPath) );
         delete listener;
-//        _listeners[i] = NULL;
+        // _listeners[i] = NULL;
         _listeners.erase(_listeners.begin() + i);
         return true;
       }
@@ -275,12 +342,15 @@ public:
 
 #ifdef __USE_VAL__
   void runWithDownloader(Downloader_Emscripten* downloader) {
+    _downloader = downloader;
+
     const int urlID = EMStorage::put( val(_urlPath) );
 
     EM_ASM({
       var url            = document.EMStorage.take($0);
       var isImageRequest = $1;
       var handler        = $2;
+      var downloader     = $3;
 
       var xhr = new XMLHttpRequest();
 
@@ -290,7 +360,6 @@ public:
 
       xhr.onload = function() {
         if (xhr.readyState == 4) {
-          final int xhrStatus = xhr.status
           Module.ccall('Downloader_Emscripten_Handler_onLoad',
                        'void',
                        [ 'int',      'int',                                'number' ],
@@ -300,13 +369,70 @@ public:
 
       xhr.send();
 
-    }, urlID, _isImageRequest, this);
+    }, urlID, _isImageRequest, this, downloader);
+  }
+
+  void processResponse(int statusCode,
+                       const val& data) {
+    const bool dataIsValid = (statusCode == 200) && !data.isNull();
+
+    const URL url(_urlPath);
+
+    if (dataIsValid) {
+      for (size_t i = 0; i < _listeners.size(); i++) {
+        ListenerEntry* listener = _listeners[i];
+        if (listener != NULL) {
+          if (listener->isCanceled()) {
+            listener->onCanceledDownload(url, data);
+            listener->onCancel(url);
+          }
+          else {
+            listener->onDownload(url, data);
+          }
+        }
+      }
+    }
+    else {
+      {
+        std::ostringstream oss;
+
+        oss << "runWithDownloader: statusCode=";
+        oss << statusCode;
+        oss << ", data=";
+        oss << data.call<std::string>("toString");
+        oss << ", url=";
+        oss << _urlPath;
+
+        emscripten_console_error( oss.str().c_str() );
+      }
+
+      for (size_t i = 0; i < _listeners.size(); i++) {
+        ListenerEntry* listener = _listeners[i];
+        if (listener != NULL) {
+          listener->onError(url);
+        }
+      }
+    }
+  }
+
+  void onLoad(int xhrStatus,
+              const val& xhrResponse) {
+    _downloader->removeDownloadingHandlerForURLPath(_urlPath);
+
+    if (xhrStatus == 200) {
+      if (_isImageRequest) {
+        jsCreateImageFromBlob(xhrStatus, xhrResponse);
+      }
+      else {
+        processResponse(xhrStatus, xhrResponse);
+      }
+    }
+    else {
+      processResponse(xhrStatus, val::null());
+    }
   }
 
 
-  void onLoad(int xhrStatus, const val& xhrResponse) {
-#error <#message#>
-  }
 
 #endif
 
@@ -600,4 +726,8 @@ Downloader_Emscripten_Handler* Downloader_Emscripten::getHandlerToRun() {
   }
 
   return selectedHandler;
+}
+
+void Downloader_Emscripten::removeDownloadingHandlerForURLPath(const std::string& urlPath) {
+  _downloadingHandlers.erase(urlPath);
 }

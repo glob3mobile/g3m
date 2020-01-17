@@ -70,6 +70,9 @@ public:
 
   void __heartbeat();
 
+  void removeDownloadingHandlerForURLPath(const std::string& urlPath);
+
+
 };
 
 #endif
