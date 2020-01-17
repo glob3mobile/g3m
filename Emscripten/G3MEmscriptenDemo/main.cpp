@@ -8,6 +8,11 @@
 #include "G3MBuilder_Emscripten.hpp"
 #include "G3MWidget_Emscripten.hpp"
 
+#include "LayerSet.hpp"
+#include "LayerTilesRenderParameters.hpp"
+#include "URLTemplateLayer.hpp"
+#include "PlanetRendererBuilder.hpp"
+
 // #include "EMStorage.hpp"
 // #include "Image_Emscripten.hpp"
 // #include "IImageListener.hpp"
@@ -151,6 +156,27 @@ int main() {
   emscripten_console_log("Step 1");
   G3MBuilder_Emscripten builder;
 
+  PlanetRendererBuilder* planetRendererBuilder = builder.getPlanetRendererBuilder();
+
+  LayerSet* layerSet = new LayerSet();
+
+  LayerTilesRenderParameters* parameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE,
+											  1,  // topSectorSplitsByLatitude
+											  2,  // topSectorSplitsByLongitude
+											  1,  // firstLevel
+											  13  // maxLevel
+											  );
+
+  layerSet->addLayer( new URLTemplateLayer("http://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg",
+					   Sector::FULL_SPHERE,
+					   false,
+					   TimeInterval::fromDays(30),
+					   true, // readExpired
+					   NULL, // condition
+					   parameters) );
+  planetRendererBuilder->setLayerSet(layerSet);
+
+      
   emscripten_console_log("Step 2");
   G3MWidget_Emscripten* widget = builder.createWidget("g3mWidgetHolder");
 
@@ -169,3 +195,4 @@ int main() {
   // foo("array.size() = %d", array);
 
 }
+

@@ -54,6 +54,8 @@ G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')
 
 # --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js
 
+export EMCC_CORES=8
+
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras      \

@@ -39,7 +39,7 @@ _devicePixelRatio(1)
   
   _canvas.set("id", val("_g3m_canvas"));
 
-  _canvas.set("style", "width: 100%;height: 100%;");
+  _canvas.set("style", val("width: 100%;height: 100%;"));
 
   val webGLContextArguments = val::object();
   //webGLContextArguments.set("preserveDrawingBuffer",           true);

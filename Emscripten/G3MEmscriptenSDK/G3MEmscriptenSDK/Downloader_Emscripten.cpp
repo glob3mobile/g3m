@@ -245,18 +245,24 @@ public:
   }
 
   void onFetchDownloadSucceeded(emscripten_fetch_t* fetch) {
+    emscripten_console_log("onFetchDownloadSucceeded 1");
     printf("Finished downloading %llu bytes from URL %s.\n", fetch->numBytes, fetch->url);
-    
+
     // The data is now available at fetch->data[0] through fetch->data[fetch->numBytes-1];
 
+    emscripten_console_log("onFetchDownloadSucceeded 2");
     URL url(fetch->url);
 
 #warning TODO create image or create buffer
+    emscripten_console_log("onFetchDownloadSucceeded 3");
     for (size_t i = 0; i < _listeners.size(); i++) {
+      emscripten_console_log("onFetchDownloadSucceeded 4");
       ListenerEntry* listener = _listeners[i];
+      emscripten_console_log("onFetchDownloadSucceeded 5");
       listener->onError(url);
     }
     
+    emscripten_console_log("onFetchDownloadSucceeded 6");
     emscripten_fetch_close(fetch); // Free data associated with the fetch.
   }
   
