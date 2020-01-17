@@ -3,7 +3,11 @@
 #include "Downloader_Emscripten.hpp"
 
 #include <emscripten/html5.h>
+
+//#define __USE_FETCH__
+#ifdef __USE_FETCH__
 #include <emscripten/fetch.h>
+#endif
 
 #include <limits>
 #include <sstream>
@@ -83,9 +87,11 @@ public:
 };
 
 
+#ifdef __USE_FETCH__
 void __downloadSucceeded(emscripten_fetch_t* fetch);
 
 void __downloadFailed(emscripten_fetch_t* fetch);
+#endif
 
 
 class Downloader_Emscripten_Handler {
@@ -218,7 +224,15 @@ public:
     }
   }
 
+#ifdef __USE_FETCH__
   void runWithDownloader(Downloader_Emscripten* downloader) {
+//#error TODO
+//
+//    val window = val::global("window");
+//
+//    val xhr = val::global("XMLHttpRequest").new_();
+//    xhr.call<void>("open", std::string("GET"), std::string("http://url"));
+
     emscripten_fetch_attr_t attr;
     emscripten_fetch_attr_init(&attr);
     strcpy(attr.requestMethod, "GET");
@@ -247,7 +261,16 @@ public:
 
     emscripten_fetch(&attr, _urlPath.c_str());
   }
+#endif
 
+#ifndef __USE_FETCH__
+  void runWithDownloader(Downloader_Emscripten* downloader) {
+#error TODO
+  }
+#endif
+
+
+#ifdef __USE_FETCH__
   void onFetchDownloadSucceeded(emscripten_fetch_t* fetch) {
     emscripten_console_log("onFetchDownloadSucceeded 1");
     printf("Finished downloading %llu bytes from URL %s.\n", fetch->numBytes, fetch->url);
@@ -267,11 +290,11 @@ public:
         listener->onError(url);
       }
     }
-    
+
     emscripten_console_log("onFetchDownloadSucceeded 6");
     emscripten_fetch_close(fetch); // Free data associated with the fetch.
   }
-  
+
   void onFetchDownloadFailed(emscripten_fetch_t* fetch) {
     printf("Downloading %s failed, HTTP failure status code: %d.\n", fetch->url, fetch->status);
 
@@ -286,10 +309,10 @@ public:
 
     emscripten_fetch_close(fetch); // Also free data on failure.
   }
-
+#endif
 };
 
-
+#ifdef __USE_FETCH__
 void __downloadSucceeded(emscripten_fetch_t* fetch) {
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) fetch->userData;
   handler->onFetchDownloadSucceeded(fetch);
@@ -299,7 +322,7 @@ void __downloadFailed(emscripten_fetch_t* fetch) {
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) fetch->userData;
   handler->onFetchDownloadFailed(fetch);
 }
-
+#endif
 
 Downloader_Emscripten::Downloader_Emscripten(const int  maxConcurrentOperationCount,
                                              const int  delayMillis) :

@@ -64,7 +64,7 @@ _devicePixelRatio(1)
   //  exportJSFunctions();
 
 
-  val canvasContainer = document.call<val>("getElementById", canvasContainerID);
+  val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
   if ( canvasContainer.as<bool>() ) {
     canvasContainer.call<void>("appendChild", _canvas);
   }

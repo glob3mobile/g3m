@@ -65,14 +65,14 @@ val Image_Emscripten::createImageData() const {
   val canvas        = document.call<val>("createElement", val("canvas"));
   val canvasContext = canvas.call<val>("getContext", val("2d"));
 
-  const int w = getWidth();
-  const int h = getHeight();
+  val w = val(getWidth());
+  val h = val(getHeight());
   canvas.set("width",  w);
   canvas.set("height", h);
 
-  canvasContext.call<void>("drawImage", _domImage, 0, 0, w, h);
+  canvasContext.call<void>("drawImage", _domImage, val(0), val(0), w, h);
 
-  return canvasContext.call<val>("getImageData", 0, 0, w, h);
+  return canvasContext.call<val>("getImageData", val(0), val(0), w, h);
 }
 
 void Image_Emscripten::getPixel(int x, int y,

@@ -45,7 +45,7 @@ void Canvas_Emscripten::_initialize(int width, int height) {
   _domCanvas.set("height", h);
 
   if (ratio != 1) {
-    _domCanvasContext.call<void>("scale", ratio, ratio);
+    _domCanvasContext.call<void>("scale", val(ratio), val(ratio));
   }
 
   tryToSetCurrentFontToContext();
@@ -125,8 +125,8 @@ void Canvas_Emscripten::_setLineDash(float lengths[],
   for (int i = 0; i < count; i++) {
     jsArray.set(i, lengths[i]);
   }
-  _domCanvasContext.call<void>("setLineDash", lengths);
-  _domCanvasContext.set("lineDashOffset", phase);
+  _domCanvasContext.call<void>("setLineDash", val(lengths));
+  _domCanvasContext.set("lineDashOffset", val(phase));
 }
 
 void Canvas_Emscripten::_setShadow(const Color& color,
@@ -134,38 +134,38 @@ void Canvas_Emscripten::_setShadow(const Color& color,
                                    float offsetX,
                                    float offsetY) {
   _domCanvasContext.set("shadowColor",   createDOMColor(color));
-  _domCanvasContext.set("shadowBlur",    blur);
-  _domCanvasContext.set("shadowOffsetX", offsetX);
-  _domCanvasContext.set("shadowOffsetY", offsetY);
+  _domCanvasContext.set("shadowBlur",    val(blur));
+  _domCanvasContext.set("shadowOffsetX", val(offsetX));
+  _domCanvasContext.set("shadowOffsetY", val(offsetY));
 }
 
 void Canvas_Emscripten::_removeShadow() {
-  _domCanvasContext.set("shadowColor",   "rgba(0,0,0,0)");
-  _domCanvasContext.set("shadowBlur",    0);
-  _domCanvasContext.set("shadowOffsetX", 0);
-  _domCanvasContext.set("shadowOffsetY", 0);
+  _domCanvasContext.set("shadowColor",   std::string("rgba(0,0,0,0)"));
+  _domCanvasContext.set("shadowBlur",    val(0));
+  _domCanvasContext.set("shadowOffsetX", val(0));
+  _domCanvasContext.set("shadowOffsetY", val(0));
 }
 
 void Canvas_Emscripten::_clearRect(float left, float top,
                                    float width, float height) {
-  _domCanvasContext.call<void>("clearRect", left, top, width, height);
+  _domCanvasContext.call<void>("clearRect", val(left), val(top), val(width), val(height));
 }
 
 
 void Canvas_Emscripten::_fillRectangle(float left, float top,
                                        float width, float height) {
-  _domCanvasContext.call<void>("fillRect", left, top, width, height);
+  _domCanvasContext.call<void>("fillRect", val(left), val(top), val(width), val(height));
 }
 
 void Canvas_Emscripten::_strokeRectangle(float left, float top,
                                          float width, float height) {
-  _domCanvasContext.call<void>("strokeRect", left, top, width, height);
+  _domCanvasContext.call<void>("strokeRect", val(left), val(top), val(width), val(height));
 }
 
 void Canvas_Emscripten::_fillAndStrokeRectangle(float left, float top,
                                                 float width, float height) {
-  _domCanvasContext.call<void>("fillRect", left, top, width, height);
-  _domCanvasContext.call<void>("strokeRect", left, top, width, height);
+  _domCanvasContext.call<void>("fillRect", val(left), val(top), val(width), val(height));
+  _domCanvasContext.call<void>("strokeRect", val(left), val(top), val(width), val(height));
 }
 
 void Canvas_Emscripten::_fillRoundedRectangle(float left, float top,
@@ -192,15 +192,15 @@ void Canvas_Emscripten::roundRect(float x, float y,
                                   bool fill,
                                   bool stroke) {
   _domCanvasContext.call<void>("beginPath");
-  _domCanvasContext.call<void>("moveTo", x + radius, y);
-  _domCanvasContext.call<void>("lineTo", x + width - radius, y);
-  _domCanvasContext.call<void>("quadraticCurveTo", x + width, y, x + width, y + radius);
-  _domCanvasContext.call<void>("lineTo", x + width, y + height - radius);
-  _domCanvasContext.call<void>("quadraticCurveTo", x + width, y + height, x + width - radius, y + height);
-  _domCanvasContext.call<void>("lineTo", x + radius, y + height);
-  _domCanvasContext.call<void>("quadraticCurveTo", x, y + height, x, y + height - radius);
-  _domCanvasContext.call<void>("lineTo", x, y + radius);
-  _domCanvasContext.call<void>("quadraticCurveTo", x, y, x + radius, y);
+  _domCanvasContext.call<void>("moveTo", val(x + radius), val(y));
+  _domCanvasContext.call<void>("lineTo", val(x + width - radius), val(y));
+  _domCanvasContext.call<void>("quadraticCurveTo", val(x + width), val(y), val(x + width), val(y + radius));
+  _domCanvasContext.call<void>("lineTo", val(x + width), val(y + height - radius));
+  _domCanvasContext.call<void>("quadraticCurveTo", val(x + width), val(y + height), val(x + width - radius), val(y + height));
+  _domCanvasContext.call<void>("lineTo", val(x + radius), val(y + height));
+  _domCanvasContext.call<void>("quadraticCurveTo", val(x), val(y + height), val(x), val(y + height - radius));
+  _domCanvasContext.call<void>("lineTo", val(x), val(y + radius));
+  _domCanvasContext.call<void>("quadraticCurveTo", val(x), val(y), val(x + radius), val(y));
   _domCanvasContext.call<void>("closePath");
   if (fill) {
     _domCanvasContext.call<void>("fill");
@@ -268,7 +268,7 @@ const Vector2F Canvas_Emscripten::_textExtent(const std::string& text) {
 void Canvas_Emscripten::_fillText(const std::string& text,
                                   float left, float top) {
   _domCanvasContext.set("textBaseline", "top");
-  _domCanvasContext.call<void>("fillText", text, left, top - 1);
+  _domCanvasContext.call<void>("fillText", text, val(left), val(top - 1));
 }
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
@@ -277,10 +277,10 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
 
   _domCanvasContext.call<void>("drawImage",
                                domImage,
-                               destLeft,
-                               destTop,
-                               domImage["width"].as<float>(),
-                               domImage["height"].as<float>());
+                               val(destLeft),
+                               val(destTop),
+                               domImage["width"],
+                               domImage["height"]);
 }
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
@@ -289,14 +289,14 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
   val domImage = ((Image_Emscripten*) image)->getDOMImage();
 
   const float currentGlobalAlpha = _domCanvasContext["globalAlpha"].as<float>();
-  _domCanvasContext.set("globalAlpha", transparency);
+  _domCanvasContext.set("globalAlpha", val(transparency));
   _domCanvasContext.call<void>("drawImage",
                                domImage,
-                               destLeft,
-                               destTop,
-                               domImage["width"].as<float>(),
-                               domImage["height"].as<float>());
-  _domCanvasContext.set("globalAlpha", currentGlobalAlpha);
+                               val(destLeft),
+                               val(destTop),
+                               domImage["width"],
+                               domImage["height"]);
+  _domCanvasContext.set("globalAlpha", val(currentGlobalAlpha));
 }
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
@@ -305,10 +305,10 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
 
   _domCanvasContext.call<void>("drawImage",
                                domImage,
-                               destLeft,
-                               destTop,
-                               destWidth,
-                               destHeight);
+                               val(destLeft),
+                               val(destTop),
+                               val(destWidth),
+                               val(destHeight));
 }
 
 
@@ -318,14 +318,14 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
   val domImage = ((Image_Emscripten*) image)->getDOMImage();
 
   const float currentGlobalAlpha = _domCanvasContext["globalAlpha"].as<float>();
-  _domCanvasContext.set("globalAlpha", transparency);
+  _domCanvasContext.set("globalAlpha", val(transparency));
   _domCanvasContext.call<void>("drawImage",
                                domImage,
-                               destLeft,
-                               destTop,
-                               destWidth,
-                               destHeight);
-  _domCanvasContext.set("globalAlpha", currentGlobalAlpha);
+                               val(destLeft),
+                               val(destTop),
+                               val(destWidth),
+                               val(destHeight));
+  _domCanvasContext.set("globalAlpha", val(currentGlobalAlpha));
 }
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
@@ -335,8 +335,8 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
 
   _domCanvasContext.call<void>("drawImage",
                                domImage,
-                               srcLeft,  srcTop,  srcWidth,  srcHeight,
-                               destLeft, destTop, destWidth, destHeight);
+                               val(srcLeft),  val(srcTop),  val(srcWidth),  val(srcHeight),
+                               val(destLeft), val(destTop), val(destWidth), val(destHeight));
 }
 
 void Canvas_Emscripten::_drawImage(const IImage* image,
@@ -346,12 +346,12 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
   val domImage = ((Image_Emscripten*) image)->getDOMImage();
 
   const float currentGlobalAlpha = _domCanvasContext["globalAlpha"].as<float>();
-  _domCanvasContext.set("globalAlpha", transparency);
+  _domCanvasContext.set("globalAlpha", val(transparency));
   _domCanvasContext.call<void>("drawImage",
                                domImage,
-                               srcLeft,  srcTop,  srcWidth,  srcHeight,
-                               destLeft, destTop, destWidth, destHeight);
-  _domCanvasContext.set("globalAlpha", currentGlobalAlpha);
+                               val(srcLeft),  val(srcTop),  val(srcWidth),  val(srcHeight),
+                               val(destLeft), val(destTop), val(destWidth), val(destHeight));
+  _domCanvasContext.set("globalAlpha", val(currentGlobalAlpha));
 }
 
 
@@ -377,11 +377,11 @@ void Canvas_Emscripten::_fillAndStroke() {
 }
 
 void Canvas_Emscripten::_moveTo(float x, float y) {
-  _domCanvasContext.call<void>("moveTo", x, y);
+  _domCanvasContext.call<void>("moveTo", val(x), val(y));
 }
 
 void Canvas_Emscripten::_lineTo(float x, float y) {
-  _domCanvasContext.call<void>("lineTo", x, y);
+  _domCanvasContext.call<void>("lineTo", val(x), val(y));
 }
 
 void Canvas_Emscripten::_fillEllipse(float left, float top,
@@ -412,11 +412,11 @@ void Canvas_Emscripten::drawEllipse(float x, float y,
   const float ym = y + h / 2;        // y-middle
 
   _domCanvasContext.call<void>("beginPath");
-  _domCanvasContext.call<void>("moveTo", x, ym);
-  _domCanvasContext.call<void>("bezierCurveTo", x, ym - oy, xm - ox, y, xm, y);
-  _domCanvasContext.call<void>("bezierCurveTo", xm + ox, y, xe, ym - oy, xe, ym);
-  _domCanvasContext.call<void>("bezierCurveTo", xe, ym + oy, xm + ox, ye, xm, ye);
-  _domCanvasContext.call<void>("bezierCurveTo", xm - ox, ye, x, ym + oy, x, ym);
+  _domCanvasContext.call<void>("moveTo", val(x), val(ym));
+  _domCanvasContext.call<void>("bezierCurveTo", val(x), val(ym - oy), val(xm - ox), val(y), val(xm), val(y));
+  _domCanvasContext.call<void>("bezierCurveTo", val(xm + ox), val(y), val(xe), val(ym - oy), val(xe), val(ym));
+  _domCanvasContext.call<void>("bezierCurveTo", val(xe), val(ym + oy), val(xm + ox), val(ye), val(xm), val(ye));
+  _domCanvasContext.call<void>("bezierCurveTo", val(xm - ox), val(ye), val(x), val(ym + oy), val(x), val(ym));
   if (fill) {
     _domCanvasContext.call<void>("fill");
   }
