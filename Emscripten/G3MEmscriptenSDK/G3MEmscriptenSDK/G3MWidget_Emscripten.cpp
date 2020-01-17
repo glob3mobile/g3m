@@ -38,7 +38,9 @@ _devicePixelRatio(1)
   _canvas = document.call<val>("createElement", val("canvas"));
   
   _canvas.set("id", val("_g3m_canvas"));
-  
+
+  _canvas.set("style", "width: 100%;height: 100%;");
+
   val webGLContextArguments = val::object();
   //webGLContextArguments.set("preserveDrawingBuffer",           true);
   webGLContextArguments.set("alpha",                           false);
@@ -108,7 +110,6 @@ void G3MWidget_Emscripten::addResizeHandler() {
 }
 
 void G3MWidget_Emscripten::_resizerStep() {
-
   if (!_canvas.as<bool>()) {
     emscripten_console_warn("G3MWidget_Emscripten::_resizerStep() * NO _canvas *");
     return;
@@ -162,7 +163,7 @@ void G3MWidget_Emscripten::startWidget() {
     emscripten_set_main_loop_arg(G3MWidget_Emscripten_loopStep, // em_arg_callback_func func
                                  (void*) this,                  // void *arg
                                  60,                            // int fps
-                                 0                              // int simulate_infinite_loop
+                                 1                              // int simulate_infinite_loop
                                  );
   }
 }

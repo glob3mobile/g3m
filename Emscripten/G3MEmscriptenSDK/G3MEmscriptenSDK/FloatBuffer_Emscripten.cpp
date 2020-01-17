@@ -16,7 +16,7 @@ _buffer( val::global("Float32Array").new_( val(size) ) ),
 _timestamp(0),
 _id(_nextID++),
 _nativeGL(NULL),
-_webGLBuffer(val::null()),
+_webGLBuffer( val::null() ),
 _webGLBufferTimeStamp(-1)
 {
 
@@ -42,7 +42,7 @@ _buffer( val::global("Float32Array").new_( val(16) ) ),
 _timestamp(0),
 _id(_nextID++),
 _nativeGL(NULL),
-_webGLBuffer(val::null()),
+_webGLBuffer( val::null() ),
 _webGLBufferTimeStamp(-1)
 {
   _buffer.set( 0, f0);
@@ -125,6 +125,7 @@ void FloatBuffer_Emscripten::rawPut(const size_t i,
 }
 
 val FloatBuffer_Emscripten::bindVBO(const NativeGL_Emscripten* nativeGL) {
+//  if (!_webGLBuffer.as<bool>()) {
   if (_webGLBuffer.isNull()) {
     _nativeGL = nativeGL;
     _webGLBuffer = _nativeGL->createBuffer();
@@ -134,13 +135,14 @@ val FloatBuffer_Emscripten::bindVBO(const NativeGL_Emscripten* nativeGL) {
 
   if (_webGLBufferTimeStamp != _timestamp) {
     _webGLBufferTimeStamp = _timestamp;
-    _nativeGL->bufferData(_webGLBuffer);
+    _nativeGL->bufferData(_buffer);
   }
 
   return _webGLBuffer;
 }
 
 FloatBuffer_Emscripten::~FloatBuffer_Emscripten() {
+//  if (_webGLBuffer.as<bool>()) {
   if (!_webGLBuffer.isNull()) {
     _nativeGL->deleteBuffer(_webGLBuffer);
     _webGLBuffer = val::null();
