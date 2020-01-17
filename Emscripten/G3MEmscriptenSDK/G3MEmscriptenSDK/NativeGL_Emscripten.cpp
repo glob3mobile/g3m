@@ -276,11 +276,11 @@ void NativeGL_Emscripten::pixelStorei(int pname,
 
 std::vector<IGLTextureID*> NativeGL_Emscripten::genTextures(int  n) const {
   std::vector<IGLTextureID*> result;
-  result.reserve(n);
+//  result.reserve(n);
   for (size_t i = 0; i < n; i++) {
     val texture = _gl.call<val>("createTexture");
     GLTextureID_Emscripten* textureID = new GLTextureID_Emscripten(texture);
-    result[i] = textureID;
+    result.push_back(textureID);
   }
   return result;
 }

@@ -162,7 +162,7 @@ void G3MWidget_Emscripten::startWidget() {
     emscripten_set_main_loop_arg(G3MWidget_Emscripten_loopStep, // em_arg_callback_func func
                                  (void*) this,                  // void *arg
                                  60,                            // int fps
-                                 1                              // int simulate_infinite_loop
+                                 0                              // int simulate_infinite_loop
                                  );
   }
 }
