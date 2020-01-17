@@ -160,7 +160,8 @@ public:
       if ((listener != NULL) && (listener->_requestID == requestID)) {
         listener->onCancel( URL(_urlPath) );
         delete listener;
-        _listeners[i] = NULL;
+//        _listeners[i] = NULL;
+        _listeners.erase(_listeners.begin() + i);
         return true;
       }
     }
@@ -169,6 +170,7 @@ public:
   }
 
   bool cancelListenerForRequestId(const long long requestID) {
+    emscripten_console_log("---> cancelListenerForRequestId()");
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
       if ((listener != NULL) && (listener->_requestID == requestID)) {
@@ -207,6 +209,7 @@ public:
   }
 
   void cancelListenersTagged(const std::string& tag) {
+    emscripten_console_log("---> cancelListenersTagged()");
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
       if ((listener != NULL) && (listener->_tag == tag)) {
