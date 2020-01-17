@@ -34,6 +34,12 @@ EMSCRIPTEN_KEEPALIVE
 void Downloader_Emscripten_Handler_onLoad(int xhrStatus,
                                           int xhrResponseID,
                                           void* voidHandler);
+
+EMSCRIPTEN_KEEPALIVE
+void Downloader_Emscripten_Handler_processResponse(int xhrStatus,
+                                                   int domImageID,
+                                                   void* voidHandler);
+
 };
 
 
@@ -420,11 +426,36 @@ public:
     }
   }
 
+  void createImageFromBlobAndProcessResponse(int xhrStatus,
+                                             const val& blob) {
+    emscripten_console_warn("createImageFromBlobAndProcessResponse");
 
-  void jsCreateImageFromBlob(int xhrStatus,
-                             const val& blob) {
-    emscripten_console_warn("jsCreateImageFromBlob");
-#error DIEGO AT WORK!
+    const int blobID = EMStorage::put(blob);
+
+    EM_ASM({
+      var img = new Image();
+
+      var xhrStatus = $0;
+      var blob = document.EMStorage.take($1);
+      var imgURL = URL.createObjectURL(blob);
+
+      img.onload = function() {
+        Module.ccall('Downloader_Emscripten_Handler_processResponse', 'void', ['int', 'int', 'number'], [ xhrStatus, document.EMStorage.put(img), $2 ]);
+        URL.revokeObjectURL(imgURL);
+      };
+      img.onerror = function() {
+        Module.ccall('Downloader_Emscripten_Handler_processResponse', 'void', ['int', 'int', 'number'], [ xhrStatus, -1, $2 ]);
+        URL.revokeObjectURL(imgURL);
+      };
+      img.onabort = function() {
+        Module.ccall('Downloader_Emscripten_Handler_processResponse', 'void', ['int', 'int', 'number'], [ xhrStatus, -1, $2 ]);
+        URL.revokeObjectURL(imgURL);
+      };
+
+      img.src = imgURL;
+
+    }, xhrStatus, blobID, this);
+
     //    var that = this;
     //
     //    var auxImg = new Image();
@@ -457,7 +488,7 @@ public:
       emscripten_console_log("===> onLoad 2");
       if (_isImageRequest) {
         emscripten_console_log("===> onLoad 3");
-        jsCreateImageFromBlob(xhrStatus, xhrResponse);
+        createImageFromBlobAndProcessResponse(xhrStatus, xhrResponse);
       }
       else {
         emscripten_console_log("===> onLoad 4");
@@ -527,6 +558,20 @@ void Downloader_Emscripten_Handler_onLoad(int xhrStatus,
   emscripten_console_log("Downloader_Emscripten_Handler_onLoad 3");
   handler->onLoad(xhrStatus, xhrResponse);
 }
+
+void Downloader_Emscripten_Handler_processResponse(int xhrStatus,
+                                                   int domImageID,
+                                                   void* voidHandler) {
+  emscripten_console_log("Downloader_Emscripten_Handler_processResponse 1");
+  val domImage = (domImageID < 0) ? val::null() : EMStorage::take(domImageID);
+
+  emscripten_console_log("Downloader_Emscripten_Handler_processResponse 2");
+  Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;
+
+  emscripten_console_log("Downloader_Emscripten_Handler_processResponse 3");
+  handler->processResponse(xhrStatus, domImage);
+}
+
 
 #ifdef __USE_FETCH__
 void __downloadSucceeded(emscripten_fetch_t* fetch) {
