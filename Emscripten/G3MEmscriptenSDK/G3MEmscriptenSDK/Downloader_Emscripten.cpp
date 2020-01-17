@@ -278,12 +278,14 @@ public:
     const int urlID = EMStorage::put( val(_urlPath) );
 
     EM_ASM({
+      var url            = document.EMStorage.take($0);
+      var isImageRequest = $1;
+      var handler        = $2;
+
       var xhr = new XMLHttpRequest();
 
-      var url = document.EMStorage.take($0);
       xhr.open("GET", url, true);
 
-      var isImageRequest = $1;
       xhr.responseType = isImageRequest ? "blob" : "arraybuffer";
 
       xhr.onload = function() {
@@ -292,7 +294,7 @@ public:
           Module.ccall('Downloader_Emscripten_Handler_onLoad',
                        'void',
                        [ 'int',      'int',                                'number' ],
-                       [ xhr.status, document.EMStorage.put(xhr.response), $2       ]);
+                       [ xhr.status, document.EMStorage.put(xhr.response), handler  ]);
         }
       };
 
