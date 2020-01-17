@@ -32,7 +32,7 @@ private:
 protected:
   
 public:
-  G3MWidget_Emscripten();
+  G3MWidget_Emscripten(const std::string& canvasContainerID);
   
   ~G3MWidget_Emscripten();
   
@@ -49,8 +49,6 @@ public:
 
   void _loopStep();
   void _resizerStep();
-
-  void addInto(const std::string& containerID);
 
 };
 

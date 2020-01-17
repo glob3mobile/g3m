@@ -145,10 +145,9 @@ int main() {
   G3MBuilder_Emscripten builder;
 
   emscripten_console_log("Step 2");
-  G3MWidget_Emscripten* widget = builder.createWidget();
+  G3MWidget_Emscripten* widget = builder.createWidget("g3mWidgetHolder");
 
   emscripten_console_log("Step 3");
-  widget->addInto("g3mWidgetHolder");
-    
-  emscripten_console_log("Step 4");
+
+  emscripten_console_log("WOOOOOOOWWWW!!!");
 }

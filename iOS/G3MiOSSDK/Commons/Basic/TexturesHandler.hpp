@@ -11,8 +11,6 @@
 #include <string>
 #include <vector>
 
-#include "INativeGL.hpp"
-
 class IImage;
 class G3MRenderContext;
 class TextureHolder;

@@ -39,9 +39,9 @@ void G3MBuilder_Emscripten::addGPUProgramSources() {
   }
 }
 
-G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget() {
+G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget(const std::string& canvasContainerID) {
   emscripten_console_log("G3MBuilder_Emscripten::createWidget() 1");
-  G3MWidget_Emscripten* nativeWidget = new G3MWidget_Emscripten();
+  G3MWidget_Emscripten* nativeWidget = new G3MWidget_Emscripten(canvasContainerID);
   if (nativeWidget->isWebGLSupported()) {
     emscripten_console_log("G3MBuilder_Emscripten::createWidget() 2");
     addGPUProgramSources();

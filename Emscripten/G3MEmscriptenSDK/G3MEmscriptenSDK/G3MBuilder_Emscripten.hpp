@@ -26,7 +26,7 @@ public:
   
   ~G3MBuilder_Emscripten();
   
-  G3MWidget_Emscripten* createWidget();
+  G3MWidget_Emscripten* createWidget(const std::string& canvasContainerID);
   
 };
 

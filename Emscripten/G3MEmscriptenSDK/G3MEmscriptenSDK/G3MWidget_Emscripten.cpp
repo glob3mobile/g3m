@@ -13,6 +13,7 @@
 #include "DeviceLocation_Emscripten.hpp"
 #include "NativeGL_Emscripten.hpp"
 #include "GL.hpp"
+#include "EMStorage.hpp"
 
 #include <math.h>
 
@@ -22,7 +23,7 @@
 
 using namespace emscripten;
 
-G3MWidget_Emscripten::G3MWidget_Emscripten() :
+G3MWidget_Emscripten::G3MWidget_Emscripten(const std::string& canvasContainerID) :
 _canvas(val::null()),
 _webGLContext(val::null()),
 _width(0),
@@ -60,6 +61,14 @@ _devicePixelRatio(1)
   //
   //  exportJSFunctions();
 
+
+  val canvasContainer = document.call<val>("getElementById", canvasContainerID);
+  if ( canvasContainer.as<bool>() ) {
+    canvasContainer.call<void>("appendChild", _canvas);
+  }
+  else {
+    emscripten_console_error("Can't find canvasContainer");
+  }
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
@@ -99,10 +108,22 @@ void G3MWidget_Emscripten::addResizeHandler() {
 }
 
 void G3MWidget_Emscripten::_resizerStep() {
+
+  if (!_canvas.as<bool>()) {
+    emscripten_console_warn("G3MWidget_Emscripten::_resizerStep() * NO _canvas *");
+    return;
+  }
+
   const int canvasWidth  = _canvas["clientWidth"].as<int>();
   const int canvasHeight = _canvas["clientHeight"].as<int>();
 
   const val canvasParent = _canvas["parentNode"];
+
+  if (!canvasParent.as<bool>()) {
+    emscripten_console_warn("G3MWidget_Emscripten::_resizerStep() * NO canvasParent *");
+    return;
+  }
+
   const int canvasParentWidth  = canvasParent["clientWidth"].as<int>();
   const int canvasParentHeight = canvasParent["clientHeight"].as<int>();
 
@@ -147,6 +168,8 @@ void G3MWidget_Emscripten::startWidget() {
 }
 
 void G3MWidget_Emscripten::initSingletons() {
+  EMStorage::initialize();
+
   ILogger*         logger         = new Logger_Emscripten(LogLevel::InfoLevel);
   IFactory*        factory        = new Factory_Emscripten();
   IStringUtils*    stringUtils    = new StringUtils_Emscripten();
@@ -166,12 +189,4 @@ void G3MWidget_Emscripten::initSingletons() {
                             textUtils,
                             deviceAttitude,
                             deviceLocation);
-}
-
-void G3MWidget_Emscripten::addInto(const std::string& containerID) {
-  val document = val::global("document");
-
-  val container = document.call<val>("getElementById", containerID);
-
-  container.call<void>("appendChild", _canvas);
 }

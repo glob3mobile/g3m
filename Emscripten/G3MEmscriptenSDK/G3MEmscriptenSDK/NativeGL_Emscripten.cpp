@@ -280,7 +280,7 @@ std::vector<IGLTextureID*> NativeGL_Emscripten::genTextures(int  n) const {
   for (size_t i = 0; i < n; i++) {
     val texture = _gl.call<val>("createTexture");
     GLTextureID_Emscripten* textureID = new GLTextureID_Emscripten(texture);
-    result[0] = textureID;
+    result[i] = textureID;
   }
   return result;
 }
