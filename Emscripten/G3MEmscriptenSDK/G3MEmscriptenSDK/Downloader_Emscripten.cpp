@@ -157,9 +157,10 @@ public:
   bool removeListenerForRequestId(const long long requestID) {
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
-      if (listener->_requestID == requestID) {
+      if ((listener != NULL) && (listener->_requestID == requestID)) {
         listener->onCancel( URL(_urlPath) );
         delete listener;
+        _listeners[i] = NULL;
         return true;
       }
     }
@@ -170,7 +171,7 @@ public:
   bool cancelListenerForRequestId(const long long requestID) {
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
-      if (listener->_requestID == requestID) {
+      if ((listener != NULL) && (listener->_requestID == requestID)) {
         listener->cancel();
         return true;
       }
@@ -191,7 +192,7 @@ public:
     std::vector<ListenerEntry*>::iterator it = _listeners.begin();
     while ( it != _listeners.end() ) {
       ListenerEntry* listener = *it;
-      if (listener->_tag == tag) {
+      if ((listener != NULL) && (listener->_tag == tag)) {
         listener->onCancel(url);
 
         it = _listeners.erase(it);
@@ -208,7 +209,7 @@ public:
   void cancelListenersTagged(const std::string& tag) {
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
-      if (listener->_tag == tag) {
+      if ((listener != NULL) && (listener->_tag == tag)) {
         listener->cancel();
       }
     }
@@ -258,8 +259,10 @@ public:
     for (size_t i = 0; i < _listeners.size(); i++) {
       emscripten_console_log("onFetchDownloadSucceeded 4");
       ListenerEntry* listener = _listeners[i];
-      emscripten_console_log("onFetchDownloadSucceeded 5");
-      listener->onError(url);
+      if (listener != NULL) {
+        emscripten_console_log("onFetchDownloadSucceeded 5");
+        listener->onError(url);
+      }
     }
     
     emscripten_console_log("onFetchDownloadSucceeded 6");
@@ -273,7 +276,9 @@ public:
 
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
-      listener->onError(url);
+      if (listener != NULL) {
+        listener->onError(url);
+      }
     }
 
     emscripten_fetch_close(fetch); // Also free data on failure.

@@ -11,7 +11,7 @@ html, body {
     overflow: hidden;
 }
 
-canvas:focus {
+#_g3m_canvas {
     border: none !important;
     outline: none !important;
 }
