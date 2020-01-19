@@ -444,11 +444,11 @@ public:
         URL.revokeObjectURL(imgURL);
       };
       img.onerror = function() {
-        Module.ccall('Downloader_Emscripten_Handler_processResponse', 'void', ['int', 'int', 'number'], [ xhrStatus, -1, $2 ]);
+        Module.ccall('Downloader_Emscripten_Handler_processResponse', 'void', ['int', 'int', 'number'], [ xhrStatus, document.EMStorage.null(), $2 ]);
         URL.revokeObjectURL(imgURL);
       };
       img.onabort = function() {
-        Module.ccall('Downloader_Emscripten_Handler_processResponse', 'void', ['int', 'int', 'number'], [ xhrStatus, -1, $2 ]);
+        Module.ccall('Downloader_Emscripten_Handler_processResponse', 'void', ['int', 'int', 'number'], [ xhrStatus, document.EMStorage.null(), $2 ]);
         URL.revokeObjectURL(imgURL);
       };
 
@@ -563,7 +563,7 @@ void Downloader_Emscripten_Handler_processResponse(int xhrStatus,
                                                    int domImageID,
                                                    void* voidHandler) {
   emscripten_console_log("Downloader_Emscripten_Handler_processResponse 1");
-  val domImage = (domImageID < 0) ? val::null() : EMStorage::take(domImageID);
+  val domImage = EMStorage::take(domImageID);
 
   emscripten_console_log("Downloader_Emscripten_Handler_processResponse 2");
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;

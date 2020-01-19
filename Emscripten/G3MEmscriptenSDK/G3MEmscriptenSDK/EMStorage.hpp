@@ -20,9 +20,12 @@ public:
   static void initialize();
   
   static int put(const emscripten::val& value);
-  
+
+  static int null();
+
   static emscripten::val take(const int id);
-  
+
+
 };
 
 #endif

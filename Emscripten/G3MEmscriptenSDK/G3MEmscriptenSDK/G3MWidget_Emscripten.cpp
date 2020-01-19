@@ -39,7 +39,7 @@ _devicePixelRatio(1)
   
   _canvas.set("id", val("_g3m_canvas"));
 
-  _canvas.set("style", val("width: 100%;height: 100%;"));
+  //_canvas.set("style", val("width:100%; height:100%;"));
 
   val webGLContextArguments = val::object();
   //webGLContextArguments.set("preserveDrawingBuffer",           true);
@@ -129,6 +129,7 @@ void G3MWidget_Emscripten::_resizerStep() {
   const int canvasParentHeight = canvasParent["clientHeight"].as<int>();
 
   if ((canvasWidth != canvasParentWidth) || (canvasHeight != canvasParentHeight)) {
+    emscripten_console_log("G3MWidget_Emscripten::_resizerStep() ==> SizeChanged!!!!!!");
     onSizeChanged(canvasParentWidth, canvasParentHeight);
   }
 }
@@ -138,7 +139,6 @@ void G3MWidget_Emscripten::onSizeChanged(const int width,
   if ((_width != width) || (_height != height)) {
     _width  = width;
     _height = height;
-    //    setPixelSize(_width, _height);
 
     val window = val::global("window");
     val valDevicePixelRatio = window["devicePixelRatio"];
@@ -147,10 +147,14 @@ void G3MWidget_Emscripten::onSizeChanged(const int width,
     _physicalWidth  = round(_width  * _devicePixelRatio);
     _physicalHeight = round(_height * _devicePixelRatio);
 
-    //    _canvas.setCoordinateSpaceWidth(_physicalWidth);
-    //    _canvas.setCoordinateSpaceHeight(_physicalHeight);
     _canvas.set("width",  _physicalWidth);
     _canvas.set("height", _physicalHeight);
+
+    EM_ASM({
+      var canvas = document.getElementById("_g3m_canvas");
+      canvas.style.width  = $0 + "px";
+      canvas.style.height = $1 + "px";
+    }, _width, _height);
   }
 }
 

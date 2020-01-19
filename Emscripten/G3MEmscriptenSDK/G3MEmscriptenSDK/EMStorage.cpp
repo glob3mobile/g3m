@@ -38,11 +38,19 @@ void EMStorage::initialize() {
         return obj;
       };
 
+      document.EMStorage["null"] = function() {
+        return -1;
+      };
+
     }
   });
 }
 
 int EMStorage::put(const val& value) {
+  if (value.isNull()) {
+    return -1;
+  }
+
   val jsEMStorage = val::global("document")["EMStorage"];
   const int id = jsEMStorage["__idCounter"].as<int>() + 1;
   jsEMStorage.set("__idCounter", id);
@@ -50,7 +58,14 @@ int EMStorage::put(const val& value) {
   return id;
 }
 
+int EMStorage::null() {
+  return -1;
+}
+
 val EMStorage::take(const int id) {
+  if (id < 0) {
+    return val::null();
+  }
   val jsEMStorage = val::global("document")["EMStorage"];
   val obj = jsEMStorage[id];
   EM_ASM({ delete document.EMStorage[$0]; }, id);
