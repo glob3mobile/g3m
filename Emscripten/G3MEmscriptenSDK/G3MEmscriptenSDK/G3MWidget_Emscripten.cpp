@@ -14,6 +14,8 @@
 #include "NativeGL_Emscripten.hpp"
 #include "GL.hpp"
 #include "EMStorage.hpp"
+#include "Vector2F.hpp"
+#include "TouchEvent.hpp"
 
 #include <math.h>
 
@@ -176,6 +178,47 @@ static inline const char *emscripten_event_type_to_string(int eventType) {
   return events[eventType];
 }
 
+EM_JS(int, getAbsoluteLeft, (int elemID), {
+  var elem = document.EMStorage.take(elemID);
+
+  var left = 0;
+  var curr = elem;
+  // This intentionally excludes body which has a null offsetParent.
+  while (curr.offsetParent) {
+    left -= curr.scrollLeft;
+    curr = curr.parentNode;
+  }
+  while (elem) {
+    left += elem.offsetLeft;
+    elem = elem.offsetParent;
+  }
+  return left;
+});
+
+EM_JS(int, getAbsoluteTop, (int elemID), {
+  var elem = document.EMStorage.take(elemID);
+
+  var top = 0;
+  var curr = elem;
+  // This intentionally excludes body which has a null offsetParent.
+  while (curr.offsetParent) {
+    top -= curr.scrollTop;
+    curr = curr.parentNode;
+  }
+  while (elem) {
+    top += elem.offsetTop;
+    elem = elem.offsetParent;
+  }
+  return top;
+});
+
+const Vector2F G3MWidget_Emscripten::createPosition(const EmscriptenMouseEvent* e) const {
+  const int canvasAbsoluteLeft = getAbsoluteLeft( EMStorage::put(_canvas) );
+  const int canvasAbsoluteTop  = getAbsoluteTop ( EMStorage::put(_canvas) );
+  return Vector2F((e->clientX - canvasAbsoluteLeft) * _devicePixelRatio,
+                  (e->clientY - canvasAbsoluteTop ) * _devicePixelRatio);
+}
+
 EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
                                             const EmscriptenMouseEvent* e)
 {
@@ -193,6 +236,13 @@ EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
   }
   else if (eventType == EMSCRIPTEN_EVENT_DBLCLICK) {
     printf("==> DBLCLICK\n");
+
+    const Vector2F currentMousePosition = createPosition(e);
+    const Touch* touch = new Touch(currentMousePosition, currentMousePosition, (unsigned char) 2);
+    const TouchEvent* event = TouchEvent::create(TouchEventType::Down, touch);
+
+    _g3mWidget->onTouchEvent(event);
+
     return EM_TRUE;
   }
   else {

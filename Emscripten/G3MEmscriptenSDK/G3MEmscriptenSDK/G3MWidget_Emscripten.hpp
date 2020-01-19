@@ -7,7 +7,7 @@
 
 class GL;
 class G3MWidget;
-
+class Vector2F;
 
 
 class G3MWidget_Emscripten {
@@ -31,6 +31,8 @@ private:
 
   void onSizeChanged(const int width,
                      const int height);
+
+  const Vector2F createPosition(const EmscriptenMouseEvent* e) const;
 
 protected:
   
