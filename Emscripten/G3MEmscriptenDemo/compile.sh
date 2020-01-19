@@ -55,6 +55,7 @@ G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')
 # --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js
 
 #    -s FETCH=1 \
+#    -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 \
 
 export EMCC_CORES=8
 
