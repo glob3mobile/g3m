@@ -192,16 +192,14 @@ EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
     //    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
-
     {
       // events
       emscripten_set_mousedown_callback("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
-      emscripten_set_mousemove_callback("_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
-      emscripten_set_mouseup_callback  ("_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
+      emscripten_set_mousemove_callback("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
+      emscripten_set_mouseup_callback  ("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
 
-      emscripten_set_dblclick_callback ("_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
+      emscripten_set_dblclick_callback ("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
     }
-
 
     addResizeHandler();
 
