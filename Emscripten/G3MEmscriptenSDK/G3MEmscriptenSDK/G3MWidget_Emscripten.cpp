@@ -235,12 +235,9 @@ EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
     return EM_TRUE;
   }
   else if (eventType == EMSCRIPTEN_EVENT_DBLCLICK) {
-    printf("==> DBLCLICK\n");
-
     const Vector2F currentMousePosition = createPosition(e);
     const Touch* touch = new Touch(currentMousePosition, currentMousePosition, (unsigned char) 2);
     const TouchEvent* event = TouchEvent::create(TouchEventType::Down, touch);
-
     _g3mWidget->onTouchEvent(event);
 
     return EM_TRUE;
