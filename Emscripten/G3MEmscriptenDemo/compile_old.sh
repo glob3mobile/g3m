@@ -59,17 +59,6 @@ G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')
 
 export EMCC_CORES=8
 
-    # -s ASSERTIONS=2 \
-    # -s SAFE_HEAP=0 -s ALIASING_FUNCTION_POINTERS=0 \
-    # -s DISABLE_EXCEPTION_CATCHING=2 \
-    # -s DEMANGLE_SUPPORT=1 \
-    # -fsanitize=undefined \
-    # -fsanitize=address \
-    # --source-map-base http://localhost:8080/ \
-    # --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
-    # -g4 \
-    # -O0 \
-
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras      \
@@ -91,12 +80,21 @@ em++ \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=10 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     -s WASM=1 \
+    -s ASSERTIONS=2 \
+    -s SAFE_HEAP=0 -s ALIASING_FUNCTION_POINTERS=0 \
+    -s DISABLE_EXCEPTION_CATCHING=2 \
+    -s DEMANGLE_SUPPORT=1 \
     -s ALLOW_MEMORY_GROWTH=1 \
     -s ASAN_SHADOW_SIZE=536870912 \
+    -fsanitize=undefined \
+    -fsanitize=address \
     --bind \
     -Wall \
     -DC_CODE \
-    -O3 \
+    -O0 \
+    -g4 \
+    --source-map-base http://localhost:8080/ \
+    --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
     -std=c++11 \
     -o deploy/G3MEmscriptenDemo.js \
     || exit 1
