@@ -71,6 +71,12 @@ _devicePixelRatio(1)
   else {
     emscripten_console_error("Can't find canvasContainer");
   }
+
+  EM_ASM({
+    var canvas = document.getElementById("_g3m_canvas");
+    canvas.style.width  = "0px";
+    canvas.style.height = "0px";
+  });
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
