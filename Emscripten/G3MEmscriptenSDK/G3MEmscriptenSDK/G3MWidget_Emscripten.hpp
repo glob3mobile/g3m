@@ -3,9 +3,12 @@
 #define G3MWidget_Emscripten_hpp
 
 #include <emscripten/val.h>
+#include <emscripten/html5.h>
 
 class GL;
 class G3MWidget;
+
+
 
 class G3MWidget_Emscripten {
 private:
@@ -49,6 +52,9 @@ public:
 
   void _loopStep();
   void _resizerStep();
+
+  EM_BOOL _onMouseEvent(int eventType,
+                        const EmscriptenMouseEvent* e);
 
 };
 

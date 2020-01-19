@@ -54,6 +54,7 @@ G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget(const std::string& can
 
     emscripten_console_log("G3MBuilder_Emscripten::createWidget() 5");
     nativeWidget->setG3MWidget(create());
+    
     emscripten_console_log("G3MBuilder_Emscripten::createWidget() 6");
     nativeWidget->startWidget();
   }

@@ -18,7 +18,7 @@
 #include <math.h>
 
 #include <emscripten/emscripten.h>
-#include <emscripten/html5.h>
+
 
 
 using namespace emscripten;
@@ -39,7 +39,7 @@ _devicePixelRatio(1)
   
   _canvas.set("id", val("_g3m_canvas"));
 
-  //_canvas.set("style", val("width:100%; height:100%;"));
+  _canvas.set("style", val("width:0px; height:0px"));
 
   val webGLContextArguments = val::object();
   //webGLContextArguments.set("preserveDrawingBuffer",           true);
@@ -71,12 +71,6 @@ _devicePixelRatio(1)
   else {
     emscripten_console_error("Can't find canvasContainer");
   }
-
-  EM_ASM({
-    var canvas = document.getElementById("_g3m_canvas");
-    canvas.style.width  = "0px";
-    canvas.style.height = "0px";
-  });
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
@@ -146,8 +140,7 @@ void G3MWidget_Emscripten::onSizeChanged(const int width,
     _width  = width;
     _height = height;
 
-    val window = val::global("window");
-    val valDevicePixelRatio = window["devicePixelRatio"];
+    val valDevicePixelRatio = val::global("window")["devicePixelRatio"];
     _devicePixelRatio = valDevicePixelRatio.as<bool>() ? valDevicePixelRatio.as<float>() : 1;
 
     _physicalWidth  = round(_width  * _devicePixelRatio);
@@ -164,12 +157,55 @@ void G3MWidget_Emscripten::onSizeChanged(const int width,
   }
 }
 
+extern "C" {
+
+EMSCRIPTEN_KEEPALIVE
+EM_BOOL G3MWidget_Emscripten_onMouseEvent(int eventType, const EmscriptenMouseEvent* e, void* userData) {
+  G3MWidget_Emscripten* widget = (G3MWidget_Emscripten*) userData;
+  return widget->_onMouseEvent(eventType, e);
+}
+
+};
+
+static inline const char *emscripten_event_type_to_string(int eventType) {
+  const char *events[] = { "(invalid)", "(none)", "keypress", "keydown", "keyup", "click", "mousedown", "mouseup", "dblclick", "mousemove", "wheel", "resize",
+    "scroll", "blur", "focus", "focusin", "focusout", "deviceorientation", "devicemotion", "orientationchange", "fullscreenchange", "pointerlockchange",
+    "visibilitychange", "touchstart", "touchend", "touchmove", "touchcancel", "gamepadconnected", "gamepaddisconnected", "beforeunload",
+    "batterychargingchange", "batterylevelchange", "webglcontextlost", "webglcontextrestored", "(invalid)" };
+  ++eventType;
+  if (eventType < 0) eventType = 0;
+  if (eventType >= sizeof(events)/sizeof(events[0])) eventType = sizeof(events)/sizeof(events[0])-1;
+  return events[eventType];
+}
+
+EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
+                                            const EmscriptenMouseEvent* e)
+{
+  printf("%s, screen: (%ld,%ld), client: (%ld,%ld),%s%s%s%s button: %hu, buttons: %hu, movement: (%ld,%ld), canvas: (%ld,%ld), target: (%ld, %ld)\n",
+    emscripten_event_type_to_string(eventType), e->screenX, e->screenY, e->clientX, e->clientY,
+    e->ctrlKey ? " CTRL" : "", e->shiftKey ? " SHIFT" : "", e->altKey ? " ALT" : "", e->metaKey ? " META" : "",
+    e->button, e->buttons, e->movementX, e->movementY, e->canvasX, e->canvasY, e->targetX, e->targetY);
+
+  return 1;
+}
+
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
     //    _motionEventProcessor = new MotionEventProcessor(this, _canvas);
+
+//    {
+//      // events
+//      emscripten_set_mousedown_callback("_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
+//      emscripten_set_mousemove_callback("_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
+//      emscripten_set_mouseup_callback  ("_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
+//
+//      emscripten_set_dblclick_callback ("_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
+//    }
+
+
     addResizeHandler();
 
-    //    jsStartRenderLoop();
+    // render loop
     emscripten_set_main_loop_arg(G3MWidget_Emscripten_loopStep, // em_arg_callback_func func
                                  (void*) this,                  // void *arg
                                  60,                            // int fps
