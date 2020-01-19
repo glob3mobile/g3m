@@ -26,6 +26,8 @@ private:
   long _resizerIntervalID;
 
   float _devicePixelRatio;
+
+  bool _mouseDown;
   
   void addResizeHandler();
 

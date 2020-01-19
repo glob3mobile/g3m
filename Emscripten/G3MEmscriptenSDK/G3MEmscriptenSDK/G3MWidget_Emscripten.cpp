@@ -33,7 +33,8 @@ _height(0),
 _physicalWidth(0),
 _physicalHeight(0),
 _resizerIntervalID(0),
-_devicePixelRatio(1)
+_devicePixelRatio(1),
+_mouseDown(false)
 {
   val document = val::global("document");
   
@@ -223,30 +224,92 @@ EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
                                             const EmscriptenMouseEvent* e)
 {
   if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN) {
-    printf("==> MOUSEDOWN\n");
-    return EM_TRUE;
-  }
-  else if (eventType == EMSCRIPTEN_EVENT_MOUSEMOVE) {
-    printf("==> MOUSEMOVE\n");
-    return EM_TRUE;
-  }
-  else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP) {
-    printf("==> MOUSEUP\n");
-    return EM_TRUE;
-  }
-  else if (eventType == EMSCRIPTEN_EVENT_DBLCLICK) {
-    const Vector2F currentMousePosition = createPosition(e);
-    const Touch* touch = new Touch(currentMousePosition, currentMousePosition, (unsigned char) 2);
-    const TouchEvent* event = TouchEvent::create(TouchEventType::Down, touch);
+    _mouseDown = true;
+
+    const Vector2F currentPos = createPosition(e);
+    const float previousX = currentPos._x - e->movementX;
+    const float previousY = currentPos._y - e->movementY;
+
+    TouchEvent* event;
+    if (e->shiftKey) {
+      std::vector<const Touch*> touches;
+      touches.push_back( new Touch(Vector2F(currentPos._x - 10, currentPos._y), Vector2F(previousX - 10, previousY) ) );
+      touches.push_back( new Touch(currentPos,                                  Vector2F(previousX     , previousY) ) );
+      touches.push_back( new Touch(Vector2F(currentPos._x + 10, currentPos._y), Vector2F(previousX + 10, previousY) ) );
+      event = TouchEvent::create(TouchEventType::Down, touches);
+    }
+    else {
+      Touch* touch = new Touch(currentPos, Vector2F(previousX, previousY));
+      event = TouchEvent::create(TouchEventType::Down, touch);
+    }
+
     _g3mWidget->onTouchEvent(event);
 
     return EM_TRUE;
   }
+  else if (eventType == EMSCRIPTEN_EVENT_MOUSEMOVE) {
+    if (_mouseDown) {
+      const Vector2F currentPos = createPosition(e);
+      const float previousX = currentPos._x - e->movementX;
+      const float previousY = currentPos._y - e->movementY;
+
+      TouchEvent* event;
+      if (e->shiftKey) {
+        std::vector<const Touch*> touches;
+        touches.push_back( new Touch(Vector2F(currentPos._x - 10, currentPos._y), Vector2F(previousX - 10, previousY) ) );
+        touches.push_back( new Touch(currentPos,                                  Vector2F(previousX     , previousY) ) );
+        touches.push_back( new Touch(Vector2F(currentPos._x + 10, currentPos._y), Vector2F(previousX + 10, previousY) ) );
+        event = TouchEvent::create(TouchEventType::Move, touches);
+      }
+      else {
+        Touch* touch = new Touch(currentPos, Vector2F(previousX, previousY));
+        event = TouchEvent::create(TouchEventType::Move, touch);
+      }
+
+      _g3mWidget->onTouchEvent(event);
+    }
+
+    return EM_TRUE;
+  }
+  else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP) {
+    if (_mouseDown) {
+      _mouseDown = false;
+      
+      const Vector2F currentPos = createPosition(e);
+      const float previousX = currentPos._x - e->movementX;
+      const float previousY = currentPos._y - e->movementY;
+
+      TouchEvent* event;
+      if (e->shiftKey) {
+        std::vector<const Touch*> touches;
+        touches.push_back( new Touch(Vector2F(currentPos._x - 10, currentPos._y), Vector2F(previousX - 10, previousY) ) );
+        touches.push_back( new Touch(currentPos,                                  Vector2F(previousX     , previousY) ) );
+        touches.push_back( new Touch(Vector2F(currentPos._x + 10, currentPos._y), Vector2F(previousX + 10, previousY) ) );
+        event = TouchEvent::create(TouchEventType::Up, touches);
+      }
+      else {
+        Touch* touch = new Touch(currentPos, Vector2F(previousX, previousY));
+        event = TouchEvent::create(TouchEventType::Up, touch);
+      }
+
+      _g3mWidget->onTouchEvent(event);
+    }
+
+    return EM_TRUE;
+  }
+  else if (eventType == EMSCRIPTEN_EVENT_DBLCLICK) {
+    const Vector2F currentPos = createPosition(e);
+    const Touch* touch = new Touch(currentPos, currentPos, (unsigned char) 2);
+    const TouchEvent* event = TouchEvent::create(TouchEventType::Down, touch);
+    _g3mWidget->onTouchEvent(event);
+    
+    return EM_TRUE;
+  }
   else {
     printf("%s, screen: (%ld,%ld), client: (%ld,%ld),%s%s%s%s button: %hu, buttons: %hu, movement: (%ld,%ld), canvas: (%ld,%ld), target: (%ld, %ld)\n",
-      emscripten_event_type_to_string(eventType), e->screenX, e->screenY, e->clientX, e->clientY,
-      e->ctrlKey ? " CTRL" : "", e->shiftKey ? " SHIFT" : "", e->altKey ? " ALT" : "", e->metaKey ? " META" : "",
-      e->button, e->buttons, e->movementX, e->movementY, e->canvasX, e->canvasY, e->targetX, e->targetY);
+           emscripten_event_type_to_string(eventType), e->screenX, e->screenY, e->clientX, e->clientY,
+           e->ctrlKey ? " CTRL" : "", e->shiftKey ? " SHIFT" : "", e->altKey ? " ALT" : "", e->metaKey ? " META" : "",
+           e->button, e->buttons, e->movementX, e->movementY, e->canvasX, e->canvasY, e->targetX, e->targetY);
     return EM_FALSE;
   }
 }
