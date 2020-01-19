@@ -267,7 +267,6 @@ public:
   }
 
   bool cancelListenerForRequestId(const long long requestID) {
-    emscripten_console_log("---> cancelListenerForRequestId()");
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
       if ((listener != NULL) && (listener->_requestID == requestID)) {
@@ -306,7 +305,6 @@ public:
   }
 
   void cancelListenersTagged(const std::string& tag) {
-    emscripten_console_log("---> cancelListenersTagged()");
     for (size_t i = 0; i < _listeners.size(); i++) {
       ListenerEntry* listener = _listeners[i];
       if ((listener != NULL) && (listener->_tag == tag)) {
@@ -379,25 +377,19 @@ public:
 
   void processResponse(int statusCode,
                        const val& data) {
-    emscripten_console_log("** processResponse (1)");
     const bool dataIsValid = (statusCode == 200) && !data.isNull();
 
-    emscripten_console_log("** processResponse (2)");
     const URL url(_urlPath);
 
     if (dataIsValid) {
-      emscripten_console_log("** processResponse (3)");
       for (size_t i = 0; i < _listeners.size(); i++) {
-        emscripten_console_log("** processResponse (4)");
         ListenerEntry* listener = _listeners[i];
         if (listener != NULL) {
           if (listener->isCanceled()) {
-            emscripten_console_log("** processResponse (5)");
             listener->onCanceledDownload(url, data);
             listener->onCancel(url);
           }
           else {
-            emscripten_console_log("** processResponse (6)");
             listener->onDownload(url, data);
           }
         }
@@ -428,8 +420,6 @@ public:
 
   void createImageFromBlobAndProcessResponse(int xhrStatus,
                                              const val& blob) {
-    emscripten_console_warn("createImageFromBlobAndProcessResponse");
-
     const int blobID = EMStorage::put(blob);
 
     EM_ASM({
@@ -479,24 +469,17 @@ public:
 
   void onLoad(int xhrStatus,
               const val& xhrResponse) {
-    emscripten_console_log( xhrResponse.call<std::string>("toString").c_str() );
-
-    emscripten_console_log("===> onLoad 1" );
     _downloader->removeDownloadingHandlerForURLPath(_urlPath);
 
     if (xhrStatus == 200) {
-      emscripten_console_log("===> onLoad 2");
       if (_isImageRequest) {
-        emscripten_console_log("===> onLoad 3");
         createImageFromBlobAndProcessResponse(xhrStatus, xhrResponse);
       }
       else {
-        emscripten_console_log("===> onLoad 4");
         processResponse(xhrStatus, xhrResponse);
       }
     }
     else {
-      emscripten_console_log("===> onLoad 5");
       processResponse(xhrStatus, val::null());
     }
   }
@@ -506,7 +489,6 @@ public:
 
 #ifdef __USE_FETCH__
   void onFetchDownloadSucceeded(emscripten_fetch_t* fetch) {
-    emscripten_console_log("onFetchDownloadSucceeded 1");
     printf("Finished downloading %llu bytes from URL %s.\n", fetch->numBytes, fetch->url);
 
     // The data is now available at fetch->data[0] through fetch->data[fetch->numBytes-1];
@@ -549,26 +531,16 @@ public:
 void Downloader_Emscripten_Handler_onLoad(int xhrStatus,
                                           int xhrResponseID,
                                           void* voidHandler) {
-  emscripten_console_log("Downloader_Emscripten_Handler_onLoad 1");
   val xhrResponse = EMStorage::take(xhrResponseID);
-
-  emscripten_console_log("Downloader_Emscripten_Handler_onLoad 2");
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;
-
-  emscripten_console_log("Downloader_Emscripten_Handler_onLoad 3");
   handler->onLoad(xhrStatus, xhrResponse);
 }
 
 void Downloader_Emscripten_Handler_processResponse(int xhrStatus,
                                                    int domImageID,
                                                    void* voidHandler) {
-  emscripten_console_log("Downloader_Emscripten_Handler_processResponse 1");
   val domImage = EMStorage::take(domImageID);
-
-  emscripten_console_log("Downloader_Emscripten_Handler_processResponse 2");
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;
-
-  emscripten_console_log("Downloader_Emscripten_Handler_processResponse 3");
   handler->processResponse(xhrStatus, domImage);
 }
 

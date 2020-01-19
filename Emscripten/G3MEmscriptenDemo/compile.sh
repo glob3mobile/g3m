@@ -85,6 +85,7 @@ em++ \
     -s DISABLE_EXCEPTION_CATCHING=2 \
     -s DEMANGLE_SUPPORT=1 \
     -s ALLOW_MEMORY_GROWTH=1 \
+    -s ASAN_SHADOW_SIZE=536870912 \
     -fsanitize=undefined \
     -fsanitize=address \
     --bind \
