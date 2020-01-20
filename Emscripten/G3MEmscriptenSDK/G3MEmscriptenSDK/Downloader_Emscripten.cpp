@@ -219,11 +219,9 @@ public:
     _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
   }
 
-private:
   ~Downloader_Emscripten_Handler() {
-    emscripten_console_log("### ~Downloader_Emscripten_Handler()");
+
   }
-public:
 
   const long long getPriority() const {
     return _priority;

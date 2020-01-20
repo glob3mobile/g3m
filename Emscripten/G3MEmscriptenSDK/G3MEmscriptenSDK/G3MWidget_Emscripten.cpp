@@ -49,21 +49,9 @@ _mouseDown(false)
   webGLContextArguments.set("preferLowPowerToHighPerformance", true);
   webGLContextArguments.set("antialias",                       false);
   _webGLContext = _canvas.call<val>("getContext", val("webgl"), webGLContextArguments);
-  
-  // jsCanvas.addEventListener("webglcontextlost", function(
-  // 		event) {
-  // 	event.preventDefault();
-  // 	$wnd.alert("webglcontextlost");
-  // }, false);
-  
+
   INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
   _gl = new GL(nativeGL);
-
-  //  jsDefineG3MBrowserObjects();
-  //
-  //  sinkEvents(Event.TOUCHEVENTS | Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
-  //
-  //  exportJSFunctions();
 
 
   val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
@@ -73,6 +61,14 @@ _mouseDown(false)
   else {
     emscripten_console_error("Can't find canvasContainer");
   }
+
+  EM_ASM({
+    var canvas = document.getElementById("_g3m_canvas");
+    canvas.addEventListener("webglcontextlost", function(event) {
+      event.preventDefault();
+      alert("webglcontextlost");
+    }, false);
+  });
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
@@ -383,7 +379,6 @@ std::vector<const Touch*> G3MWidget_Emscripten::createPointers(const EmscriptenT
   return pointers;
 }
 
-
 EM_BOOL G3MWidget_Emscripten::_onTouchEvent(int eventType,
                                             const EmscriptenTouchEvent* e)
 {
@@ -410,7 +405,7 @@ EM_BOOL G3MWidget_Emscripten::_onTouchEvent(int eventType,
   if (event) {
     _g3mWidget->onTouchEvent(event);
   }
-  
+
   return EM_TRUE;
 }
 
