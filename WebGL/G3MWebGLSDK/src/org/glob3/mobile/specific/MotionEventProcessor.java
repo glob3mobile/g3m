@@ -15,7 +15,7 @@ import com.google.gwt.user.client.*;
 
 final class MotionEventProcessor {
 
-   private static final Vector2F DELTA                  = new Vector2F(10, 0);
+   private static final Vector2F DELTA = new Vector2F(10, 0);
 
 
    private final G3MWidget_WebGL _widget;

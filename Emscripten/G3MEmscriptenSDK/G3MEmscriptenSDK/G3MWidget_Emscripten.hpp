@@ -5,6 +5,8 @@
 #include <emscripten/val.h>
 #include <emscripten/html5.h>
 
+#include "TouchEvent.hpp"
+
 class GL;
 class G3MWidget;
 class Vector2F;
@@ -36,6 +38,9 @@ private:
 
   const Vector2F createPosition(const EmscriptenMouseEvent* e) const;
 
+  const TouchEvent* createTouchFromMouseEvent(const TouchEventType& type,
+                                              const EmscriptenMouseEvent* e) const;
+
 protected:
   
 public:
@@ -59,6 +64,9 @@ public:
 
   EM_BOOL _onMouseEvent(int eventType,
                         const EmscriptenMouseEvent* e);
+
+  EM_BOOL _onMouseWheelEvent(int eventType,
+                             const EmscriptenWheelEvent* e);
 
 };
 
