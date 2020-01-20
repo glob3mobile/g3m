@@ -173,6 +173,13 @@ EM_BOOL G3MWidget_Emscripten_onMouseWheelEvent(int eventType,
   return widget->_onMouseWheelEvent(eventType, e);
 }
 
+EM_BOOL G3MWidget_Emscripten_onTouchEvent(int eventType,
+                                          const EmscriptenTouchEvent* e,
+                                          void* userData) {
+  G3MWidget_Emscripten* widget = (G3MWidget_Emscripten*) userData;
+  return widget->_onTouchEvent(eventType, e);
+}
+
 static inline const char *emscripten_event_type_to_string(int eventType) {
   const char *events[] = { "(invalid)", "(none)", "keypress", "keydown", "keyup", "click", "mousedown", "mouseup", "dblclick", "mousemove", "wheel", "resize",
     "scroll", "blur", "focus", "focusin", "focusout", "deviceorientation", "devicemotion", "orientationchange", "fullscreenchange", "pointerlockchange",
@@ -233,6 +240,7 @@ const TouchEvent* G3MWidget_Emscripten::createTouchFromMouseEvent(const TouchEve
 
   if (e->shiftKey) {
     std::vector<const Touch*> touches;
+    touches.reserve(3);
     touches.push_back( new Touch(Vector2F(currentPos._x - 10, currentPos._y), Vector2F(previousX - 10, previousY) ) );
     touches.push_back( new Touch(currentPos,                                  Vector2F(previousX     , previousY) ) );
     touches.push_back( new Touch(Vector2F(currentPos._x + 10, currentPos._y), Vector2F(previousX + 10, previousY) ) );
@@ -258,6 +266,7 @@ EM_BOOL G3MWidget_Emscripten::_onMouseWheelEvent(int eventType,
 
     {
       std::vector<const Touch*> beginTouches;
+      beginTouches.reserve(2);
       beginTouches.push_back(new Touch(beginFirstPosition,  beginFirstPosition));
       beginTouches.push_back(new Touch(beginSecondPosition, beginSecondPosition));
 
@@ -270,6 +279,7 @@ EM_BOOL G3MWidget_Emscripten::_onMouseWheelEvent(int eventType,
       const Vector2F endSecondPosition(beginSecondPosition._x, beginSecondPosition._y + delta);
 
       std::vector<const Touch*> endTouches;
+      endTouches.reserve(2);
       endTouches.push_back(new Touch(endFirstPosition,  beginFirstPosition ));
       endTouches.push_back(new Touch(endSecondPosition, beginSecondPosition));
 
@@ -340,6 +350,70 @@ EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
   }
 }
 
+
+std::vector<const Touch*> G3MWidget_Emscripten::createPointers(const EmscriptenTouchEvent* e) {
+  const int canvasAbsoluteLeft = getAbsoluteLeft( EMStorage::put(_canvas) );
+  const int canvasAbsoluteTop  = getAbsoluteTop ( EMStorage::put(_canvas) );
+
+  const int numTouches = e->numTouches;
+
+  std::map<long, XY> currentPositions;
+
+  std::vector<const Touch*> pointers;
+
+  pointers.reserve(numTouches);
+
+  for (int i = 0; i < numTouches; i++) {
+    const EmscriptenTouchPoint point = e->touches[i];
+    const long id = point.identifier;
+
+    const float x = (point.clientX - canvasAbsoluteLeft) * _devicePixelRatio;
+    const float y = (point.clientY - canvasAbsoluteTop ) * _devicePixelRatio;
+    const Vector2F currentPosition(x, y);
+
+    const Vector2F previousPosition = (_previousTouchesPositions.find(id) == _previousTouchesPositions.end()) ? Vector2F(x, y) : _previousTouchesPositions[id].asVector2F();
+
+    currentPositions[id] = {x, y};
+
+    pointers.push_back(new Touch(currentPosition, previousPosition));
+  }
+
+  _previousTouchesPositions = currentPositions;
+
+  return pointers;
+}
+
+
+EM_BOOL G3MWidget_Emscripten::_onTouchEvent(int eventType,
+                                            const EmscriptenTouchEvent* e)
+{
+  TouchEvent* event = NULL;
+
+  switch (eventType) {
+    case EMSCRIPTEN_EVENT_TOUCHSTART:
+      event = TouchEvent::create(TouchEventType::Down, createPointers(e));
+      break;
+
+    case EMSCRIPTEN_EVENT_TOUCHEND:
+      event = TouchEvent::create(TouchEventType::Up, createPointers(e));
+      break;
+
+    case EMSCRIPTEN_EVENT_TOUCHMOVE:
+      event = TouchEvent::create(TouchEventType::Move, createPointers(e));
+      break;
+
+    case EMSCRIPTEN_EVENT_TOUCHCANCEL:
+      _previousTouchesPositions.clear();
+      break;
+  }
+
+  if (event) {
+    _g3mWidget->onTouchEvent(event);
+  }
+  
+  return EM_TRUE;
+}
+
 void G3MWidget_Emscripten::startWidget() {
   if (_g3mWidget != NULL) {
     {
@@ -350,6 +424,14 @@ void G3MWidget_Emscripten::startWidget() {
       emscripten_set_dblclick_callback ("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);
 
       emscripten_set_wheel_callback    ("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseWheelEvent);
+    }
+
+    {
+      // touch events
+      emscripten_set_touchstart_callback ("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onTouchEvent);
+      emscripten_set_touchend_callback   ("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onTouchEvent);
+      emscripten_set_touchmove_callback  ("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onTouchEvent);
+      emscripten_set_touchcancel_callback("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onTouchEvent);
     }
 
     addResizeHandler();

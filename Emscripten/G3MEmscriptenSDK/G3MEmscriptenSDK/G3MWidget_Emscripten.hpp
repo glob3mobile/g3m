@@ -6,6 +6,7 @@
 #include <emscripten/html5.h>
 
 #include "TouchEvent.hpp"
+#include <map>
 
 class GL;
 class G3MWidget;
@@ -14,6 +15,15 @@ class Vector2F;
 
 class G3MWidget_Emscripten {
 private:
+  struct XY {
+    float _x;
+    float _y;
+
+    const Vector2F asVector2F() const {
+      return Vector2F(_x, _y);
+    }
+  };
+
   emscripten::val _canvas;
   emscripten::val _webGLContext;
   
@@ -41,6 +51,11 @@ private:
   const TouchEvent* createTouchFromMouseEvent(const TouchEventType& type,
                                               const EmscriptenMouseEvent* e) const;
 
+  std::map<long, XY> _previousTouchesPositions;
+
+  std::vector<const Touch*> createPointers(const EmscriptenTouchEvent* e);
+
+
 protected:
   
 public:
@@ -67,6 +82,9 @@ public:
 
   EM_BOOL _onMouseWheelEvent(int eventType,
                              const EmscriptenWheelEvent* e);
+
+  EM_BOOL _onTouchEvent(int eventType,
+                        const EmscriptenTouchEvent* e);
 
 };
 
