@@ -37,11 +37,15 @@ _devicePixelRatio(1),
 _mouseDown(false)
 {
   val document = val::global("document");
-  
-  _canvas = document.call<val>("createElement", val("canvas"));
-  
-  _canvas.set("id", val("_g3m_canvas"));
 
+  val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
+  if ( !canvasContainer.as<bool>() ) {
+    emscripten_console_error("Can't find canvasContainer");
+    THROW_EXCEPTION("Can't find canvasContainer!");
+  }
+
+  _canvas = document.call<val>("createElement", val("canvas"));
+  _canvas.set("id",    val("_g3m_canvas"));
   _canvas.set("style", val("width:0px; height:0px"));
 
   val webGLContextArguments = val::object();
@@ -54,15 +58,7 @@ _mouseDown(false)
   INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
   _gl = new GL(nativeGL);
 
-
-  val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
-  if ( canvasContainer.as<bool>() ) {
-    canvasContainer.call<void>("appendChild", _canvas);
-  }
-  else {
-    emscripten_console_error("Can't find canvasContainer");
-    THROW_EXCEPTION("Can't find canvasContainer!");
-  }
+  canvasContainer.call<void>("appendChild", _canvas);
 
   EM_ASM({
     var canvas = document.getElementById("_g3m_canvas");
@@ -190,38 +186,38 @@ static inline const char *emscripten_event_type_to_string(int eventType) {
 }
 
 EM_JS(int, getAbsoluteLeft, (int elemID), {
-  var elem = document.EMStorage.take(elemID);
+      var elem = document.EMStorage.take(elemID);
 
-  var left = 0;
-  var curr = elem;
-  // This intentionally excludes body which has a null offsetParent.
-  while (curr.offsetParent) {
-    left -= curr.scrollLeft;
-    curr = curr.parentNode;
-  }
-  while (elem) {
-    left += elem.offsetLeft;
-    elem = elem.offsetParent;
-  }
-  return left;
-});
+      var left = 0;
+      var curr = elem;
+      // This intentionally excludes body which has a null offsetParent.
+      while (curr.offsetParent) {
+      left -= curr.scrollLeft;
+      curr = curr.parentNode;
+      }
+      while (elem) {
+      left += elem.offsetLeft;
+      elem = elem.offsetParent;
+      }
+      return left;
+      });
 
 EM_JS(int, getAbsoluteTop, (int elemID), {
-  var elem = document.EMStorage.take(elemID);
+      var elem = document.EMStorage.take(elemID);
 
-  var top = 0;
-  var curr = elem;
-  // This intentionally excludes body which has a null offsetParent.
-  while (curr.offsetParent) {
-    top -= curr.scrollTop;
-    curr = curr.parentNode;
-  }
-  while (elem) {
-    top += elem.offsetTop;
-    elem = elem.offsetParent;
-  }
-  return top;
-});
+      var top = 0;
+      var curr = elem;
+      // This intentionally excludes body which has a null offsetParent.
+      while (curr.offsetParent) {
+      top -= curr.scrollTop;
+      curr = curr.parentNode;
+      }
+      while (elem) {
+      top += elem.offsetTop;
+      elem = elem.offsetParent;
+      }
+      return top;
+      });
 
 const Vector2F G3MWidget_Emscripten::createPosition(const EmscriptenMouseEvent* e) const {
   const int canvasAbsoluteLeft = getAbsoluteLeft( EMStorage::put(_canvas) );
@@ -285,18 +281,18 @@ EM_BOOL G3MWidget_Emscripten::_onMouseWheelEvent(int eventType,
       _g3mWidget->onTouchEvent( TouchEvent::create(TouchEventType::Up,   endTouches) );
     }
 
-//    if (e->deltaMode == DOM_DELTA_PIXEL) {
-//      printf("*** onMouseWheelEvent: DOM_DELTA_PIXEL %f\n", e->deltaY);
-//    }
-//    else if (e->deltaMode == DOM_DELTA_LINE) {
-//      printf("*** onMouseWheelEvent: DOM_DELTA_LINE %f\n", e->deltaY);
-//    }
-//    else if (e->deltaMode == DOM_DELTA_PAGE) {
-//      printf("*** onMouseWheelEvent: DOM_DELTA_PAGE %f\n", e->deltaY);
-//    }
-//    else {
-//      printf("*** onMouseWheelEvent: unknown delta page %f\n", e->deltaY);
-//    }
+    //    if (e->deltaMode == DOM_DELTA_PIXEL) {
+    //      printf("*** onMouseWheelEvent: DOM_DELTA_PIXEL %f\n", e->deltaY);
+    //    }
+    //    else if (e->deltaMode == DOM_DELTA_LINE) {
+    //      printf("*** onMouseWheelEvent: DOM_DELTA_LINE %f\n", e->deltaY);
+    //    }
+    //    else if (e->deltaMode == DOM_DELTA_PAGE) {
+    //      printf("*** onMouseWheelEvent: DOM_DELTA_PAGE %f\n", e->deltaY);
+    //    }
+    //    else {
+    //      printf("*** onMouseWheelEvent: unknown delta page %f\n", e->deltaY);
+    //    }
   }
 
   return EM_TRUE;

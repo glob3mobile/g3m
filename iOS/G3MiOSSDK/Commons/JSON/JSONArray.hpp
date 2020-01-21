@@ -21,6 +21,10 @@ public:
     return this;
   }
 
+//  JSONArray();
+
+  JSONArray(size_t initialCapacity);
+
   ~JSONArray();
 
   const JSONBaseObject* get(const size_t index) const;

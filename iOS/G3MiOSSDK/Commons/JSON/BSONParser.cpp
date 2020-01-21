@@ -96,10 +96,9 @@ JSONString* BSONParser::parseString(ByteBufferIterator* iterator) {
 
 JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator,
                                   bool nullAsObject) {
-  //const int arraySize = iterator->nextInt32();
-  iterator->nextInt32(); // consumes the size
+  const int arraySize = iterator->nextInt32();
 
-  JSONArray* result = new JSONArray();
+  JSONArray* result = new JSONArray(arraySize);
   while (iterator->hasNext()) {
     const unsigned char type = iterator->nextUInt8();
     if (type == 0) {
@@ -119,10 +118,9 @@ JSONArray* BSONParser::parseArray(ByteBufferIterator* iterator,
 
 JSONArray* BSONParser::parseCustomizedArray(ByteBufferIterator* iterator,
                                             bool nullAsObject) {
-  //const int arraySize = iterator->nextInt32();
-  iterator->nextInt32(); // consumes the size
+  const int arraySize = iterator->nextInt32();
 
-  JSONArray* result = new JSONArray();
+  JSONArray* result = new JSONArray(arraySize);
   while (iterator->hasNext()) {
     const unsigned char type = iterator->nextUInt8();
     if (type == 0) {

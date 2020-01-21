@@ -17,6 +17,19 @@
 #include "JSONString.hpp"
 #include "JSONVisitor.hpp"
 
+//JSONArray::JSONArray() {
+//
+//}
+
+JSONArray::JSONArray(size_t initialCapacity) {
+#ifdef C_CODE
+  _entries.reserve(initialCapacity);
+#endif
+#ifdef JAVA_CODE
+  _entries.ensureCapacity(initialCapacity);
+#endif
+}
+
 JSONArray::~JSONArray() {
   for (int i = 0; i < _entries.size(); i++) {
     delete _entries[i];
@@ -126,9 +139,9 @@ const std::string JSONArray::description() const {
 }
 
 JSONArray* JSONArray::deepCopy() const {
-  JSONArray* result = new JSONArray();
-
   const size_t size = this->size();
+  JSONArray* result = new JSONArray(size);
+
   for (size_t i = 0; i < size; i++) {
     result->add( JSONBaseObject::deepCopy( get(i) ) );
   }

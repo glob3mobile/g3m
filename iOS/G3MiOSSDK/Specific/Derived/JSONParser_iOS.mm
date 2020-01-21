@@ -60,7 +60,7 @@ JSONBaseObject* JSONParser_iOS::convert(NSObject* object,
                                         bool nullAsObject) {
   if ([object isKindOfClass:[NSArray class]]) {
     NSArray *jsonArray = (NSArray *)object;
-    JSONArray* array = new JSONArray();
+    JSONArray* array = new JSONArray(jsonArray.count);
     for (NSObject *element in jsonArray) {
       array->add(convert(element, nullAsObject));
     }
