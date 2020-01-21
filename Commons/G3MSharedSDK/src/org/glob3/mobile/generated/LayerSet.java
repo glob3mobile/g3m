@@ -29,15 +29,13 @@ package org.glob3.mobile.generated;
 
 public class LayerSet implements ChangedInfoListener
 {
-  private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
-
   private ChangedListener _listener;
-
   private ChangedInfoListener _changedInfoListener;
+  private G3MContext _context;
+  private TileImageProvider _tileImageProvider;
 
-  //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
+  private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
-
   private final java.util.ArrayList<Info> _infos = new java.util.ArrayList<Info>();
 
   private void layersChanged()
@@ -52,10 +50,6 @@ public class LayerSet implements ChangedInfoListener
       _listener.changed();
     }
   }
-
-  private G3MContext _context;
-
-  private TileImageProvider _tileImageProvider;
 
   private TileImageProvider createTileImageProvider(G3MRenderContext rc, LayerTilesRenderParameters layerTilesRenderParameters)
   {
@@ -215,12 +209,11 @@ public class LayerSet implements ChangedInfoListener
   }
 
   public LayerSet()
-  //  _layerTilesRenderParameters(NULL),
   {
      _listener = null;
+     _changedInfoListener = null;
      _context = null;
      _tileImageProvider = null;
-     _changedInfoListener = null;
   }
 
   public void dispose()

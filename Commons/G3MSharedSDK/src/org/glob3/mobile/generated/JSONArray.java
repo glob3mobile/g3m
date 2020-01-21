@@ -25,6 +25,18 @@ public class JSONArray extends JSONBaseObject
     return this;
   }
 
+//  JSONArray();
+
+
+  //JSONArray::JSONArray() {
+  //
+  //}
+  
+  public JSONArray(int initialCapacity)
+  {
+    _entries.ensureCapacity(initialCapacity);
+  }
+
   public void dispose()
   {
     for (int i = 0; i < _entries.size(); i++)
@@ -216,9 +228,9 @@ public class JSONArray extends JSONBaseObject
 
   public final JSONArray deepCopy()
   {
-    JSONArray result = new JSONArray();
-  
     final int size = this.size();
+    JSONArray result = new JSONArray(size);
+  
     for (int i = 0; i < size; i++)
     {
       result.add(JSONBaseObject.deepCopy(get(i)));

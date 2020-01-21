@@ -238,8 +238,8 @@ public class GPUVariable
   {
   }
 
-  public final GPUVariableType _variableType;
   public final String _name;
+  public final GPUVariableType _variableType;
 
   public GPUVariable(String name, GPUVariableType type)
   {

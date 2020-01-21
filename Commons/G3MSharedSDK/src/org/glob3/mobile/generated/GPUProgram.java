@@ -152,10 +152,10 @@ public class GPUProgram
 
   private GPUProgram()
   {
-     _createdAttributes = null;
-     _createdUniforms = null;
-     _nUniforms = 0;
      _nAttributes = 0;
+     _nUniforms = 0;
+     _createdUniforms = null;
+     _createdAttributes = null;
      _uniformsCode = 0;
      _attributesCode = 0;
      _gl = null;

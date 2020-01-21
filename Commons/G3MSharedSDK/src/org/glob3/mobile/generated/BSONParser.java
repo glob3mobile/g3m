@@ -81,10 +81,9 @@ public class BSONParser
   }
   private static JSONArray parseArray(ByteBufferIterator iterator, boolean nullAsObject)
   {
-    //const int arraySize = iterator->nextInt32();
-    iterator.nextInt32(); // consumes the size
+    final int arraySize = iterator.nextInt32();
   
-    JSONArray result = new JSONArray();
+    JSONArray result = new JSONArray(arraySize);
     while (iterator.hasNext())
     {
       final byte type = iterator.nextUInt8();
@@ -106,10 +105,9 @@ public class BSONParser
   }
   private static JSONArray parseCustomizedArray(ByteBufferIterator iterator, boolean nullAsObject)
   {
-    //const int arraySize = iterator->nextInt32();
-    iterator.nextInt32(); // consumes the size
+    final int arraySize = iterator.nextInt32();
   
-    JSONArray result = new JSONArray();
+    JSONArray result = new JSONArray(arraySize);
     while (iterator.hasNext())
     {
       final byte type = iterator.nextUInt8();

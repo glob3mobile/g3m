@@ -15,7 +15,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class IImage;
 //class G3MRenderContext;
 //class TextureHolder;

@@ -51,9 +51,10 @@ public class MutableMatrix44D
   private double _m32;
   private double _m33;
 
+  private boolean _isValid;
+
   private Matrix44D _matrix44D;
 
-  private boolean _isValid;
 
 
   private MutableMatrix44D(boolean isValid)

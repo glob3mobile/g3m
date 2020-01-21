@@ -81,8 +81,8 @@ public class GL
   public GL(INativeGL nativeGL)
   {
      _nativeGL = nativeGL;
-     _texturesIDAllocationCounter = 0;
      _currentGPUProgram = null;
+     _texturesIDAllocationCounter = 0;
      _clearScreenState = null;
     //Init Constants
     GLCullFace.init(_nativeGL);
