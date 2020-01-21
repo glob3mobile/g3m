@@ -28,27 +28,21 @@ class RenderState;
 
 class LayerSet : public ChangedInfoListener {
 private:
-  std::vector<Layer*> _layers;
-
-  ChangedListener* _listener;
-
+  ChangedListener*     _listener;
   ChangedInfoListener* _changedInfoListener;
-
-  //  mutable LayerTilesRenderParameters* _layerTilesRenderParameters;
-  std::vector<std::string> _errors;
-
-  std::vector<const Info*> _infos;
-
-  void layersChanged() const;
-
 #ifdef C_CODE
   mutable const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
   private G3MContext _context;
 #endif
-
   mutable TileImageProvider* _tileImageProvider;
+
+  std::vector<Layer*>      _layers;
+  std::vector<std::string> _errors;
+  std::vector<const Info*> _infos;
+
+  void layersChanged() const;
 
   TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                              const LayerTilesRenderParameters* layerTilesRenderParameters) const;
@@ -62,14 +56,7 @@ private:
                                                                         std::vector<std::string>& errors) const;
 
 public:
-  LayerSet() :
-  _listener(NULL),
-  _context(NULL),
-  _tileImageProvider(NULL),
-  //  _layerTilesRenderParameters(NULL),
-  _changedInfoListener(NULL)
-  {
-  }
+  LayerSet();
 
   ~LayerSet();
 

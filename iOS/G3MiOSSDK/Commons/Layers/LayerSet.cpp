@@ -20,6 +20,14 @@
 #include "ILogger.hpp"
 
 
+LayerSet::LayerSet() :
+_listener(NULL),
+_changedInfoListener(NULL),
+_context(NULL),
+_tileImageProvider(NULL)
+{
+}
+
 LayerSet::~LayerSet() {
   for (unsigned int i = 0; i < _layers.size(); i++) {
     delete _layers[i];

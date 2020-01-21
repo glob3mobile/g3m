@@ -15,6 +15,7 @@
 #include "GL.hpp"
 #include "EMStorage.hpp"
 #include "Vector2F.hpp"
+#include "ErrorHandling.hpp"
 
 #include <math.h>
 
@@ -60,6 +61,7 @@ _mouseDown(false)
   }
   else {
     emscripten_console_error("Can't find canvasContainer");
+    THROW_EXCEPTION("Can't find canvasContainer!");
   }
 
   EM_ASM({
