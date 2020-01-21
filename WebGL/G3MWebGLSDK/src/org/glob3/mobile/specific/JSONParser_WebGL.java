@@ -2,19 +2,7 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONBoolean;
-import org.glob3.mobile.generated.JSONDouble;
-import org.glob3.mobile.generated.JSONFloat;
-import org.glob3.mobile.generated.JSONInteger;
-import org.glob3.mobile.generated.JSONLong;
-import org.glob3.mobile.generated.JSONNull;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.JSONString;
+import org.glob3.mobile.generated.*;
 
 
 public class JSONParser_WebGL
@@ -76,8 +64,8 @@ public class JSONParser_WebGL
 
       final com.google.gwt.json.client.JSONArray jsonArray = value.isArray();
       if (jsonArray != null) {
-         final JSONArray array = new JSONArray();
          final int size = jsonArray.size();
+         final JSONArray array = new JSONArray(size);
          for (int i = 0; i < size; i++) {
             final com.google.gwt.json.client.JSONValue element = jsonArray.get(i);
             array.add(convert(element, nullAsObject));

@@ -2,17 +2,7 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONBoolean;
-import org.glob3.mobile.generated.JSONDouble;
-import org.glob3.mobile.generated.JSONFloat;
-import org.glob3.mobile.generated.JSONInteger;
-import org.glob3.mobile.generated.JSONLong;
-import org.glob3.mobile.generated.JSONNull;
-import org.glob3.mobile.generated.JSONString;
+import org.glob3.mobile.generated.*;
 
 
 public class JSONParser_Android
@@ -68,20 +58,20 @@ public class JSONParser_Android
          final long longValue = ((Long) jsonObject).longValue();
          final int intValue = (int) longValue;
          return (longValue == intValue) //
-                                       ? new JSONInteger(intValue) //
-                                       : new JSONLong(longValue);
+                                        ? new JSONInteger(intValue) //
+                                        : new JSONLong(longValue);
       }
       else if (jsonObject instanceof Double) {
          final double doubleValue = ((Double) jsonObject).doubleValue();
          final float floatValue = (float) doubleValue;
          return (doubleValue == floatValue) //
-                                           ? new JSONFloat(floatValue) //
-                                           : new JSONDouble(doubleValue);
+                                            ? new JSONFloat(floatValue) //
+                                            : new JSONDouble(doubleValue);
       }
       else if (jsonObject instanceof org.json.JSONArray) {
          final org.json.JSONArray jsonArray = (org.json.JSONArray) jsonObject;
-         final org.glob3.mobile.generated.JSONArray result = new org.glob3.mobile.generated.JSONArray();
          final int length = jsonArray.length();
+         final org.glob3.mobile.generated.JSONArray result = new org.glob3.mobile.generated.JSONArray(length);
          for (int i = 0; i < length; i++) {
             try {
                if (jsonArray.isNull(i)) {
