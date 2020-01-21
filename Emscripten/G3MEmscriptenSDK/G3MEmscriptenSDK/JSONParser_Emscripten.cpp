@@ -20,8 +20,9 @@
 using namespace emscripten;
 
 
-const JSONBaseObject* convert(val& json,
-                              bool nullAsObject);
+const JSONBaseObject* convert(const val& json,
+                              const bool nullAsObject,
+                              const val& Object);
 
 const JSONBaseObject* JSONParser_Emscripten::parse(const IByteBuffer* buffer,
                                                    bool nullAsObject)
@@ -32,15 +33,13 @@ const JSONBaseObject* JSONParser_Emscripten::parse(const IByteBuffer* buffer,
 const JSONBaseObject* JSONParser_Emscripten::parse(const std::string& json,
                                                    bool nullAsObject)
 {
-  val JSON = val::global("JSON");
-
-  val result = JSON.call<val>("parse", json);
-  return convert(result, nullAsObject);
+  const val result = val::global("JSON").call<val>("parse", json);
+  return convert(result, nullAsObject, val::global("Object"));
 }
 
-const JSONBaseObject* _convert(const val& json,
-                               const bool nullAsObject,
-                               const val& Object)
+const JSONBaseObject* convert(const val& json,
+                              const bool nullAsObject,
+                              const val& Object)
 {
   if (json.isNull()) {
     return nullAsObject ? new JSONNull() : NULL;
@@ -55,18 +54,22 @@ const JSONBaseObject* _convert(const val& json,
 
   if (json.isNumber()) {
     const double doubleValue = json.as<double>();
+
     const int intValue = (int) doubleValue;
     if (doubleValue == intValue) {
       return new JSONInteger(intValue);
     }
+
     const long long longValue = (long long) doubleValue;
     if (doubleValue == longValue) {
       return new JSONLong(longValue);
     }
+
     const float floatValue = (float) doubleValue;
     if (doubleValue == floatValue) {
       return new JSONFloat(floatValue);
     }
+
     return new JSONDouble(doubleValue);
   }
 
@@ -79,7 +82,7 @@ const JSONBaseObject* _convert(const val& json,
     JSONArray* array = new JSONArray(length);
     for (int i = 0; i < length; i++) {
       val element = json[i];
-      array->add( convert(element, nullAsObject) );
+      array->add( convert(element, nullAsObject, Object) );
     }
     return array;
   }
@@ -87,14 +90,14 @@ const JSONBaseObject* _convert(const val& json,
   {
     // object
     JSONObject* object = new JSONObject();
-    
+
     val jsKeys = Object.call<val>("keys", json);
     const int keysLength = jsKeys["length"].as<int>();
     for (int i = 0; i < keysLength; i++) {
       const val jsKey   = jsKeys[i];
       const val jsValue = json[jsKey];
 
-      const JSONBaseObject* value = _convert(jsValue, nullAsObject, Object);
+      const JSONBaseObject* value = convert(jsValue, nullAsObject, Object);
       if (value != NULL) {
         const std::string key = jsKey.as<std::string>();
         object->put(key, value);
@@ -103,9 +106,4 @@ const JSONBaseObject* _convert(const val& json,
   }
 
   return NULL;
-}
-
-const JSONBaseObject* convert(val& json,
-                              bool nullAsObject) {
-  return _convert(json, nullAsObject, val::global("Object"));
 }

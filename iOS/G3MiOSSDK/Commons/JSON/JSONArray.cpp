@@ -17,9 +17,9 @@
 #include "JSONString.hpp"
 #include "JSONVisitor.hpp"
 
-//JSONArray::JSONArray() {
-//
-//}
+JSONArray::JSONArray() {
+
+}
 
 JSONArray::JSONArray(size_t initialCapacity) {
 #ifdef C_CODE
@@ -177,7 +177,7 @@ void JSONArray::acceptVisitor(JSONVisitor* visitor) const {
     }
     visitor->visitArrayBeforeChild(this, i);
     if(get(i)!= NULL) {
-        get(i)->acceptVisitor(visitor);
+      get(i)->acceptVisitor(visitor);
     }
   }
 
