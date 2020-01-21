@@ -27,48 +27,28 @@ mkdir deploy
 #    -s EXIT_RUNTIME=0 \
 #    -s NO_EXIT_RUNTIME=0 \
 
-#G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'EM*.cpp')" 
-#G3M_EMSCRIPTEN_SOURCES2="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'Image_Emscripten.cpp')" 
-#G3M_EMSCRIPTEN_SOURCES3="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'StringBuilder_Emscripten.cpp')" 
-#G3M_EMSCRIPTEN_SOURCES4="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'TextUtils_Emscripten.cpp')" 
-#G3M_EMSCRIPTEN_SOURCES5="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'MathUtils_Emscripten.cpp')" 
-#G3M_EMSCRIPTEN_SOURCES6="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name 'StringUtils_Emscripten.cpp')" 
-
-#    ${G3M_EMSCRIPTEN_SOURCES} \
-#    ${G3M_EMSCRIPTEN_SOURCES2} \
-#    ${G3M_EMSCRIPTEN_SOURCES3} \
-#    ${G3M_EMSCRIPTEN_SOURCES4} \
-#    ${G3M_EMSCRIPTEN_SOURCES5} \
-#    ${G3M_EMSCRIPTEN_SOURCES6} \
-#    ${G3M_LIBS_DIRECTORY}/libG3MEmscripten.bc       \
-
 G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')" 
 
-#    -Wall -Werror \
 #    -s DISABLE_EXCEPTION_CATCHING=2 \
 #    -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
-
 #    -s WASM=1 \
 #    --source-map-base http://localhost:8080/ \
 #    -g4 \
-
 # --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js
-
 #    -s FETCH=1 \
-#    -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=0 \
 
 export EMCC_CORES=8
 
-    # -s ASSERTIONS=2 \
-    # -s SAFE_HEAP=0 -s ALIASING_FUNCTION_POINTERS=0 \
-    # -s DISABLE_EXCEPTION_CATCHING=2 \
-    # -s DEMANGLE_SUPPORT=1 \
-    # -fsanitize=undefined \
-    # -fsanitize=address \
-    # --source-map-base http://localhost:8080/ \
-    # --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
-    # -g4 \
-    # -O0 \
+# -s ASSERTIONS=2 \
+# -s SAFE_HEAP=0 -s ALIASING_FUNCTION_POINTERS=0 \
+# -s DISABLE_EXCEPTION_CATCHING=2 \
+# -s DEMANGLE_SUPPORT=1 \
+# -fsanitize=undefined \
+# -fsanitize=address \
+# --source-map-base http://localhost:8080/ \
+# --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
+# -g4 \
+# -O0 \
 
 em++ \
     -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
@@ -104,7 +84,5 @@ em++ \
 cp -rv html/ deploy/
 find . -name ".DS_Store" -exec rm -rf {} \;
 
-cd deploy
-#emrun --no_browser --port 8080 .
-python -m SimpleHTTPServer 8080
+./run.sh
 
