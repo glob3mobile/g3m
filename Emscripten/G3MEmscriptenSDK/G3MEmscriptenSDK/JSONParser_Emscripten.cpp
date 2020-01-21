@@ -14,6 +14,7 @@
 #include "JSONDouble.hpp"
 #include "JSONString.hpp"
 #include "JSONArray.hpp"
+#include "JSONObject.hpp"
 
 
 using namespace emscripten;
@@ -37,28 +38,9 @@ const JSONBaseObject* JSONParser_Emscripten::parse(const std::string& json,
   return convert(result, nullAsObject);
 }
 
-//var printError = function(error, explicit) {
-//    console.log(`[${explicit ? 'EXPLICIT' : 'INEXPLICIT'}] ${error.name}: ${error.message}`);
-//}
-//
-//try {
-//    var json = `
-//        {
-//            "first": "Jane",
-//            last: "Doe",
-//        }
-//    `
-//    console.log(JSON.parse(json));
-//} catch (e) {
-//    if (e instanceof SyntaxError) {
-//        printError(e, true);
-//    } else {
-//        printError(e, false);
-//    }
-//}
-
-const JSONBaseObject* convert(val& json,
-                              bool nullAsObject)
+const JSONBaseObject* _convert(const val& json,
+                               const bool nullAsObject,
+                               const val& Object)
 {
   if (json.isNull()) {
     return nullAsObject ? new JSONNull() : NULL;
@@ -94,17 +76,36 @@ const JSONBaseObject* convert(val& json,
 
   if (json.isArray()) {
     const int length = json["length"].as<int>();
-
     JSONArray* array = new JSONArray(length);
     for (int i = 0; i < length; i++) {
-       val element = json[i];
-       array->add( convert(element, nullAsObject) );
+      val element = json[i];
+      array->add( convert(element, nullAsObject) );
     }
     return array;
   }
 
-//  if (json.is)
+  {
+    // object
+    JSONObject* object = new JSONObject();
+    
+    val jsKeys = Object.call<val>("keys", json);
+    const int keysLength = jsKeys["length"].as<int>();
+    for (int i = 0; i < keysLength; i++) {
+      const val jsKey   = jsKeys[i];
+      const val jsValue = json[jsKey];
 
-#error TODO
+      const JSONBaseObject* value = _convert(jsValue, nullAsObject, Object);
+      if (value != NULL) {
+        const std::string key = jsKey.as<std::string>();
+        object->put(key, value);
+      }
+    }
+  }
 
+  return NULL;
+}
+
+const JSONBaseObject* convert(val& json,
+                              bool nullAsObject) {
+  return _convert(json, nullAsObject, val::global("Object"));
 }
