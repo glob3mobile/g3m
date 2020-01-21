@@ -25,13 +25,11 @@ public class JSONArray extends JSONBaseObject
     return this;
   }
 
-//  JSONArray();
-
-
-  //JSONArray::JSONArray() {
-  //
-  //}
+  public JSONArray()
+  {
   
+  }
+
   public JSONArray(int initialCapacity)
   {
     _entries.ensureCapacity(initialCapacity);
@@ -253,7 +251,7 @@ public class JSONArray extends JSONBaseObject
       visitor.visitArrayBeforeChild(this, i);
       if(get(i)!= null)
       {
-          get(i).acceptVisitor(visitor);
+        get(i).acceptVisitor(visitor);
       }
     }
   
