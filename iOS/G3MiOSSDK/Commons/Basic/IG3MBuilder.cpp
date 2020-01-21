@@ -735,7 +735,7 @@ G3MWidget* IG3MBuilder::create() {
    * If not, the main renderer will be made up of an only renderer (planetRenderer).
    */
   Renderer* mainRenderer = NULL;
-  if (getRenderers()->size() > 0) {
+  if ((getRenderers()->size() > 0) || _atmosphere) {
     CompositeRenderer* composite = new CompositeRenderer();
 
     if (_atmosphere) {

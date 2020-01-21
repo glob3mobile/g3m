@@ -255,8 +255,8 @@ EM_BOOL G3MWidget_Emscripten::_onMouseWheelEvent(int eventType,
     const float y = (e->mouse.clientY - canvasAbsoluteTop ) * _devicePixelRatio;
     const float delta = e->deltaY / 16;
 
-    const Vector2F beginFirstPosition (x, y - 10);
-    const Vector2F beginSecondPosition(x, y + 10);
+    const Vector2F beginFirstPosition (x - 10, y - 10);
+    const Vector2F beginSecondPosition(x + 10, y + 10);
 
     {
       std::vector<const Touch*> beginTouches;
@@ -269,8 +269,8 @@ EM_BOOL G3MWidget_Emscripten::_onMouseWheelEvent(int eventType,
     }
 
     {
-      const Vector2F endFirstPosition (beginFirstPosition._x , beginFirstPosition._y  - delta);
-      const Vector2F endSecondPosition(beginSecondPosition._x, beginSecondPosition._y + delta);
+      const Vector2F endFirstPosition (beginFirstPosition._x  - delta, beginFirstPosition._y  - delta);
+      const Vector2F endSecondPosition(beginSecondPosition._x + delta, beginSecondPosition._y + delta);
 
       std::vector<const Touch*> endTouches;
       endTouches.reserve(2);
