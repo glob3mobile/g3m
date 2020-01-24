@@ -2,46 +2,31 @@
 
 package org.glob3.mobile.specific;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Typeface;
-
-import org.glob3.mobile.generated.GFont;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.Vector2F;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 import static android.graphics.Paint.FILTER_BITMAP_FLAG;
 import static android.graphics.Paint.LINEAR_TEXT_FLAG;
 
+import org.glob3.mobile.generated.*;
+
+import android.graphics.*;
+
 
 public final class Canvas_Android
-   extends
-      ICanvas {
+                                  extends
+                                     ICanvas {
 
    private static final int PAINT_FLAGS = ANTI_ALIAS_FLAG | LINEAR_TEXT_FLAG | FILTER_BITMAP_FLAG;
 
-   private Bitmap           _bitmap     = null;
-   private Canvas           _canvas     = null;
-   private final Paint      _fillPaint;
-   private final Paint      _strokePaint;
+   private Bitmap      _bitmap = null;
+   private Canvas      _canvas = null;
+   private final Paint _fillPaint;
+   private final Paint _strokePaint;
 
-   private Path             _path       = null;
+   private Path _path = null;
 
-   private final RectF      _rectF      = new RectF();                                            // RectF instance for reuse (and avoid garbage)
-   private final Rect       _rect       = new Rect();                                             // Rect instance for reuse (and avoid garbage)
+   private final RectF _rectF = new RectF(); // RectF instance for reuse (and avoid garbage)
+   private final Rect  _rect  = new Rect();  // Rect instance for reuse (and avoid garbage)
 
 
    Canvas_Android(final boolean retina) {
@@ -62,7 +47,7 @@ public final class Canvas_Android
                               final int height) {
       final float devicePixelRatio = _retina ? IFactory.instance().getDeviceInfo().getDevicePixelRatio() : 1;
 
-      final int scaledWidth = Math.round(width * devicePixelRatio);
+      final int scaledWidth  = Math.round(width * devicePixelRatio);
       final int scaledHeight = Math.round(height * devicePixelRatio);
 
       _bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
@@ -76,7 +61,7 @@ public final class Canvas_Android
    @Override
    protected void _setFont(final GFont font) {
       final Typeface typeface = createTypeface(font);
-      final float fontSize = font.getSize();
+      final float    fontSize = font.getSize();
 
       _fillPaint.setTypeface(typeface);
       _fillPaint.setTextSize(fontSize);
@@ -128,7 +113,7 @@ public final class Canvas_Android
    protected void _createImage(final IImageListener listener,
                                final boolean autodelete) {
       final Bitmap bitmap = Bitmap.createBitmap(_bitmap);
-      final Image_Android result = new Image_Android(bitmap, null);
+      final IImage result = new Image_Android(bitmap, null);
       listener.imageCreated(result);
       if (autodelete) {
          listener.dispose();
@@ -140,7 +125,7 @@ public final class Canvas_Android
    protected Vector2F _textExtent(final String text) {
       final Rect textBounds = _rect;
       _fillPaint.getTextBounds(text, 0, text.length(), textBounds);
-      final int width = textBounds.width();
+      final int width  = textBounds.width();
       final int height = textBounds.height();
       return new Vector2F(width, height);
    }
@@ -153,10 +138,10 @@ public final class Canvas_Android
 
    private static int toAndroidColor(final org.glob3.mobile.generated.Color g3mColor) {
       return android.graphics.Color.argb( //
-               floatTo255(g3mColor._alpha), //
-               floatTo255(g3mColor._red), //
-               floatTo255(g3mColor._green), //
-               floatTo255(g3mColor._blue));
+            floatTo255(g3mColor._alpha), //
+            floatTo255(g3mColor._red), //
+            floatTo255(g3mColor._green), //
+            floatTo255(g3mColor._blue));
    }
 
 
@@ -204,7 +189,7 @@ public final class Canvas_Android
       final Paint clearPaint = new Paint();
       clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
       _canvas.drawRect(left, top, width, height, clearPaint);
-      //_canvas.drawColor(android.graphics.Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+      // _canvas.drawColor(android.graphics.Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
    }
 
 
@@ -337,9 +322,9 @@ public final class Canvas_Android
 
       final RectF dst = _rectF;
       dst.set(left, //
-               top, //
-               left + width, // Right
-               top + height); // Bottom
+            top, //
+            left + width, // Right
+            top + height); // Bottom
 
       _canvas.drawBitmap(bitmap, null, dst, null);
    }
@@ -356,9 +341,9 @@ public final class Canvas_Android
 
       final RectF dst = _rectF;
       dst.set(left, //
-               top, //
-               left + width, // Right
-               top + height); // Bottom
+            top, //
+            left + width, // Right
+            top + height); // Bottom
 
       final Paint paint = new Paint(PAINT_FLAGS);
 
@@ -381,15 +366,15 @@ public final class Canvas_Android
 
       final RectF dst = _rectF;
       dst.set(destLeft, //
-               destTop, //
-               destLeft + destWidth, // Right
-               destTop + destHeight); // Bottom
+            destTop, //
+            destLeft + destWidth, // Right
+            destTop + destHeight); // Bottom
 
       final Rect src = _rect;
       src.set(Math.round(srcLeft), //
-               Math.round(srcTop), //
-               Math.round(srcLeft + srcWidth), // Right
-               Math.round(srcTop + srcHeight)); // Bottom
+            Math.round(srcTop), //
+            Math.round(srcLeft + srcWidth), // Right
+            Math.round(srcTop + srcHeight)); // Bottom
 
       _canvas.drawBitmap(bitmap, src, dst, null);
    }
@@ -398,15 +383,15 @@ public final class Canvas_Android
    @Override
    protected void _setLineCap(final StrokeCap cap) {
       switch (cap) {
-         case CAP_BUTT:
-            _strokePaint.setStrokeCap(Paint.Cap.BUTT);
-            break;
-         case CAP_ROUND:
-            _strokePaint.setStrokeCap(Paint.Cap.ROUND);
-            break;
-         case CAP_SQUARE:
-            _strokePaint.setStrokeCap(Paint.Cap.SQUARE);
-            break;
+      case CAP_BUTT:
+         _strokePaint.setStrokeCap(Paint.Cap.BUTT);
+         break;
+      case CAP_ROUND:
+         _strokePaint.setStrokeCap(Paint.Cap.ROUND);
+         break;
+      case CAP_SQUARE:
+         _strokePaint.setStrokeCap(Paint.Cap.SQUARE);
+         break;
       }
    }
 
@@ -414,15 +399,15 @@ public final class Canvas_Android
    @Override
    protected void _setLineJoin(final StrokeJoin join) {
       switch (join) {
-         case JOIN_MITER:
-            _strokePaint.setStrokeJoin(Paint.Join.MITER);
-            break;
-         case JOIN_ROUND:
-            _strokePaint.setStrokeJoin(Paint.Join.ROUND);
-            break;
-         case JOIN_BEVEL:
-            _strokePaint.setStrokeJoin(Paint.Join.BEVEL);
-            break;
+      case JOIN_MITER:
+         _strokePaint.setStrokeJoin(Paint.Join.MITER);
+         break;
+      case JOIN_ROUND:
+         _strokePaint.setStrokeJoin(Paint.Join.ROUND);
+         break;
+      case JOIN_BEVEL:
+         _strokePaint.setStrokeJoin(Paint.Join.BEVEL);
+         break;
       }
    }
 
@@ -513,15 +498,15 @@ public final class Canvas_Android
 
       final RectF dst = _rectF;
       dst.set(destLeft, //
-               destTop, //
-               destLeft + destWidth, // Right
-               destTop + destHeight); // Bottom
+            destTop, //
+            destLeft + destWidth, // Right
+            destTop + destHeight); // Bottom
 
       final Rect src = _rect;
       src.set(Math.round(srcLeft), //
-               Math.round(srcTop), //
-               Math.round(srcLeft + srcWidth), // Right
-               Math.round(srcTop + srcHeight)); // Bottom
+            Math.round(srcTop), //
+            Math.round(srcLeft + srcWidth), // Right
+            Math.round(srcTop + srcHeight)); // Bottom
 
       final Paint paint = new Paint(PAINT_FLAGS);
 

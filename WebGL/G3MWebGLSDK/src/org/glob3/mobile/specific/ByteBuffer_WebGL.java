@@ -2,14 +2,15 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.*;
 
 import com.google.gwt.core.client.*;
 
 
 public final class ByteBuffer_WebGL
-         extends
-            IByteBuffer {
+                                    extends
+                                       IByteBuffer {
 
    private JavaScriptObject _buffer;
    private int              _timestamp = 0;
