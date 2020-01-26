@@ -15,9 +15,9 @@
 #include "Downloader_iOS.hpp"
 
 
-G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
-  _nativeWidget = nativeWidget;
-
+G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) :
+_nativeWidget(nativeWidget)
+{
   [_nativeWidget initSingletons];
 }
 
