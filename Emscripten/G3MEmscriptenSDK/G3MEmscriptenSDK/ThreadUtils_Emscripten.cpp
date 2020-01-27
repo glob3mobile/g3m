@@ -6,8 +6,7 @@
 
 #include <emscripten/html5.h>
 
-#include "GTask.hpp"
-
+#include "G3M/GTask.hpp"
 
 
 ThreadUtils_Emscripten::ThreadUtils_Emscripten(const int delayMillis) :

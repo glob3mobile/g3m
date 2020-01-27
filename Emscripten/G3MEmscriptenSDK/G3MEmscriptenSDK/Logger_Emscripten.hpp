@@ -2,7 +2,7 @@
 #ifndef Logger_Emscripten_hpp
 #define Logger_Emscripten_hpp
 
-#include "ILogger.hpp"
+#include "G3M/ILogger.hpp"
 
 
 class Logger_Emscripten : public ILogger {

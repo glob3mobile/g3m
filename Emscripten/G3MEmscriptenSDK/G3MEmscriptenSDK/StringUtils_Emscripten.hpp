@@ -2,8 +2,7 @@
 #ifndef StringUtils_Emscripten_hpp
 #define StringUtils_Emscripten_hpp
 
-#include "IStringUtils.hpp"
-
+#include "G3M/IStringUtils.hpp"
 
 
 class StringUtils_Emscripten : public IStringUtils {

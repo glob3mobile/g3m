@@ -3,7 +3,8 @@
 #define G3MBuilder_Emscripten_hpp
 
 
-#include "IG3MBuilder.hpp"
+#include <G3M/IG3MBuilder.hpp>
+
 
 class IThreadUtils;
 class IStorage;

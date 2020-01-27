@@ -2,7 +2,7 @@
 #ifndef ByteBuffer_Emscripten_hpp
 #define ByteBuffer_Emscripten_hpp
 
-#include "IByteBuffer.hpp"
+#include "G3M/IByteBuffer.hpp"
 
 #include <emscripten/val.h>
 

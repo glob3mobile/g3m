@@ -4,18 +4,18 @@
 
 #include <emscripten/emscripten.h>
 
+#include "G3M/GPUProgram.hpp"
+#include "G3M/Matrix44D.hpp"
+#include "G3M/GPUUniform.hpp"
+#include "G3M/GPUAttributeVec3Float.hpp"
+#include "G3M/GPUAttributeVec4Float.hpp"
+#include "G3M/GPUAttributeVec2Float.hpp"
+
 #include "FloatBuffer_Emscripten.hpp"
 #include "ShortBuffer_Emscripten.hpp"
 #include "GLUniformID_Emscripten.hpp"
 #include "GLTextureID_Emscripten.hpp"
 #include "Image_Emscripten.hpp"
-
-#include "GPUProgram.hpp"
-#include "Matrix44D.hpp"
-#include "GPUUniform.hpp"
-#include "GPUAttributeVec3Float.hpp"
-#include "GPUAttributeVec4Float.hpp"
-#include "GPUAttributeVec2Float.hpp"
 
 using namespace emscripten;
 

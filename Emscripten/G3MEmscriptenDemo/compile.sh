@@ -4,7 +4,7 @@ set -e # Script exists on first failure
 #set -x # For debugging purpose
 
 export EMSDK_DIRECTORY="../../../emsdk/"
-export G3M_SOURCE_DIRECTORY="../../cpp/G3M/"
+export G3M_SOURCE_DIRECTORY="../../cpp/"
 export G3M_EMSCRIPTEN_SOURCE_DIRECTORY="../G3MEmscriptenSDK/G3MEmscriptenSDK/"
 export G3M_LIBS_DIRECTORY="../G3MEmscriptenSDK/LIB/"
 

@@ -2,6 +2,8 @@
 
 #include "Factory_Emscripten.hpp"
 
+#include "G3M/ErrorHandling.hpp"
+
 #include "DeviceInfo_Emscripten.hpp"
 #include "Timer_Emscripten.hpp"
 #include "ByteBuffer_Emscripten.hpp"
@@ -11,7 +13,6 @@
 #include "Canvas_Emscripten.hpp"
 #include "WebSocket_Emscripten.hpp"
 
-#include "ErrorHandling.hpp"
 
 
 IDeviceInfo* Factory_Emscripten::createDeviceInfo() const {

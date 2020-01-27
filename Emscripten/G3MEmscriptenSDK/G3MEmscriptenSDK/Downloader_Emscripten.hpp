@@ -2,7 +2,7 @@
 #ifndef Downloader_Emscripten_hpp
 #define Downloader_Emscripten_hpp
 
-#include "IDownloader.hpp"
+#include "G3M/IDownloader.hpp"
 
 #include <map>
 #include <string>

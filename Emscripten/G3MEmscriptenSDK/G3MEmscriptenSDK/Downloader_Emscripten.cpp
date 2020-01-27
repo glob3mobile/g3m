@@ -22,9 +22,10 @@ using namespace emscripten;
 #include <sstream>
 #include <vector>
 
-#include "URL.hpp"
-#include "IBufferDownloadListener.hpp"
-#include "IImageDownloadListener.hpp"
+#include "G3M/URL.hpp"
+#include "G3M/IBufferDownloadListener.hpp"
+#include "G3M/IImageDownloadListener.hpp"
+
 #include "ByteBuffer_Emscripten.hpp"
 #include "Image_Emscripten.hpp"
 

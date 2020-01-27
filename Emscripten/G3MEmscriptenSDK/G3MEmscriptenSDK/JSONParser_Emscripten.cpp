@@ -2,19 +2,19 @@
 
 #include "JSONParser_Emscripten.hpp"
 
-#include "IByteBuffer.hpp"
+#include "G3M/IByteBuffer.hpp"
 
 #include <emscripten/val.h>
 
-#include "JSONNull.hpp"
-#include "JSONBoolean.hpp"
-#include "JSONInteger.hpp"
-#include "JSONLong.hpp"
-#include "JSONFloat.hpp"
-#include "JSONDouble.hpp"
-#include "JSONString.hpp"
-#include "JSONArray.hpp"
-#include "JSONObject.hpp"
+#include "G3M/JSONNull.hpp"
+#include "G3M/JSONBoolean.hpp"
+#include "G3M/JSONInteger.hpp"
+#include "G3M/JSONLong.hpp"
+#include "G3M/JSONFloat.hpp"
+#include "G3M/JSONDouble.hpp"
+#include "G3M/JSONString.hpp"
+#include "G3M/JSONArray.hpp"
+#include "G3M/JSONObject.hpp"
 
 
 using namespace emscripten;

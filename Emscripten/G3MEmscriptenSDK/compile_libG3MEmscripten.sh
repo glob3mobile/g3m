@@ -4,7 +4,7 @@ set -e # Script exists on first failure
 #set -x # For debugging purpose
 
 export EMSDK_DIRECTORY="../../../emsdk/"
-export G3M_SOURCE_DIRECTORY="../../cpp/G3M/"
+export G3M_SOURCE_DIRECTORY="../../cpp/"
 
 
 if [[ -z $EMSDK_DIRECTORY      ]]; then echo - Missing mandatory variable EMSDK_DIRECTORY;      exit 1; fi

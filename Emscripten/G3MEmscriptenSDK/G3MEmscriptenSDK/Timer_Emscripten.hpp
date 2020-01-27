@@ -2,7 +2,7 @@
 #ifndef Timer_Emscripten_hpp
 #define Timer_Emscripten_hpp
 
-#include "ITimer.hpp"
+#include "G3M/ITimer.hpp"
 
 
 class Timer_Emscripten : public ITimer {

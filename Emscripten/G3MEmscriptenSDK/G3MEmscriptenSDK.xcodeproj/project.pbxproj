@@ -452,7 +452,7 @@
 				);
 				GCC_WARN_PEDANTIC = NO;
 				HEADER_SEARCH_PATHS = (
-					$SRCROOT/../../cpp/G3M,
+					$SRCROOT/../../cpp,
 					$SRCROOT/../../../emsdk/upstream/emscripten/system/include/,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -475,7 +475,7 @@
 				);
 				GCC_WARN_PEDANTIC = NO;
 				HEADER_SEARCH_PATHS = (
-					$SRCROOT/../../cpp/G3M,
+					$SRCROOT/../../cpp,
 					$SRCROOT/../../../emsdk/upstream/emscripten/system/include/,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";

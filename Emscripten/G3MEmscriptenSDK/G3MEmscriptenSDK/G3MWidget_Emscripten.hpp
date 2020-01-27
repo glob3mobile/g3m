@@ -5,7 +5,7 @@
 #include <emscripten/val.h>
 #include <emscripten/html5.h>
 
-#include "TouchEvent.hpp"
+#include "G3M/TouchEvent.hpp"
 #include <map>
 
 class GL;
@@ -70,7 +70,9 @@ public:
   GL* getGL() const;
   
   void setG3MWidget(G3MWidget* g3mWidget);
-  
+
+  G3MWidget* getG3MWidget() const;
+
   void startWidget();
 
 

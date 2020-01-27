@@ -2,10 +2,11 @@
 
 #include "IntBuffer_Emscripten.hpp"
 
-#include "ILogger.hpp"
-#include "ErrorHandling.hpp"
+#include "G3M/ILogger.hpp"
+#include "G3M/ErrorHandling.hpp"
 
 #include <sstream>
+
 
 long long IntBuffer_Emscripten::_nextID = 0;
 

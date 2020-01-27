@@ -1,7 +1,11 @@
 
 #include "G3MWidget_Emscripten.hpp"
 
-#include "G3MWidget.hpp"
+#include "G3M/G3MWidget.hpp"
+#include "G3M/GL.hpp"
+#include "G3M/Vector2F.hpp"
+#include "G3M/ErrorHandling.hpp"
+
 #include "Logger_Emscripten.hpp"
 #include "Factory_Emscripten.hpp"
 #include "StringUtils_Emscripten.hpp"
@@ -12,10 +16,7 @@
 #include "DeviceAttitude_Emscripten.hpp"
 #include "DeviceLocation_Emscripten.hpp"
 #include "NativeGL_Emscripten.hpp"
-#include "GL.hpp"
 #include "EMStorage.hpp"
-#include "Vector2F.hpp"
-#include "ErrorHandling.hpp"
 
 #include <math.h>
 
@@ -78,6 +79,10 @@ GL* G3MWidget_Emscripten::getGL() const {
 
 void G3MWidget_Emscripten::setG3MWidget(G3MWidget* g3mWidget) {
   _g3mWidget = g3mWidget;
+}
+
+G3MWidget* G3MWidget_Emscripten::getG3MWidget() const {
+  return _g3mWidget;
 }
 
 bool G3MWidget_Emscripten::isWebGLSupported() const {

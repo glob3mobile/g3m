@@ -2,7 +2,7 @@
 #ifndef NativeGL_Emscripten_hpp
 #define NativeGL_Emscripten_hpp
 
-#include "INativeGL.hpp"
+#include "G3M/INativeGL.hpp"
 
 #include <emscripten/val.h>
 

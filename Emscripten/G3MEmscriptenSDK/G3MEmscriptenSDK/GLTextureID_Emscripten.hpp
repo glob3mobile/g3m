@@ -9,7 +9,7 @@
 #ifndef GLTextureID_Emscripten_hpp
 #define GLTextureID_Emscripten_hpp
 
-#include "IGLTextureID.hpp"
+#include "G3M/IGLTextureID.hpp"
 
 #include <emscripten/val.h>
 

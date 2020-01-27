@@ -2,7 +2,7 @@
 #ifndef StringBuilder_Emscripten_hpp
 #define StringBuilder_Emscripten_hpp
 
-#include "IStringBuilder.hpp"
+#include "G3M/IStringBuilder.hpp"
 
 #include <sstream>
 

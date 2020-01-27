@@ -2,7 +2,7 @@
 #ifndef JSONParser_Emscripten_hpp
 #define JSONParser_Emscripten_hpp
 
-#include "IJSONParser.hpp"
+#include "G3M/IJSONParser.hpp"
 
 
 class JSONParser_Emscripten : public IJSONParser {

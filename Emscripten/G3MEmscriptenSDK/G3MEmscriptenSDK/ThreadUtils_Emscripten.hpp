@@ -2,7 +2,7 @@
 #ifndef ThreadUtils_Emscripten_hpp
 #define ThreadUtils_Emscripten_hpp
 
-#include "IThreadUtils.hpp"
+#include "G3M/IThreadUtils.hpp"
 
 
 class ThreadUtils_Emscripten : public IThreadUtils {

@@ -2,11 +2,11 @@
 
 #include "TextUtils_Emscripten.hpp"
 
-#include "ILogger.hpp"
-#include "IImageListener.hpp"
-#include "IStringUtils.hpp"
-#include "IMathUtils.hpp"
-#include "Color.hpp"
+#include "G3M/ILogger.hpp"
+#include "G3M/IImageListener.hpp"
+#include "G3M/IStringUtils.hpp"
+#include "G3M/IMathUtils.hpp"
+#include "G3M/Color.hpp"
 
 #include "Image_Emscripten.hpp"
 

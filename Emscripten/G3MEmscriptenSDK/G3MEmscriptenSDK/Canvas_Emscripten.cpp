@@ -4,10 +4,10 @@
 
 using namespace emscripten;
 
-#include "IMathUtils.hpp"
-#include "IStringUtils.hpp"
-#include "Color.hpp"
-#include "GFont.hpp"
+#include "G3M/IMathUtils.hpp"
+#include "G3M/IStringUtils.hpp"
+#include "G3M/Color.hpp"
+#include "G3M/GFont.hpp"
 #include "Image_Emscripten.hpp"
 
 #include <sstream>

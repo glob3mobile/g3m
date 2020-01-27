@@ -2,7 +2,7 @@
 #ifndef Image_Emscripten_hpp
 #define Image_Emscripten_hpp
 
-#include "IImage.hpp"
+#include "G3M/IImage.hpp"
 
 #include <emscripten/val.h>
 

@@ -2,7 +2,8 @@
 #ifndef TextUtils_Emscripten_hpp
 #define TextUtils_Emscripten_hpp
 
-#include "ITextUtils.hpp"
+#include "G3M/ITextUtils.hpp"
+
 
 class TextUtils_Emscripten : public ITextUtils {
 private:

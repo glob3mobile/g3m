@@ -5,9 +5,9 @@
 #include <emscripten.h>
 #include <emscripten/html5.h>
 
-#include "IImageListener.hpp"
-#include "IStringBuilder.hpp"
-#include "MutableColor255.hpp"
+#include "G3M/IImageListener.hpp"
+#include "G3M/IStringBuilder.hpp"
+#include "G3M/MutableColor255.hpp"
 
 #include "EMStorage.hpp"
 

@@ -9,7 +9,7 @@
 #ifndef GLUniformID_Emscripten_hpp
 #define GLUniformID_Emscripten_hpp
 
-#include "IGLUniformID.hpp"
+#include "G3M/IGLUniformID.hpp"
 
 #include <emscripten/val.h>
 

@@ -1,9 +1,10 @@
 
 #include "G3MBuilder_Emscripten.hpp"
 
+#include "G3M/BasicShadersGL2.hpp"
+
 #include "ThreadUtils_Emscripten.hpp"
 #include "Downloader_Emscripten.hpp"
-#include "BasicShadersGL2.hpp"
 #include "G3MWidget_Emscripten.hpp"
 
 //#include <emscripten/bind.h>

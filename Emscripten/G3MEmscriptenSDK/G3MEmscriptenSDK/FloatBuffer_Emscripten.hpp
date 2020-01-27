@@ -2,7 +2,7 @@
 #ifndef FloatBuffer_Emscripten_hpp
 #define FloatBuffer_Emscripten_hpp
 
-#include "IFloatBuffer.hpp"
+#include "G3M/IFloatBuffer.hpp"
 
 #include <emscripten/val.h>
 
