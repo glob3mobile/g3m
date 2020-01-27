@@ -11,8 +11,8 @@
 
 
 #if defined(C_CODE) && !defined(__EMSCRIPTEN__)
-    #include <stdexcept>
-    #define THROW_EXCEPTION(x) throw(std::logic_error(x));
+  #include <stdexcept>
+  #define THROW_EXCEPTION(x) throw(std::logic_error(x));
 #endif
 
 #if defined(C_CODE) && defined(__EMSCRIPTEN__)
