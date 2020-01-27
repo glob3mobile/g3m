@@ -13,7 +13,8 @@
 
 #include <string>
 
-#include "IJSONParser.hpp"
+#include "G3MSharedSDK/IJSONParser.hpp"
+
 
 class JSONParser_iOS : public IJSONParser {
 private:

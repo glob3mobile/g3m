@@ -9,9 +9,9 @@
 #ifndef __G3MiOSSDK__IntBuffer_iOS__
 #define __G3MiOSSDK__IntBuffer_iOS__
 
-#include "IIntBuffer.hpp"
-#include "ILogger.hpp"
-#include "ErrorHandling.hpp"
+#include "G3MSharedSDK/IIntBuffer.hpp"
+#include "G3MSharedSDK/ILogger.hpp"
+#include "G3MSharedSDK/ErrorHandling.hpp"
 
 class IntBuffer_iOS : public IIntBuffer {
 private:

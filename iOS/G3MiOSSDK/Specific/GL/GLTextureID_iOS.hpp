@@ -8,9 +8,10 @@
 #ifndef G3MiOSSDK_GLTextureID_iOS
 #define G3MiOSSDK_GLTextureID_iOS
 
-#include "IStringBuilder.hpp"
+#include "G3MSharedSDK/IGLTextureID.hpp"
 
-#include "IGLTextureID.hpp"
+#include "G3MSharedSDK/IStringBuilder.hpp"
+
 
 class GLTextureID_iOS: public IGLTextureID {
 private:

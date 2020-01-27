@@ -6,10 +6,10 @@
 //
 //
 
-#import "IDeviceAttitude.hpp"
-
+#import "G3MSharedSDK/IDeviceAttitude.hpp"
 
 #import <CoreMotion/CoreMotion.h>
+
 
 class DeviceAttitude_iOS: public IDeviceAttitude{
 private:

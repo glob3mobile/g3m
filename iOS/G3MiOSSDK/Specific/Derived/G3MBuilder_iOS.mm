@@ -8,11 +8,12 @@
 
 #import "G3MBuilder_iOS.hpp"
 
-#include "BasicShadersGL2.hpp"
-#include "ThreadUtils_iOS.hpp"
-#include "SQLiteStorage_iOS.hpp"
-#include "CachedDownloader.hpp"
-#include "Downloader_iOS.hpp"
+#include "G3MSharedSDK/BasicShadersGL2.hpp"
+#include "G3MSharedSDK/CachedDownloader.hpp"
+
+#import "ThreadUtils_iOS.hpp"
+#import "SQLiteStorage_iOS.hpp"
+#import "Downloader_iOS.hpp"
 
 
 G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) :

@@ -9,19 +9,19 @@
 
 #include "G3MDemoModel.hpp"
 
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
-#include <G3MiOSSDK/MapQuestLayer.hpp>
-#include <G3MiOSSDK/WMSLayer.hpp>
-#include <G3MiOSSDK/LevelTileCondition.hpp>
-#include <G3MiOSSDK/OSMLayer.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/URLTemplateLayer.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/TimeInterval.hpp>
-#include <G3MiOSSDK/MercatorTiledLayer.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/MapBoxLayer.hpp>
+#include <G3MSharedSDK/MapQuestLayer.hpp>
+#include <G3MSharedSDK/WMSLayer.hpp>
+#include <G3MSharedSDK/LevelTileCondition.hpp>
+#include <G3MSharedSDK/OSMLayer.hpp>
+#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/URLTemplateLayer.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/TimeInterval.hpp>
+#include <G3MSharedSDK/MercatorTiledLayer.hpp>
+#include <G3MSharedSDK/Geodetic3D.hpp>
+#include <G3MSharedSDK/PlanetRenderer.hpp>
 
 
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {

@@ -9,9 +9,10 @@
 #ifndef __G3MiOSSDK__DeviceLocation_iOS__
 #define __G3MiOSSDK__DeviceLocation_iOS__
 
-#include "IDeviceLocation.hpp"
+#include "G3MSharedSDK/IDeviceLocation.hpp"
 
 #import <CoreLocation/CoreLocation.h>
+
 
 @interface LocationDelegate: NSObject <CLLocationManagerDelegate>{
   @private

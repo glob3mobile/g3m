@@ -9,7 +9,8 @@
 #ifndef __G3MiOSSDK__StringUtils_iOS__
 #define __G3MiOSSDK__StringUtils_iOS__
 
-#include "IStringUtils.hpp"
+#include "G3MSharedSDK/IStringUtils.hpp"
+
 
 class StringUtils_iOS : public IStringUtils {
 public:

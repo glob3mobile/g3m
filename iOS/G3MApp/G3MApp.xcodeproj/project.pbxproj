@@ -24,6 +24,7 @@
 		CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECC1A2E62C400B70D7E /* widget-background.png */; };
 		CF5DB6D121935C1600E0613E /* ccmdt.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF5DB6CF21935C1600E0613E /* ccmdt.bil */; };
 		CF64DA302180AC0E00387041 /* G3MExtrusionDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF64DA2E2180AC0E00387041 /* G3MExtrusionDemoScene.cpp */; };
+		CF6607F223DF315A00795C7F /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */; };
 		CF6920B41837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */; };
 		CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */; };
@@ -85,7 +86,6 @@
 		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
 		D87179101AE501B100A9A14F /* pin.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790F1AE501B100A9A14F /* pin.png */; };
-		E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C716D29EA5000F0395 /* map-on-96x48.png */; };
 		E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C816D29EA5000F0395 /* marker-wikipedia-48x48.png */; };
 		E780A3CF16D29EA5000F0395 /* marker-wikipedia-72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C916D29EA5000F0395 /* marker-wikipedia-72x72.png */; };
@@ -320,10 +320,10 @@
 				E7D1B60B16D2436700AF47C1 /* Foundation.framework in Frameworks */,
 				CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */,
 				CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */,
+				CF6607F223DF315A00795C7F /* libG3MiOSSDK.a in Frameworks */,
 				CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */,
 				CFF64D4918329FE6006ABFF6 /* libicucore.dylib in Frameworks */,
 				E7D1B65216D24E7300AF47C1 /* libsqlite3.dylib in Frameworks */,
-				E75321CB16D3DF6200CB3F8D /* libG3MiOSSDK.a in Frameworks */,
 				E7D1B65816D24EEE00AF47C1 /* QuartzCore.framework in Frameworks */,
 				E7D1B65616D24EE800AF47C1 /* OpenGLES.framework in Frameworks */,
 				E7D1B60916D2436700AF47C1 /* UIKit.framework in Frameworks */,

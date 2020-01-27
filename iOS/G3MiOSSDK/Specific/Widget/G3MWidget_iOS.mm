@@ -11,8 +11,10 @@
 
 #include <vector>
 
-#import "TouchEvent.hpp"
-#import "G3MWidget.hpp"
+#include "G3MSharedSDK/TouchEvent.hpp"
+#include "G3MSharedSDK/G3MWidget.hpp"
+#include "G3MSharedSDK/GL.hpp"
+
 #import "Logger_iOS.hpp"
 #import "Factory_iOS.hpp"
 #import "StringUtils_iOS.hpp"
@@ -22,7 +24,6 @@
 #import "DeviceAttitude_iOS.hpp"
 #import "DeviceLocation_iOS.hpp"
 #import "TextUtils_iOS.hpp"
-#import "GL.hpp"
 
 
 @interface G3MWidget_iOS () {

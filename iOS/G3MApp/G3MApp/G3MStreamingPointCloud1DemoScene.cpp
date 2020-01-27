@@ -6,15 +6,16 @@
 //
 
 #include "G3MStreamingPointCloud1DemoScene.hpp"
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/PointCloudsRenderer.hpp>
-#include <G3MiOSSDK/URL.hpp>
-#include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
+
+#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/PointCloudsRenderer.hpp>
+#include <G3MSharedSDK/URL.hpp>
+#include <G3MSharedSDK/DownloadPriority.hpp>
+#include <G3MSharedSDK/Geodetic3D.hpp>
+#include <G3MSharedSDK/SingleBILElevationDataProvider.hpp>
+#include <G3MSharedSDK/PlanetRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 

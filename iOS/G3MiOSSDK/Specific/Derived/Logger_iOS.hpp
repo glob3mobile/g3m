@@ -8,7 +8,7 @@
 #ifndef G3MiOSSDK_Logger_iOS
 #define G3MiOSSDK_Logger_iOS
 
-#include "ILogger.hpp"
+#include "G3MSharedSDK/ILogger.hpp"
 
 
 class Logger_iOS: public ILogger {

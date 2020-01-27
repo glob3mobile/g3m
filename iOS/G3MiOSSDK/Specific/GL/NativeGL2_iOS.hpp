@@ -10,19 +10,19 @@
 
 #include <OpenGLES/ES2/gl.h>
 
-#include "INativeGL.hpp"
+#include "G3MSharedSDK/INativeGL.hpp"
+#include "G3MSharedSDK/GPUProgram.hpp"
+#include "G3MSharedSDK/GPUAttribute.hpp"
+#include "G3MSharedSDK/GPUUniform.hpp"
+#include "G3MSharedSDK/GPUAttributeVec2Float.hpp"
+#include "G3MSharedSDK/GPUAttributeVec3Float.hpp"
+#include "G3MSharedSDK/GPUAttributeVec4Float.hpp"
 
-#include "GLUniformID_iOS.hpp"
-#include "GLTextureID_iOS.hpp"
-#include "FloatBuffer_iOS.hpp"
-#include "ShortBuffer_iOS.hpp"
-#include "Image_iOS.hpp"
-#include "GPUProgram.hpp"
-#include "GPUAttribute.hpp"
-#include "GPUUniform.hpp"
-#include "GPUAttributeVec2Float.hpp"
-#include "GPUAttributeVec3Float.hpp"
-#include "GPUAttributeVec4Float.hpp"
+#import "GLUniformID_iOS.hpp"
+#import "GLTextureID_iOS.hpp"
+#import "FloatBuffer_iOS.hpp"
+#import "ShortBuffer_iOS.hpp"
+#import "Image_iOS.hpp"
 
 
 class NativeGL2_iOS: public INativeGL {

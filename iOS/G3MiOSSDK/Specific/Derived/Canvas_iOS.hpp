@@ -9,9 +9,10 @@
 #ifndef __G3MiOSSDK__Canvas_iOS__
 #define __G3MiOSSDK__Canvas_iOS__
 
-#include "ICanvas.hpp"
+#include "G3MSharedSDK/ICanvas.hpp"
 
 #import <UIKit/UIKit.h>
+
 
 class Canvas_iOS : public ICanvas {
 private:

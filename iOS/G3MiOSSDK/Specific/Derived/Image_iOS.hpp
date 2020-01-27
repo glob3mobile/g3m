@@ -13,7 +13,8 @@
 
 #include <string>
 
-#include "IImage.hpp"
+#include "G3MSharedSDK/IImage.hpp"
+
 
 class Image_iOS: public IImage {
 private:

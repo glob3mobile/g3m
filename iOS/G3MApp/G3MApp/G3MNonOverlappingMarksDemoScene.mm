@@ -7,20 +7,20 @@
 
 #include "G3MNonOverlappingMarksDemoScene.hpp"
 
-#include <G3MiOSSDK/URLTemplateLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
-#include <G3MiOSSDK/DownloaderImageBuilder.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/LabelImageBuilder.hpp>
-#include <G3MiOSSDK/ColumnLayoutImageBuilder.hpp>
-#include <G3MiOSSDK/G3MContext.hpp>
-#include <G3MiOSSDK/IDownloader.hpp>
-#include <G3MiOSSDK/IBufferDownloadListener.hpp>
-#include <G3MiOSSDK/IJSONParser.hpp>
-#include <G3MiOSSDK/JSONArray.hpp>
-#include <G3MiOSSDK/JSONObject.hpp>
-#include <G3MiOSSDK/BoxImageBackground.hpp>
+#include <G3MSharedSDK/URLTemplateLayer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/NonOverlappingMarksRenderer.hpp>
+#include <G3MSharedSDK/DownloaderImageBuilder.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/LabelImageBuilder.hpp>
+#include <G3MSharedSDK/ColumnLayoutImageBuilder.hpp>
+#include <G3MSharedSDK/G3MContext.hpp>
+#include <G3MSharedSDK/IDownloader.hpp>
+#include <G3MSharedSDK/IBufferDownloadListener.hpp>
+#include <G3MSharedSDK/IJSONParser.hpp>
+#include <G3MSharedSDK/JSONArray.hpp>
+#include <G3MSharedSDK/JSONObject.hpp>
+#include <G3MSharedSDK/BoxImageBackground.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 

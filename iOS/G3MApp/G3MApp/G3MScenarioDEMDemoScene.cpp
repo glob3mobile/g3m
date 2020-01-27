@@ -7,13 +7,13 @@
 
 #include "G3MScenarioDEMDemoScene.hpp"
 
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/Color.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/PlanetRenderer.hpp>
+#include <G3MSharedSDK/SingleBILElevationDataProvider.hpp>
+#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/Geodetic3D.hpp>
+#include <G3MSharedSDK/Color.hpp>
 
 #include "G3MDemoModel.hpp"
 

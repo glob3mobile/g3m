@@ -9,17 +9,17 @@
 
 #include "G3MDemoModel.hpp"
 
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/URLTemplateLayer.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/BILDownloader.hpp>
-#include <G3MiOSSDK/URL.hpp>
-#include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/ShortBufferDEMGrid.hpp>
-#include <G3MiOSSDK/MeshRenderer.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/MapzenDEMProvider.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/URLTemplateLayer.hpp>
+#include <G3MSharedSDK/PlanetRenderer.hpp>
+#include <G3MSharedSDK/BILDownloader.hpp>
+#include <G3MSharedSDK/URL.hpp>
+#include <G3MSharedSDK/DownloadPriority.hpp>
+#include <G3MSharedSDK/ShortBufferDEMGrid.hpp>
+#include <G3MSharedSDK/MeshRenderer.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/MapzenDEMProvider.hpp>
+#include <G3MSharedSDK/Geodetic3D.hpp>
 
 
 void G3M3DLandDemoScene::rawSelectOption(const std::string& option,

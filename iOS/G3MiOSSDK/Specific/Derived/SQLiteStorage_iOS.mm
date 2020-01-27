@@ -8,15 +8,17 @@
 
 #include "SQLiteStorage_iOS.hpp"
 
-#include "ByteBuffer_iOS.hpp"
-#include "Image_iOS.hpp"
-#include "ILogger.hpp"
-#include "IThreadUtils.hpp"
-#include "G3MContext.hpp"
-#include "URL.hpp"
-#include "TimeInterval.hpp"
+#include "G3MSharedSDK/ILogger.hpp"
+#include "G3MSharedSDK/IThreadUtils.hpp"
+#include "G3MSharedSDK/G3MContext.hpp"
+#include "G3MSharedSDK/URL.hpp"
+#include "G3MSharedSDK/TimeInterval.hpp"
+#include "G3MSharedSDK/GTask.hpp"
+
+#import "ByteBuffer_iOS.hpp"
+#import "Image_iOS.hpp"
+
 #import "NSString_CppAdditions.h"
-#include "GTask.hpp"
 
 
 NSString* SQLiteStorage_iOS::getDBPath() const {

@@ -7,21 +7,21 @@
 
 #include "G3MVectorStreaming1DemoScene.hpp"
 
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/VectorStreamingRenderer.hpp>
-#include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/GEO2DPointGeometry.hpp>
-#include <G3MiOSSDK/GEOFeature.hpp>
-#include <G3MiOSSDK/Mark.hpp>
-#include <G3MiOSSDK/JSONObject.hpp>
-#include <G3MiOSSDK/JSONString.hpp>
-#include <G3MiOSSDK/JSONNumber.hpp>
-#include <G3MiOSSDK/StackLayoutImageBuilder.hpp>
-#include <G3MiOSSDK/CircleImageBuilder.hpp>
-#include <G3MiOSSDK/LabelImageBuilder.hpp>
-#include <G3MiOSSDK/MarksRenderer.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/VectorStreamingRenderer.hpp>
+#include <G3MSharedSDK/DownloadPriority.hpp>
+#include <G3MSharedSDK/GEO2DPointGeometry.hpp>
+#include <G3MSharedSDK/GEOFeature.hpp>
+#include <G3MSharedSDK/Mark.hpp>
+#include <G3MSharedSDK/JSONObject.hpp>
+#include <G3MSharedSDK/JSONString.hpp>
+#include <G3MSharedSDK/JSONNumber.hpp>
+#include <G3MSharedSDK/StackLayoutImageBuilder.hpp>
+#include <G3MSharedSDK/CircleImageBuilder.hpp>
+#include <G3MSharedSDK/LabelImageBuilder.hpp>
+#include <G3MSharedSDK/MarksRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 #include <sstream>

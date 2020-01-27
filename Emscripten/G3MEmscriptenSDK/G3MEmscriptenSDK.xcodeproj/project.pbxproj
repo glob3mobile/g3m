@@ -447,10 +447,6 @@
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					C_CODE,
-					"DEBUG=1",
-				);
-				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = (
-					C_CODE,
 					__EMSCRIPTEN__,
 					"DEBUG=1",
 				);

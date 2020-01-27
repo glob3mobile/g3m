@@ -5,31 +5,33 @@
 //  Created by Jose Miguel SN on 20/4/15.
 //
 
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/IDownloader.hpp>
-#include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/IBufferDownloadListener.hpp>
-#include <G3MiOSSDK/IJSONParser.hpp>
-#include <G3MiOSSDK/JSONObject.hpp>
-#include <G3MiOSSDK/JSONArray.hpp>
-#include <G3MiOSSDK/JSONNumber.hpp>
-#include <G3MiOSSDK/Mark.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/IStringUtils.hpp>
-#include <G3MiOSSDK/MarksRenderer.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/IDownloader.hpp>
+#include <G3MSharedSDK/DownloadPriority.hpp>
+#include <G3MSharedSDK/IBufferDownloadListener.hpp>
+#include <G3MSharedSDK/IJSONParser.hpp>
+#include <G3MSharedSDK/JSONObject.hpp>
+#include <G3MSharedSDK/JSONArray.hpp>
+#include <G3MSharedSDK/JSONNumber.hpp>
+#include <G3MSharedSDK/Mark.hpp>
+#include <G3MSharedSDK/Geodetic3D.hpp>
+#include <G3MSharedSDK/IStringUtils.hpp>
+#include <G3MSharedSDK/MarksRenderer.hpp>
+#include <G3MSharedSDK/BingMapsLayer.hpp>
 
 #include "G3MDemoModel.hpp"
 
 #include "G3MAnimatedMarksDemoScene.hpp"
 
-class RescaleMarkTask: public PeriodicalTask{
+
+class RescaleMarkTask: public PeriodicalTask {
   
-  class RescaleMarkTaskGTask: public GTask{
+  class RescaleMarkTaskGTask: public GTask {
     Mark* _mark;
     float _size;
     float _delta;
+
   public:
     
     ~RescaleMarkTaskGTask() {}

@@ -7,22 +7,22 @@
 
 #include "G3M3DSymbologyDemoScene.hpp"
 
-#include <G3MiOSSDK/Sector.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/GEORenderer.hpp>
-#include <G3MiOSSDK/GEOSymbolizer.hpp>
-#include <G3MiOSSDK/JSONObject.hpp>
-#include <G3MiOSSDK/GEO2DPointGeometry.hpp>
-#include <G3MiOSSDK/GEOFeature.hpp>
-#include <G3MiOSSDK/BoxShape.hpp>
-#include <G3MiOSSDK/Mark.hpp>
-#include <G3MiOSSDK/GEOShapeSymbol.hpp>
-#include <G3MiOSSDK/GEOMarkSymbol.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
-#include <G3MiOSSDK/GEOVectorLayer.hpp>
+#include <G3MSharedSDK/Sector.hpp>
+#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/GEORenderer.hpp>
+#include <G3MSharedSDK/GEOSymbolizer.hpp>
+#include <G3MSharedSDK/JSONObject.hpp>
+#include <G3MSharedSDK/GEO2DPointGeometry.hpp>
+#include <G3MSharedSDK/GEOFeature.hpp>
+#include <G3MSharedSDK/BoxShape.hpp>
+#include <G3MSharedSDK/Mark.hpp>
+#include <G3MSharedSDK/GEOShapeSymbol.hpp>
+#include <G3MSharedSDK/GEOMarkSymbol.hpp>
+#include <G3MSharedSDK/PlanetRenderer.hpp>
+#include <G3MSharedSDK/SingleBILElevationDataProvider.hpp>
+#include <G3MSharedSDK/GEOVectorLayer.hpp>
 
 #include "G3MDemoModel.hpp"
 

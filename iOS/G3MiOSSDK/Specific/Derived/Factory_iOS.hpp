@@ -8,19 +8,21 @@
 #ifndef G3MiOSSDK_Factory_iOS
 #define G3MiOSSDK_Factory_iOS
 
-#include "IFactory.hpp"
+#include "G3MSharedSDK/IFactory.hpp"
+#include "G3MSharedSDK/IImageListener.hpp"
 
-#include "Timer_iOS.hpp"
-#include "Image_iOS.hpp"
-#include "ByteBuffer_iOS.hpp"
-#include "FloatBuffer_iOS.hpp"
-#include "IntBuffer_iOS.hpp"
-#include "ShortBuffer_iOS.hpp"
-#include "IImageListener.hpp"
-#include "Canvas_iOS.hpp"
-#include "WebSocket_iOS.hpp"
+#import "Timer_iOS.hpp"
+#import "Image_iOS.hpp"
+#import "ByteBuffer_iOS.hpp"
+#import "FloatBuffer_iOS.hpp"
+#import "IntBuffer_iOS.hpp"
+#import "ShortBuffer_iOS.hpp"
+#import "Canvas_iOS.hpp"
+#import "WebSocket_iOS.hpp"
+#import "DeviceInfo_iOS.hpp"
+
 #import "NSString_CppAdditions.h"
-#include "DeviceInfo_iOS.hpp"
+
 
 class Factory_iOS: public IFactory {
 protected:

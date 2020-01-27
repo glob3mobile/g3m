@@ -7,8 +7,9 @@
 
 #import <Foundation/Foundation.h>
 
-#include "IBufferDownloadListener.hpp"
-#include "IImageDownloadListener.hpp"
+#include "G3MSharedSDK/IBufferDownloadListener.hpp"
+#include "G3MSharedSDK/IImageDownloadListener.hpp"
+
 
 // Objective-C wrapper for C++ IBufferDownloadListener
 @interface Downloader_iOS_Listener : NSObject

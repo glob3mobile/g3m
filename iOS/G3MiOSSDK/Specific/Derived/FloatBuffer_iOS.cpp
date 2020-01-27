@@ -9,7 +9,7 @@
 #include "FloatBuffer_iOS.hpp"
 
 #include <sstream>
-#include <OpenGLES/ES2/gl.h>
+
 
 long long FloatBuffer_iOS::_nextID = 0;
 GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;

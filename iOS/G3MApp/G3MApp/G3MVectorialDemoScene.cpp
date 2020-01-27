@@ -9,24 +9,24 @@
 
 #include "G3MDemoModel.hpp"
 
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/GEORenderer.hpp>
-#include <G3MiOSSDK/GEOSymbolizer.hpp>
-#include <G3MiOSSDK/GEOPolygonRasterSymbol.hpp>
-#include <G3MiOSSDK/GEO2DPolygonGeometry.hpp>
-#include <G3MiOSSDK/GEOLineRasterSymbol.hpp>
-#include <G3MiOSSDK/GEO2DLineStringGeometry.hpp>
-#include <G3MiOSSDK/JSONObject.hpp>
-#include <G3MiOSSDK/GEO2DPointGeometry.hpp>
-#include <G3MiOSSDK/GEOFeature.hpp>
-#include <G3MiOSSDK/Mark.hpp>
-#include <G3MiOSSDK/GEOMarkSymbol.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
-#include <G3MiOSSDK/MarkTouchListener.hpp>
-#include <G3MiOSSDK/GEOVectorLayer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/GEORenderer.hpp>
+#include <G3MSharedSDK/GEOSymbolizer.hpp>
+#include <G3MSharedSDK/GEOPolygonRasterSymbol.hpp>
+#include <G3MSharedSDK/GEO2DPolygonGeometry.hpp>
+#include <G3MSharedSDK/GEOLineRasterSymbol.hpp>
+#include <G3MSharedSDK/GEO2DLineStringGeometry.hpp>
+#include <G3MSharedSDK/JSONObject.hpp>
+#include <G3MSharedSDK/GEO2DPointGeometry.hpp>
+#include <G3MSharedSDK/GEOFeature.hpp>
+#include <G3MSharedSDK/Mark.hpp>
+#include <G3MSharedSDK/GEOMarkSymbol.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/PlanetRenderer.hpp>
+#include <G3MSharedSDK/SingleBILElevationDataProvider.hpp>
+#include <G3MSharedSDK/MarkTouchListener.hpp>
+#include <G3MSharedSDK/GEOVectorLayer.hpp>
 
 
 class G3MVectorialDemoScene_RestaurantMarkTouchListener : public MarkTouchListener {

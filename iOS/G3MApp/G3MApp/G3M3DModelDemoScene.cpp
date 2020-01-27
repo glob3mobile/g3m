@@ -7,15 +7,15 @@
 
 #include "G3M3DModelDemoScene.hpp"
 
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/ShapesRenderer.hpp>
-#include <G3MiOSSDK/SGShape.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/TimeInterval.hpp>
-#include <G3MiOSSDK/Color.hpp>
-#include <G3MiOSSDK/GLConstants.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/ShapesRenderer.hpp>
+#include <G3MSharedSDK/SGShape.hpp>
+#include <G3MSharedSDK/Geodetic3D.hpp>
+#include <G3MSharedSDK/TimeInterval.hpp>
+#include <G3MSharedSDK/Color.hpp>
+#include <G3MSharedSDK/GLConstants.hpp>
 
 #include "G3MDemoModel.hpp"
 

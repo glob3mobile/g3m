@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__TextUtils_iOS__
 #define __G3MiOSSDK__TextUtils_iOS__
 
-#include "ITextUtils.hpp"
+#include "G3MSharedSDK/ITextUtils.hpp"
 
 #import <UIKit/UIKit.h>
 

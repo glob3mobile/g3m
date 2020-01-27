@@ -8,9 +8,10 @@
 #ifndef G3MiOSSDK_ByteBuffer_iOS
 #define G3MiOSSDK_ByteBuffer_iOS
 
-#include "IByteBuffer.hpp"
-#include "ILogger.hpp"
-#include "ErrorHandling.hpp"
+#include "G3MSharedSDK/IByteBuffer.hpp"
+#include "G3MSharedSDK/ILogger.hpp"
+#include "G3MSharedSDK/ErrorHandling.hpp"
+
 
 class ByteBuffer_iOS : public IByteBuffer {
 private:

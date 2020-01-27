@@ -11,7 +11,8 @@
 #include <math.h>
 #include <limits>
 
-#include "IMathUtils.hpp"
+#include "G3MSharedSDK/IMathUtils.hpp"
+
 
 //Class used to avoid method names collision with Math.h
 class MathAux {

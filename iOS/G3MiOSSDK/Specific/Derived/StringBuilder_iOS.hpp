@@ -8,7 +8,7 @@
 #ifndef G3MiOSSDK_StringBuilder_iOS
 #define G3MiOSSDK_StringBuilder_iOS
 
-#include "IStringBuilder.hpp"
+#include "G3MSharedSDK/IStringBuilder.hpp"
 
 #include <sstream>
 

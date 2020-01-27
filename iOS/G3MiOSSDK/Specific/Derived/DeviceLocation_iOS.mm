@@ -8,7 +8,8 @@
 
 #include "DeviceLocation_iOS.hpp"
 
-#include "ILogger.hpp"
+#include "G3MSharedSDK/ILogger.hpp"
+
 
 @implementation LocationDelegate
 

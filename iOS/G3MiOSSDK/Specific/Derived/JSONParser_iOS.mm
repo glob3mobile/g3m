@@ -6,16 +6,19 @@
 //
 
 #import "JSONParser_iOS.hpp"
-#import "JSONArray.hpp"
-#import "JSONObject.hpp"
-#import "JSONDouble.hpp"
-#import "JSONFloat.hpp"
-#import "JSONInteger.hpp"
-#import "JSONLong.hpp"
-#import "JSONBoolean.hpp"
-#import "JSONString.hpp"
+
+#import "G3MSharedSDK/JSONArray.hpp"
+#import "G3MSharedSDK/JSONObject.hpp"
+#import "G3MSharedSDK/JSONDouble.hpp"
+#import "G3MSharedSDK/JSONFloat.hpp"
+#import "G3MSharedSDK/JSONInteger.hpp"
+#import "G3MSharedSDK/JSONLong.hpp"
+#import "G3MSharedSDK/JSONBoolean.hpp"
+#import "G3MSharedSDK/JSONString.hpp"
+#import "G3MSharedSDK/JSONNull.hpp"
+
 #import "ByteBuffer_iOS.hpp"
-#import "JSONNull.hpp"
+
 
 JSONBaseObject* JSONParser_iOS::parseNSData(NSData* jsonData,
                                             bool nullAsObject) {

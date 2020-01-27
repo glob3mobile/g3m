@@ -8,9 +8,10 @@
 
 #include "ThreadUtils_iOS.hpp"
 
-#include "GTask.hpp"
+#include "G3MSharedSDK/GTask.hpp"
 
 #include <mach/mach_host.h>
+
 
 static int countCores() {
   host_basic_info_data_t hostInfo;

@@ -10,25 +10,25 @@
 
 #include "G3MDemoModel.hpp"
 
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/OSMLayer.hpp>
-#include <G3MiOSSDK/IBufferDownloadListener.hpp>
-#include <G3MiOSSDK/IJSONParser.hpp>
-#include <G3MiOSSDK/G3MMeshParser.hpp>
-#include <G3MiOSSDK/MeshRenderer.hpp>
-#include <G3MiOSSDK/URL.hpp>
-#include <G3MiOSSDK/G3MContext.hpp>
-#include <G3MiOSSDK/IDownloader.hpp>
-#include <G3MiOSSDK/VectorStreamingRenderer.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/SingleBILElevationDataProvider.hpp>
-#include <G3MiOSSDK/LayerTilesRenderParameters.hpp>
-#include <G3MiOSSDK/URLTemplateLayer.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/IMathUtils.hpp>
-#include <G3MiOSSDK/OSMLayer.hpp>
+#include <G3MSharedSDK/LayerSet.hpp>
+#include <G3MSharedSDK/G3MWidget.hpp>
+#include <G3MSharedSDK/Geodetic3D.hpp>
+#include <G3MSharedSDK/OSMLayer.hpp>
+#include <G3MSharedSDK/IBufferDownloadListener.hpp>
+#include <G3MSharedSDK/IJSONParser.hpp>
+#include <G3MSharedSDK/G3MMeshParser.hpp>
+#include <G3MSharedSDK/MeshRenderer.hpp>
+#include <G3MSharedSDK/URL.hpp>
+#include <G3MSharedSDK/G3MContext.hpp>
+#include <G3MSharedSDK/IDownloader.hpp>
+#include <G3MSharedSDK/VectorStreamingRenderer.hpp>
+#include <G3MSharedSDK/PlanetRenderer.hpp>
+#include <G3MSharedSDK/SingleBILElevationDataProvider.hpp>
+#include <G3MSharedSDK/LayerTilesRenderParameters.hpp>
+#include <G3MSharedSDK/URLTemplateLayer.hpp>
+#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3MSharedSDK/IMathUtils.hpp>
+#include <G3MSharedSDK/OSMLayer.hpp>
 
 
 void G3MExtrusionDemoScene::rawSelectOption(const std::string& option,

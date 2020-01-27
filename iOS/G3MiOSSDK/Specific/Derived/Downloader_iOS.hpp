@@ -11,7 +11,7 @@
 #import "Downloader_iOS_WorkerThread.h"
 #import "Downloader_iOS_Handler.h"
 
-#include "IDownloader.hpp"
+#include "G3MSharedSDK/IDownloader.hpp"
 
 
 class Downloader_iOS : public IDownloader {
