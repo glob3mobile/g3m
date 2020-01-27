@@ -6,7 +6,7 @@
 //
 //
 
-#import "G3MSharedSDK/IDeviceAttitude.hpp"
+#import "G3M/IDeviceAttitude.hpp"
 
 #import <CoreMotion/CoreMotion.h>
 

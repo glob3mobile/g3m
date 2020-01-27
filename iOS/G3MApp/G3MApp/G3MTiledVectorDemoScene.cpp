@@ -7,23 +7,23 @@
 
 #include "G3MTiledVectorDemoScene.hpp"
 #include "G3MDemoModel.hpp"
-#include <G3MSharedSDK/G3MWidget.hpp>
-#include <G3MSharedSDK/LayerSet.hpp>
-#include <G3MSharedSDK/BingMapsLayer.hpp>
-#include <G3MSharedSDK/GEORasterSymbolizer.hpp>
-#include <G3MSharedSDK/GEO2DLineRasterStyle.hpp>
-#include <G3MSharedSDK/GEOGeometry.hpp>
-#include <G3MSharedSDK/GEO2DSurfaceRasterStyle.hpp>
-#include <G3MSharedSDK/GEOLineRasterSymbol.hpp>
-#include <G3MSharedSDK/GEO2DLineStringGeometry.hpp>
-#include <G3MSharedSDK/GEOMultiLineRasterSymbol.hpp>
-#include <G3MSharedSDK/GEO2DMultiLineStringGeometry.hpp>
-#include <G3MSharedSDK/GEOPolygonRasterSymbol.hpp>
-#include <G3MSharedSDK/GEO2DPolygonGeometry.hpp>
-#include <G3MSharedSDK/GEO2DMultiPolygonGeometry.hpp>
-#include <G3MSharedSDK/TiledVectorLayer.hpp>
-#include <G3MSharedSDK/LevelTileCondition.hpp>
-#include <G3MSharedSDK/Geodetic3D.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/BingMapsLayer.hpp>
+#include <G3M/GEORasterSymbolizer.hpp>
+#include <G3M/GEO2DLineRasterStyle.hpp>
+#include <G3M/GEOGeometry.hpp>
+#include <G3M/GEO2DSurfaceRasterStyle.hpp>
+#include <G3M/GEOLineRasterSymbol.hpp>
+#include <G3M/GEO2DLineStringGeometry.hpp>
+#include <G3M/GEOMultiLineRasterSymbol.hpp>
+#include <G3M/GEO2DMultiLineStringGeometry.hpp>
+#include <G3M/GEOPolygonRasterSymbol.hpp>
+#include <G3M/GEO2DPolygonGeometry.hpp>
+#include <G3M/GEO2DMultiPolygonGeometry.hpp>
+#include <G3M/TiledVectorLayer.hpp>
+#include <G3M/LevelTileCondition.hpp>
+#include <G3M/Geodetic3D.hpp>
 
 
 class SampleRasterSymbolizer : public GEORasterSymbolizer {

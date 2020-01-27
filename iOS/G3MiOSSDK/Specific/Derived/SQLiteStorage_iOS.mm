@@ -8,12 +8,12 @@
 
 #include "SQLiteStorage_iOS.hpp"
 
-#include "G3MSharedSDK/ILogger.hpp"
-#include "G3MSharedSDK/IThreadUtils.hpp"
-#include "G3MSharedSDK/G3MContext.hpp"
-#include "G3MSharedSDK/URL.hpp"
-#include "G3MSharedSDK/TimeInterval.hpp"
-#include "G3MSharedSDK/GTask.hpp"
+#include "G3M/ILogger.hpp"
+#include "G3M/IThreadUtils.hpp"
+#include "G3M/G3MContext.hpp"
+#include "G3M/URL.hpp"
+#include "G3M/TimeInterval.hpp"
+#include "G3M/GTask.hpp"
 
 #import "ByteBuffer_iOS.hpp"
 #import "Image_iOS.hpp"

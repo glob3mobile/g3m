@@ -7,9 +7,9 @@
 
 #import "Downloader_iOS_Handler.h"
 
-#include "G3MSharedSDK/ILogger.hpp"
+#include "G3M/ILogger.hpp"
 #include "Downloader_iOS.hpp"
-#include "G3MSharedSDK/IStringUtils.hpp"
+#include "G3M/IStringUtils.hpp"
 
 #import "NSString_CppAdditions.h"
 

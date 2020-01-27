@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__DeviceLocation_iOS__
 #define __G3MiOSSDK__DeviceLocation_iOS__
 
-#include "G3MSharedSDK/IDeviceLocation.hpp"
+#include "G3M/IDeviceLocation.hpp"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -42,4 +42,4 @@ public:
   
 };
 
-#endif /* defined(__G3MiOSSDK__DeviceLocation_iOS__) */
+#endif

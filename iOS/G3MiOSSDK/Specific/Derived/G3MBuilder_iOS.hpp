@@ -9,7 +9,7 @@
 #ifndef G3MBuilder_iOS_hpp
 #define G3MBuilder_iOS_hpp
 
-#include "G3MSharedSDK/IG3MBuilder.hpp"
+#include "G3M/IG3MBuilder.hpp"
 
 #import "G3MWidget_iOS.h"
 

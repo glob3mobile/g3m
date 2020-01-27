@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__ThreadUtils_iOS__
 #define __G3MiOSSDK__ThreadUtils_iOS__
 
-#include "G3MSharedSDK/IThreadUtils.hpp"
+#include "G3M/IThreadUtils.hpp"
 
 
 class ThreadUtils_iOS : public IThreadUtils {

@@ -7,8 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
-#include "G3MSharedSDK/IBufferDownloadListener.hpp"
-#include "G3MSharedSDK/IImageDownloadListener.hpp"
+#include "G3M/IBufferDownloadListener.hpp"
+#include "G3M/IImageDownloadListener.hpp"
 
 
 // Objective-C wrapper for C++ IBufferDownloadListener

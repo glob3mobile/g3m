@@ -8,7 +8,7 @@
 
 #include "ThreadUtils_iOS.hpp"
 
-#include "G3MSharedSDK/GTask.hpp"
+#include "G3M/GTask.hpp"
 
 #include <mach/mach_host.h>
 

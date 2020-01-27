@@ -8,7 +8,7 @@
 
 #include "ByteBuffer_iOS.hpp"
 
-#include "G3MSharedSDK/IStringBuilder.hpp"
+#include "G3M/IStringBuilder.hpp"
 
 
 const std::string ByteBuffer_iOS::description() const {

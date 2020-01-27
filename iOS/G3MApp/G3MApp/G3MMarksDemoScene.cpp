@@ -7,20 +7,20 @@
 
 #include "G3MMarksDemoScene.hpp"
 
-#include <G3MSharedSDK/G3MWidget.hpp>
-#include <G3MSharedSDK/LayerSet.hpp>
-#include <G3MSharedSDK/IDownloader.hpp>
-#include <G3MSharedSDK/DownloadPriority.hpp>
-#include <G3MSharedSDK/IBufferDownloadListener.hpp>
-#include <G3MSharedSDK/IJSONParser.hpp>
-#include <G3MSharedSDK/JSONObject.hpp>
-#include <G3MSharedSDK/JSONArray.hpp>
-#include <G3MSharedSDK/JSONNumber.hpp>
-#include <G3MSharedSDK/Mark.hpp>
-#include <G3MSharedSDK/Geodetic3D.hpp>
-#include <G3MSharedSDK/IStringUtils.hpp>
-#include <G3MSharedSDK/MarksRenderer.hpp>
-#include <G3MSharedSDK/BingMapsLayer.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/IDownloader.hpp>
+#include <G3M/DownloadPriority.hpp>
+#include <G3M/IBufferDownloadListener.hpp>
+#include <G3M/IJSONParser.hpp>
+#include <G3M/JSONObject.hpp>
+#include <G3M/JSONArray.hpp>
+#include <G3M/JSONNumber.hpp>
+#include <G3M/Mark.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/IStringUtils.hpp>
+#include <G3M/MarksRenderer.hpp>
+#include <G3M/BingMapsLayer.hpp>
 
 #include "G3MDemoModel.hpp"
 

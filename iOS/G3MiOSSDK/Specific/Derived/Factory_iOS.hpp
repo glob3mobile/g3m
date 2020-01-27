@@ -8,8 +8,8 @@
 #ifndef G3MiOSSDK_Factory_iOS
 #define G3MiOSSDK_Factory_iOS
 
-#include "G3MSharedSDK/IFactory.hpp"
-#include "G3MSharedSDK/IImageListener.hpp"
+#include "G3M/IFactory.hpp"
+#include "G3M/IImageListener.hpp"
 
 #import "Timer_iOS.hpp"
 #import "Image_iOS.hpp"

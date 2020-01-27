@@ -11,9 +11,9 @@
 
 #include <vector>
 
-#include "G3MSharedSDK/TouchEvent.hpp"
-#include "G3MSharedSDK/G3MWidget.hpp"
-#include "G3MSharedSDK/GL.hpp"
+#include "G3M/TouchEvent.hpp"
+#include "G3M/G3MWidget.hpp"
+#include "G3M/GL.hpp"
 
 #import "Logger_iOS.hpp"
 #import "Factory_iOS.hpp"

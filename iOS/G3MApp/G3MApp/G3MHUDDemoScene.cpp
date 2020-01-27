@@ -7,26 +7,26 @@
 
 #include "G3MHUDDemoScene.hpp"
 
-#include <G3MSharedSDK/BingMapsLayer.hpp>
-#include <G3MSharedSDK/LayerSet.hpp>
-#include <G3MSharedSDK/CanvasImageBuilder.hpp>
-#include <G3MSharedSDK/ICanvas.hpp>
-#include <G3MSharedSDK/Color.hpp>
-#include <G3MSharedSDK/IStringUtils.hpp>
-#include <G3MSharedSDK/GFont.hpp>
-#include <G3MSharedSDK/G3MContext.hpp>
-#include <G3MSharedSDK/HUDQuadWidget.hpp>
-#include <G3MSharedSDK/HUDRenderer.hpp>
-#include <G3MSharedSDK/HUDRelativePosition.hpp>
-#include <G3MSharedSDK/HUDRelativeSize.hpp>
-#include <G3MSharedSDK/LabelImageBuilder.hpp>
-#include <G3MSharedSDK/DownloaderImageBuilder.hpp>
-#include <G3MSharedSDK/HUDAbsolutePosition.hpp>
-#include <G3MSharedSDK/GTask.hpp>
-#include <G3MSharedSDK/G3MWidget.hpp>
-#include <G3MSharedSDK/PeriodicalTask.hpp>
-#include <G3MSharedSDK/IMathUtils.hpp>
-#include <G3MSharedSDK/BoxImageBackground.hpp>
+#include <G3M/BingMapsLayer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/CanvasImageBuilder.hpp>
+#include <G3M/ICanvas.hpp>
+#include <G3M/Color.hpp>
+#include <G3M/IStringUtils.hpp>
+#include <G3M/GFont.hpp>
+#include <G3M/G3MContext.hpp>
+#include <G3M/HUDQuadWidget.hpp>
+#include <G3M/HUDRenderer.hpp>
+#include <G3M/HUDRelativePosition.hpp>
+#include <G3M/HUDRelativeSize.hpp>
+#include <G3M/LabelImageBuilder.hpp>
+#include <G3M/DownloaderImageBuilder.hpp>
+#include <G3M/HUDAbsolutePosition.hpp>
+#include <G3M/GTask.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/PeriodicalTask.hpp>
+#include <G3M/IMathUtils.hpp>
+#include <G3M/BoxImageBackground.hpp>
 
 #include "G3MDemoModel.hpp"
 

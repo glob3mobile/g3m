@@ -7,29 +7,29 @@
 
 #include "G3MPointCloudDemoScene.hpp"
 
-#include <G3MSharedSDK/G3MWidget.hpp>
-#include <G3MSharedSDK/BingMapsLayer.hpp>
-#include <G3MSharedSDK/LayerSet.hpp>
-#include <G3MSharedSDK/IDownloader.hpp>
-#include <G3MSharedSDK/DownloadPriority.hpp>
-#include <G3MSharedSDK/IBufferDownloadListener.hpp>
-#include <G3MSharedSDK/BSONParser.hpp>
-#include <G3MSharedSDK/JSONBaseObject.hpp>
-#include <G3MSharedSDK/JSONObject.hpp>
-#include <G3MSharedSDK/JSONArray.hpp>
-#include <G3MSharedSDK/JSONNumber.hpp>
-#include <G3MSharedSDK/FloatBufferBuilderFromColor.hpp>
-#include <G3MSharedSDK/FloatBufferBuilderFromGeodetic.hpp>
-#include <G3MSharedSDK/DirectMesh.hpp>
-#include <G3MSharedSDK/GLConstants.hpp>
-#include <G3MSharedSDK/MeshRenderer.hpp>
-#include <G3MSharedSDK/IThreadUtils.hpp>
-#include <G3MSharedSDK/G3MContext.hpp>
-#include <G3MSharedSDK/GAsyncTask.hpp>
-#include <G3MSharedSDK/Geodetic3D.hpp>
-#include <G3MSharedSDK/Color.hpp>
-#include <G3MSharedSDK/IMathUtils.hpp>
-#include <G3MSharedSDK/ILogger.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/BingMapsLayer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/IDownloader.hpp>
+#include <G3M/DownloadPriority.hpp>
+#include <G3M/IBufferDownloadListener.hpp>
+#include <G3M/BSONParser.hpp>
+#include <G3M/JSONBaseObject.hpp>
+#include <G3M/JSONObject.hpp>
+#include <G3M/JSONArray.hpp>
+#include <G3M/JSONNumber.hpp>
+#include <G3M/FloatBufferBuilderFromColor.hpp>
+#include <G3M/FloatBufferBuilderFromGeodetic.hpp>
+#include <G3M/DirectMesh.hpp>
+#include <G3M/GLConstants.hpp>
+#include <G3M/MeshRenderer.hpp>
+#include <G3M/IThreadUtils.hpp>
+#include <G3M/G3MContext.hpp>
+#include <G3M/GAsyncTask.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/Color.hpp>
+#include <G3M/IMathUtils.hpp>
+#include <G3M/ILogger.hpp>
 
 #include "G3MDemoModel.hpp"
 

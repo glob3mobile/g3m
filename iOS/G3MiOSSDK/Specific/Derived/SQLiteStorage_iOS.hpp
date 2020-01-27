@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__SQLiteStorage_iOS__
 #define __G3MiOSSDK__SQLiteStorage_iOS__
 
-#include "G3MSharedSDK/IStorage.hpp"
+#include "G3M/IStorage.hpp"
 
 #import "SQDatabase.h"
 

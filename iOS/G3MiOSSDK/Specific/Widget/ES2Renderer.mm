@@ -9,8 +9,8 @@
 
 #import "ES2Renderer.h"
 
-#include "G3MSharedSDK/G3MWidget.hpp"
-#include "G3MSharedSDK/GL.hpp"
+#include "G3M/G3MWidget.hpp"
+#include "G3M/GL.hpp"
 
 #import "NativeGL2_iOS.hpp"
 

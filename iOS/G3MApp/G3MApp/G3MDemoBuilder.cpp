@@ -7,22 +7,22 @@
 
 #include "G3MDemoBuilder.hpp"
 
-#include <G3MSharedSDK/PlanetRendererBuilder.hpp>
-#include <G3MSharedSDK/LayerSet.hpp>
-#include <G3MSharedSDK/IG3MBuilder.hpp>
-#include <G3MSharedSDK/ErrorHandling.hpp>
-#include <G3MSharedSDK/GInitializationTask.hpp>
+#include <G3M/PlanetRendererBuilder.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/IG3MBuilder.hpp>
+#include <G3M/ErrorHandling.hpp>
+#include <G3M/GInitializationTask.hpp>
 
-#include <G3MSharedSDK/MeshRenderer.hpp>
-#include <G3MSharedSDK/ShapesRenderer.hpp>
-#include <G3MSharedSDK/MarksRenderer.hpp>
-#include <G3MSharedSDK/GEORenderer.hpp>
-#include <G3MSharedSDK/PointCloudsRenderer.hpp>
-#include <G3MSharedSDK/HUDRenderer.hpp>
-#include <G3MSharedSDK/NonOverlappingMarksRenderer.hpp>
-#include <G3MSharedSDK/VectorStreamingRenderer.hpp>
-#include <G3MSharedSDK/AtmosphereRenderer.hpp>
-#include <G3MSharedSDK/WrapperNearFrustumRenderer.hpp>
+#include <G3M/MeshRenderer.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/MarksRenderer.hpp>
+#include <G3M/GEORenderer.hpp>
+#include <G3M/PointCloudsRenderer.hpp>
+#include <G3M/HUDRenderer.hpp>
+#include <G3M/NonOverlappingMarksRenderer.hpp>
+#include <G3M/VectorStreamingRenderer.hpp>
+#include <G3M/AtmosphereRenderer.hpp>
+#include <G3M/WrapperNearFrustumRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 

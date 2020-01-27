@@ -9,7 +9,7 @@
 #include "WebSocket_iOS.hpp"
 
 #import "SRWebSocket.h"
-#include "G3MSharedSDK/IWebSocketListener.hpp"
+#include "G3M/IWebSocketListener.hpp"
 
 #import "NSString_CppAdditions.h"
 

@@ -7,13 +7,13 @@
 
 #include "G3MAugmentedRealityDemoScene.hpp"
 
-#include <G3MSharedSDK/G3MWidget.hpp>
-#include <G3MSharedSDK/DeviceAttitudeCameraHandler.hpp>
-#include <G3MSharedSDK/Camera.hpp>
-#include <G3MSharedSDK/BingMapsLayer.hpp>
-#include <G3MSharedSDK/LayerSet.hpp>
-#include <G3MSharedSDK/CameraRenderer.hpp>
-//#include <G3MSharedSDK/SingleBILElevationDataProvider.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/DeviceAttitudeCameraHandler.hpp>
+#include <G3M/Camera.hpp>
+#include <G3M/BingMapsLayer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/CameraRenderer.hpp>
+//#include <G3M/SingleBILElevationDataProvider.hpp>
 
 #include "G3MDemoModel.hpp"
 

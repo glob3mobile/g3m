@@ -13,7 +13,7 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-#include "G3MSharedSDK/GPUProgram.hpp"
+#include "G3M/GPUProgram.hpp"
 
 class GL;
 

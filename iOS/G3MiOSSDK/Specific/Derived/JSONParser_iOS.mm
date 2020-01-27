@@ -7,15 +7,15 @@
 
 #import "JSONParser_iOS.hpp"
 
-#import "G3MSharedSDK/JSONArray.hpp"
-#import "G3MSharedSDK/JSONObject.hpp"
-#import "G3MSharedSDK/JSONDouble.hpp"
-#import "G3MSharedSDK/JSONFloat.hpp"
-#import "G3MSharedSDK/JSONInteger.hpp"
-#import "G3MSharedSDK/JSONLong.hpp"
-#import "G3MSharedSDK/JSONBoolean.hpp"
-#import "G3MSharedSDK/JSONString.hpp"
-#import "G3MSharedSDK/JSONNull.hpp"
+#import "G3M/JSONArray.hpp"
+#import "G3M/JSONObject.hpp"
+#import "G3M/JSONDouble.hpp"
+#import "G3M/JSONFloat.hpp"
+#import "G3M/JSONInteger.hpp"
+#import "G3M/JSONLong.hpp"
+#import "G3M/JSONBoolean.hpp"
+#import "G3M/JSONString.hpp"
+#import "G3M/JSONNull.hpp"
 
 #import "ByteBuffer_iOS.hpp"
 

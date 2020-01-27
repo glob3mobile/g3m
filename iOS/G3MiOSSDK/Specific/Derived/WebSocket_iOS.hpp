@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__WebSocket_iOS__
 #define __G3MiOSSDK__WebSocket_iOS__
 
-#include "G3MSharedSDK/IWebSocket.hpp"
+#include "G3M/IWebSocket.hpp"
 
 @class SRWebSocket;
 @class WebSocketDelegate;

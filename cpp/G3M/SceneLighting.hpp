@@ -1,0 +1,60 @@
+//
+//  SceneLighting.hpp
+//  G3M
+//
+//  Created by Jose Miguel SN on 23/08/13.
+//
+//
+
+#ifndef __G3M__SceneLighting__
+#define __G3M__SceneLighting__
+
+class GLState;
+class G3MRenderContext;
+class Vector3D;
+class MeshRenderer;
+#include "Color.hpp"
+#include "MutableVector3D.hpp"
+
+class SceneLighting{
+public:
+  virtual ~SceneLighting() {}
+  virtual void modifyGLState(GLState* glState, const G3MRenderContext* rc) = 0;
+};
+
+class FixedFocusSceneLighting: public SceneLighting {
+public:
+
+  void modifyGLState(GLState* glState, const G3MRenderContext* rc);
+  
+};
+
+
+class CameraFocusSceneLighting: public SceneLighting {
+
+  Color _ambientColor;
+  Color _diffuseColor;
+
+  MeshRenderer* _meshRenderer;
+
+  double _cameraDirX, _cameraDirY, _cameraDirZ;
+  double _upX, _upY, _upZ;
+
+  MutableVector3D _camDir;
+  MutableVector3D _up;
+
+public:
+
+  CameraFocusSceneLighting(const Color& ambient, const Color& diffuse);
+
+  ~CameraFocusSceneLighting() {}
+
+  void modifyGLState(GLState* glState, const G3MRenderContext* rc);
+
+  void setLightDirectionsMeshRenderer(MeshRenderer* meshRenderer) {
+    _meshRenderer = meshRenderer;
+  }
+
+};
+
+#endif

@@ -10,11 +10,11 @@
 
 #include <math.h>
 
-#include "G3MSharedSDK/ILogger.hpp"
-#include "G3MSharedSDK/Color.hpp"
-#include "G3MSharedSDK/IImageListener.hpp"
-#include "G3MSharedSDK/IFactory.hpp"
-#include "G3MSharedSDK/IDeviceInfo.hpp"
+#include "G3M/ILogger.hpp"
+#include "G3M/Color.hpp"
+#include "G3M/IImageListener.hpp"
+#include "G3M/IFactory.hpp"
+#include "G3M/IDeviceInfo.hpp"
 
 #import "Image_iOS.hpp"
 

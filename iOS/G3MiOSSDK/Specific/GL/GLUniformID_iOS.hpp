@@ -8,7 +8,7 @@
 #ifndef G3MiOSSDK_GLUniformID_iOS
 #define G3MiOSSDK_GLUniformID_iOS
 
-#include "G3MSharedSDK/IGLUniformID.hpp"
+#include "G3M/IGLUniformID.hpp"
 
 
 class GLUniformID_iOS: public IGLUniformID {

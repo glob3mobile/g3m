@@ -7,20 +7,20 @@
 
 #include "G3MCanvas2DDemoScene.hpp"
 
-#include <G3MSharedSDK/G3MWidget.hpp>
-#include <G3MSharedSDK/OSMLayer.hpp>
-#include <G3MSharedSDK/LayerSet.hpp>
-#include <G3MSharedSDK/IFactory.hpp>
-#include <G3MSharedSDK/ICanvas.hpp>
-#include <G3MSharedSDK/QuadShape.hpp>
-#include <G3MSharedSDK/ShapesRenderer.hpp>
-#include <G3MSharedSDK/GFont.hpp>
-#include <G3MSharedSDK/IDownloader.hpp>
-#include <G3MSharedSDK/IImageDownloadListener.hpp>
-#include <G3MSharedSDK/Geodetic3D.hpp>
-#include <G3MSharedSDK/IImage.hpp>
-#include <G3MSharedSDK/Color.hpp>
-#include <G3MSharedSDK/G3MContext.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/OSMLayer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/IFactory.hpp>
+#include <G3M/ICanvas.hpp>
+#include <G3M/QuadShape.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/GFont.hpp>
+#include <G3M/IDownloader.hpp>
+#include <G3M/IImageDownloadListener.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/IImage.hpp>
+#include <G3M/Color.hpp>
+#include <G3M/G3MContext.hpp>
 
 #include "G3MDemoModel.hpp"
 

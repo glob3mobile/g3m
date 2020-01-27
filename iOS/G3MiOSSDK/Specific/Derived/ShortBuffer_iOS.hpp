@@ -11,9 +11,9 @@
 
 #include <OpenGLES/ES2/gl.h>
 
-#include "G3MSharedSDK/IShortBuffer.hpp"
-#include "G3MSharedSDK/ILogger.hpp"
-#include "G3MSharedSDK/ErrorHandling.hpp"
+#include "G3M/IShortBuffer.hpp"
+#include "G3M/ILogger.hpp"
+#include "G3M/ErrorHandling.hpp"
 
 
 class ShortBuffer_iOS : public IShortBuffer {

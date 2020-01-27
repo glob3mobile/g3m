@@ -7,10 +7,10 @@
 
 #include "Image_iOS.hpp"
 
-#include "G3MSharedSDK/IStringBuilder.hpp"
-#include "G3MSharedSDK/IImageListener.hpp"
-#include "G3MSharedSDK/RectangleI.hpp"
-#include "G3MSharedSDK/MutableColor255.hpp"
+#include "G3M/IStringBuilder.hpp"
+#include "G3M/IImageListener.hpp"
+#include "G3M/RectangleI.hpp"
+#include "G3M/MutableColor255.hpp"
 
 
 unsigned char* Image_iOS::createByteArrayRGBA8888() const {

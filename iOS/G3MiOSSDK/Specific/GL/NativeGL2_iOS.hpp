@@ -10,13 +10,13 @@
 
 #include <OpenGLES/ES2/gl.h>
 
-#include "G3MSharedSDK/INativeGL.hpp"
-#include "G3MSharedSDK/GPUProgram.hpp"
-#include "G3MSharedSDK/GPUAttribute.hpp"
-#include "G3MSharedSDK/GPUUniform.hpp"
-#include "G3MSharedSDK/GPUAttributeVec2Float.hpp"
-#include "G3MSharedSDK/GPUAttributeVec3Float.hpp"
-#include "G3MSharedSDK/GPUAttributeVec4Float.hpp"
+#include "G3M/INativeGL.hpp"
+#include "G3M/GPUProgram.hpp"
+#include "G3M/GPUAttribute.hpp"
+#include "G3M/GPUUniform.hpp"
+#include "G3M/GPUAttributeVec2Float.hpp"
+#include "G3M/GPUAttributeVec3Float.hpp"
+#include "G3M/GPUAttributeVec4Float.hpp"
 
 #import "GLUniformID_iOS.hpp"
 #import "GLTextureID_iOS.hpp"

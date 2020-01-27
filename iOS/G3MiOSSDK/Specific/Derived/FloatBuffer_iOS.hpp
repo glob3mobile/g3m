@@ -11,8 +11,8 @@
 
 #include <OpenGLES/ES2/gl.h>
 
-#include "G3MSharedSDK/IFloatBuffer.hpp"
-#include "G3MSharedSDK/ErrorHandling.hpp"
+#include "G3M/IFloatBuffer.hpp"
+#include "G3M/ErrorHandling.hpp"
 
 
 class FloatBuffer_iOS : public IFloatBuffer {
