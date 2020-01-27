@@ -15,20 +15,32 @@ source ${EMSDK_DIRECTORY}/emsdk_env.sh
 emcc -v
 echo
 
+rm -rf LIB
+mkdir LIB
+
 #emcc --show-ports
 
-SOURCES="$(find . -name '*.cpp')" 
+
+GM3_SOURCES="$(find ${G3M_SOURCE_DIRECTORY} -name '*.cpp')" 
+
+#echo ${GM3_SOURCES}
+#    -Wall \
+#    -O0 \
+#    -g4 \
+#    -s ASSERTIONS=2 \
+#    -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
+#    -s DISABLE_EXCEPTION_CATCHING=2 \
+#    -s DEMANGLE_SUPPORT=1 \
+
 
 em++                           \
     -I ${G3M_SOURCE_DIRECTORY} \
-    LIB/libG3M.bc              \
-    ${SOURCES}                 \
+    ${GM3_SOURCES}             \
     -s WASM=1                  \
     -DC_CODE                   \
-    -O0                        \
-    -g                         \
+    -O3                        \
     -std=c++11                 \
     -r                         \
-    -o LIB/libG3MEmscripten.bc \
+    -o LIB/libG3M.bc           \
     || exit 1
 

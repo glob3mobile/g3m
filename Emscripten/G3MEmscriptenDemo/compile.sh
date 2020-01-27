@@ -4,13 +4,13 @@ set -e # Script exists on first failure
 #set -x # For debugging purpose
 
 export EMSDK_DIRECTORY="../../../emsdk/"
-export G3M_COMMONS_SOURCE_DIRECTORY="../../iOS/G3MiOSSDK/Commons/"
+export G3M_SOURCE_DIRECTORY="../../cpp/G3M/"
 export G3M_EMSCRIPTEN_SOURCE_DIRECTORY="../G3MEmscriptenSDK/G3MEmscriptenSDK/"
 export G3M_LIBS_DIRECTORY="../G3MEmscriptenSDK/LIB/"
 
 
 if [[ -z $EMSDK_DIRECTORY                 ]]; then echo - Missing mandatory variable EMSDK_DIRECTORY;                 exit 1; fi
-if [[ -z $G3M_COMMONS_SOURCE_DIRECTORY    ]]; then echo - Missing mandatory variable G3M_COMMONS_SOURCE_DIRECTORY;    exit 1; fi
+if [[ -z $G3M_SOURCE_DIRECTORY            ]]; then echo - Missing mandatory variable G3M_SOURCE_DIRECTORY;            exit 1; fi
 if [[ -z $G3M_EMSCRIPTEN_SOURCE_DIRECTORY ]]; then echo - Missing mandatory variable G3M_EMSCRIPTEN_SOURCE_DIRECTORY; exit 1; fi
 if [[ -z $G3M_LIBS_DIRECTORY              ]]; then echo - Missing mandatory variable G3M_LIBS_DIRECTORY;              exit 1; fi
 
@@ -50,35 +50,23 @@ export EMCC_CORES=8
 # -g4 \
 # -O0 \
 
-em++ \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Basic        \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Cameras      \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/DEM          \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Downloader   \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GEO          \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/GL           \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Geometry     \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Interfaces   \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/JSON         \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Layers       \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Math         \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Mesh         \
-    -I ${G3M_COMMONS_SOURCE_DIRECTORY}/Rendererers  \
-    -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}           \
-    ${G3M_EMSCRIPTEN_SOURCES} \
-    ${G3M_LIBS_DIRECTORY}/libG3MShared.bc           \
-    *.cpp \
+em++                                                         \
+    -I ${G3M_SOURCE_DIRECTORY}                               \
+    -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}                    \
+    ${G3M_EMSCRIPTEN_SOURCES}                                \
+    ${G3M_LIBS_DIRECTORY}/libG3M.bc                          \
+    *.cpp                                                    \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=10 \
-    -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
-    -s WASM=1 \
-    -s ALLOW_MEMORY_GROWTH=1 \
-    -s ASAN_SHADOW_SIZE=536870912 \
-    --bind \
-    -Wall \
-    -DC_CODE \
-    -O3 \
-    -std=c++11 \
-    -o deploy/G3MEmscriptenDemo.js \
+    -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]'   \
+    -s WASM=1                                                \
+    -s ALLOW_MEMORY_GROWTH=1                                 \
+    -s ASAN_SHADOW_SIZE=536870912                            \
+    --bind                                                   \
+    -Wall                                                    \
+    -DC_CODE                                                 \
+    -O3                                                      \
+    -std=c++11                                               \
+    -o deploy/G3MEmscriptenDemo.js                           \
     || exit 1
 
 cp -rv html/ deploy/
