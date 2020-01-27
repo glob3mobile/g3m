@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEO2DGeometry.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/9/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEO2DGeometry.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/9/13.
 //

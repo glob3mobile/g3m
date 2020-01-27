@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  InterpolatedDEMGrid.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/18/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  InterpolatedDEMGrid.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/18/16.
 //

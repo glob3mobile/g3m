@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  AbsoluteImageSizer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/11/19.
 //
 
 //
 //  AbsoluteImageSizer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/11/19.
 //

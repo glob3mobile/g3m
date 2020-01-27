@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Quadric.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo on 29/09/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  Quadric.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo on 29/09/13.
 //

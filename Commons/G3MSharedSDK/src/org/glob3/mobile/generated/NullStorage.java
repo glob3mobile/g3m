@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  NullStorage.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 25/04/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  NullStorage.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 29/06/12.
 //

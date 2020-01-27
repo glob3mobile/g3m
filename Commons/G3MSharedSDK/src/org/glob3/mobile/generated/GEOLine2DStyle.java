@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEOLine2DStyle.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 3/26/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEOLine2DStyle.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 3/26/13.
 //

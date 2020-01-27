@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GLTextureID.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 09/08/12.
 //

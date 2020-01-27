@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ShapeOrbitCameraEffect.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/31/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ShapeOrbitCameraEffect.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/31/13.
 //

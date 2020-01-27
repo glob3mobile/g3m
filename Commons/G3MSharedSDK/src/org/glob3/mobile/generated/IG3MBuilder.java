@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IG3MBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 20/11/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  IG3MBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 20/11/12.
 //
@@ -407,7 +407,7 @@ public abstract class IG3MBuilder
      * If not, the main renderer will be made up of an only renderer (planetRenderer).
      */
     Renderer mainRenderer = null;
-    if (getRenderers().size() > 0)
+    if ((getRenderers().size() > 0) || _atmosphere)
     {
       CompositeRenderer composite = new CompositeRenderer();
   

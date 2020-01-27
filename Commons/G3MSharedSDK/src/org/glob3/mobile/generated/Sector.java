@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  Sector.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 22/06/12.
 //
 
 //
 //  Sector.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
 //

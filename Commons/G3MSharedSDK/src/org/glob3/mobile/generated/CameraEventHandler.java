@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CameraEventHandler.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 07/08/12.
 //

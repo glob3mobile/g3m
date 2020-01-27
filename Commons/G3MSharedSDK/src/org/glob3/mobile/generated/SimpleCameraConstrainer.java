@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  SimpleCameraConstrainer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/30/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  SimpleCameraConstrainer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/30/13.
 //

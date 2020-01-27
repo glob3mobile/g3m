@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GPUProgramManager.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 02/04/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GPUProgramManager.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 02/04/13.
 //

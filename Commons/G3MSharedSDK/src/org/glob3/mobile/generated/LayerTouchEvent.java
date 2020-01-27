@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  LayerTouchEventListener.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 14/08/12.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  INativeGL.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 31/07/12.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IStorage.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 05/11/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  Storage.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 26/06/12.
 //

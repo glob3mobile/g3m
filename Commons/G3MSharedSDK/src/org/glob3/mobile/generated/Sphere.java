@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Sphere.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 04/06/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  Sphere.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 04/06/13.
 //

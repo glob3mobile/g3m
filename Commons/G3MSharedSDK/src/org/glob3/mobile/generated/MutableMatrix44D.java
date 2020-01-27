@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  MutableMatrix44D.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 05/09/12.
 //
 
 //
 //  MutableMatrix44D.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 05/09/12.
 //

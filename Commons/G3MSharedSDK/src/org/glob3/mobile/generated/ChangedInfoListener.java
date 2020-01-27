@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ChangedInfoListener.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 03/04/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ChangedInfoListener.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 03/04/14.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  PointCloudsRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 8/19/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  PointCloudsRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 8/19/14.
 //

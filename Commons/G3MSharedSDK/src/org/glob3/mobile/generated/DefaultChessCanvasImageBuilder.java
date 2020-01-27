@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DefaultChessCanvasImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 21/08/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DefaultChessCanvasImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 21/08/14.
 //

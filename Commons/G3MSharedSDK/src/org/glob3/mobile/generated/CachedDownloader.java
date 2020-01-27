@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CachedDownloader.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 15/08/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CachedDownloader.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 15/08/12.
 //

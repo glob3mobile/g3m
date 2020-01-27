@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  AbstractGeometryMesh.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 23/06/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  AbstractGeometryMesh.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 23/06/13.
 //

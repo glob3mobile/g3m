@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  PlanetTileTessellator.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 12/07/12.
 //
 
 //
 //  PlanetTileTessellator.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 12/07/12.
 //

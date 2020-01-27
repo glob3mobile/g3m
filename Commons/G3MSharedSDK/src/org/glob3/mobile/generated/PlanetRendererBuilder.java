@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  PlanetRendererBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 22/11/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  PlanetRendererBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 22/11/12.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  MutableQuaternionF.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/19/17.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  MutableQuaternionF.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/19/17.
 //

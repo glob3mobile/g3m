@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GAsyncTask.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/18/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GAsyncTask.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/18/16.
 //

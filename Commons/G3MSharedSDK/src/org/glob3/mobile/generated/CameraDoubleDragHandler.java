@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  CameraDoubleDragHandler.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 28/07/12.
 //
 
 //
 //  CameraDoubleDragHandler.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 28/07/12.
 //

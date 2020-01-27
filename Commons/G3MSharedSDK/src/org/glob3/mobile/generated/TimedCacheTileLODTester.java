@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  TimedLODTester.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 22/12/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  TimedLODTester.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 22/12/15.
 //

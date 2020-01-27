@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ILocationModifier.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 28/10/15.
 //

@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  Box.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 17/07/12.
 //
 
 //
 //  Box.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 16/07/12.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  BilinearInterpolator.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/21/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  BilinearInterpolator.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/21/13.
 //

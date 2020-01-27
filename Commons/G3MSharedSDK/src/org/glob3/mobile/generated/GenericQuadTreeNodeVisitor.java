@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GenericQuadTree.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 07/08/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GenericQuadTree.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 07/08/13.
 //

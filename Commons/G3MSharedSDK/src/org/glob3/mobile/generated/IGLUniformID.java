@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IGLUniformID.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 19/09/12.
 //

@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  JSONObject.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Oliver Koehler on 01/10/12.
 //
 
 //
 //  JSONObject.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Oliver Koehler on 01/10/12.
 //

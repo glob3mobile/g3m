@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  GLConstants.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 17/09/12.
 //
 
 //
 //  GLConstants.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 17/09/12.
 //

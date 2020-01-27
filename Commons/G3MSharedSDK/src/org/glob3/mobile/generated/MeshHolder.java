@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  MeshHolder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/17/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  MeshHolder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/17/13.
 //

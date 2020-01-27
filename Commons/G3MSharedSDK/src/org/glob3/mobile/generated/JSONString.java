@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  JSONString.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/7/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  JSONString.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Oliver Koehler on 03/10/12.
 //

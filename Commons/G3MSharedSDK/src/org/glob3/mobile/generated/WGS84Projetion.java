@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  WGS84Projetion.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/14/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  WGS84Projetion.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/14/16.
 //

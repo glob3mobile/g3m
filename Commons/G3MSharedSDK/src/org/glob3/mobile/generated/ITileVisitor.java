@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ITileVisitor.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal on 1/22/13.
 //

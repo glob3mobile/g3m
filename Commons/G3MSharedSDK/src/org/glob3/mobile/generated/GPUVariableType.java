@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  GPUVariableType.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
 //
 
 //
 //  GPUVariableType.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Extent.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo Pino on 16/07/12.
 //

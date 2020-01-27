@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  JSONArray.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Oliver Koehler on 02/10/12.
 //
 
 //
 //  JSONArray.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Oliver Koehler on 02/10/12.
 //

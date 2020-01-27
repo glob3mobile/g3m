@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  TrailsRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/23/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  TrailsRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/23/12.
 //

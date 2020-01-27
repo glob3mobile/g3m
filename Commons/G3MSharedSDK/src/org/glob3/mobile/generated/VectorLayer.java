@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  VectorLayer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/30/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  VectorLayer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/30/14.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  VectorStreamingRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/30/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  VectorStreamingRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/30/15.
 //

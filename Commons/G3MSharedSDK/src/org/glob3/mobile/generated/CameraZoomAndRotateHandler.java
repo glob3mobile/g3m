@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CameraZoomAndRotateHandler.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo on 26/06/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CameraZoomAndRotateHandler.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo on 26/06/13.
 //

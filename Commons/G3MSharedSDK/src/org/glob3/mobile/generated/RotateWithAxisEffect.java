@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CameraEffects.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo on 17/07/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CameraEffects.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo on 17/07/13.
 //

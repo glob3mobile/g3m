@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  ResizerImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/11/19.
 //
 
 //
 //  ResizerImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/11/19.
 //

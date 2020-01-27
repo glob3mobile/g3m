@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  SectorTileCondition.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 12/4/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  SectorTileCondition.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 12/4/13.
 //

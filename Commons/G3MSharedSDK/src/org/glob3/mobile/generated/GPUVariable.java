@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GPUVariable.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 20/06/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GPUVariable.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 20/06/13.
 //

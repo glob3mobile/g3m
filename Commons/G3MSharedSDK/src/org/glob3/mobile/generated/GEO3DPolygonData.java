@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  GEO3DPolygonData.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 10/22/18.
 //
 
 //
 //  GEO3DPolygonData.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 10/22/18.
 //

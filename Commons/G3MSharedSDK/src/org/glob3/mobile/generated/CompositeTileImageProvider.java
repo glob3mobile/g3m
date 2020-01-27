@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CompositeTileImageProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/23/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CompositeTileImageProvider.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/23/14.
 //

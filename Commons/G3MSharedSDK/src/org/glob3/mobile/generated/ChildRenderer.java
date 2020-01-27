@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ChildRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 22/04/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ChildRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 22/04/14.
 //

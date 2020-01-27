@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  FrustumPolicyHandler.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 28/03/2017.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  FrustumPolicyHandler.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 28/03/2017.
 //

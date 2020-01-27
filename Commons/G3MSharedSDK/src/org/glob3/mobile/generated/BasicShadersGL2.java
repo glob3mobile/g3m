@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  BasicShadersGL2.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 15/11/13.
 //

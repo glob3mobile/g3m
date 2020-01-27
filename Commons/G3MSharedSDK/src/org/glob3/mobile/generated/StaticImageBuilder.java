@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  StaticImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/13/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  StaticImageBuilder.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/13/15.
 //

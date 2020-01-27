@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Geodetic3DProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 12/09/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  Geodetic3DProvider.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 12/09/13.
 //

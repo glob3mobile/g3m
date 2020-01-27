@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  EllipsoidalPlanet.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 17/05/13.
 //
@@ -10,7 +10,7 @@ package org.glob3.mobile.generated;
 
 //
 //  EllipsoidalPlanet.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 15/05/13.
 //

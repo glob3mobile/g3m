@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  FlatPlanet.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo on 10/07/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  FlatPlanet.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo on 10/07/13.
 //

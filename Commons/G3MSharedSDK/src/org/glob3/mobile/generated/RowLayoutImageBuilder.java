@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  RowLayoutImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/20/19.
 //
 
 //
 //  RowLayoutImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/20/19.
 //

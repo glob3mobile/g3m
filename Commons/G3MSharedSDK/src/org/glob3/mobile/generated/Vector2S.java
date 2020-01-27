@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Vector2S.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 16/2/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  Vector2S.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 16/2/16.
 //

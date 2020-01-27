@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CameraDoubleTapHandler.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 07/08/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CameraDoubleTapHandler.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 07/08/12.
 //

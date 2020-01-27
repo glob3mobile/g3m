@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  Frustum.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 15/07/12.
 //
 
 //
 //  Frustum.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 15/07/12.
 //

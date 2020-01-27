@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  TimeInterval.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 13/06/12.
 //
 
 //
 //  TimeInterval.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 13/06/12.
 //

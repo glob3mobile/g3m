@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DEMProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/13/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DEMProvider.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/13/16.
 //

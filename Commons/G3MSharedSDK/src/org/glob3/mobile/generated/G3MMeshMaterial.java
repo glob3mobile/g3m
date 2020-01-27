@@ -1,15 +1,15 @@
 package org.glob3.mobile.generated;
 //
 //  G3MMeshMaterial.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/29/14.
 //
 //
 
 //
-//  G3MMeshMaterial.hp
-//  G3MiOSSDK
+//  G3MMeshMaterial.hpp
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/29/14.
 //

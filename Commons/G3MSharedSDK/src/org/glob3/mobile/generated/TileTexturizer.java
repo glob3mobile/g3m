@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  TileTexturizer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 12/07/12.
 //
 
 //
 //  TileTexturizer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 12/07/12.
 //

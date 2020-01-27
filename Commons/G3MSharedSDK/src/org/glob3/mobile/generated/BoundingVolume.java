@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  BoundingVolume.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 16/07/12.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IBuffer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 05/09/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  IBuffer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 05/09/12.
 //

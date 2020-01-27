@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  RenderState.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 9/29/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  RenderState.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 9/29/13.
 //

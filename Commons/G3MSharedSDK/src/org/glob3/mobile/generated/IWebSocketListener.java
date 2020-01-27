@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IWebSocketListener.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 6/18/13.
 //

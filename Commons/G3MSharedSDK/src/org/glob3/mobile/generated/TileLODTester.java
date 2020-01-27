@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  TileLODTester.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 4/12/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  TileLODTester.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 4/12/15.
 //

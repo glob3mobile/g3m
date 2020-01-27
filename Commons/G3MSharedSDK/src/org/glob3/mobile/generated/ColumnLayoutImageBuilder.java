@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ColumnLayoutImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/11/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ColumnLayoutImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/11/15.
 //

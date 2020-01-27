@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CircleImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 9/2/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CircleImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 9/2/15.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DEMGrid.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/5/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DEMGrid.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/5/16.
 //

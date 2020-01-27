@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  LayerSet.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 23/07/12.
 //
 
 //
 //  LayerSet.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 23/07/12.
 //

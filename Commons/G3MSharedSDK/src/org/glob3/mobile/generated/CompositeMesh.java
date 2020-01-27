@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CompositeMesh.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/17/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CompositeMesh.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/17/12.
 //

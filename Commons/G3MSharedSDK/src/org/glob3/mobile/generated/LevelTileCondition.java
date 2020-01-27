@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  LevelTileCondition.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 23/08/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  LevelTileCondition.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 23/08/12.
 //

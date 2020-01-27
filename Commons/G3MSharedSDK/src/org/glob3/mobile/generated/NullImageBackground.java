@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  NullImageBackground.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/19/19.
 //
 
 //
 //  NullImageBackground.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/19/19.
 //
