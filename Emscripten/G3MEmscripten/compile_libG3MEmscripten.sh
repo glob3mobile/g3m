@@ -22,15 +22,30 @@ SOURCES="$(find . -name '*.cpp')"
 #    -Wall                      \
 #    -g                         \
 
-em++                           \
-    -I ${G3M_SOURCE_DIRECTORY} \
-    LIB/libG3M.bc              \
-    ${SOURCES}                 \
-    -s WASM=1                  \
-    -DC_CODE                   \
-    -O3                        \
-    -std=c++11                 \
-    -r                         \
-    -o LIB/libG3MEmscripten.bc \
+### deploy ### 
+#    -O3                                                                              \
+
+### debug ### 
+#    -s ASSERTIONS=2                                                                  \
+#    -s SAFE_HEAP=0 -s ALIASING_FUNCTION_POINTERS=0                                   \
+#    -s DISABLE_EXCEPTION_CATCHING=2                                                  \
+#    -s DEMANGLE_SUPPORT=1                                                            \
+#    -fsanitize=undefined                                                             \
+#    -fsanitize=address                                                               \
+#    --source-map-base http://localhost:8080/                                         \
+#    --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
+#    -g4                                                                              \
+#    -O0                                                                              \
+
+em++                                                                                 \
+    -I ${G3M_SOURCE_DIRECTORY}                                                       \
+    LIB/libG3M.bc                                                                    \
+    ${SOURCES}                                                                       \
+    -s WASM=1                                                                        \
+    -DC_CODE                                                                         \
+    -O3                                                                              \
+    -std=c++11                                                                       \
+    -r                                                                               \
+    -o LIB/libG3MEmscripten.bc                                                       \
     || exit 1
 

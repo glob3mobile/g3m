@@ -45,7 +45,7 @@ G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget(const std::string& can
   if (nativeWidget->isWebGLSupported()) {
     addGPUProgramSources();
 
-    nativeWidget->initSingletons();
+    G3MWidget_Emscripten::initSingletons();
 
     setGL(nativeWidget->getGL());
 

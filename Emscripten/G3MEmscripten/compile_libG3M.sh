@@ -20,29 +20,31 @@ mkdir LIB
 
 #emcc --show-ports
 
-
 GM3_SOURCES="$(find ${G3M_SOURCE_DIRECTORY} -name '*.cpp')" 
 
-#echo ${GM3_SOURCES}
-#    -Wall \
-#    -O0 \
-#    -g4 \
-#    -s ASSERTIONS=2 \
-#    -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
-#    -s DISABLE_EXCEPTION_CATCHING=2 \
-#    -s DEMANGLE_SUPPORT=1 \
+#### deploy ### 
+#    -O3                                                                              \
 
-#    -Wall                      \
+### debug ### 
+#    -s ASSERTIONS=2                                                                  \
+#    -s SAFE_HEAP=0 -s ALIASING_FUNCTION_POINTERS=0                                   \
+#    -s DISABLE_EXCEPTION_CATCHING=2                                                  \
+#    -s DEMANGLE_SUPPORT=1                                                            \
+#    -fsanitize=undefined                                                             \
+#    -fsanitize=address                                                               \
+#    --source-map-base http://localhost:8080/                                         \
+#    --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
+#    -g4                                                                              \
+#    -O0                                                                              \
 
-
-em++                           \
-    -I ${G3M_SOURCE_DIRECTORY} \
-    ${GM3_SOURCES}             \
-    -s WASM=1                  \
-    -DC_CODE                   \
-    -O3                        \
-    -std=c++11                 \
-    -r                         \
-    -o LIB/libG3M.bc           \
+em++                                                                                 \
+    -I ${G3M_SOURCE_DIRECTORY}                                                       \
+    ${GM3_SOURCES}                                                                   \
+    -s WASM=1                                                                        \
+    -DC_CODE                                                                         \
+    -O3                                                                              \
+    -std=c++11                                                                       \
+    -r                                                                               \
+    -o LIB/libG3M.bc                                                                 \
     || exit 1
 

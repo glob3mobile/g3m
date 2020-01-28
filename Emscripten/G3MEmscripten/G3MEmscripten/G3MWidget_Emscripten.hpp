@@ -59,12 +59,12 @@ private:
 protected:
   
 public:
+  static void initSingletons();
+
   G3MWidget_Emscripten(const std::string& canvasContainerID);
   
   ~G3MWidget_Emscripten();
-  
-  void initSingletons();
-  
+
   bool isWebGLSupported() const;
   
   GL* getGL() const;
