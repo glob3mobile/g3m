@@ -1,6 +1,6 @@
 //
 //  EMStorage.hpp
-//  G3MEmscriptenSDK
+//  G3MEmscripten
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 1/15/20.
 //  Copyright © 2020 DIEGO RAMIRO GOMEZ-DECK. All rights reserved.

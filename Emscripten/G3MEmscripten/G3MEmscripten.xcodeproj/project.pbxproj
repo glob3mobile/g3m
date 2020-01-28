@@ -64,7 +64,7 @@
 /* Begin PBXFileReference section */
 		CF3FF6E423C72FC5001D8E9A /* DeviceInfo_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DeviceInfo_Emscripten.hpp; sourceTree = "<group>"; };
 		CF3FF6E523C72FC5001D8E9A /* DeviceInfo_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceInfo_Emscripten.cpp; sourceTree = "<group>"; };
-		CF75D0E023C71F4700D85E10 /* libG3MEmscriptenSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MEmscriptenSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF75D0E023C71F4700D85E10 /* libG3MEmscripten.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MEmscripten.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Downloader_Emscripten.cpp; sourceTree = "<group>"; };
 		CF75D0EF23C71F6800D85E10 /* G3MWidget_Emscripten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MWidget_Emscripten.cpp; sourceTree = "<group>"; };
 		CF75D0F023C71F6800D85E10 /* Timer_Emscripten.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Timer_Emscripten.hpp; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 		CF75D0D723C71F4700D85E10 = {
 			isa = PBXGroup;
 			children = (
-				CF75D0E223C71F4700D85E10 /* G3MEmscriptenSDK */,
+				CF75D0E223C71F4700D85E10 /* G3MEmscripten */,
 				CF75D0E123C71F4700D85E10 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -139,17 +139,15 @@
 		CF75D0E123C71F4700D85E10 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CF75D0E023C71F4700D85E10 /* libG3MEmscriptenSDK.a */,
+				CF75D0E023C71F4700D85E10 /* libG3MEmscripten.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CF75D0E223C71F4700D85E10 /* G3MEmscriptenSDK */ = {
+		CF75D0E223C71F4700D85E10 /* G3MEmscripten */ = {
 			isa = PBXGroup;
 			children = (
 				CF920C4C23C730ED005A10ED /* ByteBuffer_Emscripten.cpp */,
-				CF9A39B123CF015B008C0BD1 /* EMStorage.cpp */,
-				CF9A39B223CF015B008C0BD1 /* EMStorage.hpp */,
 				CF920C4923C730ED005A10ED /* ByteBuffer_Emscripten.hpp */,
 				CF920C5723C73228005A10ED /* Canvas_Emscripten.cpp */,
 				CF920C5923C7323D005A10ED /* Canvas_Emscripten.hpp */,
@@ -161,6 +159,8 @@
 				CF75D10723C71F6B00D85E10 /* DeviceLocation_Emscripten.hpp */,
 				CF75D0EE23C71F6800D85E10 /* Downloader_Emscripten.cpp */,
 				CF75D0FD23C71F6A00D85E10 /* Downloader_Emscripten.hpp */,
+				CF9A39B123CF015B008C0BD1 /* EMStorage.cpp */,
+				CF9A39B223CF015B008C0BD1 /* EMStorage.hpp */,
 				CF75D0F123C71F6800D85E10 /* Factory_Emscripten.cpp */,
 				CF75D0FE23C71F6A00D85E10 /* Factory_Emscripten.hpp */,
 				CF920C4D23C730ED005A10ED /* FloatBuffer_Emscripten.cpp */,
@@ -200,7 +200,7 @@
 				CF75D10A23C71F6B00D85E10 /* WebSocket_Emscripten.cpp */,
 				CF75D10C23C71F6B00D85E10 /* WebSocket_Emscripten.hpp */,
 			);
-			path = G3MEmscriptenSDK;
+			path = G3MEmscripten;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,9 +242,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		CF75D0DF23C71F4700D85E10 /* G3MEmscriptenSDK */ = {
+		CF75D0DF23C71F4700D85E10 /* G3MEmscripten */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CF75D0EB23C71F4700D85E10 /* Build configuration list for PBXNativeTarget "G3MEmscriptenSDK" */;
+			buildConfigurationList = CF75D0EB23C71F4700D85E10 /* Build configuration list for PBXNativeTarget "G3MEmscripten" */;
 			buildPhases = (
 				CF75D0DC23C71F4700D85E10 /* Headers */,
 				CF75D0DD23C71F4700D85E10 /* Sources */,
@@ -254,9 +254,9 @@
 			);
 			dependencies = (
 			);
-			name = G3MEmscriptenSDK;
+			name = G3MEmscripten;
 			productName = G3MEmscriptenSDK;
-			productReference = CF75D0E023C71F4700D85E10 /* libG3MEmscriptenSDK.a */;
+			productReference = CF75D0E023C71F4700D85E10 /* libG3MEmscripten.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -273,7 +273,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CF75D0DB23C71F4700D85E10 /* Build configuration list for PBXProject "G3MEmscriptenSDK" */;
+			buildConfigurationList = CF75D0DB23C71F4700D85E10 /* Build configuration list for PBXProject "G3MEmscripten" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -286,7 +286,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CF75D0DF23C71F4700D85E10 /* G3MEmscriptenSDK */,
+				CF75D0DF23C71F4700D85E10 /* G3MEmscripten */,
 			);
 		};
 /* End PBXProject section */
@@ -487,7 +487,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CF75D0DB23C71F4700D85E10 /* Build configuration list for PBXProject "G3MEmscriptenSDK" */ = {
+		CF75D0DB23C71F4700D85E10 /* Build configuration list for PBXProject "G3MEmscripten" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CF75D0E923C71F4700D85E10 /* Debug */,
@@ -496,7 +496,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CF75D0EB23C71F4700D85E10 /* Build configuration list for PBXNativeTarget "G3MEmscriptenSDK" */ = {
+		CF75D0EB23C71F4700D85E10 /* Build configuration list for PBXNativeTarget "G3MEmscripten" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CF75D0EC23C71F4700D85E10 /* Debug */,
