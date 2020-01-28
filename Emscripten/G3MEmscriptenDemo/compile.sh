@@ -27,7 +27,7 @@ mkdir deploy
 #    -s EXIT_RUNTIME=0 \
 #    -s NO_EXIT_RUNTIME=0 \
 
-G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')" 
+#G3M_EMSCRIPTEN_SOURCES="$(find ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY} -name '*.cpp')" 
 
 #    -s DISABLE_EXCEPTION_CATCHING=2 \
 #    -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 \
@@ -50,11 +50,12 @@ export EMCC_CORES=8
 # -g4 \
 # -O0 \
 
+#    ${G3M_EMSCRIPTEN_SOURCES}                                \
+
 em++                                                         \
     -I ${G3M_SOURCE_DIRECTORY}                               \
     -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}                    \
-    ${G3M_EMSCRIPTEN_SOURCES}                                \
-    ${G3M_LIBS_DIRECTORY}/libG3M.bc                          \
+    ${G3M_LIBS_DIRECTORY}/libG3MEmscripten.bc                \
     *.cpp                                                    \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=10 \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]'   \

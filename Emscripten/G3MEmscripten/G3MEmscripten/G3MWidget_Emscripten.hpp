@@ -61,7 +61,7 @@ protected:
 public:
   static void initSingletons();
 
-  G3MWidget_Emscripten(const std::string& canvasContainerID);
+  G3MWidget_Emscripten();
   
   ~G3MWidget_Emscripten();
 
@@ -73,8 +73,7 @@ public:
 
   G3MWidget* getG3MWidget() const;
 
-  void startWidget();
-
+  void startWidget(const std::string& canvasContainerID);
 
   void _loopStep();
   void _resizerStep();

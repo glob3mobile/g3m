@@ -40,8 +40,8 @@ void G3MBuilder_Emscripten::addGPUProgramSources() {
   }
 }
 
-G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget(const std::string& canvasContainerID) {
-  G3MWidget_Emscripten* nativeWidget = new G3MWidget_Emscripten(canvasContainerID);
+G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget() {
+  G3MWidget_Emscripten* nativeWidget = new G3MWidget_Emscripten();
   if (nativeWidget->isWebGLSupported()) {
     addGPUProgramSources();
 
@@ -51,47 +51,8 @@ G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget(const std::string& can
 
     nativeWidget->setG3MWidget(create());
     
-    nativeWidget->startWidget();
+//    nativeWidget->startWidget();
   }
 
   return nativeWidget;
 }
-
-// class BaseClass {
-// public:
-//   BaseClass() {}
-//
-//   void basePrint() {
-//     printf("base print\n");
-//   }
-//
-//   virtual void subPrint() = 0;
-// };
-//
-//
-// class SubClass : public BaseClass {
-// public:
-//   SubClass() : BaseClass() {}
-//
-//   void subPrint() {
-//     printf("sub print\n");
-//   }
-// };
-
-
-
-
-// https://github.com/emscripten-core/emscripten/issues/627
-
-// using namespace emscripten;
-
-// EMSCRIPTEN_BINDINGS() {
-//   class_<IG3MBuilder>("IG3MBuilder")
-//     //.function("basePrint", &IG3MBuilder::basePrint)
-//     ;
-
-//   class_<G3MBuilder_Emscripten, base<IG3MBuilder>>("G3MBuilder_Emscripten")
-//     .constructor()
-//     .function("createWidget", &G3MBuilder_Emscripten::createWidget, allow_raw_pointers())
-//     ;
-// }

@@ -376,7 +376,7 @@ public:
 
   void processResponse(int statusCode,
                        const val& data) {
-    const bool dataIsValid = (statusCode == 200) && !data.isNull();
+    const bool dataIsValid = (statusCode == 200) && data.as<bool>();
 
     const URL url(_urlPath);
 
@@ -401,7 +401,7 @@ public:
         oss << "runWithDownloader: statusCode=";
         oss << statusCode;
         oss << ", data=";
-        oss << data.call<std::string>("toString");
+        oss << (data.as<bool>() ? data.call<std::string>("toString") : "NULL");
         oss << ", url=";
         oss << _urlPath;
 

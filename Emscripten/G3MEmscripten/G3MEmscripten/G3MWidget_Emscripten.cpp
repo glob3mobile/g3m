@@ -26,7 +26,7 @@
 
 using namespace emscripten;
 
-G3MWidget_Emscripten::G3MWidget_Emscripten(const std::string& canvasContainerID) :
+G3MWidget_Emscripten::G3MWidget_Emscripten() :
 _canvas(val::null()),
 _webGLContext(val::null()),
 _width(0),
@@ -38,12 +38,6 @@ _devicePixelRatio(1),
 _mouseDown(false)
 {
   val document = val::global("document");
-
-  val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
-  if ( !canvasContainer.as<bool>() ) {
-    emscripten_console_error("Can't find canvasContainer");
-    THROW_EXCEPTION("Can't find canvasContainer!");
-  }
 
   _canvas = document.call<val>("createElement", val("canvas"));
   _canvas.set("id",    val("_g3m_canvas"));
@@ -58,20 +52,30 @@ _mouseDown(false)
 
   INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
   _gl = new GL(nativeGL);
-
-  canvasContainer.call<void>("appendChild", _canvas);
-
-  EM_ASM({
-    var canvas = document.getElementById("_g3m_canvas");
-    canvas.addEventListener("webglcontextlost", function(event) {
-      event.preventDefault();
-      alert("webglcontextlost");
-    }, false);
-  });
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
 }
+
+//void G3MWidget_Emscripten::putIn(const std::string& canvasContainerID) {
+//  val document = val::global("document");
+//
+//  val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
+//  if ( !canvasContainer.as<bool>() ) {
+//    emscripten_console_error("Can't find canvasContainer");
+//    THROW_EXCEPTION("Can't find canvasContainer!");
+//  }
+//
+//  canvasContainer.call<void>("appendChild", _canvas);
+//
+//  EM_ASM({
+//    var canvas = document.getElementById("_g3m_canvas");
+//    canvas.addEventListener("webglcontextlost", function(event) {
+//      event.preventDefault();
+//      alert("webglcontextlost");
+//    }, false);
+//  });
+//}
 
 GL* G3MWidget_Emscripten::getGL() const {
   return _gl;
@@ -412,8 +416,26 @@ EM_BOOL G3MWidget_Emscripten::_onTouchEvent(int eventType,
   return EM_TRUE;
 }
 
-void G3MWidget_Emscripten::startWidget() {
+void G3MWidget_Emscripten::startWidget(const std::string& canvasContainerID) {
   if (_g3mWidget != NULL) {
+    val document = val::global("document");
+
+    val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
+    if ( !canvasContainer.as<bool>() ) {
+      emscripten_console_error("Can't find canvasContainer");
+      THROW_EXCEPTION("Can't find canvasContainer!");
+    }
+
+    canvasContainer.call<void>("appendChild", _canvas);
+
+    EM_ASM({
+      var canvas = document.getElementById("_g3m_canvas");
+      canvas.addEventListener("webglcontextlost", function(event) {
+        event.preventDefault();
+        alert("webglcontextlost");
+      }, false);
+    });
+
     {
       // mouse events
       emscripten_set_mousedown_callback("#_g3m_canvas", this, 1, G3MWidget_Emscripten_onMouseEvent);

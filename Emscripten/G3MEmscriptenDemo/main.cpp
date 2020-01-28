@@ -6,16 +6,10 @@
 #include "G3MBuilder_Emscripten.hpp"
 #include "G3MWidget_Emscripten.hpp"
 
-#include "LayerSet.hpp"
-#include "LayerTilesRenderParameters.hpp"
-#include "URLTemplateLayer.hpp"
-#include "PlanetRendererBuilder.hpp"
-//#include "HUDRenderer.hpp"
-
-//   EMStorage::initialize();
-//   IStringBuilder::setInstance( new StringBuilder_Emscripten(IStringBuilder::DEFAULT_FLOAT_PRECISION) );
-//   IMathUtils::setInstance( new MathUtils_Emscripten() );
-//   IStringUtils::setInstance( new StringUtils_Emscripten() );
+#include "G3M/LayerSet.hpp"
+#include "G3M/LayerTilesRenderParameters.hpp"
+#include "G3M/URLTemplateLayer.hpp"
+#include "G3M/PlanetRendererBuilder.hpp"
 
 
 int main() {
@@ -23,10 +17,6 @@ int main() {
   G3MBuilder_Emscripten builder;
 
   builder.setAtmosphere(true);
-  
-  // HUDRenderer* hudRenderer = new HUDRenderer();
-  // builder.setHUDRenderer(hudRenderer);
-
 
   PlanetRendererBuilder* planetRendererBuilder = builder.getPlanetRendererBuilder();
 
@@ -52,11 +42,12 @@ int main() {
 
       
   emscripten_console_log("Step 2");
-  G3MWidget_Emscripten* widget = builder.createWidget("g3mWidgetHolder");
+  G3MWidget_Emscripten* widget = builder.createWidget();
 
   emscripten_console_log("Step 3");
 
-  emscripten_console_log("WOOOOOOOWWWW!!!");
+  widget->startWidget("g3mWidgetHolder");
 
+  emscripten_console_log("WOOOOOOOWWWW!!!");
 }
 

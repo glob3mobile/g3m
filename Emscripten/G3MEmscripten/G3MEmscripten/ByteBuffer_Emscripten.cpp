@@ -23,7 +23,7 @@ _timestamp(0)
 }
 
 size_t ByteBuffer_Emscripten::size() const {
-  return _buffer["length"].as<size_t>();
+  return _buffer.as<bool>() ? _buffer["length"].as<size_t>() : 0;
 }
 
 int ByteBuffer_Emscripten::timestamp() const {
