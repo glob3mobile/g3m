@@ -19,6 +19,8 @@ echo
 
 SOURCES="$(find . -name '*.cpp')" 
 
+#    -Wall                      \
+
 em++                           \
     -I ${G3M_SOURCE_DIRECTORY} \
     LIB/libG3M.bc              \

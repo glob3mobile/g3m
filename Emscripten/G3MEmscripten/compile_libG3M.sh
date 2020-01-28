@@ -32,6 +32,8 @@ GM3_SOURCES="$(find ${G3M_SOURCE_DIRECTORY} -name '*.cpp')"
 #    -s DISABLE_EXCEPTION_CATCHING=2 \
 #    -s DEMANGLE_SUPPORT=1 \
 
+#    -Wall                      \
+
 
 em++                           \
     -I ${G3M_SOURCE_DIRECTORY} \

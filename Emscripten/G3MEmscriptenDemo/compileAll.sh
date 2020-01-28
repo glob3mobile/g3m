@@ -5,7 +5,7 @@ set -e # Script exists on first failure
 
 export EMSDK_DIRECTORY="../../../emsdk/"
 export G3M_COMMONS_SOURCE_DIRECTORY="../../iOS/G3MiOSSDK/Commons/"
-export G3M_EMSCRIPTEN_SOURCE_DIRECTORY="../G3MEmscriptenSDK/G3MEmscriptenSDK/"
+export G3M_EMSCRIPTEN_SOURCE_DIRECTORY="../G3MEmscripten/G3MEmscripten/"
 
 
 if [[ -z $EMSDK_DIRECTORY                 ]]; then echo - Missing mandatory variable EMSDK_DIRECTORY;                 exit 1; fi
