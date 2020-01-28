@@ -4,19 +4,10 @@
 
 #include <emscripten/html5.h>
 
-//#define __USE_FETCH__
-#ifdef __USE_FETCH__
-#include <emscripten/fetch.h>
-#endif
-
-#define __USE_VAL__
-#ifdef __USE_VAL__
 #include <emscripten.h>
 #include <emscripten/val.h>
-using namespace emscripten;
 
 #include "EMStorage.hpp"
-#endif
 
 #include <limits>
 #include <sstream>
@@ -29,6 +20,8 @@ using namespace emscripten;
 #include "ByteBuffer_Emscripten.hpp"
 #include "Image_Emscripten.hpp"
 
+using namespace emscripten;
+
 
 extern "C" {
 EMSCRIPTEN_KEEPALIVE
@@ -40,7 +33,6 @@ EMSCRIPTEN_KEEPALIVE
 void Downloader_Emscripten_Handler_processResponse(int xhrStatus,
                                                    int domImageID,
                                                    void* voidHandler);
-
 };
 
 
@@ -139,6 +131,14 @@ public:
   void onDownload(const URL& url,
                   const val& data) {
     if (_bufferListener != NULL) {
+
+#warning REMOVE
+      const int dataID = EMStorage::put( data );
+      EM_ASM({
+        var data = document.EMStorage.take($0);
+        console.log(data);
+      }, dataID);
+
       IByteBuffer* byteBuffer = new ByteBuffer_Emscripten(data);
 
       _bufferListener->onDownload(url, byteBuffer, false);
@@ -167,11 +167,6 @@ public:
 };
 
 
-#ifdef __USE_FETCH__
-void __downloadSucceeded(emscripten_fetch_t* fetch);
-
-void __downloadFailed(emscripten_fetch_t* fetch);
-#endif
 
 
 class Downloader_Emscripten_Handler {
@@ -180,9 +175,7 @@ private:
 
   std::vector<ListenerEntry*> _listeners;
 
-#ifdef __USE_VAL__
   Downloader_Emscripten* _downloader;
-#endif
 
 public:
   const std::string _urlPath;
@@ -195,12 +188,10 @@ public:
                                 const long long          requestID,
                                 const std::string&       tag) :
   _priority(priority),
+  _downloader(NULL),
   _urlPath(urlPath),
   _isImageRequest(false)
   {
-#ifdef __USE_VAL__
-    _downloader = NULL;
-#endif
     _listeners.push_back(new ListenerEntry(bufferListener, NULL, deleteListener, requestID, tag));
   }
 
@@ -211,12 +202,10 @@ public:
                                 const long long         requestID,
                                 const std::string&      tag) :
   _priority(priority),
+  _downloader(NULL),
   _urlPath(urlPath),
   _isImageRequest(true)
   {
-#ifdef __USE_VAL__
-    _downloader = NULL;
-#endif
     _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
   }
 
@@ -312,40 +301,6 @@ public:
     }
   }
 
-#ifdef __USE_FETCH__
-  void runWithDownloader(Downloader_Emscripten* downloader) {
-    emscripten_fetch_attr_t attr;
-    emscripten_fetch_attr_init(&attr);
-    strcpy(attr.requestMethod, "GET");
-    attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
-    attr.onsuccess  = __downloadSucceeded;
-    attr.onerror    = __downloadFailed;
-    attr.userData   = this;
-
-    // pub struct emscripten_fetch_attr_t {
-    //    pub requestMethod: [c_char; 32],
-    // 	  pub userData: *mut c_void,
-    // 	  pub onsuccess: Option<unsafe extern fn(_: *mut emscripten_fetch_t)>,
-    // 	  pub onerror: Option<unsafe extern fn(_: *mut emscripten_fetch_t)>,
-    // 	  pub onprogress: Option<unsafe extern fn(_: *mut emscripten_fetch_t)>,
-    // 	  pub attributes: u32,
-    // 	  pub timeoutMSecs: c_ulong,
-    // 	  pub withCredentials: c_int,
-    // 	  pub destinationPath: *const c_char,
-    // 	  pub userName: *const c_char,
-    // 	  pub password: *const c_char,
-    // 	  pub requestHeaders: *const *const c_char,
-    // 	  pub overriddenMimeType: *const c_char,
-    // 	  pub requestData: *const c_char,
-    // 	  pub requestDataSize: usize,
-    // }
-
-    emscripten_fetch(&attr, _urlPath.c_str());
-  }
-#endif
-
-
-#ifdef __USE_VAL__
   void runWithDownloader(Downloader_Emscripten* downloader) {
     _downloader = downloader;
 
@@ -444,26 +399,6 @@ public:
       img.src = imgURL;
 
     }, xhrStatus, blobID, this);
-
-    //    var that = this;
-    //
-    //    var auxImg = new Image();
-    //    var imgURL = $wnd.g3mURL.createObjectURL(blob);
-    //
-    //    auxImg.onload = function() {
-    //      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, auxImg);
-    //      $wnd.g3mURL.revokeObjectURL(imgURL);
-    //    };
-    //    auxImg.onerror = function() {
-    //      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, null);
-    //      $wnd.g3mURL.revokeObjectURL(imgURL);
-    //    };
-    //    auxImg.onabort = function() {
-    //      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, null);
-    //      $wnd.g3mURL.revokeObjectURL(imgURL);
-    //    };
-    //
-    //    auxImg.src = imgURL;
   }
 
   void onLoad(int xhrStatus,
@@ -483,48 +418,7 @@ public:
     }
   }
 
-#endif
 
-
-#ifdef __USE_FETCH__
-  void onFetchDownloadSucceeded(emscripten_fetch_t* fetch) {
-    printf("Finished downloading %llu bytes from URL %s.\n", fetch->numBytes, fetch->url);
-
-    // The data is now available at fetch->data[0] through fetch->data[fetch->numBytes-1];
-
-    emscripten_console_log("onFetchDownloadSucceeded 2");
-    URL url(fetch->url);
-
-#warning TODO create image or create buffer
-    emscripten_console_log("onFetchDownloadSucceeded 3");
-    for (size_t i = 0; i < _listeners.size(); i++) {
-      emscripten_console_log("onFetchDownloadSucceeded 4");
-      ListenerEntry* listener = _listeners[i];
-      if (listener != NULL) {
-        emscripten_console_log("onFetchDownloadSucceeded 5");
-        listener->onError(url);
-      }
-    }
-
-    emscripten_console_log("onFetchDownloadSucceeded 6");
-    emscripten_fetch_close(fetch); // Free data associated with the fetch.
-  }
-
-  void onFetchDownloadFailed(emscripten_fetch_t* fetch) {
-    printf("Downloading %s failed, HTTP failure status code: %d.\n", fetch->url, fetch->status);
-
-    URL url(fetch->url);
-
-    for (size_t i = 0; i < _listeners.size(); i++) {
-      ListenerEntry* listener = _listeners[i];
-      if (listener != NULL) {
-        listener->onError(url);
-      }
-    }
-
-    emscripten_fetch_close(fetch); // Also free data on failure.
-  }
-#endif
 };
 
 void Downloader_Emscripten_Handler_onLoad(int xhrStatus,
@@ -542,19 +436,6 @@ void Downloader_Emscripten_Handler_processResponse(int xhrStatus,
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;
   handler->processResponse(xhrStatus, domImage);
 }
-
-
-#ifdef __USE_FETCH__
-void __downloadSucceeded(emscripten_fetch_t* fetch) {
-  Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) fetch->userData;
-  handler->onFetchDownloadSucceeded(fetch);
-}
-
-void __downloadFailed(emscripten_fetch_t* fetch) {
-  Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) fetch->userData;
-  handler->onFetchDownloadFailed(fetch);
-}
-#endif
 
 Downloader_Emscripten::Downloader_Emscripten(const int  maxConcurrentOperationCount,
                                              const int  delayMillis) :

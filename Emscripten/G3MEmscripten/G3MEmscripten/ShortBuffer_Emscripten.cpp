@@ -34,7 +34,7 @@ long long ShortBuffer_Emscripten::getID() const {
 }
 
 const size_t ShortBuffer_Emscripten::size() const {
-  return _buffer["length"].as<size_t>();
+  return _buffer.as<bool>() ? _buffer["length"].as<size_t>() : 0;
 }
 
 int ShortBuffer_Emscripten::timestamp() const {
@@ -50,7 +50,7 @@ const std::string ShortBuffer_Emscripten::description() const {
   oss << ", timestamp=";
   oss << _timestamp;
   oss << ", values=(";
-  oss << _buffer.call<std::string>("toString");
+  oss << (_buffer.as<bool>() ? _buffer.call<std::string>("toString") : "NULL");
   oss << ")";
 
   oss << ")";

@@ -26,5 +26,8 @@ const val GLTextureID_Emscripten::getWebGLTexture() const {
 }
 
 const std::string GLTextureID_Emscripten::description() const {
-  return "GLTextureID_Emscripten " + _webGLTexture.call<std::string>("toString");
+  if (_webGLTexture.as<bool>()) {
+    return "GLTextureID_Emscripten " + _webGLTexture.call<std::string>("toString");
+  }
+  return "GLTextureID_Emscripten NULL";
 }

@@ -44,7 +44,7 @@ const std::string Image_Emscripten::description() const {
   isb->addString("x");
   isb->addInt(getHeight());
   isb->addString(", _domImage=(");
-  isb->addString( _domImage.call<std::string>("toString") );
+  isb->addString( _domImage.as<bool>() ? _domImage.call<std::string>("toString") : "NULL" );
   isb->addString(")");
   const std::string s = isb->getString();
   delete isb;
