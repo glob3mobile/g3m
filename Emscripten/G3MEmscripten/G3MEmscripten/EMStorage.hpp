@@ -25,6 +25,7 @@ public:
 
   static emscripten::val take(const int id);
 
+  static void consoleLog(const emscripten::val& obj);
 
 };
 

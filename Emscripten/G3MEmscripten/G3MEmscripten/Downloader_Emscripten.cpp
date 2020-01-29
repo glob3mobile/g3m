@@ -131,12 +131,8 @@ public:
                   const val& data) {
     if (_bufferListener != NULL) {
 
-#warning REMOVE
-      const int dataID = EMStorage::put( data );
-      EM_ASM({
-        var data = document.EMStorage.take($0);
-        console.log(data);
-      }, dataID);
+//#warning REMOVE
+//      EMStorage::consoleLog( data );
 
       IByteBuffer* byteBuffer = new ByteBuffer_Emscripten(data);
 

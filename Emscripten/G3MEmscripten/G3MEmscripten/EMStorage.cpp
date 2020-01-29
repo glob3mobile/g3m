@@ -71,3 +71,11 @@ val EMStorage::take(const int id) {
   EM_ASM({ delete document.EMStorage[$0]; }, id);
   return obj;
 }
+
+void EMStorage::consoleLog(const emscripten::val& obj) {
+  const int objID = EMStorage::put( obj );
+  EM_ASM({
+    var obj = document.EMStorage.take($0);
+    console.log(obj);
+  }, objID);
+}
