@@ -21,9 +21,9 @@
 using namespace emscripten;
 
 
-const JSONBaseObject* _convert(const val& json,
-                               const bool nullAsObject,
-                               const val& Object)
+JSONBaseObject* _convert(const val& json,
+                         const bool nullAsObject,
+                         const val& Object)
 {
   if (json.isNull()) {
     return nullAsObject ? new JSONNull() : NULL;
@@ -86,8 +86,8 @@ const JSONBaseObject* _convert(const val& json,
       //
       //      EMStorage::consoleLog( val("jsValue") );
       //      EMStorage::consoleLog( jsValue );
-
-      const JSONBaseObject* value = _convert(jsValue, nullAsObject, Object);
+      
+      JSONBaseObject* value = _convert(jsValue, nullAsObject, Object);
       if (value != NULL) {
         const std::string key = jsKey.as<std::string>();
         object->put(key, value);
@@ -111,11 +111,11 @@ const JSONBaseObject* JSONParser_Emscripten::parse(const std::string& json,
 {
   const val jsResult = val::global("JSON").call<val>("parse", json);
 
-  EMStorage::consoleLog( jsResult );
+//  EMStorage::consoleLog( jsResult );
 
   const JSONBaseObject* result = _convert(jsResult, nullAsObject, val::global("Object"));
 
-  EMStorage::consoleLog( val(result->description()) );
+//  EMStorage::consoleLog( val(result->description()) );
 
   return result;
 }

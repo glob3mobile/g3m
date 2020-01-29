@@ -51,23 +51,23 @@ public:
   void put(const std::string& key,
            JSONBaseObject* object);
 
-  void put(const std::string& key,
-           const std::string& value);
-
-  void put(const std::string& key,
-           double value);
-
-  void put(const std::string& key,
-           float value);
-
-  void put(const std::string& key,
-           int value);
-
-  void put(const std::string& key,
-           long long value);
-
-  void put(const std::string& key,
-           bool value);
+//  void put(const std::string& key,
+//           const std::string& value);
+//
+//  void put(const std::string& key,
+//           double value);
+//
+//  void put(const std::string& key,
+//           float value);
+//
+//  void put(const std::string& key,
+//           int value);
+//
+//  void put(const std::string& key,
+//           long long value);
+//
+//  void put(const std::string& key,
+//           bool value);
 
   size_t size() const;
 

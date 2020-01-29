@@ -49,12 +49,12 @@ public:
   size_t size() const;
   
   void add(JSONBaseObject* object);
-  void add(const std::string& value);
-  void add(double value);
-  void add(float value);
-  void add(int value);
-  void add(long long value);
-  void add(bool value);
+//  void add(const std::string& value);
+//  void add(double value);
+//  void add(float value);
+//  void add(int value);
+//  void add(long long value);
+//  void add(bool value);
   
   const std::string description() const;
   const std::string toString() const;
