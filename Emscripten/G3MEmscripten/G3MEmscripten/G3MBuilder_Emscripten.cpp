@@ -51,7 +51,7 @@ G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget() {
 
     nativeWidget->setG3MWidget(create());
     
-//    nativeWidget->startWidget();
+    // nativeWidget->startWidget();
   }
 
   return nativeWidget;

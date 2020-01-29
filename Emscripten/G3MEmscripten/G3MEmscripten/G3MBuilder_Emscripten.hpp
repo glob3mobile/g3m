@@ -29,7 +29,6 @@ public:
   
   G3MWidget_Emscripten* createWidget();
 
-
 };
 
 #endif

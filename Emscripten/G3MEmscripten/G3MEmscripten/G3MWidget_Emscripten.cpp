@@ -21,10 +21,8 @@
 #include <math.h>
 
 #include <emscripten/emscripten.h>
-
-
-
 using namespace emscripten;
+
 
 G3MWidget_Emscripten::G3MWidget_Emscripten() :
 _canvas(val::null()),
@@ -56,26 +54,6 @@ _mouseDown(false)
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
 }
-
-//void G3MWidget_Emscripten::putIn(const std::string& canvasContainerID) {
-//  val document = val::global("document");
-//
-//  val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
-//  if ( !canvasContainer.as<bool>() ) {
-//    emscripten_console_error("Can't find canvasContainer");
-//    THROW_EXCEPTION("Can't find canvasContainer!");
-//  }
-//
-//  canvasContainer.call<void>("appendChild", _canvas);
-//
-//  EM_ASM({
-//    var canvas = document.getElementById("_g3m_canvas");
-//    canvas.addEventListener("webglcontextlost", function(event) {
-//      event.preventDefault();
-//      alert("webglcontextlost");
-//    }, false);
-//  });
-//}
 
 GL* G3MWidget_Emscripten::getGL() const {
   return _gl;
@@ -201,12 +179,12 @@ EM_JS(int, getAbsoluteLeft, (int elemID), {
       var curr = elem;
       // This intentionally excludes body which has a null offsetParent.
       while (curr.offsetParent) {
-      left -= curr.scrollLeft;
-      curr = curr.parentNode;
+        left -= curr.scrollLeft;
+        curr = curr.parentNode;
       }
       while (elem) {
-      left += elem.offsetLeft;
-      elem = elem.offsetParent;
+        left += elem.offsetLeft;
+        elem = elem.offsetParent;
       }
       return left;
       });
@@ -218,13 +196,13 @@ EM_JS(int, getAbsoluteTop, (int elemID), {
       var curr = elem;
       // This intentionally excludes body which has a null offsetParent.
       while (curr.offsetParent) {
-      top -= curr.scrollTop;
-      curr = curr.parentNode;
-      }
+        top -= curr.scrollTop;
+        curr = curr.parentNode;
+        }
       while (elem) {
-      top += elem.offsetTop;
-      elem = elem.offsetParent;
-      }
+        top += elem.offsetTop;
+        elem = elem.offsetParent;
+        }
       return top;
       });
 

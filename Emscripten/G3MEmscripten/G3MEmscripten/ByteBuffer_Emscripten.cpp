@@ -5,6 +5,8 @@
 #include <sstream>
 #include <emscripten.h>
 
+#include "EMStorage.hpp"
+
 using namespace emscripten;
 
 
@@ -62,9 +64,13 @@ const std::string ByteBuffer_Emscripten::description() const {
   return oss.str();
 }
 
-EM_JS(char*, utf8ArrayToStr, (const val& array), {
+EM_JS(char*, utf8ArrayToStr, (const int arrID), {
+  var arr = document.EMStorage.take(arrID);
+  var array = new Uint8Array(arr);
+
 //  var out, i, len, c;
 //  var char2, char3;
+//
 //
 //  out = "";
 //  len = array.length;
@@ -98,9 +104,13 @@ EM_JS(char*, utf8ArrayToStr, (const val& array), {
 //      break;
 //    }
 //  }
+//
+////  var out = String.fromCharCode.apply(null, new Uint16Array(array));
+  var out = new TextDecoder("utf-8").decode(array);
 
-//  var out = String.fromCharCode.apply(null, new Uint16Array(array));
-  var out = new TextDecoder("utf-8").decode( new Uint16Array(array) );
+      console.info("----- string from buffer")
+      console.info( out );
+
   var lengthBytes = lengthBytesUTF8(out)+1;
   var stringOnWasmHeap = _malloc(lengthBytes);
   stringToUTF8(out, stringOnWasmHeap, lengthBytes);
@@ -108,7 +118,8 @@ EM_JS(char*, utf8ArrayToStr, (const val& array), {
 });
 
 const std::string ByteBuffer_Emscripten::getAsString() const {
-  char* cp = utf8ArrayToStr(_buffer);
+  const int bufferID = EMStorage::put(_buffer);
+  char* cp = utf8ArrayToStr(bufferID);
   const std::string result = std::string( cp );
   free(cp);
   return result;

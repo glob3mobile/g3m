@@ -111,13 +111,12 @@ public:
                           const val& data) {
     if (_bufferListener != NULL) {
       IByteBuffer* byteBuffer = new ByteBuffer_Emscripten(data);
-
       _bufferListener->onCanceledDownload(url, byteBuffer, false);
+      delete byteBuffer;
     }
 
     if (_imageListener != NULL) {
       Image_Emscripten* image = new Image_Emscripten(data);
-
       if (image->getDOMImage().as<bool>()) {
         _imageListener->onCanceledDownload(url, image, false);
       }
@@ -156,6 +155,7 @@ public:
       else {
         emscripten_console_error("Can't create image from data (2)");
         _imageListener->onError(url);
+        delete image;
       }
 
       if (_deleteListener) {
