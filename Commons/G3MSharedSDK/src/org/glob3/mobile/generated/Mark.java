@@ -3,6 +3,7 @@ public class Mark implements SurfaceElevationListener
 {
 
   private IImageBuilder _imageBuilder;
+  private MarkImageBuilderListener _imageBuilderListener;
 
   /**
    * The text the mark displays.
@@ -176,34 +177,6 @@ public class Mark implements SurfaceElevationListener
 
 
 
-  public static class ImageBuilderListener implements IImageBuilderListener
-  {
-    private Mark _mark;
-
-    public ImageBuilderListener(Mark mark)
-    {
-       _mark = mark;
-
-    }
-
-    public void dispose()
-    {
-
-    }
-
-    public final void imageCreated(IImage image, String imageName)
-    {
-      _mark.onImageCreated(image, imageName);
-    }
-
-    public final void onError(String error)
-    {
-      _mark.onImageCreationError(error);
-    }
-
-  }
-
-
   /**
    * Creates a mark with icon and label
    */
@@ -250,6 +223,7 @@ public class Mark implements SurfaceElevationListener
   public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _imageBuilder = null;
+     _imageBuilderListener = null;
      _label = label;
      _iconURL = iconURL;
      _position = new Geodetic3D(position);
@@ -336,6 +310,7 @@ public class Mark implements SurfaceElevationListener
   public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _imageBuilder = null;
+     _imageBuilderListener = null;
      _label = label;
      _labelBottom = true;
      _iconURL = new URL("", false);
@@ -410,6 +385,7 @@ public class Mark implements SurfaceElevationListener
   public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _imageBuilder = null;
+     _imageBuilderListener = null;
      _label = "";
      _labelBottom = true;
      _iconURL = iconURL;
@@ -484,6 +460,7 @@ public class Mark implements SurfaceElevationListener
   public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _imageBuilder = null;
+     _imageBuilderListener = null;
      _label = "";
      _labelBottom = true;
      _iconURL = new URL(new URL("", false));
@@ -557,6 +534,7 @@ public class Mark implements SurfaceElevationListener
   public Mark(IImageBuilder imageBuilder, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
   {
      _imageBuilder = imageBuilder;
+     _imageBuilderListener = null;
      _label = "";
      _labelBottom = true;
      _iconURL = new URL(new URL("", false));
@@ -609,9 +587,16 @@ public class Mark implements SurfaceElevationListener
 
   public void dispose()
   {
-  //  if (_effectsScheduler != NULL) {
-  //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-  //  }
+    if (_imageBuilderListener != null)
+    {
+      _imageBuilderListener.forgetMark();
+    }
+    if (_imageBuilder != null)
+       _imageBuilder.dispose();
+  
+    //  if (_effectsScheduler != NULL) {
+    //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+    //  }
     if (_effectTarget != null)
        _effectTarget.dispose();
   
@@ -647,8 +632,6 @@ public class Mark implements SurfaceElevationListener
   
     _textureImage = null;
   
-    if (_imageBuilder != null)
-       _imageBuilder.dispose();
   
     if (_glState != null)
     {
@@ -693,7 +676,9 @@ public class Mark implements SurfaceElevationListener
     {
       if (_imageBuilder != null)
       {
-        _imageBuilder.build(context, new ImageBuilderListener(this), true);
+        _imageBuilderListener = new MarkImageBuilderListener(_imageBuilder, this);
+        _imageBuilder.build(context, _imageBuilderListener, true);
+        _imageBuilder = null; // ownership moved to MarkImageBuilderListener
       }
       else
       {
@@ -772,13 +757,14 @@ public class Mark implements SurfaceElevationListener
     _textureSolved = true;
     _imageID = imageName;
   
-  //  delete _labelFontColor;
-  //  _labelFontColor = NULL;
-  //  delete _labelShadowColor;
-  //  _labelShadowColor = NULL;
-    if (_imageBuilder != null)
-       _imageBuilder.dispose();
-    _imageBuilder = null;
+    //  delete _labelFontColor;
+    //  _labelFontColor = NULL;
+    //  delete _labelShadowColor;
+    //  _labelShadowColor = NULL;
+  
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
+    _imageBuilderListener = null;
   
     _textureImage = image;
   
@@ -799,13 +785,14 @@ public class Mark implements SurfaceElevationListener
   {
     _textureSolved = true;
   
-  //  delete _labelFontColor;
-  //  _labelFontColor = NULL;
-  //  delete _labelShadowColor;
-  //  _labelShadowColor = NULL;
-    if (_imageBuilder != null)
-       _imageBuilder.dispose();
-    _imageBuilder = null;
+    //  delete _labelFontColor;
+    //  _labelFontColor = NULL;
+    //  delete _labelShadowColor;
+    //  _labelShadowColor = NULL;
+  
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
+    _imageBuilderListener = null;
   
     ILogger.instance().logError("Can't create image for Mark: \"%s\"", error);
   }

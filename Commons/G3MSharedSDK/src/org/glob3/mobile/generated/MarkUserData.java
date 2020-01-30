@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 //class EffectTarget;
 //class IImageBuilder;
 //class MarksRenderer;
-
+//class MarkImageBuilderListener;
 
 public class MarkUserData
 {
