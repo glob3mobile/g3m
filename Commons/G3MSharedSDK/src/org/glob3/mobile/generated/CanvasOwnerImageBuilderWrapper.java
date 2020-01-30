@@ -21,11 +21,13 @@ public class CanvasOwnerImageBuilderWrapper implements IImageBuilder
 {
   private ICanvas _canvas;
   private IImageBuilder _imageBuilder;
+  private final boolean _autodelete;
 
-  public CanvasOwnerImageBuilderWrapper(ICanvas canvas, IImageBuilder imageBuilder)
+  public CanvasOwnerImageBuilderWrapper(ICanvas canvas, IImageBuilder imageBuilder, boolean autodelete)
   {
      _canvas = canvas;
      _imageBuilder = imageBuilder;
+     _autodelete = autodelete;
   
   }
 
@@ -33,6 +35,11 @@ public class CanvasOwnerImageBuilderWrapper implements IImageBuilder
   {
     if (_canvas != null)
        _canvas.dispose();
+    if (_autodelete)
+    {
+      if (_imageBuilder != null)
+         _imageBuilder.dispose();
+    }
   }
 
   public final boolean isMutable()
