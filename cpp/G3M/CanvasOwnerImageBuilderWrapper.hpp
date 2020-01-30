@@ -16,10 +16,12 @@ class CanvasOwnerImageBuilderWrapper : public IImageBuilder {
 private:
   ICanvas*       _canvas;
   IImageBuilder* _imageBuilder;
+  const bool     _autodelete;
 
 public:
   CanvasOwnerImageBuilderWrapper(ICanvas* canvas,
-                                 IImageBuilder* imageBuilder);
+                                 IImageBuilder* imageBuilder,
+                                 const bool autodelete);
 
   ~CanvasOwnerImageBuilderWrapper();
 

@@ -11,15 +11,20 @@
 
 
 CanvasOwnerImageBuilderWrapper::CanvasOwnerImageBuilderWrapper(ICanvas* canvas,
-                                                               IImageBuilder* imageBuilder) :
+                                                               IImageBuilder* imageBuilder,
+                                                               const bool autodelete) :
 _canvas(canvas),
-_imageBuilder(imageBuilder)
+_imageBuilder(imageBuilder),
+_autodelete(autodelete)
 {
 
 }
 
 CanvasOwnerImageBuilderWrapper::~CanvasOwnerImageBuilderWrapper() {
   delete _canvas;
+  if (_autodelete) {
+    delete _imageBuilder;
+  }
 }
 
 bool CanvasOwnerImageBuilderWrapper::isMutable() const {
