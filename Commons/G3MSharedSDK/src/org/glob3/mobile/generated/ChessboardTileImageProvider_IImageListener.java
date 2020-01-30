@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated;
-public class ChessboardTileImageProvider_IImageListener extends IImageListener
+public class ChessboardTileImageProvider_IImageListener extends CanvasOwnerImageListener
 {
   private ChessboardTileImageProvider _parent;
   private final Tile _tile;
@@ -7,8 +7,9 @@ public class ChessboardTileImageProvider_IImageListener extends IImageListener
   private final boolean _deleteListener;
 
 
-  public ChessboardTileImageProvider_IImageListener(ChessboardTileImageProvider parent, Tile tile, TileImageListener listener, boolean deleteListener)
+  public ChessboardTileImageProvider_IImageListener(ICanvas canvas, ChessboardTileImageProvider parent, Tile tile, TileImageListener listener, boolean deleteListener)
   {
+     super(canvas);
      _parent = parent;
      _tile = tile;
      _listener = listener;

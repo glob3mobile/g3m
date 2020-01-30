@@ -1,12 +1,13 @@
 package org.glob3.mobile.generated;
-public class LabelImageBuilder_ImageListener extends IImageListener
+public class LabelImageBuilder_ImageListener extends CanvasOwnerImageListener
 {
   private IImageBuilderListener _listener;
   private boolean _deleteListener;
   private final String _imageName;
 
-  public LabelImageBuilder_ImageListener(IImageBuilderListener listener, boolean deleteListener, String imageName)
+  public LabelImageBuilder_ImageListener(ICanvas canvas, IImageBuilderListener listener, boolean deleteListener, String imageName)
   {
+     super(canvas);
      _listener = listener;
      _deleteListener = deleteListener;
      _imageName = imageName;
@@ -28,5 +29,6 @@ public class LabelImageBuilder_ImageListener extends IImageListener
   {
     if (_listener != null)
        _listener.dispose();
+    super.dispose();
   }
 }

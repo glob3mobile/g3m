@@ -186,7 +186,9 @@ public abstract class LayoutImageBuilder extends AbstractImageBuilder
   
     if (_background != null)
        _background.dispose();
+    super.dispose();
   }
+
 
   public final boolean isMutable()
   {

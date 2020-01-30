@@ -28,6 +28,11 @@ public class DefaultChessCanvasImageBuilder extends CanvasImageBuilder
   private final Color _boxColor ;
   private final int _splits;
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   protected final void buildOnCanvas(G3MContext context, ICanvas canvas)
   {
     final float width = canvas.getWidth();

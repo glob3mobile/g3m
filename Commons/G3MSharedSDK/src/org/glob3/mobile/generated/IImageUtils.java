@@ -53,9 +53,7 @@ public class IImageUtils
   
       canvas.drawImage(image, 0, 0, width, height);
   
-      canvas.createImage(listener, autodelete);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
     }
   }
 
@@ -81,9 +79,7 @@ public class IImageUtils
   
       canvas.drawImage(image, rect._x, rect._y, rect._width, rect._height, 0, 0, rect._width, rect._height);
   
-      canvas.createImage(listener, autodelete);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
     }
   }
 
@@ -133,9 +129,7 @@ public class IImageUtils
       }
     }
   
-    canvas.createImage(listener, autodelete);
-    if (canvas != null)
-       canvas.dispose();
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
   }
 
   public static void combine(Vector2I extent, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleF> sourceRects, java.util.ArrayList<RectangleF> destRects, java.util.ArrayList<Float> transparencies, IImageListener listener, boolean autodelete)

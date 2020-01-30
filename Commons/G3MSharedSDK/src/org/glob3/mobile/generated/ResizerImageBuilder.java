@@ -27,17 +27,6 @@ public class ResizerImageBuilder extends AbstractImageBuilder
   private ImageSizer _widthSizer;
   private ImageSizer _heightSizer;
 
-  public ResizerImageBuilder(IImageBuilder imageBuilder, ImageSizer widthSizer, ImageSizer heightSizer)
-  {
-     _imageBuilder = imageBuilder;
-     _widthSizer = widthSizer;
-     _heightSizer = heightSizer;
-    if (_imageBuilder.isMutable())
-    {
-      throw new RuntimeException("Mutable imageBuilder is not supported!");
-    }
-  }
-
   public void dispose()
   {
     if (_imageBuilder != null)
@@ -49,6 +38,17 @@ public class ResizerImageBuilder extends AbstractImageBuilder
        _heightSizer.dispose();
   
     super.dispose();
+  }
+
+  public ResizerImageBuilder(IImageBuilder imageBuilder, ImageSizer widthSizer, ImageSizer heightSizer)
+  {
+     _imageBuilder = imageBuilder;
+     _widthSizer = widthSizer;
+     _heightSizer = heightSizer;
+    if (_imageBuilder.isMutable())
+    {
+      throw new RuntimeException("Mutable imageBuilder is not supported!");
+    }
   }
 
   public final boolean isMutable()
@@ -109,10 +109,7 @@ public class ResizerImageBuilder extends AbstractImageBuilder
   
       canvas.drawImage(image, destLeft, destTop, destWidth, destHeight);
   
-      canvas.createImage(new ResizerImageBuilder_ImageListener(resizedImageName, listener, deleteListener), true);
-  
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new ResizerImageBuilder_ImageListener(canvas, resizedImageName, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
   
       if (image != null)
          image.dispose();

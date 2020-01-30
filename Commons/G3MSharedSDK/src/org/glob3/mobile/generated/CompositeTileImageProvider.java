@@ -333,21 +333,19 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       if (imageID != null)
          imageID.dispose();
     
-      canvas.createImage(new ComposerImageListener(this), true);
-    
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new ComposerImageListener(canvas, this), true); // transfer canvas to be deleted AFTER the image creation
     }
 
   }
 
 
-  private static class ComposerImageListener extends IImageListener
+  private static class ComposerImageListener extends CanvasOwnerImageListener
   {
     private Composer _composer;
 
-    public ComposerImageListener(Composer composer)
+    public ComposerImageListener(ICanvas canvas, Composer composer)
     {
+       super(canvas);
        _composer = composer;
       _composer._retain();
     }
@@ -355,6 +353,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     public void dispose()
     {
       _composer._release();
+      super.dispose();
     }
 
     public final void imageCreated(IImage image)

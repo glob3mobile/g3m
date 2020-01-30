@@ -19,6 +19,11 @@ package org.glob3.mobile.generated;
 
 public class StackLayoutImageBuilder extends LayoutImageBuilder
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   protected final void doLayout(G3MContext context, IImageBuilderListener listener, boolean deleteListener, java.util.ArrayList<ChildResult> results)
   {
     boolean anyError = false;
@@ -87,9 +92,7 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
         canvas.drawImage(image, left, top);
       }
   
-      canvas.createImage(new StackLayoutImageBuilder_IImageListener(imageName, listener, deleteListener), true);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new StackLayoutImageBuilder_IImageListener(canvas, imageName, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
     }
   
     for (int i = 0; i < resultsSize; i++)

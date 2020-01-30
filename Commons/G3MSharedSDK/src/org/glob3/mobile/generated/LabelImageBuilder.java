@@ -42,6 +42,13 @@ public class LabelImageBuilder extends AbstractImageBuilder
     return (_text + "/" + _font.description() + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + _shadowOffset.description() + "/" + _background.description());
   }
 
+  public void dispose()
+  {
+    if (_background != null)
+       _background.dispose();
+    super.dispose();
+  }
+
 
   public LabelImageBuilder(String text, GFont font, Color color, Color shadowColor, float shadowBlur, Vector2F shadowOffset, ImageBackground background)
   {
@@ -104,13 +111,6 @@ public class LabelImageBuilder extends AbstractImageBuilder
     }
   }
 
-  public void dispose()
-  {
-    if (_background != null)
-       _background.dispose();
-    super.dispose();
-  }
-
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
   
@@ -130,10 +130,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
     canvas.setFillColor(_color);
     canvas.fillText(_text, contentPos._x, contentPos._y);
   
-    canvas.createImage(new LabelImageBuilder_ImageListener(listener, deleteListener, getImageName()), true);
-  
-    if (canvas != null)
-       canvas.dispose();
+    canvas.createImage(new LabelImageBuilder_ImageListener(canvas, listener, deleteListener, getImageName()), true); // transfer canvas to be deleted AFTER the image creation
   }
 
 }

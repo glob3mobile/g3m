@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 
 public interface IImageBuilder
 {
+
   void dispose();
 
   boolean isMutable();

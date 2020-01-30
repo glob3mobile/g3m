@@ -28,6 +28,11 @@ public class CircleImageBuilder extends CanvasImageBuilder
   private final Color _color ;
   private final int _radius;
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   protected final void buildOnCanvas(G3MContext context, ICanvas canvas)
   {
     canvas.setFillColor(_color);

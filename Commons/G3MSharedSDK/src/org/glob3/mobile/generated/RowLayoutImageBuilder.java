@@ -20,6 +20,11 @@ public class RowLayoutImageBuilder extends LayoutImageBuilder
 {
   private final int _childrenSeparation;
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   protected final void doLayout(G3MContext context, IImageBuilderListener listener, boolean deleteListener, java.util.ArrayList<ChildResult> results)
   {
     boolean anyError = false;
@@ -87,9 +92,7 @@ public class RowLayoutImageBuilder extends LayoutImageBuilder
         cursorLeft += imageWidth + _childrenSeparation;
       }
   
-      canvas.createImage(new RowLayoutImageBuilder_IImageListener(imageName, listener, deleteListener), true);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new RowLayoutImageBuilder_IImageListener(canvas, imageName, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
     }
   
     for (int i = 0; i < resultsSize; i++)

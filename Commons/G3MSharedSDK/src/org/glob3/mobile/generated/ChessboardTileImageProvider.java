@@ -79,10 +79,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
         }
       }
   
-      canvas.createImage(new ChessboardTileImageProvider_IImageListener(this, tile, listener, deleteListener), true);
-  
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new ChessboardTileImageProvider_IImageListener(canvas, this, tile, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
     }
     else
     {

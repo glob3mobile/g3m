@@ -31,13 +31,14 @@ public abstract class AbstractImageBuilder implements IImageBuilder
     }
   }
 
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   public AbstractImageBuilder()
   {
      _changeListener = null;
-  }
-
-  public void dispose()
-  {
   }
 
   public final void setChangeListener(ChangedListener changeListener)

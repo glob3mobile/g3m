@@ -23,13 +23,6 @@ public class StaticImageBuilder extends AbstractImageBuilder
   private final IImage _image;
   private final String _imageName;
 
-  public StaticImageBuilder(IImage image, String imageName)
-  {
-     _image = image;
-     _imageName = imageName;
-
-  }
-
   public void dispose()
   {
     if (_image != null)
@@ -37,6 +30,14 @@ public class StaticImageBuilder extends AbstractImageBuilder
   
     super.dispose();
   }
+
+  public StaticImageBuilder(IImage image, String imageName)
+  {
+     _image = image;
+     _imageName = imageName;
+
+  }
+
 
   public final boolean isMutable()
   {

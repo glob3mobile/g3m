@@ -48,10 +48,7 @@ public class HUDImageRenderer extends DefaultRenderer
     
       drawOn(canvas, width, height);
     
-      canvas.createImage(listener, deleteListener);
-    
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, deleteListener), true);
     }
 
   }

@@ -108,6 +108,31 @@ public class JSONArray extends JSONBaseObject
     return (jsString == null) ? defaultValue : jsString.value();
   }
 
+
+  //void JSONArray::add(const std::string& value) {
+  //  _entries.push_back(new JSONString(value));
+  //}
+  //
+  //void JSONArray::add(double value) {
+  //  _entries.push_back(new JSONDouble(value));
+  //}
+  //
+  //void JSONArray::add(float value) {
+  //  _entries.push_back(new JSONFloat(value));
+  //}
+  //
+  //void JSONArray::add(int value) {
+  //  _entries.push_back(new JSONInteger(value));
+  //}
+  //
+  //void JSONArray::add(long long value) {
+  //  _entries.push_back(new JSONLong(value));
+  //}
+  //
+  //void JSONArray::add(bool value) {
+  //  _entries.push_back(new JSONBoolean(value));
+  //}
+  
   public final int size()
   {
     return _entries.size();
@@ -117,30 +142,12 @@ public class JSONArray extends JSONBaseObject
   {
     _entries.add(object);
   }
-  public final void add(String value)
-  {
-    _entries.add(new JSONString(value));
-  }
-  public final void add(double value)
-  {
-    _entries.add(new JSONDouble(value));
-  }
-  public final void add(float value)
-  {
-    _entries.add(new JSONFloat(value));
-  }
-  public final void add(int value)
-  {
-    _entries.add(new JSONInteger(value));
-  }
-  public final void add(long value)
-  {
-    _entries.add(new JSONLong(value));
-  }
-  public final void add(boolean value)
-  {
-    _entries.add(new JSONBoolean(value));
-  }
+//  void add(const std::string& value);
+//  void add(double value);
+//  void add(float value);
+//  void add(int value);
+//  void add(long long value);
+//  void add(bool value);
 
   public final String description()
   {

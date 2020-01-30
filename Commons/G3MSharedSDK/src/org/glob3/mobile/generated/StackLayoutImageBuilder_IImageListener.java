@@ -1,13 +1,14 @@
 package org.glob3.mobile.generated;
-public class StackLayoutImageBuilder_IImageListener extends IImageListener
+public class StackLayoutImageBuilder_IImageListener extends CanvasOwnerImageListener
 {
   private IImageBuilderListener _listener;
   private boolean _deleteListener;
 
   private final String _imageName;
 
-  public StackLayoutImageBuilder_IImageListener(String imageName, IImageBuilderListener listener, boolean deleteListener)
+  public StackLayoutImageBuilder_IImageListener(ICanvas canvas, String imageName, IImageBuilderListener listener, boolean deleteListener)
   {
+     super(canvas);
      _imageName = imageName;
      _listener = listener;
      _deleteListener = deleteListener;
