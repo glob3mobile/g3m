@@ -21,6 +21,7 @@
 #include <G3M/IImage.hpp>
 #include <G3M/Color.hpp>
 #include <G3M/G3MContext.hpp>
+#include <G3M/CanvasOwnerImageListenerWrapper.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -115,9 +116,10 @@ public:
                       width / 8 * 7, height / 8 * 7, image->getWidth()*2, image->getHeight()*2,
                       0.5);
 
-    canvas->createImage(new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer),
-                        true,
-                        canvas /* transfer canvas to be deleted AFTER the image creation */);
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer),
+                                                            true),
+                        true);
 
     delete image;
   }
