@@ -22,7 +22,6 @@
 #include "MutableVector3D.hpp"
 #include "GTask.hpp"
 #include "PeriodicalTask.hpp"
-#include "IImageBuilderListener.hpp"
 #include "AltitudeMode.hpp"
 #include "Vector2F.hpp"
 
@@ -36,7 +35,7 @@ class TextureIDReference;
 class EffectTarget;
 class IImageBuilder;
 class MarksRenderer;
-
+class MarkImageBuilderListener;
 
 class MarkUserData {
 public:
@@ -49,6 +48,7 @@ class Mark : public SurfaceElevationListener {
 private:
 
   IImageBuilder* _imageBuilder;
+  MarkImageBuilderListener* _imageBuilderListener;
 
   /**
    * The text the mark displays.
@@ -204,29 +204,6 @@ private:
 
   
 public:
-
-
-  class ImageBuilderListener : public IImageBuilderListener {
-  private:
-    Mark* _mark;
-
-  public:
-    ImageBuilderListener(Mark* mark) :
-    _mark(mark)
-    {
-
-    }
-
-    ~ImageBuilderListener() {
-
-    }
-
-    void imageCreated(const IImage*      image,
-                      const std::string& imageName);
-
-    void onError(const std::string& error);
-    
-  };
   
   
   /**

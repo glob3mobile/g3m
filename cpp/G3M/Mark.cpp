@@ -28,6 +28,45 @@
 #include "G3MRenderContext.hpp"
 #include "Planet.hpp"
 #include "MarksRenderer.hpp"
+#include "IImageBuilderListener.hpp"
+
+
+class MarkImageBuilderListener : public IImageBuilderListener {
+private:
+  IImageBuilder* _imageBuilder;
+  Mark* _mark;
+
+public:
+  MarkImageBuilderListener(IImageBuilder* imageBuilder,
+                           Mark* mark) :
+  _imageBuilder(imageBuilder),
+  _mark(mark)
+  {
+
+  }
+
+  ~MarkImageBuilderListener() {
+    delete _imageBuilder;
+  }
+
+  void forgetMark() {
+    _mark = NULL;
+  }
+
+  void imageCreated(const IImage*      image,
+                    const std::string& imageName) {
+    if (_mark) {
+      _mark->onImageCreated(image, imageName);
+    }
+  }
+
+  void onError(const std::string& error)  {
+    if (_mark) {
+      _mark->onImageCreationError(error);
+    }
+  }
+
+};
 
 
 class MarkEffectTarget : public EffectTarget {
@@ -263,6 +302,7 @@ Mark::Mark(const std::string& label,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
 _imageBuilder(NULL),
+_imageBuilderListener(NULL),
 _label(label),
 _iconURL(iconURL),
 _position(new Geodetic3D(position)),
@@ -324,6 +364,7 @@ Mark::Mark(const std::string& label,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
 _imageBuilder(NULL),
+_imageBuilderListener(NULL),
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
@@ -382,6 +423,7 @@ Mark::Mark(const URL&         iconURL,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
 _imageBuilder(NULL),
+_imageBuilderListener(NULL),
 _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
@@ -441,6 +483,7 @@ Mark::Mark(const IImage*      image,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
 _imageBuilder(NULL),
+_imageBuilderListener(NULL),
 _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
@@ -498,6 +541,7 @@ Mark::Mark(IImageBuilder*     imageBuilder,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
 _imageBuilder(imageBuilder),
+_imageBuilderListener(NULL),
 _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
@@ -563,9 +607,11 @@ void Mark::initialize(const G3MContext* context,
 
   if (!_textureSolved) {
     if (_imageBuilder != NULL) {
+      _imageBuilderListener = new MarkImageBuilderListener(_imageBuilder, this);
       _imageBuilder->build(context,
-                           new ImageBuilderListener(this),
+                           _imageBuilderListener,
                            true);
+      _imageBuilder = NULL; // ownership moved to MarkImageBuilderListener
     }
     else {
       const bool hasIconURL = ( _iconURL._path.length() != 0 );
@@ -643,9 +689,14 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
-//  if (_effectsScheduler != NULL) {
-//    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-//  }
+  if (_imageBuilderListener) {
+    _imageBuilderListener->forgetMark();
+  }
+  delete _imageBuilder;
+
+  //  if (_effectsScheduler != NULL) {
+  //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+  //  }
   delete _effectTarget;
 
   delete _labelFontColor;
@@ -671,7 +722,6 @@ Mark::~Mark() {
 
   delete _textureImage;
 
-  delete _imageBuilder;
 
   if (_glState != NULL) {
     _glState->_release();
@@ -1016,12 +1066,14 @@ void Mark::setMarkAnchor(float anchorU, float anchorV) {
 void Mark::onImageCreationError(const std::string& error) {
   _textureSolved = true;
 
-//  delete _labelFontColor;
-//  _labelFontColor = NULL;
-//  delete _labelShadowColor;
-//  _labelShadowColor = NULL;
-  delete _imageBuilder;
-  _imageBuilder = NULL;
+  //  delete _labelFontColor;
+  //  _labelFontColor = NULL;
+  //  delete _labelShadowColor;
+  //  _labelShadowColor = NULL;
+
+//  delete _imageBuilder;
+//  _imageBuilder = NULL;
+  _imageBuilderListener = NULL;
 
   ILogger::instance()->logError("Can't create image for Mark: \"%s\"",
                                 error.c_str());
@@ -1032,12 +1084,14 @@ void Mark::onImageCreated(const IImage* image,
   _textureSolved = true;
   _imageID = imageName;
 
-//  delete _labelFontColor;
-//  _labelFontColor = NULL;
-//  delete _labelShadowColor;
-//  _labelShadowColor = NULL;
-  delete _imageBuilder;
-  _imageBuilder = NULL;
+  //  delete _labelFontColor;
+  //  _labelFontColor = NULL;
+  //  delete _labelShadowColor;
+  //  _labelShadowColor = NULL;
+
+//  delete _imageBuilder;
+//  _imageBuilder = NULL;
+  _imageBuilderListener = NULL;
 
   _textureImage = image;
 
@@ -1050,13 +1104,4 @@ void Mark::onImageCreated(const IImage* image,
       _textureHeight *= _textureHeightProportion;
     }
   }
-}
-
-void Mark::ImageBuilderListener::imageCreated(const IImage*      image,
-                                              const std::string& imageName) {
-  _mark->onImageCreated(image, imageName);
-}
-
-void Mark::ImageBuilderListener::onError(const std::string& error) {
-  _mark->onImageCreationError(error);
 }
