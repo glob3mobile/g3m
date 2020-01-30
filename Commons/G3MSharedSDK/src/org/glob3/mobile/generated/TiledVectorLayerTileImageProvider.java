@@ -30,13 +30,12 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
 
 
-  private static class TVLTIP_CanvasOwnerImageListener extends CanvasOwnerImageListener
+  private static class TVLTIP_IImageListener extends IImageListener
   {
     private ImageAssembler _imageAssembler;
     private final String _imageID;
-    public TVLTIP_CanvasOwnerImageListener(ICanvas canvas, ImageAssembler imageAssembler, String imageID)
+    public TVLTIP_IImageListener(ImageAssembler imageAssembler, String imageID)
     {
-       super(canvas);
        _imageAssembler = imageAssembler;
        _imageID = imageID;
     }
@@ -395,7 +394,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
       else
       {
-        canvas.createImage(new TVLTIP_CanvasOwnerImageListener(canvas, this, url._path), true); // autodelete -  transfer canvas to be deleted AFTER the image creation
+        canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new TVLTIP_IImageListener(this, url._path), true), true);
       }
     }
     public final void deletedRasterizer()

@@ -33,7 +33,6 @@ public abstract class AbstractImageBuilder implements IImageBuilder
 
   public void dispose()
   {
-    super.dispose();
   }
 
   public AbstractImageBuilder()

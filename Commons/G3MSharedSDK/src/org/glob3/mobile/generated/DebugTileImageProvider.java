@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 
 public class DebugTileImageProvider extends CanvasTileImageProvider
 {
-  private static class ImageListener extends CanvasOwnerImageListener
+  private static class ImageListener extends IImageListener
   {
     private final String _tileID;
     private final TileImageContribution _contribution;
@@ -42,9 +42,8 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
       return s;
     }
 
-    public ImageListener(ICanvas canvas, String tileID, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
+    public ImageListener(String tileID, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
     {
-       super(canvas);
        _tileID = tileID;
        _contribution = contribution;
        _listener = listener;
@@ -188,7 +187,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   
     //ILogger::instance()->logInfo(getIDLabel(tile));
   
-    canvas.createImage(new DebugTileImageProvider.ImageListener(canvas, tile._id, contribution, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new DebugTileImageProvider.ImageListener(tile._id, contribution, listener, deleteListener), true), true);
   }
 
   public final void cancel(String tileID)

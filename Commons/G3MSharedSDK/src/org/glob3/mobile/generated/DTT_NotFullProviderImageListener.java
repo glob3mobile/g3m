@@ -1,12 +1,11 @@
 package org.glob3.mobile.generated;
-public class DTT_NotFullProviderImageListener extends CanvasOwnerImageListener
+public class DTT_NotFullProviderImageListener extends IImageListener
 {
   private DTT_TileTextureBuilder _builder;
   private final String _imageID;
 
-  public DTT_NotFullProviderImageListener(ICanvas canvas, DTT_TileTextureBuilder builder, String imageID)
+  public DTT_NotFullProviderImageListener(DTT_TileTextureBuilder builder, String imageID)
   {
-     super(canvas);
      _builder = builder;
      _imageID = imageID;
     _builder._retain();

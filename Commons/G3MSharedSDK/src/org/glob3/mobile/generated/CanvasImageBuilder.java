@@ -55,7 +55,7 @@ public abstract class CanvasImageBuilder extends AbstractImageBuilder
   
     buildOnCanvas(context, canvas);
   
-    canvas.createImage(new CanvasImageBuilder_ImageListener(canvas, getImageName(context), listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new CanvasImageBuilder_ImageListener(getImageName(context), listener, deleteListener), true), true);
   }
 
 }

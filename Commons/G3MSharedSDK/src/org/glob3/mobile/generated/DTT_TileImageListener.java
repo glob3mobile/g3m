@@ -102,7 +102,7 @@ public class DTT_TileImageListener extends TileImageListener
            srcRect.dispose();
       }
   
-      canvas.createImage(new DTT_NotFullProviderImageListener(canvas, _builder, auxImageID.getString()), true); // transfer canvas to be deleted AFTER the image creation
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new DTT_NotFullProviderImageListener(_builder, auxImageID.getString()), true), true);
   
       if (auxImageID != null)
          auxImageID.dispose();

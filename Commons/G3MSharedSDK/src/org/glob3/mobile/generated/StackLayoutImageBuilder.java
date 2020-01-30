@@ -92,7 +92,7 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
         canvas.drawImage(image, left, top);
       }
   
-      canvas.createImage(new StackLayoutImageBuilder_IImageListener(canvas, imageName, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new StackLayoutImageBuilder_ImageListener(imageName, listener, deleteListener), true), true);
     }
   
     for (int i = 0; i < resultsSize; i++)

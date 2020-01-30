@@ -94,7 +94,7 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
         cursorTop += imageHeight + _childrenSeparation;
       }
   
-      canvas.createImage(new ColumnLayoutImageBuilder_IImageListener(canvas, imageName, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new ColumnLayoutImageBuilder_ImageListener(imageName, listener, deleteListener), true), true);
     }
   
     for (int i = 0; i < resultsSize; i++)

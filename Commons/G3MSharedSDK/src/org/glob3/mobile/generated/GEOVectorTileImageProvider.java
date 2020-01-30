@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 public class GEOVectorTileImageProvider extends TileImageProvider
 {
 
-  public static class GEORasterizerCanvasOwnerImageListener extends CanvasOwnerImageListener
+  public static class GEORasterizerImageListener extends IImageListener
   {
     private final TileImageContribution _contribution;
     private final String _tileID;
@@ -42,9 +42,8 @@ public class GEOVectorTileImageProvider extends TileImageProvider
       return s;
     }
 
-    public GEORasterizerCanvasOwnerImageListener(ICanvas canvas, TileImageContribution contribution, String tileID, TileImageListener listener, boolean deleteListener)
+    public GEORasterizerImageListener(TileImageContribution contribution, String tileID, TileImageListener listener, boolean deleteListener)
     {
-       super(canvas);
        _contribution = contribution;
        _tileID = tileID;
        _listener = listener;
@@ -210,7 +209,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
     if (projection != null)
        projection.dispose();
   
-    canvas.createImage(new GEORasterizerCanvasOwnerImageListener(canvas, contribution, tileID, listener, deleteListener), true); // autodelete -  transfer canvas to be deleted AFTER the image creation
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new GEORasterizerImageListener(contribution, tileID, listener, deleteListener), true), true);
   }
 
   public final void layerDeleted(GEOVectorLayer layer)

@@ -92,7 +92,7 @@ public class RowLayoutImageBuilder extends LayoutImageBuilder
         cursorLeft += imageWidth + _childrenSeparation;
       }
   
-      canvas.createImage(new RowLayoutImageBuilder_IImageListener(canvas, imageName, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new RowLayoutImageBuilder_ImageListener(imageName, listener, deleteListener), true), true);
     }
   
     for (int i = 0; i < resultsSize; i++)

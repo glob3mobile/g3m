@@ -130,7 +130,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
     canvas.setFillColor(_color);
     canvas.fillText(_text, contentPos._x, contentPos._y);
   
-    canvas.createImage(new LabelImageBuilder_ImageListener(canvas, listener, deleteListener, getImageName()), true); // transfer canvas to be deleted AFTER the image creation
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new LabelImageBuilder_ImageListener(listener, deleteListener, getImageName()), true), true);
   }
 
 }

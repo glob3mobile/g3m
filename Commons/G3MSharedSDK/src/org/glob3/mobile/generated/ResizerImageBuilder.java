@@ -109,7 +109,7 @@ public class ResizerImageBuilder extends AbstractImageBuilder
   
       canvas.drawImage(image, destLeft, destTop, destWidth, destHeight);
   
-      canvas.createImage(new ResizerImageBuilder_ImageListener(canvas, resizedImageName, listener, deleteListener), true); // transfer canvas to be deleted AFTER the image creation
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new ResizerImageBuilder_ImageListener(resizedImageName, listener, deleteListener), true), true);
   
       if (image != null)
          image.dispose();
