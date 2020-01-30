@@ -14,7 +14,7 @@
 
 #include "CanvasTileImageProvider.hpp"
 #include "TileImageListener.hpp"
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
 #include "FrameTask.hpp"
 #include "RectangleF.hpp"
 #include "Sector.hpp"
@@ -126,14 +126,12 @@ private:
   };
 
 
-  class ComposerImageListener : public CanvasOwnerImageListener {
+  class ComposerImageListener : public IImageListener {
   private:
     Composer* _composer;
 
   public:
-    ComposerImageListener(ICanvas* canvas,
-                          Composer* composer) :
-    CanvasOwnerImageListener(canvas),
+    ComposerImageListener(Composer* composer) :
     _composer(composer)
     {
       _composer->_retain();

@@ -8,11 +8,12 @@
 
 #include "ColumnLayoutImageBuilder.hpp"
 
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
 #include "ImageBackground.hpp"
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 ColumnLayoutImageBuilder::ColumnLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
@@ -47,7 +48,7 @@ _childrenSeparation(childrenSeparation)
 
 }
 
-class ColumnLayoutImageBuilder_IImageListener : public CanvasOwnerImageListener {
+class ColumnLayoutImageBuilder_ImageListener : public IImageListener {
 private:
   IImageBuilderListener* _listener;
   bool _deleteListener;
@@ -55,11 +56,9 @@ private:
   const std::string _imageName;
 
 public:
-  ColumnLayoutImageBuilder_IImageListener(ICanvas* canvas,
-                                          const std::string& imageName,
-                                          IImageBuilderListener* listener,
-                                          bool deleteListener) :
-  CanvasOwnerImageListener(canvas),
+  ColumnLayoutImageBuilder_ImageListener(const std::string& imageName,
+                                         IImageBuilderListener* listener,
+                                         bool deleteListener) :
   _imageName(imageName),
   _listener(listener),
   _deleteListener(deleteListener)
@@ -130,16 +129,17 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
       const IImage* image = result->_image;
       const int imageWidth  = image->getWidth();
       const int imageHeight = image->getHeight();
-
+      
       const float left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
       canvas->drawImage(image, left, cursorTop);
       cursorTop += imageHeight + _childrenSeparation;
     }
-
-    canvas->createImage(new ColumnLayoutImageBuilder_IImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                                    imageName,
-                                                                    listener,
-                                                                    deleteListener),
+    
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            new ColumnLayoutImageBuilder_ImageListener(imageName,
+                                                                                                       listener,
+                                                                                                       deleteListener),
+                                                            true),
                         true);
   }
 

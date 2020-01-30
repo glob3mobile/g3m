@@ -15,14 +15,14 @@
 #include "Vector2S.hpp"
 #include "QuadTree.hpp"
 #include <map>
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
 
 class GEOVectorLayer;
 
 class GEOVectorTileImageProvider : public TileImageProvider {
 public:
 
-  class GEORasterizerCanvasOwnerImageListener : public CanvasOwnerImageListener {
+  class GEORasterizerImageListener : public IImageListener {
   private:
     const TileImageContribution* _contribution;
     const std::string            _tileID;
@@ -33,12 +33,10 @@ public:
     const std::string getImageID(const std::string& tileID) const;
 
   public:
-    GEORasterizerCanvasOwnerImageListener(ICanvas* canvas,
-                                     const TileImageContribution* contribution,
-                                     const std::string& tileID,
-                                     TileImageListener* listener,
-                                     bool deleteListener) :
-    CanvasOwnerImageListener(canvas),
+    GEORasterizerImageListener(const TileImageContribution* contribution,
+                               const std::string& tileID,
+                               TileImageListener* listener,
+                               bool deleteListener) :
     _contribution(contribution),
     _tileID(tileID),
     _listener(listener),

@@ -22,13 +22,13 @@
 #include "ColumnCanvasElement.hpp"
 #include "IFactory.hpp"
 #include "Vector2S.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
-DebugTileImageProvider::ImageListener::ImageListener(ICanvas*                     canvas,
-                                                     const std::string&           tileID,
+
+DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileID,
                                                      const TileImageContribution* contribution,
                                                      TileImageListener*           listener,
                                                      bool                         deleteListener) :
-CanvasOwnerImageListener(canvas),
 _tileID(tileID),
 _contribution(contribution),
 _listener(listener),
@@ -173,13 +173,14 @@ void DebugTileImageProvider::create(const Tile* tile,
   }
   
   //ILogger::instance()->logInfo(getIDLabel(tile));
-  
-  canvas->createImage(new DebugTileImageProvider::ImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                                tile->_id,
-                                                                contribution,
-                                                                listener,
-                                                                deleteListener),
-                      true);  
+
+  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                          new DebugTileImageProvider::ImageListener(tile->_id,
+                                                                                                    contribution,
+                                                                                                    listener,
+                                                                                                    deleteListener),
+                                                          true),
+                      true);
 }
 
 void DebugTileImageProvider::cancel(const std::string& tileID) {

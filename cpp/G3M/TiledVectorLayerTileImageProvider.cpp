@@ -20,6 +20,7 @@
 #include "GEORasterProjection.hpp"
 #include "ErrorHandling.hpp"
 #include "ILogger.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRasterizer() {
@@ -269,7 +270,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadCanceled()
   _downloadRequestID = -1;
 }
 
-void TiledVectorLayerTileImageProvider::TVLTIP_CanvasOwnerImageListener::imageCreated(const IImage* image) {
+void TiledVectorLayerTileImageProvider::TVLTIP_IImageListener::imageCreated(const IImage* image) {
   _imageAssembler->imageCreated(image,
                                 _imageID);
 }
@@ -302,10 +303,11 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::rasterizedGEOObject(cons
     }
   }
   else {
-    canvas->createImage(new TVLTIP_CanvasOwnerImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                       this,
-                                                       url._path),
-                        true /* autodelete */);
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            new TVLTIP_IImageListener(this,
+                                                                                      url._path),
+                                                            true),
+                        true);
   }
 }
 

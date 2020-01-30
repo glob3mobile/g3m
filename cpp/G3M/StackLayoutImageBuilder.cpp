@@ -11,8 +11,9 @@
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
 #include "ImageBackground.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 StackLayoutImageBuilder::StackLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
@@ -33,7 +34,7 @@ LayoutImageBuilder(child0,
   
 }
 
-class StackLayoutImageBuilder_IImageListener : public CanvasOwnerImageListener {
+class StackLayoutImageBuilder_ImageListener : public IImageListener {
 private:
   IImageBuilderListener* _listener;
   bool _deleteListener;
@@ -41,11 +42,9 @@ private:
   const std::string _imageName;
   
 public:
-  StackLayoutImageBuilder_IImageListener(ICanvas* canvas,
-                                         const std::string& imageName,
-                                         IImageBuilderListener* listener,
-                                         bool deleteListener) :
-  CanvasOwnerImageListener(canvas),
+  StackLayoutImageBuilder_ImageListener(const std::string& imageName,
+                                        IImageBuilderListener* listener,
+                                        bool deleteListener) :
   _imageName(imageName),
   _listener(listener),
   _deleteListener(deleteListener)
@@ -121,11 +120,12 @@ void StackLayoutImageBuilder::doLayout(const G3MContext* context,
       const float left = contentPos._x + ((contentWidth  - imageWidth ) / 2.0f);
       canvas->drawImage(image, left, top);
     }
-    
-    canvas->createImage(new StackLayoutImageBuilder_IImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                                   imageName,
-                                                                   listener,
-                                                                   deleteListener),
+
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            new StackLayoutImageBuilder_ImageListener(imageName,
+                                                                                                      listener,
+                                                                                                      deleteListener),
+                                                            true),
                         true);
   }
   

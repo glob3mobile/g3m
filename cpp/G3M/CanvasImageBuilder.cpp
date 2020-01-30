@@ -12,9 +12,10 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "Color.hpp"
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
 #include "IImageBuilderListener.hpp"
 #include "IStringUtils.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 CanvasImageBuilder::~CanvasImageBuilder() {
@@ -23,7 +24,7 @@ CanvasImageBuilder::~CanvasImageBuilder() {
 #endif
 }
 
-class CanvasImageBuilder_ImageListener : public CanvasOwnerImageListener {
+class CanvasImageBuilder_ImageListener : public IImageListener {
 private:
   const std::string      _imageName;
   IImageBuilderListener* _listener;
@@ -31,11 +32,9 @@ private:
 
 
 public:
-  CanvasImageBuilder_ImageListener(ICanvas* canvas,
-                                   const std::string& imageName,
+  CanvasImageBuilder_ImageListener(const std::string& imageName,
                                    IImageBuilderListener* listener,
                                    bool deleteListener) :
-  CanvasOwnerImageListener(canvas),
   _imageName(imageName),
   _listener(listener),
   _deleteListener(deleteListener)
@@ -69,10 +68,11 @@ void CanvasImageBuilder::build(const G3MContext* context,
 
   buildOnCanvas(context, canvas);
 
-  canvas->createImage(new CanvasImageBuilder_ImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                           getImageName(context),
-                                                           listener,
-                                                           deleteListener),
+  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                          new CanvasImageBuilder_ImageListener(getImageName(context),
+                                                                                               listener,
+                                                                                               deleteListener),
+                                                          true),
                       true);
 }
 

@@ -23,13 +23,14 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "RectangleF.hpp"
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
 #include "IImageBuilder.hpp"
 #include "IImageBuilderListener.hpp"
 #include "PlanetRenderContext.hpp"
 #include "TilesRenderParameters.hpp"
 #include "G3MRenderContext.hpp"
 #include "ILogger.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 class DTT_LTMInitializer : public LazyTextureMappingInitializer {
@@ -372,16 +373,14 @@ public:
   }
 };
 
-class DTT_NotFullProviderImageListener : public CanvasOwnerImageListener {
+class DTT_NotFullProviderImageListener : public IImageListener {
 private:
   DTT_TileTextureBuilder* _builder;
   const std::string& _imageID;
 
 public:
-  DTT_NotFullProviderImageListener(ICanvas* canvas,
-                                   DTT_TileTextureBuilder* builder,
+  DTT_NotFullProviderImageListener(DTT_TileTextureBuilder* builder,
                                    const std::string& imageID) :
-  CanvasOwnerImageListener(canvas),
   _builder(builder),
   _imageID(imageID)
   {
@@ -502,9 +501,10 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileID,
       delete srcRect;
     }
 
-    canvas->createImage(new DTT_NotFullProviderImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                             _builder,
-                                                             auxImageID->getString()),
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            new DTT_NotFullProviderImageListener(_builder,
+                                                                                                 auxImageID->getString()),
+                                                            true),
                         true);
 
     delete auxImageID;

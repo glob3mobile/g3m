@@ -18,6 +18,8 @@
 #include "TileImageContribution.hpp"
 #include "ErrorHandling.hpp"
 #include "IStringBuilder.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
+
 
 GEOVectorTileImageProvider::GEOVectorTileImageProvider(const GEOVectorLayer* layer) :
 _layer(layer)
@@ -32,15 +34,15 @@ const TileImageContribution* GEOVectorTileImageProvider::contribution(const Tile
 GEOVectorTileImageProvider::GEORasterizerFrameTask::~GEORasterizerFrameTask() {
   _geoVectorTileImageProvider->rasterizerDeleted(_tileID);
   _geoVectorTileImageProvider->_release();
-
+  
   if (_deleteListener) {
     delete _listener;
   }
-
+  
   if (_contribution != NULL) {
     _contribution->_release();
   }
-
+  
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -78,10 +80,10 @@ bool GEOVectorTileImageProvider::GEORasterizerQuadTreeVisitor::visitElement(cons
 }
 
 void GEOVectorTileImageProvider::GEORasterizerQuadTreeVisitor::endVisit(bool aborted) const {
-
+  
 }
 
-const std::string GEOVectorTileImageProvider::GEORasterizerCanvasOwnerImageListener::getImageID(const std::string& tileID) const {
+const std::string GEOVectorTileImageProvider::GEORasterizerImageListener::getImageID(const std::string& tileID) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("GEOVectorTileImageProvider/");
   isb->addString(tileID);
@@ -90,7 +92,7 @@ const std::string GEOVectorTileImageProvider::GEORasterizerCanvasOwnerImageListe
   return s;
 }
 
-void GEOVectorTileImageProvider::GEORasterizerCanvasOwnerImageListener::imageCreated(const IImage* image) {
+void GEOVectorTileImageProvider::GEORasterizerImageListener::imageCreated(const IImage* image) {
   _listener->imageCreated(_tileID,
                           image,
                           getImageID(_tileID),
@@ -111,22 +113,23 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
                                            bool deleteListener) {
   ICanvas* canvas = IFactory::instance()->createCanvas(false);
   canvas->initialize(resolutionWidth, resolutionHeight);
-
+  
   GEORasterProjection* projection = new GEORasterProjection(tileSector,
                                                             tileMercator,
                                                             resolutionWidth, resolutionHeight);
-
+  
   _layer->getQuadTree().acceptVisitor(tileSector,
                                       GEORasterizerQuadTreeVisitor(canvas, projection, tileLevel));
-
+  
   delete projection;
 
-  canvas->createImage(new GEORasterizerCanvasOwnerImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                           contribution,
-                                                           tileID,
-                                                           listener,
-                                                           deleteListener),
-                      true /* autodelete */);
+  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                          new GEORasterizerImageListener(contribution,
+                                                                                         tileID,
+                                                                                         listener,
+                                                                                         deleteListener),
+                                                          true),
+                      true);
 }
 
 void GEOVectorTileImageProvider::create(const Tile* tile,
@@ -137,7 +140,7 @@ void GEOVectorTileImageProvider::create(const Tile* tile,
                                         TileImageListener* listener,
                                         bool deleteListener,
                                         FrameTasksExecutor* frameTasksExecutor) {
-
+  
   const std::string tileID = tile->_id;
   GEORasterizerFrameTask* rasterizer = new GEORasterizerFrameTask(this,
                                                                   contribution,
@@ -149,7 +152,7 @@ void GEOVectorTileImageProvider::create(const Tile* tile,
                                                                   listener,
                                                                   deleteListener);
   _rasterizers[tileID] = rasterizer;
-
+  
   frameTasksExecutor->addPreRenderTask(rasterizer);
 }
 

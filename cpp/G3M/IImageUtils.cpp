@@ -42,10 +42,12 @@ void IImageUtils::scale(int width,
     ICanvas* canvas = IFactory::instance()->createCanvas(false);
     canvas->initialize(width, height);
 
-    canvas->drawImage(image,
-                      0, 0, width, height);
+    canvas->drawImage(image, 0, 0, width, height);
 
-    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            listener,
+                                                            autodelete),
+                        true);
   }
 }
 
@@ -73,7 +75,10 @@ void IImageUtils::subImage(const IImage* image,
                       rect._x, rect._y, rect._width, rect._height,
                       0, 0, rect._width, rect._height);
 
-    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            listener,
+                                                            autodelete),
+                        true);
   }
 }
 
@@ -138,5 +143,8 @@ void IImageUtils::combine(int width,
     }
   }
 
-  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
+  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                          listener,
+                                                          autodelete),
+                      true);
 }

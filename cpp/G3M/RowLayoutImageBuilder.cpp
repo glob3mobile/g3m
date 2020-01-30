@@ -8,11 +8,12 @@
 #include "RowLayoutImageBuilder.hpp"
 
 
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
 #include "ImageBackground.hpp"
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 RowLayoutImageBuilder::RowLayoutImageBuilder(const std::vector<IImageBuilder*>& children,
@@ -22,7 +23,7 @@ LayoutImageBuilder(children,
                    background),
 _childrenSeparation(childrenSeparation)
 {
-
+  
 }
 
 RowLayoutImageBuilder::RowLayoutImageBuilder(IImageBuilder*         child0,
@@ -34,7 +35,7 @@ LayoutImageBuilder(child0,
                    background),
 _childrenSeparation(childrenSeparation)
 {
-
+  
 }
 
 RowLayoutImageBuilder::RowLayoutImageBuilder(IImageBuilder*         child0,
@@ -44,28 +45,26 @@ LayoutImageBuilder(child0,
                    background),
 _childrenSeparation(childrenSeparation)
 {
-
+  
 }
 
-class RowLayoutImageBuilder_IImageListener : public CanvasOwnerImageListener {
+class RowLayoutImageBuilder_ImageListener : public IImageListener {
 private:
-  IImageBuilderListener* _listener;
-  bool _deleteListener;
-
   const std::string _imageName;
-
+  
+  IImageBuilderListener* _listener;
+  const bool             _deleteListener;
+  
 public:
-  RowLayoutImageBuilder_IImageListener(ICanvas* canvas,
-                                       const std::string& imageName,
-                                       IImageBuilderListener* listener,
-                                       bool deleteListener) :
-  CanvasOwnerImageListener(canvas),
+  RowLayoutImageBuilder_ImageListener(const std::string& imageName,
+                                      IImageBuilderListener* listener,
+                                      bool deleteListener) :
   _imageName(imageName),
   _listener(listener),
   _deleteListener(deleteListener)
   {
   }
-
+  
   void imageCreated(const IImage* image) {
     _listener->imageCreated(image, _imageName);
     if (_deleteListener) {
@@ -82,15 +81,15 @@ void RowLayoutImageBuilder::doLayout(const G3MContext* context,
   bool anyError = false;
   std::string error = "";
   std::string imageName = "Row";
-
+  
   int maxHeight = 0;
   int accumulatedWidth = 0;
-
+  
   const size_t resultsSize = results.size();
   for (size_t i = 0; i < resultsSize; i++) {
     ChildResult* result = results[i];
     const IImage* image = result->_image;
-
+    
     if (image == NULL) {
       anyError = true;
       error += result->_error + " ";
@@ -103,9 +102,9 @@ void RowLayoutImageBuilder::doLayout(const G3MContext* context,
       imageName += result->_imageName + "/";
     }
   }
-
+  
   imageName += _background->description();
-
+  
   if (anyError) {
     if (listener != NULL) {
       listener->onError(error);
@@ -117,32 +116,33 @@ void RowLayoutImageBuilder::doLayout(const G3MContext* context,
   else {
     const float contentWidth  = accumulatedWidth + ((resultsSize - 1) * _childrenSeparation);
     const float contentHeight = maxHeight;
-
+    
     ICanvas* canvas = context->getFactory()->createCanvas(false);
-
+    
     const Vector2F contentPos = _background->initializeCanvas(canvas,
                                                               contentWidth,
                                                               contentHeight);
-
+    
     float cursorLeft = contentPos._x;
     for (int i = 0; i < resultsSize; i++) {
       ChildResult* result = results[i];
       const IImage* image = result->_image;
       const int imageWidth  = image->getWidth();
       const int imageHeight = image->getHeight();
-
+      
       const float top = contentPos._y + ((contentHeight - imageHeight) / 2.0f);
       canvas->drawImage(image, cursorLeft, top);
       cursorLeft += imageWidth + _childrenSeparation;
     }
 
-    canvas->createImage(new RowLayoutImageBuilder_IImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                                 imageName,
-                                                                 listener,
-                                                                 deleteListener),
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            new RowLayoutImageBuilder_ImageListener(imageName,
+                                                                                                    listener,
+                                                                                                    deleteListener),
+                                                            true),
                         true);
   }
-
+  
   for (int i = 0; i < resultsSize; i++) {
     ChildResult* result = results[i];
 #ifdef C_CODE
@@ -152,5 +152,5 @@ void RowLayoutImageBuilder::doLayout(const G3MContext* context,
     result.dispose();
 #endif
   }
-
+  
 }

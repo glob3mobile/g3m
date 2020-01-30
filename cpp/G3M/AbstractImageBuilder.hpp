@@ -22,9 +22,6 @@ protected:
   void changed();
 
   virtual ~AbstractImageBuilder() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
   }
 
 public:

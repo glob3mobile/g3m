@@ -40,13 +40,15 @@ void HUDImageRenderer::CanvasImageFactory::create(const G3MRenderContext* rc,
                                                   int height,
                                                   IImageListener* listener,
                                                   bool deleteListener) {
-
   ICanvas* canvas = rc->getFactory()->createCanvas(true);
   canvas->initialize(width, height);
 
   drawOn(canvas, width, height);
 
-  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, deleteListener), true);
+  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                          listener,
+                                                          deleteListener),
+                      true);
 }
 
 HUDImageRenderer::HUDImageRenderer(HUDImageRenderer::ImageFactory* imageFactory) :

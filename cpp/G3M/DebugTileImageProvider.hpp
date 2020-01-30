@@ -11,7 +11,7 @@
 
 #include "CanvasTileImageProvider.hpp"
 
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
 
 #include "GFont.hpp"
 #include "Color.hpp"
@@ -20,7 +20,7 @@ class Sector;
 
 class DebugTileImageProvider : public CanvasTileImageProvider {
 private:
-  class ImageListener : public CanvasOwnerImageListener {
+  class ImageListener : public IImageListener {
   private:
     const std::string           _tileID;
     const TileImageContribution* _contribution;
@@ -31,8 +31,7 @@ private:
     static const std::string getImageID(const std::string& tileID);
 
   public:
-    ImageListener(ICanvas*                     canvas,
-                  const std::string&           tileID,
+    ImageListener(const std::string&           tileID,
                   const TileImageContribution* contribution,
                   TileImageListener*           listener,
                   bool                         deleteListener);

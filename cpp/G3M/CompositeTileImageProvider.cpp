@@ -17,6 +17,7 @@
 #include "Sector.hpp"
 #include "Vector2S.hpp"
 #include "IStringBuilder.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 CompositeTileImageProvider::~CompositeTileImageProvider() {
@@ -301,8 +302,10 @@ void CompositeTileImageProvider::Composer::mixResult() {
 
   delete imageID;
 
-  canvas->createImage(new ComposerImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
-                                                this),
+
+  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                          new ComposerImageListener(this),
+                                                          true),
                       true);
 }
 

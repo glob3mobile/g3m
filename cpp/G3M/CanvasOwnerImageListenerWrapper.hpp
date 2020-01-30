@@ -8,12 +8,15 @@
 #ifndef CanvasOwnerImageListenerWrapper_hpp
 #define CanvasOwnerImageListenerWrapper_hpp
 
-#include "CanvasOwnerImageListener.hpp"
+#include "IImageListener.hpp"
+
+class ICanvas;
 
 
-class CanvasOwnerImageListenerWrapper : public CanvasOwnerImageListener {
-
+class CanvasOwnerImageListenerWrapper : public IImageListener {
 private:
+  ICanvas* _canvas;
+
   IImageListener* _listener;
   const bool      _autodelete;
 

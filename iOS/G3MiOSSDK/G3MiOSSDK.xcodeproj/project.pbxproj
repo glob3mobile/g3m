@@ -885,8 +885,6 @@
 		CF66099F23DF332400795C7F /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		CF6609A023DF332400795C7F /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
 		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
-		CFC693D423E1FCC700E564AD /* CanvasOwnerImageListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC693D223E1FCC700E564AD /* CanvasOwnerImageListener.cpp */; };
-		CFDEB62323E2011600804CE3 /* CanvasOwnerImageListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC693D323E1FCC700E564AD /* CanvasOwnerImageListener.hpp */; };
 		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
@@ -927,7 +925,6 @@
 			files = (
 				CF277C8923E2C5E7000B969C /* CanvasOwnerImageListenerWrapper.hpp in CopyFiles */,
 				CF277C8523E2C083000B969C /* CanvasOwnerImageBuilderWrapper.hpp in CopyFiles */,
-				CFDEB62323E2011600804CE3 /* CanvasOwnerImageListener.hpp in CopyFiles */,
 				CF66063E23DF2FFD00795C7F /* BufferElevationData.hpp in CopyFiles */,
 				CF66063F23DF2FFD00795C7F /* GPUAttributeValueVecFloat.hpp in CopyFiles */,
 				CF66064023DF2FFD00795C7F /* ILogger.hpp in CopyFiles */,
@@ -2302,8 +2299,6 @@
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
 		CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBuffer_iOS.cpp; path = Specific/Derived/ShortBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBuffer_iOS.hpp; path = Specific/Derived/ShortBuffer_iOS.hpp; sourceTree = "<group>"; };
-		CFC693D223E1FCC700E564AD /* CanvasOwnerImageListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasOwnerImageListener.cpp; sourceTree = "<group>"; };
-		CFC693D323E1FCC700E564AD /* CanvasOwnerImageListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasOwnerImageListener.hpp; sourceTree = "<group>"; };
 		CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NativeGL2_iOS.mm; path = Specific/GL/NativeGL2_iOS.mm; sourceTree = "<group>"; };
 		CFCCFE0A16F506210082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
@@ -2572,8 +2567,6 @@
 				CF6603CD23DF2DA900795C7F /* CanvasImageBuilder.hpp */,
 				CF277C8223E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp */,
 				CF277C8323E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.hpp */,
-				CFC693D223E1FCC700E564AD /* CanvasOwnerImageListener.cpp */,
-				CFC693D323E1FCC700E564AD /* CanvasOwnerImageListener.hpp */,
 				CF277C8623E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp */,
 				CF277C8723E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.hpp */,
 				CF66046523DF2DAB00795C7F /* CanvasTileImageProvider.cpp */,
@@ -3813,7 +3806,6 @@
 				CF66090823DF330700795C7F /* ICameraConstrainer.cpp in Sources */,
 				CF66090923DF330700795C7F /* IWebSocket.cpp in Sources */,
 				CF66090A23DF330700795C7F /* RectangleF.cpp in Sources */,
-				CFC693D423E1FCC700E564AD /* CanvasOwnerImageListener.cpp in Sources */,
 				CF66090B23DF330700795C7F /* GEOMultiLineRasterSymbol.cpp in Sources */,
 				CF66090C23DF330700795C7F /* JSONFloat.cpp in Sources */,
 				CF66090D23DF330700795C7F /* MutableAngle.cpp in Sources */,
