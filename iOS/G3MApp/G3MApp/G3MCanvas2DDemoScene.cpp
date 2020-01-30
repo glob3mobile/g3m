@@ -116,9 +116,8 @@ public:
                       0.5);
 
     canvas->createImage(new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer),
-                        true);
-    
-    delete canvas;
+                        true,
+                        canvas /* transfer canvas to be deleted AFTER the image creation */);
 
     delete image;
   }

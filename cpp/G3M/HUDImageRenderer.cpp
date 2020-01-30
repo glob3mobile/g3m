@@ -30,6 +30,7 @@
 #include "GLFeature.hpp"
 #include "GLState.hpp"
 #include "ILogger.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 long long HUDImageRenderer::INSTANCE_COUNTER = 0;
@@ -45,9 +46,7 @@ void HUDImageRenderer::CanvasImageFactory::create(const G3MRenderContext* rc,
 
   drawOn(canvas, width, height);
 
-  canvas->createImage(listener, deleteListener);
-
-  delete canvas;
+  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, deleteListener), true);
 }
 
 HUDImageRenderer::HUDImageRenderer(HUDImageRenderer::ImageFactory* imageFactory) :

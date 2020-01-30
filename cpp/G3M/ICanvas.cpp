@@ -102,7 +102,6 @@ void ICanvas::clearRect(float left, float top, float width, float height) {
              width, height);
 }
 
-
 void ICanvas::fillRectangle(float left, float top,
                             float width, float height) {
   checkInitialized();

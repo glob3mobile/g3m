@@ -20,7 +20,7 @@ class GEOObject;
 class GEORasterSymbolizer;
 #include "Vector2S.hpp"
 #include "Sector.hpp"
-#include "IImageListener.hpp"
+#include "CanvasOwnerImageListener.hpp"
 #include <list>
 #include "GAsyncTask.hpp"
 
@@ -29,13 +29,17 @@ private:
 
   class ImageAssembler;
 
-  class CanvasImageListener : public IImageListener {
+
+
+  class TVLTIP_CanvasOwnerImageListener : public CanvasOwnerImageListener {
   private:
     ImageAssembler*   _imageAssembler;
     const std::string _imageID;
   public:
-    CanvasImageListener(ImageAssembler* imageAssembler,
-                        const std::string& imageID) :
+    TVLTIP_CanvasOwnerImageListener(ICanvas* canvas,
+                               ImageAssembler* imageAssembler,
+                               const std::string& imageID) :
+    CanvasOwnerImageListener(canvas),
     _imageAssembler(imageAssembler),
     _imageID(imageID)
     {

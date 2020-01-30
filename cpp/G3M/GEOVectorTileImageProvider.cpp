@@ -81,7 +81,7 @@ void GEOVectorTileImageProvider::GEORasterizerQuadTreeVisitor::endVisit(bool abo
 
 }
 
-const std::string GEOVectorTileImageProvider::GEORasterizerCanvasImageListener::getImageID(const std::string& tileID) const {
+const std::string GEOVectorTileImageProvider::GEORasterizerCanvasOwnerImageListener::getImageID(const std::string& tileID) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("GEOVectorTileImageProvider/");
   isb->addString(tileID);
@@ -90,7 +90,7 @@ const std::string GEOVectorTileImageProvider::GEORasterizerCanvasImageListener::
   return s;
 }
 
-void GEOVectorTileImageProvider::GEORasterizerCanvasImageListener::imageCreated(const IImage* image) {
+void GEOVectorTileImageProvider::GEORasterizerCanvasOwnerImageListener::imageCreated(const IImage* image) {
   _listener->imageCreated(_tileID,
                           image,
                           getImageID(_tileID),
@@ -121,13 +121,12 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
 
   delete projection;
 
-  canvas->createImage(new GEORasterizerCanvasImageListener(contribution,
+  canvas->createImage(new GEORasterizerCanvasOwnerImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                           contribution,
                                                            tileID,
                                                            listener,
                                                            deleteListener),
                       true /* autodelete */);
-
-  delete canvas;
 }
 
 void GEOVectorTileImageProvider::create(const Tile* tile,

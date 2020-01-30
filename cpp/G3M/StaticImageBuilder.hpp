@@ -18,6 +18,9 @@ private:
   const IImage*     _image;
   const std::string _imageName;
 
+protected:
+  ~StaticImageBuilder();
+
 public:
   StaticImageBuilder(const IImage* image,
                      const std::string& imageName) :
@@ -27,7 +30,6 @@ public:
 
   }
 
-  ~StaticImageBuilder();
 
   bool isMutable() const {
     return false;

@@ -21,6 +21,12 @@ private:
   const long long    _priority;
   const bool         _readExpired;
 
+protected:
+  ~DownloaderImageBuilder() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
 
 public:
   DownloaderImageBuilder(const URL& url) :
@@ -46,11 +52,6 @@ public:
     return false;
   }
 
-  ~DownloaderImageBuilder() {
-#ifdef JAVA_CODE
-    super.dispose();
-#endif
-  }
 
   void build(const G3MContext* context,
              IImageBuilderListener* listener,

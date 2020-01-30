@@ -23,7 +23,7 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "RectangleF.hpp"
-#include "IImageListener.hpp"
+#include "CanvasOwnerImageListener.hpp"
 #include "IImageBuilder.hpp"
 #include "IImageBuilderListener.hpp"
 #include "PlanetRenderContext.hpp"
@@ -372,14 +372,16 @@ public:
   }
 };
 
-class DTT_NotFullProviderImageListener : public IImageListener {
+class DTT_NotFullProviderImageListener : public CanvasOwnerImageListener {
 private:
   DTT_TileTextureBuilder* _builder;
   const std::string& _imageID;
 
 public:
-  DTT_NotFullProviderImageListener(DTT_TileTextureBuilder* builder,
+  DTT_NotFullProviderImageListener(ICanvas* canvas,
+                                   DTT_TileTextureBuilder* builder,
                                    const std::string& imageID) :
+  CanvasOwnerImageListener(canvas),
   _builder(builder),
   _imageID(imageID)
   {
@@ -500,12 +502,12 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileID,
       delete srcRect;
     }
 
-    canvas->createImage(new DTT_NotFullProviderImageListener(_builder,
+    canvas->createImage(new DTT_NotFullProviderImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                             _builder,
                                                              auxImageID->getString()),
                         true);
 
     delete auxImageID;
-    delete canvas;
     delete image;
     TileImageContribution::releaseContribution( contribution );
 

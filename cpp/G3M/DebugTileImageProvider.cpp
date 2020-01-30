@@ -23,10 +23,12 @@
 #include "IFactory.hpp"
 #include "Vector2S.hpp"
 
-DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileID,
+DebugTileImageProvider::ImageListener::ImageListener(ICanvas*                     canvas,
+                                                     const std::string&           tileID,
                                                      const TileImageContribution* contribution,
                                                      TileImageListener*           listener,
                                                      bool                         deleteListener) :
+CanvasOwnerImageListener(canvas),
 _tileID(tileID),
 _contribution(contribution),
 _listener(listener),
@@ -135,8 +137,9 @@ void DebugTileImageProvider::create(const Tile* tile,
   const short width  = resolution._x;
   const short height = resolution._y;
   
-  ICanvas* canvas = getCanvas(width, height);
-  
+  ICanvas* canvas = IFactory::instance()->createCanvas(false);
+  canvas->initialize(width, height);
+
   //canvas->removeShadow();
   
   //canvas->clearRect(0, 0, width, height);
@@ -171,7 +174,8 @@ void DebugTileImageProvider::create(const Tile* tile,
   
   //ILogger::instance()->logInfo(getIDLabel(tile));
   
-  canvas->createImage(new DebugTileImageProvider::ImageListener(tile->_id,
+  canvas->createImage(new DebugTileImageProvider::ImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                                tile->_id,
                                                                 contribution,
                                                                 listener,
                                                                 deleteListener),

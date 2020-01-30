@@ -15,7 +15,7 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "IImage.hpp"
-#include "IImageListener.hpp"
+#include "CanvasOwnerImageListener.hpp"
 
 
 class ResizerImageBuilder_IImageBuilderListener : public IImageBuilderListener {
@@ -67,7 +67,7 @@ public:
 };
 
 
-class ResizerImageBuilder_ImageListener : public IImageListener {
+class ResizerImageBuilder_ImageListener : public CanvasOwnerImageListener {
 private:
   const std::string _imageName;
   IImageBuilderListener* _listener;
@@ -75,9 +75,11 @@ private:
 
 public:
 
-  ResizerImageBuilder_ImageListener(const std::string& imageName,
+  ResizerImageBuilder_ImageListener(ICanvas* canvas,
+                                    const std::string& imageName,
                                     IImageBuilderListener* listener,
                                     bool deleteListener) :
+  CanvasOwnerImageListener(canvas),
   _imageName(imageName),
   _listener(listener),
   _deleteListener(deleteListener)
@@ -188,12 +190,11 @@ void ResizerImageBuilder::imageCreated(const IImage*      image,
                       destLeft, destTop,
                       destWidth, destHeight);
 
-    canvas->createImage(new ResizerImageBuilder_ImageListener(resizedImageName,
+    canvas->createImage(new ResizerImageBuilder_ImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                              resizedImageName,
                                                               listener,
                                                               deleteListener),
                         true);
-
-    delete canvas;
 
     delete image;
   }

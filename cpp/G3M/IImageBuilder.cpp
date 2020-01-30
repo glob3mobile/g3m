@@ -7,3 +7,9 @@
 //
 
 #include "IImageBuilder.hpp"
+
+#ifdef C_CODE
+IImageBuilder::~IImageBuilder() {
+#warning ******** TODO: destructor private
+}
+#endif

@@ -21,15 +21,18 @@ protected:
 
   void changed();
 
+  virtual ~AbstractImageBuilder() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
 public:
   AbstractImageBuilder() :
   _changeListener(NULL)
   {
   }
 
-  virtual ~AbstractImageBuilder() {
-  }
-  
   void setChangeListener(ChangedListener* changeListener);
 
 };

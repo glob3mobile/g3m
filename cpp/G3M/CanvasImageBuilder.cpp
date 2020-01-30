@@ -12,44 +12,18 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "Color.hpp"
-#include "IImageListener.hpp"
+#include "CanvasOwnerImageListener.hpp"
 #include "IImageBuilderListener.hpp"
 #include "IStringUtils.hpp"
 
 
 CanvasImageBuilder::~CanvasImageBuilder() {
-  delete _canvas;
-
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
-ICanvas* CanvasImageBuilder::getCanvas(const G3MContext* context) {
-  if ((_canvas == NULL) ||
-      (_canvasWidth  != _width ) ||
-      (_canvasHeight != _height) ||
-      (_canvasRetina != _retina)) {
-    delete _canvas;
-
-    const IFactory* factory = context->getFactory();
-
-    _canvas = factory->createCanvas(_retina);
-    _canvas->initialize(_width, _height);
-    _canvasWidth  = _width;
-    _canvasHeight = _height;
-    _canvasRetina = _retina;
-  }
-  else {
-    _canvas->setFillColor(Color::TRANSPARENT);
-    _canvas->fillRectangle(0, 0, _width, _height);
-  }
-
-  return _canvas;
-}
-
-
-class CanvasImageBuilder_ImageListener : public IImageListener {
+class CanvasImageBuilder_ImageListener : public CanvasOwnerImageListener {
 private:
   const std::string      _imageName;
   IImageBuilderListener* _listener;
@@ -57,9 +31,11 @@ private:
 
 
 public:
-  CanvasImageBuilder_ImageListener(const std::string& imageName,
+  CanvasImageBuilder_ImageListener(ICanvas* canvas,
+                                   const std::string& imageName,
                                    IImageBuilderListener* listener,
                                    bool deleteListener) :
+  CanvasOwnerImageListener(canvas),
   _imageName(imageName),
   _listener(listener),
   _deleteListener(deleteListener)
@@ -70,6 +46,9 @@ public:
     if (_deleteListener) {
       delete _listener;
     }
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
   }
 
   void imageCreated(const IImage* image) {
@@ -85,11 +64,13 @@ public:
 void CanvasImageBuilder::build(const G3MContext* context,
                                IImageBuilderListener* listener,
                                bool deleteListener) {
-  ICanvas* canvas = getCanvas(context);
+  ICanvas* canvas = context->getFactory()->createCanvas(_retina);
+  canvas->initialize(_width, _height);
 
   buildOnCanvas(context, canvas);
 
-  canvas->createImage(new CanvasImageBuilder_ImageListener(getImageName(context),
+  canvas->createImage(new CanvasImageBuilder_ImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                           getImageName(context),
                                                            listener,
                                                            deleteListener),
                       true);

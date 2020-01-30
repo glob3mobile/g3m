@@ -19,13 +19,6 @@ private:
   const int  _height;
   const bool _retina;
 
-  ICanvas* _canvas;
-  int      _canvasWidth;
-  int      _canvasHeight;
-  bool     _canvasRetina;
-
-  ICanvas* getCanvas(const G3MContext* context);
-
 protected:
 
   CanvasImageBuilder(int width,
@@ -33,11 +26,7 @@ protected:
                      bool retina) :
   _width(width),
   _height(height),
-  _retina(retina),
-  _canvas(NULL),
-  _canvasWidth(0),
-  _canvasHeight(0),
-  _canvasRetina(false)
+  _retina(retina)
   {
   }
 

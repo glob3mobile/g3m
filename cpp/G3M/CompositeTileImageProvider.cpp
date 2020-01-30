@@ -301,9 +301,9 @@ void CompositeTileImageProvider::Composer::mixResult() {
 
   delete imageID;
 
-  canvas->createImage(new ComposerImageListener(this), true);
-
-  delete canvas;
+  canvas->createImage(new ComposerImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                this),
+                      true);
 }
 
 bool CompositeTileImageProvider::ComposerFrameTask::isCanceled(const G3MRenderContext* rc) {

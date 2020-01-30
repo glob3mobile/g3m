@@ -8,7 +8,7 @@
 
 #include "ColumnLayoutImageBuilder.hpp"
 
-#include "IImageListener.hpp"
+#include "CanvasOwnerImageListener.hpp"
 #include "ImageBackground.hpp"
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
@@ -47,7 +47,7 @@ _childrenSeparation(childrenSeparation)
 
 }
 
-class ColumnLayoutImageBuilder_IImageListener : public IImageListener {
+class ColumnLayoutImageBuilder_IImageListener : public CanvasOwnerImageListener {
 private:
   IImageBuilderListener* _listener;
   bool _deleteListener;
@@ -55,9 +55,11 @@ private:
   const std::string _imageName;
 
 public:
-  ColumnLayoutImageBuilder_IImageListener(const std::string& imageName,
+  ColumnLayoutImageBuilder_IImageListener(ICanvas* canvas,
+                                          const std::string& imageName,
                                           IImageBuilderListener* listener,
                                           bool deleteListener) :
+  CanvasOwnerImageListener(canvas),
   _imageName(imageName),
   _listener(listener),
   _deleteListener(deleteListener)
@@ -134,11 +136,11 @@ void ColumnLayoutImageBuilder::doLayout(const G3MContext* context,
       cursorTop += imageHeight + _childrenSeparation;
     }
 
-    canvas->createImage(new ColumnLayoutImageBuilder_IImageListener(imageName,
+    canvas->createImage(new ColumnLayoutImageBuilder_IImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                                    imageName,
                                                                     listener,
                                                                     deleteListener),
                         true);
-    delete canvas;
   }
 
   for (int i = 0; i < resultsSize; i++) {

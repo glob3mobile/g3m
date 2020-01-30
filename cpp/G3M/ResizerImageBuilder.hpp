@@ -23,12 +23,13 @@ private:
   ImageSizer*    _widthSizer;
   ImageSizer*    _heightSizer;
 
+protected:
+  ~ResizerImageBuilder();
+
 public:
   ResizerImageBuilder(IImageBuilder* imageBuilder,
                       ImageSizer*    widthSizer,
                       ImageSizer*    heightSizer);
-
-  ~ResizerImageBuilder();
 
   bool isMutable() const {
     return false;

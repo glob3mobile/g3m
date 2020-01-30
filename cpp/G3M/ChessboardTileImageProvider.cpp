@@ -15,12 +15,12 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "Color.hpp"
-#include "IImageListener.hpp"
+#include "CanvasOwnerImageListener.hpp"
 #include "TileImageContribution.hpp"
 #include "Vector2S.hpp"
 
 
-class ChessboardTileImageProvider_IImageListener : public IImageListener {
+class ChessboardTileImageProvider_IImageListener : public CanvasOwnerImageListener {
 private:
   ChessboardTileImageProvider* _parent;
   const Tile*                  _tile;
@@ -29,10 +29,12 @@ private:
 
 public:
 
-  ChessboardTileImageProvider_IImageListener(ChessboardTileImageProvider* parent,
+  ChessboardTileImageProvider_IImageListener(ICanvas* canvas,
+                                             ChessboardTileImageProvider* parent,
                                              const Tile* tile,
                                              TileImageListener* listener,
                                              bool deleteListener) :
+  CanvasOwnerImageListener(canvas),
   _parent(parent),
   _tile(tile),
   _listener(listener),
@@ -118,13 +120,12 @@ void ChessboardTileImageProvider::create(const Tile* tile,
       }
     }
 
-    canvas->createImage(new ChessboardTileImageProvider_IImageListener(this,
+    canvas->createImage(new ChessboardTileImageProvider_IImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                                       this,
                                                                        tile,
                                                                        listener,
                                                                        deleteListener),
                         true);
-
-    delete canvas;
   }
   else {
     IImage* image = _image->shallowCopy();

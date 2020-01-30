@@ -1052,7 +1052,6 @@ void Mark::onImageCreated(const IImage* image,
   }
 }
 
-
 void Mark::ImageBuilderListener::imageCreated(const IImage*      image,
                                               const std::string& imageName) {
   _mark->onImageCreated(image, imageName);

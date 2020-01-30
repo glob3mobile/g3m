@@ -11,7 +11,7 @@
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
-#include "IImageListener.hpp"
+#include "CanvasOwnerImageListener.hpp"
 #include "ImageBackground.hpp"
 
 
@@ -33,7 +33,7 @@ LayoutImageBuilder(child0,
   
 }
 
-class StackLayoutImageBuilder_IImageListener : public IImageListener {
+class StackLayoutImageBuilder_IImageListener : public CanvasOwnerImageListener {
 private:
   IImageBuilderListener* _listener;
   bool _deleteListener;
@@ -41,9 +41,11 @@ private:
   const std::string _imageName;
   
 public:
-  StackLayoutImageBuilder_IImageListener(const std::string& imageName,
+  StackLayoutImageBuilder_IImageListener(ICanvas* canvas,
+                                         const std::string& imageName,
                                          IImageBuilderListener* listener,
                                          bool deleteListener) :
+  CanvasOwnerImageListener(canvas),
   _imageName(imageName),
   _listener(listener),
   _deleteListener(deleteListener)
@@ -120,11 +122,11 @@ void StackLayoutImageBuilder::doLayout(const G3MContext* context,
       canvas->drawImage(image, left, top);
     }
     
-    canvas->createImage(new StackLayoutImageBuilder_IImageListener(imageName,
+    canvas->createImage(new StackLayoutImageBuilder_IImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                                   imageName,
                                                                    listener,
                                                                    deleteListener),
                         true);
-    delete canvas;
   }
   
   for (int i = 0; i < resultsSize; i++) {

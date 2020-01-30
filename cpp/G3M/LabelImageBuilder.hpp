@@ -35,7 +35,10 @@ private:
   const bool  _isMutable;
   
   const std::string getImageName() const;
-  
+
+protected:
+  ~LabelImageBuilder();
+
 public:
   
   LabelImageBuilder(const std::string&     text,
@@ -52,9 +55,7 @@ public:
   }
   
   void setText(const std::string& text);
-  
-  ~LabelImageBuilder();
-  
+
   void build(const G3MContext* context,
              IImageBuilderListener* listener,
              bool deleteListener);

@@ -159,6 +159,7 @@ protected:
   {
   }
 
+
 public:
   virtual ~ICanvas();
 

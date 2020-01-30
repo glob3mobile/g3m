@@ -14,7 +14,7 @@
 
 #include "CanvasTileImageProvider.hpp"
 #include "TileImageListener.hpp"
-#include "IImageListener.hpp"
+#include "CanvasOwnerImageListener.hpp"
 #include "FrameTask.hpp"
 #include "RectangleF.hpp"
 #include "Sector.hpp"
@@ -126,12 +126,14 @@ private:
   };
 
 
-  class ComposerImageListener : public IImageListener {
+  class ComposerImageListener : public CanvasOwnerImageListener {
   private:
     Composer* _composer;
 
   public:
-    ComposerImageListener(Composer* composer) :
+    ComposerImageListener(ICanvas* canvas,
+                          Composer* composer) :
+    CanvasOwnerImageListener(canvas),
     _composer(composer)
     {
       _composer->_retain();
@@ -139,6 +141,9 @@ private:
 
     ~ComposerImageListener() {
       _composer->_release();
+#ifdef JAVA_CODE
+      super.dispose();
+#endif
     }
 
     void imageCreated(const IImage* image) {

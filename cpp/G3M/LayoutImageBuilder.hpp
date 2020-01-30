@@ -150,8 +150,10 @@ protected:
                         bool deleteListener,
                         const std::vector<ChildResult*>& results) = 0;
 
-public:
+protected:
   ~LayoutImageBuilder();
+
+public:
 
   bool isMutable() const;
 

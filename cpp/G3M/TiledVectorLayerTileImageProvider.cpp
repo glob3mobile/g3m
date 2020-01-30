@@ -33,7 +33,7 @@ TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRaster
     _geoObjectHolder->_release();
   }
   delete _canvas;
-
+  
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -52,7 +52,7 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::rasterizeGEOObj
                        _canvas,
                        projection,
                        _tileLevel);
-
+  
   delete projection;
 }
 
@@ -60,7 +60,7 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground
   if (_imageAssembler != NULL) {
     _canvas = IFactory::instance()->createCanvas(false);
     _canvas->initialize(_imageWidth, _imageHeight);
-
+    
     if (_geoObjectHolder != NULL) {
       rasterizeGEOObject(_geoObjectHolder->_geoObject);
     }
@@ -77,53 +77,14 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::runInBackground
       }
     }
   }
-
-//  if ((_imageAssembler != NULL) && (_buffer != NULL)) {
-//    _canvas = IFactory::instance()->createCanvas();
-//    _canvas->initialize(_imageWidth, _imageHeight);
-//
-//    if (_buffer->size() > 0) {
-//      const bool isBSON = IStringUtils::instance()->endsWith(_url._path, "bson");
-//
-//      if (_geoObject2 == NULL) {
-//        const bool showStatistics = false;
-//        _geoObject = (isBSON
-//                      ? GEOJSONParser::parseBSON(_buffer, showStatistics)
-//                      : GEOJSONParser::parseJSON(_buffer, showStatistics));
-//      }
-//
-//      if (_geoObject != NULL) {
-//        const long long coordinatesCount = _geoObject->getCoordinatesCount();
-//        if (coordinatesCount > 5000) {
-//          ILogger::instance()->logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d",
-//                                          _tileID.c_str(),
-//                                          coordinatesCount
-//                                          );
-//        }
-//
-//        if (_imageAssembler != NULL) {
-//          const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
-//                                                                          _tileIsMercator,
-//                                                                          _imageWidth,
-//                                                                          _imageHeight);
-//          _geoObject->rasterize(_symbolizer,
-//                                _canvas,
-//                                projection,
-//                                _tileLevel);
-//
-//          delete projection;
-//        }
-//        // delete geoObject;
-//      }
-//    }
-//  }
+  
 }
 
 void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::onPostExecute(const G3MContext* context) {
   if (_imageAssembler != NULL) {
     ICanvas* canvas = _canvas;
     _canvas = NULL;  // moves ownership of _canvas to _imageAssembler
-
+    
     GEOObject* transferedGEOObject;
     if (_geoObjectFromCache) {
       // This _geoObject had come from the cache, no need to transfer to put into the cache again
@@ -134,7 +95,7 @@ void TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::onPostExecute(c
       transferedGEOObject = _geoObject;
       _geoObject = NULL; // moves ownership of _geoObject to _imageAssembler
     }
-
+    
     _imageAssembler->rasterizedGEOObject(_url,
                                          transferedGEOObject,
                                          canvas);
@@ -202,12 +163,12 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
                                                               bool                    logDownloadActivity) {
   
   TiledVectorLayer::RequestGEOJSONBufferData* requestData = layer->getRequestGEOJSONBufferData(tile);
-
+  
   const GEOObjectHolder* geoObjectHolder = _tileImageProvider->getGEOObjectFor(requestData->_url);
   if (geoObjectHolder == NULL) {
     _symbolizer = layer->symbolizerCopy();
     _downloadListener = new GEOJSONBufferDownloadListener(this);
-
+    
     if (logDownloadActivity) {
       ILogger::instance()->logInfo("Downloading %s", requestData->_url._path.c_str());
     }
@@ -220,7 +181,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
   }
   else {
     const GEORasterSymbolizer* symbolizer = layer->symbolizerCopy();
-
+    
     _rasterizer = new GEOJSONBufferRasterizer(this,
                                               requestData->_url,
                                               NULL, // buffer,
@@ -234,7 +195,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
     _threadUtils->invokeAsyncTask(_rasterizer,
                                   true);
   }
-
+  
   delete requestData;
 }
 
@@ -261,7 +222,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::cancel() {
   if (_rasterizer != NULL) {
     _rasterizer->cancel();
   }
-
+  
   _listener->imageCreationCanceled(_tileID);
   _tileImageProvider->requestFinish(_tileID);
 }
@@ -271,14 +232,14 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(const U
                                                                          IByteBuffer* buffer) {
   _downloadListener = NULL;
   _downloadRequestID = -1;
-
+  
   if (_canceled) {
     delete buffer;
   }
   else {
     const GEORasterSymbolizer* symbolizer = _symbolizer;
     _symbolizer = NULL; // moves ownership of _symbolizer to GEOJSONBufferRasterizer
-
+    
     _rasterizer = new GEOJSONBufferRasterizer(this,
                                               url,
                                               buffer,
@@ -297,7 +258,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloaded(const U
 void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadError(const URL& url) {
   _downloadListener = NULL;
   _downloadRequestID = -1;
-
+  
   _listener->imageCreationError(_tileID,
                                 "Download error - " + url._path);
   _tileImageProvider->requestFinish(_tileID);
@@ -308,7 +269,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::bufferDownloadCanceled()
   _downloadRequestID = -1;
 }
 
-void TiledVectorLayerTileImageProvider::CanvasImageListener::imageCreated(const IImage* image) {
+void TiledVectorLayerTileImageProvider::TVLTIP_CanvasOwnerImageListener::imageCreated(const IImage* image) {
   _imageAssembler->imageCreated(image,
                                 _imageID);
 }
@@ -317,7 +278,7 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
                                                                      const std::string& imageID) {
   // retain the _contribution before calling the listener, as it takes full ownership of the contribution
   TileImageContribution::retainContribution(_contribution);
-
+  
   _listener->imageCreated(_tileID,
                           image,
                           imageID,
@@ -328,12 +289,12 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::imageCreated(const IImag
 void TiledVectorLayerTileImageProvider::ImageAssembler::rasterizedGEOObject(const URL& url,
                                                                             GEOObject* geoObject,
                                                                             ICanvas* canvas) {
-
+  
   if (geoObject != NULL) {
     _tileImageProvider->takeGEOObjectFor(url,
                                          geoObject);
   }
-
+  
   if (canvas == NULL) {
     _listener->imageCreationError(_tileID, "GEOJSON parser error");
     if (_deleteListener) {
@@ -341,10 +302,10 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::rasterizedGEOObject(cons
     }
   }
   else {
-    canvas->createImage(new CanvasImageListener(this, url._path),
+    canvas->createImage(new TVLTIP_CanvasOwnerImageListener(canvas /* transfer canvas to be deleted AFTER the image creation */,
+                                                       this,
+                                                       url._path),
                         true /* autodelete */);
-
-    delete canvas;
   }
 }
 
@@ -364,7 +325,7 @@ void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                TileImageListener* listener,
                                                bool deleteListener,
                                                FrameTasksExecutor* frameTasksExecutor) {
-
+  
   ImageAssembler* assembler = new ImageAssembler(this,
                                                  tile,
                                                  contribution,
@@ -373,9 +334,9 @@ void TiledVectorLayerTileImageProvider::create(const Tile* tile,
                                                  resolution,
                                                  _downloader,
                                                  _threadUtils);
-
+  
   _assemblers[tile->_id] = assembler;
-
+  
   assembler->start(_layer,
                    tile,
                    tileTextureDownloadPriority,
@@ -386,7 +347,7 @@ void TiledVectorLayerTileImageProvider::cancel(const std::string& tileID) {
 #ifdef C_CODE
   if (_assemblers.find(tileID) != _assemblers.end()) {
     ImageAssembler* assembler = _assemblers[tileID];
-
+    
     assembler->cancel();
   }
 #endif
@@ -402,9 +363,9 @@ void TiledVectorLayerTileImageProvider::requestFinish(const std::string& tileID)
 #ifdef C_CODE
   if (_assemblers.find(tileID) != _assemblers.end()) {
     ImageAssembler* assembler = _assemblers[tileID];
-
+    
     _assemblers.erase(tileID);
-
+    
     delete assembler;
   }
 #endif
@@ -421,14 +382,14 @@ TiledVectorLayerTileImageProvider::CacheEntry::~CacheEntry() {
 }
 
 TiledVectorLayerTileImageProvider::~TiledVectorLayerTileImageProvider() {
-
+  
   for (std::list<CacheEntry*>::iterator it = _geoObjectsCache.begin();
        it != _geoObjectsCache.end();
        ++it) {
     CacheEntry* entry = *it;
     delete entry;
   }
-
+  
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -450,15 +411,15 @@ void TiledVectorLayerTileImageProvider::takeGEOObjectFor(const URL& url,
 }
 
 const TiledVectorLayerTileImageProvider::GEOObjectHolder* TiledVectorLayerTileImageProvider::getGEOObjectFor(const URL& url) {
-//  _geoObjectsCacheRequests++;
+  //  _geoObjectsCacheRequests++;
   const std::string path = url._path;
   for (std::list<CacheEntry*>::iterator it = _geoObjectsCache.begin();
        it != _geoObjectsCache.end();
        ++it) {
     CacheEntry* entry = *it;
     if (entry->_path == path) {
-//      _geoObjectsCacheHits++;
-
+      //      _geoObjectsCacheHits++;
+      
       // move hit entry to the top of the cache (LRU rules)
 #ifdef C_CODE
       it = _geoObjectsCache.erase(it);
@@ -467,7 +428,7 @@ const TiledVectorLayerTileImageProvider::GEOObjectHolder* TiledVectorLayerTileIm
       it.remove();
 #endif
       _geoObjectsCache.push_front(entry);
-
+      
       const GEOObjectHolder* geoObjectHolder = entry->_geoObjectHolder;
       geoObjectHolder->_retain();
       return geoObjectHolder;

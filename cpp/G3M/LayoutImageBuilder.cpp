@@ -45,6 +45,9 @@ LayoutImageBuilder::~LayoutImageBuilder() {
   }
   
   delete _background;
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
 }
 
 bool LayoutImageBuilder::isMutable() const {

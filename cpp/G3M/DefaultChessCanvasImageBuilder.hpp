@@ -24,6 +24,12 @@ private:
   const int _splits;
   
 protected:
+  ~DefaultChessCanvasImageBuilder() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+  
   void buildOnCanvas(const G3MContext* context,
                      ICanvas* canvas);
   

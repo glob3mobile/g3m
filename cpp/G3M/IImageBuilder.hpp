@@ -14,10 +14,11 @@ class IImageBuilderListener;
 class ChangedListener;
 
 class IImageBuilder {
+protected:
+
 public:
 #ifdef C_CODE
-  virtual ~IImageBuilder() {
-  }
+  virtual ~IImageBuilder();
 #endif
 #ifdef JAVA_CODE
   void dispose();

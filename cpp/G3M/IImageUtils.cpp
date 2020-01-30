@@ -15,6 +15,7 @@
 #include "RectangleF.hpp"
 #include "IMathUtils.hpp"
 #include "ILogger.hpp"
+#include "CanvasOwnerImageListenerWrapper.hpp"
 
 
 void IImageUtils::createShallowCopy(const IImage* image,
@@ -44,8 +45,7 @@ void IImageUtils::scale(int width,
     canvas->drawImage(image,
                       0, 0, width, height);
 
-    canvas->createImage(listener, autodelete);
-    delete canvas;
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
   }
 }
 
@@ -73,8 +73,7 @@ void IImageUtils::subImage(const IImage* image,
                       rect._x, rect._y, rect._width, rect._height,
                       0, 0, rect._width, rect._height);
 
-    canvas->createImage(listener, autodelete);
-    delete canvas;
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
   }
 }
 
@@ -139,6 +138,5 @@ void IImageUtils::combine(int width,
     }
   }
 
-  canvas->createImage(listener, autodelete);
-  delete canvas;
+  canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, autodelete), true);
 }

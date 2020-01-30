@@ -13,6 +13,12 @@
 
 class StackLayoutImageBuilder : public LayoutImageBuilder {
 protected:
+  ~StackLayoutImageBuilder() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
   void doLayout(const G3MContext* context,
                 IImageBuilderListener* listener,
                 bool deleteListener,
