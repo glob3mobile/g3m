@@ -19,7 +19,7 @@
 #include "CanvasOwnerImageListenerWrapper.hpp"
 
 
-class ResizerImageBuilder_IImageBuilderListener : public IImageBuilderListener {
+class ResizerImageBuilder_ImageBuilderListener : public IImageBuilderListener {
 private:
   const G3MContext* _context;
 
@@ -30,10 +30,10 @@ private:
 
 public:
 
-  ResizerImageBuilder_IImageBuilderListener(const G3MContext* context,
-                                            ResizerImageBuilder* builder,
-                                            IImageBuilderListener* listener,
-                                            bool deleteListener) :
+  ResizerImageBuilder_ImageBuilderListener(const G3MContext* context,
+                                           ResizerImageBuilder* builder,
+                                           IImageBuilderListener* listener,
+                                           bool deleteListener) :
   _context(context),
   _builder(builder),
   _listener(listener),
@@ -42,7 +42,7 @@ public:
 
   }
 
-  ~ResizerImageBuilder_IImageBuilderListener() {
+  ~ResizerImageBuilder_ImageBuilderListener() {
     if (_deleteListener) {
       delete _listener;
     }
@@ -55,14 +55,14 @@ public:
                            _context,
                            _listener,
                            _deleteListener);
-    _listener = NULL;
+    _listener = NULL; // 'listener' ownership went to _builder
   }
 
   void onError(const std::string& error) {
     _builder->onError(error,
                       _listener,
                       _deleteListener);
-    _listener = NULL;
+    _listener = NULL; // 'listener' ownership went to _builder
   }
 
 };
@@ -133,10 +133,10 @@ void ResizerImageBuilder::build(const G3MContext* context,
                                 IImageBuilderListener* listener,
                                 bool deleteListener) {
   _imageBuilder->build(context,
-                       new ResizerImageBuilder_IImageBuilderListener(context,
-                                                                     this,
-                                                                     listener,
-                                                                     deleteListener),
+                       new ResizerImageBuilder_ImageBuilderListener(context,
+                                                                    this,
+                                                                    listener,
+                                                                    deleteListener),
                        true);
 }
 

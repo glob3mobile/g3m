@@ -311,13 +311,24 @@ public:
       xhr.open("GET", url, true);
       xhr.responseType = isImageRequest ? "blob" : "arraybuffer";
 
+      var handled = false;
       xhr.onload = function() {
+        if (handled) return;
         if (xhr.readyState == 4) {
+          handled = true;
           Module.ccall('Downloader_Emscripten_Handler_onLoad',
                        'void',
                        [ 'int',      'int',                                'number' ],
                        [ xhr.status, document.EMStorage.put(xhr.response), handler  ]);
         }
+      };
+      xhr.onerror = function() {
+        if (handled) return;
+        handled = true;
+        Module.ccall('Downloader_Emscripten_Handler_onLoad',
+                     'void',
+                     [ 'int', 'int',                    'number' ],
+                     [ 0,     document.EMStorage.null(), handler  ]);
       };
 
       xhr.send();
