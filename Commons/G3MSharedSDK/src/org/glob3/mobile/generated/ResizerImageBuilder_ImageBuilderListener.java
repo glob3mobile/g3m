@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated;
-public class ResizerImageBuilder_IImageBuilderListener implements IImageBuilderListener
+public class ResizerImageBuilder_ImageBuilderListener implements IImageBuilderListener
 {
   private final G3MContext _context;
 
@@ -9,7 +9,7 @@ public class ResizerImageBuilder_IImageBuilderListener implements IImageBuilderL
   private final boolean _deleteListener;
 
 
-  public ResizerImageBuilder_IImageBuilderListener(G3MContext context, ResizerImageBuilder builder, IImageBuilderListener listener, boolean deleteListener)
+  public ResizerImageBuilder_ImageBuilderListener(G3MContext context, ResizerImageBuilder builder, IImageBuilderListener listener, boolean deleteListener)
   {
      _context = context;
      _builder = builder;
@@ -30,13 +30,13 @@ public class ResizerImageBuilder_IImageBuilderListener implements IImageBuilderL
   public final void imageCreated(IImage image, String imageName)
   {
     _builder.imageCreated(image, imageName, _context, _listener, _deleteListener);
-    _listener = null;
+    _listener = null; // 'listener' ownership went to _builder
   }
 
   public final void onError(String error)
   {
     _builder.onError(error, _listener, _deleteListener);
-    _listener = null;
+    _listener = null; // 'listener' ownership went to _builder
   }
 
 }

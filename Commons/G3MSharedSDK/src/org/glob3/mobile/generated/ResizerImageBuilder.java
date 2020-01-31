@@ -58,7 +58,7 @@ public class ResizerImageBuilder extends AbstractImageBuilder
 
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
-    _imageBuilder.build(context, new ResizerImageBuilder_IImageBuilderListener(context, this, listener, deleteListener), true);
+    _imageBuilder.build(context, new ResizerImageBuilder_ImageBuilderListener(context, this, listener, deleteListener), true);
   }
 
   public final void onError(String error, IImageBuilderListener listener, boolean deleteListener)
