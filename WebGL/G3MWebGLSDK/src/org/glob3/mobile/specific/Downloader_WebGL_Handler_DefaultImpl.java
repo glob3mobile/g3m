@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.specific;
 
+
 import java.util.*;
 
 import org.glob3.mobile.generated.*;
@@ -10,8 +11,8 @@ import com.google.gwt.core.client.*;
 
 
 public class Downloader_WebGL_Handler_DefaultImpl
-         implements
-            Downloader_WebGL_Handler {
+                                                  implements
+                                                     Downloader_WebGL_Handler {
 
 
    private long                _priority;
@@ -33,8 +34,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final long priority,
                           final long requestID,
                           final String tag) {
-      _priority = priority;
-      _url = url;
+      _priority  = priority;
+      _url       = url;
       _listeners = new ArrayList<>();
       _listeners.add(new ListenerEntry(bufferListener, null, deleteListener, requestID, tag));
       _isImageRequest = false;
@@ -48,8 +49,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
                           final long priority,
                           final long requestID,
                           final String tag) {
-      _priority = priority;
-      _url = url;
+      _priority  = priority;
+      _url       = url;
       _listeners = new ArrayList<>();
       _listeners.add(new ListenerEntry(null, imageListener, deleteListener, requestID, tag));
       _isImageRequest = true;
@@ -204,8 +205,16 @@ public class Downloader_WebGL_Handler_DefaultImpl
 		xhr.open("GET", url, true);
 		xhr.responseType = (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) ? "blob"
 				: "arraybuffer";
+
+		var handled = false;
 		xhr.onload = function() {
+			if (handled) {
+				return;
+			}
+
 			if (xhr.readyState == 4) {
+				handled = true;
+
 				// inform downloader to remove myself, to avoid adding new Listener
 				that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
 				if (xhr.status === 200) {
@@ -219,6 +228,15 @@ public class Downloader_WebGL_Handler_DefaultImpl
 				}
 			}
 		};
+
+		xhr.onerror = function() {
+			if (handled) {
+				return;
+			}
+			handled = true;
+			that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
+		};
+
 		xhr.send();
    }-*/;
 

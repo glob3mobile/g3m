@@ -313,7 +313,9 @@ public:
 
       var handled = false;
       xhr.onload = function() {
-        if (handled) return;
+        if (handled) {
+          return;
+        }
         if (xhr.readyState == 4) {
           handled = true;
           Module.ccall('Downloader_Emscripten_Handler_onLoad',
@@ -323,12 +325,14 @@ public:
         }
       };
       xhr.onerror = function() {
-        if (handled) return;
+        if (handled) {
+          return;
+        }
         handled = true;
         Module.ccall('Downloader_Emscripten_Handler_onLoad',
                      'void',
-                     [ 'int', 'int',                    'number' ],
-                     [ 0,     document.EMStorage.null(), handler  ]);
+                     [ 'int',      'int',                    'number' ],
+                     [ xhr.status, document.EMStorage.null(), handler  ]);
       };
 
       xhr.send();
