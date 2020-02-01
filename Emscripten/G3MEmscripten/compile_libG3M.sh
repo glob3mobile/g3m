@@ -23,7 +23,7 @@ mkdir LIB
 GM3_SOURCES="$(find ${G3M_SOURCE_DIRECTORY} -name '*.cpp')" 
 
 #### deploy ### 
-#    -O3                                                                              \
+#    -O2                                                                              \
 
 ### debug ### 
 #    -s ASSERTIONS=2                                                                  \
@@ -42,7 +42,7 @@ em++                                                                            
     ${GM3_SOURCES}                                                                   \
     -s WASM=1                                                                        \
     -DC_CODE                                                                         \
-    -O3                                                                              \
+    -O2                                                                              \
     -std=c++11                                                                       \
     -r                                                                               \
     -o LIB/libG3M.bc                                                                 \

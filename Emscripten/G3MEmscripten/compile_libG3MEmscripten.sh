@@ -23,7 +23,7 @@ SOURCES="$(find . -name '*.cpp')"
 #    -g                         \
 
 ### deploy ### 
-#    -O3                                                                              \
+#    -O2                                                                              \
 
 ### debug ### 
 #    -s ASSERTIONS=2                                                                  \
@@ -36,6 +36,7 @@ SOURCES="$(find . -name '*.cpp')"
 #    --pre-js ${EMSDK_DIRECTORY}/upstream/emscripten/src/emscripten-source-map.min.js \
 #    -g4                                                                              \
 #    -O0                                                                              \
+#    -Rpass=.*                                                                        \
 
 em++                                                                                 \
     -I ${G3M_SOURCE_DIRECTORY}                                                       \
@@ -43,7 +44,7 @@ em++                                                                            
     ${SOURCES}                                                                       \
     -s WASM=1                                                                        \
     -DC_CODE                                                                         \
-    -O3                                                                              \
+    -O2                                                                              \
     -std=c++11                                                                       \
     -r                                                                               \
     -o LIB/libG3MEmscripten.bc                                                       \
