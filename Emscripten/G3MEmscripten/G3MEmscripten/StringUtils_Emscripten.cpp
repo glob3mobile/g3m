@@ -2,7 +2,6 @@
 
 #include "StringUtils_Emscripten.hpp"
 
-#include <algorithm>
 #include <sstream>
 
 
@@ -71,7 +70,7 @@ std::string StringUtils_Emscripten::ltrim(const std::string& string) const {
   s.erase(s.begin(),
           std::find_if(s.begin(),
                        s.end(),
-                       std::not1(std::ptr_fun<int, int>(std::isspace))
+                       [](int c) { return !std::isspace(c); }
                        )
           );
   return s;
@@ -81,7 +80,7 @@ std::string StringUtils_Emscripten::rtrim(const std::string& string) const {
   std::string s = string;
   s.erase(std::find_if(s.rbegin(),
                        s.rend(),
-                       std::not1(std::ptr_fun<int, int>(std::isspace))
+                       [](int c) { return !std::isspace(c); }
                        ).base(),
           s.end());
   return s;
@@ -172,7 +171,6 @@ std::string StringUtils_Emscripten::toString(float value) const {
 double StringUtils_Emscripten::parseDouble(const std::string& str) const {
   return atof(str.c_str());
 }
-
 
 std::string StringUtils_Emscripten::replaceAll(const std::string& originalString,
                                                const std::string& searchString,
