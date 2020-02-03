@@ -35,8 +35,8 @@ void Canvas_Emscripten::_initialize(int width, int height) {
 
   const IMathUtils*   mu = IMathUtils::instance();
 
-  int w = mu->ceil(width * ratio);
-  int h = mu->ceil(height * ratio);
+  const int w = (int) mu->ceil(width * ratio);
+  const int h = (int) mu->ceil(height * ratio);
 
   _width = w;
   _height = h;
@@ -260,7 +260,7 @@ const Vector2F Canvas_Emscripten::_textExtent(const std::string& text) {
   _domCanvasContext.set("textBaseline", "top");
 
   const val textMetrics = _domCanvasContext.call<val>("measureText", text);
-  const int width  = mu->ceil( textMetrics["width"].as<float>() );
+  const int width  = (int) mu->ceil( textMetrics["width"].as<float>() );
   const int height = _currentFontSize;
   return Vector2F(width, height);
 }
@@ -403,7 +403,7 @@ void Canvas_Emscripten::drawEllipse(float x, float y,
                                     float w, float h,
                                     bool fill,
                                     bool stroke) {
-  const float kappa = .5522848;
+  const float kappa = 0.5522848f;
   const float ox = (w / 2) * kappa;  // control point offset horizontal
   const float oy = (h / 2) * kappa;  // control point offset vertical
   const float xe = x + w;            // x-end

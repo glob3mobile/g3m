@@ -126,8 +126,8 @@ void G3MWidget_Emscripten::onSizeChanged(const int width,
     val valDevicePixelRatio = val::global("window")["devicePixelRatio"];
     _devicePixelRatio = valDevicePixelRatio.as<bool>() ? valDevicePixelRatio.as<float>() : 1;
 
-    _physicalWidth  = round(_width  * _devicePixelRatio);
-    _physicalHeight = round(_height * _devicePixelRatio);
+    _physicalWidth  = (int) round(_width  * _devicePixelRatio);
+    _physicalHeight = (int) round(_height * _devicePixelRatio);
 
     _canvas.set("width",  _physicalWidth);
     _canvas.set("height", _physicalHeight);
@@ -161,16 +161,16 @@ EM_BOOL G3MWidget_Emscripten_onTouchEvent(int eventType,
   return widget->_onTouchEvent(eventType, e);
 }
 
-static inline const char *emscripten_event_type_to_string(int eventType) {
-  const char *events[] = { "(invalid)", "(none)", "keypress", "keydown", "keyup", "click", "mousedown", "mouseup", "dblclick", "mousemove", "wheel", "resize",
-    "scroll", "blur", "focus", "focusin", "focusout", "deviceorientation", "devicemotion", "orientationchange", "fullscreenchange", "pointerlockchange",
-    "visibilitychange", "touchstart", "touchend", "touchmove", "touchcancel", "gamepadconnected", "gamepaddisconnected", "beforeunload",
-    "batterychargingchange", "batterylevelchange", "webglcontextlost", "webglcontextrestored", "(invalid)" };
-  ++eventType;
-  if (eventType < 0) eventType = 0;
-  if (eventType >= sizeof(events)/sizeof(events[0])) eventType = sizeof(events)/sizeof(events[0])-1;
-  return events[eventType];
-}
+//static inline const char *emscripten_event_type_to_string(int eventType) {
+//  const char *events[] = { "(invalid)", "(none)", "keypress", "keydown", "keyup", "click", "mousedown", "mouseup", "dblclick", "mousemove", "wheel", "resize",
+//"scroll", "blur", "focus", "focusin", "focusout", "deviceorientation", "devicemotion", "orientationchange", "fullscreenchange", "pointerlockchange",
+//"visibilitychange", "touchstart", "touchend", "touchmove", "touchcancel", "gamepadconnected", "gamepaddisconnected", "beforeunload",
+//"batterychargingchange", "batterylevelchange", "webglcontextlost", "webglcontextrestored", "(invalid)" };
+//  ++eventType;
+//  if (eventType < 0) eventType = 0;
+//  if (eventType >= sizeof(events)/sizeof(events[0])) eventType = sizeof(events)/sizeof(events[0])-1;
+//  return events[eventType];
+//}
 
 EM_JS(int, getAbsoluteLeft, (int elemID), {
       var elem = document.EMStorage.take(elemID);
@@ -198,11 +198,11 @@ EM_JS(int, getAbsoluteTop, (int elemID), {
       while (curr.offsetParent) {
         top -= curr.scrollTop;
         curr = curr.parentNode;
-        }
+      }
       while (elem) {
         top += elem.offsetTop;
         elem = elem.offsetParent;
-        }
+      }
       return top;
       });
 
@@ -240,7 +240,7 @@ EM_BOOL G3MWidget_Emscripten::_onMouseWheelEvent(int eventType,
 
     const float x = (e->mouse.clientX - canvasAbsoluteLeft) * _devicePixelRatio;
     const float y = (e->mouse.clientY - canvasAbsoluteTop ) * _devicePixelRatio;
-    const float delta = e->deltaY / 16;
+    const float delta = (float) (e->deltaY / 16);
 
     const Vector2F beginFirstPosition (x - 10, y - 10);
     const Vector2F beginSecondPosition(x + 10, y + 10);
@@ -268,18 +268,18 @@ EM_BOOL G3MWidget_Emscripten::_onMouseWheelEvent(int eventType,
       _g3mWidget->onTouchEvent( TouchEvent::create(TouchEventType::Up,   endTouches) );
     }
 
-    //    if (e->deltaMode == DOM_DELTA_PIXEL) {
-    //      printf("*** onMouseWheelEvent: DOM_DELTA_PIXEL %f\n", e->deltaY);
-    //    }
-    //    else if (e->deltaMode == DOM_DELTA_LINE) {
-    //      printf("*** onMouseWheelEvent: DOM_DELTA_LINE %f\n", e->deltaY);
-    //    }
-    //    else if (e->deltaMode == DOM_DELTA_PAGE) {
-    //      printf("*** onMouseWheelEvent: DOM_DELTA_PAGE %f\n", e->deltaY);
-    //    }
-    //    else {
-    //      printf("*** onMouseWheelEvent: unknown delta page %f\n", e->deltaY);
-    //    }
+    //if (e->deltaMode == DOM_DELTA_PIXEL) {
+    //  printf("*** onMouseWheelEvent: DOM_DELTA_PIXEL %f\n", e->deltaY);
+    //}
+    //else if (e->deltaMode == DOM_DELTA_LINE) {
+    //  printf("*** onMouseWheelEvent: DOM_DELTA_LINE %f\n", e->deltaY);
+    //}
+    //else if (e->deltaMode == DOM_DELTA_PAGE) {
+    //  printf("*** onMouseWheelEvent: DOM_DELTA_PAGE %f\n", e->deltaY);
+    //}
+    //else {
+    //  printf("*** onMouseWheelEvent: unknown delta page %f\n", e->deltaY);
+    //}
   }
 
   return EM_TRUE;
@@ -323,10 +323,10 @@ EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
     return EM_TRUE;
   }
   else {
-    printf("%s, screen: (%ld,%ld), client: (%ld,%ld),%s%s%s%s button: %hu, buttons: %hu, movement: (%ld,%ld), canvas: (%ld,%ld), target: (%ld, %ld)\n",
-           emscripten_event_type_to_string(eventType), e->screenX, e->screenY, e->clientX, e->clientY,
-           e->ctrlKey ? " CTRL" : "", e->shiftKey ? " SHIFT" : "", e->altKey ? " ALT" : "", e->metaKey ? " META" : "",
-           e->button, e->buttons, e->movementX, e->movementY, e->canvasX, e->canvasY, e->targetX, e->targetY);
+    //printf("%s, screen: (%ld,%ld), client: (%ld,%ld),%s%s%s%s button: %hu, buttons: %hu, movement: (%ld,%ld), canvas: (%ld,%ld), target: (%ld, %ld)\n",
+    //       emscripten_event_type_to_string(eventType), e->screenX, e->screenY, e->clientX, e->clientY,
+    //       e->ctrlKey ? " CTRL" : "", e->shiftKey ? " SHIFT" : "", e->altKey ? " ALT" : "", e->metaKey ? " META" : "",
+    //       e->button, e->buttons, e->movementX, e->movementY, e->canvasX, e->canvasY, e->targetX, e->targetY);
     return EM_FALSE;
   }
 }

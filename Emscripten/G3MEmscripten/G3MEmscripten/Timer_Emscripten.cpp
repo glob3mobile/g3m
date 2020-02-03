@@ -39,11 +39,11 @@ TimeInterval Timer_Emscripten::now() const {
 }
 
 TimeInterval Timer_Emscripten::fromDaysFromNow(const double days) const {
-  const long daysInMilliseconds = round(days
-                                        * 24   /* hours        */
-                                        * 60   /* minutes      */
-                                        * 60   /* seconds      */
-                                        * 1000 /* milliseconds */ );
+  const long daysInMilliseconds = (long) round(days
+                                               * 24   /* hours        */
+                                               * 60   /* minutes      */
+                                               * 60   /* seconds      */
+                                               * 1000 /* milliseconds */ );
   
   const long milliseconds = nowInMilliseconds() + daysInMilliseconds;
   
