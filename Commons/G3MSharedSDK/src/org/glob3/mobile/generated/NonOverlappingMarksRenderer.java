@@ -26,7 +26,7 @@ public class NonOverlappingMarksRenderer extends DefaultRenderer
     {
       NonOverlappingMark m = _marks.get(i);
   
-      if (_visibleMarks.size() < _maxVisibleMarks && frustrum.contains(m.getCartesianPosition(planet)))
+      if ((_visibleMarks.size() < _maxVisibleMarks) && frustrum.contains(m.getCartesianPosition(planet)))
       {
         _visibleMarks.add(m);
   

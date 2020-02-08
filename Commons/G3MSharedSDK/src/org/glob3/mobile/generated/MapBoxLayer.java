@@ -42,12 +42,6 @@ public class MapBoxLayer extends MercatorTiledLayer
     return (_domain.equals(t._domain));
   }
 
-  // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/3/3/3.png
-  // https://tiles.mapbox.com/v3/dgd.map-v93trj8v/7/62/48.png?updated=f0e992c
-
-  // TODO: parse json of layer metadata
-  // http://a.tiles.mapbox.com/v3/examples.map-qfyrx5r8.json
-
   public MapBoxLayer(String mapKey, TimeInterval timeToCache, boolean readExpired, int initialLevel, int maxLevel, float transparency, LayerCondition condition)
   {
      this(mapKey, timeToCache, readExpired, initialLevel, maxLevel, transparency, condition, new java.util.ArrayList<Info>());

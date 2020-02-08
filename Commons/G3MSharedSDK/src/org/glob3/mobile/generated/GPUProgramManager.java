@@ -87,6 +87,10 @@ public class GPUProgramManager
       {
         return compileProgramWithName(gl, "FlatColor2DMesh");
       }
+      if (transformTC)
+      {
+        System.out.print("");
+      }
       return compileProgramWithName(gl, "Textured2DMesh");
     }
   
@@ -204,7 +208,7 @@ public class GPUProgramManager
       if (p.getAttributesCode() != attributesCode || p.getUniformsCode() != uniformsCode)
       {
         ///#warning GIVE MORE DETAIL
-        ILogger.instance().logError("New compiled program does not match GL state.");
+        ILogger.instance().logError("New compiled program (%s) does not match GL state.", p.getName());
       }
     }
   
