@@ -3,23 +3,23 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */; };
-		44AFBB2119D4272F00EB78E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2019D4272F00EB78E9 /* UIKit.framework */; };
-		44AFBB2319D4273A00EB78E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */; };
-		44AFBB2719D4276000EB78E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2619D4276000EB78E9 /* QuartzCore.framework */; };
-		44AFBB2919D4286C00EB78E9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2819D4286C00EB78E9 /* CoreData.framework */; };
+		44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */; platformFilter = ios; };
+		44AFBB2119D4272F00EB78E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2019D4272F00EB78E9 /* UIKit.framework */; platformFilter = ios; };
+		44AFBB2319D4273A00EB78E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */; platformFilter = ios; };
+		44AFBB2719D4276000EB78E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2619D4276000EB78E9 /* QuartzCore.framework */; platformFilter = ios; };
+		44AFBB2919D4286C00EB78E9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2819D4286C00EB78E9 /* CoreData.framework */; platformFilter = ios; };
 		CF277C8423E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF277C8223E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp */; };
 		CF277C8523E2C083000B969C /* CanvasOwnerImageBuilderWrapper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF277C8323E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.hpp */; };
 		CF277C8823E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF277C8623E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp */; };
 		CF277C8923E2C5E7000B969C /* CanvasOwnerImageListenerWrapper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF277C8723E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.hpp */; };
 		CF3C992E17C274A500937BD3 /* NSString_CppAdditions.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF3C992B17C270D800937BD3 /* NSString_CppAdditions.h */; };
 		CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */; };
-		CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E21770E84E00D5A80C /* CFNetwork.framework */; };
-		CF4027E51770E85500D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E41770E85500D5A80C /* Security.framework */; };
+		CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E21770E84E00D5A80C /* CFNetwork.framework */; platformFilter = ios; };
+		CF4027E51770E85500D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E41770E85500D5A80C /* Security.framework */; platformFilter = ios; };
 		CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */; };
 		CF66063E23DF2FFD00795C7F /* BufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66016C23DF2DA500795C7F /* BufferElevationData.hpp */; };
 		CF66063F23DF2FFD00795C7F /* GPUAttributeValueVecFloat.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66016D23DF2DA500795C7F /* GPUAttributeValueVecFloat.hpp */; };
@@ -887,7 +887,7 @@
 		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
 		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
-		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
+		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; platformFilter = ios; };
 		E780A5AF16D3AEDA000F0395 /* SQDatabase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8B21BD15DD345D0068601A /* SQDatabase.h */; };
 		E780A5B016D3AEDA000F0395 /* GLUniformID_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */; };
 		E780A5B116D3AEDA000F0395 /* NativeGL2_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */; };
@@ -3391,26 +3391,22 @@
 		E70B56E016D3CCCD00C5FFFB /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				D8B50F821DABCBDA00FA96FA /* SphericalAtmosphere.fsh */,
-				D8B50F831DABCBDA00FA96FA /* SphericalAtmosphere.vsh */,
-				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
 				D8C3BA2F1946174D003F6642 /* Billboard_TransformedTexCoor.fsh */,
-				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,
-				D80C8B4B1A77B94E00E67587 /* FlatColor2DMesh.vsh */,
-				D8CA641C1A75282200B9EABC /* Textured2DMesh.fsh */,
-				D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */,
-				D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */,
-				D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */,
+				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
 				D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */,
 				D8CE5D37173BB68200C7AAE6 /* Billboard.vsh */,
 				D84625DD177732A900FC4862 /* ColorMesh.fsh */,
 				D84625DE177732A900FC4862 /* ColorMesh.vsh */,
 				D8CE5D33173BB5D800C7AAE6 /* Default.fsh */,
 				D8CE5D32173BB5D800C7AAE6 /* Default.vsh */,
-				D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */,
-				D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */,
+				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,
+				D80C8B4B1A77B94E00E67587 /* FlatColor2DMesh.vsh */,
 				D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */,
 				D807875F1846141400A6DB28 /* FlatColorMesh_DirectionLight.vsh */,
+				D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */,
+				D8D0CDB61771C91300D25CB6 /* FlatColorMesh.vsh */,
+				D8B5533F18800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.fsh */,
+				D8B5534018800D5A00C1B3B3 /* FullTransformedTexCoorMultiTexturedMesh.vsh */,
 				CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */,
 				CFD66B491863505B008EC15B /* FullTransformedTexCoorTexturedMesh.vsh */,
 				D88EE1B51869A1D800AED85A /* MultiTexturedMesh.fsh */,
@@ -3419,16 +3415,20 @@
 				D8769D8C17C394AC00CEF074 /* NoColorMesh.vsh */,
 				E70B56E116D3CCCD00C5FFFB /* Shader.fsh */,
 				E70B56E216D3CCCD00C5FFFB /* Shader.vsh */,
-				D84625D51777291F00FC4862 /* TexturedMesh.fsh */,
-				D84625D61777291F00FC4862 /* TexturedMesh.vsh */,
+				D8B50F821DABCBDA00FA96FA /* SphericalAtmosphere.fsh */,
+				D8B50F831DABCBDA00FA96FA /* SphericalAtmosphere.vsh */,
+				D8CA641C1A75282200B9EABC /* Textured2DMesh.fsh */,
+				D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */,
 				D80787601846141400A6DB28 /* TexturedMesh_DirectionLight.fsh */,
 				D80787611846141400A6DB28 /* TexturedMesh_DirectionLight.vsh */,
+				D84625D51777291F00FC4862 /* TexturedMesh.fsh */,
+				D84625D61777291F00FC4862 /* TexturedMesh.vsh */,
 				D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */,
 				D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */,
-				D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */,
-				D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */,
 				D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.fsh */,
 				D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.vsh */,
+				D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */,
+				D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";

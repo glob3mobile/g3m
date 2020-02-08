@@ -28,15 +28,15 @@
 #include "ILogger.hpp"
 
 
-BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
-                             const std::string&    key,
-                             const TimeInterval&   timeToCache,
-                             const bool            readExpired,
-                             const int             initialLevel,
-                             const int             maxLevel,
-                             const float           transparency,
-                             const LayerCondition* condition,
-                             std::vector<const Info*>*  layerInfo) :
+BingMapsLayer::BingMapsLayer(const std::string&        imagerySet,
+                             const std::string&        key,
+                             const TimeInterval&       timeToCache,
+                             const bool                readExpired,
+                             const int                 initialLevel,
+                             const int                 maxLevel,
+                             const float               transparency,
+                             const LayerCondition*     condition,
+                             std::vector<const Info*>* layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,
@@ -52,16 +52,16 @@ _isInitialized(false)
 {
 }
 
-BingMapsLayer::BingMapsLayer(const std::string&    imagerySet,
-                             const std::string&    culture,
-                             const std::string&    key,
-                             const TimeInterval&   timeToCache,
-                             const bool            readExpired,
-                             const int             initialLevel,
-                             const int             maxLevel,
-                             const float           transparency,
-                             const LayerCondition* condition,
-                             std::vector<const Info*>*  layerInfo) :
+BingMapsLayer::BingMapsLayer(const std::string&        imagerySet,
+                             const std::string&        culture,
+                             const std::string&        key,
+                             const TimeInterval&       timeToCache,
+                             const bool                readExpired,
+                             const int                 initialLevel,
+                             const int                 maxLevel,
+                             const float               transparency,
+                             const LayerCondition*     condition,
+                             std::vector<const Info*>* layerInfo) :
 RasterLayer(timeToCache,
             readExpired,
             NULL,

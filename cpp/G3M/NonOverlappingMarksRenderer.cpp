@@ -486,7 +486,7 @@ void NonOverlappingMarksRenderer::computeMarksToBeRendered(const Camera* camera,
   for (size_t i = 0; i < marksSize; i++) {
     NonOverlappingMark* m = _marks[i];
 
-    if (_visibleMarks.size() < _maxVisibleMarks &&
+    if ((_visibleMarks.size() < _maxVisibleMarks) &&
         frustrum->contains(m->getCartesianPosition(planet))) {
       _visibleMarks.push_back(m);
 

@@ -94,26 +94,26 @@ public:
    imagerySet: "Aerial", "AerialWithLabels", "Road", "OrdnanceSurvey" or "CollinsBart". See class BingMapType for constants.
    key: Bing Maps key. See http://msdn.microsoft.com/en-us/library/gg650598.aspx
    */
-  BingMapsLayer(const std::string&    imagerySet,
-                const std::string&    key,
-                const TimeInterval&   timeToCache,
-                const bool            readExpired    = true,
-                const int             initialLevel   = 2,
-                const int             maxLevel       = 25,
-                const float           transparency   = 1,
-                const LayerCondition* condition      = NULL,
-                std::vector<const Info*>*  layerInfo = new std::vector<const Info*>());
+  BingMapsLayer(const std::string&        imagerySet,
+                const std::string&        key,
+                const TimeInterval&       timeToCache,
+                const bool                readExpired  = true,
+                const int                 initialLevel = 2,
+                const int                 maxLevel     = 25,
+                const float               transparency = 1,
+                const LayerCondition*     condition    = NULL,
+                std::vector<const Info*>* layerInfo    = new std::vector<const Info*>());
 
-  BingMapsLayer(const std::string&    imagerySet,
-                const std::string&    culture,
-                const std::string&    key,
-                const TimeInterval&   timeToCache,
-                const bool            readExpired    = true,
-                const int             initialLevel   = 2,
-                const int             maxLevel       = 25,
-                const float           transparency   = 1,
-                const LayerCondition* condition      = NULL,
-                std::vector<const Info*>*  layerInfo = new std::vector<const Info*>());
+  BingMapsLayer(const std::string&        imagerySet,
+                const std::string&        culture,
+                const std::string&        key,
+                const TimeInterval&       timeToCache,
+                const bool                readExpired  = true,
+                const int                 initialLevel = 2,
+                const int                 maxLevel     = 25,
+                const float               transparency = 1,
+                const LayerCondition*     condition    = NULL,
+                std::vector<const Info*>* layerInfo    = new std::vector<const Info*>());
 
   URL getFeatureInfoURL(const Geodetic2D& position,
                         const Sector& sector) const;

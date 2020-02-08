@@ -23,24 +23,23 @@ int main() {
   LayerSet* layerSet = new LayerSet();
 
   LayerTilesRenderParameters* parameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE,
-											  1,  // topSectorSplitsByLatitude
-											  2,  // topSectorSplitsByLongitude
-											  1,  // firstLevel
-											  13  // maxLevel
-											  );
+                                                                                          1,  // topSectorSplitsByLatitude
+                                                                                          2,  // topSectorSplitsByLongitude
+                                                                                          1,  // firstLevel
+                                                                                          13  // maxLevel
+                                                                                          );
 
   layerSet->addLayer( new URLTemplateLayer("http://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg",
-					   Sector::FULL_SPHERE,
-					   false,
-					   TimeInterval::fromDays(30),
-					   true, // readExpired
-					   NULL, // condition
-					   parameters) );
+                                           Sector::FULL_SPHERE,
+                                           false,
+                                           TimeInterval::fromDays(30),
+                                           true, // readExpired
+                                           NULL, // condition
+                                           parameters) );
   planetRendererBuilder->setLayerSet(layerSet);
 
   planetRendererBuilder->setIncrementalTileQuality(true);
 
-      
   emscripten_console_log("Step 2");
   G3MWidget_Emscripten* widget = builder.createWidget();
 

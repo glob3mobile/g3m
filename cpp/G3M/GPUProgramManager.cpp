@@ -32,9 +32,9 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
 
     //#warning AVOID getAttributesCode and getUniformsCode calls
     if (p->getAttributesCode() != attributesCode ||
-        p->getUniformsCode() != uniformsCode) {
+        p->getUniformsCode()   != uniformsCode) {
       //#warning GIVE MORE DETAIL
-      ILogger::instance()->logError("New compiled program does not match GL state.");
+      ILogger::instance()->logError("New compiled program (%s) does not match GL state.", p->getName().c_str());
     }
   }
 
@@ -67,6 +67,9 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   if (is2D) {
     if (flatColor) {
       return compileProgramWithName(gl, "FlatColor2DMesh");
+    }
+    if (transformTC) {
+      printf("");
     }
     return compileProgramWithName(gl, "Textured2DMesh");
   }
