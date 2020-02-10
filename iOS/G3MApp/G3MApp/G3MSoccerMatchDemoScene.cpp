@@ -8,28 +8,28 @@
 
 #include "G3MSoccerMatchDemoScene.hpp"
 
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/G3MContext.hpp>
-#include <G3MiOSSDK/IDownloader.hpp>
-#include <G3MiOSSDK/URL.hpp>
-#include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/IBufferDownloadListener.hpp>
-#include <G3MiOSSDK/IThreadUtils.hpp>
-#include <G3MiOSSDK/GAsyncTask.hpp>
-#include <G3MiOSSDK/DirectMesh.hpp>
-#include <G3MiOSSDK/JSONObject.hpp>
-#include <G3MiOSSDK/JSONArray.hpp>
-#include <G3MiOSSDK/IJSONParser.hpp>
-#include <G3MiOSSDK/JSONNumber.hpp>
-#include <G3MiOSSDK/JSONString.hpp>
-#include <G3MiOSSDK/FloatBufferBuilderFromCartesian3D.hpp>
-#include <G3MiOSSDK/FloatBufferBuilderFromColor.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/ShapesRenderer.hpp>
-#include <G3MiOSSDK/MeshShape.hpp>
-#include <G3MiOSSDK/Color.hpp>
-#include <G3MiOSSDK/G3MMeshParser.hpp>
+#include <G3M/BingMapsLayer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/G3MContext.hpp>
+#include <G3M/IDownloader.hpp>
+#include <G3M/URL.hpp>
+#include <G3M/DownloadPriority.hpp>
+#include <G3M/IBufferDownloadListener.hpp>
+#include <G3M/IThreadUtils.hpp>
+#include <G3M/GAsyncTask.hpp>
+#include <G3M/DirectMesh.hpp>
+#include <G3M/JSONObject.hpp>
+#include <G3M/JSONArray.hpp>
+#include <G3M/IJSONParser.hpp>
+#include <G3M/JSONNumber.hpp>
+#include <G3M/JSONString.hpp>
+#include <G3M/FloatBufferBuilderFromCartesian3D.hpp>
+#include <G3M/FloatBufferBuilderFromColor.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/MeshShape.hpp>
+#include <G3M/Color.hpp>
+#include <G3M/G3MMeshParser.hpp>
 
 #include "G3MDemoModel.hpp"
 

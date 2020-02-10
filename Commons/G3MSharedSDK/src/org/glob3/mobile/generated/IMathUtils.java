@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  IMathUtils.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 29/08/12.
 //
 
 //
 //  IMathUtils.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 24/08/12.
 //

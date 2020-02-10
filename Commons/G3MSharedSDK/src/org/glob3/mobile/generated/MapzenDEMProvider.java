@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  MapzenDEMProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/13/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  MapzenDEMProvider.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/13/16.
 //
@@ -107,7 +107,7 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
 
   public final void onDownloadError(int z, int x, int y)
   {
-    ILogger.instance().logError("Error downloading Mapzen terrarium at %i/%i/%i", z, x, y);
+    ILogger.instance().logError("Error downloading Mapzen terrarium at %d/%d/%d", z, x, y);
     if ((z == 0) && (x == 0) && (y == 0))
     {
       _errorDownloadingRootGrid = true;

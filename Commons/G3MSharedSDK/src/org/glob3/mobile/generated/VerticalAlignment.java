@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ICanvasUtils.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 07/05/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ICanvasUtils.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 07/05/14.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  TiledVectorLayerTileImageProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/30/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  TiledVectorLayerTileImageProvider.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/30/14.
 //
@@ -28,11 +28,13 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following type could not be found.
 //  class ImageAssembler;
 
-  private static class CanvasImageListener extends IImageListener
+
+
+  private static class TVLTIP_IImageListener extends IImageListener
   {
     private ImageAssembler _imageAssembler;
     private final String _imageID;
-    public CanvasImageListener(ImageAssembler imageAssembler, String imageID)
+    public TVLTIP_IImageListener(ImageAssembler imageAssembler, String imageID)
     {
        _imageAssembler = imageAssembler;
        _imageID = imageID;
@@ -138,45 +140,6 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
         }
       }
     
-    //  if ((_imageAssembler != NULL) && (_buffer != NULL)) {
-    //    _canvas = IFactory::instance()->createCanvas();
-    //    _canvas->initialize(_imageWidth, _imageHeight);
-    //
-    //    if (_buffer->size() > 0) {
-    //      const bool isBSON = IStringUtils::instance()->endsWith(_url._path, "bson");
-    //
-    //      if (_geoObject2 == NULL) {
-    //        const bool showStatistics = false;
-    //        _geoObject = (isBSON
-    //                      ? GEOJSONParser::parseBSON(_buffer, showStatistics)
-    //                      : GEOJSONParser::parseJSON(_buffer, showStatistics));
-    //      }
-    //
-    //      if (_geoObject != NULL) {
-    //        const long long coordinatesCount = _geoObject->getCoordinatesCount();
-    //        if (coordinatesCount > 5000) {
-    //          ILogger::instance()->logWarning("GEOObject for tile=\"%s\" has with too many vertices=%d",
-    //                                          _tileID.c_str(),
-    //                                          coordinatesCount
-    //                                          );
-    //        }
-    //
-    //        if (_imageAssembler != NULL) {
-    //          const GEORasterProjection* projection = new GEORasterProjection(_tileSector,
-    //                                                                          _tileIsMercator,
-    //                                                                          _imageWidth,
-    //                                                                          _imageHeight);
-    //          _geoObject->rasterize(_symbolizer,
-    //                                _canvas,
-    //                                projection,
-    //                                _tileLevel);
-    //
-    //          delete projection;
-    //        }
-    //        // delete geoObject;
-    //      }
-    //    }
-    //  }
     }
 
     public final void onPostExecute(G3MContext context)
@@ -431,10 +394,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
       else
       {
-        canvas.createImage(new CanvasImageListener(this, url._path), true); // autodelete
-    
-        if (canvas != null)
-           canvas.dispose();
+        canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new TVLTIP_IImageListener(this, url._path), true), true);
       }
     }
     public final void deletedRasterizer()
@@ -559,14 +519,14 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
 
   public final TiledVectorLayerTileImageProvider.GEOObjectHolder getGEOObjectFor(URL url)
   {
-  //  _geoObjectsCacheRequests++;
+    //  _geoObjectsCacheRequests++;
     final String path = url._path;
     for (java.util.Iterator<CacheEntry> it = _geoObjectsCache.iterator(); it.hasNext();)
     {
       CacheEntry entry = it.next();
       if (entry._path.equals(path))
       {
-  //      _geoObjectsCacheHits++;
+        //      _geoObjectsCacheHits++;
   
         // move hit entry to the top of the cache (LRU rules)
         it.remove();

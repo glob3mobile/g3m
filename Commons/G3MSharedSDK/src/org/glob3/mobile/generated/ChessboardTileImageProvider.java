@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ChessboardTileImageProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/23/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ChessboardTileImageProvider.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/23/14.
 //
@@ -79,10 +79,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
         }
       }
   
-      canvas.createImage(new ChessboardTileImageProvider_IImageListener(this, tile, listener, deleteListener), true);
-  
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new ChessboardTileImageProvider_ImageListener(this, tile, listener, deleteListener), true), true);
     }
     else
     {

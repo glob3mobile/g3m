@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  Mesh.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 27/06/12.
 //
 
 //
 //  Mesh.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 27/06/12.
 //
@@ -34,12 +34,13 @@ public abstract class Mesh
 
   private MeshUserData _userData;
 
-  private String _token = "";
+  private String _token;
 
   protected Mesh()
   {
      _enable = true;
      _userData = null;
+     _token = "";
   }
 
   public final void setToken(String token)

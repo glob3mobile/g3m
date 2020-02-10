@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ProtoRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 23/04/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ProtoRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 18/03/14.
 //

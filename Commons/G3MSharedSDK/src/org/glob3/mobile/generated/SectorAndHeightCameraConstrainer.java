@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  SectorAndHeightCameraConstrainer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 06/09/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  SectorAndHeightCameraConstrainer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 06/09/13.
 //

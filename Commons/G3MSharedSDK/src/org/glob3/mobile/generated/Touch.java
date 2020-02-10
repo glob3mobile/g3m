@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  TouchEvent.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 31/05/12.
 //
 
 //
 //  TouchEvent.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 31/05/12.
 //

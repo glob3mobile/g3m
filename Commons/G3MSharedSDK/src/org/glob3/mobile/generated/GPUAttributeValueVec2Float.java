@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  GPUAttributeValueVec2Float.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
 //
 
 //
 //  GPUAttributeValueVec2Float.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 1/4/19.
 //

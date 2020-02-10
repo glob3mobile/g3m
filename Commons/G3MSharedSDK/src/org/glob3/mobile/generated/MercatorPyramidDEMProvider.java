@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  MercatorPyramidDEMProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/19/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  MercatorPyramidDEMProvider.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/19/16.
 //

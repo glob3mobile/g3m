@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Matrix44D.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 01/07/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  Matrix44D.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 01/07/13.
 //

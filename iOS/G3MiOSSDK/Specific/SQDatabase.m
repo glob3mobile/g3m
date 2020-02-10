@@ -43,7 +43,7 @@
     }
 
     _queryParamCount = sqlite3_bind_parameter_count(_stmt);
-    //NSLog(@"queryParamCount=%i", _queryParamCount);
+    //NSLog(@"queryParamCount=%d", _queryParamCount);
 
     int i = 0;
     while (i++ < _queryParamCount) {
@@ -53,7 +53,7 @@
     }
 
     _columnCount = sqlite3_column_count(_stmt);
-    //NSLog(@"columnCount=%i", _columnCount);
+    //NSLog(@"columnCount=%d", _columnCount);
   }
   return self;
 }
@@ -277,7 +277,7 @@
 
 	do {
     //    if (numOfRetries > 0) {
-    //      NSLog(@"SQLite Busy, step %i: %@", numOfRetries, _dbPath);
+    //      NSLog(@"SQLite Busy, step %d: %@", numOfRetries, _dbPath);
     //    }
 
 		int rc = sqlite3_step(stmt);

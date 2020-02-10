@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  Plane.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 14/07/12.
 //
 
 //
 //  Plane.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 14/07/12.
 //

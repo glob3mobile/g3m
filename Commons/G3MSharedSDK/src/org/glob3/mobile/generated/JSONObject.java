@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  JSONObject.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Oliver Koehler on 01/10/12.
 //
 
 //
 //  JSONObject.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Oliver Koehler on 01/10/12.
 //
@@ -124,36 +124,55 @@ public class JSONObject extends JSONBaseObject
     _entries.put(key, object);
   }
 
-  public final void put(String key, String value)
-  {
-    _entries.put(key, new JSONString(value));
-  }
+//  void put(const std::string& key,
+//           const std::string& value);
+//
+//  void put(const std::string& key,
+//           double value);
+//
+//  void put(const std::string& key,
+//           float value);
+//
+//  void put(const std::string& key,
+//           int value);
+//
+//  void put(const std::string& key,
+//           long long value);
+//
+//  void put(const std::string& key,
+//           bool value);
 
-  public final void put(String key, double value)
-  {
-    _entries.put(key, new JSONDouble(value));
-  }
 
-  public final void put(String key, float value)
-  {
-    _entries.put(key, new JSONFloat(value));
-  }
-
-  public final void put(String key, int value)
-  {
-    _entries.put(key, new JSONInteger(value));
-  }
-
-  public final void put(String key, long value)
-  {
-    _entries.put(key, new JSONLong(value));
-  }
-
-  public final void put(String key, boolean value)
-  {
-    _entries.put(key, new JSONBoolean(value));
-  }
-
+  //void JSONObject::put(const std::string& key,
+  //                     const std::string& value) {
+  //  _entries[key] = new JSONString(value);
+  //}
+  //
+  //void JSONObject::put(const std::string& key,
+  //                     double value) {
+  //  _entries[key] = new JSONDouble(value);
+  //}
+  //
+  //void JSONObject::put(const std::string& key,
+  //                     float value) {
+  //  _entries[key] = new JSONFloat(value);
+  //}
+  //
+  //void JSONObject::put(const std::string& key,
+  //                     int value) {
+  //  _entries[key] = new JSONInteger(value);
+  //}
+  //
+  //void JSONObject::put(const std::string& key,
+  //                     long long value) {
+  //  _entries[key] = new JSONLong(value);
+  //}
+  //
+  //void JSONObject::put(const std::string& key,
+  //                     bool value) {
+  //  _entries[key] = new JSONBoolean(value);
+  //}
+  
   public final int size()
   {
     return _entries.size();

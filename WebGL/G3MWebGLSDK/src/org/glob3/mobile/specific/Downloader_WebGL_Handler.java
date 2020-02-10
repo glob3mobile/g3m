@@ -27,7 +27,7 @@ public interface Downloader_WebGL_Handler {
              final String tag);
 
 
-   boolean isRequestingImage();
+   boolean isImageRequest();
 
 
    void addListener(final IBufferDownloadListener listener,

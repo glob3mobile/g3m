@@ -8,18 +8,20 @@
 
 #include "Canvas_iOS.hpp"
 
-#include "Color.hpp"
-#include "Image_iOS.hpp"
-#include "IImageListener.hpp"
-#include "GFont.hpp"
-#include "IDeviceInfo.hpp"
-#include "Image_iOS.hpp"
-#include "IFactory.hpp"
-#include "ILogger.hpp"
+#include "G3M/Color.hpp"
+#include "G3M/IImageListener.hpp"
+#include "G3M/GFont.hpp"
+#include "G3M/IDeviceInfo.hpp"
+#include "G3M/IFactory.hpp"
+#include "G3M/ILogger.hpp"
 
 #import <UIKit/UIKit.h>
 
+#import "Image_iOS.hpp"
+#import "Image_iOS.hpp"
+
 #import "NSString_CppAdditions.h"
+
 
 Canvas_iOS::~Canvas_iOS() {
   _currentUIFont = nil;

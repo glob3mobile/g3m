@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  BoxImageBackground.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/19/19.
 //
 
 //
 //  BoxImageBackground.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/19/19.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  TaitBryanAngles.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 06/02/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  TaitBryanAngles.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 06/02/14.
 //

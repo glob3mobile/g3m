@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ChessboardLayer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 5/15/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ChessboardLayer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 5/15/14.
 //

@@ -7,20 +7,20 @@
 
 #include "G3MMarksDemoScene.hpp"
 
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/IDownloader.hpp>
-#include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/IBufferDownloadListener.hpp>
-#include <G3MiOSSDK/IJSONParser.hpp>
-#include <G3MiOSSDK/JSONObject.hpp>
-#include <G3MiOSSDK/JSONArray.hpp>
-#include <G3MiOSSDK/JSONNumber.hpp>
-#include <G3MiOSSDK/Mark.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/IStringUtils.hpp>
-#include <G3MiOSSDK/MarksRenderer.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/IDownloader.hpp>
+#include <G3M/DownloadPriority.hpp>
+#include <G3M/IBufferDownloadListener.hpp>
+#include <G3M/IJSONParser.hpp>
+#include <G3M/JSONObject.hpp>
+#include <G3M/JSONArray.hpp>
+#include <G3M/JSONNumber.hpp>
+#include <G3M/Mark.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/IStringUtils.hpp>
+#include <G3M/MarksRenderer.hpp>
+#include <G3M/BingMapsLayer.hpp>
 
 #include "G3MDemoModel.hpp"
 

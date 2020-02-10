@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DefaultChessCanvasImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 21/08/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DefaultChessCanvasImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 21/08/14.
 //
@@ -27,6 +27,11 @@ public class DefaultChessCanvasImageBuilder extends CanvasImageBuilder
   private final Color _backgroundColor ;
   private final Color _boxColor ;
   private final int _splits;
+
+  public void dispose()
+  {
+    super.dispose();
+  }
 
   protected final void buildOnCanvas(G3MContext context, ICanvas canvas)
   {

@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  CameraRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 30/07/12.
 //
 
 //
 //  CameraRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 30/07/12.
 //

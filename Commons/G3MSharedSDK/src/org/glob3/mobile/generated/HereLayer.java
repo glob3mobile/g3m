@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  HereLayer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 3/7/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  HereLayer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 3/7/13.
 //

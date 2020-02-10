@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DefaultInfoDisplay.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 11/08/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DefaultInfoDisplay.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso on 11/08/14.
 //

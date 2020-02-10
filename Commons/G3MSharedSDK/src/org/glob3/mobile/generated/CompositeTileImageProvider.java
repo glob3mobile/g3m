@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CompositeTileImageProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/23/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CompositeTileImageProvider.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/23/14.
 //
@@ -333,10 +333,8 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
       if (imageID != null)
          imageID.dispose();
     
-      canvas.createImage(new ComposerImageListener(this), true);
     
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new ComposerImageListener(this), true), true);
     }
 
   }
@@ -355,6 +353,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     public void dispose()
     {
       _composer._release();
+      super.dispose();
     }
 
     public final void imageCreated(IImage image)

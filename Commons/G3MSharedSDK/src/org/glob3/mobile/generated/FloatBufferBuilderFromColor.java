@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  FloatBufferBuilderFromColor.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/9/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  FloatBufferBuilderFromColor.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 07/09/12.
 //

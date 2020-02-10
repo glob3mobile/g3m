@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  MutableMatrix44D.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 05/09/12.
 //
 
 //
 //  MutableMatrix44D.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 05/09/12.
 //
@@ -51,9 +51,10 @@ public class MutableMatrix44D
   private double _m32;
   private double _m33;
 
+  private boolean _isValid;
+
   private Matrix44D _matrix44D;
 
-  private boolean _isValid;
 
 
   private MutableMatrix44D(boolean isValid)

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  TransformableTextureMapping.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/9/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  TransformableTextureMapping.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/9/14.
 //

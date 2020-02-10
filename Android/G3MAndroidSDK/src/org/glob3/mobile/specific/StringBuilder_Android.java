@@ -2,20 +2,21 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IStringBuilder;
+
+import org.glob3.mobile.generated.*;
 
 
 public final class StringBuilder_Android
-         extends
-            IStringBuilder {
+                                         extends
+                                            IStringBuilder {
 
    private final StringBuilder _builder = new StringBuilder();
    // // private final DecimalFormat _df = new DecimalFormat("0");
-   // private final DecimalFormat _df = new DecimalFormat("0", new DecimalFormatSymbols(Locale.US));
+   // private final DecimalFormat _df = new DecimalFormat("0", new
+   // DecimalFormatSymbols(Locale.US));
 
 
-   public StringBuilder_Android(@SuppressWarnings("unused")
-   final int floatPrecision) {
+   public StringBuilder_Android(final int floatPrecision) {
       // _df.setMaximumFractionDigits(floatPrecision);
    }
 

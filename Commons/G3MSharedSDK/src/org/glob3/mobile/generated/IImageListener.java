@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IImageListener.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 12/5/12.
 //

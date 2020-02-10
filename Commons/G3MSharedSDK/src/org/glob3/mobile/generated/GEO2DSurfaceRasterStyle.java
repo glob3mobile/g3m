@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEO2DSurfaceRasterStyle.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/23/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEO2DSurfaceRasterStyle.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/23/13.
 //

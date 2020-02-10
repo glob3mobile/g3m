@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CameraEventGesture.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/14/17.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CameraEventGesture.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/14/17.
 //

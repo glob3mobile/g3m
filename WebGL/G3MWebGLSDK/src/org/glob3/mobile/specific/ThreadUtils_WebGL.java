@@ -2,11 +2,9 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.GTask;
-import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.*;
 
 
 public final class ThreadUtils_WebGL

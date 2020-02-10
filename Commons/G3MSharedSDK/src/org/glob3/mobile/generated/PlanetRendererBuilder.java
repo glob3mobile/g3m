@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  PlanetRendererBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 22/11/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  PlanetRendererBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 22/11/12.
 //
@@ -251,7 +251,7 @@ public class PlanetRendererBuilder
     return _touchEventTypeOfTerrainTouchListener;
   }
 
-  private IImageBuilder _defaultTileBackgroundImage = null;
+  private IImageBuilder _defaultTileBackgroundImage;
 
   private IImageBuilder getDefaultTileBackgroundImageBuilder()
   {
@@ -308,6 +308,7 @@ public class PlanetRendererBuilder
      _tileLODTester = null;
      _tileVisibilityTester = null;
      _verboseTileTexturizerErrors = true;
+     _defaultTileBackgroundImage = null;
   }
   public void dispose()
   {

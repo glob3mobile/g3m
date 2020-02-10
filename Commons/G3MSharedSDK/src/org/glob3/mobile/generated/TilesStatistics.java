@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  PlanetRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
 //
 
 //
 //  PlanetRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 12/06/12.
 //

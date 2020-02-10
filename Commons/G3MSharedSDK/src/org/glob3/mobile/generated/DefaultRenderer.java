@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DefaultRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/16/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DefaultRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/16/12.
 //
@@ -42,21 +42,25 @@ public abstract class DefaultRenderer implements Renderer
   }
 
 
-  protected ChangedRendererInfoListener _changedInfoListener = null;
+  protected ChangedRendererInfoListener _changedInfoListener;
 
-  protected int _rendererID = 0;
+  protected int _rendererID;
 
   protected G3MContext _context;
 
   protected DefaultRenderer()
   {
      _enable = true;
+     _changedInfoListener = null;
+     _rendererID = 0;
 
   }
 
   protected DefaultRenderer(boolean enable)
   {
      _enable = enable;
+     _changedInfoListener = null;
+     _rendererID = 0;
 
   }
 

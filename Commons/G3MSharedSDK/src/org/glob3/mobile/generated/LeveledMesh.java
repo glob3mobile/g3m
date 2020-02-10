@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  LeveledMesh.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 16/04/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  LeveledMesh.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 16/04/13.
 //

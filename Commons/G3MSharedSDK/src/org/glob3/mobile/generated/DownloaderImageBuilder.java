@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DownloaderImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/2/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DownloaderImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/2/14.
 //
@@ -24,6 +24,10 @@ public class DownloaderImageBuilder extends AbstractImageBuilder
   private final long _priority;
   private final boolean _readExpired;
 
+  public void dispose()
+  {
+    super.dispose();
+  }
 
   public DownloaderImageBuilder(URL url)
   {
@@ -46,10 +50,6 @@ public class DownloaderImageBuilder extends AbstractImageBuilder
     return false;
   }
 
-  public void dispose()
-  {
-    super.dispose();
-  }
 
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IndexedMesh.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 22/06/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  IndexedMesh.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 22/06/12.
 //

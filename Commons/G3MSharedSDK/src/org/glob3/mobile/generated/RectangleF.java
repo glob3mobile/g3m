@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  RectangleF.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/7/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  RectangleF.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 19/04/13.
 //

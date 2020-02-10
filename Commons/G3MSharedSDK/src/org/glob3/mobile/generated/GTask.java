@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GTask.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/16/12.
 //

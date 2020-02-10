@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  RowLayoutImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/20/19.
 //
 
 //
 //  RowLayoutImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/20/19.
 //
@@ -19,6 +19,11 @@ package org.glob3.mobile.generated;
 public class RowLayoutImageBuilder extends LayoutImageBuilder
 {
   private final int _childrenSeparation;
+
+  public void dispose()
+  {
+    super.dispose();
+  }
 
   protected final void doLayout(G3MContext context, IImageBuilderListener listener, boolean deleteListener, java.util.ArrayList<ChildResult> results)
   {
@@ -87,9 +92,7 @@ public class RowLayoutImageBuilder extends LayoutImageBuilder
         cursorLeft += imageWidth + _childrenSeparation;
       }
   
-      canvas.createImage(new RowLayoutImageBuilder_IImageListener(imageName, listener, deleteListener), true);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new RowLayoutImageBuilder_ImageListener(imageName, listener, deleteListener), true), true);
     }
   
     for (int i = 0; i < resultsSize; i++)

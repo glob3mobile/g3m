@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Layer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 23/08/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  Layer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 23/07/12.
 //

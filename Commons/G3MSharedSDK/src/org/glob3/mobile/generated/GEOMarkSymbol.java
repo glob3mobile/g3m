@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEOMarkSymbol.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 3/28/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEOMarkSymbol.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 3/28/13.
 //

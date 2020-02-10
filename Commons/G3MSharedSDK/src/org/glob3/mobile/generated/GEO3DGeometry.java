@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  GEO3DGeometry.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 10/21/18.
 //
 
 //
 //  GEO3DGeometry.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 10/21/18.
 //

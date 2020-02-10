@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  FlatColorMesh.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 23/06/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  FlatColorMesh.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 23/06/13.
 //

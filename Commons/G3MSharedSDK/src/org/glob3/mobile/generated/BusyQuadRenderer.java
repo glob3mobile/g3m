@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  BusyQuadRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
 //
@@ -10,7 +10,7 @@ package org.glob3.mobile.generated;
 
 //
 //  BusyQuadRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 13/08/12.
 //

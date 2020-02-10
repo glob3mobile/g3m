@@ -1,12 +1,12 @@
 package org.glob3.mobile.generated;
 //
 //  FloatBufferBuilderFromGeodetic.cpp
-//  G3MiOSSDK
+//  G3M
 
 
 //
 //  FloatBufferBuilderFromGeodetic.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 06/09/12.
 //

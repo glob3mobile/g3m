@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Vector2I.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/19/12.
 //
@@ -10,7 +10,7 @@ package org.glob3.mobile.generated;
 
 //
 //  Vector2I.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/19/12.
 //

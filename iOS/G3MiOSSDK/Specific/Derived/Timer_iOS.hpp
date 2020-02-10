@@ -8,7 +8,8 @@
 #ifndef G3MiOSSDK_Timer_iOS
 #define G3MiOSSDK_Timer_iOS
 
-#include "ITimer.hpp"
+#include "G3M/ITimer.hpp"
+
 
 class Timer_iOS : public ITimer {
 private:

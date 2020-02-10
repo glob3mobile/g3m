@@ -2,17 +2,12 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.ITextUtils;
-import org.glob3.mobile.generated.LabelPosition;
+import org.glob3.mobile.generated.*;
 
 
 public class TextUtils_WebGL
-   extends
-      ITextUtils {
+         extends
+            ITextUtils {
 
 
    private static String toJSColor(final Color color) {
@@ -43,7 +38,7 @@ public class TextUtils_WebGL
 		context.font = font;
 
 		var width = context.measureText(label).width;
-		var height = Math.round(fontSize);
+		var height = Math.ceil(fontSize);
 		if (shadowColor) {
 			width += 2;
 			height += 2;
@@ -127,7 +122,7 @@ public class TextUtils_WebGL
 		context.font = font;
 
 		var textWidth = context.measureText(label).width;
-		var textHeight = Math.round(fontSize);
+		var textHeight = Math.ceil(fontSize);
 		if (shadowColor) {
 			textWidth += 2;
 			textHeight += 2;

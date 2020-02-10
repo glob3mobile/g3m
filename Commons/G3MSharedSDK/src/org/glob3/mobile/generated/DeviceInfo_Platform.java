@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IDeviceInfo.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/8/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  IDeviceInfo.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/8/13.
 //
@@ -20,7 +20,8 @@ public enum DeviceInfo_Platform
 {
   DEVICE_iOS,
   DEVICE_Android,
-  DEVICE_GWT;
+  DEVICE_GWT,
+  DEVICE_Emscripten;
 
    public int getValue()
    {

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEORectangleRasterSymbol.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by fpulido on 30/06/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEORectangleRasterSymbol.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by fpulido on 30/06/14.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IDeviceLocation.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 25/6/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  IDeviceLocation.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 25/6/15.
 //

@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  GEOMeshes.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 11/6/18.
 //
 
 //
 //  GEOMeshes.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 11/6/18.
 //

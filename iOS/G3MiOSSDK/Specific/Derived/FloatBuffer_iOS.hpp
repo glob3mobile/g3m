@@ -9,10 +9,10 @@
 #ifndef __G3MiOSSDK__FloatBuffer_iOS__
 #define __G3MiOSSDK__FloatBuffer_iOS__
 
-#include "IFloatBuffer.hpp"
-#include "ErrorHandling.hpp"
-
 #include <OpenGLES/ES2/gl.h>
+
+#include "G3M/IFloatBuffer.hpp"
+#include "G3M/ErrorHandling.hpp"
 
 
 class FloatBuffer_iOS : public IFloatBuffer {
@@ -82,7 +82,7 @@ public:
   _vertexBuffer(-1),
   _vertexBufferTimestamp(-1),
   _vertexBufferCreated(false),
-  _id(_nextID)
+  _id(_nextID++)
   {
     _values = new float[16];
     _values[ 0] = f0;

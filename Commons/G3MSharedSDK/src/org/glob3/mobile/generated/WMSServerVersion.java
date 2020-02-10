@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  WMSLayer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 18/07/12.
 //
 
 //
 //  WMSLayer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 18/07/12.
 //

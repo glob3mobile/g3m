@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEO2DCoordinatesData.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 5/11/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEO2DCoordinatesData.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 5/11/14.
 //

@@ -8,7 +8,8 @@
 
 #include "ByteBuffer_iOS.hpp"
 
-#include "IStringBuilder.hpp"
+#include "G3M/IStringBuilder.hpp"
+
 
 const std::string ByteBuffer_iOS::description() const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

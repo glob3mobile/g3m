@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  TextureMapping.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 12/07/12.
 //
 
 //
 //  TextureMapping.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 12/07/12.
 //

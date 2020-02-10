@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  SubviewElevationData.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/21/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  SubviewElevationData.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/21/13.
 //

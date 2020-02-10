@@ -7,22 +7,22 @@
 
 #include "G3MDemoBuilder.hpp"
 
-#include <G3MiOSSDK/PlanetRendererBuilder.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/IG3MBuilder.hpp>
-#include <G3MiOSSDK/ErrorHandling.hpp>
-#include <G3MiOSSDK/GInitializationTask.hpp>
+#include <G3M/PlanetRendererBuilder.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/IG3MBuilder.hpp>
+#include <G3M/ErrorHandling.hpp>
+#include <G3M/GInitializationTask.hpp>
 
-#include <G3MiOSSDK/MeshRenderer.hpp>
-#include <G3MiOSSDK/ShapesRenderer.hpp>
-#include <G3MiOSSDK/MarksRenderer.hpp>
-#include <G3MiOSSDK/GEORenderer.hpp>
-#include <G3MiOSSDK/PointCloudsRenderer.hpp>
-#include <G3MiOSSDK/HUDRenderer.hpp>
-#include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
-#include <G3MiOSSDK/VectorStreamingRenderer.hpp>
-#include <G3MiOSSDK/AtmosphereRenderer.hpp>
-#include <G3MiOSSDK/WrapperNearFrustumRenderer.hpp>
+#include <G3M/MeshRenderer.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/MarksRenderer.hpp>
+#include <G3M/GEORenderer.hpp>
+#include <G3M/PointCloudsRenderer.hpp>
+#include <G3M/HUDRenderer.hpp>
+#include <G3M/NonOverlappingMarksRenderer.hpp>
+#include <G3M/VectorStreamingRenderer.hpp>
+#include <G3M/AtmosphereRenderer.hpp>
+#include <G3M/WrapperNearFrustumRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -91,7 +91,7 @@ void G3MDemoBuilder::build() {
   HUDRenderer* hudRenderer = new HUDRenderer();
   builder->setHUDRenderer(hudRenderer);
 
-  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(10);
+  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(100);
   builder->addRenderer(nonOverlappingMarksRenderer);
 
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer, meshRenderer);

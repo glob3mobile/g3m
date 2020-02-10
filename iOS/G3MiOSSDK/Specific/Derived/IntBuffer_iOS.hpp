@@ -9,9 +9,9 @@
 #ifndef __G3MiOSSDK__IntBuffer_iOS__
 #define __G3MiOSSDK__IntBuffer_iOS__
 
-#include "IIntBuffer.hpp"
-#include "ILogger.hpp"
-#include "ErrorHandling.hpp"
+#include "G3M/IIntBuffer.hpp"
+#include "G3M/ILogger.hpp"
+#include "G3M/ErrorHandling.hpp"
 
 class IntBuffer_iOS : public IIntBuffer {
 private:
@@ -79,9 +79,9 @@ public:
     _values[i] = value;
   }
   
-  int* getPointer() const {
-    return _values;
-  }
+//  int* getPointer() const {
+//    return _values;
+//  }
 
   const std::string description() const;
 

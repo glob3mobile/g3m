@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEOMultiLineRasterSymbol.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/10/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEOMultiLineRasterSymbol.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/10/13.
 //

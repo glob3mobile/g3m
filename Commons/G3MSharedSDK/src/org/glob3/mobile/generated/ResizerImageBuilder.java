@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  ResizerImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/11/19.
 //
 
 //
 //  ResizerImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 2/11/19.
 //
@@ -27,17 +27,6 @@ public class ResizerImageBuilder extends AbstractImageBuilder
   private ImageSizer _widthSizer;
   private ImageSizer _heightSizer;
 
-  public ResizerImageBuilder(IImageBuilder imageBuilder, ImageSizer widthSizer, ImageSizer heightSizer)
-  {
-     _imageBuilder = imageBuilder;
-     _widthSizer = widthSizer;
-     _heightSizer = heightSizer;
-    if (_imageBuilder.isMutable())
-    {
-      throw new RuntimeException("Mutable imageBuilder is not supported!");
-    }
-  }
-
   public void dispose()
   {
     if (_imageBuilder != null)
@@ -51,6 +40,17 @@ public class ResizerImageBuilder extends AbstractImageBuilder
     super.dispose();
   }
 
+  public ResizerImageBuilder(IImageBuilder imageBuilder, ImageSizer widthSizer, ImageSizer heightSizer)
+  {
+     _imageBuilder = imageBuilder;
+     _widthSizer = widthSizer;
+     _heightSizer = heightSizer;
+    if (_imageBuilder.isMutable())
+    {
+      throw new RuntimeException("Mutable imageBuilder is not supported!");
+    }
+  }
+
   public final boolean isMutable()
   {
     return false;
@@ -58,7 +58,7 @@ public class ResizerImageBuilder extends AbstractImageBuilder
 
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
-    _imageBuilder.build(context, new ResizerImageBuilder_IImageBuilderListener(context, this, listener, deleteListener), true);
+    _imageBuilder.build(context, new ResizerImageBuilder_ImageBuilderListener(context, this, listener, deleteListener), true);
   }
 
   public final void onError(String error, IImageBuilderListener listener, boolean deleteListener)
@@ -109,10 +109,7 @@ public class ResizerImageBuilder extends AbstractImageBuilder
   
       canvas.drawImage(image, destLeft, destTop, destWidth, destHeight);
   
-      canvas.createImage(new ResizerImageBuilder_ImageListener(resizedImageName, listener, deleteListener), true);
-  
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new ResizerImageBuilder_ImageListener(resizedImageName, listener, deleteListener), true), true);
   
       if (image != null)
          image.dispose();

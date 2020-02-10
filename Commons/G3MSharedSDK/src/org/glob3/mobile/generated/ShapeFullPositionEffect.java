@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ShapeFullPositionEffect.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso Pérez on 03/05/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ShapeFullPositionEffect.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Vidal Toboso Pérez on 03/05/13.
 //

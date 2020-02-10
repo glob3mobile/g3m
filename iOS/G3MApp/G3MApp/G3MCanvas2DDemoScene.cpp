@@ -7,20 +7,21 @@
 
 #include "G3MCanvas2DDemoScene.hpp"
 
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/OSMLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/IFactory.hpp>
-#include <G3MiOSSDK/ICanvas.hpp>
-#include <G3MiOSSDK/QuadShape.hpp>
-#include <G3MiOSSDK/ShapesRenderer.hpp>
-#include <G3MiOSSDK/GFont.hpp>
-#include <G3MiOSSDK/IDownloader.hpp>
-#include <G3MiOSSDK/IImageDownloadListener.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/IImage.hpp>
-#include <G3MiOSSDK/Color.hpp>
-#include <G3MiOSSDK/G3MContext.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/OSMLayer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/IFactory.hpp>
+#include <G3M/ICanvas.hpp>
+#include <G3M/QuadShape.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/GFont.hpp>
+#include <G3M/IDownloader.hpp>
+#include <G3M/IImageDownloadListener.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/IImage.hpp>
+#include <G3M/Color.hpp>
+#include <G3M/G3MContext.hpp>
+#include <G3M/CanvasOwnerImageListenerWrapper.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -115,10 +116,10 @@ public:
                       width / 8 * 7, height / 8 * 7, image->getWidth()*2, image->getHeight()*2,
                       0.5);
 
-    canvas->createImage(new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer),
+    canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
+                                                            new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer),
+                                                            true),
                         true);
-    
-    delete canvas;
 
     delete image;
   }

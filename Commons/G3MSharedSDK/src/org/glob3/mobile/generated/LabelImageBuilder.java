@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  LabelImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/3/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  LabelImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/3/14.
 //
@@ -40,6 +40,13 @@ public class LabelImageBuilder extends AbstractImageBuilder
   {
     final IStringUtils su = IStringUtils.instance();
     return (_text + "/" + _font.description() + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + _shadowOffset.description() + "/" + _background.description());
+  }
+
+  public void dispose()
+  {
+    if (_background != null)
+       _background.dispose();
+    super.dispose();
   }
 
 
@@ -104,13 +111,6 @@ public class LabelImageBuilder extends AbstractImageBuilder
     }
   }
 
-  public void dispose()
-  {
-    if (_background != null)
-       _background.dispose();
-    super.dispose();
-  }
-
   public final void build(G3MContext context, IImageBuilderListener listener, boolean deleteListener)
   {
   
@@ -130,10 +130,7 @@ public class LabelImageBuilder extends AbstractImageBuilder
     canvas.setFillColor(_color);
     canvas.fillText(_text, contentPos._x, contentPos._y);
   
-    canvas.createImage(new LabelImageBuilder_ImageListener(listener, deleteListener, getImageName()), true);
-  
-    if (canvas != null)
-       canvas.dispose();
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new LabelImageBuilder_ImageListener(listener, deleteListener, getImageName()), true), true);
   }
 
 }

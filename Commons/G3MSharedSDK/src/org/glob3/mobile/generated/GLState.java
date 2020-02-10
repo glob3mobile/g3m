@@ -1,12 +1,12 @@
 package org.glob3.mobile.generated;
 //
 //  GLState.cpp
-//  G3MiOSSDK
+//  G3M
 //
 
 //
 //  GLState.hpp
-//  G3MiOSSDK
+//  G3M
 //
 
 

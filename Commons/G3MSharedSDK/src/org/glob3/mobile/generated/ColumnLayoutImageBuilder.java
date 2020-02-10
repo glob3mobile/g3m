@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ColumnLayoutImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/11/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ColumnLayoutImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/11/15.
 //
@@ -21,6 +21,11 @@ package org.glob3.mobile.generated;
 public class ColumnLayoutImageBuilder extends LayoutImageBuilder
 {
   private final int _childrenSeparation;
+
+  public void dispose()
+  {
+    super.dispose();
+  }
 
   protected final void doLayout(G3MContext context, IImageBuilderListener listener, boolean deleteListener, java.util.ArrayList<ChildResult> results)
   {
@@ -89,9 +94,7 @@ public class ColumnLayoutImageBuilder extends LayoutImageBuilder
         cursorTop += imageHeight + _childrenSeparation;
       }
   
-      canvas.createImage(new ColumnLayoutImageBuilder_IImageListener(imageName, listener, deleteListener), true);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new ColumnLayoutImageBuilder_ImageListener(imageName, listener, deleteListener), true), true);
     }
   
     for (int i = 0; i < resultsSize; i++)

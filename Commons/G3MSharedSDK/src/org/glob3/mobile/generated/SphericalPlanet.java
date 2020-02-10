@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  SphericalPlanet.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 31/05/12.
 //
 
 //
 //  SphericalPlanet.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 31/05/12.
 //

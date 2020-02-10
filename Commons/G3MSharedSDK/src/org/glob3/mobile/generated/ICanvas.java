@@ -111,6 +111,7 @@ public abstract class ICanvas
      _currentFont = null;
   }
 
+
   public void dispose()
   {
     if (_currentFont != null)

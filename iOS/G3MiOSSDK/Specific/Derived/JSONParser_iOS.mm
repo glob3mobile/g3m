@@ -6,16 +6,19 @@
 //
 
 #import "JSONParser_iOS.hpp"
-#import "JSONArray.hpp"
-#import "JSONObject.hpp"
-#import "JSONDouble.hpp"
-#import "JSONFloat.hpp"
-#import "JSONInteger.hpp"
-#import "JSONLong.hpp"
-#import "JSONBoolean.hpp"
-#import "JSONString.hpp"
+
+#import "G3M/JSONArray.hpp"
+#import "G3M/JSONObject.hpp"
+#import "G3M/JSONDouble.hpp"
+#import "G3M/JSONFloat.hpp"
+#import "G3M/JSONInteger.hpp"
+#import "G3M/JSONLong.hpp"
+#import "G3M/JSONBoolean.hpp"
+#import "G3M/JSONString.hpp"
+#import "G3M/JSONNull.hpp"
+
 #import "ByteBuffer_iOS.hpp"
-#import "JSONNull.hpp"
+
 
 JSONBaseObject* JSONParser_iOS::parseNSData(NSData* jsonData,
                                             bool nullAsObject) {
@@ -60,7 +63,7 @@ JSONBaseObject* JSONParser_iOS::convert(NSObject* object,
                                         bool nullAsObject) {
   if ([object isKindOfClass:[NSArray class]]) {
     NSArray *jsonArray = (NSArray *)object;
-    JSONArray* array = new JSONArray();
+    JSONArray* array = new JSONArray(jsonArray.count);
     for (NSObject *element in jsonArray) {
       array->add(convert(element, nullAsObject));
     }

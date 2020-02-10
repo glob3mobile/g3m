@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  GLErrorRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 20/06/12.
 //
 
 //
 //  GLErrorRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 20/06/12.
 //

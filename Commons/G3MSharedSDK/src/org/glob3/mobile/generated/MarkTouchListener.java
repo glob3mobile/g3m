@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  MarkTouchListener.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Eduardo de la Montaña on 05/12/12.
 //

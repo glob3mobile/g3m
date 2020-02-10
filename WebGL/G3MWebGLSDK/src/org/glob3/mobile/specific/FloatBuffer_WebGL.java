@@ -2,26 +2,26 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IFloatBuffer;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.*;
 
 
 public final class FloatBuffer_WebGL
-   extends
-      IFloatBuffer {
+         extends
+            IFloatBuffer {
 
    private final JavaScriptObject _buffer;
    private int                    _timestamp       = 0;
    private int                    _bufferTimeStamp = -1;
 
 
-   private JavaScriptObject       _webGLBuffer     = null;
-   private JavaScriptObject       _gl              = null;
+   private JavaScriptObject _webGLBuffer = null;
+   private JavaScriptObject _gl          = null;
 
    //ID
-   private static long            _nextID          = 0;
-   private final long             _id              = _nextID++;
+   private static long _nextID = 0;
+   private final long  _id     = _nextID++;
 
 
    public JavaScriptObject getWebGLBuffer(final JavaScriptObject gl) {

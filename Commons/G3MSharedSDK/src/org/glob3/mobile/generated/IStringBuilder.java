@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  IStringBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 22/08/12.
 //
 
 //
 //  IStringBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 22/08/12.
 //

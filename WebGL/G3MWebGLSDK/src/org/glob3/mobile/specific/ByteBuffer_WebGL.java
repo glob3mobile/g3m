@@ -2,15 +2,15 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IByteBuffer;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayNumber;
+import org.glob3.mobile.generated.*;
+
+import com.google.gwt.core.client.*;
 
 
 public final class ByteBuffer_WebGL
-   extends
-      IByteBuffer {
+                                    extends
+                                       IByteBuffer {
 
    private JavaScriptObject _buffer;
    private int              _timestamp = 0;
@@ -23,17 +23,6 @@ public final class ByteBuffer_WebGL
 
    public ByteBuffer_WebGL(final int size) {
       _buffer = jsCreateBuffer(size);
-   }
-
-
-   public ByteBuffer_WebGL(final byte[] data,
-                           final int dataLength) {
-      final JsArrayNumber array = JavaScriptObject.createArray().<JsArrayNumber> cast();
-      array.setLength(dataLength);
-      for (int i = 0; i < dataLength; i++) {
-         array.set(i, data[i]);
-      }
-      _buffer = jsCreateBuffer(array);
    }
 
 

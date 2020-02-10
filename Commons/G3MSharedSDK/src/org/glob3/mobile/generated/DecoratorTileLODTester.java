@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DecoratorTileLODTester.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/26/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DecoratorTileLODTester.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/26/16.
 //

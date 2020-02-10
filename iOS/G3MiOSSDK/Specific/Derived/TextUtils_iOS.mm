@@ -8,14 +8,16 @@
 
 #include "TextUtils_iOS.hpp"
 
-#include "ILogger.hpp"
-#include "Image_iOS.hpp"
-#include "Color.hpp"
-#include "IImageListener.hpp"
-#include "IFactory.hpp"
-#include "IDeviceInfo.hpp"
-
 #include <math.h>
+
+#include "G3M/ILogger.hpp"
+#include "G3M/Color.hpp"
+#include "G3M/IImageListener.hpp"
+#include "G3M/IFactory.hpp"
+#include "G3M/IDeviceInfo.hpp"
+
+#import "Image_iOS.hpp"
+
 #import "NSString_CppAdditions.h"
 
 

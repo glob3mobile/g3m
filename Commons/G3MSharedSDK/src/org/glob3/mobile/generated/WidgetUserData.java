@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  G3MWidget.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 31/05/12.
 //
 
 //
 //  G3MWidget.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 31/05/12.
 //

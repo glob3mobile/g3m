@@ -1,0 +1,52 @@
+//
+//  GEORectangleRasterSymbol.hpp
+//  G3M
+//
+//  Created by fpulido on 30/06/14.
+//
+//
+
+#ifndef __G3M__GEORectangleRasterSymbol__
+#define __G3M__GEORectangleRasterSymbol__
+
+#include "GEORasterSymbol.hpp"
+
+#include "GEO2DLineRasterStyle.hpp"
+#include "GEO2DSurfaceRasterStyle.hpp"
+
+class GEO2DPolygonData;
+
+
+class GEORectangleRasterSymbol : public GEORasterSymbol {
+private:
+  const GEO2DPolygonData* _polygonData;
+#ifdef C_CODE
+  const GEO2DLineRasterStyle    _lineStyle;
+  const GEO2DSurfaceRasterStyle _surfaceStyle;
+#endif
+#ifdef JAVA_CODE
+  private final GEO2DLineRasterStyle    _lineStyle;
+  private final GEO2DSurfaceRasterStyle _surfaceStyle;
+#endif
+  const Vector2F _rectangleSize;
+
+protected:
+  void rawRasterize(ICanvas*                   canvas,
+                    const GEORasterProjection* projection) const;
+
+public:
+
+  GEORectangleRasterSymbol(const GEO2DPolygonData*        polygonData,
+                           const Vector2F rectangleSize,
+                           const GEO2DLineRasterStyle&    lineStyle,
+                           const GEO2DSurfaceRasterStyle& surfaceStyle,
+                           const int minTileLevel = -1,
+                           const int maxTileLevel = -1);
+
+  ~GEORectangleRasterSymbol();
+
+  const Sector* getSector() const;
+
+};
+
+#endif

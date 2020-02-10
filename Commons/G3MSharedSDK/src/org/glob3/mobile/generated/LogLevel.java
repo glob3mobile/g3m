@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  ILogger.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 25/07/12.
 //
 
 //
 //  ILogger.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
 //

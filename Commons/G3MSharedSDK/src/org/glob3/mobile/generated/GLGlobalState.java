@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GLGlobalState.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 18/03/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GLGlobalState.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo Pino on 27/10/12.
 //

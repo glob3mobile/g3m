@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEOLabelRasterSymbol.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 3/10/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEOLabelRasterSymbol.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 3/10/14.
 //

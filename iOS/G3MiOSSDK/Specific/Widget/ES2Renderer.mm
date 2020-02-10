@@ -9,9 +9,11 @@
 
 #import "ES2Renderer.h"
 
-#include "G3MWidget.hpp"
-#include "GL.hpp"
-#include "NativeGL2_iOS.hpp"
+#include "G3M/G3MWidget.hpp"
+#include "G3M/GL.hpp"
+
+#import "NativeGL2_iOS.hpp"
+
 
 // uniform index
 enum {

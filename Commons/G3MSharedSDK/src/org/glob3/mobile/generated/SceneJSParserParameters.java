@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  SceneJSParserParameters.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 10/19/18.
 //
 
 //
 //  SceneJSParserParameters.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 10/19/18.
 //

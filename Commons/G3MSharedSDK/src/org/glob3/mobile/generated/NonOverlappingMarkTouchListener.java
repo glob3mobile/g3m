@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  NonOverlappingMarksRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 23/1/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  NonOverlappingMarksRenderer.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 23/1/15.
 //

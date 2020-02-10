@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ShortBufferElevationData.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/23/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ShortBufferElevationData.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/23/13.
 //

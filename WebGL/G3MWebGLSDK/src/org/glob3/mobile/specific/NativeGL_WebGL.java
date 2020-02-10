@@ -2,22 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.ArrayList;
+import java.util.*;
 
-import org.glob3.mobile.generated.GPUAttribute;
-import org.glob3.mobile.generated.GPUProgram;
-import org.glob3.mobile.generated.GPUUniform;
-import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IGLTextureID;
-import org.glob3.mobile.generated.IGLUniformID;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.INativeGL;
-import org.glob3.mobile.generated.IShortBuffer;
-import org.glob3.mobile.generated.Matrix44D;
-import org.glob3.mobile.generated.ShaderType;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayInteger;
+import com.google.gwt.core.client.*;
 
 
 public final class NativeGL_WebGL
@@ -543,6 +532,8 @@ public final class NativeGL_WebGL
 
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 				.deleteProgram(jsoProgram);
+
+		return true;
    }-*/;
 
 

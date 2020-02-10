@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  FrameImageBackground.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Nico on 21/02/2019.
 //
 
 //
 //  FrameImageBackground.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Nico on 21/02/2019.
 //

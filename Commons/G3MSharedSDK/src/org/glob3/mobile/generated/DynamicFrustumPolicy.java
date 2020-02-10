@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DynamicFrustumPolicy.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/13/17.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DynamicFrustumPolicy.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/13/17.
 //

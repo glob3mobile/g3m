@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  Rectangle.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 24/07/12.
 //

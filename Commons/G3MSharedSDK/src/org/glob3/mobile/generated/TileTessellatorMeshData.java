@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  TileTessellator.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 27/06/12.
 //
 
 //
 //  TileTessellator.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 27/06/12.
 //

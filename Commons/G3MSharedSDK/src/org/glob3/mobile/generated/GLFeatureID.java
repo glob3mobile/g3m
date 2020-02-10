@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GLFeature.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 18/03/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GLFeature.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustín Trujillo Pino on 27/10/12.
 //

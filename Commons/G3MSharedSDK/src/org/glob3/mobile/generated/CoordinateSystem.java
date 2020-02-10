@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CoordinateSystem.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 29/01/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CoordinateSystem.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 29/01/14.
 //

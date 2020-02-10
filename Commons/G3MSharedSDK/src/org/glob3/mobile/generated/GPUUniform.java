@@ -15,9 +15,9 @@ public class GPUUniform extends GPUVariable
   public GPUUniform(String name, IGLUniformID id, int type)
   {
      super(name, GPUVariableType.UNIFORM);
-     _id = id;
      _dirty = false;
      _value = null;
+     _id = id;
      _type = type;
      _key = getUniformKey(name);
   }
@@ -76,7 +76,8 @@ public class GPUUniform extends GPUVariable
     }
     else
     {
-      throw new RuntimeException("Attempting to set uniform \"" + _name + "\" with invalid value type.");
+//      THROW_EXCEPTION("Attempting to set uniform \"" + _name + "\" with invalid value type.");
+      throw new RuntimeException("Attempting to set uniform with invalid value type.");
     }
   }
 
@@ -91,7 +92,8 @@ public class GPUUniform extends GPUVariable
     {
       if (_value == null)
       {
-        throw new RuntimeException("Uniform \"" + _name + "\" was not set.");
+  //      THROW_EXCEPTION("Uniform \"" + _name + "\" was not set.");
+        throw new RuntimeException("Uniform was not set.");
       }
     }
   }

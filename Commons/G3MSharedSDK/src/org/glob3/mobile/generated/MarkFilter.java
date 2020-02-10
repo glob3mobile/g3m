@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  MarkFilter.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 9/27/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  MarkFilter.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 9/27/16.
 //

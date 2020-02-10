@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  MapzenTerrariumParser.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/17/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  MapzenTerrariumParser.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 10/17/16.
 //

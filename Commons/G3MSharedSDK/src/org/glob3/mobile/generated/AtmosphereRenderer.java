@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  AtmosphereRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 07/10/2016.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  AtmosphereRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 07/10/2016.
 //

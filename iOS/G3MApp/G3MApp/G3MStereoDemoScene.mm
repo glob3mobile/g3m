@@ -8,10 +8,10 @@
 
 #include "G3MStereoDemoScene.hpp"
 
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Geodetic3D.hpp>
 
 #include "G3MDemoModel.hpp"
 

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  ShapePositionEffect.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/1/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  ShapePositionEffect.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/1/13.
 //

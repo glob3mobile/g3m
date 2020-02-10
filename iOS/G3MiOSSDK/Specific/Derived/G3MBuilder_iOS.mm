@@ -7,16 +7,18 @@
 //
 
 #import "G3MBuilder_iOS.hpp"
-#include "Factory_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
-#include "SQLiteStorage_iOS.hpp"
-#include "CachedDownloader.hpp"
-#include "Downloader_iOS.hpp"
-#include "BasicShadersGL2.hpp"
 
-G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) {
-  _nativeWidget = nativeWidget;
+#include "G3M/BasicShadersGL2.hpp"
+#include "G3M/CachedDownloader.hpp"
 
+#import "ThreadUtils_iOS.hpp"
+#import "SQLiteStorage_iOS.hpp"
+#import "Downloader_iOS.hpp"
+
+
+G3MBuilder_iOS::G3MBuilder_iOS(G3MWidget_iOS* nativeWidget) :
+_nativeWidget(nativeWidget)
+{
   [_nativeWidget initSingletons];
 }
 
@@ -44,31 +46,4 @@ IDownloader* G3MBuilder_iOS::createDefaultDownloader() {
   return new CachedDownloader(new Downloader_iOS(8),
                               getStorage(),
                               saveInBackground);
-}
-
-GPUProgramSources G3MBuilder_iOS::loadGPUProgramSources(const std::string& name) {
-
-  NSString* nsName = [[NSString alloc] initWithUTF8String:name.c_str()];
-
-  //GPU Program Sources
-  NSString* vertShaderPathname = [[NSBundle mainBundle] pathForResource: nsName
-                                                                 ofType: @"vsh"];
-  if (!vertShaderPathname) {
-    NSLog(@"Can't load Shader.vsh");
-  }
-  const std::string vertexSource ([[NSString stringWithContentsOfFile: vertShaderPathname
-                                                             encoding: NSUTF8StringEncoding
-                                                                error: nil] UTF8String]);
-
-  NSString* fragShaderPathname = [[NSBundle mainBundle] pathForResource: nsName
-                                                                 ofType: @"fsh"];
-  if (!fragShaderPathname) {
-    NSLog(@"Can't load Shader.fsh");
-  }
-
-  const std::string fragmentSource ([[NSString stringWithContentsOfFile: fragShaderPathname
-                                                               encoding: NSUTF8StringEncoding
-                                                                  error: nil] UTF8String]);
-
-  return GPUProgramSources(name, vertexSource, fragmentSource);
 }

@@ -28,5 +28,6 @@ public class LabelImageBuilder_ImageListener extends IImageListener
   {
     if (_listener != null)
        _listener.dispose();
+    super.dispose();
   }
 }

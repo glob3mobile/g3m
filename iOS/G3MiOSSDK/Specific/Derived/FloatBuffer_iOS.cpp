@@ -9,7 +9,7 @@
 #include "FloatBuffer_iOS.hpp"
 
 #include <sstream>
-#include <OpenGLES/ES2/gl.h>
+
 
 long long FloatBuffer_iOS::_nextID = 0;
 GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;
@@ -81,9 +81,9 @@ FloatBuffer_iOS::~FloatBuffer_iOS() {
     _deleteBufferCounter++;
 
     glDeleteBuffers(1, &_vertexBuffer);
-    if (GL_NO_ERROR != glGetError()) {
-      THROW_EXCEPTION("Problem deleting VBO");
-    }
+//    if (GL_NO_ERROR != glGetError()) {
+//      THROW_EXCEPTION("Problem deleting VBO");
+//    }
 
     if (_vertexBuffer == _boundVertexBuffer) {
       _boundVertexBuffer = -1;

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GPUAttribute.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 16/05/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GPUAttribute.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 27/03/13.
 //

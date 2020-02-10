@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GPUProgramManager.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 02/04/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GPUProgramManager.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 02/04/13.
 //
@@ -86,6 +86,10 @@ public class GPUProgramManager
       if (flatColor)
       {
         return compileProgramWithName(gl, "FlatColor2DMesh");
+      }
+      if (transformTC)
+      {
+        System.out.print("");
       }
       return compileProgramWithName(gl, "Textured2DMesh");
     }
@@ -204,7 +208,7 @@ public class GPUProgramManager
       if (p.getAttributesCode() != attributesCode || p.getUniformsCode() != uniformsCode)
       {
         ///#warning GIVE MORE DETAIL
-        ILogger.instance().logError("New compiled program does not match GL state.");
+        ILogger.instance().logError("New compiled program (%s) does not match GL state.", p.getName());
       }
     }
   

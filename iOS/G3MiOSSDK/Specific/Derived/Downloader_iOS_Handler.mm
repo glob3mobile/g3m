@@ -7,23 +7,23 @@
 
 #import "Downloader_iOS_Handler.h"
 
-#include "ILogger.hpp"
+#include "G3M/ILogger.hpp"
 #include "Downloader_iOS.hpp"
-#include "IStringUtils.hpp"
+#include "G3M/IStringUtils.hpp"
 
 #import "NSString_CppAdditions.h"
 
 @implementation ListenerEntry
 
-+(id) entryWithListener: (Downloader_iOS_Listener*) listener
-              requestID: (long long) requestID
++ (instancetype) entryWithListener:(Downloader_iOS_Listener*) listener
+                         requestID:(long long) requestID
 {
-  return [[ListenerEntry alloc] initWithListener: listener
-                                       requestID: requestID];
+  return [[ListenerEntry alloc] initWithListener:listener
+                                       requestID:requestID];
 }
 
--(id) initWithListener: (Downloader_iOS_Listener*) listener
-             requestID: (long long) requestID
+- (instancetype) initWithListener:(Downloader_iOS_Listener*) listener
+                        requestID:(long long) requestID
 {
   self = [super init];
   if (self) {
@@ -34,17 +34,17 @@
   return self;
 }
 
--(Downloader_iOS_Listener*) listener
+- (Downloader_iOS_Listener*) listener
 {
   return _listener;
 }
 
--(long long) requestID
+- (long long) requestID
 {
   return _requestID;
 }
 
--(void) cancel
+- (void) cancel
 {
   if (_canceled) {
     NSLog(@"Listener for RequestID=%lld already canceled", _requestID);
@@ -52,7 +52,7 @@
   _canceled = YES;
 }
 
--(bool) isCanceled
+- (bool) isCanceled
 {
   return _canceled;
 }
@@ -62,11 +62,11 @@
 
 @implementation Downloader_iOS_Handler
 
-- (id) initWithNSURL: (NSURL*) nsURL
-                 url: (URL*) url
-            listener: (Downloader_iOS_Listener*) listener
-            priority: (long long) priority
-           requestID: (long long) requestID
+- (id) initWithNSURL:(NSURL*) nsURL
+                 url:(URL*) url
+            listener:(Downloader_iOS_Listener*) listener
+            priority:(long long) priority
+           requestID:(long long) requestID
 {
   self = [super init];
   if (self) {
@@ -76,19 +76,19 @@
     _url       = url;
     _priority  = priority;
 
-    ListenerEntry* entry = [ListenerEntry entryWithListener: listener
-                                                  requestID: requestID];
+    ListenerEntry* entry = [ListenerEntry entryWithListener:listener
+                                                  requestID:requestID];
     _listeners = [NSMutableArray arrayWithObject:entry];
   }
   return self;
 }
 
-- (void) addListener: (Downloader_iOS_Listener*) listener
-            priority: (long long) priority
-           requestID: (long long) requestID
+- (void) addListener:(Downloader_iOS_Listener*) listener
+            priority:(long long) priority
+           requestID:(long long) requestID
 {
-  ListenerEntry* entry = [ListenerEntry entryWithListener: listener
-                                                requestID: requestID];
+  ListenerEntry* entry = [ListenerEntry entryWithListener:listener
+                                                requestID:requestID];
 
   [_lock lock];
 
@@ -112,7 +112,7 @@
   return result;
 }
 
-- (bool) cancelListenerForRequestID: (long long)requestID
+- (bool) cancelListenerForRequestID:(long long) requestID
 {
   bool canceled = false;
 
@@ -120,7 +120,7 @@
 
   const size_t listenersCount = [_listeners count];
   for (size_t i = 0; i < listenersCount; i++) {
-    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    ListenerEntry* entry = _listeners[i];
     if (entry.requestID == requestID) {
       [entry cancel];
 
@@ -134,7 +134,7 @@
   return canceled;
 }
 
-- (bool) removeListenerForRequestID: (long long)requestID
+- (bool) removeListenerForRequestID:(long long) requestID
 {
   bool removed = false;
 
@@ -142,11 +142,11 @@
 
   const size_t listenersCount = [_listeners count];
   for (size_t i = 0; i < listenersCount; i++) {
-    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    ListenerEntry* entry = _listeners[i];
     if (entry.requestID == requestID) {
       [entry.listener onCancel:*_url];
 
-      [_listeners removeObjectAtIndex: i];
+      [_listeners removeObjectAtIndex:i];
 
       removed = true;
       break;
@@ -158,13 +158,13 @@
   return removed;
 }
 
-- (void) cancelListenersTagged: (const std::string&) tag
+- (void) cancelListenersTagged:(const std::string&) tag
 {
   [_lock lock];
 
   const size_t listenersCount = [_listeners count];
   for (size_t i = 0; i < listenersCount; i++) {
-    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    ListenerEntry* entry = _listeners[i];
     if (entry.listener.tag == tag) {
       [entry cancel];
     }
@@ -173,7 +173,7 @@
   [_lock unlock];
 }
 
-- (bool) removeListenersTagged: (const std::string&) tag
+- (bool) removeListenersTagged:(const std::string&) tag
 {
   bool anyRemoved = false;
 
@@ -182,17 +182,17 @@
   NSMutableIndexSet* indexesToDelete = [NSMutableIndexSet indexSet];
   const size_t listenersCount = [_listeners count];
   for (size_t i = 0; i < listenersCount; i++) {
-    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    ListenerEntry* entry = _listeners[i];
     if (entry.listener.tag == tag) {
       [entry.listener onCancel:*_url];
 
-      [indexesToDelete addIndex: i];
+      [indexesToDelete addIndex:i];
 
       anyRemoved = true;
     }
   }
 
-  [_listeners removeObjectsAtIndexes: indexesToDelete];
+  [_listeners removeObjectsAtIndexes:indexesToDelete];
 
   [_lock unlock];
 
@@ -215,9 +215,9 @@
   @autoreleasepool {
 
     Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
-    __block NSData* data = nil;
+    __block NSData*   data = nil;
     __block NSInteger statusCode;
-    __block NSError* error = nil;
+    __block NSError*  error = nil;
 
     if (_url->isFileProtocol()) {
       const IStringUtils* su = IStringUtils::instance();
@@ -225,12 +225,12 @@
       const std::string fileFullName = su->replaceAll(_url->_path, URL::FILE_PROTOCOL, "");
       const int dotPos = su->indexOf(fileFullName, ".");
 
-      NSString* fileName = [ NSString stringWithCppString: su->left(fileFullName, dotPos) ];
-      NSString* fileExt  = [ NSString stringWithCppString: su->substring(fileFullName,
-                                                                         dotPos + 1,
-                                                                         fileFullName.size()) ];
-      NSString* filePath = [[NSBundle mainBundle] pathForResource: fileName
-                                                           ofType: fileExt];
+      NSString* fileName = [ NSString stringWithCppString:su->left(fileFullName, dotPos) ];
+      NSString* fileExt  = [ NSString stringWithCppString:su->substring(fileFullName,
+                                                                        dotPos + 1,
+                                                                        fileFullName.size()) ];
+      NSString* filePath = [[NSBundle mainBundle] pathForResource:fileName
+                                                           ofType:fileExt];
       data = [NSData dataWithContentsOfFile:filePath];
       if (!data) {
         data = [NSData dataWithContentsOfURL:_nsURL];
@@ -239,16 +239,16 @@
       statusCode = (data) ? 200 : 404;
     }
     else {
-      NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: _nsURL
-                                                             cachePolicy: NSURLRequestReturnCacheDataElseLoad
-                                                         timeoutInterval: 60.0];
+      NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:_nsURL
+                                                             cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                                         timeoutInterval:60.0];
       [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
       NSURLResponse* urlResponse = nil;
 
-      data = [NSURLConnection sendSynchronousRequest: request
-                                   returningResponse: &urlResponse
-                                               error: &error];
+      data = [NSURLConnection sendSynchronousRequest:request
+                                   returningResponse:&urlResponse
+                                               error:&error];
 
       statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
     }
@@ -270,30 +270,30 @@
 
       const size_t listenersCount = [self->_listeners count];
 
-      const URL url( [[self->_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
+      const URL url( [[self->_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding], false);
 
       if (dataIsValid) {
         for (int i = 0; i < listenersCount; i++) {
-          ListenerEntry* entry = [self->_listeners objectAtIndex: i];
+          ListenerEntry* entry = self->_listeners[i];
           Downloader_iOS_Listener* listener = entry.listener;
 
           if (entry.isCanceled) {
-            [listener onCanceledDownloadURL: url
-                                       data: data];
+            [listener onCanceledDownloadURL:url
+                                       data:data];
 
-            [listener onCancel: url];
+            [listener onCancel:url];
           }
           else {
-            [listener onDownloadURL: url
-                               data: data];
+            [listener onDownloadURL:url
+                               data:data];
           }
         }
       }
       else {
         for (int i = 0; i < listenersCount; i++) {
-          ListenerEntry* entry = [self->_listeners objectAtIndex: i];
+          ListenerEntry* entry = self->_listeners[i];
 
-          [entry.listener onErrorURL: url];
+          [entry.listener onErrorURL:url];
         }
       }
       
@@ -305,7 +305,7 @@
   }
 }
 
-- (void)dealloc
+- (void) dealloc
 {
   delete _url;
 }

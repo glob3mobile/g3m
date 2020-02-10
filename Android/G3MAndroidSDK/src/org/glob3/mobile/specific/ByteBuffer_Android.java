@@ -2,14 +2,16 @@
 
 package org.glob3.mobile.specific;
 
-import java.nio.charset.Charset;
+import java.nio.charset.*;
 
-import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.*;
 
 
 public final class ByteBuffer_Android
-   extends
-      IByteBuffer {
+         extends
+            IByteBuffer {
+
+   private static final Charset UTF_8 = Charset.forName("UTF-8");
 
    private byte[] _buffer;
    private int    _timestamp = 0;
@@ -76,8 +78,6 @@ public final class ByteBuffer_Android
    public String description() {
       return "ByteBuffer_Android (size=" + _buffer.length + ")";
    }
-
-   private static final Charset UTF_8 = Charset.forName("UTF-8");
 
 
    @Override

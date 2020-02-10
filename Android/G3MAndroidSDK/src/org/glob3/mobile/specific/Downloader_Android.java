@@ -3,42 +3,33 @@
 package org.glob3.mobile.specific;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.*;
 
-import org.glob3.mobile.generated.FrameTasksExecutor;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.*;
 
-import android.content.Context;
-import android.util.Log;
+import android.content.*;
+import android.util.*;
 
 
 public final class Downloader_Android
-         extends
-            IDownloader {
+                                      extends
+                                         IDownloader {
 
    final static String TAG = "Downloader_Android";
 
-   private final int                                     _maxConcurrentOperationCount;
-   private int                                           _requestIDCounter    = 1;
-   private long                                          _requestsCounter     = 0;
-   private long                                          _cancelsCounter      = 0;
+   private final int _maxConcurrentOperationCount;
+
+   private int  _requestIDCounter = 1;
+   private long _requestsCounter  = 0;
+   private long _cancelsCounter   = 0;
+
    private final List<Downloader_Android_WorkerThread>   _workers;
    private final Map<String, Downloader_Android_Handler> _downloadingHandlers = new HashMap<>();
    private final Map<String, Downloader_Android_Handler> _queuedHandlers      = new HashMap<>();
-   private final TimeInterval                            _connectTimeout;
-   private final TimeInterval                            _readTimeout;
-   private final Context                                 _appContext;
+
+   private final TimeInterval _connectTimeout;
+   private final TimeInterval _readTimeout;
+   private final Context      _appContext;
 
    private boolean      _started        = false;
    private final Object _startStopMutex = new Object();
@@ -51,11 +42,11 @@ public final class Downloader_Android
                       final TimeInterval readTimeout,
                       final Context appContext) {
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
-      _appContext = appContext;
-      _workers = new ArrayList<>(maxConcurrentOperationCount);
+      _appContext                  = appContext;
+      _workers                     = new ArrayList<>(maxConcurrentOperationCount);
 
       _connectTimeout = connectTimeout;
-      _readTimeout = readTimeout;
+      _readTimeout    = readTimeout;
    }
 
 
@@ -93,22 +84,22 @@ public final class Downloader_Android
             _started = false;
 
 
-            //            boolean allWorkersStopped;
-            //            do {
-            //               allWorkersStopped = true;
-            //               for (final Downloader_Android_WorkerThread worker : _workers) {
-            //                  if (!worker.isStopped()) {
-            //                     allWorkersStopped = false;
-            //                     try {
-            //                        Thread.sleep(2);
-            //                     }
-            //                     catch (final InterruptedException e) {
-            //                     }
-            //                     break;
-            //                  }
-            //               }
-            //            }
-            //            while (!allWorkersStopped);
+            // boolean allWorkersStopped;
+            // do {
+            // allWorkersStopped = true;
+            // for (final Downloader_Android_WorkerThread worker : _workers) {
+            // if (!worker.isStopped()) {
+            // allWorkersStopped = false;
+            // try {
+            // Thread.sleep(2);
+            // }
+            // catch (final InterruptedException e) {
+            // }
+            // break;
+            // }
+            // }
+            // }
+            // while (!allWorkersStopped);
 
 
             _workers.clear();
@@ -131,14 +122,14 @@ public final class Downloader_Android
       synchronized (this) {
          _requestsCounter++;
          requestID = _requestIDCounter++;
-         final String path = url._path;
+         final String               path    = url._path;
          Downloader_Android_Handler handler = _downloadingHandlers.get(path);
          if (handler == null) {
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag, _connectTimeout,
-                        _readTimeout);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag,
+                     _connectTimeout, _readTimeout);
                _queuedHandlers.put(path, handler);
             }
             else {
@@ -169,14 +160,14 @@ public final class Downloader_Android
       synchronized (this) {
          _requestsCounter++;
          requestID = _requestIDCounter++;
-         final String path = url._path;
+         final String               path    = url._path;
          Downloader_Android_Handler handler = _downloadingHandlers.get(path);
          if (handler == null) {
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag, _connectTimeout,
-                        _readTimeout);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag,
+                     _connectTimeout, _readTimeout);
                _queuedHandlers.put(path, handler);
             }
             else {
@@ -208,9 +199,9 @@ public final class Downloader_Android
          Iterator<Map.Entry<String, Downloader_Android_Handler>> iter = _queuedHandlers.entrySet().iterator();
 
          while (iter.hasNext() && !found) {
-            final Map.Entry<String, Downloader_Android_Handler> e = iter.next();
-            final String url = e.getKey();
-            final Downloader_Android_Handler handler = e.getValue();
+            final Map.Entry<String, Downloader_Android_Handler> e       = iter.next();
+            final String                                        url     = e.getKey();
+            final Downloader_Android_Handler                    handler = e.getValue();
 
             if (handler.removeListenerForRequestId(requestID)) {
 
@@ -225,8 +216,8 @@ public final class Downloader_Android
             iter = _downloadingHandlers.entrySet().iterator();
 
             while (iter.hasNext() && !found) {
-               final Map.Entry<String, Downloader_Android_Handler> e = iter.next();
-               final Downloader_Android_Handler handler = e.getValue();
+               final Map.Entry<String, Downloader_Android_Handler> e       = iter.next();
+               final Downloader_Android_Handler                    handler = e.getValue();
 
                if (handler.cancelListenerForRequestId(requestID)) {
                   found = true;
@@ -249,7 +240,8 @@ public final class Downloader_Android
       synchronized (this) {
          _cancelsCounter++;
 
-         for (final Iterator<Entry<String, Downloader_Android_Handler>> iterator = _queuedHandlers.entrySet().iterator(); iterator.hasNext();) {
+         for (final Iterator<Map.Entry<String, Downloader_Android_Handler>> iterator = _queuedHandlers.entrySet()
+               .iterator(); iterator.hasNext();) {
             final Map.Entry<String, Downloader_Android_Handler> entry = iterator.next();
 
             final Downloader_Android_Handler handler = entry.getValue();
@@ -294,18 +286,18 @@ public final class Downloader_Android
             return null;
          }
 
-         long selectedPriority = Long.MIN_VALUE;
-         String selectedURL = null;
+         long   selectedPriority = Long.MIN_VALUE;
+         String selectedURL      = null;
          for (final Map.Entry<String, Downloader_Android_Handler> e : _queuedHandlers.entrySet()) {
-            //            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
-            final String url = e.getKey();
-            final Downloader_Android_Handler handler = e.getValue();
-            final long priority = handler.getPriority();
+            // final Map.Entry<String, Downloader_Android_Handler> e = it.next();
+            final String                     url      = e.getKey();
+            final Downloader_Android_Handler handler  = e.getValue();
+            final long                       priority = handler.getPriority();
 
             if (priority > selectedPriority) {
                selectedPriority = priority;
-               selectedHandler = handler;
-               selectedURL = url;
+               selectedHandler  = handler;
+               selectedURL      = url;
             }
          }
 
@@ -337,14 +329,14 @@ public final class Downloader_Android
    }
 
 
-   //   public TimeInterval getConnectTimeout() {
-   //      return _connectTimeout;
-   //   }
+   // public TimeInterval getConnectTimeout() {
+   // return _connectTimeout;
+   // }
    //
    //
-   //   public TimeInterval getReadTimeout() {
-   //      return _readTimeout;
-   //   }
+   // public TimeInterval getReadTimeout() {
+   // return _readTimeout;
+   // }
 
 
    @Override

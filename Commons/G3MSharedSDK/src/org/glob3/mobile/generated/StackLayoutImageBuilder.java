@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  StackLayoutImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/11/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  StackLayoutImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 2/11/15.
 //
@@ -19,6 +19,11 @@ package org.glob3.mobile.generated;
 
 public class StackLayoutImageBuilder extends LayoutImageBuilder
 {
+  public void dispose()
+  {
+    super.dispose();
+  }
+
   protected final void doLayout(G3MContext context, IImageBuilderListener listener, boolean deleteListener, java.util.ArrayList<ChildResult> results)
   {
     boolean anyError = false;
@@ -87,9 +92,7 @@ public class StackLayoutImageBuilder extends LayoutImageBuilder
         canvas.drawImage(image, left, top);
       }
   
-      canvas.createImage(new StackLayoutImageBuilder_IImageListener(imageName, listener, deleteListener), true);
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new StackLayoutImageBuilder_ImageListener(imageName, listener, deleteListener), true), true);
     }
   
     for (int i = 0; i < resultsSize; i++)

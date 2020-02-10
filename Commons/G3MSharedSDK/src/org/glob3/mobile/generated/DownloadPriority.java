@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DownloadPriority.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 08/02/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DownloadPriority.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 08/02/13.
 //

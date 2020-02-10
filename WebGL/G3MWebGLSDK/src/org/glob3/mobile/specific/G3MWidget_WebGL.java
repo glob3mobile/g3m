@@ -2,37 +2,12 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.BasicShadersGL2;
-import org.glob3.mobile.generated.Camera;
-import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GL;
-import org.glob3.mobile.generated.GPUProgramFactory;
-import org.glob3.mobile.generated.GPUProgramManager;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.IDeviceAttitude;
-import org.glob3.mobile.generated.IDeviceLocation;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.INativeGL;
-import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.IStringUtils;
-import org.glob3.mobile.generated.ITextUtils;
-import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.TouchEvent;
-import org.glob3.mobile.generated.WidgetUserData;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.canvas.client.*;
+import com.google.gwt.core.client.*;
+import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.ui.*;
 
 
 public class G3MWidget_WebGL
@@ -327,12 +302,6 @@ public class G3MWidget_WebGL
 
 		return context;
    }-*/;
-
-
-   static private GPUProgramManager createGPUProgramManager() {
-      final GPUProgramFactory factory = new BasicShadersGL2();
-      return new GPUProgramManager(factory);
-   }
 
 
    public void startWidget() {

@@ -2,20 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
-import org.glob3.mobile.generated.FrameTasksExecutor;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.*;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.Timer;
 
 
@@ -111,13 +102,13 @@ public final class Downloader_WebGL
       requestID = _requestIDCounter++;
       handler = _downloadingHandlers.get(proxyUrl);
 
-      if ((handler != null) && !handler.isRequestingImage()) {
+      if ((handler != null) && !handler.isImageRequest()) {
          // the URL is being downloaded, just add the new listener
          handler.addListener(listener, deleteListener, priority, requestID, tag);
       }
       else {
          handler = _queuedHandlers.get(proxyUrl);
-         if ((handler != null) && !handler.isRequestingImage()) {
+         if ((handler != null) && !handler.isImageRequest()) {
             // the URL is queued for future download, just add the new listener
             handler.addListener(listener, deleteListener, priority, requestID, tag);
          }
@@ -165,13 +156,13 @@ public final class Downloader_WebGL
       requestID = _requestIDCounter++;
       handler = _downloadingHandlers.get(proxyUrl);
 
-      if ((handler != null) && handler.isRequestingImage()) {
+      if ((handler != null) && handler.isImageRequest()) {
          // the URL is being downloaded, just add the new listener
          handler.addListener(listener, deleteListener, priority, requestID, tag);
       }
       else {
          handler = _queuedHandlers.get(proxyUrl);
-         if ((handler != null) && handler.isRequestingImage()) {
+         if ((handler != null) && handler.isImageRequest()) {
             // the URL is queued for future download, just add the new listener
             handler.addListener(listener, deleteListener, priority, requestID, tag);
          }
@@ -195,35 +186,29 @@ public final class Downloader_WebGL
 
       _cancelsCounter++;
 
-      boolean found = false;
-      Iterator<Map.Entry<URL, Downloader_WebGL_Handler>> iter = _queuedHandlers.entrySet().iterator();
-
-      while (iter.hasNext() && !found) {
-         final Map.Entry<URL, Downloader_WebGL_Handler> e = iter.next();
-         final Downloader_WebGL_Handler handler = e.getValue();
-
-         if (handler.removeListenerForRequestId(requestID)) {
-            if (!handler.hasListener()) {
-               iter.remove();
-            }
-            found = true;
-         }
-      }
-
-      if (!found) {
-         iter = _downloadingHandlers.entrySet().iterator();
-
-         while (iter.hasNext() && !found) {
+      {
+         final Iterator<Map.Entry<URL, Downloader_WebGL_Handler>> iter = _queuedHandlers.entrySet().iterator();
+         while (iter.hasNext()) {
             final Map.Entry<URL, Downloader_WebGL_Handler> e = iter.next();
             final Downloader_WebGL_Handler handler = e.getValue();
 
-            if (handler.cancelListenerForRequestId(requestID)) {
-               found = true;
+            if (handler.removeListenerForRequestId(requestID)) {
+               if (!handler.hasListener()) {
+                  iter.remove();
+               }
+               return true;
             }
          }
       }
 
-      return found;
+      for (final Map.Entry<URL, Downloader_WebGL_Handler> e : _downloadingHandlers.entrySet()) {
+         final Downloader_WebGL_Handler handler = e.getValue();
+         if (handler.cancelListenerForRequestId(requestID)) {
+            return true;
+         }
+      }
+
+      return false;
    }
 
 

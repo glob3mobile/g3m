@@ -1,37 +1,29 @@
 
-
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.GFont;
-import org.glob3.mobile.generated.ICanvas;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.IImageListener;
-import org.glob3.mobile.generated.StrokeCap;
-import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.Vector2F;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayNumber;
+import org.glob3.mobile.generated.*;
+
+import com.google.gwt.core.client.*;
 
 
 public final class Canvas_WebGL
-   extends
-      ICanvas {
+                                extends
+                                   ICanvas {
 
    private final JavaScriptObject _domCanvas;
    private final JavaScriptObject _domCanvasContext;
 
-   private String                 _currentDOMFont;
-   private int                    _currentFontSize;
+   private String _currentDOMFont;
+   private int    _currentFontSize;
 
-   private int                    _width;
-   private int                    _height;
+   private int _width;
+   private int _height;
 
 
    Canvas_WebGL(final boolean retina) {
       super(retina);
-      _domCanvas = createCanvas();
+      _domCanvas        = createCanvas();
       _domCanvasContext = getContext2D(_domCanvas);
    }
 
@@ -40,11 +32,9 @@ public final class Canvas_WebGL
 		return $doc.createElement("canvas");
    }-*/;
 
-
    private static native JavaScriptObject getContext2D(final JavaScriptObject canvas) /*-{
 		return canvas.getContext("2d");
    }-*/;
-
 
    @Override
    protected native void _initialize(final int width,
@@ -53,8 +43,8 @@ public final class Canvas_WebGL
 
 		var isRetina = this.@org.glob3.mobile.generated.ICanvas::_retina;
 		var ratio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
-		var w = width * ratio;
-		var h = height * ratio;
+		var w = Math.ceil(width * ratio);
+		var h = Math.ceil(height * ratio);
 
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_width = w;
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_height = h;
@@ -110,7 +100,7 @@ public final class Canvas_WebGL
    @Override
    protected void _setFont(final GFont font) {
       _currentFontSize = Math.round(font.getSize());
-      _currentDOMFont = createDOMFont(font);
+      _currentDOMFont  = createDOMFont(font);
 
       tryToSetCurrentFontToContext();
    }
@@ -139,9 +129,9 @@ public final class Canvas_WebGL
          return null;
       }
 
-      final int r = Math.round(255 * color._red);
-      final int g = Math.round(255 * color._green);
-      final int b = Math.round(255 * color._blue);
+      final int   r = Math.round(255 * color._red);
+      final int   g = Math.round(255 * color._green);
+      final int   b = Math.round(255 * color._blue);
       final float a = color._alpha;
 
       return "rgba(" + r + ", " + g + ", " + b + ", " + a + ")";
@@ -154,19 +144,16 @@ public final class Canvas_WebGL
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.fillStyle = jsColor;
    }-*/;
 
-
    @Override
    protected native void _setLineColor(final Color color) /*-{
 		var jsColor = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.strokeStyle = jsColor;
    }-*/;
 
-
    @Override
    protected native void _setLineWidth(final float width) /*-{
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext.lineWidth = width;
    }-*/;
-
 
    @Override
    protected native void _setShadow(final Color color,
@@ -181,7 +168,6 @@ public final class Canvas_WebGL
 		context.shadowOffsetY = offsetY;
    }-*/;
 
-
    @Override
    protected native void _removeShadow() /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
@@ -192,7 +178,6 @@ public final class Canvas_WebGL
 		context.shadowOffsetY = 0;
    }-*/;
 
-
    @Override
    protected native void _fillRectangle(final float left,
                                         final float top,
@@ -202,7 +187,6 @@ public final class Canvas_WebGL
 		context.fillRect(left, top, width, height);
    }-*/;
 
-
    @Override
    protected native void _strokeRectangle(final float left,
                                           final float top,
@@ -211,7 +195,6 @@ public final class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.strokeRect(left, top, width, height);
    }-*/;
-
 
    @Override
    protected native void _fillAndStrokeRectangle(final float left,
@@ -281,7 +264,6 @@ public final class Canvas_WebGL
 		}
    }-*/;
 
-
    @Override
    protected native void _fillText(final String text,
                                    final float left,
@@ -291,16 +273,14 @@ public final class Canvas_WebGL
 		context.fillText(text, left, top - 1);
    }-*/;
 
-
    @Override
    protected native Vector2F _textExtent(final String text) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.textBaseline = "top";
-		var width = context.measureText(text).width;
+		var width = Math.ceil(context.measureText(text).width);
 		var height = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize;
 		return @org.glob3.mobile.generated.Vector2F::new(FF)(width, height);
    }-*/;
-
 
    private native void roundRect(final float x,
                                  final float y,
@@ -371,7 +351,6 @@ public final class Canvas_WebGL
 		context.clearRect(left, top, width, height);
    }-*/;
 
-
    @Override
    protected native void _drawImage(final IImage image,
                                     final float destLeft,
@@ -382,7 +361,6 @@ public final class Canvas_WebGL
 		context.drawImage(imageJS, destLeft, destTop, imageJS.width,
 				imageJS.height);
    }-*/;
-
 
    @Override
    protected native void _drawImage(final IImage image,
@@ -399,7 +377,6 @@ public final class Canvas_WebGL
 		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
-
    @Override
    protected native void _drawImage(IImage image,
                                     float left,
@@ -411,7 +388,6 @@ public final class Canvas_WebGL
 
 		context.drawImage(imageJS, left, top, width, height);
    }-*/;
-
 
    @Override
    protected native void _drawImage(IImage image,
@@ -429,7 +405,6 @@ public final class Canvas_WebGL
 		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
-
    @Override
    protected native void _drawImage(IImage image,
                                     float srcLeft,
@@ -446,7 +421,6 @@ public final class Canvas_WebGL
 		context.drawImage(imageJS, srcLeft, srcTop, srcWidth, srcHeight,
 				destLeft, destTop, destWidth, destHeight);
    }-*/;
-
 
    @Override
    protected native void _drawImage(final IImage image,
@@ -469,13 +443,11 @@ public final class Canvas_WebGL
 		context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
-
    @Override
    protected native void _beginPath() /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.beginPath();
    }-*/;
-
 
    @Override
    protected native void _stroke() /*-{
@@ -483,14 +455,12 @@ public final class Canvas_WebGL
 		context.stroke();
    }-*/;
 
-
    @Override
    protected native void _moveTo(final float x,
                                  final float y) /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.moveTo(x, y);
    }-*/;
-
 
    @Override
    protected native void _lineTo(final float x,
@@ -503,15 +473,15 @@ public final class Canvas_WebGL
    @Override
    protected void _setLineCap(final StrokeCap cap) {
       switch (cap) {
-         case CAP_BUTT:
-            jsLineCap("butt");
-            break;
-         case CAP_ROUND:
-            jsLineCap("round");
-            break;
-         case CAP_SQUARE:
-            jsLineCap("square");
-            break;
+      case CAP_BUTT:
+         jsLineCap("butt");
+         break;
+      case CAP_ROUND:
+         jsLineCap("round");
+         break;
+      case CAP_SQUARE:
+         jsLineCap("square");
+         break;
       }
    }
 
@@ -525,15 +495,15 @@ public final class Canvas_WebGL
    @Override
    protected void _setLineJoin(final StrokeJoin join) {
       switch (join) {
-         case JOIN_MITER:
-            jsLineJoin("miter");
-            break;
-         case JOIN_ROUND:
-            jsLineJoin("round");
-            break;
-         case JOIN_BEVEL:
-            jsLineJoin("bevel");
-            break;
+      case JOIN_MITER:
+         jsLineJoin("miter");
+         break;
+      case JOIN_ROUND:
+         jsLineJoin("round");
+         break;
+      case JOIN_BEVEL:
+         jsLineJoin("bevel");
+         break;
       }
    }
 
@@ -542,7 +512,6 @@ public final class Canvas_WebGL
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.lineJoin = join;
    }-*/;
-
 
    @Override
    protected native void _setLineMiterLimit(final float limit) /*-{
@@ -570,13 +539,11 @@ public final class Canvas_WebGL
 		context.lineDashOffset = phase;
    }-*/;
 
-
    @Override
    protected native void _closePath() /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.closePath();
    }-*/;
-
 
    @Override
    protected native void _fill() /*-{
@@ -584,13 +551,11 @@ public final class Canvas_WebGL
 		context.fill();
    }-*/;
 
-
    @Override
    protected native void _fillAndStroke() /*-{
 		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
 		context.fill();
 		context.stroke();
    }-*/;
-
 
 }

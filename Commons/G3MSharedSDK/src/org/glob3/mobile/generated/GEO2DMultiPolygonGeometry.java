@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEO2DMultiPolygonGeometry.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/25/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEO2DMultiPolygonGeometry.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/25/13.
 //

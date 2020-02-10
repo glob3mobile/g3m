@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  MarksRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 05/06/12.
 //
 
 //
 //  MarksRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 05/06/12.
 //

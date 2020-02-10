@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DeviceAttitudeCameraHandler.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 1/9/15.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DeviceAttitudeCameraHandler.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 1/9/15.
 //

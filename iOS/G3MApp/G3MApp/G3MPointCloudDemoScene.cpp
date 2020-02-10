@@ -7,29 +7,29 @@
 
 #include "G3MPointCloudDemoScene.hpp"
 
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/IDownloader.hpp>
-#include <G3MiOSSDK/DownloadPriority.hpp>
-#include <G3MiOSSDK/IBufferDownloadListener.hpp>
-#include <G3MiOSSDK/BSONParser.hpp>
-#include <G3MiOSSDK/JSONBaseObject.hpp>
-#include <G3MiOSSDK/JSONObject.hpp>
-#include <G3MiOSSDK/JSONArray.hpp>
-#include <G3MiOSSDK/JSONNumber.hpp>
-#include <G3MiOSSDK/FloatBufferBuilderFromColor.hpp>
-#include <G3MiOSSDK/FloatBufferBuilderFromGeodetic.hpp>
-#include <G3MiOSSDK/DirectMesh.hpp>
-#include <G3MiOSSDK/GLConstants.hpp>
-#include <G3MiOSSDK/MeshRenderer.hpp>
-#include <G3MiOSSDK/IThreadUtils.hpp>
-#include <G3MiOSSDK/G3MContext.hpp>
-#include <G3MiOSSDK/GAsyncTask.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/Color.hpp>
-#include <G3MiOSSDK/IMathUtils.hpp>
-#include <G3MiOSSDK/ILogger.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/BingMapsLayer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/IDownloader.hpp>
+#include <G3M/DownloadPriority.hpp>
+#include <G3M/IBufferDownloadListener.hpp>
+#include <G3M/BSONParser.hpp>
+#include <G3M/JSONBaseObject.hpp>
+#include <G3M/JSONObject.hpp>
+#include <G3M/JSONArray.hpp>
+#include <G3M/JSONNumber.hpp>
+#include <G3M/FloatBufferBuilderFromColor.hpp>
+#include <G3M/FloatBufferBuilderFromGeodetic.hpp>
+#include <G3M/DirectMesh.hpp>
+#include <G3M/GLConstants.hpp>
+#include <G3M/MeshRenderer.hpp>
+#include <G3M/IThreadUtils.hpp>
+#include <G3M/G3MContext.hpp>
+#include <G3M/GAsyncTask.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/Color.hpp>
+#include <G3M/IMathUtils.hpp>
+#include <G3M/ILogger.hpp>
 
 #include "G3MDemoModel.hpp"
 

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IImageBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/2/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  IImageBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/2/14.
 //
@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 
 public interface IImageBuilder
 {
+
   void dispose();
 
   boolean isMutable();

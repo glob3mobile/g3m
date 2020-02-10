@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GEOVectorTileImageProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/17/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GEOVectorTileImageProvider.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 7/17/14.
 //
@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 public class GEOVectorTileImageProvider extends TileImageProvider
 {
 
-  public static class GEORasterizerCanvasImageListener extends IImageListener
+  public static class GEORasterizerImageListener extends IImageListener
   {
     private final TileImageContribution _contribution;
     private final String _tileID;
@@ -42,7 +42,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
       return s;
     }
 
-    public GEORasterizerCanvasImageListener(TileImageContribution contribution, String tileID, TileImageListener listener, boolean deleteListener)
+    public GEORasterizerImageListener(TileImageContribution contribution, String tileID, TileImageListener listener, boolean deleteListener)
     {
        _contribution = contribution;
        _tileID = tileID;
@@ -209,10 +209,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
     if (projection != null)
        projection.dispose();
   
-    canvas.createImage(new GEORasterizerCanvasImageListener(contribution, tileID, listener, deleteListener), true); // autodelete
-  
-    if (canvas != null)
-       canvas.dispose();
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new GEORasterizerImageListener(contribution, tileID, listener, deleteListener), true), true);
   }
 
   public final void layerDeleted(GEOVectorLayer layer)

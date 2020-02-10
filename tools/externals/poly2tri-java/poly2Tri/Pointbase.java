@@ -5,7 +5,7 @@ package poly2Tri;
 
 public class Pointbase
          implements
-            Comparable {
+            Comparable<Pointbase> {
 
    /**
     * id of point;
@@ -134,15 +134,11 @@ public class Pointbase
    //friend  bool operator>(const Pointbase&, const Pointbase&);
    //friend  bool operator<(const Pointbase&, const Pointbase&);    
    @Override
-   public int compareTo(final Object o) {
+   public int compareTo(final Pointbase pb) {
       // operator>
       // return( (pa.y > pb.y) || ( (pa.y==pb.y) && (pa.x < pb.x)) );
       // operator<
       // return( (pa.y < pb.y) || ( (pa.y==pb.y) && (pa.x > pb.x)) );
-      if (!(o instanceof Pointbase)) {
-         return -1;
-      }
-      final Pointbase pb = (Pointbase) o;
       if (this.equals(pb)) {
          return 0;
       }
@@ -163,6 +159,7 @@ public class Pointbase
 
    //friend  bool operator!=(const Pointbase&, const Pointbase&);
    //substitute with !equals(pointbase)
+
 
    //friend  ostream &operator<<(ostream &os, const Pointbase& point);
    @Override

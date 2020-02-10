@@ -8,16 +8,17 @@
 
 #include "SQLiteStorage_iOS.hpp"
 
-#include "IFactory.hpp"
-#include "ByteBuffer_iOS.hpp"
-#include "Image_iOS.hpp"
-#include "ILogger.hpp"
-#include "IThreadUtils.hpp"
-#include "G3MContext.hpp"
-#include "URL.hpp"
-#include "TimeInterval.hpp"
+#include "G3M/ILogger.hpp"
+#include "G3M/IThreadUtils.hpp"
+#include "G3M/G3MContext.hpp"
+#include "G3M/URL.hpp"
+#include "G3M/TimeInterval.hpp"
+#include "G3M/GTask.hpp"
+
+#import "ByteBuffer_iOS.hpp"
+#import "Image_iOS.hpp"
+
 #import "NSString_CppAdditions.h"
-#include "GTask.hpp"
 
 
 NSString* SQLiteStorage_iOS::getDBPath() const {
@@ -294,7 +295,7 @@ IByteBufferResult SQLiteStorage_iOS::readBuffer(const URL& url,
       [nsData getBytes: bytes
                 length: length];
 
-      buffer = IFactory::instance()->createByteBuffer(bytes, length);
+      buffer = new ByteBuffer_iOS(bytes, length);
     }
   }
 

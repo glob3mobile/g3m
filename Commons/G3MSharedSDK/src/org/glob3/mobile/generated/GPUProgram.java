@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GPUProgram.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 27/03/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  GPUProgram.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 27/03/13.
 //
@@ -152,10 +152,10 @@ public class GPUProgram
 
   private GPUProgram()
   {
-     _createdAttributes = null;
-     _createdUniforms = null;
-     _nUniforms = 0;
      _nAttributes = 0;
+     _nUniforms = 0;
+     _createdUniforms = null;
+     _createdAttributes = null;
      _uniformsCode = 0;
      _attributesCode = 0;
      _gl = null;

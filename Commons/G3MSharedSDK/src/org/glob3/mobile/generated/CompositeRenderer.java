@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  CompositeRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 31/05/12.
 //
 
 //
 //  CompositeRenderer.h
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 31/05/12.
 //

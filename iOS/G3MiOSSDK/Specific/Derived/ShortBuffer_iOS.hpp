@@ -10,9 +10,11 @@
 #define __G3MiOSSDK__ShortBuffer_iOS__
 
 #include <OpenGLES/ES2/gl.h>
-#include "IShortBuffer.hpp"
-#include "ILogger.hpp"
-#include "ErrorHandling.hpp"
+
+#include "G3M/IShortBuffer.hpp"
+#include "G3M/ILogger.hpp"
+#include "G3M/ErrorHandling.hpp"
+
 
 class ShortBuffer_iOS : public IShortBuffer {
 private:

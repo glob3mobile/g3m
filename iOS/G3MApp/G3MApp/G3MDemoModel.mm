@@ -7,20 +7,20 @@
 
 #include "G3MDemoModel.hpp"
 
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/ILogger.hpp>
-#include <G3MiOSSDK/GEORenderer.hpp>
-#include <G3MiOSSDK/MarksRenderer.hpp>
-#include <G3MiOSSDK/MeshRenderer.hpp>
-#include <G3MiOSSDK/ShapesRenderer.hpp>
-#include <G3MiOSSDK/ErrorHandling.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
-#include <G3MiOSSDK/GEOVectorLayer.hpp>
-#include <G3MiOSSDK/PointCloudsRenderer.hpp>
-#include <G3MiOSSDK/HUDRenderer.hpp>
-#include <G3MiOSSDK/NonOverlappingMarksRenderer.hpp>
-#include <G3MiOSSDK/VectorStreamingRenderer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/ILogger.hpp>
+#include <G3M/GEORenderer.hpp>
+#include <G3M/MarksRenderer.hpp>
+#include <G3M/MeshRenderer.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/ErrorHandling.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/PlanetRenderer.hpp>
+#include <G3M/GEOVectorLayer.hpp>
+#include <G3M/PointCloudsRenderer.hpp>
+#include <G3M/HUDRenderer.hpp>
+#include <G3M/NonOverlappingMarksRenderer.hpp>
+#include <G3M/VectorStreamingRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"

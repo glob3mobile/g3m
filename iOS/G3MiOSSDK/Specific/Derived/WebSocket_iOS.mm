@@ -9,9 +9,10 @@
 #include "WebSocket_iOS.hpp"
 
 #import "SRWebSocket.h"
-#include "IWebSocketListener.hpp"
+#include "G3M/IWebSocketListener.hpp"
 
 #import "NSString_CppAdditions.h"
+
 
 @interface WebSocketDelegate : NSObject<SRWebSocketDelegate>
 {

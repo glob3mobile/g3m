@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__DeviceInfo_iOS__
 #define __G3MiOSSDK__DeviceInfo_iOS__
 
-#include "IDeviceInfo.hpp"
+#include "G3M/IDeviceInfo.hpp"
 
 
 class DeviceInfo_iOS : public IDeviceInfo {

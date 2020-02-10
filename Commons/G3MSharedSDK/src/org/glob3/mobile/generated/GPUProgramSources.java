@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  GPUProgramFactory.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 02/04/13.
 //

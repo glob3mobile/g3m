@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  JSONGenerator.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/3/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  JSONGenerator.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 1/3/13.
 //

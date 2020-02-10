@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  EllipsoidShape.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 02/13/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  EllipsoidShape.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 02/13/13.
 //

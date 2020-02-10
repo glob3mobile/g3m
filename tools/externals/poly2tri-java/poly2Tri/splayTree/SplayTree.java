@@ -145,7 +145,7 @@ public class SplayTree {
 
 
    //const SplayTree & operator=( const SplayTree & rhs );
-   public static <T extends Comparable> SplayTree clone(final SplayTree rhs) {
+   public static <T extends Comparable<?>> SplayTree clone(final SplayTree rhs) {
       final SplayTree st = new SplayTree();
       st.root = rhs.clone(rhs.root);
       st.size = rhs.size;

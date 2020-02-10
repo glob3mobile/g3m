@@ -20,6 +20,7 @@ public class CanvasImageBuilder_ImageListener extends IImageListener
       if (_listener != null)
          _listener.dispose();
     }
+    super.dispose();
   }
 
   public final void imageCreated(IImage image)

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  IFactory.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 06/09/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  IFactory.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Agustin Trujillo Pino on 31/05/12.
 //
@@ -74,8 +74,6 @@ public abstract class IFactory
   public abstract IShortBuffer createShortBuffer(int size);
 
   public abstract IByteBuffer createByteBuffer(int length);
-
-  public abstract IByteBuffer createByteBuffer(byte[] data, int length);
 
   public abstract ICanvas createCanvas(boolean retina);
 

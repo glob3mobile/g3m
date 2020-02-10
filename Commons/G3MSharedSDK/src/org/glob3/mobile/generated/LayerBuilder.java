@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  LayerBuilder.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 21/12/12.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  LayerBuilder.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Mari Luz Mateo on 21/12/12.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DebugTileImageProvider.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/18/14.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DebugTileImageProvider.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 4/18/14.
 //
@@ -148,7 +148,8 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
     final short width = resolution._x;
     final short height = resolution._y;
   
-    ICanvas canvas = getCanvas(width, height);
+    ICanvas canvas = IFactory.instance().createCanvas(false);
+    canvas.initialize(width, height);
   
     //canvas->removeShadow();
   
@@ -186,7 +187,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   
     //ILogger::instance()->logInfo(getIDLabel(tile));
   
-    canvas.createImage(new DebugTileImageProvider.ImageListener(tile._id, contribution, listener, deleteListener), true);
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new DebugTileImageProvider.ImageListener(tile._id, contribution, listener, deleteListener), true), true);
   }
 
   public final void cancel(String tileID)

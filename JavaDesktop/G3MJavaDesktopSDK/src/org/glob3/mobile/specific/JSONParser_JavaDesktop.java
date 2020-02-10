@@ -2,26 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.Map;
+import java.util.*;
 
-import org.glob3.mobile.generated.IByteBuffer;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONBoolean;
-import org.glob3.mobile.generated.JSONDouble;
-import org.glob3.mobile.generated.JSONFloat;
-import org.glob3.mobile.generated.JSONInteger;
-import org.glob3.mobile.generated.JSONLong;
-import org.glob3.mobile.generated.JSONNull;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.JSONString;
+import org.glob3.mobile.generated.*;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 
 
 public class JSONParser_JavaDesktop
@@ -82,7 +67,7 @@ public class JSONParser_JavaDesktop
       }
       else if (element.isJsonArray()) {
          final JsonArray jsonArray = (JsonArray) element;
-         final JSONArray result = new JSONArray();
+         final JSONArray result = new JSONArray(jsonArray.size());
          for (final JsonElement child : jsonArray) {
             result.add(convert(child, nullAsObject));
          }

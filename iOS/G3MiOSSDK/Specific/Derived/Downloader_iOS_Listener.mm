@@ -7,8 +7,9 @@
 
 #import "Downloader_iOS_Listener.h"
 
-#import "IFactory.hpp"
 #import "Image_iOS.hpp"
+#import "ByteBuffer_iOS.hpp"
+
 
 @implementation Downloader_iOS_Listener
 
@@ -49,7 +50,7 @@
     [data getBytes: bytes
             length: length];
 
-    IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
+    IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
 
     _cppBufferListener->onDownload(url, buffer, false);
   }
@@ -97,7 +98,7 @@
     [data getBytes: bytes
             length: length];
 
-    IByteBuffer* buffer = IFactory::instance()->createByteBuffer(bytes, length);
+    IByteBuffer* buffer = new ByteBuffer_iOS(bytes, length);
     _cppBufferListener->onCanceledDownload(url, buffer, false);
     delete buffer;
   }

@@ -8,10 +8,9 @@
 #include "Downloader_iOS.hpp"
 
 #import "Downloader_iOS_Handler.h"
-#include "IStringBuilder.hpp"
+#include "G3M/IStringBuilder.hpp"
 #import "NSString_CppAdditions.h"
 
-#include <UIKit/UIKit.h>
 
 void Downloader_iOS::start() {
   if (!_started) {
@@ -70,15 +69,12 @@ bool Downloader_iOS::cancelRequest(long long requestID) {
 
   __block bool found = false;
 
-  [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
-                                                        id obj,
+  [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(const NSURL* nsURL,
+                                                        Downloader_iOS_Handler* handler,
                                                         BOOL *stop) {
-    Downloader_iOS_Handler* handler = obj;
-
     if ( [handler removeListenerForRequestID: requestID] ) {
       if ( ![handler hasListeners] ) {
-        NSURL* url = key;
-        [_queuedHandlers removeObjectForKey:url];
+        [_queuedHandlers removeObjectForKey:nsURL];
       }
 
       *stop = YES;
@@ -87,11 +83,9 @@ bool Downloader_iOS::cancelRequest(long long requestID) {
   } ];
 
   if (!found) {
-    [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
-                                                               id obj,
+    [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(const NSURL* nsURL,
+                                                               Downloader_iOS_Handler* handler,
                                                                BOOL *stop) {
-      Downloader_iOS_Handler* handler = obj;
-
       if ( [handler cancelListenerForRequestID: requestID] ) {
         *stop = YES;
         found = true;
@@ -113,28 +107,25 @@ void Downloader_iOS::cancelRequestsTagged(const std::string& tag) {
 
   _cancelsCounter++;
 
-  NSMutableArray* keysToDelete = [NSMutableArray array];
+  NSMutableArray<const NSURL*>* nsURLsToDelete = [NSMutableArray array];
 
-  [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
-                                                        id obj,
+  [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(const NSURL* nsURL,
+                                                        Downloader_iOS_Handler* handler,
                                                         BOOL *stop) {
-    Downloader_iOS_Handler* handler = obj;
-
     if ( [handler removeListenersTagged: tag] ) {
       if ( ![handler hasListeners] ) {
-        [keysToDelete addObject:key];
+        [nsURLsToDelete addObject:nsURL];
       }
     }
   } ];
 
-  [_queuedHandlers removeObjectsForKeys:keysToDelete];
-  [keysToDelete removeAllObjects];
+  [_queuedHandlers removeObjectsForKeys:nsURLsToDelete];
+  [nsURLsToDelete removeAllObjects];
 
 
-  [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
-                                                             id obj,
+  [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(const NSURL* nsURL,
+                                                             Downloader_iOS_Handler* handler,
                                                              BOOL *stop) {
-    Downloader_iOS_Handler* handler = obj;
     [handler cancelListenersTagged: tag];
   } ];
 
@@ -143,10 +134,10 @@ void Downloader_iOS::cancelRequestsTagged(const std::string& tag) {
   return;
 }
 
-void Downloader_iOS::removeDownloadingHandlerForNSURL(const NSURL* url) {
+void Downloader_iOS::removeDownloadingHandlerForNSURL(const NSURL* nsURL) {
   [_lock lock];
 
-  [_downloadingHandlers removeObjectForKey:url];
+  [_downloadingHandlers removeObjectForKey:nsURL];
 
   [_lock unlock];
 }
@@ -155,40 +146,37 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
 
   __block long long               selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
   __block Downloader_iOS_Handler* selectedHandler  = nil;
-  __block NSURL*                  selectedURL      = nil;
+  __block const NSURL*            selectedNSURL    = nil;
 
   [_lock lock];
 
-  [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
-                                                        id obj,
+  [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(const NSURL* nsURL,
+                                                        Downloader_iOS_Handler* handler,
                                                         BOOL *stop) {
-    NSURL*                  url     = key;
-    Downloader_iOS_Handler* handler = obj;
-
     const long long priority = [handler priority];
 
     if (priority > selectedPriority) {
       selectedPriority = priority;
       selectedHandler  = handler;
-      selectedURL      = url;
+      selectedNSURL    = nsURL;
     }
   } ];
 
   if (selectedHandler) {
     // move the selected handler to _downloadingHandlers collection
-    [_queuedHandlers removeObjectForKey: selectedURL];
+    [_queuedHandlers removeObjectForKey: selectedNSURL];
     [_downloadingHandlers setObject: selectedHandler
-                             forKey: selectedURL];
+                             forKey: selectedNSURL];
   }
 
   [_lock unlock];
 
-//  if (selectedHandler == NULL) {
-//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-//  }
-//  else {
-//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-//  }
+  //  if (selectedHandler == NULL) {
+  //    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  //  }
+  //  else {
+  //    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+  //  }
 
   return selectedHandler;
 }
@@ -274,8 +262,6 @@ long long Downloader_iOS::request(const URL &url,
 
   return requestID;
 }
-
-
 
 const std::string Downloader_iOS::statistics() {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

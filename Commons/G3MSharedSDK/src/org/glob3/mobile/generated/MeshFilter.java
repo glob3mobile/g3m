@@ -1,14 +1,14 @@
 package org.glob3.mobile.generated;
 //
 //  MeshFilter.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 11/6/18.
 //
 
 //
 //  MeshFilter.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by DIEGO RAMIRO GOMEZ-DECK on 11/6/18.
 //

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  DecoratorDEMGrid.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/17/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  DecoratorDEMGrid.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/17/16.
 //

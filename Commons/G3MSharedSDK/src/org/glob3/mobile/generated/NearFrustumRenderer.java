@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  NearFrustumRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 24/03/2017.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  NearFrustumRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Jose Miguel SN on 24/03/2017.
 //

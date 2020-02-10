@@ -2,29 +2,10 @@
 
 package org.glob3.mobile.tools.conversion.jbson2bjson;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
-import org.glob3.mobile.generated.BSONGenerator;
-import org.glob3.mobile.generated.BSONParser;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.JSONArray;
-import org.glob3.mobile.generated.JSONBaseObject;
-import org.glob3.mobile.generated.JSONGenerator;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.JSONString;
-import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.specific.ByteBuffer_JavaDesktop;
-import org.glob3.mobile.specific.Factory_JavaDesktop;
-import org.glob3.mobile.specific.JSONParser_JavaDesktop;
-import org.glob3.mobile.specific.Logger_JavaDesktop;
-import org.glob3.mobile.specific.MathUtils_JavaDesktop;
-import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
+import org.glob3.mobile.generated.*;
+import org.glob3.mobile.specific.*;
 
 
 public class JBson2BJson {
@@ -126,7 +107,7 @@ public class JBson2BJson {
       final JSONObject jRoot = new JSONObject();
       jRoot.put("type", new JSONString("FeatureCollection"));
 
-      final JSONArray features = new JSONArray();
+      final JSONArray features = new JSONArray(10);
       for (final File fJson : fsJson) {
          if (Utils.checkFileIsJson(fJson)) {
             final JSONBaseObject jbase = readJsonFile(fJson);

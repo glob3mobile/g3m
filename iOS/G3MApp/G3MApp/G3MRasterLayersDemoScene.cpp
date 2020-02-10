@@ -9,19 +9,19 @@
 
 #include "G3MDemoModel.hpp"
 
-#include <G3MiOSSDK/LayerSet.hpp>
-#include <G3MiOSSDK/MapBoxLayer.hpp>
-#include <G3MiOSSDK/MapQuestLayer.hpp>
-#include <G3MiOSSDK/WMSLayer.hpp>
-#include <G3MiOSSDK/LevelTileCondition.hpp>
-#include <G3MiOSSDK/OSMLayer.hpp>
-#include <G3MiOSSDK/BingMapsLayer.hpp>
-#include <G3MiOSSDK/URLTemplateLayer.hpp>
-#include <G3MiOSSDK/G3MWidget.hpp>
-#include <G3MiOSSDK/TimeInterval.hpp>
-#include <G3MiOSSDK/MercatorTiledLayer.hpp>
-#include <G3MiOSSDK/Geodetic3D.hpp>
-#include <G3MiOSSDK/PlanetRenderer.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/MapBoxLayer.hpp>
+#include <G3M/MapQuestLayer.hpp>
+#include <G3M/WMSLayer.hpp>
+#include <G3M/LevelTileCondition.hpp>
+#include <G3M/OSMLayer.hpp>
+#include <G3M/BingMapsLayer.hpp>
+#include <G3M/URLTemplateLayer.hpp>
+#include <G3M/G3MWidget.hpp>
+#include <G3M/TimeInterval.hpp>
+#include <G3M/MercatorTiledLayer.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/PlanetRenderer.hpp>
 
 
 void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  HUDImageRenderer.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 9/27/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  HUDImageRenderer.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 9/27/13.
 //
@@ -42,16 +42,12 @@ public class HUDImageRenderer extends DefaultRenderer
 
     public final void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener)
     {
-    
       ICanvas canvas = rc.getFactory().createCanvas(true);
       canvas.initialize(width, height);
     
       drawOn(canvas, width, height);
     
-      canvas.createImage(listener, deleteListener);
-    
-      if (canvas != null)
-         canvas.dispose();
+      canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, listener, deleteListener), true);
     }
 
   }

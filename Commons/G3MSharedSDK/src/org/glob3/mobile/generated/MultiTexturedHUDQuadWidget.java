@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  MultiTexturedHUDQuadWidget.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 12/17/13.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  MultiTexturedHUDQuadWidget.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 12/17/13.
 //

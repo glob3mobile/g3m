@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 //
 //  CameraGoToPositionEffect.cpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by Diego Gomez Deck on 11/7/16.
 //
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 //
 //  CameraGoToPositionEffect.hpp
-//  G3MiOSSDK
+//  G3M
 //
 //  Created by José Miguel S N on 24/10/12.
 //
