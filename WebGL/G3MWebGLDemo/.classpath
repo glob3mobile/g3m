@@ -4,11 +4,11 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/G3MWebGLSDK"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/G3MSharedSDK"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
-	<classpathentry kind="con" path="com.gwtplugins.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-9">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="com.gwtplugins.gwt.eclipse.core.GWT_CONTAINER/GWT 2.8.1"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -2,35 +2,25 @@
 
 package com.glob3mobile.pointcloud.octree;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.zip.GZIPInputStream;
 
-import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
-import com.glob3mobile.utils.Geodetic3D;
+import java.io.*;
+import java.util.zip.*;
 
-import es.igosoftware.euclid.projection.GProjection;
-import es.igosoftware.euclid.vector.GVector2D;
-import es.igosoftware.euclid.vector.IVector2;
-import es.igosoftware.util.GUndeterminateProgress;
-import es.igosoftware.util.XStringTokenizer;
+import com.glob3mobile.pointcloud.octree.berkeleydb.*;
+import com.glob3mobile.utils.*;
+
+import es.igosoftware.euclid.projection.*;
+import es.igosoftware.euclid.vector.*;
+import es.igosoftware.util.*;
 
 
 public class CreateOT {
 
 
    private static String[] getFilesToLoad(final File sourceTXTDirectory) {
-      final String[] filesNames = sourceTXTDirectory.list(new FilenameFilter() {
-         @Override
-         public boolean accept(final File dir,
-                               final String name) {
-            return name.endsWith(".txt") || name.endsWith(".txt.gz") || name.endsWith(".csv") || name.endsWith(".csv.gz");
-         }
-      });
+      final String[] filesNames = sourceTXTDirectory.list((dir,
+                                                           name) -> name.endsWith(".txt") || name.endsWith(".txt.gz") || name.endsWith(".csv")
+                                                                 || name.endsWith(".csv.gz"));
 
       final String[] result = new String[filesNames.length];
       for (int i = 0; i < filesNames.length; i++) {
@@ -55,6 +45,7 @@ public class CreateOT {
          }
       };
 
+
       final GProjection targetProjection = GProjection.EPSG_4326;
 
       try (final BufferedReader reader = open(fileName)) {
@@ -68,7 +59,7 @@ public class CreateOT {
                final double z = Double.valueOf(tokens[2]);
                // final double intensity = Double.valueOf(tokens[2]);
 
-               final IVector2 sourcePoint = new GVector2D(x, y);
+               final IVector2 sourcePoint             = new GVector2D(x, y);
                final IVector2 projectedPointInRadians = projection.transformPoint(targetProjection, sourcePoint);
 
                octree.addPoint(Geodetic3D.fromRadians(projectedPointInRadians.y(), projectedPointInRadians.x(), z));
@@ -102,15 +93,15 @@ public class CreateOT {
 
       //      final int bufferSize = 512 * 1024;
       //      final int maxPointsPerTitle = 512 * 1024;
-      final int bufferSize = 256 * 1024;
+      final int bufferSize        = 256 * 1024;
       final int maxPointsPerTitle = 256 * 1024;
 
       final boolean loadPoints = true;
       if (loadPoints) {
          final boolean createIfNotExists = true;
-         final int cacheSizeInBytes = 1024 * 1024 * 1024;
+         final int     cacheSizeInBytes  = 1024 * 1024 * 1024;
          try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists, maxPointsPerTitle, bufferSize,
-                  cacheSizeInBytes)) {
+               cacheSizeInBytes)) {
 
             final int filesNamesLength = filesNames.length;
             for (int i = 0; i < filesNamesLength; i++) {
@@ -132,7 +123,7 @@ public class CreateOT {
    private static void visitOT(final File cloudDirectory,
                                final String cloudName) {
       final boolean createIfNotExists = false;
-      final int cacheSizeInBytes = 1024 * 1024 * 1024;
+      final int     cacheSizeInBytes  = 1024 * 1024 * 1024;
 
       try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists, cacheSizeInBytes)) {
          octree.acceptDepthFirstVisitor(new PersistentOctree.Visitor() {
@@ -143,8 +134,8 @@ public class CreateOT {
 
             @Override
             public void start() {
-               _counter = 0;
-               _started = System.currentTimeMillis();
+               _counter     = 0;
+               _started     = System.currentTimeMillis();
                _totalPoints = 0;
             }
 
@@ -184,7 +175,7 @@ public class CreateOT {
    private static void showStatisticsOT(final File cloudDirectory,
                                         final String cloudName) {
       final boolean createIfNotExists = false;
-      final int cacheSizeInBytes = 1024 * 1024 * 1024;
+      final int     cacheSizeInBytes  = 1024 * 1024 * 1024;
       try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists, cacheSizeInBytes)) {
          octree.getStatistics(false).show();
       }
@@ -227,18 +218,18 @@ public class CreateOT {
 
       final GProjection sourceProjection = GProjection.EPSG_28992;
 
-      final File sourceTXTDirectory = new File("/Users/dgd/Desktop/TomTomDemo/csv");
-      final File cloudDirectory = new File("/Users/dgd/Desktop/TomTomDemo/cloud_fixed");
-      final String cloudName = "TomTom";
+      final File   sourceTXTDirectory = new File("/Users/dgd/Desktop/TomTomDemo/csv");
+      final File   cloudDirectory     = new File("/Users/dgd/Desktop/TomTomDemo/cloud_fixed");
+      final String cloudName          = "TomTom";
 
-      final String delimiter = "\t";
+      final String delimiter     = "\t";
       final String commentPrefix = "#";
 
 
-      final boolean deleteOT = false; //true;
-      final boolean loadOT = false; // true;
-      final boolean renameDone = false;
-      final boolean visitOT = false;
+      final boolean deleteOT         = false; //true;
+      final boolean loadOT           = false; // true;
+      final boolean renameDone       = false;
+      final boolean visitOT          = false;
       final boolean showStatisticsOT = true;
 
 

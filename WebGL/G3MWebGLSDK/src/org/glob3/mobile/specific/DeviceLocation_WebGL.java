@@ -2,14 +2,15 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.*;
 
 import com.google.gwt.core.client.*;
 
 
 public class DeviceLocation_WebGL
-         extends
-            IDeviceLocation {
+                                  extends
+                                     IDeviceLocation {
 
    private double _lat;
    private double _lon;
@@ -25,23 +26,23 @@ public class DeviceLocation_WebGL
 
 
    private void reset() {
-      _watchId = -1;
+      _watchId    = -1;
       _isTracking = false;
-      _lat = Double.NaN;
-      _lon = Double.NaN;
-      _altitude = Double.NaN;
+      _lat        = Double.NaN;
+      _lon        = Double.NaN;
+      _altitude   = Double.NaN;
    }
 
 
    private native boolean onPositionChanged(JavaScriptObject location)/*-{
-		@org.glob3.mobile.specific.DeviceLocation_WebGL::_lat = location.coords.latitude;
-		@org.glob3.mobile.specific.DeviceLocation_WebGL::_lon = location.coords.longitude;
+		this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_lat = location.coords.latitude;
+		this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_lon = location.coords.longitude;
 
 		if (location.coords.altitude == null) {
 			console.log("Device altitude is undefined, assuming 0");
-			@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = 0;
+			this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = 0;
 		} else {
-			@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = location.coords.altitude;
+			this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = location.coords.altitude;
 		}
    }-*/;
 

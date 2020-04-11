@@ -2,8 +2,9 @@
 
 package com.glob3mobile.pointcloud.server;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHandler;
+
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.servlet.*;
 
 
 public class RunPCSS {
@@ -14,7 +15,7 @@ public class RunPCSS {
       System.out.println("--------\n");
 
 
-      final int port = 8082;
+      final int    port   = 8082;
       final Server server = new Server(port);
 
       final ServletHandler handler = new ServletHandler();

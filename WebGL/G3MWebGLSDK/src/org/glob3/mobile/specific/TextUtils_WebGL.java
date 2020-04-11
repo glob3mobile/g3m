@@ -2,12 +2,13 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.*;
 
 
 public class TextUtils_WebGL
-         extends
-            ITextUtils {
+                             extends
+                                ITextUtils {
 
 
    private static String toJSColor(final Color color) {
@@ -15,9 +16,9 @@ public class TextUtils_WebGL
          return null;
       }
 
-      final int r = Math.round(255 * color._red);
-      final int g = Math.round(255 * color._green);
-      final int b = Math.round(255 * color._blue);
+      final int   r = Math.round(255 * color._red);
+      final int   g = Math.round(255 * color._green);
+      final int   b = Math.round(255 * color._blue);
       final float a = color._alpha;
 
       return "rgba(" + r + "," + g + "," + b + "," + a + ")";
@@ -185,4 +186,5 @@ public class TextUtils_WebGL
 		jsResult.src = canvas.toDataURL();
 
    }-*/;
+
 }

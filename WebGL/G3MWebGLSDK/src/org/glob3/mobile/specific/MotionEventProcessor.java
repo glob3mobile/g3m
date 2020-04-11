@@ -9,12 +9,32 @@ import org.glob3.mobile.generated.*;
 import org.glob3.mobile.generated.Touch;
 
 import com.google.gwt.core.client.*;
+import com.google.gwt.core.client.Scheduler.*;
 import com.google.gwt.dom.client.*;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.*;
 
 
 final class MotionEventProcessor {
+
+
+   private final class ScheduledCommandImplementation
+                                                      implements
+                                                         ScheduledCommand {
+      private final TouchEvent _event;
+
+
+      private ScheduledCommandImplementation(final TouchEvent event) {
+         _event = event;
+      }
+
+
+      @Override
+      public void execute() {
+         _widget.onTouchEvent(_event);
+      }
+   }
+
 
    private static final Vector2F DELTA = new Vector2F(10, 0);
 
@@ -25,7 +45,8 @@ final class MotionEventProcessor {
    private Vector2F              _previousMousePosition = null;
 
 
-   MotionEventProcessor(final G3MWidget_WebGL widget, final CanvasElement canvasElement) {
+   MotionEventProcessor(final G3MWidget_WebGL widget,
+                        final CanvasElement canvasElement) {
       _widget        = widget;
       _canvasElement = canvasElement;
 
@@ -155,8 +176,7 @@ final class MotionEventProcessor {
       if (events.length > 0) {
          final Scheduler scheduler = Scheduler.get();
          for (final TouchEvent event : events) {
-            scheduler.scheduleDeferred( //
-                  () -> _widget.onTouchEvent(event));
+            scheduler.scheduleDeferred(new ScheduledCommandImplementation(event));
          }
       }
    }

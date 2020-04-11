@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.*;
 
 import com.google.gwt.canvas.client.*;
@@ -11,8 +12,8 @@ import com.google.gwt.user.client.ui.*;
 
 
 public class G3MWidget_WebGL
-         extends
-            Composite {
+                             extends
+                                Composite {
 
 
    static {
@@ -21,26 +22,26 @@ public class G3MWidget_WebGL
 
 
    public static void initSingletons() {
-      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
-      final IFactory factory = new Factory_WebGL();
-      final IStringUtils stringUtils = new StringUtils_WebGL();
-      final IStringBuilder stringBuilder = new StringBuilder_WebGL(IStringBuilder.DEFAULT_FLOAT_PRECISION);
-      final IMathUtils mathUtils = new MathUtils_WebGL();
-      final IJSONParser jsonParser = new JSONParser_WebGL();
-      final ITextUtils textUtils = new TextUtils_WebGL();
+      final ILogger         logger         = new Logger_WebGL(LogLevel.InfoLevel);
+      final IFactory        factory        = new Factory_WebGL();
+      final IStringUtils    stringUtils    = new StringUtils_WebGL();
+      final IStringBuilder  stringBuilder  = new StringBuilder_WebGL(IStringBuilder.DEFAULT_FLOAT_PRECISION);
+      final IMathUtils      mathUtils      = new MathUtils_WebGL();
+      final IJSONParser     jsonParser     = new JSONParser_WebGL();
+      final ITextUtils      textUtils      = new TextUtils_WebGL();
       final IDeviceAttitude deviceAttitude = new DeviceAttitude_WebGL();
       final IDeviceLocation deviceLocation = new DeviceLocation_WebGL();
 
       G3MWidget.initSingletons( //
-               logger, //
-               factory, //
-               stringUtils, //
-               stringBuilder, //
-               mathUtils, //
-               jsonParser, //
-               textUtils, //
-               deviceAttitude, //
-               deviceLocation);
+            logger, //
+            factory, //
+            stringUtils, //
+            stringBuilder, //
+            mathUtils, //
+            jsonParser, //
+            textUtils, //
+            deviceAttitude, //
+            deviceLocation);
    }
 
 
@@ -216,13 +217,13 @@ public class G3MWidget_WebGL
    private void onSizeChanged(final int width,
                               final int height) {
       if ((_width != width) || (_height != height)) {
-         _width = width;
+         _width  = width;
          _height = height;
          setPixelSize(_width, _height);
 
          _devicePixelRatio = jsGetDevicePixelRatio();
-         _physicalWidth = Math.round(_width * _devicePixelRatio);
-         _physicalHeight = Math.round(_height * _devicePixelRatio);
+         _physicalWidth    = Math.round(_width * _devicePixelRatio);
+         _physicalHeight   = Math.round(_height * _devicePixelRatio);
          _canvas.setCoordinateSpaceWidth(_physicalWidth);
          _canvas.setCoordinateSpaceHeight(_physicalHeight);
       }
