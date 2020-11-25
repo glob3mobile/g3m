@@ -46,7 +46,17 @@ public class MapzenDEMProvider extends MercatorPyramidDEMProvider
     IDownloader downloader = _context.getDownloader();
   
     final IStringUtils su = IStringUtils.instance();
-    final String path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su.toString(z) + "/" + su.toString(x) + "/" + su.toString(y) + ".png?api_key=" + _apiKey;
+  //  const std::string path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su->toString(z) + "/" + su->toString(x) + "/" + su->toString(y) + ".png?api_key=" + _apiKey;
+  
+    final int tilesize = 256;
+  
+    final String path = "https://tile.nextzen.org/tilezen/terrain/v1/" + su.toString(tilesize) + "/terrarium/" + su.toString(z) + "/" + su.toString(x) + "/" + su.toString(y) + ".png?api_key=" + _apiKey;
+  
+  //  https://tile.nextzen.org/tilezen/terrain/v1/{tilesize}/terrarium/{z}/{x}/{y}.png?api_key=your-nextzen-api-key
+  //  https://tile.nextzen.org/tilezen/terrain/v1/{tilesize}/normal/{z}/{x}/{y}.png?api_key=your-nextzen-api-key
+  //  https://tile.nextzen.org/tilezen/terrain/v1/geotiff/{z}/{x}/{y}.tif?api_key=your-nextzen-api-key
+  //  https://tile.nextzen.org/tilezen/terrain/v1/skadi/{N|S}{y}/{N|S}{y}{E|W}{x}.hgt.gz?api_key=your-nextzen-api-key
+  
   
     downloader.requestImage(new URL(path), _downloadPriority, _timeToCache, _readExpired, new MapzenDEMProvider_ImageDownloadListener(_context, this, z, x, y, sector, _deltaHeight), true, _instanceID);
   }

@@ -87,10 +87,6 @@ public class GPUProgramManager
       {
         return compileProgramWithName(gl, "FlatColor2DMesh");
       }
-      if (transformTC)
-      {
-        System.out.print("");
-      }
       return compileProgramWithName(gl, "Textured2DMesh");
     }
   

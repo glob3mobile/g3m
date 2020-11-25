@@ -210,7 +210,8 @@ public class GPUProgram
     int vertexShader = gl.createShader(ShaderType.VERTEX_SHADER);
     if (!p.compileShader(gl, vertexShader, vertexSource))
     {
-      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader :\n %s\n", vertexSource);
+      ILogger.instance().logError("Program name: %s", name);
+      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader:\n %s\n", vertexSource);
       gl.printShaderInfoLog(vertexShader);
   
       p.deleteShader(gl, vertexShader);
@@ -224,7 +225,8 @@ public class GPUProgram
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
     if (!p.compileShader(gl, fragmentShader, fragmentSource))
     {
-      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader :\n %s\n", fragmentSource);
+      ILogger.instance().logError("Program name: %s", name);
+      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader:\n %s\n", fragmentSource);
       gl.printShaderInfoLog(fragmentShader);
   
       p.deleteShader(gl, fragmentShader);
@@ -239,11 +241,11 @@ public class GPUProgram
     // link program
     if (!p.linkProgram(gl))
     {
+      ILogger.instance().logError("Program name: %s", name);
       ILogger.instance().logError("GPUProgram: ERROR linking graphic program\n");
       p.deleteShader(gl, vertexShader);
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p);
-      ILogger.instance().logError("GPUProgram: ERROR linking graphic program");
       return null;
     }
   
@@ -253,8 +255,10 @@ public class GPUProgram
   
     p.getVariables(gl);
   
-    if (gl.getError() != GLError.noError())
+    final int error = gl.getError();
+    if (error != GLError.noError())
     {
+      ILogger.instance().logError("Program name: %s", name);
       ILogger.instance().logError("Error while compiling program");
     }
   

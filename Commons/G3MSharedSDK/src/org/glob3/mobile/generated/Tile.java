@@ -648,6 +648,11 @@ public class Tile
     return _elevationData;
   }
 
+  public final DEMGrid getGrid()
+  {
+    return _grid;
+  }
+
   public final void onGrid(DEMGrid grid)
   {
     if (grid != _grid)

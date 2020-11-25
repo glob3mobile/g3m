@@ -75,7 +75,7 @@ public class PlanetTileTessellator extends TileTessellator
   }
 
 
-  private double createSurfaceVertices(Vector2S meshResolution, Sector meshSector, ElevationData elevationData, float verticalExaggeration, FloatBufferBuilderFromGeodetic vertices, TileTessellatorMeshData tileTessellatorMeshData)
+  private double createSurfaceVertices(Vector2S meshResolution, Sector meshSector, ElevationData elevationData, DEMGrid grid, float verticalExaggeration, FloatBufferBuilderFromGeodetic vertices, TileTessellatorMeshData tileTessellatorMeshData)
   {
   
     final IMathUtils mu = IMathUtils.instance();
@@ -93,9 +93,9 @@ public class PlanetTileTessellator extends TileTessellator
         final Geodetic2D position = meshSector.getInnerPoint(u, v);
         double elevation = 0;
   
-        if (elevationData != null)
+        if ((elevationData != null) || (grid != null))
         {
-          final double rawElevation = elevationData.getElevationAt(position);
+          final double rawElevation = (elevationData == null) ? grid.getElevation(i, j) : elevationData.getElevationAt(position);
   
           elevation = (rawElevation != rawElevation)? 0 : rawElevation * verticalExaggeration;
   
@@ -132,11 +132,11 @@ public class PlanetTileTessellator extends TileTessellator
     return minElevation;
   }
 
-  private double createSurface(Sector tileSector, Sector meshSector, Vector2S meshResolution, ElevationData elevationData, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords, TileTessellatorMeshData tileTessellatorMeshData)
+  private double createSurface(Sector tileSector, Sector meshSector, Vector2S meshResolution, ElevationData elevationData, DEMGrid grid, float verticalExaggeration, boolean mercator, FloatBufferBuilderFromGeodetic vertices, ShortBufferBuilder indices, FloatBufferBuilderFromCartesian2D textCoords, TileTessellatorMeshData tileTessellatorMeshData)
   {
   
     //VERTICES
-    final double minElevation = createSurfaceVertices(new Vector2S(meshResolution._x, meshResolution._y), meshSector, elevationData, verticalExaggeration, vertices, tileTessellatorMeshData);
+    final double minElevation = createSurfaceVertices(new Vector2S(meshResolution._x, meshResolution._y), meshSector, elevationData, grid, verticalExaggeration, vertices, tileTessellatorMeshData);
   
   
     //TEX COORDINATES
@@ -386,6 +386,9 @@ public class PlanetTileTessellator extends TileTessellator
       return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), prc._verticalExaggeration, Geodetic3D.zero(), -11000, 9000, 15); // pointSize -  maxElevation -  minElevation -  offset
     }
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning DIEGO AT WORK!
+  
     final Sector tileSector = tile._sector;
     final Sector meshSector = getRenderedSectorForTile(tile);
     final Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
@@ -396,7 +399,7 @@ public class PlanetTileTessellator extends TileTessellator
     ShortBufferBuilder indices = new ShortBufferBuilder();
     FloatBufferBuilderFromCartesian2D textCoords = new FloatBufferBuilderFromCartesian2D();
   
-    final double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, prc._verticalExaggeration, tile._mercator, vertices, indices, textCoords, tileTessellatorMeshData);
+    final double minElevation = createSurface(tileSector, meshSector, meshResolution, elevationData, grid, prc._verticalExaggeration, tile._mercator, vertices, indices, textCoords, tileTessellatorMeshData);
   
     if (_skirted)
     {
@@ -441,7 +444,7 @@ public class PlanetTileTessellator extends TileTessellator
   
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(rc.getPlanet());
     TileTessellatorMeshData tileTessellatorMeshData = new TileTessellatorMeshData();
-    createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), prc._verticalExaggeration, vertices, tileTessellatorMeshData);
+    createSurfaceVertices(meshResolution, meshSector, tile.getElevationData(), tile.getGrid(), prc._verticalExaggeration, vertices, tileTessellatorMeshData);
   
     //INDEX OF BORDER
     ShortBufferBuilder indicesBorder = new ShortBufferBuilder();
