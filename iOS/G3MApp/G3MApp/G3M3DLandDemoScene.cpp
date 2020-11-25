@@ -72,14 +72,17 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setIncrementalTileQuality(true);
 
   planetRenderer->setVerticalExaggeration(30);
-  planetRenderer->setDEMProvider( new MapzenDEMProvider("mapzen-ZB6FqMg",
+  planetRenderer->setDEMProvider( new MapzenDEMProvider("bQ8CZljwS5Sdd4IKWwdILg", // mapzen-ZB6FqMg",
                                                         DownloadPriority::HIGHER,
                                                         TimeInterval::fromDays(0),
                                                         false, /* readExpired */
                                                         0      /* deltaHeight */) );
 
   // https://mapzen.com/blog/elevation/
-  URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg",
+  // https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg
+  // https://tile.nextzen.org/tilezen/terrain/v1/256/normal/{z}/{x}/{y}.png?api_key=your-nextzen-api-key
+
+  URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.nextzen.org/tilezen/terrain/v1/256/normal/{z}/{x}/{y}.png?api_key=bQ8CZljwS5Sdd4IKWwdILg",
                                                           Sector::FULL_SPHERE,
                                                           false,                     // isTransparent
                                                           2,                         // firstLevel

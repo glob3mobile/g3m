@@ -564,7 +564,7 @@ bool Downloader_Emscripten::cancelRequest(long long requestID) {
   _cancelsCounter++;
 
   for (const std::pair<const std::string, Downloader_Emscripten_Handler*>& element : _queuedHandlers) {
-    Downloader_Emscripten_Handler* handler  = element.second;
+    Downloader_Emscripten_Handler* handler = element.second;
     if (handler->removeListenerForRequestId(requestID)) {
       if (!handler->hasListener()) {
         _queuedHandlers.erase( handler->_urlPath );
@@ -574,7 +574,7 @@ bool Downloader_Emscripten::cancelRequest(long long requestID) {
   }
   
   for (const std::pair<const std::string, Downloader_Emscripten_Handler*>& element : _downloadingHandlers) {
-    Downloader_Emscripten_Handler* handler  = element.second;
+    Downloader_Emscripten_Handler* handler = element.second;
     if (handler->cancelListenerForRequestId(requestID)) {
       return true;
     }
@@ -607,7 +607,7 @@ void Downloader_Emscripten::cancelRequestsTagged(const std::string& tag) {
   }
 
   for (const std::pair<const std::string, Downloader_Emscripten_Handler*>& element : _downloadingHandlers) {
-    Downloader_Emscripten_Handler* handler  = element.second;
+    Downloader_Emscripten_Handler* handler = element.second;
     handler->cancelListenersTagged(tag);
   }
 

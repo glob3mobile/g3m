@@ -37,6 +37,7 @@
 #include "IMathUtils.hpp"
 #include "Vector2D.hpp"
 #include "ILogger.hpp"
+#include "DEMGrid.hpp"
 
 
 PlanetTileTessellator::PlanetTileTessellator(const bool skirted, const Sector& sector):
@@ -117,6 +118,8 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                          );
   }
 
+#warning DIEGO AT WORK!
+
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile);
   const Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
@@ -131,6 +134,7 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                             meshSector,
                                             meshResolution,
                                             elevationData,
+                                            grid,
                                             prc->_verticalExaggeration,
                                             tile->_mercator,
                                             vertices,
@@ -249,6 +253,7 @@ Mesh* PlanetTileTessellator::createTileDebugMesh(const G3MRenderContext* rc,
   createSurfaceVertices(meshResolution,
                         meshSector,
                         tile->getElevationData(),
+                        tile->getGrid(),
                         prc->_verticalExaggeration,
                         vertices,
                         tileTessellatorMeshData);
@@ -345,6 +350,7 @@ Sector PlanetTileTessellator::getRenderedSectorForTile(const Tile* tile) const {
 double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResolution, //Mesh resolution
                                                     const Sector& meshSector,
                                                     const ElevationData* elevationData,
+                                                    const DEMGrid* grid,
                                                     float verticalExaggeration,
                                                     FloatBufferBuilderFromGeodetic* vertices,
                                                     TileTessellatorMeshData& tileTessellatorMeshData) const {
@@ -362,8 +368,8 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
       const Geodetic2D position = meshSector.getInnerPoint(u, v);
       double elevation = 0;
 
-      if (elevationData != NULL) {
-        const double rawElevation = elevationData->getElevationAt(position);
+      if ((elevationData != NULL) || (grid != NULL)) {
+        const double rawElevation = (elevationData == NULL) ? grid->getElevation(i, j) : elevationData->getElevationAt(position);
 
         elevation = ISNAN(rawElevation)? 0 : rawElevation * verticalExaggeration;
 
@@ -400,6 +406,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
                                             const Sector& meshSector,
                                             const Vector2S& meshResolution,
                                             const ElevationData* elevationData,
+                                            const DEMGrid* grid,
                                             float verticalExaggeration,
                                             bool mercator,
                                             FloatBufferBuilderFromGeodetic* vertices,
@@ -411,6 +418,7 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
   const double minElevation = createSurfaceVertices(Vector2S(meshResolution._x, meshResolution._y),
                                                     meshSector,
                                                     elevationData,
+                                                    grid,
                                                     verticalExaggeration,
                                                     vertices,
                                                     tileTessellatorMeshData);

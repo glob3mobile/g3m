@@ -33,7 +33,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
   // compile vertex shader
   int vertexShader= gl->createShader(VERTEX_SHADER);
   if (!p->compileShader(gl, vertexShader, vertexSource)) {
-    ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader :\n %s\n", vertexSource.c_str());
+    ILogger::instance()->logError("Program name: %s", name.c_str());
+    ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader:\n %s\n", vertexSource.c_str());
     gl->printShaderInfoLog(vertexShader);
 
     p->deleteShader(gl, vertexShader);
@@ -46,7 +47,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
   // compile fragment shader
   int fragmentShader = gl->createShader(FRAGMENT_SHADER);
   if (!p->compileShader(gl, fragmentShader, fragmentSource)) {
-    ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader :\n %s\n", fragmentSource.c_str());
+    ILogger::instance()->logError("Program name: %s", name.c_str());
+    ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader:\n %s\n", fragmentSource.c_str());
     gl->printShaderInfoLog(fragmentShader);
 
     p->deleteShader(gl, fragmentShader);
@@ -60,11 +62,11 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
 
   // link program
   if (!p->linkProgram(gl)) {
+    ILogger::instance()->logError("Program name: %s", name.c_str());
     ILogger::instance()->logError("GPUProgram: ERROR linking graphic program\n");
     p->deleteShader(gl, vertexShader);
     p->deleteShader(gl, fragmentShader);
     p->deleteProgram(gl, p);
-    ILogger::instance()->logError("GPUProgram: ERROR linking graphic program");
     return NULL;
   }
 
@@ -74,7 +76,9 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
 
   p->getVariables(gl);
 
-  if (gl->getError() != GLError::noError()) {
+  const int error = gl->getError();
+  if (error != GLError::noError()) {
+    ILogger::instance()->logError("Program name: %s", name.c_str());
     ILogger::instance()->logError("Error while compiling program");
   }
 

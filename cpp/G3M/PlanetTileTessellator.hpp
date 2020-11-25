@@ -81,6 +81,7 @@ private:
   double createSurfaceVertices(const Vector2S& meshResolution, //Mesh resolution
                                const Sector& meshSector,
                                const ElevationData* elevationData,
+                               const DEMGrid* grid,
                                float verticalExaggeration,
                                FloatBufferBuilderFromGeodetic* vertices,
                                TileTessellatorMeshData& tileTessellatorMeshData) const;
@@ -89,6 +90,7 @@ private:
                        const Sector& meshSector,
                        const Vector2S& meshResolution,
                        const ElevationData* elevationData,
+                       const DEMGrid* grid,
                        float verticalExaggeration,
                        bool mercator,
                        FloatBufferBuilderFromGeodetic* vertices,

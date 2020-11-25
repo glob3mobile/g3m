@@ -161,7 +161,17 @@ void MapzenDEMProvider::requestTile(int z,
   IDownloader* downloader = _context->getDownloader();
 
   const IStringUtils* su = IStringUtils::instance();
-  const std::string path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su->toString(z) + "/" + su->toString(x) + "/" + su->toString(y) + ".png?api_key=" + _apiKey;
+//  const std::string path = "https://tile.mapzen.com/mapzen/terrain/v1/terrarium/" + su->toString(z) + "/" + su->toString(x) + "/" + su->toString(y) + ".png?api_key=" + _apiKey;
+
+  const int tilesize = 256;
+
+  const std::string path = "https://tile.nextzen.org/tilezen/terrain/v1/" + su->toString(tilesize) + "/terrarium/" + su->toString(z) + "/" + su->toString(x) + "/" + su->toString(y) + ".png?api_key=" + _apiKey;
+
+//  https://tile.nextzen.org/tilezen/terrain/v1/{tilesize}/terrarium/{z}/{x}/{y}.png?api_key=your-nextzen-api-key
+//  https://tile.nextzen.org/tilezen/terrain/v1/{tilesize}/normal/{z}/{x}/{y}.png?api_key=your-nextzen-api-key
+//  https://tile.nextzen.org/tilezen/terrain/v1/geotiff/{z}/{x}/{y}.tif?api_key=your-nextzen-api-key
+//  https://tile.nextzen.org/tilezen/terrain/v1/skadi/{N|S}{y}/{N|S}{y}{E|W}{x}.hgt.gz?api_key=your-nextzen-api-key
+
 
   downloader->requestImage(URL(path),
                            _downloadPriority,

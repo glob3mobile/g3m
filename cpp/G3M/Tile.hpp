@@ -207,6 +207,10 @@ public:
     return _elevationData;
   }
 
+  DEMGrid* getGrid() const {
+    return _grid;
+  }
+
   void onGrid(DEMGrid* grid);
 
   void setElevationData(ElevationData* ed, int level);
