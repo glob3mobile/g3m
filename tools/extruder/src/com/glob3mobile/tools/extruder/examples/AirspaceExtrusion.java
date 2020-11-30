@@ -2,29 +2,22 @@
 
 package com.glob3mobile.tools.extruder.examples;
 
-import java.io.IOException;
-import java.util.List;
 
-import org.glob3.mobile.generated.Color;
-import org.glob3.mobile.generated.GEOFeature;
-import org.glob3.mobile.generated.JSONObject;
-import org.glob3.mobile.generated.Planet;
+import java.io.*;
+import java.util.*;
 
-import com.glob3mobile.tools.extruder.Building;
-import com.glob3mobile.tools.extruder.ExtruderPolygon;
-import com.glob3mobile.tools.extruder.ExtrusionHandler;
-import com.glob3mobile.tools.extruder.Heigths;
-import com.glob3mobile.tools.extruder.PolygonExtruder;
-import com.glob3mobile.tools.mesh.G3MeshCollection;
-import com.glob3mobile.tools.mesh.G3MeshMaterial;
+import org.glob3.mobile.generated.*;
+
+import com.glob3mobile.tools.extruder.*;
+import com.glob3mobile.tools.mesh.*;
 
 
 public class AirspaceExtrusion {
 
 
    private static class AirspaceExtrusionHandler
-            implements
-               ExtrusionHandler<GEOFeature, Void> {
+                                                 implements
+                                                    ExtrusionHandler<GEOFeature, Void> {
 
 
       private static final G3MeshMaterial MATERIAL_1 = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 0.5f));
@@ -42,7 +35,7 @@ public class AirspaceExtrusion {
 
       private static double toMeters(final double value,
                                      final String unit) {
-         final double exageration = 1;
+         final double exageration   = 1;
          final double valueInMeters = (value / 3) * exageration;
          return unit.equalsIgnoreCase("FT") ? valueInMeters : (valueInMeters * 100);
       }
@@ -88,9 +81,9 @@ public class AirspaceExtrusion {
       @Override
       public Heigths getHeightsFor(final GEOFeature geoFeature,
                                    final Void v) {
-         final JSONObject properties = geoFeature.getProperties();
-         final double lowerMeters = toMeter(properties, "lowerLimit", "lowerLimit_uom");
-         final double upperMeters = toMeter(properties, "upperLimit", "upperLimit_uom");
+         final JSONObject properties  = geoFeature.getProperties();
+         final double     lowerMeters = toMeter(properties, "lowerLimit", "lowerLimit_uom");
+         final double     upperMeters = toMeter(properties, "upperLimit", "upperLimit_uom");
          return new Heigths(lowerMeters, upperMeters);
       }
 
@@ -115,19 +108,20 @@ public class AirspaceExtrusion {
       System.out.println("AirspaceExtrusion 0.1");
       System.out.println("---------------------\n");
 
-      final String name = "airspace";
-      final String inputFileName = name + ".geojson";
+      final String name           = "airspace";
+      final String inputFileName  = name + ".geojson";
       final String outputFileName = name + "_3d.json";
 
       final int floatPrecision = 6;
 
-      final Planet planet = null; // cartesian
-      final float verticalExaggeration = 1;
-      final double deltaHeight = 0;
-      final boolean createNormals = true;
+      final Planet  planet               = null; // cartesian
+      final float   verticalExaggeration = 1;
+      final double  deltaHeight          = 0;
+      final boolean createNormals        = true;
 
 
-      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), createNormals, planet, verticalExaggeration, deltaHeight, floatPrecision, true);
+      PolygonExtruder.process(inputFileName, outputFileName, new AirspaceExtrusionHandler(), createNormals, planet, verticalExaggeration, deltaHeight,
+            floatPrecision, true);
    }
 
 
