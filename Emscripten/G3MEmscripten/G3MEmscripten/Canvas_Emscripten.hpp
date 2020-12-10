@@ -9,6 +9,8 @@
 
 class Canvas_Emscripten : public ICanvas {
 private:
+  const int _maxSize;
+
   emscripten::val _domCanvas;
   emscripten::val _domCanvasContext;
 
@@ -145,7 +147,8 @@ protected:
 
 
 public:
-  Canvas_Emscripten(bool retina);
+  Canvas_Emscripten(bool retina,
+                    const int maxSize);
 
   virtual ~Canvas_Emscripten();
 
