@@ -53,7 +53,7 @@ public final class Canvas_WebGL
 		var widthPixelRatio = rawDevicePixelRatio;
 		var heightPixelRatio = rawDevicePixelRatio;
 
-		var maxSize = this.@org.glob3.mobile.generated.ICanvas::_maxSize;
+		var maxSize = this.@org.glob3.mobile.specific.Canvas_WebGL::_maxSize;
 		if (maxSize > 0) {
 			var goalWidth = (width * widthPixelRatio);
 			if (goalWidth > maxSize) {
