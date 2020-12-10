@@ -152,6 +152,8 @@ public abstract class INativeGL
 
   public abstract int Error_NoError();
 
+  public abstract int getMaxTextureSize();
+
   public abstract int createProgram();
   public abstract boolean deleteProgram(int program);
   public abstract void attachShader(int program, int shader);

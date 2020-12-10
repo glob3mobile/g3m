@@ -77,6 +77,8 @@ public abstract class IFactory
 
   public abstract ICanvas createCanvas(boolean retina);
 
+  public abstract ICanvas createCanvas(boolean retina, int maxSize);
+
   public abstract IWebSocket createWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket);
 
   public final IDeviceInfo getDeviceInfo()

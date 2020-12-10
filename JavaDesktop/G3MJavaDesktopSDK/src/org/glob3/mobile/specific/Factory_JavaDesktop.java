@@ -2,12 +2,13 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.*;
 
 
 public class Factory_JavaDesktop
-         extends
-            IFactory {
+                                 extends
+                                    IFactory {
 
 
    @Override
@@ -63,6 +64,13 @@ public class Factory_JavaDesktop
 
    @Override
    public ICanvas createCanvas(final boolean retina) {
+      throw new RuntimeException("Not yet implemented");
+   }
+
+
+   @Override
+   public ICanvas createCanvas(final boolean retina,
+                               final int maxSize) {
       throw new RuntimeException("Not yet implemented");
    }
 

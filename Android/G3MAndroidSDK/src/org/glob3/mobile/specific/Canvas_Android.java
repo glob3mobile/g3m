@@ -3,9 +3,7 @@
 package org.glob3.mobile.specific;
 
 
-import static android.graphics.Paint.ANTI_ALIAS_FLAG;
-import static android.graphics.Paint.FILTER_BITMAP_FLAG;
-import static android.graphics.Paint.LINEAR_TEXT_FLAG;
+import static android.graphics.Paint.*;
 
 import org.glob3.mobile.generated.*;
 
@@ -18,6 +16,8 @@ public final class Canvas_Android
 
    private static final int PAINT_FLAGS = ANTI_ALIAS_FLAG | LINEAR_TEXT_FLAG | FILTER_BITMAP_FLAG;
 
+   private final int _maxSize;
+
    private Bitmap      _bitmap = null;
    private Canvas      _canvas = null;
    private final Paint _fillPaint;
@@ -29,8 +29,11 @@ public final class Canvas_Android
    private final Rect  _rect  = new Rect();  // Rect instance for reuse (and avoid garbage)
 
 
-   Canvas_Android(final boolean retina) {
+   Canvas_Android(final boolean retina,
+                  final int maxSize) {
       super(retina);
+
+      _maxSize = maxSize;
 
       _fillPaint = new Paint(PAINT_FLAGS);
       _fillPaint.setAntiAlias(true);
@@ -45,16 +48,31 @@ public final class Canvas_Android
    @Override
    protected void _initialize(final int width,
                               final int height) {
-      final float devicePixelRatio = _retina ? IFactory.instance().getDeviceInfo().getDevicePixelRatio() : 1;
+      final float rawDevicePixelRatio = _retina ? IFactory.instance().getDeviceInfo().getDevicePixelRatio() : 1;
 
-      final int scaledWidth  = Math.round(width * devicePixelRatio);
-      final int scaledHeight = Math.round(height * devicePixelRatio);
+      float widthPixelRatio  = rawDevicePixelRatio;
+      float heightPixelRatio = rawDevicePixelRatio;
+
+      if (_maxSize > 0) {
+         final float goalWidth = (width * widthPixelRatio);
+         if (goalWidth > _maxSize) {
+            widthPixelRatio = (float) _maxSize / width;
+         }
+
+         final float goalHeight = (height * heightPixelRatio);
+         if (goalHeight > _maxSize) {
+            heightPixelRatio = (float) _maxSize / height;
+         }
+      }
+
+      final int scaledWidth  = (int) Math.ceil(width * widthPixelRatio);
+      final int scaledHeight = (int) Math.ceil(height * heightPixelRatio);
 
       _bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
       _canvas = new Canvas(_bitmap);
-      if (devicePixelRatio != 1) {
-         _canvas.scale(devicePixelRatio, devicePixelRatio);
-      }
+      //if ((widthPixelRatio != 1) || (heightPixelRatio != 1)) {
+      _canvas.scale(widthPixelRatio, heightPixelRatio);
+      //}
    }
 
 

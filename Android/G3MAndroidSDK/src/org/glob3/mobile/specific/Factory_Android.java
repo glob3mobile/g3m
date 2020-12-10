@@ -2,14 +2,15 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.*;
 
 import android.content.*;
 
 
 public final class Factory_Android
-         extends
-            IFactory {
+                                   extends
+                                      IFactory {
 
 
    private final Context _context;
@@ -73,7 +74,14 @@ public final class Factory_Android
 
    @Override
    public ICanvas createCanvas(final boolean retina) {
-      return new Canvas_Android(retina);
+      return new Canvas_Android(retina, -1);
+   }
+
+
+   @Override
+   public ICanvas createCanvas(final boolean retina,
+                               final int maxSize) {
+      return new Canvas_Android(retina, maxSize);
    }
 
 

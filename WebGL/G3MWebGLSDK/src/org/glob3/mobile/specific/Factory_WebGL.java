@@ -2,12 +2,13 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.*;
 
 
 public final class Factory_WebGL
-         extends
-            IFactory {
+                                 extends
+                                    IFactory {
 
 
    @Override
@@ -63,7 +64,14 @@ public final class Factory_WebGL
 
    @Override
    public ICanvas createCanvas(final boolean retina) {
-      return new Canvas_WebGL(retina);
+      return new Canvas_WebGL(retina, -1);
+   }
+
+
+   @Override
+   public ICanvas createCanvas(final boolean retina,
+                               final int maxSize) {
+      return new Canvas_WebGL(retina, maxSize);
    }
 
 

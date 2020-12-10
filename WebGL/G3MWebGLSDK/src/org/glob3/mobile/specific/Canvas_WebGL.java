@@ -11,6 +11,8 @@ public final class Canvas_WebGL
                                 extends
                                    ICanvas {
 
+   private final int _maxSize;
+
    private final JavaScriptObject _domCanvas;
    private final JavaScriptObject _domCanvasContext;
 
@@ -21,8 +23,12 @@ public final class Canvas_WebGL
    private int _height;
 
 
-   Canvas_WebGL(final boolean retina) {
+   Canvas_WebGL(final boolean retina,
+                final int maxSize) {
       super(retina);
+
+      _maxSize = maxSize;
+
       _domCanvas        = createCanvas();
       _domCanvasContext = getContext2D(_domCanvas);
    }
@@ -42,9 +48,26 @@ public final class Canvas_WebGL
 		var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas;
 
 		var isRetina = this.@org.glob3.mobile.generated.ICanvas::_retina;
-		var ratio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
-		var w = Math.ceil(width * ratio);
-		var h = Math.ceil(height * ratio);
+		var rawRatio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
+
+		var widthPixelRatio = rawDevicePixelRatio;
+		var heightPixelRatio = rawDevicePixelRatio;
+
+		var maxSize = this.@org.glob3.mobile.generated.ICanvas::_maxSize;
+		if (maxSize > 0) {
+			var goalWidth = (width * widthPixelRatio);
+			if (goalWidth > maxSize) {
+				widthPixelRatio = maxSize / width;
+			}
+
+			var goalHeight = (height * heightPixelRatio);
+			if (goalHeight > maxSize) {
+				heightPixelRatio = maxSize / height;
+			}
+		}
+
+		var w = Math.ceil(width * widthPixelRatio);
+		var h = Math.ceil(height * heightPixelRatio);
 
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_width = w;
 		this.@org.glob3.mobile.specific.Canvas_WebGL::_height = h;
@@ -52,13 +75,37 @@ public final class Canvas_WebGL
 		canvas.width = w;
 		canvas.height = h;
 
-		if (ratio != 1) {
-			var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-			context.scale(ratio, ratio);
-		}
+		//if ((widthPixelRatio != 1) || (heightPixelRatio != 1)) {
+		var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+		context.scale(widthPixelRatio, heightPixelRatio);
+		//}
 
 		this.@org.glob3.mobile.specific.Canvas_WebGL::tryToSetCurrentFontToContext()();
    }-*/;
+
+
+   //   private native void _initialize(final int width,
+   //                                   final int height) /*-{
+   //		var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas;
+   //
+   //		var isRetina = this.@org.glob3.mobile.generated.ICanvas::_retina;
+   //		var ratio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
+   //		var w = Math.ceil(width * ratio);
+   //		var h = Math.ceil(height * ratio);
+   //
+   //		this.@org.glob3.mobile.specific.Canvas_WebGL::_width = w;
+   //		this.@org.glob3.mobile.specific.Canvas_WebGL::_height = h;
+   //
+   //		canvas.width = w;
+   //		canvas.height = h;
+   //
+   //		if (ratio != 1) {
+   //			var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+   //			context.scale(ratio, ratio);
+   //		}
+   //
+   //		this.@org.glob3.mobile.specific.Canvas_WebGL::tryToSetCurrentFontToContext()();
+   //   }-*/;
 
 
    private static String createDOMFont(final GFont font) {

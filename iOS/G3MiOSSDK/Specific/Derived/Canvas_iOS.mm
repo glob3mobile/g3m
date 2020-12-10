@@ -66,9 +66,12 @@ void Canvas_iOS::_initialize(int width, int height) {
     }
   }
 
+  const size_t w = (size_t) ceil(width  * widthPixelRatio );
+  const size_t h = (size_t) ceil(height * heightPixelRatio);
+
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
-                                   (size_t) (width  * widthPixelRatio),
-                                   (size_t) (height * heightPixelRatio),
+                                   w,
+                                   h,
                                    8,          // bits per component
                                    0,          // bytes per row
                                    colorSpace,
