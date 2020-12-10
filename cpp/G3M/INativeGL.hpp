@@ -184,6 +184,8 @@ public:
 
   virtual int Error_NoError() const = 0;
 
+  virtual int getMaxTextureSize() const = 0;
+
   virtual int createProgram() const = 0;
   virtual bool deleteProgram(int program) const = 0;
   virtual void attachShader(int program, int shader) const = 0;

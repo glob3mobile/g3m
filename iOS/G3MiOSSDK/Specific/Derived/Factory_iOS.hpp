@@ -88,7 +88,12 @@ public:
   }
 
   ICanvas* createCanvas(bool retina) const {
-    return new Canvas_iOS(retina);
+    return new Canvas_iOS(retina, -1);
+  }
+
+  ICanvas* createCanvas(bool retina,
+                        const int maxSize) const {
+    return new Canvas_iOS(retina, maxSize);
   }
 
   IWebSocket* createWebSocket(const URL& url,

@@ -16,6 +16,8 @@
 
 class Canvas_iOS : public ICanvas {
 private:
+  const int _maxSize;
+
   CGContextRef   _context;
   UIFont*        _currentUIFont;
 
@@ -147,8 +149,10 @@ protected:
 
 
 public:
-  Canvas_iOS(bool retina) :
+  Canvas_iOS(bool retina,
+             int maxSize) :
   ICanvas(retina),
+  _maxSize(maxSize),
   _context(NULL),
   _currentUIFont(nil),
   _path(NULL),

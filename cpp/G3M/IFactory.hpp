@@ -73,6 +73,9 @@ public:
 
   virtual ICanvas* createCanvas(bool retina) const = 0;
 
+  virtual ICanvas* createCanvas(bool retina,
+                                const int maxSize) const = 0;
+
   virtual IWebSocket* createWebSocket(const URL& url,
                                       IWebSocketListener* listener,
                                       bool autodeleteListener,

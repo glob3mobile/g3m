@@ -248,7 +248,11 @@ public:
   }
   
   void clearDepthBuffer();
-  
+
+  int getMaxTextureSize() const {
+    return _nativeGL->getMaxTextureSize();
+  }
+
 };
 
 #endif
