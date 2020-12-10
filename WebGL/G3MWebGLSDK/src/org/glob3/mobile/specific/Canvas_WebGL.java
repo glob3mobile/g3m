@@ -48,7 +48,7 @@ public final class Canvas_WebGL
 		var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas;
 
 		var isRetina = this.@org.glob3.mobile.generated.ICanvas::_retina;
-		var rawRatio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
+		var rawDevicePixelRatio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
 
 		var widthPixelRatio = rawDevicePixelRatio;
 		var heightPixelRatio = rawDevicePixelRatio;
