@@ -84,30 +84,6 @@ public final class Canvas_WebGL
    }-*/;
 
 
-   //   private native void _initialize(final int width,
-   //                                   final int height) /*-{
-   //		var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas;
-   //
-   //		var isRetina = this.@org.glob3.mobile.generated.ICanvas::_retina;
-   //		var ratio = isRetina ? ($wnd.devicePixelRatio || 1) : 1;
-   //		var w = Math.ceil(width * ratio);
-   //		var h = Math.ceil(height * ratio);
-   //
-   //		this.@org.glob3.mobile.specific.Canvas_WebGL::_width = w;
-   //		this.@org.glob3.mobile.specific.Canvas_WebGL::_height = h;
-   //
-   //		canvas.width = w;
-   //		canvas.height = h;
-   //
-   //		if (ratio != 1) {
-   //			var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-   //			context.scale(ratio, ratio);
-   //		}
-   //
-   //		this.@org.glob3.mobile.specific.Canvas_WebGL::tryToSetCurrentFontToContext()();
-   //   }-*/;
-
-
    private static String createDOMFont(final GFont font) {
       final StringBuilder builder = new StringBuilder();
 
