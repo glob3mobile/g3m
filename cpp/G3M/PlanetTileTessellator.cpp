@@ -369,6 +369,9 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
       double elevation = 0;
 
       if ((elevationData != NULL) || (grid != NULL)) {
+#ifdef JAVA_CODE
+        @SuppressWarnings("null")
+#endif
         const double rawElevation = (elevationData == NULL) ? grid->getElevation(i, j) : elevationData->getElevationAt(position);
 
         elevation = ISNAN(rawElevation)? 0 : rawElevation * verticalExaggeration;
