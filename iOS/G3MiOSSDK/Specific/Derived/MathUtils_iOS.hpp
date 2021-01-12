@@ -200,7 +200,7 @@ public:
   }
 
   double nextRandomDouble() const {
-    return (double)rand() / RAND_MAX;
+    return (float)rand() / RAND_MAX;
   }
   
   double copySign(double a, double b) const {
