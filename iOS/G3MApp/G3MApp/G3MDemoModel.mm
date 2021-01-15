@@ -28,7 +28,8 @@
 #include "G3MVectorialDemoScene.hpp"
 #include "G3MMarksDemoScene.hpp"
 #include "G3M3DSymbologyDemoScene.hpp"
-#include "G3MPointCloudDemoScene.hpp"
+#include "G3MStaticPointCloudDemoScene.hpp"
+#include "G3MXPointCloudDemoScene.hpp"
 #include "G3M3DModelDemoScene.hpp"
 #include "G3MCameraDemoScene.hpp"
 #include "G3MIsosurfaceDemoScene.hpp"
@@ -73,29 +74,30 @@ _vectorStreamingRenderer(vectorStreamingRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
-  _scenes.push_back( new G3MRasterLayersDemoScene(this) );
-  _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
-  _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
-  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
-  _scenes.push_back( new G3MVectorialDemoScene(this) );
-  _scenes.push_back( new G3MMarksDemoScene(this) );
-  _scenes.push_back( new G3M3DSymbologyDemoScene(this) );
-  _scenes.push_back( new G3MPointCloudDemoScene(this) );
-  _scenes.push_back( new G3M3DModelDemoScene(this) );
-  _scenes.push_back( new G3MCameraDemoScene(this) );
-  _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
-  _scenes.push_back( new G3MTiledVectorDemoScene(this) );
-  _scenes.push_back( new G3MHUDDemoScene(this) );
-  _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
-  _scenes.push_back( new G3MAugmentedRealityDemoScene(this) );
-  _scenes.push_back( new G3MAnimatedMarksDemoScene(this) );
-  _scenes.push_back( new G3MCanvas2DDemoScene(this) );
-  _scenes.push_back( new G3MVectorStreaming1DemoScene(this) );
-  _scenes.push_back( new G3MVectorStreaming2DemoScene(this) );
-  _scenes.push_back( new G3MStereoDemoScene(this) );
-  _scenes.push_back( new G3M3DLandDemoScene(this) );
-  _scenes.push_back( new G3MExtrusionDemoScene(this) );
-  _scenes.push_back( new G3MSoccerMatchDemoScene(this) );
+  _scenes.push_back(  new G3MXPointCloudDemoScene(this)           );
+  _scenes.push_back(  new G3MRasterLayersDemoScene(this)          );
+  _scenes.push_back(  new G3MScenarioDEMDemoScene(this)           );
+  _scenes.push_back(  new G3MStreamingPointCloud1DemoScene(this)  );
+  _scenes.push_back(  new G3MStreamingPointCloud2DemoScene(this)  );
+  _scenes.push_back(  new G3MVectorialDemoScene(this)             );
+  _scenes.push_back(  new G3MMarksDemoScene(this)                 );
+  _scenes.push_back(  new G3M3DSymbologyDemoScene(this)           );
+  _scenes.push_back(  new G3MStaticPointCloudDemoScene(this)      );
+  _scenes.push_back(  new G3M3DModelDemoScene(this)               );
+  _scenes.push_back(  new G3MCameraDemoScene(this)                );
+  _scenes.push_back(  new G3MIsosurfaceDemoScene(this)            );
+  _scenes.push_back(  new G3MTiledVectorDemoScene(this)           );
+  _scenes.push_back(  new G3MHUDDemoScene(this)                   );
+  _scenes.push_back(  new G3MNonOverlappingMarksDemoScene(this)   );
+  _scenes.push_back(  new G3MAugmentedRealityDemoScene(this)      );
+  _scenes.push_back(  new G3MAnimatedMarksDemoScene(this)         );
+  _scenes.push_back(  new G3MCanvas2DDemoScene(this)              );
+  _scenes.push_back(  new G3MVectorStreaming1DemoScene(this)      );
+  _scenes.push_back(  new G3MVectorStreaming2DemoScene(this)      );
+  _scenes.push_back(  new G3MStereoDemoScene(this)                );
+  _scenes.push_back(  new G3M3DLandDemoScene(this)                );
+  _scenes.push_back(  new G3MExtrusionDemoScene(this)             );
+  _scenes.push_back(  new G3MSoccerMatchDemoScene(this)           );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {

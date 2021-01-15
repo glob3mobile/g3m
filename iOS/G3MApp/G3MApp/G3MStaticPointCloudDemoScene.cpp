@@ -1,11 +1,11 @@
 //
-//  G3MPointCloudDemoScene.cpp
+//  G3MStaticPointCloudDemoScene.cpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 11/18/13.
 //
 
-#include "G3MPointCloudDemoScene.hpp"
+#include "G3MStaticPointCloudDemoScene.hpp"
 
 #include <G3M/G3MWidget.hpp>
 #include <G3M/BingMapsLayer.hpp>
@@ -35,9 +35,9 @@
 
 
 
-class G3MPointCloudDemoScene_ParserAsyncTask : public GAsyncTask {
+class G3MStaticPointCloudDemoScene_ParserAsyncTask : public GAsyncTask {
 private:
-  G3MPointCloudDemoScene* _scene;
+  G3MStaticPointCloudDemoScene* _scene;
   const Planet*           _planet;
   const URL               _url;
   IByteBuffer*            _buffer;
@@ -52,10 +52,10 @@ private:
 
 
 public:
-  G3MPointCloudDemoScene_ParserAsyncTask(G3MPointCloudDemoScene* scene,
-                                         const Planet*           planet,
-                                         const URL&              url,
-                                         IByteBuffer*            buffer) :
+  G3MStaticPointCloudDemoScene_ParserAsyncTask(G3MStaticPointCloudDemoScene* scene,
+                                               const Planet*           planet,
+                                               const URL&              url,
+                                               IByteBuffer*            buffer) :
   _scene(scene),
   _planet(planet),
   _url(url),
@@ -64,7 +64,7 @@ public:
   {
   }
 
-  ~G3MPointCloudDemoScene_ParserAsyncTask() {
+  ~G3MStaticPointCloudDemoScene_ParserAsyncTask() {
     delete _buffer;
     delete _mesh;
   }
@@ -155,16 +155,16 @@ public:
 };
 
 
-class G3MPointCloudDemoScene_BufferDownloadListener : public IBufferDownloadListener {
+class G3MStaticPointCloudDemoScene_BufferDownloadListener : public IBufferDownloadListener {
 private:
   const IThreadUtils* _threadUtils;
-  G3MPointCloudDemoScene* _scene;
+  G3MStaticPointCloudDemoScene* _scene;
   const Planet* _planet;
 
 public:
-  G3MPointCloudDemoScene_BufferDownloadListener(G3MPointCloudDemoScene* scene,
-                                                const Planet*           planet,
-                                                const IThreadUtils*     threadUtils) :
+  G3MStaticPointCloudDemoScene_BufferDownloadListener(G3MStaticPointCloudDemoScene* scene,
+                                                      const Planet*           planet,
+                                                      const IThreadUtils*     threadUtils) :
   _scene(scene),
   _planet(planet),
   _threadUtils(threadUtils)
@@ -174,7 +174,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    _threadUtils->invokeAsyncTask(new G3MPointCloudDemoScene_ParserAsyncTask(_scene, _planet, url, buffer),
+    _threadUtils->invokeAsyncTask(new G3MStaticPointCloudDemoScene_ParserAsyncTask(_scene, _planet, url, buffer),
                                   true);
   }
 
@@ -193,11 +193,11 @@ public:
   }
 };
 
-void G3MPointCloudDemoScene::rawSelectOption(const std::string& option,
-                                             int optionIndex) {
+void G3MStaticPointCloudDemoScene::rawSelectOption(const std::string& option,
+                                                   int optionIndex) {
 }
 
-void G3MPointCloudDemoScene::setPointsCloudMesh(Mesh* mesh) {
+void G3MStaticPointCloudDemoScene::setPointsCloudMesh(Mesh* mesh) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
@@ -209,7 +209,7 @@ void G3MPointCloudDemoScene::setPointsCloudMesh(Mesh* mesh) {
                                        Geodetic3D::fromDegrees(39.12787093899339, -77.59965772558118, 5000));
 }
 
-void G3MPointCloudDemoScene::rawActivate(const G3MContext* context) {
+void G3MStaticPointCloudDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
@@ -228,8 +228,8 @@ void G3MPointCloudDemoScene::rawActivate(const G3MContext* context) {
                             DownloadPriority::HIGHEST,
                             TimeInterval::forever(),
                             true,
-                            new G3MPointCloudDemoScene_BufferDownloadListener(this,
-                                                                              context->getPlanet(),
-                                                                              context->getThreadUtils()),
+                            new G3MStaticPointCloudDemoScene_BufferDownloadListener(this,
+                                                                                    context->getPlanet(),
+                                                                                    context->getThreadUtils()),
                             true);
 }
