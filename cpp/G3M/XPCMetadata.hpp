@@ -11,12 +11,13 @@
 #include <vector>
 
 class JSONObject;
-class XPCDimension;
-class XPCNode;
 class XPCPointCloud;
 class G3MRenderContext;
+class XPCDimension;
+class XPCNode;
 class GLState;
 class Frustum;
+class XPCPointColorizer;
 
 class XPCMetadata {
 public:
@@ -30,8 +31,6 @@ public:
                    const G3MRenderContext* rc,
                    GLState* glState,
                    const Frustum* frustum,
-                   const float pointSize,
-                   const bool dynamicPointSize,
                    long long nowInMS);
 
   
@@ -43,7 +42,7 @@ private:
   
   XPCMetadata(const std::vector<XPCDimension*>* extraDimensions,
               const std::vector<XPCNode*>* rootNodes);
-  
+
 };
 
 #endif

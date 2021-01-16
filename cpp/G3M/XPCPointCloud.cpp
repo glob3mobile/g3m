@@ -131,10 +131,11 @@ XPCPointCloud::XPCPointCloud(const URL& serverURL,
                              bool readExpired,
                              const XPCPointColorizer* pointColorizer,
                              bool deletePointColorizer,
+                             const double minProjectedArea,
                              float pointSize,
                              bool dynamicPointSize,
                              float verticalExaggeration,
-                             double deltaHeight,
+                             float deltaHeight,
                              XPCMetadataListener* metadataListener,
                              bool deleteMetadataListener,
                              bool verbose) :
@@ -145,6 +146,7 @@ _timeToCache(timeToCache),
 _readExpired(readExpired),
 _pointColorizer(pointColorizer),
 _deletePointColorizer(deletePointColorizer),
+_minProjectedArea(minProjectedArea),
 _pointSize(pointSize),
 _dynamicPointSize(dynamicPointSize),
 _verticalExaggeration(verticalExaggeration),
@@ -218,7 +220,11 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                            const Frustum* frustum,
                            long long nowInMS) {
   if (_metadata != NULL) {
-    const long long renderedCount = _metadata->render(this, rc, glState, frustum, _pointSize, _dynamicPointSize, nowInMS);
+    const long long renderedCount = _metadata->render(this,
+                                                      rc,
+                                                      glState,
+                                                      frustum,
+                                                      nowInMS);
 
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {

@@ -58,6 +58,7 @@ public:
                      bool readExpired,
                      const XPCPointColorizer* pointColorizer,
                      bool deletePointColorizer,
+                     const double minProjectedArea,
                      float pointSize = 1.0f,
                      bool dynamicPointSize = true,
                      float verticalExaggeration = 1.0f,

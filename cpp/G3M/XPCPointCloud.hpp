@@ -30,10 +30,11 @@ private:
   const bool                _readExpired;
   const XPCPointColorizer*  _pointColorizer;
   const bool                _deletePointColorizer;
+  const double              _minProjectedArea;
   const float               _pointSize;
   const bool                _dynamicPointSize;
   const float               _verticalExaggeration;
-  const double              _deltaHeight;
+  const float               _deltaHeight;
   XPCMetadataListener*      _metadataListener;
   const bool                _deleteMetadataListener;
   const bool                _verbose;
@@ -57,16 +58,29 @@ public:
                 bool readExpired,
                 const XPCPointColorizer* pointColorizer,
                 bool deletePointColorizer,
+                const double minProjectedArea,
                 float pointSize,
                 bool dynamicPointSize,
                 float verticalExaggeration,
-                double deltaHeight,
+                float deltaHeight,
                 XPCMetadataListener* metadataListener,
                 bool deleteMetadataListener,
                 bool verbose);
 
   const std::string getCloudName() const {
     return _cloudName;
+  }
+
+  const float getVerticalExaggeration() const {
+    return _verticalExaggeration;
+  }
+
+  const float getDeltaHeight() const {
+    return _deltaHeight;
+  }
+
+  const double getMinProjectedArea() const {
+    return _minProjectedArea;
   }
 
   void initialize(const G3MContext* context);

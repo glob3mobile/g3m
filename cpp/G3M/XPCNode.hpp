@@ -14,6 +14,12 @@
 class JSONObject;
 class JSONArray;
 class Sector;
+class XPCPointCloud;
+class G3MRenderContext;
+class GLState;
+class Frustum;
+class XPCPointColorizer;
+class Sphere;
 
 
 class XPCNode {
@@ -31,21 +37,42 @@ private:
   const double _minZ;
   const double _maxZ;
 
-  const std::vector<std::string>* _childIDs;
-
+  const std::vector<XPCNode*>* _children;
+  const size_t _childrenSize;
 
   XPCNode(const std::string& id,
           const Sector* sector,
           const int pointsCount,
           const double minZ,
-          const double maxZ,
-          const std::vector<std::string>* childIDs);
+          const double maxZ);
+
+  Sphere* _bounds;
+  const Sphere* getBounds(const G3MRenderContext* rc,
+                          const XPCPointCloud* pointCloud);
+  
+  Sphere* calculateBounds(const G3MRenderContext* rc,
+                          const XPCPointCloud* pointCloud);
+
+
+  bool _renderedInPreviousFrame;
+
+  double    _projectedArea;
+  long long _projectedAreaTS;
+
+  bool _loadedContent;
+  bool _loadingContent;
 
 public:
   
   static const std::vector<XPCNode*>* fromJSON(const JSONArray* jsonArray);
 
   ~XPCNode();
+
+  long long render(const XPCPointCloud* pointCloud,
+                   const G3MRenderContext* rc,
+                   GLState* glState,
+                   const Frustum* frustum,
+                   long long nowInMS);
 
 };
 

@@ -75,7 +75,10 @@ void XPCRenderer::render(const G3MRenderContext* rc,
     const Frustum* frustum = camera->getFrustumInModelCoordinates();
     for (int i = 0; i < _cloudsSize; i++) {
       XPCPointCloud* cloud = _clouds[i];
-      cloud->render(rc, _glState, frustum, nowInMS);
+      cloud->render(rc,
+                    _glState,
+                    frustum,
+                    nowInMS);
     }
   }
 }
@@ -88,6 +91,7 @@ void XPCRenderer::addPointCloud(const URL& serverURL,
                                 bool readExpired,
                                 const XPCPointColorizer* pointColorizer,
                                 bool deletePointColorizer,
+                                const double minProjectedArea,
                                 float pointSize,
                                 bool dynamicPointSize,
                                 float verticalExaggeration,
@@ -100,6 +104,7 @@ void XPCRenderer::addPointCloud(const URL& serverURL,
                                                 cloudName,
                                                 downloadPriority, timeToCache, readExpired,
                                                 pointColorizer, deletePointColorizer,
+                                                minProjectedArea,
                                                 pointSize, dynamicPointSize,
                                                 verticalExaggeration, deltaHeight,
                                                 metadataListener, deleteMetadataListener,

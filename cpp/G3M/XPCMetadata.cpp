@@ -57,8 +57,6 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                               const G3MRenderContext* rc,
                               GLState* glState,
                               const Frustum* frustum,
-                              const float pointSize,
-                              const bool dynamicPointSize,
                               long long nowInMS) {
 
   long long renderedCount = 0;
@@ -66,12 +64,10 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
   for (size_t i = 0; i < _rootNodesSize; i++) {
     XPCNode* rootNode = _rootNodes->at(i);
 
-    renderedCount += rootNode->render(this,
+    renderedCount += rootNode->render(pointCloud,
                                       rc,
                                       glState,
                                       frustum,
-                                      pointSize,
-                                      dynamicPointSize,
                                       nowInMS);
   }
 
