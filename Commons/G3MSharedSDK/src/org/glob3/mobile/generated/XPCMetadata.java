@@ -16,12 +16,13 @@ package org.glob3.mobile.generated;
 
 
 //class JSONObject;
-//class XPCDimension;
-//class XPCNode;
 //class XPCPointCloud;
 //class G3MRenderContext;
+//class XPCDimension;
+//class XPCNode;
 //class GLState;
 //class Frustum;
+//class XPCPointColorizer;
 
 public class XPCMetadata
 {
@@ -58,7 +59,7 @@ public class XPCMetadata
   }
 
 
-  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, float pointSize, boolean dynamicPointSize, long nowInMS)
+  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS)
   {
   
     long renderedCount = 0;
@@ -67,7 +68,7 @@ public class XPCMetadata
     {
       XPCNode rootNode = _rootNodes.get(i);
   
-      renderedCount += rootNode.render(this, rc, glState, frustum, pointSize, dynamicPointSize, nowInMS);
+      renderedCount += rootNode.render(pointCloud, rc, glState, frustum, nowInMS);
     }
   
     return renderedCount;

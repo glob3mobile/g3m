@@ -122,38 +122,38 @@ public class XPCRenderer extends DefaultRenderer
 
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, pointSize, dynamicPointSize, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, false);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, pointSize, dynamicPointSize, verticalExaggeration, deltaHeight, metadataListener, true, false);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, verticalExaggeration, deltaHeight, metadataListener, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, pointSize, dynamicPointSize, verticalExaggeration, deltaHeight, null, true, false);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, verticalExaggeration, deltaHeight, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, float pointSize, boolean dynamicPointSize, float verticalExaggeration)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, float verticalExaggeration)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, pointSize, dynamicPointSize, verticalExaggeration, 0, null, true, false);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, verticalExaggeration, 0, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, float pointSize, boolean dynamicPointSize)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, pointSize, dynamicPointSize, 1.0f, 0, null, true, false);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, 1.0f, 0, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, float pointSize)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, pointSize, true, 1.0f, 0, null, true, false);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, true, 1.0f, 0, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, 1.0f, true, 1.0f, 0, null, true, false);
+     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, 1.0f, true, 1.0f, 0, null, true, false);
   }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, boolean verbose)
+  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, boolean verbose)
   {
   
-    XPCPointCloud pointCloud = new XPCPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, pointSize, dynamicPointSize, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, verbose);
+    XPCPointCloud pointCloud = new XPCPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, verbose);
   
     if (_context != null)
     {

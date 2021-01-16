@@ -95,7 +95,7 @@ void XPCRenderer::addPointCloud(const URL& serverURL,
                                 float pointSize,
                                 bool dynamicPointSize,
                                 float verticalExaggeration,
-                                double deltaHeight,
+                                float deltaHeight,
                                 XPCMetadataListener* metadataListener,
                                 bool deleteMetadataListener,
                                 bool verbose) {

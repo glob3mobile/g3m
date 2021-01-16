@@ -12,7 +12,7 @@
 #include "Color.hpp"
 
 class XPCMetadata;
-class PCPoint;
+class XPCPoint;
 
 
 class XPCPointColorizer {
@@ -21,7 +21,7 @@ public:
   }
 
   virtual Color colorize(const XPCMetadata* metadata,
-                         const PCPoint* point) = 0;
+                         const XPCPoint* point) = 0;
 };
 
 

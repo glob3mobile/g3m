@@ -33,10 +33,11 @@ public class XPCPointCloud extends RCObject
   private final boolean _readExpired;
   private final XPCPointColorizer _pointColorizer;
   private final boolean _deletePointColorizer;
+  private final double _minProjectedArea;
   private final float _pointSize;
   private final boolean _dynamicPointSize;
   private final float _verticalExaggeration;
-  private final double _deltaHeight;
+  private final float _deltaHeight;
   private XPCMetadataListener _metadataListener;
   private final boolean _deleteMetadataListener;
   private final boolean _verbose;
@@ -68,7 +69,7 @@ public class XPCPointCloud extends RCObject
     super.dispose();
   }
 
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, float pointSize, boolean dynamicPointSize, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, boolean verbose)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, boolean verbose)
   {
      _serverURL = serverURL;
      _cloudName = cloudName;
@@ -77,6 +78,7 @@ public class XPCPointCloud extends RCObject
      _readExpired = readExpired;
      _pointColorizer = pointColorizer;
      _deletePointColorizer = deletePointColorizer;
+     _minProjectedArea = minProjectedArea;
      _pointSize = pointSize;
      _dynamicPointSize = dynamicPointSize;
      _verticalExaggeration = verticalExaggeration;
@@ -95,6 +97,21 @@ public class XPCPointCloud extends RCObject
   public final String getCloudName()
   {
     return _cloudName;
+  }
+
+  public final float getVerticalExaggeration()
+  {
+    return _verticalExaggeration;
+  }
+
+  public final float getDeltaHeight()
+  {
+    return _deltaHeight;
+  }
+
+  public final double getMinProjectedArea()
+  {
+    return _minProjectedArea;
   }
 
   public final void initialize(G3MContext context)
@@ -123,7 +140,7 @@ public class XPCPointCloud extends RCObject
   {
     if (_metadata != null)
     {
-      final long renderedCount = _metadata.render(this, rc, glState, frustum, _pointSize, _dynamicPointSize, nowInMS);
+      final long renderedCount = _metadata.render(this, rc, glState, frustum, nowInMS);
   
       if (_lastRenderedCount != renderedCount)
       {

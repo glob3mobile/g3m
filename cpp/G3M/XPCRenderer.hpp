@@ -62,7 +62,7 @@ public:
                      float pointSize = 1.0f,
                      bool dynamicPointSize = true,
                      float verticalExaggeration = 1.0f,
-                     double deltaHeight = 0,
+                     float deltaHeight = 0,
                      XPCMetadataListener* metadataListener = NULL,
                      bool deleteMetadataListener = true,
                      bool verbose = false);
