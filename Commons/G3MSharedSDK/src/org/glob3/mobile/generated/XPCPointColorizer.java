@@ -1,0 +1,30 @@
+package org.glob3.mobile.generated;
+//
+//  XPCPointColorizer.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez-Deck on 1/15/21.
+//
+
+//
+//  XPCPointColorizer.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez-Deck on 1/15/21.
+//
+
+
+
+
+//class XPCMetadata;
+//class PCPoint;
+
+
+public abstract class XPCPointColorizer
+{
+  public void dispose()
+  {
+  }
+
+  public abstract Color colorize(XPCMetadata metadata, PCPoint point);
+}
