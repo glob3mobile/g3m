@@ -23,6 +23,10 @@ public:
 
   static const std::vector<XPCDimension*>* fromJSON(const JSONArray* jsonArray);
 
+  ~XPCDimension() {
+
+  }
+
 private:
   const std::string _name;
   const std::string _type;

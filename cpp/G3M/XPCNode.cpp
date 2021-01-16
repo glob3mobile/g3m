@@ -92,5 +92,7 @@ _childIDs(childIDs)
 XPCNode::~XPCNode() {
   delete _sector;
 
+#if C_CODE
   delete _childIDs;
+#endif
 }

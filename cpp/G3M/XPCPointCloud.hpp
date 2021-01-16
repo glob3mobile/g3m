@@ -23,20 +23,20 @@ class XPCMetadata;
 
 class XPCPointCloud : public RCObject {
 private:
-  const URL                  _serverURL;
-  const std::string          _cloudName;
-  const long long            _downloadPriority;
-  const TimeInterval         _timeToCache;
-  const bool                 _readExpired;
-  const XPCPointColorizer*   _pointColorizer;
-  const bool                 _deletePointColorizer;
-  const float                _pointSize;
-  const bool                 _dynamicPointSize;
-  const float                _verticalExaggeration;
-  const double               _deltaHeight;
-  const XPCMetadataListener* _metadataListener;
-  const bool                 _deleteMetadataListener;
-  const bool                 _verbose;
+  const URL                 _serverURL;
+  const std::string         _cloudName;
+  const long long           _downloadPriority;
+  const TimeInterval        _timeToCache;
+  const bool                _readExpired;
+  const XPCPointColorizer*  _pointColorizer;
+  const bool                _deletePointColorizer;
+  const float               _pointSize;
+  const bool                _dynamicPointSize;
+  const float               _verticalExaggeration;
+  const double              _deltaHeight;
+  XPCMetadataListener*      _metadataListener;
+  const bool                _deleteMetadataListener;
+  const bool                _verbose;
 
   bool _downloadingMetadata;
   bool _errorDownloadingMetadata;
@@ -61,7 +61,7 @@ public:
                 bool dynamicPointSize,
                 float verticalExaggeration,
                 double deltaHeight,
-                const XPCMetadataListener* metadataListener,
+                XPCMetadataListener* metadataListener,
                 bool deleteMetadataListener,
                 bool verbose);
 

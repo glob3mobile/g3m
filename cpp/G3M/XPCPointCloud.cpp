@@ -135,7 +135,7 @@ XPCPointCloud::XPCPointCloud(const URL& serverURL,
                              bool dynamicPointSize,
                              float verticalExaggeration,
                              double deltaHeight,
-                             const XPCMetadataListener* metadataListener,
+                             XPCMetadataListener* metadataListener,
                              bool deleteMetadataListener,
                              bool verbose) :
 _serverURL(serverURL),
