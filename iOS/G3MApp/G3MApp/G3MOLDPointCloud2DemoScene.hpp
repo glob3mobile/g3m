@@ -1,16 +1,16 @@
 //
-//  G3MStreamingPointCloud2DemoScene.hpp
+//  G3MOLDPointCloud2DemoScene.hpp
 //  G3MApp
 //
 //  Created by Diego Gomez Deck on 8/19/14.
 //
 
-#ifndef __G3MApp__G3MStreamingPointCloud2DemoScene__
-#define __G3MApp__G3MStreamingPointCloud2DemoScene__
+#ifndef __G3MApp__G3MOLDPointCloud2DemoScene__
+#define __G3MApp__G3MOLDPointCloud2DemoScene__
 
 #include "G3MDemoScene.hpp"
 
-class G3MStreamingPointCloud2DemoScene : public G3MDemoScene {
+class G3MOLDPointCloud2DemoScene : public G3MDemoScene {
 protected:
   void rawActivate(const G3MContext* context);
 
@@ -20,9 +20,8 @@ protected:
   }
 
 public:
-  G3MStreamingPointCloud2DemoScene(G3MDemoModel* model) :
+  G3MOLDPointCloud2DemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "Amsterdam - Point Cloud streaming", "", -1)
-//  G3MDemoScene(model, "Streaming Points 2", "", -1)
   {
   }
 

@@ -12,6 +12,18 @@
 		44AFBB2319D4273A00EB78E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */; platformFilter = ios; };
 		44AFBB2719D4276000EB78E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2619D4276000EB78E9 /* QuartzCore.framework */; platformFilter = ios; };
 		44AFBB2919D4286C00EB78E9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2819D4286C00EB78E9 /* CoreData.framework */; platformFilter = ios; };
+		CF2744FF25B1AF450056304B /* XPCRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2744FD25B1AF450056304B /* XPCRenderer.cpp */; };
+		CF27450125B1B0260056304B /* XPCRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2744FE25B1AF450056304B /* XPCRenderer.hpp */; };
+		CF27451125B1D0120056304B /* XPCMetadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27450F25B1D0120056304B /* XPCMetadata.cpp */; };
+		CF27451525B1D0700056304B /* XPCPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27451325B1D0700056304B /* XPCPointColorizer.cpp */; };
+		CF27451925B1D12A0056304B /* XPCMetadataListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27451725B1D1290056304B /* XPCMetadataListener.cpp */; };
+		CF27451B25B1D1CD0056304B /* XPCPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27451425B1D0700056304B /* XPCPointColorizer.hpp */; };
+		CF27451C25B1D1CD0056304B /* XPCMetadata.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27451025B1D0120056304B /* XPCMetadata.hpp */; };
+		CF27451D25B1D1CD0056304B /* XPCMetadataListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27451825B1D1290056304B /* XPCMetadataListener.hpp */; };
+		CF27452125B1D2CC0056304B /* XPCPointCloud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27451F25B1D2CC0056304B /* XPCPointCloud.cpp */; };
+		CF27452525B1F2C20056304B /* XPCDimension.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27452325B1F2C20056304B /* XPCDimension.cpp */; };
+		CF27452925B2047B0056304B /* XPCNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27452725B2047B0056304B /* XPCNode.cpp */; };
+		CF27452E25B2F73C0056304B /* XPCParsing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27452C25B2F73C0056304B /* XPCParsing.cpp */; };
 		CF277C8423E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF277C8223E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp */; };
 		CF277C8523E2C083000B969C /* CanvasOwnerImageBuilderWrapper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF277C8323E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.hpp */; };
 		CF277C8823E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF277C8623E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp */; };
@@ -127,7 +139,7 @@
 		CF6606A523DF2FFD00795C7F /* BSONParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66022B23DF2DA600795C7F /* BSONParser.hpp */; };
 		CF6606A623DF2FFD00795C7F /* MutableMatrix44D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66022D23DF2DA600795C7F /* MutableMatrix44D.hpp */; };
 		CF6606A723DF2FFD00795C7F /* FloatBufferBuilderFromGeodetic.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023023DF2DA600795C7F /* FloatBufferBuilderFromGeodetic.hpp */; };
-		CF6606A823DF2FFD00795C7F /* PointCloudsRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023123DF2DA600795C7F /* PointCloudsRenderer.hpp */; };
+		CF6606A823DF2FFD00795C7F /* OLDPointCloudsRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023123DF2DA600795C7F /* OLDPointCloudsRenderer.hpp */; };
 		CF6606A923DF2FFD00795C7F /* BalloonCanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023223DF2DA600795C7F /* BalloonCanvasElement.hpp */; };
 		CF6606AA23DF2FFD00795C7F /* Planet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023323DF2DA600795C7F /* Planet.hpp */; };
 		CF6606AB23DF2FFD00795C7F /* ViewMode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023A23DF2DA600795C7F /* ViewMode.hpp */; };
@@ -843,7 +855,7 @@
 		CF66097523DF330700795C7F /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049123DF2DAB00795C7F /* MutableMatrix44D.cpp */; };
 		CF66097623DF330700795C7F /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049323DF2DAB00795C7F /* Planet.cpp */; };
 		CF66097723DF330700795C7F /* BalloonCanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049423DF2DAB00795C7F /* BalloonCanvasElement.cpp */; };
-		CF66097823DF330700795C7F /* PointCloudsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049523DF2DAB00795C7F /* PointCloudsRenderer.cpp */; };
+		CF66097823DF330700795C7F /* OLDPointCloudsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049523DF2DAB00795C7F /* OLDPointCloudsRenderer.cpp */; };
 		CF66097923DF330700795C7F /* GEOFeatureCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049623DF2DAB00795C7F /* GEOFeatureCollection.cpp */; };
 		CF66097A23DF330700795C7F /* BSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049823DF2DAB00795C7F /* BSONParser.cpp */; };
 		CF66097B23DF330700795C7F /* Angle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049A23DF2DAB00795C7F /* Angle.cpp */; };
@@ -923,6 +935,10 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF27451B25B1D1CD0056304B /* XPCPointColorizer.hpp in CopyFiles */,
+				CF27451C25B1D1CD0056304B /* XPCMetadata.hpp in CopyFiles */,
+				CF27451D25B1D1CD0056304B /* XPCMetadataListener.hpp in CopyFiles */,
+				CF27450125B1B0260056304B /* XPCRenderer.hpp in CopyFiles */,
 				CF277C8923E2C5E7000B969C /* CanvasOwnerImageListenerWrapper.hpp in CopyFiles */,
 				CF277C8523E2C083000B969C /* CanvasOwnerImageBuilderWrapper.hpp in CopyFiles */,
 				CF66063E23DF2FFD00795C7F /* BufferElevationData.hpp in CopyFiles */,
@@ -1031,7 +1047,7 @@
 				CF6606A523DF2FFD00795C7F /* BSONParser.hpp in CopyFiles */,
 				CF6606A623DF2FFD00795C7F /* MutableMatrix44D.hpp in CopyFiles */,
 				CF6606A723DF2FFD00795C7F /* FloatBufferBuilderFromGeodetic.hpp in CopyFiles */,
-				CF6606A823DF2FFD00795C7F /* PointCloudsRenderer.hpp in CopyFiles */,
+				CF6606A823DF2FFD00795C7F /* OLDPointCloudsRenderer.hpp in CopyFiles */,
 				CF6606A923DF2FFD00795C7F /* BalloonCanvasElement.hpp in CopyFiles */,
 				CF6606AA23DF2FFD00795C7F /* Planet.hpp in CopyFiles */,
 				CF6606AB23DF2FFD00795C7F /* ViewMode.hpp in CopyFiles */,
@@ -1422,6 +1438,22 @@
 		A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = JSONParser_iOS.hpp; path = Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A70F560C161B5CD800340256 /* JSONParser_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JSONParser_iOS.mm; path = Specific/Derived/JSONParser_iOS.mm; sourceTree = "<group>"; };
 		CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ByteBuffer_iOS.cpp; path = Specific/Derived/ByteBuffer_iOS.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF2744FD25B1AF450056304B /* XPCRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCRenderer.cpp; sourceTree = "<group>"; };
+		CF2744FE25B1AF450056304B /* XPCRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCRenderer.hpp; sourceTree = "<group>"; };
+		CF27450F25B1D0120056304B /* XPCMetadata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCMetadata.cpp; sourceTree = "<group>"; };
+		CF27451025B1D0120056304B /* XPCMetadata.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCMetadata.hpp; sourceTree = "<group>"; };
+		CF27451325B1D0700056304B /* XPCPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCPointColorizer.cpp; sourceTree = "<group>"; };
+		CF27451425B1D0700056304B /* XPCPointColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCPointColorizer.hpp; sourceTree = "<group>"; };
+		CF27451725B1D1290056304B /* XPCMetadataListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCMetadataListener.cpp; sourceTree = "<group>"; };
+		CF27451825B1D1290056304B /* XPCMetadataListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCMetadataListener.hpp; sourceTree = "<group>"; };
+		CF27451F25B1D2CC0056304B /* XPCPointCloud.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCPointCloud.cpp; sourceTree = "<group>"; };
+		CF27452025B1D2CC0056304B /* XPCPointCloud.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCPointCloud.hpp; sourceTree = "<group>"; };
+		CF27452325B1F2C20056304B /* XPCDimension.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCDimension.cpp; sourceTree = "<group>"; };
+		CF27452425B1F2C20056304B /* XPCDimension.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCDimension.hpp; sourceTree = "<group>"; };
+		CF27452725B2047B0056304B /* XPCNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCNode.cpp; sourceTree = "<group>"; };
+		CF27452825B2047B0056304B /* XPCNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCNode.hpp; sourceTree = "<group>"; };
+		CF27452C25B2F73C0056304B /* XPCParsing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCParsing.cpp; sourceTree = "<group>"; };
+		CF27452D25B2F73C0056304B /* XPCParsing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCParsing.hpp; sourceTree = "<group>"; };
 		CF277C8223E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasOwnerImageBuilderWrapper.cpp; sourceTree = "<group>"; };
 		CF277C8323E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasOwnerImageBuilderWrapper.hpp; sourceTree = "<group>"; };
 		CF277C8623E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasOwnerImageListenerWrapper.cpp; sourceTree = "<group>"; };
@@ -1643,7 +1675,7 @@
 		CF66022E23DF2DA600795C7F /* TileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TileLODTester.cpp; sourceTree = "<group>"; };
 		CF66022F23DF2DA600795C7F /* IImageUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IImageUtils.cpp; sourceTree = "<group>"; };
 		CF66023023DF2DA600795C7F /* FloatBufferBuilderFromGeodetic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FloatBufferBuilderFromGeodetic.hpp; sourceTree = "<group>"; };
-		CF66023123DF2DA600795C7F /* PointCloudsRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PointCloudsRenderer.hpp; sourceTree = "<group>"; };
+		CF66023123DF2DA600795C7F /* OLDPointCloudsRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OLDPointCloudsRenderer.hpp; sourceTree = "<group>"; };
 		CF66023223DF2DA600795C7F /* BalloonCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BalloonCanvasElement.hpp; sourceTree = "<group>"; };
 		CF66023323DF2DA600795C7F /* Planet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Planet.hpp; sourceTree = "<group>"; };
 		CF66023423DF2DA600795C7F /* PyramidDEMProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PyramidDEMProvider.cpp; sourceTree = "<group>"; };
@@ -2255,7 +2287,7 @@
 		CF66049223DF2DAB00795C7F /* TileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TileLODTester.hpp; sourceTree = "<group>"; };
 		CF66049323DF2DAB00795C7F /* Planet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Planet.cpp; sourceTree = "<group>"; };
 		CF66049423DF2DAB00795C7F /* BalloonCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BalloonCanvasElement.cpp; sourceTree = "<group>"; };
-		CF66049523DF2DAB00795C7F /* PointCloudsRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointCloudsRenderer.cpp; sourceTree = "<group>"; };
+		CF66049523DF2DAB00795C7F /* OLDPointCloudsRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OLDPointCloudsRenderer.cpp; sourceTree = "<group>"; };
 		CF66049623DF2DAB00795C7F /* GEOFeatureCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOFeatureCollection.cpp; sourceTree = "<group>"; };
 		CF66049723DF2DAB00795C7F /* JSONInteger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONInteger.hpp; sourceTree = "<group>"; };
 		CF66049823DF2DAB00795C7F /* BSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BSONParser.cpp; sourceTree = "<group>"; };
@@ -3093,6 +3125,8 @@
 				CF66046923DF2DAB00795C7F /* NullImageBackground.hpp */,
 				CF66034923DF2DA700795C7F /* NullStorage.cpp */,
 				CF66028E23DF2DA600795C7F /* NullStorage.hpp */,
+				CF66049523DF2DAB00795C7F /* OLDPointCloudsRenderer.cpp */,
+				CF66023123DF2DA600795C7F /* OLDPointCloudsRenderer.hpp */,
 				CF66026123DF2DA600795C7F /* OrderedRenderable.cpp */,
 				CF66032423DF2DA700795C7F /* OrderedRenderable.hpp */,
 				CF66023723DF2DA600795C7F /* OrTileLODTester.cpp */,
@@ -3112,8 +3146,6 @@
 				CF66032123DF2DA700795C7F /* PlanetRendererBuilder.hpp */,
 				CF66031923DF2DA700795C7F /* PlanetTileTessellator.cpp */,
 				CF66024723DF2DA600795C7F /* PlanetTileTessellator.hpp */,
-				CF66049523DF2DAB00795C7F /* PointCloudsRenderer.cpp */,
-				CF66023123DF2DA600795C7F /* PointCloudsRenderer.hpp */,
 				CF66033223DF2DA700795C7F /* ProceduralLayer.cpp */,
 				CF66026423DF2DA600795C7F /* ProceduralLayer.hpp */,
 				CF66018523DF2DA500795C7F /* ProjectedCornersDistanceTileLODTester.cpp */,
@@ -3320,6 +3352,22 @@
 				CF6603BB23DF2DA800795C7F /* WMSLayer.hpp */,
 				CF66019C23DF2DA500795C7F /* WrapperNearFrustumRenderer.cpp */,
 				CF66040023DF2DA900795C7F /* WrapperNearFrustumRenderer.hpp */,
+				CF27452325B1F2C20056304B /* XPCDimension.cpp */,
+				CF27452425B1F2C20056304B /* XPCDimension.hpp */,
+				CF27450F25B1D0120056304B /* XPCMetadata.cpp */,
+				CF27451025B1D0120056304B /* XPCMetadata.hpp */,
+				CF27451725B1D1290056304B /* XPCMetadataListener.cpp */,
+				CF27451825B1D1290056304B /* XPCMetadataListener.hpp */,
+				CF27452725B2047B0056304B /* XPCNode.cpp */,
+				CF27452825B2047B0056304B /* XPCNode.hpp */,
+				CF27452C25B2F73C0056304B /* XPCParsing.cpp */,
+				CF27452D25B2F73C0056304B /* XPCParsing.hpp */,
+				CF27451F25B1D2CC0056304B /* XPCPointCloud.cpp */,
+				CF27452025B1D2CC0056304B /* XPCPointCloud.hpp */,
+				CF27451325B1D0700056304B /* XPCPointColorizer.cpp */,
+				CF27451425B1D0700056304B /* XPCPointColorizer.hpp */,
+				CF2744FD25B1AF450056304B /* XPCRenderer.cpp */,
+				CF2744FE25B1AF450056304B /* XPCRenderer.hpp */,
 			);
 			name = G3M;
 			path = ../../cpp/G3M;
@@ -3656,8 +3704,10 @@
 				CF66087223DF330600795C7F /* RCObject.cpp in Sources */,
 				CF66087323DF330600795C7F /* PyramidNode.cpp in Sources */,
 				CF66087423DF330600795C7F /* GEO2DGeometry.cpp in Sources */,
+				CF27452125B1D2CC0056304B /* XPCPointCloud.cpp in Sources */,
 				CF66087523DF330600795C7F /* Projection.cpp in Sources */,
 				CF66087623DF330600795C7F /* DecimatedDEMGrid.cpp in Sources */,
+				CF2744FF25B1AF450056304B /* XPCRenderer.cpp in Sources */,
 				CF66087723DF330600795C7F /* RowLayoutImageBuilder.cpp in Sources */,
 				CF66087823DF330600795C7F /* ChildRenderer.cpp in Sources */,
 				CF66087923DF330600795C7F /* GEO2DLineStringGeometry.cpp in Sources */,
@@ -3674,6 +3724,7 @@
 				CF66088423DF330600795C7F /* GEOFeature.cpp in Sources */,
 				CF66088523DF330600795C7F /* TransformableMesh.cpp in Sources */,
 				CF66088623DF330600795C7F /* GPUUniformKey.cpp in Sources */,
+				CF27451125B1D0120056304B /* XPCMetadata.cpp in Sources */,
 				CF66088723DF330600795C7F /* G3MContext.cpp in Sources */,
 				CF66088823DF330600795C7F /* TransformableTextureMapping.cpp in Sources */,
 				CF66088923DF330600795C7F /* GEOLineRasterSymbol.cpp in Sources */,
@@ -3724,6 +3775,7 @@
 				CF6608B623DF330600795C7F /* CanvasElement.cpp in Sources */,
 				CF6608B723DF330600795C7F /* DEMListener.cpp in Sources */,
 				CF6608B823DF330600795C7F /* DefaultChessCanvasImageBuilder.cpp in Sources */,
+				CF27452925B2047B0056304B /* XPCNode.cpp in Sources */,
 				CF6608B923DF330600795C7F /* GEO2DMultiPolygonGeometry.cpp in Sources */,
 				CF6608BA23DF330600795C7F /* CircleShape.cpp in Sources */,
 				CF6608BB23DF330600795C7F /* StaticImageBuilder.cpp in Sources */,
@@ -3777,6 +3829,7 @@
 				CF6608EB23DF330600795C7F /* GenericQuadTree.cpp in Sources */,
 				CF6608EC23DF330600795C7F /* ITextUtils.cpp in Sources */,
 				CF6608ED23DF330700795C7F /* Shape.cpp in Sources */,
+				CF27452E25B2F73C0056304B /* XPCParsing.cpp in Sources */,
 				CF6608EE23DF330700795C7F /* BILDownloader.cpp in Sources */,
 				CF6608EF23DF330700795C7F /* TextureMapping.cpp in Sources */,
 				CF6608F023DF330700795C7F /* GEO3DPointGeometry.cpp in Sources */,
@@ -3794,6 +3847,7 @@
 				CF6608FC23DF330700795C7F /* AltitudeMode.cpp in Sources */,
 				CF6608FD23DF330700795C7F /* IMathUtils.cpp in Sources */,
 				CF6608FE23DF330700795C7F /* Vector2S.cpp in Sources */,
+				CF27451925B1D12A0056304B /* XPCMetadataListener.cpp in Sources */,
 				CF6608FF23DF330700795C7F /* Vector2D.cpp in Sources */,
 				CF66090023DF330700795C7F /* CameraDoubleDragHandler.cpp in Sources */,
 				CF66090123DF330700795C7F /* MultiTexturedHUDQuadWidget.cpp in Sources */,
@@ -3840,6 +3894,7 @@
 				CF66092A23DF330700795C7F /* ProtoRenderer.cpp in Sources */,
 				CF66092B23DF330700795C7F /* QuadTree.cpp in Sources */,
 				CF66092C23DF330700795C7F /* SceneJSNodeParser.cpp in Sources */,
+				CF27451525B1D0700056304B /* XPCPointColorizer.cpp in Sources */,
 				CF277C8423E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp in Sources */,
 				CF66092D23DF330700795C7F /* IndexedGeometryMesh.cpp in Sources */,
 				CF66092E23DF330700795C7F /* SimpleTextureMapping.cpp in Sources */,
@@ -3894,6 +3949,7 @@
 				CF66095F23DF330700795C7F /* GEOMeshes.cpp in Sources */,
 				CF66096023DF330700795C7F /* BoxImageBackground.cpp in Sources */,
 				CF66096123DF330700795C7F /* ChessboardTileImageProvider.cpp in Sources */,
+				CF27452525B1F2C20056304B /* XPCDimension.cpp in Sources */,
 				CF66096223DF330700795C7F /* DEMGrid.cpp in Sources */,
 				CF66096323DF330700795C7F /* NormalsUtils.cpp in Sources */,
 				CF66096423DF330700795C7F /* HUDAbsoluteSize.cpp in Sources */,
@@ -3916,7 +3972,7 @@
 				CF66097523DF330700795C7F /* MutableMatrix44D.cpp in Sources */,
 				CF66097623DF330700795C7F /* Planet.cpp in Sources */,
 				CF66097723DF330700795C7F /* BalloonCanvasElement.cpp in Sources */,
-				CF66097823DF330700795C7F /* PointCloudsRenderer.cpp in Sources */,
+				CF66097823DF330700795C7F /* OLDPointCloudsRenderer.cpp in Sources */,
 				CF66097923DF330700795C7F /* GEOFeatureCollection.cpp in Sources */,
 				CF66097A23DF330700795C7F /* BSONParser.cpp in Sources */,
 				CF66097B23DF330700795C7F /* Angle.cpp in Sources */,

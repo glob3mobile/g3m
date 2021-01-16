@@ -17,7 +17,8 @@
 #include <G3M/ShapesRenderer.hpp>
 #include <G3M/MarksRenderer.hpp>
 #include <G3M/GEORenderer.hpp>
-#include <G3M/PointCloudsRenderer.hpp>
+#include <G3M/OLDPointCloudsRenderer.hpp>
+#include <G3M/XPCRenderer.hpp>
 #include <G3M/HUDRenderer.hpp>
 #include <G3M/NonOverlappingMarksRenderer.hpp>
 #include <G3M/VectorStreamingRenderer.hpp>
@@ -78,8 +79,11 @@ void G3MDemoBuilder::build() {
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   builder->addRenderer(marksRenderer);
 
-  PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
-  builder->addRenderer(pointCloudsRenderer);
+  OLDPointCloudsRenderer* oldPointCloudsRenderer = new OLDPointCloudsRenderer();
+  builder->addRenderer(oldPointCloudsRenderer);
+
+  XPCRenderer* xPointCloudsRenderer = new XPCRenderer();
+  builder->addRenderer(xPointCloudsRenderer);
 
   GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
                                              meshRenderer,
@@ -108,7 +112,8 @@ void G3MDemoBuilder::build() {
                             shapesRenderer,
                             marksRenderer,
                             geoRenderer,
-                            pointCloudsRenderer,
+                            oldPointCloudsRenderer,
+                            xPointCloudsRenderer,
                             hudRenderer,
                             nonOverlappingMarksRenderer,
                             vectorStreamingRenderer);

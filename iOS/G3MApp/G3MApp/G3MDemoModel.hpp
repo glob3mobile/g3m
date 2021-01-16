@@ -22,7 +22,8 @@ class MeshRenderer;
 class ShapesRenderer;
 class PlanetRenderer;
 class GEORenderer;
-class PointCloudsRenderer;
+class OLDPointCloudsRenderer;
+class XPCRenderer;
 class HUDRenderer;
 class NonOverlappingMarksRenderer;
 class VectorStreamingRenderer;
@@ -39,7 +40,8 @@ private:
   ShapesRenderer*              _shapesRenderer;
   MarksRenderer*               _marksRenderer;
   GEORenderer*                 _geoRenderer;
-  PointCloudsRenderer*         _pointCloudsRenderer;
+  OLDPointCloudsRenderer*      _oldPointCloudsRenderer;
+  XPCRenderer*                 _xpcRenderer;
   HUDRenderer*                 _hudRenderer;
   NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
   VectorStreamingRenderer*     _vectorStreamingRenderer;
@@ -57,7 +59,8 @@ public:
                ShapesRenderer*              shapesRenderer,
                MarksRenderer*               marksRenderer,
                GEORenderer*                 geoRenderer,
-               PointCloudsRenderer*         pointCloudsRenderer,
+               OLDPointCloudsRenderer*      oldPointCloudsRenderer,
+               XPCRenderer*                 xpcloudsRenderer,
                HUDRenderer*                 hudRenderer,
                NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
                VectorStreamingRenderer*     vectorStreamingRenderer);
@@ -91,8 +94,12 @@ public:
     return _shapesRenderer;
   }
 
-  PointCloudsRenderer* getPointCloudsRenderer() const {
-    return _pointCloudsRenderer;
+  OLDPointCloudsRenderer* getOLDPointCloudsRenderer() const {
+    return _oldPointCloudsRenderer;
+  }
+
+  XPCRenderer* getXPCRenderer() const {
+    return _xpcRenderer;
   }
 
   HUDRenderer* getHUDRenderer() const {

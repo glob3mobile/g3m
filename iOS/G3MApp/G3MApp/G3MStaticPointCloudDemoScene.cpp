@@ -148,7 +148,7 @@ public:
       ILogger::instance()->logError("Can't parse \"%s\" (2)", _url._path.c_str());
     }
     else {
-      _scene->setPointsCloudMesh(_mesh);
+      _scene->setPointCloudMesh(_mesh);
       _mesh = NULL;
     }
   }
@@ -197,7 +197,7 @@ void G3MStaticPointCloudDemoScene::rawSelectOption(const std::string& option,
                                                    int optionIndex) {
 }
 
-void G3MStaticPointCloudDemoScene::setPointsCloudMesh(Mesh* mesh) {
+void G3MStaticPointCloudDemoScene::setPointCloudMesh(Mesh* mesh) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 

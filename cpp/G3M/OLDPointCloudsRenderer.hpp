@@ -1,13 +1,13 @@
 //
-//  PointCloudsRenderer.hpp
+//  OLDPointCloudsRenderer.hpp
 //  G3M
 //
 //  Created by Diego Gomez Deck on 8/19/14.
 //
 //
 
-#ifndef __G3M__PointCloudsRenderer__
-#define __G3M__PointCloudsRenderer__
+#ifndef __G3M__OLDPointCloudsRenderer__
+#define __G3M__OLDPointCloudsRenderer__
 
 #include "DefaultRenderer.hpp"
 
@@ -26,7 +26,7 @@ class ByteBufferIterator;
 class ITimer;
 
 
-class PointCloudsRenderer : public DefaultRenderer {
+class OLDPointCloudsRenderer : public DefaultRenderer {
 public:
   enum ColorPolicy {
     MIN_MAX_HEIGHT,
@@ -603,9 +603,9 @@ protected:
 
 public:
 
-  PointCloudsRenderer();
+  OLDPointCloudsRenderer();
 
-  ~PointCloudsRenderer();
+  ~OLDPointCloudsRenderer();
 
   RenderState getRenderState(const G3MRenderContext* rc);
 

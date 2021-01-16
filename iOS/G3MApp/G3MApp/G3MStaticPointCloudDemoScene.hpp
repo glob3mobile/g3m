@@ -26,7 +26,7 @@ public:
   {
   }
 
-  void setPointsCloudMesh(Mesh* mesh);
+  void setPointCloudMesh(Mesh* mesh);
 
 };
 
