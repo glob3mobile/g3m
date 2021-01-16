@@ -83,6 +83,8 @@ public:
     return _minProjectedArea;
   }
 
+  const float getDevicePointSize() const;
+
   void initialize(const G3MContext* context);
 
   void render(const G3MRenderContext* rc,

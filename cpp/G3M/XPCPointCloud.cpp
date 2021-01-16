@@ -14,6 +14,8 @@
 #include "IThreadUtils.hpp"
 #include "GAsyncTask.hpp"
 #include "IJSONParser.hpp"
+#include "IFactory.hpp"
+#include "IDeviceInfo.hpp"
 
 #include "XPCPointColorizer.hpp"
 #include "XPCMetadataListener.hpp"
@@ -253,4 +255,8 @@ XPCPointCloud::~XPCPointCloud() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
+}
+
+const float XPCPointCloud::getDevicePointSize() const {
+  return _pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
 }
