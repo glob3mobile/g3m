@@ -62,7 +62,7 @@ public:
                      bool dynamicPointSize = true,
                      float verticalExaggeration = 1.0f,
                      double deltaHeight = 0,
-                     const XPCMetadataListener* metadataListener = NULL,
+                     XPCMetadataListener* metadataListener = NULL,
                      bool deleteMetadataListener = true,
                      bool verbose = false);
 

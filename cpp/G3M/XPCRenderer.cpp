@@ -35,10 +35,10 @@ XPCRenderer::~XPCRenderer() {
     XPCPointCloud* cloud = _clouds[i];
     cloud->_release();
   }
-
+  
   _glState->_release();
   delete _timer;
-
+  
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -60,7 +60,7 @@ void XPCRenderer::render(const G3MRenderContext* rc,
       _timer = rc->getFactory()->createTimer();
     }
     const long long nowInMS = _timer->elapsedTimeInMilliseconds();
-
+    
     const Camera* camera = rc->getCurrentCamera();
     ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
     if (f == NULL) {
@@ -69,9 +69,9 @@ void XPCRenderer::render(const G3MRenderContext* rc,
     else {
       f->setMatrix(camera->getModelViewMatrix44D());
     }
-
+    
     _glState->setParent(glState);
-
+    
     const Frustum* frustum = camera->getFrustumInModelCoordinates();
     for (int i = 0; i < _cloudsSize; i++) {
       XPCPointCloud* cloud = _clouds[i];
@@ -92,10 +92,10 @@ void XPCRenderer::addPointCloud(const URL& serverURL,
                                 bool dynamicPointSize,
                                 float verticalExaggeration,
                                 double deltaHeight,
-                                const XPCMetadataListener* metadataListener,
+                                XPCMetadataListener* metadataListener,
                                 bool deleteMetadataListener,
                                 bool verbose) {
-
+  
   XPCPointCloud* pointCloud = new XPCPointCloud(serverURL,
                                                 cloudName,
                                                 downloadPriority, timeToCache, readExpired,
@@ -104,7 +104,7 @@ void XPCRenderer::addPointCloud(const URL& serverURL,
                                                 verticalExaggeration, deltaHeight,
                                                 metadataListener, deleteMetadataListener,
                                                 verbose);
-
+  
   if (_context != NULL) {
     pointCloud->initialize(_context);
   }
