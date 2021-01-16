@@ -37,14 +37,20 @@ _rootNodesSize( _extraDimensions->size() )
 
 XPCMetadata::~XPCMetadata() {
   for (size_t i = 0; i < _extraDimensions->size(); i++) {
-    delete _extraDimensions->at(i);
+    const XPCDimension* extraDimension = _extraDimensions->at(i);
+    delete extraDimension;
   }
+#ifdef C_CODE
   delete _extraDimensions;
+#endif
 
   for (size_t i = 0; i < _rootNodes->size(); i++) {
-    delete _rootNodes->at(i);
+    const XPCNode* rootNode = _rootNodes->at(i);
+    delete rootNode;
   }
+#ifdef C_CODE
   delete _rootNodes;
+#endif
 }
 
 long long XPCMetadata::render(const XPCPointCloud* pointCloud,
