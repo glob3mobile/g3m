@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class XPCMetadata;
-//class PCPoint;
+//class XPCPoint;
 
 
 public abstract class XPCPointColorizer
@@ -26,5 +26,5 @@ public abstract class XPCPointColorizer
   {
   }
 
-  public abstract Color colorize(XPCMetadata metadata, PCPoint point);
+  public abstract Color colorize(XPCMetadata metadata, XPCPoint point);
 }

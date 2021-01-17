@@ -197,7 +197,7 @@ void XPCPointCloud::errorDownloadingMetadata() {
 }
 
 void XPCPointCloud::errorParsingMetadata() {
-  _downloadingMetadata = false;
+  _downloadingMetadata  = false;
   _errorParsingMetadata = true;
 }
 

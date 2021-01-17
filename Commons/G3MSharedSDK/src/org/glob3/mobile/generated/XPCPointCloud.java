@@ -114,6 +114,11 @@ public class XPCPointCloud extends RCObject
     return _minProjectedArea;
   }
 
+  public final float getDevicePointSize()
+  {
+    return _pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+  }
+
   public final void initialize(G3MContext context)
   {
     _downloadingMetadata = true;
@@ -134,6 +139,26 @@ public class XPCPointCloud extends RCObject
     ILogger.instance().logInfo("Downloading metadata for \"%s\"", _cloudName);
   
     context.getDownloader().requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new XPCMetadataDownloadListener(this, context.getThreadUtils()), true);
+  }
+
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    if (_downloadingMetadata)
+    {
+      return RenderState.busy();
+    }
+  
+    if (_errorDownloadingMetadata)
+    {
+      return RenderState.error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
+    }
+  
+    if (_errorParsingMetadata)
+    {
+      return RenderState.error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
+    }
+  
+    return RenderState.ready();
   }
 
   public final void render(G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS)

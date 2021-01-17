@@ -106,9 +106,9 @@ public class XPCNode
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: check if the sphere fits into the parent's one
-  //  if (_parent) {
-  //    _parent->updateBoundingSphereWith(rc, vectorSet, _boundingSphere);
-  //  }
+    //  if (_parent) {
+    //    _parent->updateBoundingSphereWith(rc, vectorSet, _boundingSphere);
+    //  }
   
     //return Sphere::enclosingSphere(points, 0.1);
     return Sphere.enclosingSphere(points, 0);
