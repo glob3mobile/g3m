@@ -217,6 +217,43 @@ void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
   }
 }
 
+
+XPCPointCloud::~XPCPointCloud() {
+  if (_deletePointColorizer) {
+    delete _pointColorizer;
+  }
+  if (_deleteMetadataListener) {
+    delete _metadataListener;
+  }
+
+  delete _metadata;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+}
+
+const float XPCPointCloud::getDevicePointSize() const {
+  return _pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+}
+
+
+RenderState XPCPointCloud::getRenderState(const G3MRenderContext* rc) {
+  if (_downloadingMetadata) {
+    return RenderState::busy();
+  }
+
+  if (_errorDownloadingMetadata) {
+    return RenderState::error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
+  }
+
+  if (_errorParsingMetadata) {
+    return RenderState::error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
+  }
+
+  return RenderState::ready();
+}
+
 void XPCPointCloud::render(const G3MRenderContext* rc,
                            GLState* glState,
                            const Frustum* frustum,
@@ -240,23 +277,4 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
       _lastRenderedCount = renderedCount;
     }
   }
-}
-
-XPCPointCloud::~XPCPointCloud() {
-  if (_deletePointColorizer) {
-    delete _pointColorizer;
-  }
-  if (_deleteMetadataListener) {
-    delete _metadataListener;
-  }
-
-  delete _metadata;
-
-#ifdef JAVA_CODE
-  super.dispose();
-#endif
-}
-
-const float XPCPointCloud::getDevicePointSize() const {
-  return _pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
 }

@@ -11,6 +11,7 @@
 #include "RCObject.hpp"
 #include "URL.hpp"
 #include "TimeInterval.hpp"
+#include "RenderState.hpp"
 
 class XPCPointColorizer;
 class XPCMetadataListener;
@@ -86,6 +87,8 @@ public:
   const float getDevicePointSize() const;
 
   void initialize(const G3MContext* context);
+
+  RenderState getRenderState(const G3MRenderContext* rc);
 
   void render(const G3MRenderContext* rc,
               GLState* glState,
