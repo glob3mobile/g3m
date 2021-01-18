@@ -27,20 +27,11 @@ public class XPCMetadataParserAsyncTask extends GAsyncTask
 
   public final void runInBackground(G3MContext context)
   {
-    final JSONBaseObject jsonBaseObject = IJSONParser.instance().parse(_buffer);
+    _metadata = XPCMetadata.fromBuffer(_buffer);
 
     if (_buffer != null)
        _buffer.dispose();
     _buffer = null;
-
-    if (jsonBaseObject != null)
-    {
-      final JSONObject jsonObject = jsonBaseObject.asObject();
-      if (jsonObject != null)
-      {
-        _metadata = XPCMetadata.fromJSON(jsonObject);
-      }
-    }
   }
 
   public final void onPostExecute(G3MContext context)

@@ -15,46 +15,89 @@ package org.glob3.mobile.generated;
 
 
 
-//class JSONObject;
+//class IByteBuffer;
 //class XPCPointCloud;
 //class G3MRenderContext;
-//class XPCDimension;
-//class XPCNode;
 //class GLState;
 //class Frustum;
-//class XPCPointColorizer;
+//class XPCDimension;
+//class XPCTree;
+
 
 public class XPCMetadata
 {
 
-  public static XPCMetadata fromJSON(JSONObject jsonObject)
+  public static XPCMetadata fromBuffer(IByteBuffer buffer)
   {
-    if (jsonObject == null)
+    if (buffer == null)
     {
       return null;
     }
   
-    final java.util.ArrayList<XPCDimension> extraDimensions = XPCDimension.fromJSON(jsonObject.getAsArray("extraDimensions"));
+    ByteBufferIterator iterator = new ByteBufferIterator(buffer);
   
-    final java.util.ArrayList<XPCNode> rootNodes = XPCNode.fromJSON(jsonObject.getAsArray("rootNodes"));
   
-    return new XPCMetadata(extraDimensions, rootNodes);
+    byte version = iterator.nextUInt8();
+    if (version != 1)
+    {
+      ILogger.instance().logError("Unssuported format version");
+      return null;
+    }
+  
+    java.util.ArrayList<XPCDimension> dimensions = new java.util.ArrayList<XPCDimension>();
+    {
+      final int dimensionsCount = iterator.nextInt32();
+      for (int i = 0; i < dimensionsCount; i++)
+      {
+        final String name = iterator.nextZeroTerminatedString();
+        byte size = iterator.nextUInt8();
+        final String type = iterator.nextZeroTerminatedString();
+  
+        dimensions.add(new XPCDimension(name, size, type));
+      }
+    }
+  
+    java.util.ArrayList<XPCTree> trees = new java.util.ArrayList<XPCTree>();
+    {
+      final int treesCount = iterator.nextInt32();
+      for (int i = 0; i < treesCount; i++)
+      {
+        final String id = iterator.nextZeroTerminatedString();
+  
+        final double lowerLatitudeDegrees = iterator.nextDouble();
+        final double lowerLongitudeDegrees = iterator.nextDouble();
+        final double upperLatitudeDegrees = iterator.nextDouble();
+        final double upperLongitudeDegrees = iterator.nextDouble();
+  
+        final Sector sector = Sector.newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees, upperLatitudeDegrees, upperLongitudeDegrees);
+  
+        final double minZ = iterator.nextDouble();
+        final double maxZ = iterator.nextDouble();
+  
+        XPCNode rootNode = new XPCNode(id, sector, minZ, maxZ);
+  
+        XPCTree tree = new XPCTree(i, rootNode);
+        trees.add(tree);
+      }
+    }
+  
+    return new XPCMetadata(dimensions, trees);
   }
 
   public void dispose()
   {
-    for (int i = 0; i < _extraDimensions.size(); i++)
+    for (int i = 0; i < _dimensions.size(); i++)
     {
-      final XPCDimension extraDimension = _extraDimensions.get(i);
-      if (extraDimension != null)
-         extraDimension.dispose();
+      final XPCDimension dimension = _dimensions.get(i);
+      if (dimension != null)
+         dimension.dispose();
     }
   
-    for (int i = 0; i < _rootNodes.size(); i++)
+    for (int i = 0; i < _trees.size(); i++)
     {
-      final XPCNode rootNode = _rootNodes.get(i);
-      if (rootNode != null)
-         rootNode.dispose();
+      final XPCTree tree = _trees.get(i);
+      if (tree != null)
+         tree.dispose();
     }
   }
 
@@ -64,27 +107,29 @@ public class XPCMetadata
   
     long renderedCount = 0;
   
-    for (int i = 0; i < _rootNodesSize; i++)
+    for (int i = 0; i < _treesSize; i++)
     {
-      XPCNode rootNode = _rootNodes.get(i);
+      final XPCTree tree = _trees.get(i);
   
-      renderedCount += rootNode.render(pointCloud, rc, glState, frustum, nowInMS);
+      renderedCount += tree.render(pointCloud, rc, glState, frustum, nowInMS);
     }
   
     return renderedCount;
   }
 
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  XPCMetadata(XPCMetadata that);
 
-  private final java.util.ArrayList<XPCDimension> _extraDimensions;
-  private final java.util.ArrayList<XPCNode> _rootNodes;
-  private final int _rootNodesSize;
+  private final java.util.ArrayList<XPCDimension> _dimensions;
+  private final java.util.ArrayList<XPCTree> _trees;
+  private final int _treesSize;
 
-  private XPCMetadata(java.util.ArrayList<XPCDimension> extraDimensions, java.util.ArrayList<XPCNode> rootNodes)
+  private XPCMetadata(java.util.ArrayList<XPCDimension> dimensions, java.util.ArrayList<XPCTree> trees)
   {
-     _extraDimensions = extraDimensions;
-     _rootNodes = rootNodes;
-     _rootNodesSize = _extraDimensions.size();
+     _dimensions = dimensions;
+     _trees = trees;
+     _treesSize = _trees.size();
   
   }
 

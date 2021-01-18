@@ -15,65 +15,26 @@ package org.glob3.mobile.generated;
 
 
 
-//class JSONObject;
-//class JSONArray;
 //class Sector;
-//class XPCPointCloud;
+//class Sphere;
 //class G3MRenderContext;
+//class XPCPointCloud;
 //class GLState;
 //class Frustum;
-//class XPCPointColorizer;
-//class Sphere;
 
 
 public class XPCNode
 {
 
-  private static XPCNode fromJSON(JSONObject jsonObject)
-  {
-  
-    final String id = jsonObject.getAsString("id").value();
-  
-    final Sector sector = XPCParsing.parseSector(jsonObject.getAsArray("sector"));
-  
-    final int pointsCount = (int) jsonObject.getAsNumber("pointsCount").value();
-  
-    final double minZ = jsonObject.getAsNumber("minZ").value();
-    final double maxZ = jsonObject.getAsNumber("maxZ").value();
-  
-    return new XPCNode(id, sector, pointsCount, minZ, maxZ);
-  }
-
-
   private final String _id;
 
   private final Sector _sector;
-
-  private final int _pointsCount;
 
   private final double _minZ;
   private final double _maxZ;
 
   private final java.util.ArrayList<XPCNode> _children;
   private final int _childrenSize;
-
-  private XPCNode(String id, Sector sector, int pointsCount, double minZ, double maxZ)
-  {
-     _id = id;
-     _sector = sector;
-     _pointsCount = pointsCount;
-     _minZ = minZ;
-     _maxZ = maxZ;
-     _bounds = null;
-     _renderedInPreviousFrame = false;
-     _projectedArea = -1;
-     _projectedAreaTS = -1;
-     _loadedContent = false;
-     _loadingContent = false;
-     _children = null;
-     _childrenSize = 0;
-  
-  }
 
   private Sphere _bounds;
   private Sphere getBounds(G3MRenderContext rc, XPCPointCloud pointCloud)
@@ -124,38 +85,21 @@ public class XPCNode
   private boolean _loadingContent;
 
 
-  public static java.util.ArrayList<XPCNode> fromJSON(JSONArray jsonArray)
+  public XPCNode(String id, Sector sector, double minZ, double maxZ)
   {
-    if (jsonArray == null)
-    {
-      return null;
-    }
+     _id = id;
+     _sector = sector;
+     _minZ = minZ;
+     _maxZ = maxZ;
+     _bounds = null;
+     _renderedInPreviousFrame = false;
+     _projectedArea = -1;
+     _projectedAreaTS = -1;
+     _loadedContent = false;
+     _loadingContent = false;
+     _children = null;
+     _childrenSize = 0;
   
-    java.util.ArrayList<XPCNode> result = new java.util.ArrayList<XPCNode>();
-  
-    final int size = jsonArray.size();
-  
-    for (int i = 0; i < size; i++)
-    {
-      final JSONObject jsonObject = jsonArray.getAsObject(i);
-      XPCNode dimension = fromJSON(jsonObject);
-      if (dimension == null)
-      {
-        // release the memory allocated up to here
-        for (int j = 0; j < result.size(); j++)
-        {
-          if (result.get(j) != null)
-             result.get(j).dispose();
-        }
-        result = null;
-  
-        return null;
-      }
-  
-      result.add(dimension);
-    }
-  
-    return result;
   }
 
   public void dispose()
