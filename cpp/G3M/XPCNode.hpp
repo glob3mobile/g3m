@@ -11,22 +11,16 @@
 #include <vector>
 #include <string>
 
-class JSONObject;
-class JSONArray;
 class Sector;
-class XPCPointCloud;
+class Sphere;
 class G3MRenderContext;
+class XPCPointCloud;
 class GLState;
 class Frustum;
-class XPCPointColorizer;
-class Sphere;
 
 
 class XPCNode {
 private:
-
-  static XPCNode* fromJSON(const JSONObject* jsonObject);
-
 
   const std::string _id;
 
@@ -37,11 +31,6 @@ private:
 
   const std::vector<XPCNode*>* _children;
   const size_t _childrenSize;
-
-  XPCNode(const std::string& id,
-          const Sector* sector,
-          const double minZ,
-          const double maxZ);
 
   Sphere* _bounds;
   const Sphere* getBounds(const G3MRenderContext* rc,
@@ -60,8 +49,11 @@ private:
   bool _loadingContent;
 
 public:
-  
-  static const std::vector<XPCNode*>* fromJSON(const JSONArray* jsonArray);
+
+  XPCNode(const std::string& id,
+          const Sector* sector,
+          const double minZ,
+          const double maxZ);
 
   ~XPCNode();
 

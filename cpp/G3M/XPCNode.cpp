@@ -7,63 +7,13 @@
 
 #include "XPCNode.hpp"
 
-#include "JSONArray.hpp"
-#include "JSONObject.hpp"
-#include "JSONNumber.hpp"
-#include "JSONString.hpp"
-#include "Box.hpp"
+#include "Sector.hpp"
 #include "G3MRenderContext.hpp"
+#include "Box.hpp"
 #include "Planet.hpp"
 #include "Sphere.hpp"
 
-#include "Sector.hpp"
-#include "XPCParsing.hpp"
 #include "XPCPointCloud.hpp"
-
-
-const std::vector<XPCNode*>* XPCNode::fromJSON(const JSONArray* jsonArray) {
-  if (jsonArray == NULL) {
-    return NULL;
-  }
-  
-  std::vector<XPCNode*>* result = new std::vector<XPCNode*>();
-
-  const size_t size = jsonArray->size();
-
-  for (size_t i = 0; i < size; i++) {
-    const JSONObject* jsonObject = jsonArray->getAsObject(i);
-    XPCNode* dimension = XPCNode::fromJSON(jsonObject);
-    if (dimension == NULL) {
-      // release the memory allocated up to here
-      for (size_t j = 0; j < result->size(); j++) {
-        delete result->at(j);
-      }
-      delete result;
-
-      return NULL;
-    }
-
-    result->push_back( dimension );
-  }
-
-  return result;
-}
-
-
-XPCNode* XPCNode::fromJSON(const JSONObject* jsonObject) {
-
-  const std::string id = jsonObject->getAsString("id")->value();
-
-  const Sector* sector = XPCParsing::parseSector( jsonObject->getAsArray("sector") );
-
-  const double minZ = jsonObject->getAsNumber("minZ")->value();
-  const double maxZ = jsonObject->getAsNumber("maxZ")->value();
-
-  return new XPCNode(id,
-                     sector,
-                     minZ,
-                     maxZ);
-}
 
 
 XPCNode::XPCNode(const std::string& id,

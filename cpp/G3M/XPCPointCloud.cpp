@@ -7,19 +7,18 @@
 
 #include "XPCPointCloud.hpp"
 
+#include "GAsyncTask.hpp"
+#include "IBufferDownloadListener.hpp"
+#include "IThreadUtils.hpp"
 #include "ILogger.hpp"
 #include "G3MContext.hpp"
 #include "IDownloader.hpp"
-#include "IBufferDownloadListener.hpp"
-#include "IThreadUtils.hpp"
-#include "GAsyncTask.hpp"
-#include "IJSONParser.hpp"
 #include "IFactory.hpp"
 #include "IDeviceInfo.hpp"
 
-#include "XPCPointColorizer.hpp"
-#include "XPCMetadataListener.hpp"
 #include "XPCMetadata.hpp"
+#include "XPCMetadataListener.hpp"
+#include "XPCPointColorizer.hpp"
 
 
 class XPCMetadataParserAsyncTask : public GAsyncTask {
@@ -48,17 +47,10 @@ public:
   }
 
   void runInBackground(const G3MContext* context) {
-    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(_buffer);
+    _metadata = XPCMetadata::fromBuffer(_buffer);
 
     delete _buffer;
     _buffer = NULL;
-
-    if (jsonBaseObject != NULL) {
-      const JSONObject *jsonObject = jsonBaseObject->asObject();
-      if (jsonObject != NULL) {
-        _metadata = XPCMetadata::fromJSON(jsonObject);
-      }
-    }
   }
 
   void onPostExecute(const G3MContext* context) {

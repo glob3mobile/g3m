@@ -10,19 +10,19 @@
 
 #include <vector>
 
-class JSONObject;
+class IByteBuffer;
 class XPCPointCloud;
 class G3MRenderContext;
-class XPCDimension;
-class XPCNode;
 class GLState;
 class Frustum;
-class XPCPointColorizer;
+class XPCDimension;
+class XPCTree;
+
 
 class XPCMetadata {
 public:
   
-  static XPCMetadata* fromJSON(const JSONObject* jsonObject);
+  static XPCMetadata* fromBuffer(const IByteBuffer* buffer);
   
   ~XPCMetadata();
 
@@ -35,13 +35,14 @@ public:
 
   
 private:
+  XPCMetadata(const XPCMetadata& that);
 
   const std::vector<XPCDimension*>* _dimensions;
-  const std::vector<XPCNode*>*      _rootNodes;
-  const size_t                      _rootNodesSize;
+  const std::vector<XPCTree*>*      _trees;
+  const size_t                      _treesSize;
   
   XPCMetadata(const std::vector<XPCDimension*>* dimensions,
-              const std::vector<XPCNode*>* rootNodes);
+              const std::vector<XPCTree*>*      trees);
 
 };
 

@@ -32,6 +32,12 @@
 		CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */; };
 		CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E21770E84E00D5A80C /* CFNetwork.framework */; platformFilter = ios; };
 		CF4027E51770E85500D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E41770E85500D5A80C /* Security.framework */; platformFilter = ios; };
+		CF4AD09725B5F574009A1E48 /* XPCTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4AD09525B5F574009A1E48 /* XPCTree.cpp */; };
+		CF4AD09A25B5F90C009A1E48 /* XPCDimension.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452425B1F2C20056304B /* XPCDimension.hpp */; };
+		CF4AD09B25B5F90D009A1E48 /* XPCNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452825B2047B0056304B /* XPCNode.hpp */; };
+		CF4AD09C25B5F90D009A1E48 /* XPCParsing.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452D25B2F73C0056304B /* XPCParsing.hpp */; };
+		CF4AD09D25B5F90D009A1E48 /* XPCPointCloud.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452025B1D2CC0056304B /* XPCPointCloud.hpp */; };
+		CF4AD09E25B5F90D009A1E48 /* XPCTree.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4AD09625B5F574009A1E48 /* XPCTree.hpp */; };
 		CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */; };
 		CF66063E23DF2FFD00795C7F /* BufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66016C23DF2DA500795C7F /* BufferElevationData.hpp */; };
 		CF66063F23DF2FFD00795C7F /* GPUAttributeValueVecFloat.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66016D23DF2DA500795C7F /* GPUAttributeValueVecFloat.hpp */; };
@@ -935,6 +941,11 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF4AD09A25B5F90C009A1E48 /* XPCDimension.hpp in CopyFiles */,
+				CF4AD09B25B5F90D009A1E48 /* XPCNode.hpp in CopyFiles */,
+				CF4AD09C25B5F90D009A1E48 /* XPCParsing.hpp in CopyFiles */,
+				CF4AD09D25B5F90D009A1E48 /* XPCPointCloud.hpp in CopyFiles */,
+				CF4AD09E25B5F90D009A1E48 /* XPCTree.hpp in CopyFiles */,
 				CF27451B25B1D1CD0056304B /* XPCPointColorizer.hpp in CopyFiles */,
 				CF27451C25B1D1CD0056304B /* XPCMetadata.hpp in CopyFiles */,
 				CF27451D25B1D1CD0056304B /* XPCMetadataListener.hpp in CopyFiles */,
@@ -1475,6 +1486,8 @@
 		CF4027E41770E85500D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
+		CF4AD09525B5F574009A1E48 /* XPCTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCTree.cpp; sourceTree = "<group>"; };
+		CF4AD09625B5F574009A1E48 /* XPCTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCTree.hpp; sourceTree = "<group>"; };
 		CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = DeviceInfo_iOS.mm; path = Specific/Derived/DeviceInfo_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceInfo_iOS.hpp; path = Specific/Derived/DeviceInfo_iOS.hpp; sourceTree = "<group>"; };
 		CF66016B23DF2DA500795C7F /* SGTranslateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGTranslateNode.cpp; sourceTree = "<group>"; };
@@ -3368,6 +3381,8 @@
 				CF27451425B1D0700056304B /* XPCPointColorizer.hpp */,
 				CF2744FD25B1AF450056304B /* XPCRenderer.cpp */,
 				CF2744FE25B1AF450056304B /* XPCRenderer.hpp */,
+				CF4AD09525B5F574009A1E48 /* XPCTree.cpp */,
+				CF4AD09625B5F574009A1E48 /* XPCTree.hpp */,
 			);
 			name = G3M;
 			path = ../../cpp/G3M;
@@ -3645,6 +3660,7 @@
 				CF66083723DF330600795C7F /* TaitBryanAngles.cpp in Sources */,
 				CF66083823DF330600795C7F /* ChangedRendererInfoListener.cpp in Sources */,
 				CF66083923DF330600795C7F /* GEO3DPolygonGeometry.cpp in Sources */,
+				CF4AD09725B5F574009A1E48 /* XPCTree.cpp in Sources */,
 				CF66083A23DF330600795C7F /* HUDAbsolutePosition.cpp in Sources */,
 				CF66083B23DF330600795C7F /* GEOLabelRasterSymbol.cpp in Sources */,
 				CF66083C23DF330600795C7F /* RasterLayerTileImageProvider.cpp in Sources */,

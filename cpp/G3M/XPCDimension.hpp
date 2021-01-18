@@ -11,35 +11,28 @@
 #include <vector>
 #include <string>
 
-class JSONArray;
-class JSONObject;
-
 
 class XPCDimension {
+private:
+  const std::string   _name;
+  const unsigned char _size;
+  const std::string   _type;
 
-  static XPCDimension* fromJSON(const JSONObject* jsonObject);
 
 public:
-
-  static const std::vector<XPCDimension*>* fromJSON(const JSONArray* jsonArray);
-
-  ~XPCDimension() {
-
-  }
-
-private:
-  const std::string _name;
-  const std::string _type;
-
-
   XPCDimension(const std::string& name,
+               const unsigned char size,
                const std::string& type) :
   _name(name),
+  _size(size),
   _type(type)
   {
 
   }
 
+  ~XPCDimension() {
+
+  }
 
 };
 
