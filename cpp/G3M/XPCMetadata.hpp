@@ -36,11 +36,11 @@ public:
   
 private:
 
-  const std::vector<XPCDimension*>* _extraDimensions;
+  const std::vector<XPCDimension*>* _dimensions;
   const std::vector<XPCNode*>*      _rootNodes;
   const size_t                      _rootNodesSize;
   
-  XPCMetadata(const std::vector<XPCDimension*>* extraDimensions,
+  XPCMetadata(const std::vector<XPCDimension*>* dimensions,
               const std::vector<XPCNode*>* rootNodes);
 
 };

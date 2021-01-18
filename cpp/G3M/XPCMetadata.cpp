@@ -18,30 +18,32 @@ XPCMetadata* XPCMetadata::fromJSON(const JSONObject* jsonObject) {
     return NULL;
   }
 
-  const std::vector<XPCDimension*>* extraDimensions = XPCDimension::fromJSON( jsonObject->getAsArray("extraDimensions") );
+  const std::vector<XPCDimension*>* dimensions = XPCDimension::fromJSON( jsonObject->getAsArray("dimensions") );
 
-  const std::vector<XPCNode*>* rootNodes = XPCNode::fromJSON( jsonObject->getAsArray("rootNodes") );
+  //  const std::vector<XPCNode*>* rootNodes = XPCNode::fromJSON( jsonObject->getAsArray("rootNodes") );
 
-  return new XPCMetadata(extraDimensions, rootNodes);
+  const std::vector<XPCTree*>* rootNodes = XPCNode::fromJSON( jsonObject->getAsArray("rootNodes") );
+
+  return new XPCMetadata(dimensions, rootNodes);
 }
 
 
-XPCMetadata::XPCMetadata(const std::vector<XPCDimension*>* extraDimensions,
+XPCMetadata::XPCMetadata(const std::vector<XPCDimension*>* dimensions,
                          const std::vector<XPCNode*>* rootNodes) :
-_extraDimensions(extraDimensions),
+_dimensions(dimensions),
 _rootNodes(rootNodes),
-_rootNodesSize( _extraDimensions->size() )
+_rootNodesSize( _dimensions->size() )
 {
 
 }
 
 XPCMetadata::~XPCMetadata() {
-  for (size_t i = 0; i < _extraDimensions->size(); i++) {
-    const XPCDimension* extraDimension = _extraDimensions->at(i);
-    delete extraDimension;
+  for (size_t i = 0; i < _dimensions->size(); i++) {
+    const XPCDimension* dimension = _dimensions->at(i);
+    delete dimension;
   }
 #ifdef C_CODE
-  delete _extraDimensions;
+  delete _dimensions;
 #endif
 
   for (size_t i = 0; i < _rootNodes->size(); i++) {

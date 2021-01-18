@@ -56,14 +56,11 @@ XPCNode* XPCNode::fromJSON(const JSONObject* jsonObject) {
 
   const Sector* sector = XPCParsing::parseSector( jsonObject->getAsArray("sector") );
 
-  const int pointsCount = (int) jsonObject->getAsNumber("pointsCount")->value();
-
   const double minZ = jsonObject->getAsNumber("minZ")->value();
   const double maxZ = jsonObject->getAsNumber("maxZ")->value();
 
   return new XPCNode(id,
                      sector,
-                     pointsCount,
                      minZ,
                      maxZ);
 }
@@ -71,12 +68,10 @@ XPCNode* XPCNode::fromJSON(const JSONObject* jsonObject) {
 
 XPCNode::XPCNode(const std::string& id,
                  const Sector* sector,
-                 const int pointsCount,
                  const double minZ,
                  const double maxZ) :
 _id(id),
 _sector(sector),
-_pointsCount(pointsCount),
 _minZ(minZ),
 _maxZ(maxZ),
 _bounds(NULL),

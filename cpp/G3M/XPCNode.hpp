@@ -32,8 +32,6 @@ private:
 
   const Sector* _sector;
 
-  const int _pointsCount;
-
   const double _minZ;
   const double _maxZ;
 
@@ -42,7 +40,6 @@ private:
 
   XPCNode(const std::string& id,
           const Sector* sector,
-          const int pointsCount,
           const double minZ,
           const double maxZ);
 
