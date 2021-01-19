@@ -35,6 +35,9 @@ public:
   }
 
   void onMetadata(const XPCMetadata* metadata) const {
+
+//    metadata->getTree
+
     // _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 70000) );
 
     //    _g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(39.051416089546606258,
@@ -56,6 +59,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const float  verticalExaggeration = 1;
   const double deltaHeight          = 0;
 
+  const double minProjectedArea = 1000;
+
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
 
@@ -70,17 +75,21 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   model->getLayerSet()->addLayer(layer);
 
   //#warning TODO cache
-  model->getXPCRenderer()->addPointCloud(URL("http://192.168.1.69:8082"),
-                                         "Leica_M40",
+
+  model->getXPCRenderer()->addPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
+                                         "Leica_FFCC_SMALL_LOD",
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
-                                         PointCloudsRenderer::MIN_AVERAGE3_HEIGHT,
+                                         NULL, // const XPCPointColorizer* pointColorizer
+                                         true, // deletePointColorizer,
+                                         minProjectedArea,
                                          pointSize,
                                          dynamicPointSize,
                                          verticalExaggeration,
                                          deltaHeight,
                                          new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
+                                         true,
                                          true);
 
 }

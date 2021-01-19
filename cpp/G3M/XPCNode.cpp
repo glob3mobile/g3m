@@ -128,14 +128,16 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         renderedInThisFrame = true;
 
         if (_loadedContent) {
-          renderedCount += rawRender(pointCloud,
-                                     rc,
-                                     glState);
+#warning ________rawRender
+//          renderedCount += rawRender(pointCloud,
+//                                     rc,
+//                                     glState);
         }
         else {
           if (!_loadingContent) {
             _loadingContent = true;
-            loadContent(rc);
+#warning ________loadContent
+//            loadContent(rc);
           }
         }
 
@@ -156,7 +158,8 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
   if (_renderedInPreviousFrame != renderedInThisFrame) {
     if (_renderedInPreviousFrame) {
-      unload();
+#warning ________unload
+//      unload();
     }
     _renderedInPreviousFrame = renderedInThisFrame;
   }

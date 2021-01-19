@@ -10,6 +10,7 @@
 #include "ByteBufferIterator.hpp"
 #include "ILogger.hpp"
 #include "Sector.hpp"
+#include "ErrorHandling.hpp"
 
 #include "XPCDimension.hpp"
 #include "XPCNode.hpp"
@@ -21,10 +22,10 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
     return NULL;
   }
 
-  ByteBufferIterator iterator(buffer);
+  ByteBufferIterator it(buffer);
 
 
-  unsigned char version = iterator.nextUInt8();
+  unsigned char version = it.nextUInt8();
   if (version != 1) {
     ILogger::instance()->logError("Unssuported format version");
     return NULL;
@@ -32,11 +33,11 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
 
   std::vector<XPCDimension*>* dimensions = new std::vector<XPCDimension*>();
   {
-    const int dimensionsCount = iterator.nextInt32();
+    const int dimensionsCount = it.nextInt32();
     for (int i = 0; i < dimensionsCount; i++) {
-      const std::string name = iterator.nextZeroTerminatedString();
-      unsigned char     size = iterator.nextUInt8();
-      const std::string type = iterator.nextZeroTerminatedString();
+      const std::string name = it.nextZeroTerminatedString();
+      unsigned char     size = it.nextUInt8();
+      const std::string type = it.nextZeroTerminatedString();
 
       dimensions->push_back( new XPCDimension(name, size, type) );
     }
@@ -44,26 +45,30 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
 
   std::vector<XPCTree*>* trees = new std::vector<XPCTree*>();
   {
-    const int treesCount = iterator.nextInt32();
+    const int treesCount = it.nextInt32();
     for (int i = 0; i < treesCount; i++) {
-      const std::string id = iterator.nextZeroTerminatedString();
+      const std::string id = it.nextZeroTerminatedString();
 
-      const double lowerLatitudeDegrees  = iterator.nextDouble();
-      const double lowerLongitudeDegrees = iterator.nextDouble();
-      const double upperLatitudeDegrees  = iterator.nextDouble();
-      const double upperLongitudeDegrees = iterator.nextDouble();
+      const double lowerLatitudeDegrees  = it.nextDouble();
+      const double lowerLongitudeDegrees = it.nextDouble();
+      const double upperLatitudeDegrees  = it.nextDouble();
+      const double upperLongitudeDegrees = it.nextDouble();
 
       const Sector* sector = Sector::newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees,
                                                     upperLatitudeDegrees, upperLongitudeDegrees);
 
-      const double minZ = iterator.nextDouble();
-      const double maxZ = iterator.nextDouble();
+      const double minZ = it.nextDouble();
+      const double maxZ = it.nextDouble();
 
       XPCNode* rootNode = new XPCNode(id, sector, minZ, maxZ);
 
       XPCTree* tree = new XPCTree(i, rootNode);
       trees->push_back(tree);
     }
+  }
+
+  if (it.hasNext()) {
+    THROW_EXCEPTION("Logic error");
   }
 
   return new XPCMetadata(dimensions, trees);
