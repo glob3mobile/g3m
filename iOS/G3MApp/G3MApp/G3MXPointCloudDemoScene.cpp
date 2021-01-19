@@ -41,7 +41,7 @@ public:
 
       const Geodetic2D center = tree->getSector()->_center;
       
-      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, 70000) );
+      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, 700) );
     }
   }
 

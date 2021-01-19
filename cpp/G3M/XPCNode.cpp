@@ -117,7 +117,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
   if (bounds != NULL) {
     const bool isVisible = bounds->touchesFrustum(frustum);
     if (isVisible) {
-      if ((_projectedArea == -1) || ((_projectedAreaTS + 25) < nowInMS)) {
+      if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS)) {
         const double projectedArea = bounds->projectedArea(rc);
         _projectedArea   = projectedArea;
         _projectedAreaTS = nowInMS;
