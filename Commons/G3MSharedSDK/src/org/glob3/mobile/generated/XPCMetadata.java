@@ -64,21 +64,9 @@ public class XPCMetadata
       final int treesCount = it.nextInt32();
       for (int i = 0; i < treesCount; i++)
       {
-        final String nodeID = it.nextZeroTerminatedString();
-  
-        final double lowerLatitudeDegrees = it.nextDouble();
-        final double lowerLongitudeDegrees = it.nextDouble();
-        final double upperLatitudeDegrees = it.nextDouble();
-        final double upperLongitudeDegrees = it.nextDouble();
-  
-        final Sector sector = Sector.newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees, upperLatitudeDegrees, upperLongitudeDegrees);
-  
-        final double minZ = it.nextDouble();
-        final double maxZ = it.nextDouble();
-  
-        XPCNode rootNode = new XPCNode(nodeID, sector, minZ, maxZ);
-  
         final String treeID = su.toString(i);
+  
+        XPCNode rootNode = XPCNode.fromByteBufferIterator(it);
   
         XPCTree tree = new XPCTree(treeID, rootNode);
         trees.add(tree);

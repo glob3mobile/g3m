@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class GLState;
 //class Frustum;
 //class IDownloader;
+//class ByteBufferIterator;
 
 
 public class XPCNode extends RCObject
@@ -98,22 +99,7 @@ public class XPCNode extends RCObject
     _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(this, rc.getThreadUtils()), true);
   }
 
-  public void dispose()
-  {
-    if (_sector != null)
-       _sector.dispose();
-  
-    for (int i = 0; i < _childrenSize; i++)
-    {
-      XPCNode child = _children.get(i);
-      child._release();
-    }
-  
-    _children = null;
-  }
-
-
-  public XPCNode(String id, Sector sector, double minZ, double maxZ)
+  private XPCNode(String id, Sector sector, double minZ, double maxZ)
   {
      _id = id;
      _sector = sector;
@@ -130,6 +116,38 @@ public class XPCNode extends RCObject
      _downloader = null;
      _contentRequestID = -1;
   
+  }
+
+  public void dispose()
+  {
+    if (_sector != null)
+       _sector.dispose();
+  
+    for (int i = 0; i < _childrenSize; i++)
+    {
+      XPCNode child = _children.get(i);
+      child._release();
+    }
+  
+    _children = null;
+  }
+
+
+  public static XPCNode fromByteBufferIterator(ByteBufferIterator it)
+  {
+    final String nodeID = it.nextZeroTerminatedString();
+  
+    final double lowerLatitudeDegrees = it.nextDouble();
+    final double lowerLongitudeDegrees = it.nextDouble();
+    final double upperLatitudeDegrees = it.nextDouble();
+    final double upperLongitudeDegrees = it.nextDouble();
+  
+    final Sector sector = Sector.newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees, upperLatitudeDegrees, upperLongitudeDegrees);
+  
+    final double minZ = it.nextDouble();
+    final double maxZ = it.nextDouble();
+  
+    return new XPCNode(nodeID, sector, minZ, maxZ);
   }
 
 
@@ -157,6 +175,8 @@ public class XPCNode extends RCObject
         if (isBigEnough)
         {
           renderedInThisFrame = true;
+  
+          ILogger.instance().logInfo("- Rendering node \"%s\"", _id);
   
           if (_loadedContent)
           {

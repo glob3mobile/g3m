@@ -34,8 +34,29 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 
   public final void runInBackground(G3MContext context)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#error PARSE CHILDREN
+    ByteBufferIterator it = new ByteBufferIterator(_buffer);
+
+    byte version = it.nextUInt8();
+    if (version != 1)
+    {
+      ILogger.instance().logError("Unssuported format version");
+      return;
+    }
+
+    _children = new java.util.ArrayList<XPCNode>();
+
+    final int childrenCount = it.nextInt32();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      XPCNode child = XPCNode.fromByteBufferIterator(it);
+      _children.add(child);
+    }
+
+    if (it.hasNext())
+    {
+      throw new RuntimeException("Logic error");
+    }
+
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning _______TODO: PARSE POINTS
   }

@@ -218,4 +218,4 @@ public class XPCPointCloud extends RCObject
     return downloader.requestBuffer(nodeContentURL, _downloadPriority + deltaPriority, _timeToCache, _readExpired, listener, deleteListener);
   }
 
-  }
+}
