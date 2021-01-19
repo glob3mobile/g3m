@@ -15,15 +15,17 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class Sector;
 //class Sphere;
 //class G3MRenderContext;
 //class XPCPointCloud;
 //class GLState;
 //class Frustum;
+//class IDownloader;
 
 
-public class XPCNode
+public class XPCNode extends RCObject
 {
 
   private final String _id;
@@ -33,8 +35,8 @@ public class XPCNode
   private final double _minZ;
   private final double _maxZ;
 
-  private final java.util.ArrayList<XPCNode> _children;
-  private final int _childrenSize;
+  private java.util.ArrayList<XPCNode> _children;
+  private int _childrenSize;
 
   private Sphere _bounds;
   private Sphere getBounds(G3MRenderContext rc, XPCPointCloud pointCloud)
@@ -85,6 +87,32 @@ public class XPCNode
   private boolean _loadingContent;
 
 
+  private IDownloader _downloader;
+  private long _contentRequestID;
+
+  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc)
+  {
+    _downloader = rc.getDownloader();
+    final long deltaPriority = 100 * _id.length();
+  
+    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(this, rc.getThreadUtils()), true);
+  }
+
+  public void dispose()
+  {
+    if (_sector != null)
+       _sector.dispose();
+  
+    for (int i = 0; i < _childrenSize; i++)
+    {
+      XPCNode child = _children.get(i);
+      child._release();
+    }
+  
+    _children = null;
+  }
+
+
   public XPCNode(String id, Sector sector, double minZ, double maxZ)
   {
      _id = id;
@@ -99,23 +127,13 @@ public class XPCNode
      _loadingContent = false;
      _children = null;
      _childrenSize = 0;
+     _downloader = null;
+     _contentRequestID = -1;
   
   }
 
-  public void dispose()
-  {
-    if (_sector != null)
-       _sector.dispose();
-  
-    for (int i = 0; i < _childrenSize; i++)
-    {
-      XPCNode child = _children.get(i);
-      if (child != null)
-         child.dispose();
-    }
-  }
 
-  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS)
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS)
   {
   
     long renderedCount = 0;
@@ -128,7 +146,7 @@ public class XPCNode
       final boolean isVisible = bounds.touchesFrustum(frustum);
       if (isVisible)
       {
-        if ((_projectedArea == -1) || ((_projectedAreaTS + 25) < nowInMS))
+        if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS))
         {
           final double projectedArea = bounds.projectedArea(rc);
           _projectedArea = projectedArea;
@@ -144,18 +162,16 @@ public class XPCNode
           {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ________rawRender
-  //          renderedCount += rawRender(pointCloud,
-  //                                     rc,
-  //                                     glState);
+            //          renderedCount += rawRender(pointCloud,
+            //                                     rc,
+            //                                     glState);
           }
           else
           {
             if (!_loadingContent)
             {
               _loadingContent = true;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ________loadContent
-  //            loadContent(rc);
+              loadContent(pointCloud, treeID, rc);
             }
           }
   
@@ -164,7 +180,7 @@ public class XPCNode
             for (int i = 0; i < _childrenSize; i++)
             {
               XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, rc, glState, frustum, nowInMS);
+              renderedCount += child.render(pointCloud, treeID, rc, glState, frustum, nowInMS);
             }
           }
   
@@ -178,7 +194,7 @@ public class XPCNode
       {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ________unload
-  //      unload();
+        //      unload();
       }
       _renderedInPreviousFrame = renderedInThisFrame;
     }
@@ -189,6 +205,24 @@ public class XPCNode
   public final Sector getSector()
   {
     return _sector;
+  }
+
+  public final void errorDownloadingContent()
+  {
+    // I don't know how to deal with it (DGD)  :(
+  }
+
+  public final void setContent(java.util.ArrayList<XPCNode> children)
+  {
+  
+    for (int i = 0; i < _childrenSize; i++)
+    {
+      XPCNode child = _children.get(i);
+      child._release();
+    }
+  
+    _children = children;
+    _childrenSize = (_children == null) ? 0 : _children.size();
   }
 
 }

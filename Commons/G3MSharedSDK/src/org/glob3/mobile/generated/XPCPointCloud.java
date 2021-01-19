@@ -22,6 +22,8 @@ package org.glob3.mobile.generated;
 //class GLState;
 //class Frustum;
 //class XPCMetadata;
+//class IDownloader;
+//class IBufferDownloadListener;
 
 
 public class XPCPointCloud extends RCObject
@@ -208,4 +210,12 @@ public class XPCPointCloud extends RCObject
     }
   }
 
-}
+  public final long requestNodeContentBuffer(IDownloader downloader, String treeID, String nodeID, long deltaPriority, IBufferDownloadListener listener, boolean deleteListener)
+  {
+  
+    final URL nodeContentURL = new URL(_serverURL, _cloudName + "/" + treeID + "/" +nodeID);
+  
+    return downloader.requestBuffer(nodeContentURL, _downloadPriority + deltaPriority, _timeToCache, _readExpired, listener, deleteListener);
+  }
+
+  }

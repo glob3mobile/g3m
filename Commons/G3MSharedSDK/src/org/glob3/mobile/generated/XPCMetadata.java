@@ -59,10 +59,12 @@ public class XPCMetadata
   
     java.util.ArrayList<XPCTree> trees = new java.util.ArrayList<XPCTree>();
     {
+      final IStringUtils su = IStringUtils.instance();
+  
       final int treesCount = it.nextInt32();
       for (int i = 0; i < treesCount; i++)
       {
-        final String id = it.nextZeroTerminatedString();
+        final String nodeID = it.nextZeroTerminatedString();
   
         final double lowerLatitudeDegrees = it.nextDouble();
         final double lowerLongitudeDegrees = it.nextDouble();
@@ -74,9 +76,11 @@ public class XPCMetadata
         final double minZ = it.nextDouble();
         final double maxZ = it.nextDouble();
   
-        XPCNode rootNode = new XPCNode(id, sector, minZ, maxZ);
+        XPCNode rootNode = new XPCNode(nodeID, sector, minZ, maxZ);
   
-        XPCTree tree = new XPCTree(i, rootNode);
+        final String treeID = su.toString(i);
+  
+        XPCTree tree = new XPCTree(treeID, rootNode);
         trees.add(tree);
       }
     }

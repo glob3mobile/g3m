@@ -14,6 +14,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class XPCNode;
 //class XPCPointCloud;
 //class G3MRenderContext;
@@ -24,11 +25,11 @@ package org.glob3.mobile.generated;
 
 public class XPCTree
 {
-  private final int _id;
+  private final String _id;
   private XPCNode _rootNode;
 
 
-  public XPCTree(int id, XPCNode rootNode)
+  public XPCTree(String id, XPCNode rootNode)
   {
      _id = id;
      _rootNode = rootNode;
@@ -37,14 +38,13 @@ public class XPCTree
 
   public void dispose()
   {
-    if (_rootNode != null)
-       _rootNode.dispose();
+    _rootNode._release();
   }
 
   public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS)
   {
   
-    return (_rootNode == null) ? 0 : _rootNode.render(pointCloud, rc, glState, frustum, nowInMS);
+    return (_rootNode == null) ? 0 : _rootNode.render(pointCloud, _id, rc, glState, frustum, nowInMS);
   }
 
   public final Sector getSector()
