@@ -13,6 +13,7 @@ class XPCPointCloud;
 class G3MRenderContext;
 class GLState;
 class Frustum;
+class Sector;
 
 
 class XPCTree {
@@ -32,7 +33,9 @@ public:
                    GLState* glState,
                    const Frustum* frustum,
                    long long nowInMS) const;
-  
+
+  const Sector* getSector() const;
+
 };
 
 #endif

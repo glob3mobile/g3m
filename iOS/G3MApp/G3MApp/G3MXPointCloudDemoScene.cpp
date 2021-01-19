@@ -20,6 +20,7 @@
 #include <G3M/XPCRenderer.hpp>
 #include <G3M/XPCMetadataListener.hpp>
 #include <G3M/XPCMetadata.hpp>
+#include <G3M/XPCTree.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -35,16 +36,13 @@ public:
   }
 
   void onMetadata(const XPCMetadata* metadata) const {
+    if (metadata->getTreesCount() > 0) {
+      const XPCTree* tree = metadata->getTree(0);
 
-//    metadata->getTree
-
-    // _g3mWidget->setAnimatedCameraPosition( Geodetic3D::fromDegrees(39.068479748852752209, -77.602316923351310152, 70000) );
-
-    //    _g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(39.051416089546606258,
-    //                                                                  -77.517952264331185575,
-    //                                                                  1218.9966501063768192),
-    //                                          Angle::fromDegrees(-5),
-    //                                          Angle::fromDegrees(-42));
+      const Geodetic2D center = tree->getSector()->_center;
+      
+      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, 70000) );
+    }
   }
 
 };

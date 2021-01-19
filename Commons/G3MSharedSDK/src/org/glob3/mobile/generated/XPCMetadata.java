@@ -34,10 +34,10 @@ public class XPCMetadata
       return null;
     }
   
-    ByteBufferIterator iterator = new ByteBufferIterator(buffer);
+    ByteBufferIterator it = new ByteBufferIterator(buffer);
   
   
-    byte version = iterator.nextUInt8();
+    byte version = it.nextUInt8();
     if (version != 1)
     {
       ILogger.instance().logError("Unssuported format version");
@@ -46,12 +46,12 @@ public class XPCMetadata
   
     java.util.ArrayList<XPCDimension> dimensions = new java.util.ArrayList<XPCDimension>();
     {
-      final int dimensionsCount = iterator.nextInt32();
+      final int dimensionsCount = it.nextInt32();
       for (int i = 0; i < dimensionsCount; i++)
       {
-        final String name = iterator.nextZeroTerminatedString();
-        byte size = iterator.nextUInt8();
-        final String type = iterator.nextZeroTerminatedString();
+        final String name = it.nextZeroTerminatedString();
+        byte size = it.nextUInt8();
+        final String type = it.nextZeroTerminatedString();
   
         dimensions.add(new XPCDimension(name, size, type));
       }
@@ -59,26 +59,31 @@ public class XPCMetadata
   
     java.util.ArrayList<XPCTree> trees = new java.util.ArrayList<XPCTree>();
     {
-      final int treesCount = iterator.nextInt32();
+      final int treesCount = it.nextInt32();
       for (int i = 0; i < treesCount; i++)
       {
-        final String id = iterator.nextZeroTerminatedString();
+        final String id = it.nextZeroTerminatedString();
   
-        final double lowerLatitudeDegrees = iterator.nextDouble();
-        final double lowerLongitudeDegrees = iterator.nextDouble();
-        final double upperLatitudeDegrees = iterator.nextDouble();
-        final double upperLongitudeDegrees = iterator.nextDouble();
+        final double lowerLatitudeDegrees = it.nextDouble();
+        final double lowerLongitudeDegrees = it.nextDouble();
+        final double upperLatitudeDegrees = it.nextDouble();
+        final double upperLongitudeDegrees = it.nextDouble();
   
         final Sector sector = Sector.newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees, upperLatitudeDegrees, upperLongitudeDegrees);
   
-        final double minZ = iterator.nextDouble();
-        final double maxZ = iterator.nextDouble();
+        final double minZ = it.nextDouble();
+        final double maxZ = it.nextDouble();
   
         XPCNode rootNode = new XPCNode(id, sector, minZ, maxZ);
   
         XPCTree tree = new XPCTree(i, rootNode);
         trees.add(tree);
       }
+    }
+  
+    if (it.hasNext())
+    {
+      throw new RuntimeException("Logic error");
     }
   
     return new XPCMetadata(dimensions, trees);
@@ -117,6 +122,15 @@ public class XPCMetadata
     return renderedCount;
   }
 
+  public final int getTreesCount()
+  {
+    return _treesSize;
+  }
+
+  public final XPCTree getTree(int i)
+  {
+    return _trees.get(i);
+  }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  XPCMetadata(XPCMetadata that);

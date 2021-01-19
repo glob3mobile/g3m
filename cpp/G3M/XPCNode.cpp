@@ -166,3 +166,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
   return renderedCount;
 }
+
+const Sector* XPCNode::getSector() const {
+  return _sector;
+}

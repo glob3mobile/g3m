@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class GLState;
 //class Frustum;
+//class Sector;
 
 
 public class XPCTree
@@ -44,6 +45,11 @@ public class XPCTree
   {
   
     return (_rootNode == null) ? 0 : _rootNode.render(pointCloud, rc, glState, frustum, nowInMS);
+  }
+
+  public final Sector getSector()
+  {
+    return _rootNode.getSector();
   }
 
 }

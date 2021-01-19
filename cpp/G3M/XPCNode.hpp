@@ -63,6 +63,8 @@ public:
                    const Frustum* frustum,
                    long long nowInMS);
 
+  const Sector* getSector() const;
+
 };
 
 #endif

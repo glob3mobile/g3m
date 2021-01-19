@@ -142,14 +142,20 @@ public class XPCNode
   
           if (_loadedContent)
           {
-            renderedCount += rawRender(pointCloud, rc, glState);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ________rawRender
+  //          renderedCount += rawRender(pointCloud,
+  //                                     rc,
+  //                                     glState);
           }
           else
           {
             if (!_loadingContent)
             {
               _loadingContent = true;
-              loadContent(rc);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ________loadContent
+  //            loadContent(rc);
             }
           }
   
@@ -170,12 +176,19 @@ public class XPCNode
     {
       if (_renderedInPreviousFrame)
       {
-        unload();
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning ________unload
+  //      unload();
       }
       _renderedInPreviousFrame = renderedInThisFrame;
     }
   
     return renderedCount;
+  }
+
+  public final Sector getSector()
+  {
+    return _sector;
   }
 
 }

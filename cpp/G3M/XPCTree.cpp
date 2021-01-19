@@ -36,3 +36,7 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                                                      frustum,
                                                      nowInMS);
 }
+
+const Sector* XPCTree::getSector() const {
+  return _rootNode->getSector();
+}
