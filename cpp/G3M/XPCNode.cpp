@@ -15,6 +15,8 @@
 #include "IBufferDownloadListener.hpp"
 #include "IThreadUtils.hpp"
 #include "GAsyncTask.hpp"
+#include "ByteBufferIterator.hpp"
+#include "ILogger.hpp"
 
 #include "XPCPointCloud.hpp"
 
@@ -52,7 +54,26 @@ public:
   }
 
   void runInBackground(const G3MContext* context) {
-#error PARSE CHILDREN
+    ByteBufferIterator it(_buffer);
+
+    unsigned char version = it.nextUInt8();
+    if (version != 1) {
+      ILogger::instance()->logError("Unssuported format version");
+      return;
+    }
+
+    _children = new std::vector<XPCNode*>();
+
+    const int childrenCount = it.nextInt32();
+    for (int i = 0; i < childrenCount; i++) {
+      XPCNode* child = XPCNode::fromByteBufferIterator(it);
+      _children->push_back( child );
+    }
+
+    if (it.hasNext()) {
+      THROW_EXCEPTION("Logic error");
+    }
+
 #warning _______TODO: PARSE POINTS
   }
 
@@ -231,6 +252,8 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
       if (isBigEnough) {
         renderedInThisFrame = true;
 
+        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
+
         if (_loadedContent) {
 #warning ________rawRender
           //          renderedCount += rawRender(pointCloud,
@@ -300,4 +323,21 @@ void XPCNode::setContent(std::vector<XPCNode*>* children) {
 
   _children     = children;
   _childrenSize = (_children == NULL) ? 0 : _children->size();
+}
+
+XPCNode* XPCNode::fromByteBufferIterator(ByteBufferIterator& it) {
+  const std::string nodeID = it.nextZeroTerminatedString();
+
+  const double lowerLatitudeDegrees  = it.nextDouble();
+  const double lowerLongitudeDegrees = it.nextDouble();
+  const double upperLatitudeDegrees  = it.nextDouble();
+  const double upperLongitudeDegrees = it.nextDouble();
+
+  const Sector* sector = Sector::newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees,
+                                                upperLatitudeDegrees, upperLongitudeDegrees);
+
+  const double minZ = it.nextDouble();
+  const double maxZ = it.nextDouble();
+
+  return new XPCNode(nodeID, sector, minZ, maxZ);
 }

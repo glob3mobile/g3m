@@ -20,6 +20,7 @@ class XPCPointCloud;
 class GLState;
 class Frustum;
 class IDownloader;
+class ByteBufferIterator;
 
 
 class XPCNode : public RCObject {
@@ -59,14 +60,16 @@ private:
                    const std::string& treeID,
                    const G3MRenderContext* rc);
 
-  ~XPCNode();
-
-public:
-
   XPCNode(const std::string& id,
           const Sector* sector,
           const double minZ,
           const double maxZ);
+
+  ~XPCNode();
+
+public:
+
+  static XPCNode* fromByteBufferIterator(ByteBufferIterator& it);
 
 
   long long render(const XPCPointCloud* pointCloud,

@@ -50,22 +50,9 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
 
     const int treesCount = it.nextInt32();
     for (int i = 0; i < treesCount; i++) {
-      const std::string nodeID = it.nextZeroTerminatedString();
-
-      const double lowerLatitudeDegrees  = it.nextDouble();
-      const double lowerLongitudeDegrees = it.nextDouble();
-      const double upperLatitudeDegrees  = it.nextDouble();
-      const double upperLongitudeDegrees = it.nextDouble();
-
-      const Sector* sector = Sector::newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees,
-                                                    upperLatitudeDegrees, upperLongitudeDegrees);
-
-      const double minZ = it.nextDouble();
-      const double maxZ = it.nextDouble();
-
-      XPCNode* rootNode = new XPCNode(nodeID, sector, minZ, maxZ);
-
       const std::string treeID = su->toString(i);
+
+      XPCNode* rootNode = XPCNode::fromByteBufferIterator(it);
 
       XPCTree* tree = new XPCTree(treeID, rootNode);
       trees->push_back(tree);

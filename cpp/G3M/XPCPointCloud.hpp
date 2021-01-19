@@ -108,6 +108,6 @@ public:
                                      IBufferDownloadListener* listener,
                                      bool deleteListener) const;
 
-  };
+};
 
 #endif
