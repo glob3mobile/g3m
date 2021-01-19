@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class ByteBufferIterator;
 //class XPCPoint;
+//class DirectMesh;
 
 
 public class XPCNode extends RCObject
@@ -41,6 +42,7 @@ public class XPCNode extends RCObject
   private int _childrenSize;
 
   private java.util.ArrayList<XPCPoint> _points;
+  private DirectMesh _mesh;
 
   private Sphere _bounds;
   private Sphere getBounds(G3MRenderContext rc, XPCPointCloud pointCloud)
@@ -99,7 +101,7 @@ public class XPCNode extends RCObject
     _downloader = rc.getDownloader();
     final long deltaPriority = 100 * _id.length();
   
-    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(this, rc.getThreadUtils()), true);
+    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
 
   private XPCNode(String id, Sector sector, double minZ, double maxZ)
@@ -119,6 +121,7 @@ public class XPCNode extends RCObject
      _downloader = null;
      _contentRequestID = -1;
      _points = null;
+     _mesh = null;
   
   }
 
@@ -146,6 +149,9 @@ public class XPCNode extends RCObject
   
       _points = null;
     }
+  
+    if (_mesh != null)
+       _mesh.dispose();
   }
 
 
@@ -192,15 +198,17 @@ public class XPCNode extends RCObject
         {
           renderedInThisFrame = true;
   
-          ILogger.instance().logInfo("- Rendering node \"%s\"", _id);
+  //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
   
           if (_loadedContent)
           {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning ________rawRender
-            //          renderedCount += rawRender(pointCloud,
-            //                                     rc,
-            //                                     glState);
+            _mesh.render(rc, glState);
+            renderedCount += _mesh.getRenderVerticesCount();
+  //          renderedCount += rawRender(pointCloud,
+  //                                     rc,
+  //                                     glState);
           }
           else
           {
@@ -248,8 +256,9 @@ public class XPCNode extends RCObject
     // I don't know how to deal with it (DGD)  :(
   }
 
-  public final void setContent(java.util.ArrayList<XPCNode> children, java.util.ArrayList<XPCPoint> points)
+  public final void setContent(java.util.ArrayList<XPCNode> children, java.util.ArrayList<XPCPoint> points, DirectMesh mesh)
   {
+    _loadedContent = true;
   
     for (int i = 0; i < _childrenSize; i++)
     {
@@ -274,6 +283,8 @@ public class XPCNode extends RCObject
     }
   
     _points = points;
+  
+    _mesh = mesh;
   }
 
 }

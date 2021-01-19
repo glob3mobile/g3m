@@ -3,18 +3,20 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
 {
   private XPCNode _node;
   private final IThreadUtils _threadUtils;
+  private final Planet _planet;
 
 
-  public XPCNodeContentDownloadListener(XPCNode node, IThreadUtils threadUtils)
+  public XPCNodeContentDownloadListener(XPCNode node, IThreadUtils threadUtils, Planet planet)
   {
      _node = node;
      _threadUtils = threadUtils;
+     _planet = planet;
     _node._retain();
   }
 
   public final void onDownload(URL url, IByteBuffer buffer, boolean expired)
   {
-    _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node, buffer), true);
+    _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node, buffer, _planet), true);
   }
 
   public final void onError(URL url)

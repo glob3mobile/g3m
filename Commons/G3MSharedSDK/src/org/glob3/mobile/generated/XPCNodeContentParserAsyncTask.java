@@ -3,17 +3,20 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 {
   private XPCNode _node;
   private IByteBuffer _buffer;
+  private final Planet _planet;
 
   private java.util.ArrayList<XPCNode> _children;
   private java.util.ArrayList<XPCPoint> _points;
+  private DirectMesh _mesh;
 
-
-  public XPCNodeContentParserAsyncTask(XPCNode node, IByteBuffer buffer)
+  public XPCNodeContentParserAsyncTask(XPCNode node, IByteBuffer buffer, Planet planet)
   {
      _node = node;
      _buffer = buffer;
+     _planet = planet;
      _children = null;
      _points = null;
+     _mesh = null;
     _node._retain();
   }
 
@@ -42,6 +45,9 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       }
       _points = null;
     }
+
+    if (_mesh != null)
+       _mesh.dispose();
   }
 
   public final void runInBackground(G3MContext context)
@@ -82,13 +88,33 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     {
       throw new RuntimeException("Logic error");
     }
+
+
+    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_planet);
+
+    for (int i = 0; i < _points.size(); i++)
+    {
+      XPCPoint point = _points.get(i);
+      vertices.add(Angle.fromDegrees(point._y), Angle.fromDegrees(point._x), point._z);
+    }
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO_______ verticalExaggeration
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO_______ deltaHeight
+
+    _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, 1, Color.newFromRGBA(1, 1, 1, 1)); // flatColor
+
+    if (vertices != null)
+       vertices.dispose();
   }
 
   public final void onPostExecute(G3MContext context)
   {
-    _node.setContent(_children, _points);
+    _node.setContent(_children, _points, _mesh);
     _children = null; // moved ownership to _node
     _points = null; // moved ownership to _node
+    _mesh = null;
   }
 
 }
