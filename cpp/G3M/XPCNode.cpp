@@ -19,6 +19,7 @@
 #include "ILogger.hpp"
 
 #include "XPCPointCloud.hpp"
+#include "XPCPoint.hpp"
 
 
 
@@ -27,14 +28,17 @@ private:
   XPCNode*     _node;
   IByteBuffer* _buffer;
 
-  std::vector<XPCNode*>* _children;
+  std::vector<XPCNode*>*  _children;
+  std::vector<XPCPoint*>* _points;
+
 
 public:
   XPCNodeContentParserAsyncTask(XPCNode* node,
                                 IByteBuffer* buffer) :
   _node(node),
   _buffer(buffer),
-  _children(NULL)
+  _children(NULL),
+  _points(NULL)
   {
     _node->_retain();
   }
@@ -50,7 +54,13 @@ public:
       delete _children;
     }
 
-//    delete _points;
+    if (_points != NULL) {
+      for (size_t i = 0; i < _points->size(); i++) {
+        XPCPoint* point = _points->at(i);
+        delete point;
+      }
+      delete _points;
+    }
   }
 
   void runInBackground(const G3MContext* context) {
@@ -62,26 +72,36 @@ public:
       return;
     }
 
-    _children = new std::vector<XPCNode*>();
+    {
+      _children = new std::vector<XPCNode*>();
 
-    const int childrenCount = it.nextInt32();
-    for (int i = 0; i < childrenCount; i++) {
-      XPCNode* child = XPCNode::fromByteBufferIterator(it);
-      _children->push_back( child );
+      const int childrenCount = it.nextInt32();
+      for (int i = 0; i < childrenCount; i++) {
+        XPCNode* child = XPCNode::fromByteBufferIterator(it);
+        _children->push_back( child );
+      }
     }
+
+    {
+      _points = new std::vector<XPCPoint*>();
+
+      const int pointsCount = it.nextInt32();
+      for (int i = 0; i < pointsCount; i++) {
+        XPCPoint* point = XPCPoint::fromByteBufferIterator(it);
+        _points->push_back( point );
+      }
+    }
+
 
     if (it.hasNext()) {
       THROW_EXCEPTION("Logic error");
     }
-
-#warning _______TODO: PARSE POINTS
   }
 
   void onPostExecute(const G3MContext* context) {
-//    _node->parsedContent( _children, _points );
-    _node->setContent( _children );
+    _node->setContent( _children, _points );
     _children = NULL; // moved ownership to _node
-//    _points   = NULL; // moved ownership to _node
+    _points   = NULL; // moved ownership to _node
   }
 
 };
@@ -148,7 +168,8 @@ _loadingContent(false),
 _children(NULL),
 _childrenSize(0),
 _downloader(NULL),
-_contentRequestID(-1)
+_contentRequestID(-1),
+_points(NULL)
 {
 
 }
@@ -163,6 +184,15 @@ XPCNode::~XPCNode() {
   }
 
   delete _children;
+
+  if (_points != NULL) {
+    for (size_t i = 0; i < _points->size(); i++) {
+      XPCPoint* point = _points->at(i);
+      delete point;
+    }
+
+    delete _points;
+  }
 }
 
 
@@ -314,17 +344,6 @@ void XPCNode::errorDownloadingContent() {
   // I don't know how to deal with it (DGD)  :(
 }
 
-void XPCNode::setContent(std::vector<XPCNode*>* children) {
-
-  for (size_t i = 0; i < _childrenSize; i++) {
-    XPCNode* child = _children->at(i);
-    child->_release();
-  }
-
-  _children     = children;
-  _childrenSize = (_children == NULL) ? 0 : _children->size();
-}
-
 XPCNode* XPCNode::fromByteBufferIterator(ByteBufferIterator& it) {
   const std::string nodeID = it.nextZeroTerminatedString();
 
@@ -340,4 +359,29 @@ XPCNode* XPCNode::fromByteBufferIterator(ByteBufferIterator& it) {
   const double maxZ = it.nextDouble();
 
   return new XPCNode(nodeID, sector, minZ, maxZ);
+}
+
+
+void XPCNode::setContent(std::vector<XPCNode*>* children,
+                         std::vector<XPCPoint*>* points) {
+
+  for (size_t i = 0; i < _childrenSize; i++) {
+    XPCNode* child = _children->at(i);
+    child->_release();
+  }
+
+  _children     = children;
+  _childrenSize = (_children == NULL) ? 0 : _children->size();
+
+
+  if (_points != NULL) {
+    for (size_t i = 0; i < _points->size(); i++) {
+      XPCPoint* point = _points->at(i);
+      delete point;
+    }
+
+    delete _points;
+  }
+
+  _points = points;
 }

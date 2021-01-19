@@ -21,6 +21,7 @@ class GLState;
 class Frustum;
 class IDownloader;
 class ByteBufferIterator;
+class XPCPoint;
 
 
 class XPCNode : public RCObject {
@@ -35,6 +36,8 @@ private:
 
   std::vector<XPCNode*>* _children;
   size_t _childrenSize;
+
+  std::vector<XPCPoint*>* _points;
 
   Sphere* _bounds;
   const Sphere* getBounds(const G3MRenderContext* rc,
@@ -83,7 +86,8 @@ public:
 
   void errorDownloadingContent();
 
-  void setContent(std::vector<XPCNode*>* children);
+  void setContent(std::vector<XPCNode*>* children,
+                  std::vector<XPCPoint*>* points);
 
 };
 
