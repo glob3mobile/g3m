@@ -8,6 +8,8 @@
 #ifndef XPCTree_hpp
 #define XPCTree_hpp
 
+#include <string>
+
 class XPCNode;
 class XPCPointCloud;
 class G3MRenderContext;
@@ -18,12 +20,12 @@ class Sector;
 
 class XPCTree {
 private:
-  const int _id;
-  XPCNode*  _rootNode;
+  const std::string _id;
+  XPCNode*          _rootNode;
 
 public:
 
-  XPCTree(const int id,
+  XPCTree(const std::string& id,
           XPCNode* rootNode);
 
   ~XPCTree();

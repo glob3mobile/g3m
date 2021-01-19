@@ -270,3 +270,21 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
     }
   }
 }
+
+
+long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
+                                                  const std::string& treeID,
+                                                  const std::string& nodeID,
+                                                  const long long deltaPriority,
+                                                  IBufferDownloadListener* listener,
+                                                  bool deleteListener) const {
+
+  const URL nodeContentURL(_serverURL, _cloudName + "/" + treeID + "/" +nodeID );
+
+  return downloader->requestBuffer(nodeContentURL,
+                                   _downloadPriority + deltaPriority,
+                                   _timeToCache,
+                                   _readExpired,
+                                   listener,
+                                   deleteListener);
+}

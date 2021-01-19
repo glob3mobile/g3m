@@ -12,8 +12,102 @@
 #include "Box.hpp"
 #include "Planet.hpp"
 #include "Sphere.hpp"
+#include "IBufferDownloadListener.hpp"
+#include "IThreadUtils.hpp"
+#include "GAsyncTask.hpp"
 
 #include "XPCPointCloud.hpp"
+
+
+
+class XPCNodeContentParserAsyncTask : public GAsyncTask {
+private:
+  XPCNode*     _node;
+  IByteBuffer* _buffer;
+
+  std::vector<XPCNode*>* _children;
+
+public:
+  XPCNodeContentParserAsyncTask(XPCNode* node,
+                                IByteBuffer* buffer) :
+  _node(node),
+  _buffer(buffer),
+  _children(NULL)
+  {
+    _node->_retain();
+  }
+
+  ~XPCNodeContentParserAsyncTask() {
+    delete _buffer;
+
+    if (_children != NULL) {
+      for (size_t i = 0; i < _children->size(); i++) {
+        XPCNode* child = _children->at(i);
+        child->_release();
+      }
+      delete _children;
+    }
+
+//    delete _points;
+  }
+
+  void runInBackground(const G3MContext* context) {
+#error PARSE CHILDREN
+#warning _______TODO: PARSE POINTS
+  }
+
+  void onPostExecute(const G3MContext* context) {
+//    _node->parsedContent( _children, _points );
+    _node->setContent( _children );
+    _children = NULL; // moved ownership to _node
+//    _points   = NULL; // moved ownership to _node
+  }
+
+};
+
+
+class XPCNodeContentDownloadListener : public IBufferDownloadListener {
+private:
+  XPCNode*            _node;
+  const IThreadUtils* _threadUtils;
+
+public:
+
+  XPCNodeContentDownloadListener(XPCNode*            node,
+                                 const IThreadUtils* threadUtils) :
+  _node(node),
+  _threadUtils(threadUtils)
+  {
+    _node->_retain();
+  }
+  
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+    _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node, buffer),
+                                  true);
+  }
+
+  void onError(const URL& url) {
+    _node->errorDownloadingContent();
+  }
+
+  void onCancel(const URL& url) {
+    // do nothing
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    // do nothing
+  }
+
+  ~XPCNodeContentDownloadListener() {
+    _node->_release();
+  }
+
+
+};
 
 
 XPCNode::XPCNode(const std::string& id,
@@ -31,7 +125,9 @@ _projectedAreaTS(-1),
 _loadedContent(false),
 _loadingContent(false),
 _children(NULL),
-_childrenSize(0)
+_childrenSize(0),
+_downloader(NULL),
+_contentRequestID(-1)
 {
 
 }
@@ -42,12 +138,17 @@ XPCNode::~XPCNode() {
 
   for (size_t i = 0; i < _childrenSize; i++) {
     XPCNode* child = _children->at(i);
-    delete child;
+    child->_release();
   }
-#ifdef C_CODE
+
   delete _children;
-#endif
 }
+
+
+const Sector* XPCNode::getSector() const {
+  return _sector;
+}
+
 
 const Sphere* XPCNode::getBounds(const G3MRenderContext* rc,
                                  const XPCPointCloud* pointCloud) {
@@ -56,6 +157,7 @@ const Sphere* XPCNode::getBounds(const G3MRenderContext* rc,
   }
   return _bounds;
 }
+
 
 Sphere* XPCNode::calculateBounds(const G3MRenderContext* rc,
                                  const XPCPointCloud* pointCloud) {
@@ -103,7 +205,9 @@ Sphere* XPCNode::calculateBounds(const G3MRenderContext* rc,
   return Sphere::enclosingSphere(points, 0);
 }
 
+
 long long XPCNode::render(const XPCPointCloud* pointCloud,
+                          const std::string& treeID,
                           const G3MRenderContext* rc,
                           GLState* glState,
                           const Frustum* frustum,
@@ -129,15 +233,14 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
         if (_loadedContent) {
 #warning ________rawRender
-//          renderedCount += rawRender(pointCloud,
-//                                     rc,
-//                                     glState);
+          //          renderedCount += rawRender(pointCloud,
+          //                                     rc,
+          //                                     glState);
         }
         else {
           if (!_loadingContent) {
             _loadingContent = true;
-#warning ________loadContent
-//            loadContent(rc);
+            loadContent(pointCloud, treeID, rc);
           }
         }
 
@@ -145,6 +248,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
           for (size_t i = 0; i < _childrenSize; i++) {
             XPCNode* child = _children->at(i);
             renderedCount += child->render(pointCloud,
+                                           treeID,
                                            rc,
                                            glState,
                                            frustum,
@@ -159,7 +263,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
   if (_renderedInPreviousFrame != renderedInThisFrame) {
     if (_renderedInPreviousFrame) {
 #warning ________unload
-//      unload();
+      //      unload();
     }
     _renderedInPreviousFrame = renderedInThisFrame;
   }
@@ -167,6 +271,33 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
   return renderedCount;
 }
 
-const Sector* XPCNode::getSector() const {
-  return _sector;
+
+void XPCNode::loadContent(const XPCPointCloud* pointCloud,
+                          const std::string& treeID,
+                          const G3MRenderContext* rc) {
+  _downloader = rc->getDownloader();
+  const long long deltaPriority = 100 * _id.length();
+
+  _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
+                                                           treeID,
+                                                           _id,
+                                                           deltaPriority,
+                                                           new XPCNodeContentDownloadListener(this,
+                                                                                              rc->getThreadUtils()),
+                                                           true);
+}
+
+void XPCNode::errorDownloadingContent() {
+  // I don't know how to deal with it (DGD)  :(
+}
+
+void XPCNode::setContent(std::vector<XPCNode*>* children) {
+
+  for (size_t i = 0; i < _childrenSize; i++) {
+    XPCNode* child = _children->at(i);
+    child->_release();
+  }
+
+  _children     = children;
+  _childrenSize = (_children == NULL) ? 0 : _children->size();
 }

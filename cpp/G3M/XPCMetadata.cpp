@@ -11,6 +11,7 @@
 #include "ILogger.hpp"
 #include "Sector.hpp"
 #include "ErrorHandling.hpp"
+#include "IStringUtils.hpp"
 
 #include "XPCDimension.hpp"
 #include "XPCNode.hpp"
@@ -45,9 +46,11 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
 
   std::vector<XPCTree*>* trees = new std::vector<XPCTree*>();
   {
+    const IStringUtils* su = IStringUtils::instance();
+
     const int treesCount = it.nextInt32();
     for (int i = 0; i < treesCount; i++) {
-      const std::string id = it.nextZeroTerminatedString();
+      const std::string nodeID = it.nextZeroTerminatedString();
 
       const double lowerLatitudeDegrees  = it.nextDouble();
       const double lowerLongitudeDegrees = it.nextDouble();
@@ -60,9 +63,11 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
       const double minZ = it.nextDouble();
       const double maxZ = it.nextDouble();
 
-      XPCNode* rootNode = new XPCNode(id, sector, minZ, maxZ);
+      XPCNode* rootNode = new XPCNode(nodeID, sector, minZ, maxZ);
 
-      XPCTree* tree = new XPCTree(i, rootNode);
+      const std::string treeID = su->toString(i);
+
+      XPCTree* tree = new XPCTree(treeID, rootNode);
       trees->push_back(tree);
     }
   }

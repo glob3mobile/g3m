@@ -20,6 +20,8 @@ class G3MRenderContext;
 class GLState;
 class Frustum;
 class XPCMetadata;
+class IDownloader;
+class IBufferDownloadListener;
 
 
 class XPCPointCloud : public RCObject {
@@ -99,6 +101,13 @@ public:
   void errorParsingMetadata();
   void parsedMetadata(XPCMetadata* metadata);
 
-};
+  long long requestNodeContentBuffer(IDownloader* downloader,
+                                     const std::string& treeID,
+                                     const std::string& nodeID,
+                                     const long long deltaPriority,
+                                     IBufferDownloadListener* listener,
+                                     bool deleteListener) const;
+
+  };
 
 #endif

@@ -10,7 +10,7 @@
 #include "XPCNode.hpp"
 
 
-XPCTree::XPCTree(const int id,
+XPCTree::XPCTree(const std::string& id,
                  XPCNode* rootNode) :
 _id(id),
 _rootNode(rootNode)
@@ -20,7 +20,7 @@ _rootNode(rootNode)
 
 
 XPCTree::~XPCTree() {
-  delete _rootNode;
+  _rootNode->_release();
 }
 
 
@@ -31,6 +31,7 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                           long long nowInMS) const {
   
   return (_rootNode == NULL) ? 0 : _rootNode->render(pointCloud,
+                                                     _id,
                                                      rc,
                                                      glState,
                                                      frustum,
