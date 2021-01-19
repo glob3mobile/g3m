@@ -17,6 +17,9 @@
 #include "GAsyncTask.hpp"
 #include "ByteBufferIterator.hpp"
 #include "ILogger.hpp"
+#include "FloatBufferBuilderFromGeodetic.hpp"
+#include "DirectMesh.hpp"
+#include "Color.hpp"
 
 #include "XPCPointCloud.hpp"
 #include "XPCPoint.hpp"
@@ -25,20 +28,24 @@
 
 class XPCNodeContentParserAsyncTask : public GAsyncTask {
 private:
-  XPCNode*     _node;
-  IByteBuffer* _buffer;
+  XPCNode*      _node;
+  IByteBuffer*  _buffer;
+  const Planet* _planet;
 
   std::vector<XPCNode*>*  _children;
   std::vector<XPCPoint*>* _points;
-
+  DirectMesh*             _mesh;
 
 public:
   XPCNodeContentParserAsyncTask(XPCNode* node,
-                                IByteBuffer* buffer) :
+                                IByteBuffer* buffer,
+                                const Planet* planet) :
   _node(node),
   _buffer(buffer),
+  _planet(planet),
   _children(NULL),
-  _points(NULL)
+  _points(NULL),
+  _mesh(NULL)
   {
     _node->_retain();
   }
@@ -61,6 +68,8 @@ public:
       }
       delete _points;
     }
+
+    delete _mesh;
   }
 
   void runInBackground(const G3MContext* context) {
@@ -96,12 +105,37 @@ public:
     if (it.hasNext()) {
       THROW_EXCEPTION("Logic error");
     }
+
+
+    FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
+
+    for (int i = 0; i < _points->size(); i++) {
+      XPCPoint* point = _points->at(i);
+      vertices->add(Angle::fromDegrees(point->_y),
+                    Angle::fromDegrees(point->_x),
+                    point->_z);
+    }
+
+#warning TODO_______    verticalExaggeration
+#warning TODO_______    deltaHeight
+
+    _mesh = new DirectMesh(GLPrimitive::points(),
+                           true,
+                           vertices->getCenter(),
+                           vertices->create(),
+                           1,
+                           1,
+                           Color::newFromRGBA(1,1,1,1) // flatColor
+                           );
+
+    delete vertices;
   }
 
   void onPostExecute(const G3MContext* context) {
-    _node->setContent( _children, _points );
+    _node->setContent( _children, _points, _mesh );
     _children = NULL; // moved ownership to _node
     _points   = NULL; // moved ownership to _node
+    _mesh     = NULL;
   }
 
 };
@@ -111,13 +145,16 @@ class XPCNodeContentDownloadListener : public IBufferDownloadListener {
 private:
   XPCNode*            _node;
   const IThreadUtils* _threadUtils;
+  const Planet*       _planet;
 
 public:
 
   XPCNodeContentDownloadListener(XPCNode*            node,
-                                 const IThreadUtils* threadUtils) :
+                                 const IThreadUtils* threadUtils,
+                                 const Planet* planet) :
   _node(node),
-  _threadUtils(threadUtils)
+  _threadUtils(threadUtils),
+  _planet(planet)
   {
     _node->_retain();
   }
@@ -125,7 +162,7 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node, buffer),
+    _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node, buffer, _planet),
                                   true);
   }
 
@@ -169,7 +206,8 @@ _children(NULL),
 _childrenSize(0),
 _downloader(NULL),
 _contentRequestID(-1),
-_points(NULL)
+_points(NULL),
+_mesh(NULL)
 {
 
 }
@@ -193,6 +231,8 @@ XPCNode::~XPCNode() {
 
     delete _points;
   }
+
+  delete _mesh;
 }
 
 
@@ -282,13 +322,15 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
       if (isBigEnough) {
         renderedInThisFrame = true;
 
-        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
+//        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
 
         if (_loadedContent) {
 #warning ________rawRender
-          //          renderedCount += rawRender(pointCloud,
-          //                                     rc,
-          //                                     glState);
+          _mesh->render(rc, glState);
+          renderedCount += _mesh->getRenderVerticesCount();
+//          renderedCount += rawRender(pointCloud,
+//                                     rc,
+//                                     glState);
         }
         else {
           if (!_loadingContent) {
@@ -336,7 +378,8 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                                                            _id,
                                                            deltaPriority,
                                                            new XPCNodeContentDownloadListener(this,
-                                                                                              rc->getThreadUtils()),
+                                                                                              rc->getThreadUtils(),
+                                                                                              rc->getPlanet()),
                                                            true);
 }
 
@@ -363,7 +406,9 @@ XPCNode* XPCNode::fromByteBufferIterator(ByteBufferIterator& it) {
 
 
 void XPCNode::setContent(std::vector<XPCNode*>* children,
-                         std::vector<XPCPoint*>* points) {
+                         std::vector<XPCPoint*>* points,
+                         DirectMesh* mesh) {
+  _loadedContent = true;
 
   for (size_t i = 0; i < _childrenSize; i++) {
     XPCNode* child = _children->at(i);
@@ -384,4 +429,6 @@ void XPCNode::setContent(std::vector<XPCNode*>* children,
   }
 
   _points = points;
+
+  _mesh = mesh;
 }

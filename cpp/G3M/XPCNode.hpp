@@ -22,6 +22,7 @@ class Frustum;
 class IDownloader;
 class ByteBufferIterator;
 class XPCPoint;
+class DirectMesh;
 
 
 class XPCNode : public RCObject {
@@ -38,6 +39,7 @@ private:
   size_t _childrenSize;
 
   std::vector<XPCPoint*>* _points;
+  DirectMesh* _mesh;
 
   Sphere* _bounds;
   const Sphere* getBounds(const G3MRenderContext* rc,
@@ -87,7 +89,8 @@ public:
   void errorDownloadingContent();
 
   void setContent(std::vector<XPCNode*>* children,
-                  std::vector<XPCPoint*>* points);
+                  std::vector<XPCPoint*>* points,
+                  DirectMesh* mesh);
 
 };
 

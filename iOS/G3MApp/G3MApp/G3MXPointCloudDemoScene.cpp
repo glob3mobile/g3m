@@ -41,7 +41,7 @@ public:
 
       const Geodetic2D center = tree->getSector()->_center;
       
-      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, 700) );
+      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, 500) );
     }
   }
 
@@ -57,7 +57,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const float  verticalExaggeration = 1;
   const double deltaHeight          = 0;
 
-  const double minProjectedArea = 1000;
+  const double minProjectedArea = 10000;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
