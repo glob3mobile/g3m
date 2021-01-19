@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class IDownloader;
 //class ByteBufferIterator;
+//class XPCPoint;
 
 
 public class XPCNode extends RCObject
@@ -38,6 +39,8 @@ public class XPCNode extends RCObject
 
   private java.util.ArrayList<XPCNode> _children;
   private int _childrenSize;
+
+  private java.util.ArrayList<XPCPoint> _points;
 
   private Sphere _bounds;
   private Sphere getBounds(G3MRenderContext rc, XPCPointCloud pointCloud)
@@ -115,6 +118,7 @@ public class XPCNode extends RCObject
      _childrenSize = 0;
      _downloader = null;
      _contentRequestID = -1;
+     _points = null;
   
   }
 
@@ -130,6 +134,18 @@ public class XPCNode extends RCObject
     }
   
     _children = null;
+  
+    if (_points != null)
+    {
+      for (int i = 0; i < _points.size(); i++)
+      {
+        XPCPoint point = _points.get(i);
+        if (point != null)
+           point.dispose();
+      }
+  
+      _points = null;
+    }
   }
 
 
@@ -232,7 +248,7 @@ public class XPCNode extends RCObject
     // I don't know how to deal with it (DGD)  :(
   }
 
-  public final void setContent(java.util.ArrayList<XPCNode> children)
+  public final void setContent(java.util.ArrayList<XPCNode> children, java.util.ArrayList<XPCPoint> points)
   {
   
     for (int i = 0; i < _childrenSize; i++)
@@ -243,6 +259,21 @@ public class XPCNode extends RCObject
   
     _children = children;
     _childrenSize = (_children == null) ? 0 : _children.size();
+  
+  
+    if (_points != null)
+    {
+      for (int i = 0; i < _points.size(); i++)
+      {
+        XPCPoint point = _points.get(i);
+        if (point != null)
+           point.dispose();
+      }
+  
+      _points = null;
+    }
+  
+    _points = points;
   }
 
 }
