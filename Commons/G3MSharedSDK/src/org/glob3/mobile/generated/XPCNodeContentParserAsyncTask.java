@@ -48,6 +48,8 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 
     if (_mesh != null)
        _mesh.dispose();
+
+    _node._release();
   }
 
   public final void runInBackground(G3MContext context)

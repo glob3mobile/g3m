@@ -20,6 +20,7 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "DirectMesh.hpp"
 #include "Color.hpp"
+#include "IDownloader.hpp"
 
 #include "XPCPointCloud.hpp"
 #include "XPCPoint.hpp"
@@ -70,6 +71,8 @@ public:
     }
 
     delete _mesh;
+
+    _node->_release();
   }
 
   void runInBackground(const G3MContext* context) {
@@ -217,6 +220,8 @@ _mesh(NULL)
 XPCNode::~XPCNode() {
   delete _sector;
 
+  delete _bounds;
+
   for (size_t i = 0; i < _childrenSize; i++) {
     XPCNode* child = _children->at(i);
     child->_release();
@@ -325,13 +330,11 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
 //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
 
+        // bounds->render(rc, glState, Color::blue());
+
         if (_loadedContent) {
-#warning ________rawRender
           _mesh->render(rc, glState);
           renderedCount += _mesh->getRenderVerticesCount();
-//          renderedCount += rawRender(pointCloud,
-//                                     rc,
-//                                     glState);
         }
         else {
           if (!_loadingContent) {
@@ -358,8 +361,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
   if (_renderedInPreviousFrame != renderedInThisFrame) {
     if (_renderedInPreviousFrame) {
-#warning ________unload
-      //      unload();
+      unload();
     }
     _renderedInPreviousFrame = renderedInThisFrame;
   }
@@ -367,12 +369,70 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
   return renderedCount;
 }
 
+//void XPCNode::cancelTasks() {
+//  if (_featuresTask != NULL) {
+//    _featuresTask->cancel();
+//    _featuresTask = NULL;
+//  }
+//}
+
+void XPCNode::cancelLoadContent() {
+  if (_contentRequestID != -1) {
+    _downloader->cancelRequest(_contentRequestID);
+    _contentRequestID = -1;
+  }
+}
+
+void XPCNode::unloadContent() {
+  if (_points != NULL) {
+    for (size_t i = 0; i < _points->size(); i++) {
+      XPCPoint* point = _points->at(i);
+      delete point;
+    }
+    delete _points;
+    _points = NULL;
+  }
+
+  delete _mesh;
+  _mesh = NULL;
+}
+
+void XPCNode::unloadChildren() {
+  if (_children != NULL) {
+    for (size_t i = 0; i < _childrenSize; i++) {
+      XPCNode* child = _children->at(i);
+      child->unload();
+      child->_release();
+    }
+
+    delete _children;
+    _children = NULL;
+    _childrenSize = 0;
+  }
+}
+
+void XPCNode::unload() {
+//  cancelTasks();
+
+  if (_loadingContent) {
+    _loadingContent = false;
+    cancelLoadContent();
+  }
+
+  if (_loadedContent) {
+    _loadedContent = false;
+    unloadContent();
+  }
+
+  unloadChildren();
+}
 
 void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                           const std::string& treeID,
                           const G3MRenderContext* rc) {
   _downloader = rc->getDownloader();
-  const long long deltaPriority = 100 * _id.length();
+
+  const long long deltaPriority = 100 - _id.length() /* + _pointsCount */;
 
   _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
                                                            treeID,
@@ -419,7 +479,6 @@ void XPCNode::setContent(std::vector<XPCNode*>* children,
   _children     = children;
   _childrenSize = (_children == NULL) ? 0 : _children->size();
 
-
   if (_points != NULL) {
     for (size_t i = 0; i < _points->size(); i++) {
       XPCPoint* point = _points->at(i);
@@ -431,5 +490,6 @@ void XPCNode::setContent(std::vector<XPCNode*>* children,
 
   _points = points;
 
+  delete _mesh;
   _mesh = mesh;
 }

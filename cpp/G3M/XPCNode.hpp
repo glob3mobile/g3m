@@ -65,6 +65,12 @@ private:
                    const std::string& treeID,
                    const G3MRenderContext* rc);
 
+  void cancelLoadContent();
+  void unloadContent();
+  void unloadChildren();
+  void unload();
+
+
   XPCNode(const std::string& id,
           const Sector* sector,
           const double minZ,

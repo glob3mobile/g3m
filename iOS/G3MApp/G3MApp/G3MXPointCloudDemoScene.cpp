@@ -72,8 +72,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                            TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
-  //#warning TODO cache
 
+#warning TODO cache
   model->getXPCRenderer()->addPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
                                          "Leica_FFCC_SMALL_LOD",
                                          DownloadPriority::LOWER,

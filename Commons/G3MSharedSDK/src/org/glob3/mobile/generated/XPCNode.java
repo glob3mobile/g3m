@@ -99,10 +99,81 @@ public class XPCNode extends RCObject
   private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc)
   {
     _downloader = rc.getDownloader();
-    final long deltaPriority = 100 * _id.length();
+  
+    final long deltaPriority = 100 - _id.length(); // + _pointsCount
   
     _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
+
+
+  //void XPCNode::cancelTasks() {
+  //  if (_featuresTask != NULL) {
+  //    _featuresTask->cancel();
+  //    _featuresTask = NULL;
+  //  }
+  //}
+  
+  private void cancelLoadContent()
+  {
+    if (_contentRequestID != -1)
+    {
+      _downloader.cancelRequest(_contentRequestID);
+      _contentRequestID = -1;
+    }
+  }
+  private void unloadContent()
+  {
+    if (_points != null)
+    {
+      for (int i = 0; i < _points.size(); i++)
+      {
+        XPCPoint point = _points.get(i);
+        if (point != null)
+           point.dispose();
+      }
+      _points = null;
+      _points = null;
+    }
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  }
+  private void unloadChildren()
+  {
+    if (_children != null)
+    {
+      for (int i = 0; i < _childrenSize; i++)
+      {
+        XPCNode child = _children.get(i);
+        child.unload();
+        child._release();
+      }
+  
+      _children = null;
+      _children = null;
+      _childrenSize = 0;
+    }
+  }
+  private void unload()
+  {
+  //  cancelTasks();
+  
+    if (_loadingContent)
+    {
+      _loadingContent = false;
+      cancelLoadContent();
+    }
+  
+    if (_loadedContent)
+    {
+      _loadedContent = false;
+      unloadContent();
+    }
+  
+    unloadChildren();
+  }
+
 
   private XPCNode(String id, Sector sector, double minZ, double maxZ)
   {
@@ -129,6 +200,9 @@ public class XPCNode extends RCObject
   {
     if (_sector != null)
        _sector.dispose();
+  
+    if (_bounds != null)
+       _bounds.dispose();
   
     for (int i = 0; i < _childrenSize; i++)
     {
@@ -200,15 +274,12 @@ public class XPCNode extends RCObject
   
   //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
   
+          // bounds->render(rc, glState, Color::blue());
+  
           if (_loadedContent)
           {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ________rawRender
             _mesh.render(rc, glState);
             renderedCount += _mesh.getRenderVerticesCount();
-  //          renderedCount += rawRender(pointCloud,
-  //                                     rc,
-  //                                     glState);
           }
           else
           {
@@ -236,9 +307,7 @@ public class XPCNode extends RCObject
     {
       if (_renderedInPreviousFrame)
       {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ________unload
-        //      unload();
+        unload();
       }
       _renderedInPreviousFrame = renderedInThisFrame;
     }
@@ -269,7 +338,6 @@ public class XPCNode extends RCObject
     _children = children;
     _childrenSize = (_children == null) ? 0 : _children.size();
   
-  
     if (_points != null)
     {
       for (int i = 0; i < _points.size(); i++)
@@ -284,6 +352,8 @@ public class XPCNode extends RCObject
   
     _points = points;
   
+    if (_mesh != null)
+       _mesh.dispose();
     _mesh = mesh;
   }
 
