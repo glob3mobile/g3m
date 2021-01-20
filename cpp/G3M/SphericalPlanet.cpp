@@ -589,3 +589,28 @@ void SphericalPlanet::toCartesian(const Geodetic2D& geodetic,
               height,
               result);
 }
+
+void SphericalPlanet::geodeticSurfaceNormalFromDegrees(const double latitudeDegrees,
+                                                       const double longitudeDegrees,
+                                                       MutableVector3D& result) const {
+  const double cosLatitude = COS( TO_RADIANS(latitudeDegrees) );
+
+  result.set(cosLatitude * COS( TO_RADIANS(longitudeDegrees) ),
+             cosLatitude * SIN( TO_RADIANS(longitudeDegrees) ),
+             SIN( TO_RADIANS(latitudeDegrees) ));
+}
+
+void SphericalPlanet::toCartesianFromDegrees(const double latitudeDegrees,
+                                             const double longitudeDegrees,
+                                             const double height,
+                                             MutableVector3D& result) const {
+  geodeticSurfaceNormalFromDegrees(latitudeDegrees, longitudeDegrees, result);
+  const double nX = result.x();
+  const double nY = result.y();
+  const double nZ = result.z();
+
+  const double K = _sphere._radius + height;
+  result.set(nX * K,
+             nY * K,
+             nZ * K);
+}

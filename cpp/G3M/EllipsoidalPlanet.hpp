@@ -180,7 +180,16 @@ public:
   const std::string getType() const {
     return "Ellipsoidal";
   }
-  
+
+  void toCartesianFromDegrees(const double latitudeDegrees,
+                              const double longitudeDegrees,
+                              const double height,
+                              MutableVector3D& result) const;
+
+  void geodeticSurfaceNormalFromDegrees(const double latitudeDegrees,
+                                        const double longitudeDegrees,
+                                        MutableVector3D& result) const;
+
 };
 
 #endif

@@ -44,6 +44,10 @@ public:
                                      const Angle& longitude,
                                      MutableVector3D& result) const = 0;
 
+  virtual void geodeticSurfaceNormalFromDegrees(const double latitudeDegrees,
+                                                const double longitudeDegrees,
+                                                MutableVector3D& result) const = 0;
+
   std::vector<double> intersectionsDistances(const Vector3D& origin,
                                              const Vector3D& direction) const;
 
@@ -77,6 +81,10 @@ public:
                            const double height,
                            MutableVector3D& result) const = 0;
 
+  virtual void toCartesianFromDegrees(const double latitudeDegrees,
+                                      const double longitudeDegrees,
+                                      const double height,
+                                      MutableVector3D& result) const = 0;
 
   virtual Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoid) const = 0;
 

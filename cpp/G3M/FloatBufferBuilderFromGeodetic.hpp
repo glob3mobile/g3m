@@ -10,6 +10,7 @@
 
 #include "FloatBufferBuilder.hpp"
 #include "CenterStrategy.hpp"
+#include "MutableVector3D.hpp"
 
 class Planet;
 class Geodetic2D;
@@ -26,7 +27,10 @@ private:
   float _cy;
   float _cz;
 
+  MutableVector3D _cartesianVector;
+
   void setCenter(const Vector3D& center);
+  void setCenter(const MutableVector3D& center);
 
   const Planet* _planet;
 
@@ -42,6 +46,8 @@ private:
                                  const Planet* planet,
                                  const Geodetic3D& center);
 
+  void addCartesianVector();
+
 public:
 
   static FloatBufferBuilderFromGeodetic* builderWithoutCenter(const Planet* planet);
@@ -56,6 +62,10 @@ public:
 
   static FloatBufferBuilderFromGeodetic* builderWithGivenCenter(const Planet* planet,
                                                                 const Geodetic3D& center);
+
+  void addDegrees(const double latitudeDegrees,
+                  const double longitudeDegress,
+                  const double height);
 
   void add(const Angle& latitude,
            const Angle& longitude,

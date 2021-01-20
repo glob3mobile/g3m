@@ -26,27 +26,51 @@ void FloatBufferBuilderFromGeodetic::setCenter(const Vector3D& center) {
   _cz = (float) center._z;
 }
 
-void FloatBufferBuilderFromGeodetic::add(const Angle& latitude,
-                                         const Angle& longitude,
-                                         const double height) {
-  const Vector3D vector = _planet->toCartesian(latitude, longitude, height);
+void FloatBufferBuilderFromGeodetic::setCenter(const MutableVector3D& center) {
+  _cx = (float) center._x;
+  _cy = (float) center._y;
+  _cz = (float) center._z;
+}
 
+void FloatBufferBuilderFromGeodetic::addCartesianVector() {
   if (_centerStrategy == FIRST_VERTEX) {
     if (_values.size() == 0) {
-      setCenter(vector);
+      setCenter(_cartesianVector);
     }
   }
 
   if (_centerStrategy == NO_CENTER) {
-    _values.push_back( (float) vector._x );
-    _values.push_back( (float) vector._y );
-    _values.push_back( (float) vector._z );
+    _values.push_back( (float) _cartesianVector._x );
+    _values.push_back( (float) _cartesianVector._y );
+    _values.push_back( (float) _cartesianVector._z );
   }
   else {
-    _values.push_back( (float) (vector._x - _cx) );
-    _values.push_back( (float) (vector._y - _cy) );
-    _values.push_back( (float) (vector._z - _cz) );
+    _values.push_back( (float) (_cartesianVector._x - _cx) );
+    _values.push_back( (float) (_cartesianVector._y - _cy) );
+    _values.push_back( (float) (_cartesianVector._z - _cz) );
   }
+}
+
+void FloatBufferBuilderFromGeodetic::addDegrees(const double latitudeDegrees,
+                                                const double longitudeDegress,
+                                                const double height) {
+  _planet->toCartesianFromDegrees(latitudeDegrees,
+                                  longitudeDegress,
+                                  height,
+                                  _cartesianVector);
+
+  addCartesianVector();
+}
+
+void FloatBufferBuilderFromGeodetic::add(const Angle& latitude,
+                                         const Angle& longitude,
+                                         const double height) {
+  _planet->toCartesian(latitude,
+                       longitude,
+                       height,
+                       _cartesianVector);
+
+  addCartesianVector();
 }
 
 FloatBufferBuilderFromGeodetic::FloatBufferBuilderFromGeodetic(CenterStrategy centerStrategy,

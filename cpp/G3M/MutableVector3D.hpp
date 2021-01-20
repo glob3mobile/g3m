@@ -14,13 +14,11 @@ class MutableMatrix44D;
 
 
 class MutableVector3D {
-private:
+public:
   double _x;
   double _y;
   double _z;
 
-
-public:
 
   MutableVector3D() :
   _x(0),

@@ -306,3 +306,18 @@ void FlatPlanet::toCartesian(const Geodetic2D& geodetic,
               height,
               result);
 }
+
+void FlatPlanet::toCartesianFromDegrees(const double latitudeDegrees,
+                                        const double longitudeDegrees,
+                                        const double height,
+                                        MutableVector3D& result) const {
+  const double x = longitudeDegrees * _size._x / 360.0;
+  const double y = latitudeDegrees  * _size._y / 180.0;
+  result.set(x, y, height);
+}
+
+void FlatPlanet::geodeticSurfaceNormalFromDegrees(const double latitudeDegrees,
+                                                  const double longitudeDegrees,
+                                                  MutableVector3D& result) const {
+  result.set(0, 0, 1);
+}

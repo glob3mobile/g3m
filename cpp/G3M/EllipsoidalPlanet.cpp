@@ -639,3 +639,39 @@ Geodetic3D EllipsoidalPlanet::getDefaultCameraPosition(const Sector& rendereSect
   return Geodetic3D(rendereSector._center,
                     height);
 }
+
+void EllipsoidalPlanet::toCartesianFromDegrees(const double latitudeDegrees,
+                                               const double longitudeDegrees,
+                                               const double height,
+                                               MutableVector3D& result) const {
+  geodeticSurfaceNormalFromDegrees(latitudeDegrees, longitudeDegrees, result);
+  const double nX = result.x();
+  const double nY = result.y();
+  const double nZ = result.z();
+
+  const double kX = nX * _ellipsoid._radiiSquared._x;
+  const double kY = nY * _ellipsoid._radiiSquared._y;
+  const double kZ = nZ * _ellipsoid._radiiSquared._z;
+
+  const double gamma = IMathUtils::instance()->sqrt((kX * nX) +
+                                                    (kY * nY) +
+                                                    (kZ * nZ));
+
+  const double rSurfaceX = kX / gamma;
+  const double rSurfaceY = kY / gamma;
+  const double rSurfaceZ = kZ / gamma;
+
+  result.set(rSurfaceX + (nX * height),
+             rSurfaceY + (nY * height),
+             rSurfaceZ + (nZ * height));
+}
+
+void EllipsoidalPlanet::geodeticSurfaceNormalFromDegrees(const double latitudeDegrees,
+                                                         const double longitudeDegrees,
+                                                         MutableVector3D& result) const {
+  const double cosLatitude = COS( TO_RADIANS(latitudeDegrees) );
+
+  result.set(cosLatitude * COS( TO_RADIANS(longitudeDegrees) ),
+             cosLatitude * SIN( TO_RADIANS(longitudeDegrees) ),
+             SIN( TO_RADIANS(latitudeDegrees) ));
+}
