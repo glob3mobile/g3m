@@ -133,13 +133,31 @@ public:
                            _deltaHeight + (point->_z * _verticalExaggeration));
     }
 
+//    DirectMesh(const int primitive,
+//               bool owner,
+//               const Vector3D& center,
+//               const IFloatBuffer* vertices,
+//               float lineWidth,
+//               float pointSize,
+//               const Color* flatColor      = NULL,
+//               const IFloatBuffer* colors  = NULL,
+//               bool depthTest              = true,
+//               const IFloatBuffer* normals = NULL,
+//               bool polygonOffsetFill      = false,
+//               float polygonOffsetFactor   = 0,
+//               float polygonOffsetUnits    = 0,
+//               bool cullFace               = false,
+//               int  culledFace             = GLCullFace::back());
+
     _mesh = new DirectMesh(GLPrimitive::points(),
                            true,
                            vertices->getCenter(),
                            vertices->create(),
                            1,
                            1,
-                           Color::newFromRGBA(1,1,1,1) // flatColor
+                           Color::newFromRGBA(1,1,1,1),  // flatColor
+                           NULL,                         // const IFloatBuffer* colors
+                           false                         // depthTest
                            );
 
     delete vertices;

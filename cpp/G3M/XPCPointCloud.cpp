@@ -162,15 +162,6 @@ void XPCPointCloud::initialize(const G3MContext* context) {
   _errorDownloadingMetadata = false;
   _errorParsingMetadata     = false;
 
-  //  const std::string planetType = context->getPlanet()->getType();
-
-  //  const URL metadataURL(_serverURL,
-  //                        _cloudName +
-  //                        "?planet=" + planetType +
-  //                        "&verticalExaggeration=" + IStringUtils::instance()->toString(_verticalExaggeration) +
-  //                        "&deltaHeight=" + IStringUtils::instance()->toString(_deltaHeight) +
-  //                        "&format=binary");
-
   const URL metadataURL(_serverURL, _cloudName);
 
   ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());

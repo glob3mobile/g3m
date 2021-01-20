@@ -3,16 +3,14 @@
 package org.glob3.mobile.specific;
 
 
-import java.util.ArrayList;
+import java.util.*;
 
-import org.glob3.mobile.generated.ITileVisitor;
-import org.glob3.mobile.generated.Layer;
-import org.glob3.mobile.generated.Tile;
+import org.glob3.mobile.generated.*;
 
 
 public class TileVisitorCache_JavaDesktop
-   implements
-      ITileVisitor {
+                                          implements
+                                             ITileVisitor {
 
    @Override
    public void dispose() {

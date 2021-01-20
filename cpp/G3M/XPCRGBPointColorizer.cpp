@@ -7,6 +7,8 @@
 
 #include "XPCRGBPointColorizer.hpp"
 
+#include "ILogger.hpp"
+
 #include "XPCMetadata.hpp"
 #include "XPCDimension.hpp"
 
@@ -59,6 +61,10 @@ void XPCRGBPointColorizer::initialize(const XPCMetadata* metadata) {
   }
 
   _ok = (_redDimensionIndex >= 0) && (_greenDimensionIndex >= 0) && (_blueDimensionIndex >= 0);
+
+  if (!_ok) {
+    ILogger::instance()->logError("Can't find Red, Green and Blue dimensions");
+  }
 }
 
 Color XPCRGBPointColorizer::colorize(const XPCMetadata* metadata,
