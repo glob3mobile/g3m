@@ -127,15 +127,6 @@ public class XPCPointCloud extends RCObject
     _errorDownloadingMetadata = false;
     _errorParsingMetadata = false;
   
-    //  const std::string planetType = context->getPlanet()->getType();
-  
-    //  const URL metadataURL(_serverURL,
-    //                        _cloudName +
-    //                        "?planet=" + planetType +
-    //                        "&verticalExaggeration=" + IStringUtils::instance()->toString(_verticalExaggeration) +
-    //                        "&deltaHeight=" + IStringUtils::instance()->toString(_deltaHeight) +
-    //                        "&format=binary");
-  
     final URL metadataURL = new URL(_serverURL, _cloudName);
   
     ILogger.instance().logInfo("Downloading metadata for \"%s\"", _cloudName);

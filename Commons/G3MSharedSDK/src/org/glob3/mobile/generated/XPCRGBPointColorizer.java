@@ -80,6 +80,11 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
     }
   
     _ok = (_redDimensionIndex >= 0) && (_greenDimensionIndex >= 0) && (_blueDimensionIndex >= 0);
+  
+    if (!_ok)
+    {
+      ILogger.instance().logError("Can't find Red, Green and Blue dimensions");
+    }
   }
 
   public final Color colorize(XPCMetadata metadata, XPCPoint point)
