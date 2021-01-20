@@ -30,8 +30,13 @@
 class XPCNodeContentParserAsyncTask : public GAsyncTask {
 private:
   XPCNode*      _node;
+
   IByteBuffer*  _buffer;
+
   const Planet* _planet;
+  const float _verticalExaggeration;
+  const float _deltaHeight;
+
 
   std::vector<XPCNode*>*  _children;
   std::vector<XPCPoint*>* _points;
@@ -40,10 +45,14 @@ private:
 public:
   XPCNodeContentParserAsyncTask(XPCNode* node,
                                 IByteBuffer* buffer,
-                                const Planet* planet) :
+                                const Planet* planet,
+                                const float verticalExaggeration,
+                                const float deltaHeight) :
   _node(node),
   _buffer(buffer),
   _planet(planet),
+  _verticalExaggeration(verticalExaggeration),
+  _deltaHeight(deltaHeight),
   _children(NULL),
   _points(NULL),
   _mesh(NULL)
@@ -76,6 +85,10 @@ public:
   }
 
   void runInBackground(const G3MContext* context) {
+    if (_node->isCanceled()) {
+      return;
+    }
+
     ByteBufferIterator it(_buffer);
 
     unsigned char version = it.nextUInt8();
@@ -117,11 +130,8 @@ public:
       XPCPoint* point = _points->at(i);
       vertices->addDegrees(point->_y,
                            point->_x,
-                           point->_z);
+                           _deltaHeight + (point->_z * _verticalExaggeration));
     }
-
-#warning TODO_______    verticalExaggeration
-#warning TODO_______    deltaHeight
 
     _mesh = new DirectMesh(GLPrimitive::points(),
                            true,
@@ -136,6 +146,10 @@ public:
   }
 
   void onPostExecute(const G3MContext* context) {
+    if (_node->isCanceled()) {
+      return;
+    }
+
     _node->setContent( _children, _points, _mesh );
     _children = NULL; // moved ownership to _node
     _points   = NULL; // moved ownership to _node
@@ -149,16 +163,23 @@ class XPCNodeContentDownloadListener : public IBufferDownloadListener {
 private:
   XPCNode*            _node;
   const IThreadUtils* _threadUtils;
-  const Planet*       _planet;
+
+  const Planet* _planet;
+  const float   _verticalExaggeration;
+  const float   _deltaHeight;
 
 public:
 
   XPCNodeContentDownloadListener(XPCNode*            node,
                                  const IThreadUtils* threadUtils,
-                                 const Planet* planet) :
+                                 const Planet* planet,
+                                 const float verticalExaggeration,
+                                 const float deltaHeight) :
   _node(node),
   _threadUtils(threadUtils),
-  _planet(planet)
+  _planet(planet),
+  _verticalExaggeration(verticalExaggeration),
+  _deltaHeight(deltaHeight)
   {
     _node->_retain();
   }
@@ -166,8 +187,17 @@ public:
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
-    _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node, buffer, _planet),
-                                  true);
+    if (_node->isCanceled()) {
+      delete buffer;
+    }
+    else {
+      _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node,
+                                                                      buffer,
+                                                                      _planet,
+                                                                      _verticalExaggeration,
+                                                                      _deltaHeight),
+                                    true);
+    }
   }
 
   void onError(const URL& url) {
@@ -211,7 +241,8 @@ _childrenSize(0),
 _downloader(NULL),
 _contentRequestID(-1),
 _points(NULL),
-_mesh(NULL)
+_mesh(NULL),
+_canceled(false)
 {
 
 }
@@ -338,6 +369,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         }
         else {
           if (!_loadingContent) {
+            _canceled = false;
             _loadingContent = true;
             loadContent(pointCloud, treeID, rc);
           }
@@ -413,6 +445,7 @@ void XPCNode::unloadChildren() {
 
 void XPCNode::unload() {
 //  cancelTasks();
+  _canceled = true;
 
   if (_loadingContent) {
     _loadingContent = false;
@@ -440,7 +473,9 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                                                            deltaPriority,
                                                            new XPCNodeContentDownloadListener(this,
                                                                                               rc->getThreadUtils(),
-                                                                                              rc->getPlanet()),
+                                                                                              rc->getPlanet(),
+                                                                                              pointCloud->getVerticalExaggeration(),
+                                                                                              pointCloud->getDeltaHeight()),
                                                            true);
 }
 
@@ -492,4 +527,8 @@ void XPCNode::setContent(std::vector<XPCNode*>* children,
 
   delete _mesh;
   _mesh = mesh;
+}
+
+bool XPCNode::isCanceled() const {
+  return _canceled;
 }

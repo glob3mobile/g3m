@@ -55,7 +55,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const float  pointSize            = 1;
   const bool   dynamicPointSize     = true;
   const float  verticalExaggeration = 1;
-  const double deltaHeight          = 0;
+  const float  deltaHeight          = -210;
 
   const double minProjectedArea = 10000;
 

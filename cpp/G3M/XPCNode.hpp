@@ -56,7 +56,7 @@ private:
 
   bool _loadedContent;
   bool _loadingContent;
-
+  bool _canceled;
 
   IDownloader* _downloader;
   long long    _contentRequestID;
@@ -97,6 +97,8 @@ public:
   void setContent(std::vector<XPCNode*>* children,
                   std::vector<XPCPoint*>* points,
                   DirectMesh* mesh);
+
+  bool isCanceled() const;
 
 };
 
