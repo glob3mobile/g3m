@@ -677,4 +677,31 @@ public class EllipsoidalPlanet extends Planet
     return "Ellipsoidal";
   }
 
+  public final void toCartesianFromDegrees(double latitudeDegrees, double longitudeDegrees, double height, MutableVector3D result)
+  {
+    geodeticSurfaceNormalFromDegrees(latitudeDegrees, longitudeDegrees, result);
+    final double nX = result.x();
+    final double nY = result.y();
+    final double nZ = result.z();
+  
+    final double kX = nX * _ellipsoid._radiiSquared._x;
+    final double kY = nY * _ellipsoid._radiiSquared._y;
+    final double kZ = nZ * _ellipsoid._radiiSquared._z;
+  
+    final double gamma = IMathUtils.instance().sqrt((kX * nX) + (kY * nY) + (kZ * nZ));
+  
+    final double rSurfaceX = kX / gamma;
+    final double rSurfaceY = kY / gamma;
+    final double rSurfaceZ = kZ / gamma;
+  
+    result.set(rSurfaceX + (nX * height), rSurfaceY + (nY * height), rSurfaceZ + (nZ * height));
+  }
+
+  public final void geodeticSurfaceNormalFromDegrees(double latitudeDegrees, double longitudeDegrees, MutableVector3D result)
+  {
+    final double cosLatitude = Math.cos(((latitudeDegrees) / 180.0 * 3.14159265358979323846264338327950288));
+  
+    result.set(cosLatitude * Math.cos(((longitudeDegrees) / 180.0 * 3.14159265358979323846264338327950288)), cosLatitude * Math.sin(((longitudeDegrees) / 180.0 * 3.14159265358979323846264338327950288)), Math.sin(((latitudeDegrees) / 180.0 * 3.14159265358979323846264338327950288)));
+  }
+
 }

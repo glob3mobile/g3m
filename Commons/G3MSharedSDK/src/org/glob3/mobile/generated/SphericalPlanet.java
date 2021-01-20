@@ -644,4 +644,22 @@ public class SphericalPlanet extends Planet
     return "Spherical";
   }
 
+  public final void toCartesianFromDegrees(double latitudeDegrees, double longitudeDegrees, double height, MutableVector3D result)
+  {
+    geodeticSurfaceNormalFromDegrees(latitudeDegrees, longitudeDegrees, result);
+    final double nX = result.x();
+    final double nY = result.y();
+    final double nZ = result.z();
+  
+    final double K = _sphere._radius + height;
+    result.set(nX * K, nY * K, nZ * K);
+  }
+
+  public final void geodeticSurfaceNormalFromDegrees(double latitudeDegrees, double longitudeDegrees, MutableVector3D result)
+  {
+    final double cosLatitude = Math.cos(((latitudeDegrees) / 180.0 * 3.14159265358979323846264338327950288));
+  
+    result.set(cosLatitude * Math.cos(((longitudeDegrees) / 180.0 * 3.14159265358979323846264338327950288)), cosLatitude * Math.sin(((longitudeDegrees) / 180.0 * 3.14159265358979323846264338327950288)), Math.sin(((latitudeDegrees) / 180.0 * 3.14159265358979323846264338327950288)));
+  }
+
 }

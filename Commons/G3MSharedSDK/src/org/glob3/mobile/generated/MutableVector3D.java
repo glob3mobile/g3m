@@ -21,10 +21,9 @@ package org.glob3.mobile.generated;
 
 public class MutableVector3D
 {
-  private double _x;
-  private double _y;
-  private double _z;
-
+  public double _x;
+  public double _y;
+  public double _z;
 
 
   public MutableVector3D()

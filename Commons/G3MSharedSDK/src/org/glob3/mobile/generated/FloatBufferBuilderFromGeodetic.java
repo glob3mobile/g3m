@@ -29,7 +29,15 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   private float _cy;
   private float _cz;
 
+  private MutableVector3D _cartesianVector = new MutableVector3D();
+
   private void setCenter(Vector3D center)
+  {
+    _cx = (float) center._x;
+    _cy = (float) center._y;
+    _cz = (float) center._z;
+  }
+  private void setCenter(MutableVector3D center)
   {
     _cx = (float) center._x;
     _cy = (float) center._y;
@@ -59,6 +67,30 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     setCenter(_planet.toCartesian(center));
   }
 
+  private void addCartesianVector()
+  {
+    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
+    {
+      if (_values.size() == 0)
+      {
+        setCenter(_cartesianVector);
+      }
+    }
+  
+    if (_centerStrategy == CenterStrategy.NO_CENTER)
+    {
+      _values.push_back((float) _cartesianVector._x);
+      _values.push_back((float) _cartesianVector._y);
+      _values.push_back((float) _cartesianVector._z);
+    }
+    else
+    {
+      _values.push_back((float)(_cartesianVector._x - _cx));
+      _values.push_back((float)(_cartesianVector._y - _cy));
+      _values.push_back((float)(_cartesianVector._z - _cz));
+    }
+  }
+
 
   public static FloatBufferBuilderFromGeodetic builderWithoutCenter(Planet planet)
   {
@@ -85,30 +117,18 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     return new FloatBufferBuilderFromGeodetic(CenterStrategy.GIVEN_CENTER, planet, center);
   }
 
+  public final void addDegrees(double latitudeDegrees, double longitudeDegress, double height)
+  {
+    _planet.toCartesianFromDegrees(latitudeDegrees, longitudeDegress, height, _cartesianVector);
+  
+    addCartesianVector();
+  }
+
   public final void add(Angle latitude, Angle longitude, double height)
   {
-    final Vector3D vector = _planet.toCartesian(latitude, longitude, height);
+    _planet.toCartesian(latitude, longitude, height, _cartesianVector);
   
-    if (_centerStrategy == CenterStrategy.FIRST_VERTEX)
-    {
-      if (_values.size() == 0)
-      {
-        setCenter(vector);
-      }
-    }
-  
-    if (_centerStrategy == CenterStrategy.NO_CENTER)
-    {
-      _values.push_back((float) vector._x);
-      _values.push_back((float) vector._y);
-      _values.push_back((float) vector._z);
-    }
-    else
-    {
-      _values.push_back((float)(vector._x - _cx));
-      _values.push_back((float)(vector._y - _cy));
-      _values.push_back((float)(vector._z - _cz));
-    }
+    addCartesianVector();
   }
 
   public final void add(Geodetic3D position)

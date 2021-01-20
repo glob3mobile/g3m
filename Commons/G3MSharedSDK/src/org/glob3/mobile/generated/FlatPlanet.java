@@ -380,4 +380,16 @@ public class FlatPlanet extends Planet
     return "Flat";
   }
 
+  public final void toCartesianFromDegrees(double latitudeDegrees, double longitudeDegrees, double height, MutableVector3D result)
+  {
+    final double x = longitudeDegrees * _size._x / 360.0;
+    final double y = latitudeDegrees * _size._y / 180.0;
+    result.set(x, y, height);
+  }
+
+  public final void geodeticSurfaceNormalFromDegrees(double latitudeDegrees, double longitudeDegrees, MutableVector3D result)
+  {
+    result.set(0, 0, 1);
+  }
+
 }
