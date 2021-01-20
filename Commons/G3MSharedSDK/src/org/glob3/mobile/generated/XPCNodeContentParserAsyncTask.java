@@ -92,10 +92,11 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_planet);
 
-    for (int i = 0; i < _points.size(); i++)
+    final int pointsSize = _points.size();
+    for (int i = 0; i < pointsSize; i++)
     {
       XPCPoint point = _points.get(i);
-      vertices.add(Angle.fromDegrees(point._y), Angle.fromDegrees(point._x), point._z);
+      vertices.addDegrees(point._y, point._x, point._z);
     }
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
@@ -114,7 +115,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     _node.setContent(_children, _points, _mesh);
     _children = null; // moved ownership to _node
     _points = null; // moved ownership to _node
-    _mesh = null;
+    _mesh = null; // moved ownership to _node
   }
 
 }

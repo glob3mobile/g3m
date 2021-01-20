@@ -26,5 +26,7 @@ public abstract class XPCPointColorizer
   {
   }
 
+  public abstract void initialize(XPCMetadata metadata);
+
   public abstract Color colorize(XPCMetadata metadata, XPCPoint point);
 }

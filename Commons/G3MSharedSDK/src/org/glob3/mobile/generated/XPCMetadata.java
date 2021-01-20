@@ -98,7 +98,6 @@ public class XPCMetadata
     }
   }
 
-
   public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS)
   {
   
@@ -118,11 +117,20 @@ public class XPCMetadata
   {
     return _treesSize;
   }
-
   public final XPCTree getTree(int i)
   {
     return _trees.get(i);
   }
+
+  public final int getDimensionsCount()
+  {
+    return _dimensions.size();
+  }
+  public final XPCDimension getDimension(int i)
+  {
+    return _dimensions.get(i);
+  }
+
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  XPCMetadata(XPCMetadata that);

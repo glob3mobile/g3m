@@ -18,10 +18,9 @@ package org.glob3.mobile.generated;
 
 public class XPCDimension
 {
-  private final String _name;
-  private final byte _size;
-  private final String _type;
-
+  public final String _name;
+  public final byte _size;
+  public final String _type;
 
   public XPCDimension(String name, byte size, String type)
   {

@@ -33,7 +33,7 @@ public class XPCPointCloud extends RCObject
   private final long _downloadPriority;
   private final TimeInterval _timeToCache;
   private final boolean _readExpired;
-  private final XPCPointColorizer _pointColorizer;
+  private XPCPointColorizer _pointColorizer;
   private final boolean _deletePointColorizer;
   private final double _minProjectedArea;
   private final float _pointSize;
@@ -192,11 +192,19 @@ public class XPCPointCloud extends RCObject
   }
   public final void parsedMetadata(XPCMetadata metadata)
   {
+    if (_metadata != null)
+       _metadata.dispose();
+  
     _metadata = metadata;
   
     _downloadingMetadata = false;
   
     ILogger.instance().logInfo("Parsed metadata for \"%s\"", _cloudName);
+  
+    if (_pointColorizer != null)
+    {
+      _pointColorizer.initialize(_metadata);
+    }
   
     if (_metadataListener != null)
     {
