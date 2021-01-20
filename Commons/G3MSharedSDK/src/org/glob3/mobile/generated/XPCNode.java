@@ -91,7 +91,7 @@ public class XPCNode extends RCObject
 
   private boolean _loadedContent;
   private boolean _loadingContent;
-
+  private boolean _canceled;
 
   private IDownloader _downloader;
   private long _contentRequestID;
@@ -102,7 +102,7 @@ public class XPCNode extends RCObject
   
     final long deltaPriority = 100 - _id.length(); // + _pointsCount
   
-    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(this, rc.getThreadUtils(), rc.getPlanet()), true);
+    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(this, rc.getThreadUtils(), rc.getPlanet(), pointCloud.getVerticalExaggeration(), pointCloud.getDeltaHeight()), true);
   }
 
 
@@ -158,6 +158,7 @@ public class XPCNode extends RCObject
   private void unload()
   {
   //  cancelTasks();
+    _canceled = true;
   
     if (_loadingContent)
     {
@@ -193,6 +194,7 @@ public class XPCNode extends RCObject
      _contentRequestID = -1;
      _points = null;
      _mesh = null;
+     _canceled = false;
   
   }
 
@@ -285,6 +287,7 @@ public class XPCNode extends RCObject
           {
             if (!_loadingContent)
             {
+              _canceled = false;
               _loadingContent = true;
               loadContent(pointCloud, treeID, rc);
             }
@@ -355,6 +358,11 @@ public class XPCNode extends RCObject
     if (_mesh != null)
        _mesh.dispose();
     _mesh = mesh;
+  }
+
+  public final boolean isCanceled()
+  {
+    return _canceled;
   }
 
 }
