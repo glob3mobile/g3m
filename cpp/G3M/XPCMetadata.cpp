@@ -76,6 +76,24 @@ _treesSize( _trees->size() )
 
 }
 
+
+const size_t XPCMetadata::getTreesCount() const {
+  return _treesSize;
+}
+
+const XPCTree* XPCMetadata::getTree(const size_t i) const {
+  return _trees->at(i);
+}
+
+const size_t XPCMetadata::getDimensionsCount() const {
+  return _dimensions->size();
+}
+
+const XPCDimension* XPCMetadata::getDimension(const size_t i) const {
+  return _dimensions->at(i);
+}
+
+
 XPCMetadata::~XPCMetadata() {
   for (size_t i = 0; i < _dimensions->size(); i++) {
     const XPCDimension* dimension = _dimensions->at(i);

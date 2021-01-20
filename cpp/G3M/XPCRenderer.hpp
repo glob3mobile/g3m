@@ -58,7 +58,7 @@ public:
                      long long downloadPriority,
                      const TimeInterval& timeToCache,
                      bool readExpired,
-                     const XPCPointColorizer* pointColorizer,
+                     XPCPointColorizer* pointColorizer,
                      bool deletePointColorizer,
                      const double minProjectedArea,
                      float pointSize = 1.0f,

@@ -16,11 +16,11 @@
 #include <G3M/SingleBILElevationDataProvider.hpp>
 #include <G3M/PlanetRenderer.hpp>
 
-
 #include <G3M/XPCRenderer.hpp>
 #include <G3M/XPCMetadataListener.hpp>
 #include <G3M/XPCMetadata.hpp>
 #include <G3M/XPCTree.hpp>
+#include <G3M/XPCRGBPointColorizer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -79,8 +79,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
-                                         NULL, // const XPCPointColorizer* pointColorizer
-                                         true, // deletePointColorizer,
+                                         new XPCRGBPointColorizer(),  // pointColorizer
+                                         true,                        // deletePointColorizer,
                                          minProjectedArea,
                                          pointSize,
                                          dynamicPointSize,

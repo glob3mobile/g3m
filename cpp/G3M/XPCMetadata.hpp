@@ -26,21 +26,19 @@ public:
   
   ~XPCMetadata();
 
-
   long long render(const XPCPointCloud* pointCloud,
                    const G3MRenderContext* rc,
                    GLState* glState,
                    const Frustum* frustum,
                    long long nowInMS);
 
-  const size_t getTreesCount() const {
-    return _treesSize;
-  }
+  const size_t getTreesCount() const;
+  const XPCTree* getTree(const size_t i) const;
 
-  const XPCTree* getTree(const size_t i) const {
-    return _trees->at(i);
-  }
-  
+  const size_t getDimensionsCount() const;
+  const XPCDimension* getDimension(const size_t i) const;
+
+
 private:
   XPCMetadata(const XPCMetadata& that);
 

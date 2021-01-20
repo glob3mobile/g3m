@@ -20,9 +20,10 @@ public:
   virtual ~XPCPointColorizer() {
   }
 
+  virtual void initialize(const XPCMetadata* metadata) = 0;
+
   virtual Color colorize(const XPCMetadata* metadata,
                          const XPCPoint* point) = 0;
 };
-
 
 #endif

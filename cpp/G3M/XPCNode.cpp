@@ -109,11 +109,12 @@ public:
 
     FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
 
-    for (int i = 0; i < _points->size(); i++) {
+    const size_t pointsSize = _points->size();
+    for (int i = 0; i < pointsSize; i++) {
       XPCPoint* point = _points->at(i);
-      vertices->add(Angle::fromDegrees(point->_y),
-                    Angle::fromDegrees(point->_x),
-                    point->_z);
+      vertices->addDegrees(point->_y,
+                           point->_x,
+                           point->_z);
     }
 
 #warning TODO_______    verticalExaggeration
@@ -135,7 +136,7 @@ public:
     _node->setContent( _children, _points, _mesh );
     _children = NULL; // moved ownership to _node
     _points   = NULL; // moved ownership to _node
-    _mesh     = NULL;
+    _mesh     = NULL; // moved ownership to _node
   }
 
 };

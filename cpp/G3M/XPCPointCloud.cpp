@@ -123,7 +123,7 @@ XPCPointCloud::XPCPointCloud(const URL& serverURL,
                              long long downloadPriority,
                              const TimeInterval& timeToCache,
                              bool readExpired,
-                             const XPCPointColorizer* pointColorizer,
+                             XPCPointColorizer* pointColorizer,
                              bool deletePointColorizer,
                              const double minProjectedArea,
                              float pointSize,
@@ -194,11 +194,17 @@ void XPCPointCloud::errorParsingMetadata() {
 }
 
 void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
+  delete _metadata;
+
   _metadata = metadata;
 
   _downloadingMetadata = false;
 
   ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _cloudName.c_str());
+
+  if (_pointColorizer != NULL) {
+    _pointColorizer->initialize(_metadata);
+  }
 
   if (_metadataListener != NULL) {
     _metadataListener->onMetadata(_metadata);

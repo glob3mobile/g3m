@@ -13,13 +13,11 @@
 
 
 class XPCDimension {
-private:
+public:
   const std::string   _name;
   const unsigned char _size;
   const std::string   _type;
 
-
-public:
   XPCDimension(const std::string& name,
                const unsigned char size,
                const std::string& type) :

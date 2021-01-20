@@ -26,21 +26,21 @@ class IBufferDownloadListener;
 
 class XPCPointCloud : public RCObject {
 private:
-  const URL                 _serverURL;
-  const std::string         _cloudName;
-  const long long           _downloadPriority;
-  const TimeInterval        _timeToCache;
-  const bool                _readExpired;
-  const XPCPointColorizer*  _pointColorizer;
-  const bool                _deletePointColorizer;
-  const double              _minProjectedArea;
-  const float               _pointSize;
-  const bool                _dynamicPointSize;
-  const float               _verticalExaggeration;
-  const float               _deltaHeight;
-  XPCMetadataListener*      _metadataListener;
-  const bool                _deleteMetadataListener;
-  const bool                _verbose;
+  const URL            _serverURL;
+  const std::string    _cloudName;
+  const long long      _downloadPriority;
+  const TimeInterval   _timeToCache;
+  const bool           _readExpired;
+  XPCPointColorizer*   _pointColorizer;
+  const bool           _deletePointColorizer;
+  const double         _minProjectedArea;
+  const float          _pointSize;
+  const bool           _dynamicPointSize;
+  const float          _verticalExaggeration;
+  const float          _deltaHeight;
+  XPCMetadataListener* _metadataListener;
+  const bool            _deleteMetadataListener;
+  const bool            _verbose;
 
   bool _downloadingMetadata;
   bool _errorDownloadingMetadata;
@@ -59,7 +59,7 @@ public:
                 long long downloadPriority,
                 const TimeInterval& timeToCache,
                 bool readExpired,
-                const XPCPointColorizer* pointColorizer,
+                XPCPointColorizer* pointColorizer,
                 bool deletePointColorizer,
                 const double minProjectedArea,
                 float pointSize,
