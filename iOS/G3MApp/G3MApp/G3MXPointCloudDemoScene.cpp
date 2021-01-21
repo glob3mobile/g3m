@@ -21,6 +21,8 @@
 #include <G3M/XPCMetadata.hpp>
 #include <G3M/XPCTree.hpp>
 #include <G3M/XPCRGBPointColorizer.hpp>
+#include <G3M/XPCIntensityPointColorizer.hpp>
+#include <G3M/XPCClassificationPointColorizer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -55,11 +57,11 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const float  pointSize            = 1;
   const bool   dynamicPointSize     = true;
   const float  verticalExaggeration = 1;
-  const float  deltaHeight          = -210;
-//  const float  deltaHeight          = -580;
+  // const float  deltaHeight          = -210;
+  const float  deltaHeight          = -580;
 //  const float  deltaHeight          = -385;
 
-  const double minProjectedArea = 5000; //50000;
+  const double minProjectedArea = 50000; //50000;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
@@ -77,14 +79,16 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 #warning TODO cache
   model->getXPCRenderer()->addPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
-                                          "Leica_FFCC_SMALL_LOD",
-                                         // "Leica_M40_LOD",
+                                         // "Leica_FFCC_SMALL_LOD",
+                                         "Leica_M40_LOD",
                                          // "NEON_LOD",
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
-                                         new XPCRGBPointColorizer(),  // pointColorizer
-                                         true,                        // deletePointColorizer,
+                                         // new XPCRGBPointColorizer(),         // pointColorizer
+                                         // new XPCIntensityPointColorizer(),   // pointColorizer
+                                         new XPCClassificationPointColorizer(), // pointColorizer
+                                         true,                                  // deletePointColorizer,
                                          minProjectedArea,
                                          pointSize,
                                          dynamicPointSize,

@@ -907,6 +907,10 @@
 		CF66099F23DF332400795C7F /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		CF6609A023DF332400795C7F /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
 		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
+		CFC54DFE25B9B76300424542 /* XPCIntensityPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54DFC25B9B76300424542 /* XPCIntensityPointColorizer.cpp */; };
+		CFC54E0125B9B8CC00424542 /* XPCIntensityPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54DFD25B9B76300424542 /* XPCIntensityPointColorizer.hpp */; };
+		CFC54E0525B9BD7300424542 /* XPCClassificationPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */; };
+		CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */; };
 		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; platformFilter = ios; };
@@ -945,6 +949,8 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */,
+				CFC54E0125B9B8CC00424542 /* XPCIntensityPointColorizer.hpp in CopyFiles */,
 				CF05D55E25B82D9500220105 /* XPCPoint.hpp in CopyFiles */,
 				CF05D55F25B82D9500220105 /* XPCRGBPointColorizer.hpp in CopyFiles */,
 				CF4AD09A25B5F90C009A1E48 /* XPCDimension.hpp in CopyFiles */,
@@ -2354,6 +2360,10 @@
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
 		CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBuffer_iOS.cpp; path = Specific/Derived/ShortBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBuffer_iOS.hpp; path = Specific/Derived/ShortBuffer_iOS.hpp; sourceTree = "<group>"; };
+		CFC54DFC25B9B76300424542 /* XPCIntensityPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCIntensityPointColorizer.cpp; sourceTree = "<group>"; };
+		CFC54DFD25B9B76300424542 /* XPCIntensityPointColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCIntensityPointColorizer.hpp; sourceTree = "<group>"; };
+		CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCClassificationPointColorizer.cpp; sourceTree = "<group>"; };
+		CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCClassificationPointColorizer.hpp; sourceTree = "<group>"; };
 		CFCCFE0816F504590082F383 /* NativeGL2_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NativeGL2_iOS.mm; path = Specific/GL/NativeGL2_iOS.mm; sourceTree = "<group>"; };
 		CFCCFE0A16F506210082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
@@ -2537,8 +2547,12 @@
 		CF05D55825B82B8900220105 /* XCP */ = {
 			isa = PBXGroup;
 			children = (
+				CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */,
+				CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */,
 				CF27452325B1F2C20056304B /* XPCDimension.cpp */,
 				CF27452425B1F2C20056304B /* XPCDimension.hpp */,
+				CFC54DFC25B9B76300424542 /* XPCIntensityPointColorizer.cpp */,
+				CFC54DFD25B9B76300424542 /* XPCIntensityPointColorizer.hpp */,
 				CF27450F25B1D0120056304B /* XPCMetadata.cpp */,
 				CF27451025B1D0120056304B /* XPCMetadata.hpp */,
 				CF27451725B1D1290056304B /* XPCMetadataListener.cpp */,
@@ -2555,10 +2569,10 @@
 				CF27451425B1D0700056304B /* XPCPointColorizer.hpp */,
 				CF2744FD25B1AF450056304B /* XPCRenderer.cpp */,
 				CF2744FE25B1AF450056304B /* XPCRenderer.hpp */,
-				CF4AD09525B5F574009A1E48 /* XPCTree.cpp */,
-				CF4AD09625B5F574009A1E48 /* XPCTree.hpp */,
 				CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */,
 				CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */,
+				CF4AD09525B5F574009A1E48 /* XPCTree.cpp */,
+				CF4AD09625B5F574009A1E48 /* XPCTree.hpp */,
 			);
 			name = XCP;
 			sourceTree = "<group>";
@@ -3827,6 +3841,7 @@
 				CF6608C223DF330600795C7F /* GEO2DPolygonData.cpp in Sources */,
 				CF6608C323DF330600795C7F /* GEO2DPointGeometry.cpp in Sources */,
 				CF6608C423DF330600795C7F /* FloatBufferDEMGrid.cpp in Sources */,
+				CFC54DFE25B9B76300424542 /* XPCIntensityPointColorizer.cpp in Sources */,
 				CF6608C523DF330600795C7F /* CompositeTileImageContribution.cpp in Sources */,
 				CF6608C623DF330600795C7F /* CameraSingleDragHandler.cpp in Sources */,
 				CF6608C723DF330600795C7F /* TileTessellator.cpp in Sources */,
@@ -3944,6 +3959,7 @@
 				CF66093323DF330700795C7F /* CachedDownloader.cpp in Sources */,
 				CF66093423DF330700795C7F /* IndexedMesh.cpp in Sources */,
 				CF66093523DF330700795C7F /* Ellipsoid.cpp in Sources */,
+				CFC54E0525B9BD7300424542 /* XPCClassificationPointColorizer.cpp in Sources */,
 				CF66093623DF330700795C7F /* CoordinateSystem.cpp in Sources */,
 				CF66093723DF330700795C7F /* ImageSizer.cpp in Sources */,
 				CF66093823DF330700795C7F /* Trail.cpp in Sources */,

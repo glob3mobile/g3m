@@ -147,12 +147,9 @@ public:
       THROW_EXCEPTION("Logic error");
     }
 
-//#error USER AND DELETE dimensionsValues
-
     XPCPointColorizer* pointsColorizer = _pointCloud->getPointsColorizer();
-
-    const float deltaHeight          = _pointCloud->getDeltaHeight();
-    const float verticalExaggeration = _pointCloud->getVerticalExaggeration();
+    const float deltaHeight            = _pointCloud->getDeltaHeight();
+    const float verticalExaggeration   = _pointCloud->getVerticalExaggeration();
 
     FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
     FloatBufferBuilderFromColor colors;
@@ -164,37 +161,33 @@ public:
                            point->_x,
                            (point->_z * verticalExaggeration) + deltaHeight);
 
-      const Color color = pointsColorizer->colorize(metadata,
-                                                    _points,
-                                                    dimensionsValues,
-                                                    i);
+      if (pointsColorizer != NULL) {
+        const Color color = pointsColorizer->colorize(metadata,
+                                                      _points,
+                                                      dimensionsValues,
+                                                      i);
 
-      colors.add(color);
-
+        colors.add(color);
+      }
+      else {
+        colors.add(1, 1, 1, 1);
+      }
     }
 
-//    DirectMesh(const int primitive,
-//               bool owner,
-//               const Vector3D& center,
-//               const IFloatBuffer* vertices,
-//               float lineWidth,
-//               float pointSize,
-//               const Color* flatColor      = NULL,
-//               const IFloatBuffer* colors  = NULL,
-//               bool depthTest              = true,
-//               const IFloatBuffer* normals = NULL,
-//               bool polygonOffsetFill      = false,
-//               float polygonOffsetFactor   = 0,
-//               float polygonOffsetUnits    = 0,
-//               bool cullFace               = false,
-//               int  culledFace             = GLCullFace::back());
+    if (dimensionsValues != NULL) {
+      for (size_t i = 0; i < dimensionsValues->size(); i++) {
+        delete dimensionsValues->at(i);
+      }
+      delete dimensionsValues;
+      dimensionsValues = NULL;
+    }
 
     _mesh = new DirectMesh(GLPrimitive::points(),
                            true,
                            vertices->getCenter(),
                            vertices->create(),
                            1,
-                           1,
+                           _pointCloud->getDevicePointSize(),
                            NULL,            // flatColor
                            colors.create(), // const IFloatBuffer* colors
                            false            // depthTest
@@ -420,8 +413,10 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         // bounds->render(rc, glState, Color::blue());
 
         if (_loadedContent) {
-          _mesh->render(rc, glState);
-          renderedCount += _mesh->getRenderVerticesCount();
+          if (_mesh != NULL) {
+            _mesh->render(rc, glState);
+            renderedCount += _mesh->getRenderVerticesCount();
+          }
         }
         else {
           if (!_loadingContent) {
@@ -483,6 +478,8 @@ void XPCNode::unloadContent() {
 
   delete _mesh;
   _mesh = NULL;
+
+  _loadedContent = false;
 }
 
 void XPCNode::unloadChildren() {
