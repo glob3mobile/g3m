@@ -24,6 +24,7 @@ package org.glob3.mobile.generated;
 //class XPCMetadata;
 //class IDownloader;
 //class IBufferDownloadListener;
+//class IIntBuffer;
 
 
 public class XPCPointCloud extends RCObject
@@ -48,6 +49,8 @@ public class XPCPointCloud extends RCObject
   private boolean _errorDownloadingMetadata;
   private boolean _errorParsingMetadata;
 
+  private IIntBuffer _requiredDimensionIndices;
+
   private XPCMetadata _metadata;
   private long _lastRenderedCount;
 
@@ -67,6 +70,9 @@ public class XPCPointCloud extends RCObject
   
     if (_metadata != null)
        _metadata.dispose();
+  
+    if (_requiredDimensionIndices != null)
+       _requiredDimensionIndices.dispose();
   
     super.dispose();
   }
@@ -93,6 +99,7 @@ public class XPCPointCloud extends RCObject
      _errorParsingMetadata = false;
      _metadata = null;
      _lastRenderedCount = 0;
+     _requiredDimensionIndices = null;
   
   }
 
@@ -114,6 +121,11 @@ public class XPCPointCloud extends RCObject
   public final double getMinProjectedArea()
   {
     return _minProjectedArea;
+  }
+
+  public final XPCMetadata getMetadada()
+  {
+    return _metadata;
   }
 
   public final float getDevicePointSize()
@@ -183,19 +195,32 @@ public class XPCPointCloud extends RCObject
   }
   public final void parsedMetadata(XPCMetadata metadata)
   {
-    if (_metadata != null)
-       _metadata.dispose();
-  
-    _metadata = metadata;
-  
+    _lastRenderedCount = 0;
     _downloadingMetadata = false;
   
     ILogger.instance().logInfo("Parsed metadata for \"%s\"", _cloudName);
   
+  
+    if (_metadata != metadata)
+    {
+        if (_metadata != null)
+           _metadata.dispose();
+    }
+    _metadata = metadata;
+  
+  
+    IIntBuffer requiredDimensionIndices = null;
     if (_pointColorizer != null)
     {
-      _pointColorizer.initialize(_metadata);
+      requiredDimensionIndices = _pointColorizer.initialize(_metadata);
     }
+    if (_requiredDimensionIndices != requiredDimensionIndices)
+    {
+      if (_requiredDimensionIndices != null)
+         _requiredDimensionIndices.dispose();
+    }
+    _requiredDimensionIndices = requiredDimensionIndices;
+  
   
     if (_metadataListener != null)
     {
@@ -211,10 +236,34 @@ public class XPCPointCloud extends RCObject
 
   public final long requestNodeContentBuffer(IDownloader downloader, String treeID, String nodeID, long deltaPriority, IBufferDownloadListener listener, boolean deleteListener)
   {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_cloudName);
+    isb.addString("/");
+    isb.addString(treeID);
+    isb.addString("/");
+    isb.addString(nodeID);
   
-    final URL nodeContentURL = new URL(_serverURL, _cloudName + "/" + treeID + "/" +nodeID);
+    if (_requiredDimensionIndices != null)
+    {
+      for (int i = 0; i < _requiredDimensionIndices.size(); i++)
+      {
+        isb.addString((i == 0) ? "?requiredDimensionIndices=" : ",");
+        isb.addInt(_requiredDimensionIndices.get(i));
+      }
+    }
+  
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    final URL nodeContentURL = new URL(_serverURL, path);
   
     return downloader.requestBuffer(nodeContentURL, _downloadPriority + deltaPriority, _timeToCache, _readExpired, listener, deleteListener);
+  }
+
+  public final IIntBuffer getRequiredDimensionIndices()
+  {
+    return _requiredDimensionIndices;
   }
 
 }

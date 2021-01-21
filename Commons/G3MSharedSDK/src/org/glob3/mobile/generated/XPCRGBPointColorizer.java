@@ -57,7 +57,7 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
   
   }
 
-  public final void initialize(XPCMetadata metadata)
+  public final IIntBuffer initialize(XPCMetadata metadata)
   {
     final int dimensionsCount = metadata.getDimensionsCount();
   
@@ -84,7 +84,15 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
     if (!_ok)
     {
       ILogger.instance().logError("Can't find Red, Green and Blue dimensions");
+      return null;
     }
+  
+    IIntBuffer requiredDimensionIndices = IFactory.instance().createIntBuffer(3);
+    requiredDimensionIndices.put(0, _redDimensionIndex);
+    requiredDimensionIndices.put(1, _greenDimensionIndex);
+    requiredDimensionIndices.put(2, _blueDimensionIndex);
+  
+    return requiredDimensionIndices;
   }
 
   public final Color colorize(XPCMetadata metadata, XPCPoint point)

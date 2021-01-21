@@ -34,4 +34,6 @@ public abstract class IByteBuffer
 
   public abstract String getAsString();
 
+  public abstract IByteBuffer copy(int from, int length);
+
 }

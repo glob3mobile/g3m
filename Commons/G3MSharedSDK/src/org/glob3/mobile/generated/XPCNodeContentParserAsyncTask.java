@@ -1,29 +1,27 @@
 package org.glob3.mobile.generated;
 public class XPCNodeContentParserAsyncTask extends GAsyncTask
 {
+  private final XPCPointCloud _pointCloud;
   private XPCNode _node;
 
   private IByteBuffer _buffer;
 
   private final Planet _planet;
-  private final float _verticalExaggeration;
-  private final float _deltaHeight;
-
 
   private java.util.ArrayList<XPCNode> _children;
   private java.util.ArrayList<XPCPoint> _points;
   private DirectMesh _mesh;
 
-  public XPCNodeContentParserAsyncTask(XPCNode node, IByteBuffer buffer, Planet planet, float verticalExaggeration, float deltaHeight)
+  public XPCNodeContentParserAsyncTask(XPCPointCloud pointCloud, XPCNode node, IByteBuffer buffer, Planet planet)
   {
+     _pointCloud = pointCloud;
      _node = node;
      _buffer = buffer;
      _planet = planet;
-     _verticalExaggeration = verticalExaggeration;
-     _deltaHeight = deltaHeight;
      _children = null;
      _points = null;
      _mesh = null;
+    _pointCloud._retain();
     _node._retain();
   }
 
@@ -57,6 +55,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
        _mesh.dispose();
 
     _node._release();
+    _pointCloud._release();
   }
 
   public final void runInBackground(G3MContext context)
@@ -98,11 +97,39 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     }
 
 
+    final java.util.ArrayList<IByteBuffer> dimensionsValues;
+
+    final IIntBuffer dimensionIndices = _pointCloud.getRequiredDimensionIndices();
+    if (dimensionIndices == null)
+    {
+      dimensionsValues = null;
+    }
+    else
+    {
+      final int dimensionsCount = dimensionIndices.size();
+      dimensionsValues = new java.util.ArrayList<IByteBuffer>();
+      for (int j = 0; j < dimensionsCount; j++)
+      {
+        final int dimensionIndex = dimensionIndices.get(j);
+
+        final XPCDimension dimension = _pointCloud.getMetadada().getDimension(dimensionIndex);
+
+        final IByteBuffer dimensionValue = dimension.readValues(it);
+
+        dimensionsValues.add(dimensionValue);
+      }
+    }
+
     if (it.hasNext())
     {
       throw new RuntimeException("Logic error");
     }
 
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#error USER AND DELETE dimensionsValues
+
+    final float deltaHeight = _pointCloud.getDeltaHeight();
+    final float verticalExaggeration = _pointCloud.getVerticalExaggeration();
 
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_planet);
 
@@ -110,7 +137,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     for (int i = 0; i < pointsSize; i++)
     {
       XPCPoint point = _points.get(i);
-      vertices.addDegrees(point._y, point._x, _deltaHeight + (point._z * _verticalExaggeration));
+      vertices.addDegrees(point._y, point._x, (point._z * verticalExaggeration) + deltaHeight);
     }
 
 //    DirectMesh(const int primitive,

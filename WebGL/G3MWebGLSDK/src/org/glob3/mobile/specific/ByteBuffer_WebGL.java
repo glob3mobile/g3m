@@ -145,4 +145,18 @@ public final class ByteBuffer_WebGL
    }-*/;
 
 
+   @Override
+   public ByteBuffer_WebGL copy(final int from,
+                                final int length) {
+      return new ByteBuffer_WebGL(jsBufferSlice(from, length));
+   }
+
+
+   native private JavaScriptObject jsBufferSlice(final int from,
+                                                 final int length) /*-{
+		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.buffer;
+		return buffer.slice(from, from + length);
+   }-*/;
+
+
 }

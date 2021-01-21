@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 //class XPCMetadata;
 //class XPCPoint;
+//class IIntBuffer;
 
 
 public abstract class XPCPointColorizer
@@ -26,7 +27,7 @@ public abstract class XPCPointColorizer
   {
   }
 
-  public abstract void initialize(XPCMetadata metadata);
+  public abstract IIntBuffer initialize(XPCMetadata metadata);
 
   public abstract Color colorize(XPCMetadata metadata, XPCPoint point);
 }

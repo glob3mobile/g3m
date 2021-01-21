@@ -1,21 +1,20 @@
 package org.glob3.mobile.generated;
 public class XPCNodeContentDownloadListener extends IBufferDownloadListener
 {
+  private final XPCPointCloud _pointCloud;
   private XPCNode _node;
+
   private final IThreadUtils _threadUtils;
-
   private final Planet _planet;
-  private final float _verticalExaggeration;
-  private final float _deltaHeight;
 
 
-  public XPCNodeContentDownloadListener(XPCNode node, IThreadUtils threadUtils, Planet planet, float verticalExaggeration, float deltaHeight)
+  public XPCNodeContentDownloadListener(XPCPointCloud pointCloud, XPCNode node, IThreadUtils threadUtils, Planet planet)
   {
+     _pointCloud = pointCloud;
      _node = node;
      _threadUtils = threadUtils;
      _planet = planet;
-     _verticalExaggeration = verticalExaggeration;
-     _deltaHeight = deltaHeight;
+    _pointCloud._retain();
     _node._retain();
   }
 
@@ -28,7 +27,7 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
     }
     else
     {
-      _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node, buffer, _planet, _verticalExaggeration, _deltaHeight), true);
+      _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud, _node, buffer, _planet), true);
     }
   }
 
@@ -50,6 +49,7 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
   public void dispose()
   {
     _node._release();
+    _pointCloud._release();
   }
 
 

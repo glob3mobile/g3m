@@ -15,6 +15,9 @@ package org.glob3.mobile.generated;
 
 
 
+//class IByteBuffer;
+//class ByteBufferIterator;
+
 
 public class XPCDimension
 {
@@ -27,12 +30,29 @@ public class XPCDimension
      _name = name;
      _size = size;
      _type = type;
-
+  
   }
 
   public void dispose()
   {
+  
+  }
 
+  public final IByteBuffer readValues(ByteBufferIterator it)
+  {
+    final int pointsCount = it.nextInt32();
+  
+  //  for (int i = 0; i < pointsCount; i++) {
+  //    dimensionValue;
+  //  }
+  
+    //  UNSIGNED 8, 4, 2, 1
+    //  FLOATING 8, 4
+    //
+    ///#error DIEGO AT WORK
+  
+    final IByteBuffer dimensionValues = it.nextBuffer(pointsCount * _size);
+    return dimensionValues;
   }
 
 }

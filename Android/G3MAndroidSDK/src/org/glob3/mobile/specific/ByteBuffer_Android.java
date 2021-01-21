@@ -2,14 +2,15 @@
 
 package org.glob3.mobile.specific;
 
+
 import java.nio.charset.*;
 
 import org.glob3.mobile.generated.*;
 
 
 public final class ByteBuffer_Android
-         extends
-            IByteBuffer {
+                                      extends
+                                         IByteBuffer {
 
    private static final Charset UTF_8 = Charset.forName("UTF-8");
 
@@ -83,6 +84,15 @@ public final class ByteBuffer_Android
    @Override
    public String getAsString() {
       return new String(_buffer, UTF_8);
+   }
+
+
+   @Override
+   public ByteBuffer_Android copy(final int from,
+                                  final int length) {
+      final byte[] newBuffer = new byte[length];
+      System.arraycopy(_buffer, from, newBuffer, 0, length);
+      return new ByteBuffer_Android(newBuffer);
    }
 
 

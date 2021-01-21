@@ -44,6 +44,7 @@ ByteBuffer_iOS* ByteBuffer_iOS::copy(size_t from, size_t length) const {
 
   memcpy(newValues, _values + from, length);
 
+#warning _____TODO --> REMOVE DEBUG CODE
   for (size_t i = 0; i < length; i++ ) {
     unsigned char oldV = _values[from + i];
     unsigned char newV = newValues[i];

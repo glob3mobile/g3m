@@ -102,7 +102,7 @@ public class XPCNode extends RCObject
   
     final long deltaPriority = 100 - _id.length(); // + _pointsCount
   
-    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(this, rc.getThreadUtils(), rc.getPlanet(), pointCloud.getVerticalExaggeration(), pointCloud.getDeltaHeight()), true);
+    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
 
 
