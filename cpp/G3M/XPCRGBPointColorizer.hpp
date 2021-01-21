@@ -32,7 +32,7 @@ public:
 
   ~XPCRGBPointColorizer();
 
-  void initialize(const XPCMetadata* metadata);
+  IIntBuffer* initialize(const XPCMetadata* metadata);
 
   Color colorize(const XPCMetadata* metadata,
                  const XPCPoint* point);

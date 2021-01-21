@@ -56,8 +56,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const bool   dynamicPointSize     = true;
   const float  verticalExaggeration = 1;
 //  const float  deltaHeight          = -210;
-//  const float  deltaHeight          = -580;
-  const float  deltaHeight          = 0;
+  const float  deltaHeight          = -580;
+//  const float  deltaHeight          = -385;
 
   const double minProjectedArea = 50000;
 
@@ -77,9 +77,9 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 #warning TODO cache
   model->getXPCRenderer()->addPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
-                                         //"Leica_FFCC_SMALL_LOD",
-                                         // "Leica_M40_LOD",
-                                         "NEON_LOD",
+                                         // "Leica_FFCC_SMALL_LOD",
+                                          "Leica_M40_LOD",
+                                         // "NEON_LOD",
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,

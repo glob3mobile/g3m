@@ -146,6 +146,16 @@ IByteBuffer* ByteBufferIterator::nextBufferUpTo(unsigned char sentinel) {
   return builder.create();
 }
 
+IByteBuffer* ByteBufferIterator::nextBuffer(const size_t size) {
+  if ((_cursor + size) > _bufferSize) {
+    THROW_EXCEPTION("Iteration overflow");
+  }
+
+  IByteBuffer* result = _buffer->copy(_cursor, size);
+  _cursor += size;
+  return result;
+}
+
 const std::string ByteBufferIterator::nextZeroTerminatedString() {
   IByteBuffer* buffer = nextBufferUpTo((unsigned char) 0);
   const std::string result = buffer->getAsString();

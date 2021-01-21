@@ -15,6 +15,8 @@
 #include "IDownloader.hpp"
 #include "IFactory.hpp"
 #include "IDeviceInfo.hpp"
+#include "IIntBuffer.hpp"
+#include "IStringBuilder.hpp"
 
 #include "XPCMetadata.hpp"
 #include "XPCMetadataListener.hpp"
@@ -152,7 +154,8 @@ _downloadingMetadata(false),
 _errorDownloadingMetadata(false),
 _errorParsingMetadata(false),
 _metadata(NULL),
-_lastRenderedCount(0)
+_lastRenderedCount(0),
+_requiredDimensionIndices(NULL)
 {
 
 }
@@ -185,17 +188,27 @@ void XPCPointCloud::errorParsingMetadata() {
 }
 
 void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
-  delete _metadata;
-
-  _metadata = metadata;
-
+  _lastRenderedCount   = 0;
   _downloadingMetadata = false;
 
   ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _cloudName.c_str());
 
-  if (_pointColorizer != NULL) {
-    _pointColorizer->initialize(_metadata);
+
+  if (_metadata != metadata) {
+      delete _metadata;
   }
+  _metadata = metadata;
+
+
+  IIntBuffer* requiredDimensionIndices = NULL;
+  if (_pointColorizer != NULL) {
+    requiredDimensionIndices = _pointColorizer->initialize(_metadata);
+  }
+  if (_requiredDimensionIndices != requiredDimensionIndices) {
+    delete _requiredDimensionIndices;
+  }
+  _requiredDimensionIndices = requiredDimensionIndices;
+
 
   if (_metadataListener != NULL) {
     _metadataListener->onMetadata(_metadata);
@@ -216,6 +229,8 @@ XPCPointCloud::~XPCPointCloud() {
   }
 
   delete _metadata;
+
+  delete _requiredDimensionIndices;
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -269,14 +284,34 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
 }
 
 
+const IIntBuffer* XPCPointCloud::getRequiredDimensionIndices() const {
+  return _requiredDimensionIndices;
+}
+
 long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
                                                   const std::string& treeID,
                                                   const std::string& nodeID,
                                                   const long long deltaPriority,
                                                   IBufferDownloadListener* listener,
                                                   bool deleteListener) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_cloudName);
+  isb->addString("/");
+  isb->addString(treeID);
+  isb->addString("/");
+  isb->addString(nodeID);
 
-  const URL nodeContentURL(_serverURL, _cloudName + "/" + treeID + "/" +nodeID );
+  if (_requiredDimensionIndices != NULL) {
+    for (size_t i = 0; i < _requiredDimensionIndices->size(); i++) {
+      isb->addString( (i == 0) ? "?requiredDimensionIndices=" : ",");
+      isb->addInt( _requiredDimensionIndices->get(i) );
+    }
+  }
+
+  const std::string path = isb->getString();
+  delete isb;
+
+  const URL nodeContentURL(_serverURL, path);
 
   return downloader->requestBuffer(nodeContentURL,
                                    _downloadPriority + deltaPriority,

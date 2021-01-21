@@ -93,6 +93,8 @@ public:
 #endif
 
   const std::string getAsString() const;
+
+  ByteBuffer_iOS* copy(size_t from, size_t length) const;
   
 };
 

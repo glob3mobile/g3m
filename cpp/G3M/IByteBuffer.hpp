@@ -37,6 +37,8 @@ public:
 
   virtual const std::string getAsString() const = 0;
 
+  virtual IByteBuffer* copy(size_t from, size_t length) const = 0;
+
 };
 
 #endif

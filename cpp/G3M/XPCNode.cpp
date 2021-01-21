@@ -21,42 +21,42 @@
 #include "DirectMesh.hpp"
 #include "Color.hpp"
 #include "IDownloader.hpp"
+#include "IIntBuffer.hpp"
 
 #include "XPCPointCloud.hpp"
 #include "XPCPoint.hpp"
+#include "XPCMetadata.hpp"
+#include "XPCDimension.hpp"
 
 
 
 class XPCNodeContentParserAsyncTask : public GAsyncTask {
 private:
-  XPCNode*      _node;
+  const XPCPointCloud* _pointCloud;
+  XPCNode*             _node;
 
   IByteBuffer*  _buffer;
 
   const Planet* _planet;
-  const float _verticalExaggeration;
-  const float _deltaHeight;
-
 
   std::vector<XPCNode*>*  _children;
   std::vector<XPCPoint*>* _points;
   DirectMesh*             _mesh;
 
 public:
-  XPCNodeContentParserAsyncTask(XPCNode* node,
+  XPCNodeContentParserAsyncTask(const XPCPointCloud* pointCloud,
+                                XPCNode* node,
                                 IByteBuffer* buffer,
-                                const Planet* planet,
-                                const float verticalExaggeration,
-                                const float deltaHeight) :
+                                const Planet* planet) :
+  _pointCloud(pointCloud),
   _node(node),
   _buffer(buffer),
   _planet(planet),
-  _verticalExaggeration(verticalExaggeration),
-  _deltaHeight(deltaHeight),
   _children(NULL),
   _points(NULL),
   _mesh(NULL)
   {
+    _pointCloud->_retain();
     _node->_retain();
   }
 
@@ -82,6 +82,7 @@ public:
     delete _mesh;
 
     _node->_release();
+    _pointCloud->_release();
   }
 
   void runInBackground(const G3MContext* context) {
@@ -118,10 +119,34 @@ public:
     }
 
 
+    std::vector<const IByteBuffer*>* dimensionsValues;
+
+    const IIntBuffer* dimensionIndices = _pointCloud->getRequiredDimensionIndices();
+    if (dimensionIndices == NULL) {
+      dimensionsValues = NULL;
+    }
+    else {
+      const size_t dimensionsCount = dimensionIndices->size();
+      dimensionsValues = new std::vector<const IByteBuffer*>();
+      for (size_t j = 0; j < dimensionsCount; j++) {
+        const size_t dimensionIndex = dimensionIndices->get(j);
+
+        const XPCDimension* dimension = _pointCloud->getMetadada()->getDimension( dimensionIndex );
+
+        const IByteBuffer* dimensionValue = dimension->readValues( it );
+
+        dimensionsValues->push_back( dimensionValue );
+      }
+    }
+
     if (it.hasNext()) {
       THROW_EXCEPTION("Logic error");
     }
 
+#error USER AND DELETE dimensionsValues
+
+    const float deltaHeight          = _pointCloud->getDeltaHeight();
+    const float verticalExaggeration = _pointCloud->getVerticalExaggeration();
 
     FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
 
@@ -130,7 +155,7 @@ public:
       XPCPoint* point = _points->at(i);
       vertices->addDegrees(point->_y,
                            point->_x,
-                           _deltaHeight + (point->_z * _verticalExaggeration));
+                           (point->_z * verticalExaggeration) + deltaHeight);
     }
 
 //    DirectMesh(const int primitive,
@@ -179,26 +204,24 @@ public:
 
 class XPCNodeContentDownloadListener : public IBufferDownloadListener {
 private:
-  XPCNode*            _node;
-  const IThreadUtils* _threadUtils;
+  const XPCPointCloud* _pointCloud;
+  XPCNode*       _node;
 
-  const Planet* _planet;
-  const float   _verticalExaggeration;
-  const float   _deltaHeight;
+  const IThreadUtils* _threadUtils;
+  const Planet*       _planet;
 
 public:
 
-  XPCNodeContentDownloadListener(XPCNode*            node,
+  XPCNodeContentDownloadListener(const XPCPointCloud* pointCloud,
+                                 XPCNode* node,
                                  const IThreadUtils* threadUtils,
-                                 const Planet* planet,
-                                 const float verticalExaggeration,
-                                 const float deltaHeight) :
+                                 const Planet* planet) :
+  _pointCloud(pointCloud),
   _node(node),
   _threadUtils(threadUtils),
-  _planet(planet),
-  _verticalExaggeration(verticalExaggeration),
-  _deltaHeight(deltaHeight)
+  _planet(planet)
   {
+    _pointCloud->_retain();
     _node->_retain();
   }
   
@@ -209,11 +232,10 @@ public:
       delete buffer;
     }
     else {
-      _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_node,
+      _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud,
+                                                                      _node,
                                                                       buffer,
-                                                                      _planet,
-                                                                      _verticalExaggeration,
-                                                                      _deltaHeight),
+                                                                      _planet),
                                     true);
     }
   }
@@ -234,6 +256,7 @@ public:
 
   ~XPCNodeContentDownloadListener() {
     _node->_release();
+    _pointCloud->_release();
   }
 
 
@@ -489,11 +512,10 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                                                            treeID,
                                                            _id,
                                                            deltaPriority,
-                                                           new XPCNodeContentDownloadListener(this,
+                                                           new XPCNodeContentDownloadListener(pointCloud,
+                                                                                              this,
                                                                                               rc->getThreadUtils(),
-                                                                                              rc->getPlanet(),
-                                                                                              pointCloud->getVerticalExaggeration(),
-                                                                                              pointCloud->getDeltaHeight()),
+                                                                                              rc->getPlanet()),
                                                            true);
 }
 

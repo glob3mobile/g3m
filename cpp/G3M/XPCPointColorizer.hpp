@@ -13,6 +13,7 @@
 
 class XPCMetadata;
 class XPCPoint;
+class IIntBuffer;
 
 
 class XPCPointColorizer {
@@ -20,7 +21,7 @@ public:
   virtual ~XPCPointColorizer() {
   }
 
-  virtual void initialize(const XPCMetadata* metadata) = 0;
+  virtual IIntBuffer* initialize(const XPCMetadata* metadata) = 0;
 
   virtual Color colorize(const XPCMetadata* metadata,
                          const XPCPoint* point) = 0;

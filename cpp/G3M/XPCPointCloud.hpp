@@ -22,6 +22,7 @@ class Frustum;
 class XPCMetadata;
 class IDownloader;
 class IBufferDownloadListener;
+class IIntBuffer;
 
 
 class XPCPointCloud : public RCObject {
@@ -45,6 +46,8 @@ private:
   bool _downloadingMetadata;
   bool _errorDownloadingMetadata;
   bool _errorParsingMetadata;
+
+  IIntBuffer* _requiredDimensionIndices;
 
   XPCMetadata* _metadata;
   long long _lastRenderedCount;
@@ -86,6 +89,10 @@ public:
     return _minProjectedArea;
   }
 
+  const XPCMetadata* getMetadada() const {
+    return _metadata;
+  }
+
   const float getDevicePointSize() const;
 
   void initialize(const G3MContext* context);
@@ -107,6 +114,8 @@ public:
                                      const long long deltaPriority,
                                      IBufferDownloadListener* listener,
                                      bool deleteListener) const;
+
+  const IIntBuffer* getRequiredDimensionIndices() const;
 
 };
 

@@ -11,6 +11,9 @@
 #include <vector>
 #include <string>
 
+class IByteBuffer;
+class ByteBufferIterator;
+
 
 class XPCDimension {
 public:
@@ -20,17 +23,11 @@ public:
 
   XPCDimension(const std::string& name,
                const unsigned char size,
-               const std::string& type) :
-  _name(name),
-  _size(size),
-  _type(type)
-  {
+               const std::string& type);
 
-  }
+  ~XPCDimension();
 
-  ~XPCDimension() {
-
-  }
+  const IByteBuffer* readValues(ByteBufferIterator& it) const;
 
 };
 

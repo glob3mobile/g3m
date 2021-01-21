@@ -11,6 +11,8 @@
 
 #include "XPCMetadata.hpp"
 #include "XPCDimension.hpp"
+#include "IFactory.hpp"
+#include "IIntBuffer.hpp"
 
 
 XPCRGBPointColorizer::XPCRGBPointColorizer() :
@@ -43,7 +45,7 @@ XPCRGBPointColorizer::~XPCRGBPointColorizer() {
 
 }
 
-void XPCRGBPointColorizer::initialize(const XPCMetadata* metadata) {
+IIntBuffer* XPCRGBPointColorizer::initialize(const XPCMetadata* metadata) {
   const size_t dimensionsCount = metadata->getDimensionsCount();
 
   for (int i = 0; i < dimensionsCount; i++) {
@@ -64,7 +66,15 @@ void XPCRGBPointColorizer::initialize(const XPCMetadata* metadata) {
 
   if (!_ok) {
     ILogger::instance()->logError("Can't find Red, Green and Blue dimensions");
+    return NULL;
   }
+
+  IIntBuffer* requiredDimensionIndices = IFactory::instance()->createIntBuffer(3);
+  requiredDimensionIndices->put(0, _redDimensionIndex);
+  requiredDimensionIndices->put(1, _greenDimensionIndex);
+  requiredDimensionIndices->put(2, _blueDimensionIndex);
+
+  return requiredDimensionIndices;
 }
 
 Color XPCRGBPointColorizer::colorize(const XPCMetadata* metadata,
