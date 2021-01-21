@@ -89,10 +89,16 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       _points = new java.util.ArrayList<XPCPoint>();
 
       final int pointsCount = it.nextInt32();
-      for (int i = 0; i < pointsCount; i++)
+      if (pointsCount > 0)
       {
-        XPCPoint point = XPCPoint.fromByteBufferIterator(it);
-        _points.add(point);
+        final float centerLatitudeDegrees = it.nextFloat();
+        final float centerLongitudeDegrees = it.nextFloat();
+        final float centerHeight = it.nextFloat();
+        for (int i = 0; i < pointsCount; i++)
+        {
+          XPCPoint point = XPCPoint.fromByteBufferIterator(it, centerLatitudeDegrees, centerLongitudeDegrees, centerHeight);
+          _points.add(point);
+        }
       }
     }
 

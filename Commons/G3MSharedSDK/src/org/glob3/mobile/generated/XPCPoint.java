@@ -19,11 +19,11 @@ package org.glob3.mobile.generated;
 
 public class XPCPoint
 {
-  public static XPCPoint fromByteBufferIterator(ByteBufferIterator it)
+  public static XPCPoint fromByteBufferIterator(ByteBufferIterator it, float centerLatitudeDegrees, float centerLongitudeDegrees, float centerHeight)
   {
-    final double latitudeDegrees = it.nextDouble();
-    final double longitueDegrees = it.nextDouble();
-    final double height = it.nextDouble();
+    final double latitudeDegrees = (double) it.nextFloat() + centerLatitudeDegrees;
+    final double longitueDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
+    final double height = (double) it.nextFloat() + centerHeight;
   
     return new XPCPoint(latitudeDegrees, longitueDegrees, height);
   }

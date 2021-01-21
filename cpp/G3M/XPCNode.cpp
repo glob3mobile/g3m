@@ -111,12 +111,19 @@ public:
     }
 
     {
+#warning TODO____ points should be a floatbuffer + center
+      
       _points = new std::vector<XPCPoint*>();
 
       const int pointsCount = it.nextInt32();
-      for (int i = 0; i < pointsCount; i++) {
-        XPCPoint* point = XPCPoint::fromByteBufferIterator(it);
-        _points->push_back( point );
+      if (pointsCount > 0) {
+        const float centerLatitudeDegrees  = it.nextFloat();
+        const float centerLongitudeDegrees = it.nextFloat();
+        const float centerHeight           = it.nextFloat();
+        for (int i = 0; i < pointsCount; i++) {
+          XPCPoint* point = XPCPoint::fromByteBufferIterator(it, centerLatitudeDegrees, centerLongitudeDegrees, centerHeight);
+          _points->push_back( point );
+        }
       }
     }
 

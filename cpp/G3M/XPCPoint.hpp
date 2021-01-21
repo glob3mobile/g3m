@@ -13,7 +13,10 @@ class ByteBufferIterator;
 
 class XPCPoint {
 public:
-  static XPCPoint* fromByteBufferIterator(ByteBufferIterator& it);
+  static XPCPoint* fromByteBufferIterator(ByteBufferIterator& it,
+                                          const float centerLatitudeDegrees,
+                                          const float centerLongitudeDegrees,
+                                          const float centerHeight);
 
 
   const double _latitudeDegrees;
