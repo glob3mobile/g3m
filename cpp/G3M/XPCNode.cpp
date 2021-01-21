@@ -157,9 +157,9 @@ public:
     const size_t pointsSize = _points->size();
     for (int i = 0; i < pointsSize; i++) {
       XPCPoint* point = _points->at(i);
-      vertices->addDegrees(point->_y,
-                           point->_x,
-                           (point->_z * verticalExaggeration) + deltaHeight);
+      vertices->addDegrees(point->_latitudeDegrees,
+                           point->_longitueDegrees,
+                           (point->_height * verticalExaggeration) + deltaHeight);
 
       if (pointsColorizer != NULL) {
         const Color color = pointsColorizer->colorize(metadata,

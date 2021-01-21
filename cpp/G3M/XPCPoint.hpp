@@ -16,13 +16,13 @@ public:
   static XPCPoint* fromByteBufferIterator(ByteBufferIterator& it);
 
 
-  const double _x;
-  const double _y;
-  const double _z;
+  const double _latitudeDegrees;
+  const double _longitueDegrees;
+  const double _height;
 
-  XPCPoint(const double x,
-           const double y,
-           const double z);
+  XPCPoint(const double latitudeDegrees,
+           const double longitueDegrees,
+           const double height);
 
   ~XPCPoint();
 

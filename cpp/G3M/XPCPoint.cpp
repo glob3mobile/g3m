@@ -11,20 +11,20 @@
 
 
 XPCPoint* XPCPoint::fromByteBufferIterator(ByteBufferIterator& it) {
-  const double x = it.nextDouble();
-  const double y = it.nextDouble();
-  const double z = it.nextDouble();
+  const double latitudeDegrees = it.nextDouble();
+  const double longitueDegrees = it.nextDouble();
+  const double height          = it.nextDouble();
 
-  return new XPCPoint(x, y, z);
+  return new XPCPoint(latitudeDegrees, longitueDegrees, height);
 }
 
 
-XPCPoint::XPCPoint(const double x,
-                   const double y,
-                   const double z) :
-_x(x),
-_y(y),
-_z(z)
+XPCPoint::XPCPoint(const double latitudeDegrees,
+                   const double longitueDegrees,
+                   const double height) :
+_latitudeDegrees(latitudeDegrees),
+_longitueDegrees(longitueDegrees),
+_height(height)
 {
 
 }

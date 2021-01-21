@@ -138,7 +138,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     for (int i = 0; i < pointsSize; i++)
     {
       XPCPoint point = _points.get(i);
-      vertices.addDegrees(point._y, point._x, (point._z * verticalExaggeration) + deltaHeight);
+      vertices.addDegrees(point._latitudeDegrees, point._longitueDegrees, (point._height * verticalExaggeration) + deltaHeight);
 
       if (pointsColorizer != null)
       {
