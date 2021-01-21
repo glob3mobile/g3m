@@ -66,15 +66,10 @@ public class XPCDimension
       }
       else if (_size == 2)
       {
-  //      const unsigned char b1 = values->get( i*2     );
-  //      const unsigned char b2 = values->get( i*2 + 1 );
+        final byte b1 = values.get(i *2);
+        final byte b2 = values.get(i *2 + 1);
   
-        // LittleEndian
-        final short b1 = (short) (values->get( i*2     ) & 0xFF);
-        final short b2 = (short) (values->get( i*2 + 1 ) & 0xFF);
-  
-        final int iResult = (((int) b1) | ((int)(b2 << 8)));
-        return iResult / 65535.0f;
+        return IMathUtils.instance().toUInt16(b1, b2) / 65535.0f;
       }
   //    else if (_size == 4) {
   //

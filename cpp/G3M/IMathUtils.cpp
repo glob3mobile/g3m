@@ -41,3 +41,15 @@ Geodetic2D IMathUtils::greatCircleIntermediatePoint(const Angle& fromLat,
   return Geodetic2D(Angle::fromRadians(latRad),
                     Angle::fromRadians(lngRad));
 }
+
+const int IMathUtils::toUInt16(const unsigned char b1,
+                               const unsigned char b2) const {
+  // LittleEndian
+#ifdef C_CODE
+  return (b1 | (b2 << 8));
+#endif
+#ifdef JAVA_CODE
+  return (((short) (b1 & 0xFF)) |
+          ((short) (b2 & 0xFF) << 8));
+#endif
+}

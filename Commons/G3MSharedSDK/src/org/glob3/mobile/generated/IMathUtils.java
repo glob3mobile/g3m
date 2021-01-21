@@ -307,4 +307,12 @@ public abstract class IMathUtils
     return (f * f);
   }
 
+
+  public final int toUInt16(byte b1, byte b2)
+  {
+    // LittleEndian
+    return (((short) (b1 & 0xFF)) |
+            ((short) (b2 & 0xFF) << 8));
+  }
+
 }
