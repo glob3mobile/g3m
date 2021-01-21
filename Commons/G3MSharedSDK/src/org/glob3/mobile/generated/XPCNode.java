@@ -138,6 +138,8 @@ public class XPCNode extends RCObject
     if (_mesh != null)
        _mesh.dispose();
     _mesh = null;
+  
+    _loadedContent = false;
   }
   private void unloadChildren()
   {
@@ -280,8 +282,11 @@ public class XPCNode extends RCObject
   
           if (_loadedContent)
           {
-            _mesh.render(rc, glState);
-            renderedCount += _mesh.getRenderVerticesCount();
+            if (_mesh != null)
+            {
+              _mesh.render(rc, glState);
+              renderedCount += _mesh.getRenderVerticesCount();
+            }
           }
           else
           {

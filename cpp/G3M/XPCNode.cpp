@@ -178,8 +178,10 @@ public:
       for (size_t i = 0; i < dimensionsValues->size(); i++) {
         delete dimensionsValues->at(i);
       }
+#ifdef C_CODE
       delete dimensionsValues;
       dimensionsValues = NULL;
+#endif
     }
 
     _mesh = new DirectMesh(GLPrimitive::points(),

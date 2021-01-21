@@ -127,10 +127,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       throw new RuntimeException("Logic error");
     }
 
-///#error USER AND DELETE dimensionsValues
-
     XPCPointColorizer pointsColorizer = _pointCloud.getPointsColorizer();
-
     final float deltaHeight = _pointCloud.getDeltaHeight();
     final float verticalExaggeration = _pointCloud.getVerticalExaggeration();
 
@@ -143,29 +140,28 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       XPCPoint point = _points.get(i);
       vertices.addDegrees(point._y, point._x, (point._z * verticalExaggeration) + deltaHeight);
 
-      final Color color = pointsColorizer.colorize(metadata, _points, dimensionsValues, i);
+      if (pointsColorizer != null)
+      {
+        final Color color = pointsColorizer.colorize(metadata, _points, dimensionsValues, i);
 
-      colors.add(color);
-
+        colors.add(color);
+      }
+      else
+      {
+        colors.add(1, 1, 1, 1);
+      }
     }
 
-//    DirectMesh(const int primitive,
-//               bool owner,
-//               const Vector3D& center,
-//               const IFloatBuffer* vertices,
-//               float lineWidth,
-//               float pointSize,
-//               const Color* flatColor      = NULL,
-//               const IFloatBuffer* colors  = NULL,
-//               bool depthTest              = true,
-//               const IFloatBuffer* normals = NULL,
-//               bool polygonOffsetFill      = false,
-//               float polygonOffsetFactor   = 0,
-//               float polygonOffsetUnits    = 0,
-//               bool cullFace               = false,
-//               int  culledFace             = GLCullFace::back());
+    if (dimensionsValues != null)
+    {
+      for (int i = 0; i < dimensionsValues.size(); i++)
+      {
+        if (dimensionsValues.get(i) != null)
+           dimensionsValues.get(i).dispose();
+      }
+    }
 
-    _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, 1, null, colors.create(), false); // depthTest -  const IFloatBuffer* colors -  flatColor
+    _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, _pointCloud.getDevicePointSize(), null, colors.create(), false); // depthTest -  const IFloatBuffer* colors -  flatColor
 
     if (vertices != null)
        vertices.dispose();
