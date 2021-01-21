@@ -55,4 +55,45 @@ public class XPCDimension
     return dimensionValues;
   }
 
+  public final float getNormalizedValue(IByteBuffer values, int i)
+  {
+  
+    if (_type.equals("unsigned"))
+    {
+      if (_size == 1)
+      {
+        return values.get(i) / 255.0f;
+      }
+      else if (_size == 2)
+      {
+  //      const unsigned char b1 = values->get( i*2     );
+  //      const unsigned char b2 = values->get( i*2 + 1 );
+  
+        // LittleEndian
+        final short b1 = (short) (values->get( i*2     ) & 0xFF);
+        final short b2 = (short) (values->get( i*2 + 1 ) & 0xFF);
+  
+        final int iResult = (((int) b1) | ((int)(b2 << 8)));
+        return iResult / 65535.0f;
+      }
+  //    else if (_size == 4) {
+  //
+  //    }
+  //    else if (_size == 8) {
+  //
+  //    }
+    }
+    else if (_type.equals("floating"))
+    {
+  //    if (_size == 4) {
+  //
+  //    }
+  //    else if (_size == 8) {
+  //
+  //    }
+    }
+  
+    throw new RuntimeException("Unsupported dimension type or size.");
+  }
+
 }

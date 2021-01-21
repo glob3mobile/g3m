@@ -96,6 +96,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       }
     }
 
+    final XPCMetadata metadata = _pointCloud.getMetadada();
 
     final java.util.ArrayList<IByteBuffer> dimensionsValues;
 
@@ -106,17 +107,18 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     }
     else
     {
+
       final int dimensionsCount = dimensionIndices.size();
       dimensionsValues = new java.util.ArrayList<IByteBuffer>();
       for (int j = 0; j < dimensionsCount; j++)
       {
         final int dimensionIndex = dimensionIndices.get(j);
 
-        final XPCDimension dimension = _pointCloud.getMetadada().getDimension(dimensionIndex);
+        final XPCDimension dimension = metadata.getDimension(dimensionIndex);
 
-        final IByteBuffer dimensionValue = dimension.readValues(it);
+        final IByteBuffer dimensionValues = dimension.readValues(it);
 
-        dimensionsValues.add(dimensionValue);
+        dimensionsValues.add(dimensionValues);
       }
     }
 
@@ -125,19 +127,26 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       throw new RuntimeException("Logic error");
     }
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#error USER AND DELETE dimensionsValues
+///#error USER AND DELETE dimensionsValues
+
+    XPCPointColorizer pointsColorizer = _pointCloud.getPointsColorizer();
 
     final float deltaHeight = _pointCloud.getDeltaHeight();
     final float verticalExaggeration = _pointCloud.getVerticalExaggeration();
 
     FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_planet);
+    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
     final int pointsSize = _points.size();
     for (int i = 0; i < pointsSize; i++)
     {
       XPCPoint point = _points.get(i);
       vertices.addDegrees(point._y, point._x, (point._z * verticalExaggeration) + deltaHeight);
+
+      final Color color = pointsColorizer.colorize(metadata, _points, dimensionsValues, i);
+
+      colors.add(color);
+
     }
 
 //    DirectMesh(const int primitive,
@@ -156,7 +165,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 //               bool cullFace               = false,
 //               int  culledFace             = GLCullFace::back());
 
-    _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, 1, Color.newFromRGBA(1, 1, 1, 1), null, false); // depthTest -  const IFloatBuffer* colors -  flatColor
+    _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, 1, null, colors.create(), false); // depthTest -  const IFloatBuffer* colors -  flatColor
 
     if (vertices != null)
        vertices.dispose();

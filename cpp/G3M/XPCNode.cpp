@@ -22,11 +22,13 @@
 #include "Color.hpp"
 #include "IDownloader.hpp"
 #include "IIntBuffer.hpp"
+#include "FloatBufferBuilderFromColor.hpp"
 
 #include "XPCPointCloud.hpp"
 #include "XPCPoint.hpp"
 #include "XPCMetadata.hpp"
 #include "XPCDimension.hpp"
+#include "XPCPointColorizer.hpp"
 
 
 
@@ -118,6 +120,7 @@ public:
       }
     }
 
+    const XPCMetadata* metadata = _pointCloud->getMetadada();
 
     std::vector<const IByteBuffer*>* dimensionsValues;
 
@@ -126,16 +129,17 @@ public:
       dimensionsValues = NULL;
     }
     else {
+
       const size_t dimensionsCount = dimensionIndices->size();
       dimensionsValues = new std::vector<const IByteBuffer*>();
       for (size_t j = 0; j < dimensionsCount; j++) {
         const size_t dimensionIndex = dimensionIndices->get(j);
 
-        const XPCDimension* dimension = _pointCloud->getMetadada()->getDimension( dimensionIndex );
+        const XPCDimension* dimension = metadata->getDimension( dimensionIndex );
 
-        const IByteBuffer* dimensionValue = dimension->readValues( it );
+        const IByteBuffer* dimensionValues = dimension->readValues( it );
 
-        dimensionsValues->push_back( dimensionValue );
+        dimensionsValues->push_back( dimensionValues );
       }
     }
 
@@ -143,12 +147,15 @@ public:
       THROW_EXCEPTION("Logic error");
     }
 
-#error USER AND DELETE dimensionsValues
+//#error USER AND DELETE dimensionsValues
+
+    XPCPointColorizer* pointsColorizer = _pointCloud->getPointsColorizer();
 
     const float deltaHeight          = _pointCloud->getDeltaHeight();
     const float verticalExaggeration = _pointCloud->getVerticalExaggeration();
 
     FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
+    FloatBufferBuilderFromColor colors;
 
     const size_t pointsSize = _points->size();
     for (int i = 0; i < pointsSize; i++) {
@@ -156,6 +163,14 @@ public:
       vertices->addDegrees(point->_y,
                            point->_x,
                            (point->_z * verticalExaggeration) + deltaHeight);
+
+      const Color color = pointsColorizer->colorize(metadata,
+                                                    _points,
+                                                    dimensionsValues,
+                                                    i);
+
+      colors.add(color);
+
     }
 
 //    DirectMesh(const int primitive,
@@ -180,9 +195,9 @@ public:
                            vertices->create(),
                            1,
                            1,
-                           Color::newFromRGBA(1,1,1,1),  // flatColor
-                           NULL,                         // const IFloatBuffer* colors
-                           false                         // depthTest
+                           NULL,            // flatColor
+                           colors.create(), // const IFloatBuffer* colors
+                           false            // depthTest
                            );
 
     delete vertices;

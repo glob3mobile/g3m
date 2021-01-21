@@ -35,7 +35,9 @@ public:
   IIntBuffer* initialize(const XPCMetadata* metadata);
 
   Color colorize(const XPCMetadata* metadata,
-                 const XPCPoint* point);
+                 const std::vector<XPCPoint*>* points,
+                 const std::vector<const IByteBuffer*>* dimensionsValues,
+                 const size_t i);
 
 };
 

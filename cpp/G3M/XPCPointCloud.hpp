@@ -117,6 +117,10 @@ public:
 
   const IIntBuffer* getRequiredDimensionIndices() const;
 
+  XPCPointColorizer* getPointsColorizer() const {
+    return _pointColorizer;
+  }
+
 };
 
 #endif

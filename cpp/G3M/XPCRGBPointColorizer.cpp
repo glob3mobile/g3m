@@ -78,11 +78,19 @@ IIntBuffer* XPCRGBPointColorizer::initialize(const XPCMetadata* metadata) {
 }
 
 Color XPCRGBPointColorizer::colorize(const XPCMetadata* metadata,
-                                     const XPCPoint* point) {
+                                     const std::vector<XPCPoint*>* points,
+                                     const std::vector<const IByteBuffer*>* dimensionsValues,
+                                     const size_t i) {
   if (!_ok) {
     return Color::RED;
   }
 
-#warning DIEGO AT WORK
-  return Color::YELLOW;
+//  redValue = dimensionsValues->at(0)->;
+
+  const float red   = metadata->getDimension(_redDimensionIndex  )->getNormalizedValue( dimensionsValues->at(0), i );
+  const float green = metadata->getDimension(_greenDimensionIndex)->getNormalizedValue( dimensionsValues->at(1), i );
+  const float blue  = metadata->getDimension(_blueDimensionIndex )->getNormalizedValue( dimensionsValues->at(2), i );
+
+#warning ______DIEGO AT WORK
+  return Color::fromRGBA(red, green, blue, 1);
 }

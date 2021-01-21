@@ -266,4 +266,9 @@ public class XPCPointCloud extends RCObject
     return _requiredDimensionIndices;
   }
 
+  public final XPCPointColorizer getPointsColorizer()
+  {
+    return _pointColorizer;
+  }
+
 }

@@ -29,6 +29,9 @@ public:
 
   const IByteBuffer* readValues(ByteBufferIterator& it) const;
 
+  const float getNormalizedValue(const IByteBuffer* values,
+                                 const size_t valueIndex) const;
+
 };
 
 #endif
