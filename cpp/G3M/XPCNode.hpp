@@ -80,6 +80,10 @@ private:
 
 public:
 
+  const std::string getID() const {
+    return _id;
+  }
+
   static XPCNode* fromByteBufferIterator(ByteBufferIterator& it);
 
 

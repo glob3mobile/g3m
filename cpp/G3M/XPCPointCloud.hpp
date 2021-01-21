@@ -77,6 +77,10 @@ public:
     return _cloudName;
   }
 
+  const bool isVerbose() const {
+    return _verbose;
+  }
+
   const float getVerticalExaggeration() const {
     return _verticalExaggeration;
   }
