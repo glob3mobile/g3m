@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class GLState;
 //class Frustum;
 //class Sector;
+//class Ray;
 
 
 public class XPCTree
@@ -41,15 +42,20 @@ public class XPCTree
     _rootNode._release();
   }
 
+  public final Sector getSector()
+  {
+    return _rootNode.getSector();
+  }
+
   public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug)
   {
   
     return (_rootNode == null) ? 0 : _rootNode.render(pointCloud, _id, rc, glState, frustum, nowInMS, renderDebug);
   }
 
-  public final Sector getSector()
+  public final boolean touchesRay(Ray ray)
   {
-    return _rootNode.getSector();
+    return (_rootNode != null) && _rootNode.touchesRay(ray);
   }
 
 }

@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 
 
 //class Mesh;
+//class Ray;
 
 
 public class Sphere extends BoundingVolume
@@ -381,16 +382,8 @@ public class Sphere extends BoundingVolume
   }
   public final boolean fullContainedInSphere(Sphere that)
   {
-    //  const double d = _center.distanceTo(that->_center);
-    //  return (d + _radius <= that->_radius);
-  
     if (_radius <= that._radius)
     {
-      //    const double squaredDistance    = _center.squaredDistanceTo(that->_center);
-      //    const double squaredDeltaRadius = IMathUtils::instance()->squared(that->_radius - _radius);
-      //    if (squaredDeltaRadius >= squaredDistance) {
-      //      return true;
-      //    }
       final double distance = _center.distanceTo(that._center);
       final double deltaRadius = that._radius - _radius;
       if (deltaRadius >= distance)
@@ -412,5 +405,25 @@ public class Sphere extends BoundingVolume
     return new Sphere(this);
   }
 
+  public final boolean touchesRay(Ray ray)
+  {
+    // from Real-Time Collision Detection - Christer Ericson
+    //   page 178
+  
+    final Vector3D m = ray._origin.sub(_center);
+  
+    final double b = m.dot(ray._direction);
+    final double c = m.dot(m) - _radiusSquared;
+  
+    // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
+    if ((c > 0.0) && (b > 0.0))
+    {
+      return false;
+    }
+  
+    final double discr = (b * b) - c;
+    // A negative discriminant corresponds to ray missing sphere
+    return (discr >= 0.0);
+  }
 
 }

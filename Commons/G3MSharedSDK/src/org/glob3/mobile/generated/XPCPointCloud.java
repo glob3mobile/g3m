@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class IBufferDownloadListener;
 //class IIntBuffer;
+//class Ray;
 
 
 public class XPCPointCloud extends RCObject
@@ -274,6 +275,11 @@ public class XPCPointCloud extends RCObject
   public final XPCPointColorizer getPointsColorizer()
   {
     return _pointColorizer;
+  }
+
+  public final boolean touchesRay(Ray ray)
+  {
+    return (_metadata != null) && _metadata.touchesRay(ray);
   }
 
 }

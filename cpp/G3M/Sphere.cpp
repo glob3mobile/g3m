@@ -282,7 +282,6 @@ Sphere* Sphere::copy() const {
   return new Sphere(*this);
 }
 
-
 const bool Sphere::touchesRay(const Ray& ray) const {
   // from Real-Time Collision Detection - Christer Ericson
   //   page 178

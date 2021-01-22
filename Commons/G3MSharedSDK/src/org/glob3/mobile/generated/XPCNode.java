@@ -26,6 +26,7 @@ package org.glob3.mobile.generated;
 //class ByteBufferIterator;
 //class XPCPoint;
 //class DirectMesh;
+//class Ray;
 
 
 public class XPCNode extends RCObject
@@ -105,14 +106,6 @@ public class XPCNode extends RCObject
     _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
 
-
-  //void XPCNode::cancelTasks() {
-  //  if (_featuresTask != NULL) {
-  //    _featuresTask->cancel();
-  //    _featuresTask = NULL;
-  //  }
-  //}
-  
   private void cancelLoadContent()
   {
     if (_contentRequestID != -1)
@@ -159,7 +152,6 @@ public class XPCNode extends RCObject
   }
   private void unload()
   {
-  //  cancelTasks();
     _canceled = true;
   
     if (_loadingContent)
@@ -329,6 +321,11 @@ public class XPCNode extends RCObject
     }
   
     return renderedCount;
+  }
+
+  public final boolean touchesRay(Ray ray)
+  {
+    return (_bounds != null) && _bounds.touchesRay(ray);
   }
 
   public final Sector getSector()

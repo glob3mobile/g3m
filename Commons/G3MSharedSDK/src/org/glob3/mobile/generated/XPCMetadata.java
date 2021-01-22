@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class XPCDimension;
 //class XPCTree;
+//class Ray;
 
 
 public class XPCMetadata
@@ -111,6 +112,19 @@ public class XPCMetadata
     }
   
     return renderedCount;
+  }
+
+  public final boolean touchesRay(Ray ray)
+  {
+    for (int i = 0; i < _treesSize; i++)
+    {
+      final XPCTree tree = _trees.get(i);
+      if (tree.touchesRay(ray))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   public final int getTreesCount()

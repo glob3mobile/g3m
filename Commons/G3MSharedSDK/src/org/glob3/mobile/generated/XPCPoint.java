@@ -22,21 +22,21 @@ public class XPCPoint
   public static XPCPoint fromByteBufferIterator(ByteBufferIterator it, float centerLatitudeDegrees, float centerLongitudeDegrees, float centerHeight)
   {
     final double latitudeDegrees = (double) it.nextFloat() + centerLatitudeDegrees;
-    final double longitueDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
+    final double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
     final double height = (double) it.nextFloat() + centerHeight;
   
-    return new XPCPoint(latitudeDegrees, longitueDegrees, height);
+    return new XPCPoint(latitudeDegrees, longitudeDegrees, height);
   }
 
 
   public final double _latitudeDegrees;
-  public final double _longitueDegrees;
+  public final double _longitudeDegrees;
   public final double _height;
 
-  public XPCPoint(double latitudeDegrees, double longitueDegrees, double height)
+  public XPCPoint(double latitudeDegrees, double longitudeDegrees, double height)
   {
      _latitudeDegrees = latitudeDegrees;
-     _longitueDegrees = longitueDegrees;
+     _longitudeDegrees = longitudeDegrees;
      _height = height;
   
   }

@@ -166,7 +166,6 @@ public class XPCRenderer extends DefaultRenderer
   
     if (_cloudsSize > 0)
     {
-  
       if (_lastCamera != null)
       {
         if ((touchEvent.getTouchCount() == 1) && (touchEvent.getTapCount() == 1) && (touchEvent.getType() == TouchEventType.LongPress)) //Down
@@ -177,18 +176,22 @@ public class XPCRenderer extends DefaultRenderer
   
           if (!rayDirection.isNan())
           {
-            _renderDebug = true;
+  //          _renderDebug = true;
   
             final Vector3D rayOrigin = _lastCamera.getCartesianPosition();
+  
+            final Ray ray = new Ray(rayOrigin, rayDirection);
   
             //const Planet* planet = ec->getPlanet();
   
             for (int i = 0; i < _cloudsSize; i++)
             {
               XPCPointCloud cloud = _clouds.get(i);
-  //            if (cloud->touchesRay(rayOrigin, rayDirection)) {
-  //              _renderDebug = true;
-  //            }
+              if (cloud.touchesRay(ray))
+              {
+                _renderDebug = true;
+                return true;
+              }
             }
   
   //          std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
