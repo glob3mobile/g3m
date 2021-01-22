@@ -108,6 +108,11 @@ public class XPCPointCloud extends RCObject
     return _cloudName;
   }
 
+  public final boolean isVerbose()
+  {
+    return _verbose;
+  }
+
   public final float getVerticalExaggeration()
   {
     return _verticalExaggeration;

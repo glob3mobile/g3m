@@ -86,6 +86,9 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     }
 
     {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO____ points should be a floatbuffer + center
+
       _points = new java.util.ArrayList<XPCPoint>();
 
       final int pointsCount = it.nextInt32();

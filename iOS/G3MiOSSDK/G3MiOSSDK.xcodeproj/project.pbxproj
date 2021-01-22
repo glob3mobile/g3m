@@ -162,7 +162,6 @@
 		CF6606B223DF2FFD00795C7F /* SGLayerNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024523DF2DA600795C7F /* SGLayerNode.hpp */; };
 		CF6606B323DF2FFD00795C7F /* GEO2DLineRasterStyle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024623DF2DA600795C7F /* GEO2DLineRasterStyle.hpp */; };
 		CF6606B423DF2FFD00795C7F /* PlanetTileTessellator.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024723DF2DA600795C7F /* PlanetTileTessellator.hpp */; };
-		CF6606B523DF2FFD00795C7F /* Extent.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024823DF2DA600795C7F /* Extent.hpp */; };
 		CF6606B623DF2FFD00795C7F /* GEOObject.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024923DF2DA600795C7F /* GEOObject.hpp */; };
 		CF6606B723DF2FFD00795C7F /* FrameImageBackground.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024A23DF2DA600795C7F /* FrameImageBackground.hpp */; };
 		CF6606B823DF2FFD00795C7F /* DebugTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024D23DF2DA600795C7F /* DebugTileImageProvider.hpp */; };
@@ -1083,7 +1082,6 @@
 				CF6606B223DF2FFD00795C7F /* SGLayerNode.hpp in CopyFiles */,
 				CF6606B323DF2FFD00795C7F /* GEO2DLineRasterStyle.hpp in CopyFiles */,
 				CF6606B423DF2FFD00795C7F /* PlanetTileTessellator.hpp in CopyFiles */,
-				CF6606B523DF2FFD00795C7F /* Extent.hpp in CopyFiles */,
 				CF6606B623DF2FFD00795C7F /* GEOObject.hpp in CopyFiles */,
 				CF6606B723DF2FFD00795C7F /* FrameImageBackground.hpp in CopyFiles */,
 				CF6606B823DF2FFD00795C7F /* DebugTileImageProvider.hpp in CopyFiles */,
@@ -1727,7 +1725,6 @@
 		CF66024523DF2DA600795C7F /* SGLayerNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SGLayerNode.hpp; sourceTree = "<group>"; };
 		CF66024623DF2DA600795C7F /* GEO2DLineRasterStyle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEO2DLineRasterStyle.hpp; sourceTree = "<group>"; };
 		CF66024723DF2DA600795C7F /* PlanetTileTessellator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PlanetTileTessellator.hpp; sourceTree = "<group>"; };
-		CF66024823DF2DA600795C7F /* Extent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Extent.hpp; sourceTree = "<group>"; };
 		CF66024923DF2DA600795C7F /* GEOObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEOObject.hpp; sourceTree = "<group>"; };
 		CF66024A23DF2DA600795C7F /* FrameImageBackground.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FrameImageBackground.hpp; sourceTree = "<group>"; };
 		CF66024B23DF2DA600795C7F /* ShapesRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShapesRenderer.cpp; sourceTree = "<group>"; };
@@ -2766,7 +2763,6 @@
 				CF66018023DF2DA500795C7F /* ErrorHandling.hpp */,
 				CF6602C223DF2DA600795C7F /* ErrorRenderer.cpp */,
 				CF66039123DF2DA800795C7F /* ErrorRenderer.hpp */,
-				CF66024823DF2DA600795C7F /* Extent.hpp */,
 				CF6601ED23DF2DA500795C7F /* FlatColorMesh.cpp */,
 				CF66045123DF2DAA00795C7F /* FlatColorMesh.hpp */,
 				CF66025C23DF2DA600795C7F /* FlatPlanet.cpp */,

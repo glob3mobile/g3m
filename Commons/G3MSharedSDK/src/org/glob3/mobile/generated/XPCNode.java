@@ -233,6 +233,11 @@ public class XPCNode extends RCObject
   }
 
 
+  public final String getID()
+  {
+    return _id;
+  }
+
   public static XPCNode fromByteBufferIterator(ByteBufferIterator it)
   {
     final String nodeID = it.nextZeroTerminatedString();

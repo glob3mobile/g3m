@@ -27,6 +27,14 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
     }
     else
     {
+      if (_pointCloud.isVerbose())
+      {
+        ILogger.instance().logInfo("Downloaded metadata for \"%s\" node \"%s\" (bytes=%d)",
+                                   _pointCloud.getCloudName(),
+                                   _node.getID(),
+                                   buffer.size());
+      }
+
       _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud, _node, buffer, _planet), true);
     }
   }
