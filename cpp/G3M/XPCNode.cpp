@@ -199,7 +199,7 @@ public:
                            _pointCloud->getDevicePointSize(),
                            NULL,            // flatColor
                            colors.create(), // const IFloatBuffer* colors
-                           false            // depthTest
+                           true            // depthTest
                            );
 
     delete vertices;
@@ -413,7 +413,8 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                           GLState* glState,
                           const Frustum* frustum,
                           long long nowInMS,
-                          bool renderDebug) {
+                          bool renderDebug,
+                          const Ray* selectionRay) {
 
   long long renderedCount = 0;
 
@@ -438,12 +439,26 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
       if (isBigEnough) {
         renderedInThisFrame = true;
 
+//        if (selectionRay != NULL) {
+//          if (touchesRay(selectionRay)) {
+//            bounds->render(rc, glState, Color::YELLOW);
+//          }
+//        }
+
 //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
 
         if (_loadedContent) {
           if (_mesh != NULL) {
-            _mesh->render(rc, glState);
-            renderedCount += _mesh->getRenderVerticesCount();
+            if (selectionRay == NULL) {
+              _mesh->render(rc, glState);
+              renderedCount += _mesh->getRenderVerticesCount();
+            }
+            else {
+              if (touchesRay(selectionRay)) {
+                _mesh->render(rc, glState);
+                renderedCount += _mesh->getRenderVerticesCount();
+              }
+            }
           }
         }
         else {
@@ -463,7 +478,8 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                                            glState,
                                            frustum,
                                            nowInMS,
-                                           renderDebug);
+                                           renderDebug,
+                                           selectionRay);
           }
         }
 
@@ -481,7 +497,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
   return renderedCount;
 }
 
-const bool XPCNode::touchesRay(const Ray& ray) const {
+const bool XPCNode::touchesRay(const Ray* ray) const {
   return (_bounds != NULL) && _bounds->touchesRay(ray);
 }
 

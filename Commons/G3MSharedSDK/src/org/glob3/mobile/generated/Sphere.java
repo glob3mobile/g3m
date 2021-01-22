@@ -405,18 +405,42 @@ public class Sphere extends BoundingVolume
     return new Sphere(this);
   }
 
+  //const bool touchesRay(const Ray* ray) const {
+  //  // from Real-Time Collision Detection - Christer Ericson
+  //  //   page 178
+  //
+  //  const Vector3D m = ray->_origin.sub(_center);
+  //
+  //  const double b = m.dot(ray->_direction);
+  //  const double c = m.dot(m) - _radiusSquared;
+  //
+  //  // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
+  //  if ((c > 0.0) && (b > 0.0)) {
+  //    return false;
+  //  }
+  //
+  //  const double discr = (b * b) - c;
+  //  // A negative discriminant corresponds to ray missing sphere
+  //  return (discr >= 0.0);
+  //}
+  
   public final boolean touchesRay(Ray ray)
   {
     // from Real-Time Collision Detection - Christer Ericson
-    //   page 178
+    //   page 179
   
     final Vector3D m = ray._origin.sub(_center);
   
-    final double b = m.dot(ray._direction);
     final double c = m.dot(m) - _radiusSquared;
+    // If there is definitely at least one real root, there must be an intersection
+    if (c <= 0)
+    {
+      return true;
+    }
   
-    // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
-    if ((c > 0.0) && (b > 0.0))
+    final double b = m.dot(ray._direction);
+    // Early exit if ray origin outside sphere and ray pointing away from sphere
+    if (b > 0)
     {
       return false;
     }

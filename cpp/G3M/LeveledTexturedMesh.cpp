@@ -115,6 +115,11 @@ const Vector3D LeveledTexturedMesh::getVertex(const size_t index) const {
   return _mesh->getVertex(index);
 }
 
+void LeveledTexturedMesh::getVertex(const size_t index,
+                                    MutableVector3D& result) const {
+  _mesh->getVertex(index, result);
+}
+
 BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {
   return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
 }

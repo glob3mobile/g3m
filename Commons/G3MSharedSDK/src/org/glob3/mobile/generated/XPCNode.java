@@ -247,7 +247,7 @@ public class XPCNode extends RCObject
     return new XPCNode(nodeID, sector, minHeight, maxHeight);
   }
 
-  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug)
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, Ray selectionRay)
   {
   
     long renderedCount = 0;
@@ -278,14 +278,31 @@ public class XPCNode extends RCObject
         {
           renderedInThisFrame = true;
   
+  //        if (selectionRay != NULL) {
+  //          if (touchesRay(selectionRay)) {
+  //            bounds->render(rc, glState, Color::YELLOW);
+  //          }
+  //        }
+  
   //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
   
           if (_loadedContent)
           {
             if (_mesh != null)
             {
-              _mesh.render(rc, glState);
-              renderedCount += _mesh.getRenderVerticesCount();
+              if (selectionRay == null)
+              {
+                _mesh.render(rc, glState);
+                renderedCount += _mesh.getRenderVerticesCount();
+              }
+              else
+              {
+                if (touchesRay(selectionRay))
+                {
+                  _mesh.render(rc, glState);
+                  renderedCount += _mesh.getRenderVerticesCount();
+                }
+              }
             }
           }
           else
@@ -303,7 +320,7 @@ public class XPCNode extends RCObject
             for (int i = 0; i < _childrenSize; i++)
             {
               XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, treeID, rc, glState, frustum, nowInMS, renderDebug);
+              renderedCount += child.render(pointCloud, treeID, rc, glState, frustum, nowInMS, renderDebug, selectionRay);
             }
           }
   

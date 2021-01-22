@@ -73,6 +73,9 @@ public:
 
   const Vector3D getVertex(const size_t index) const;
 
+  void getVertex(const size_t index,
+                 MutableVector3D& result) const;
+
   virtual bool isTransparent(const G3MRenderContext* rc) const;
 
   void rawRender(const G3MRenderContext* rc,

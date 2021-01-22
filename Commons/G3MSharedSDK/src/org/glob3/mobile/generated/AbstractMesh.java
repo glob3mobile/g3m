@@ -208,6 +208,12 @@ public abstract class AbstractMesh extends TransformableMesh
     return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
 
+  public final void getVertex(int index, MutableVector3D result)
+  {
+    final int p = index * 3;
+    result.set(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
+  }
+
   public boolean isTransparent(G3MRenderContext rc)
   {
     if (_flatColor == null)

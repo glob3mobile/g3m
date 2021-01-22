@@ -93,9 +93,10 @@ public:
                    GLState* glState,
                    const Frustum* frustum,
                    long long nowInMS,
-                   bool renderDebug);
+                   bool renderDebug,
+                   const Ray* selectionRay);
 
-  const bool touchesRay(const Ray& ray) const;
+  const bool touchesRay(const Ray* ray) const;
 
   const Sector* getSector() const;
 

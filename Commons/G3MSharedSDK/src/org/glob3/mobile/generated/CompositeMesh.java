@@ -103,6 +103,24 @@ public class CompositeMesh extends Mesh
     }
     return Vector3D.NANV;
   }
+  public final void getVertex(int index, MutableVector3D result)
+  {
+    int acumIndex = 0;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      final int childIndex = index - acumIndex;
+      final int childSize = child.getVertexCount();
+      if (childIndex < childSize)
+      {
+        child.getVertex(childIndex, result);
+        return;
+      }
+      acumIndex += childSize;
+    }
+    result.copyFrom(Vector3D.NANV);
+  }
 
   public final BoundingVolume getBoundingVolume()
   {

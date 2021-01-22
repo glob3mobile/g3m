@@ -58,3 +58,8 @@ TexturedMesh::~TexturedMesh() {
 const Vector3D TexturedMesh::getVertex(const size_t index) const {
   return _mesh->getVertex(index);
 }
+
+void TexturedMesh::getVertex(const size_t index,
+                             MutableVector3D& result) const {
+  _mesh->getVertex(index, result);
+}

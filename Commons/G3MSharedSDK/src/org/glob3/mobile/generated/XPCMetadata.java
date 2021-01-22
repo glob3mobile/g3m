@@ -99,7 +99,7 @@ public class XPCMetadata
     }
   }
 
-  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug)
+  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, Ray selectionRay)
   {
   
     long renderedCount = 0;
@@ -108,7 +108,7 @@ public class XPCMetadata
     {
       final XPCTree tree = _trees.get(i);
   
-      renderedCount += tree.render(pointCloud, rc, glState, frustum, nowInMS, renderDebug);
+      renderedCount += tree.render(pointCloud, rc, glState, frustum, nowInMS, renderDebug, selectionRay);
     }
   
     return renderedCount;

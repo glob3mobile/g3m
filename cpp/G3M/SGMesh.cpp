@@ -53,6 +53,11 @@ const Vector3D SGMesh::getVertex(const size_t index) const {
   THROW_EXCEPTION("Can't implement");
 }
 
+void SGMesh::getVertex(const size_t index,
+                       MutableVector3D& result) const {
+  THROW_EXCEPTION("Can't implement");
+}
+
 void SGMesh::initializeGLState(GLState* glState) const {
   TransformableMesh::initializeGLState(glState);
 

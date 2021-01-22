@@ -17,6 +17,7 @@ class TimeInterval;
 class XPCPointColorizer;
 class XPCMetadataListener;
 class Camera;
+class Ray;
 
 
 class XPCRenderer : public DefaultRenderer {
@@ -37,7 +38,7 @@ private:
   private Camera _lastCamera;
 #endif
   bool _renderDebug;
-
+  Ray* _ray;
   
 protected:
 

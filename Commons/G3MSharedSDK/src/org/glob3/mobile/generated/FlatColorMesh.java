@@ -80,6 +80,11 @@ public class FlatColorMesh extends Mesh
     return _mesh.getVertex(index);
   }
 
+  public void getVertex(int index, MutableVector3D result)
+  {
+    _mesh.getVertex(index, result);
+  }
+
   public final boolean isTransparent(G3MRenderContext rc)
   {
     return _flatColor._alpha != 1.0;

@@ -28,7 +28,8 @@ _cloudsSize(0),
 _glState(new GLState()),
 _timer(NULL),
 _lastCamera(NULL),
-_renderDebug(false)
+_renderDebug(false),
+_ray(NULL)
 {
 }
 
@@ -41,6 +42,8 @@ XPCRenderer::~XPCRenderer() {
   
   _glState->_release();
   delete _timer;
+
+  delete _ray;
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -167,12 +170,15 @@ void XPCRenderer::render(const G3MRenderContext* rc,
                     _glState,
                     frustum,
                     nowInMS,
-                    _renderDebug);
+                    _renderDebug,
+                    _ray);
+    }
+
+    if (_ray != NULL) {
+      _ray->render(rc, _glState, Color::YELLOW);
     }
   }
 }
-
-
 
 bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
                                const TouchEvent* touchEvent) {
@@ -182,46 +188,50 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
     if (_lastCamera != NULL) {
       if ((touchEvent->getTouchCount() == 1) &&
           (touchEvent->getTapCount()   == 1) &&
-          (touchEvent->getType()       == LongPress /*Down*/)) {
+          (touchEvent->getType()       == LongPress)) {
 
         const Vector2F touchedPixel = touchEvent->getTouch(0)->getPos();
         const Vector3D rayDirection = _lastCamera->pixel2Ray(touchedPixel);
 
         if (!rayDirection.isNan()) {
-//          _renderDebug = true;
+          // _renderDebug = true;
 
           const Vector3D rayOrigin = _lastCamera->getCartesianPosition();
 
-          const Ray ray = Ray(rayOrigin,
-                              rayDirection);
+          Ray* ray = new Ray(rayOrigin, rayDirection);
 
           //const Planet* planet = ec->getPlanet();
+
+
+#warning SELECTION (pointCloud, tree, node, pointID)
+#warning     currentXYZ, minimumSquaredDistance
 
           for (int i = 0; i < _cloudsSize; i++) {
             XPCPointCloud* cloud = _clouds[i];
             if (cloud->touchesRay(ray)) {
-              _renderDebug = true;
+              delete _ray;
+              _ray = ray;
+//              _renderDebug = true;
               return true;
             }
           }
 
-//          std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
-//
-//          if (!shapeDistances.empty()) {
-//            //        printf ("Found %d intersections with shapes:\n",
-//            //                (int)shapeDistances.size());
-//            for (int i=0; i<shapeDistances.size(); i++) {
-//              //            printf ("   %d: shape %x to distance %f\n",
-//              //                    i+1,
-//              //                    (unsigned int)shapeDistances[i]._shape,
-//              //                    shapeDistances[i]._distance);
-//            }
-//          }
+          delete ray;
         }
 
       }
     }
   }
+
+  if (touchEvent->getType() == LongPress) {
+    delete _ray;
+    _ray = NULL;
+  }
+
+//  if (!_renderDebug) {
+//    delete _ray;
+//    _ray = NULL;
+//  }
 
   return false;
 }

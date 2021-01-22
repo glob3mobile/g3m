@@ -41,8 +41,8 @@ private:
   const float          _verticalExaggeration;
   const float          _deltaHeight;
   XPCMetadataListener* _metadataListener;
-  const bool            _deleteMetadataListener;
-  const bool            _verbose;
+  const bool           _deleteMetadataListener;
+  const bool           _verbose;
 
   bool _downloadingMetadata;
   bool _errorDownloadingMetadata;
@@ -108,7 +108,8 @@ public:
               GLState* glState,
               const Frustum* frustum,
               long long nowInMS,
-              bool renderDebug);
+              bool renderDebug,
+              const Ray* selectionRay);
 
   void errorDownloadingMetadata();
   void errorParsingMetadata();
@@ -127,7 +128,7 @@ public:
     return _pointColorizer;
   }
 
-  const bool touchesRay(const Ray& ray) const;
+  const bool touchesRay(const Ray* ray) const;
 
 };
 

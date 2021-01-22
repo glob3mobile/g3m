@@ -72,6 +72,11 @@ public:
     return _mesh->getVertex(index);
   }
 
+  virtual void getVertex(const size_t index,
+                         MutableVector3D& result) const {
+    _mesh->getVertex(index, result);
+  }
+
   bool isTransparent(const G3MRenderContext* rc) const {
     return _flatColor->_alpha != 1.0;
   }

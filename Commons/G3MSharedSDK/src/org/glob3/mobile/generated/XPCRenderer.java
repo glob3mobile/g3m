@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class XPCPointColorizer;
 //class XPCMetadataListener;
 //class Camera;
+//class Ray;
 
 
 public class XPCRenderer extends DefaultRenderer
@@ -37,7 +38,7 @@ public class XPCRenderer extends DefaultRenderer
 
   private Camera _lastCamera;
   private boolean _renderDebug;
-
+  private Ray _ray;
 
 
   protected final void onChangedContext()
@@ -58,6 +59,7 @@ public class XPCRenderer extends DefaultRenderer
      _timer = null;
      _lastCamera = null;
      _renderDebug = false;
+     _ray = null;
   }
 
   public void dispose()
@@ -71,6 +73,9 @@ public class XPCRenderer extends DefaultRenderer
     _glState._release();
     if (_timer != null)
        _timer.dispose();
+  
+    if (_ray != null)
+       _ray.dispose();
   
     super.dispose();
   }
@@ -155,7 +160,12 @@ public class XPCRenderer extends DefaultRenderer
       for (int i = 0; i < _cloudsSize; i++)
       {
         XPCPointCloud cloud = _clouds.get(i);
-        cloud.render(rc, _glState, frustum, nowInMS, _renderDebug);
+        cloud.render(rc, _glState, frustum, nowInMS, _renderDebug, _ray);
+      }
+  
+      if (_ray != null)
+      {
+        _ray.render(rc, _glState, Color.YELLOW);
       }
     }
   }
@@ -168,7 +178,7 @@ public class XPCRenderer extends DefaultRenderer
     {
       if (_lastCamera != null)
       {
-        if ((touchEvent.getTouchCount() == 1) && (touchEvent.getTapCount() == 1) && (touchEvent.getType() == TouchEventType.LongPress)) //Down
+        if ((touchEvent.getTouchCount() == 1) && (touchEvent.getTapCount() == 1) && (touchEvent.getType() == TouchEventType.LongPress))
         {
   
           final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();
@@ -176,41 +186,52 @@ public class XPCRenderer extends DefaultRenderer
   
           if (!rayDirection.isNan())
           {
-  //          _renderDebug = true;
+            // _renderDebug = true;
   
             final Vector3D rayOrigin = _lastCamera.getCartesianPosition();
   
-            final Ray ray = new Ray(rayOrigin, rayDirection);
+            Ray ray = new Ray(rayOrigin, rayDirection);
   
             //const Planet* planet = ec->getPlanet();
+  
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning SELECTION (pointCloud, tree, node, pointID)
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning currentXYZ, minimumSquaredDistance
   
             for (int i = 0; i < _cloudsSize; i++)
             {
               XPCPointCloud cloud = _clouds.get(i);
               if (cloud.touchesRay(ray))
               {
-                _renderDebug = true;
+                if (_ray != null)
+                   _ray.dispose();
+                _ray = ray;
+  //              _renderDebug = true;
                 return true;
               }
             }
   
-  //          std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
-  //
-  //          if (!shapeDistances.empty()) {
-  //            //        printf ("Found %d intersections with shapes:\n",
-  //            //                (int)shapeDistances.size());
-  //            for (int i=0; i<shapeDistances.size(); i++) {
-  //              //            printf ("   %d: shape %x to distance %f\n",
-  //              //                    i+1,
-  //              //                    (unsigned int)shapeDistances[i]._shape,
-  //              //                    shapeDistances[i]._distance);
-  //            }
-  //          }
+            if (ray != null)
+               ray.dispose();
           }
   
         }
       }
     }
+  
+    if (touchEvent.getType() == TouchEventType.LongPress)
+    {
+      if (_ray != null)
+         _ray.dispose();
+      _ray = null;
+    }
+  
+  //  if (!_renderDebug) {
+  //    delete _ray;
+  //    _ray = NULL;
+  //  }
   
     return false;
   }

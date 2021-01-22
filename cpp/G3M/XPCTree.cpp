@@ -34,7 +34,8 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                           GLState* glState,
                           const Frustum* frustum,
                           long long nowInMS,
-                          bool renderDebug) const {
+                          bool renderDebug,
+                          const Ray* selectionRay) const {
   
   return (_rootNode == NULL) ? 0 : _rootNode->render(pointCloud,
                                                      _id,
@@ -42,10 +43,11 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                                                      glState,
                                                      frustum,
                                                      nowInMS,
-                                                     renderDebug);
+                                                     renderDebug,
+                                                     selectionRay);
 }
 
 
-const bool XPCTree::touchesRay(const Ray& ray) const {
+const bool XPCTree::touchesRay(const Ray* ray) const {
   return (_rootNode != NULL) && _rootNode->touchesRay(ray);
 }

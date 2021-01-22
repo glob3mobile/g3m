@@ -172,11 +172,11 @@ public class XPCPointCloud extends RCObject
     return RenderState.ready();
   }
 
-  public final void render(G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug)
+  public final void render(G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, Ray selectionRay)
   {
     if (_metadata != null)
     {
-      final long renderedCount = _metadata.render(this, rc, glState, frustum, nowInMS, renderDebug);
+      final long renderedCount = _metadata.render(this, rc, glState, frustum, nowInMS, renderDebug, selectionRay);
   
       if (_lastRenderedCount != renderedCount)
       {

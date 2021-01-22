@@ -170,7 +170,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       }
     }
 
-    _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, _pointCloud.getDevicePointSize(), null, colors.create(), false); // depthTest -  const IFloatBuffer* colors -  flatColor
+    _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, _pointCloud.getDevicePointSize(), null, colors.create(), true); // depthTest -  const IFloatBuffer* colors -  flatColor
 
     if (vertices != null)
        vertices.dispose();

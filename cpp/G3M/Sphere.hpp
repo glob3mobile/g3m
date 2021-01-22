@@ -108,7 +108,7 @@ public:
   
   Sphere* copy() const;
 
-  const bool touchesRay(const Ray& ray) const;
+  const bool touchesRay(const Ray* ray) const;
   
 };
 

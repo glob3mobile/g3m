@@ -42,6 +42,8 @@ public:
   }
 
   const Vector3D getVertex(const size_t index) const;
+  void getVertex(const size_t index,
+                 MutableVector3D& result) const;
 
   BoundingVolume* getBoundingVolume() const {
     return _mesh->getBoundingVolume();

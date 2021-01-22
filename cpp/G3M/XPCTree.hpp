@@ -38,9 +38,10 @@ public:
                    GLState* glState,
                    const Frustum* frustum,
                    long long nowInMS,
-                   bool renderDebug) const;
+                   bool renderDebug,
+                   const Ray* selectionRay) const;
 
-  const bool touchesRay(const Ray& ray) const;
+  const bool touchesRay(const Ray* ray) const;
 
 };
 

@@ -11,6 +11,7 @@
 #include "GLFeature.hpp"
 #include "GLState.hpp"
 #include "Box.hpp"
+#include "MutableVector3D.hpp"
 
 
 AbstractMesh::~AbstractMesh() {
@@ -119,6 +120,14 @@ BoundingVolume* AbstractMesh::getBoundingVolume() const {
     _boundingVolume = computeBoundingVolume();
   }
   return _boundingVolume;
+}
+
+void AbstractMesh::getVertex(const size_t index,
+                             MutableVector3D& result) const {
+  const size_t p = index * 3;
+  result.set(_vertices->get(p  ) + _center._x,
+             _vertices->get(p+1) + _center._y,
+             _vertices->get(p+2) + _center._z);
 }
 
 const Vector3D AbstractMesh::getVertex(const size_t index) const {

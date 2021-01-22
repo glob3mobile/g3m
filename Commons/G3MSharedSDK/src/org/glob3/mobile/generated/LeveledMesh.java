@@ -60,6 +60,11 @@ public class LeveledMesh extends Mesh
     return _mesh.getVertex(index);
   }
 
+  public final void getVertex(int index, MutableVector3D result)
+  {
+    _mesh.getVertex(index, result);
+  }
+
   public final void rawRender(G3MRenderContext rc, GLState parentState)
   {
     _mesh.render(rc, parentState);
