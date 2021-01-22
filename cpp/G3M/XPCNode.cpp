@@ -166,7 +166,7 @@ public:
       XPCPoint* point = _points->at(i);
       vertices->addDegrees(point->_latitudeDegrees,
                            point->_longitueDegrees,
-                           (point->_height * verticalExaggeration) + deltaHeight);
+                           (point->_height + deltaHeight) * verticalExaggeration);
 
       if (pointsColorizer != NULL) {
         const Color color = pointsColorizer->colorize(metadata,
@@ -297,12 +297,12 @@ public:
 
 XPCNode::XPCNode(const std::string& id,
                  const Sector* sector,
-                 const double minZ,
-                 const double maxZ) :
+                 const double minHeight,
+                 const double maxHeight) :
 _id(id),
 _sector(sector),
-_minZ(minZ),
-_maxZ(maxZ),
+_minHeight(minHeight),
+_maxHeight(maxHeight),
 _bounds(NULL),
 _renderedInPreviousFrame(false),
 _projectedArea(-1),
@@ -369,32 +369,32 @@ Sphere* XPCNode::calculateBounds(const G3MRenderContext* rc,
 
 #ifdef C_CODE
   const Vector3D c[10] = {
-    planet->toCartesian( _sector->getNE()     , (_minZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getNE()     , (_maxZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getNW()     , (_minZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getNW()     , (_maxZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getSE()     , (_minZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getSE()     , (_maxZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getSW()     , (_minZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getSW()     , (_maxZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getCenter() , (_minZ + deltaHeight) * verticalExaggeration ),
-    planet->toCartesian( _sector->getCenter() , (_maxZ + deltaHeight) * verticalExaggeration )
+    planet->toCartesian( _sector->getNE()     , (_minHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getNE()     , (_maxHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getNW()     , (_minHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getNW()     , (_maxHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getSE()     , (_minHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getSE()     , (_maxHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getSW()     , (_minHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getSW()     , (_maxHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getCenter() , (_minHeight + deltaHeight) * verticalExaggeration ),
+    planet->toCartesian( _sector->getCenter() , (_maxHeight + deltaHeight) * verticalExaggeration )
   };
 
   std::vector<Vector3D> points(c, c+10);
 #endif
 #ifdef JAVA_CODE
   java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(10);
-  points.add( planet.toCartesian( _sector.getNE()     , (_minZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getNE()     , (_maxZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getNW()     , (_minZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getNW()     , (_maxZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getSE()     , (_minZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getSE()     , (_maxZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getSW()     , (_minZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getSW()     , (_maxZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getCenter() , (_minZ + deltaHeight) * verticalExaggeration ) );
-  points.add( planet.toCartesian( _sector.getCenter() , (_maxZ + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getNE()     , (_minHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getNE()     , (_maxHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getNW()     , (_minHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getNW()     , (_maxHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getSE()     , (_minHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getSE()     , (_maxHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getSW()     , (_minHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getSW()     , (_maxHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getCenter() , (_minHeight + deltaHeight) * verticalExaggeration ) );
+  points.add( planet.toCartesian( _sector.getCenter() , (_maxHeight + deltaHeight) * verticalExaggeration ) );
 #endif
 
 #warning TODO: check if the sphere fits into the parent's one
@@ -412,7 +412,8 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                           const G3MRenderContext* rc,
                           GLState* glState,
                           const Frustum* frustum,
-                          long long nowInMS) {
+                          long long nowInMS,
+                          bool renderDebug) {
 
   long long renderedCount = 0;
 
@@ -422,6 +423,11 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
   if (bounds != NULL) {
     const bool isVisible = bounds->touchesFrustum(frustum);
     if (isVisible) {
+
+      if (renderDebug) {
+        bounds->render(rc, glState, Color::WHITE);
+      }
+
       if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS)) {
         const double projectedArea = bounds->projectedArea(rc);
         _projectedArea   = projectedArea;
@@ -433,8 +439,6 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         renderedInThisFrame = true;
 
 //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
-
-        // bounds->render(rc, glState, Color::blue());
 
         if (_loadedContent) {
           if (_mesh != NULL) {
@@ -458,7 +462,8 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                                            rc,
                                            glState,
                                            frustum,
-                                           nowInMS);
+                                           nowInMS,
+                                           renderDebug);
           }
         }
 
@@ -570,10 +575,10 @@ XPCNode* XPCNode::fromByteBufferIterator(ByteBufferIterator& it) {
   const Sector* sector = Sector::newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees,
                                                 upperLatitudeDegrees, upperLongitudeDegrees);
 
-  const double minZ = it.nextDouble();
-  const double maxZ = it.nextDouble();
+  const double minHeight = it.nextDouble();
+  const double maxHeight = it.nextDouble();
 
-  return new XPCNode(nodeID, sector, minZ, maxZ);
+  return new XPCNode(nodeID, sector, minHeight, maxHeight);
 }
 
 

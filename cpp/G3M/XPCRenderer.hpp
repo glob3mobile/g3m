@@ -16,6 +16,7 @@ class URL;
 class TimeInterval;
 class XPCPointColorizer;
 class XPCMetadataListener;
+class Camera;
 
 
 class XPCRenderer : public DefaultRenderer {
@@ -29,7 +30,15 @@ private:
 
   GLState* _glState;
 
+#ifdef C_CODE
+  const Camera*  _lastCamera;
+#endif
+#ifdef JAVA_CODE
+  private Camera _lastCamera;
+#endif
+  bool _renderDebug;
 
+  
 protected:
 
   void onChangedContext();
@@ -47,6 +56,9 @@ public:
 
   void render(const G3MRenderContext* rc,
               GLState* glState);
+
+  bool onTouchEvent(const G3MEventContext* ec,
+                    const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {

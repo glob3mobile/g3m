@@ -30,7 +30,8 @@ public:
                    const G3MRenderContext* rc,
                    GLState* glState,
                    const Frustum* frustum,
-                   long long nowInMS);
+                   long long nowInMS,
+                   bool renderDebug);
 
   const size_t getTreesCount() const;
   const XPCTree* getTree(const size_t i) const;

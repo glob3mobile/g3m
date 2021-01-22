@@ -55,30 +55,29 @@ std::vector<double> SphericalPlanet::intersectionsDistances(double originX,
   std::vector<double> intersections;
 
   // By laborious algebraic manipulation....
-  const double a = directionX * directionX  + directionY * directionY + directionZ * directionZ;
+  const double a = (directionX * directionX) + (directionY * directionY) + (directionZ * directionZ);
 
-  const double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
+  const double b = 2.0 * ((originX * directionX) + (originY * directionY) + (originZ * directionZ));
 
-  const double c = originX * originX + originY * originY + originZ * originZ - _sphere._radiusSquared;
+  const double c = ((originX * originX) + (originY * originY) + (originZ * originZ)) - _sphere._radiusSquared;
 
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
   // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-  const double discriminant = b * b - 4 * a * c;
+  const double discriminant = (b * b) - (4 * a * c);
   if (discriminant < 0.0) {
     // no intersections
     return intersections;
   }
   else if (discriminant == 0.0) {
     // one intersection at a tangent point
-    //return new double[1] { -0.5 * b / a };
-    intersections.push_back(-0.5 * b / a);
+    intersections.push_back((-0.5 * b) / a);
     return intersections;
   }
 
   const double rootDiscriminant = IMathUtils::instance()->sqrt(discriminant);
-  const double root1 = (-b + rootDiscriminant) / (2*a);
-  const double root2 = (-b - rootDiscriminant) / (2*a);
+  const double root1 = (-b + rootDiscriminant) / (2 * a);
+  const double root2 = (-b - rootDiscriminant) / (2 * a);
 
   // Two intersections - return the smallest first.
   if (root1 < root2) {
@@ -195,14 +194,14 @@ double SphericalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
   const double lonP = g2._longitude._radians;
   const double latQ = g1._latitude._radians;
   const double lonQ = g1._longitude._radians;
-  const double coslatP = mu->cos(latP);
-  const double sinlatP = mu->sin(latP);
-  const double coslonP = mu->cos(lonP);
-  const double sinlonP = mu->sin(lonP);
-  const double coslatQ = mu->cos(latQ);
-  const double sinlatQ = mu->sin(latQ);
-  const double coslonQ = mu->cos(lonQ);
-  const double sinlonQ = mu->sin(lonQ);
+  const double coslatP = COS(latP);
+  const double sinlatP = SIN(latP);
+  const double coslonP = COS(lonP);
+  const double sinlonP = SIN(lonP);
+  const double coslatQ = COS(latQ);
+  const double sinlatQ = SIN(latQ);
+  const double coslonQ = COS(lonQ);
+  const double sinlonQ = SIN(lonQ);
   const double pq = (coslatP * sinlonP * coslatQ * sinlonQ +
                      sinlatP * sinlatQ +
                      coslatP * coslonP * coslatQ * coslonQ);

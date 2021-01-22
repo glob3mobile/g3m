@@ -28,14 +28,16 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                           const G3MRenderContext* rc,
                           GLState* glState,
                           const Frustum* frustum,
-                          long long nowInMS) const {
+                          long long nowInMS,
+                          bool renderDebug) const {
   
   return (_rootNode == NULL) ? 0 : _rootNode->render(pointCloud,
                                                      _id,
                                                      rc,
                                                      glState,
                                                      frustum,
-                                                     nowInMS);
+                                                     nowInMS,
+                                                     renderDebug);
 }
 
 const Sector* XPCTree::getSector() const {

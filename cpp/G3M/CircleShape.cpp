@@ -14,8 +14,6 @@
 #include "IMathUtils.hpp"
 
 Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
-  const IMathUtils* mu = IMathUtils::instance();
-
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
 
   // first is the center
@@ -25,8 +23,8 @@ Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
 
   for (int i = 0; i <= _steps; i++) {
     const double angleInRadians = i * twicePi / _steps;
-    const double x = _radius * mu->cos(angleInRadians);
-    const double y = _radius * mu->sin(angleInRadians);
+    const double x = _radius * COS(angleInRadians);
+    const double y = _radius * SIN(angleInRadians);
     vertices->add(x, y, 0);
   }
 

@@ -13,19 +13,21 @@
 
 #include "GLState.hpp"
 #include "ITimer.hpp"
-//#include "G3MContext.hpp"
 #include "G3MRenderContext.hpp"
 #include "IFactory.hpp"
 #include "Camera.hpp"
 #include "ILogger.hpp"
 #include "IDownloader.hpp"
-
+#include "TouchEvent.hpp"
+#include "G3MEventContext.hpp"
 
 
 XPCRenderer::XPCRenderer() :
 _cloudsSize(0),
 _glState(new GLState()),
-_timer(NULL)
+_timer(NULL),
+_lastCamera(NULL),
+_renderDebug(false)
 {
 }
 
@@ -139,6 +141,8 @@ RenderState XPCRenderer::getRenderState(const G3MRenderContext* rc) {
 void XPCRenderer::render(const G3MRenderContext* rc,
                          GLState* glState) {
   if (_cloudsSize > 0) {
+    _lastCamera = rc->getCurrentCamera();
+
     if (_timer == NULL) {
       _timer = rc->getFactory()->createTimer();
     }
@@ -161,8 +165,59 @@ void XPCRenderer::render(const G3MRenderContext* rc,
       cloud->render(rc,
                     _glState,
                     frustum,
-                    nowInMS);
+                    nowInMS,
+                    _renderDebug);
     }
   }
 }
 
+
+
+bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
+                               const TouchEvent* touchEvent) {
+  _renderDebug = false;
+
+  if (_cloudsSize > 0) {
+
+    if (_lastCamera != NULL) {
+      if ((touchEvent->getTouchCount() == 1) &&
+          (touchEvent->getTapCount()   == 1) &&
+          (touchEvent->getType()       == LongPress /*Down*/)) {
+
+        const Vector2F touchedPixel = touchEvent->getTouch(0)->getPos();
+        const Vector3D rayDirection = _lastCamera->pixel2Ray(touchedPixel);
+
+        if (!rayDirection.isNan()) {
+          _renderDebug = true;
+
+          const Vector3D rayOrigin = _lastCamera->getCartesianPosition();
+
+          //const Planet* planet = ec->getPlanet();
+
+          for (int i = 0; i < _cloudsSize; i++) {
+            XPCPointCloud* cloud = _clouds[i];
+//            if (cloud->touchesRay(rayOrigin, rayDirection)) {
+//              _renderDebug = true;
+//            }
+          }
+
+//          std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
+//
+//          if (!shapeDistances.empty()) {
+//            //        printf ("Found %d intersections with shapes:\n",
+//            //                (int)shapeDistances.size());
+//            for (int i=0; i<shapeDistances.size(); i++) {
+//              //            printf ("   %d: shape %x to distance %f\n",
+//              //                    i+1,
+//              //                    (unsigned int)shapeDistances[i]._shape,
+//              //                    shapeDistances[i]._distance);
+//            }
+//          }
+        }
+
+      }
+    }
+  }
+
+  return false;
+}

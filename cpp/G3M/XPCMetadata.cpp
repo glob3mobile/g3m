@@ -116,7 +116,8 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                               const G3MRenderContext* rc,
                               GLState* glState,
                               const Frustum* frustum,
-                              long long nowInMS) {
+                              long long nowInMS,
+                              bool renderDebug) {
 
   long long renderedCount = 0;
 
@@ -127,7 +128,8 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                                   rc,
                                   glState,
                                   frustum,
-                                  nowInMS);
+                                  nowInMS,
+                                  renderDebug);
   }
 
   return renderedCount;

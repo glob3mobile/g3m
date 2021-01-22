@@ -74,7 +74,6 @@ double Sphere::projectedArea(const G3MRenderContext* rc) const {
 
 Mesh* Sphere::createWireframeMesh(const Color& color,
                                   short resolution) const {
-  const IMathUtils* mu = IMathUtils::instance();
   const double delta = PI / (resolution-1);
 
   // create vertices
@@ -83,10 +82,10 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
     const double longitude = -PI + i*delta;
     for (int j=0; j<resolution; j++) {
       const double latitude = -PI/2 + j*delta;
-      const double h = mu->cos(latitude);
-      const double x = h * mu->cos(longitude);
-      const double y = h * mu->sin(longitude);
-      const double z = mu->sin(latitude);
+      const double h = COS(latitude);
+      const double x = h * COS(longitude);
+      const double y = h * SIN(longitude);
+      const double z = SIN(latitude);
       vertices->add(Vector3D(x,y,z).times(_radius).add(_center));
     }
   }

@@ -32,8 +32,8 @@ private:
 
   const Sector* _sector;
 
-  const double _minZ;
-  const double _maxZ;
+  const double _minHeight;
+  const double _maxHeight;
 
   std::vector<XPCNode*>* _children;
   size_t _childrenSize;
@@ -73,8 +73,8 @@ private:
 
   XPCNode(const std::string& id,
           const Sector* sector,
-          const double minZ,
-          const double maxZ);
+          const double minHeight,
+          const double maxHeight);
 
   ~XPCNode();
 
@@ -86,13 +86,13 @@ public:
 
   static XPCNode* fromByteBufferIterator(ByteBufferIterator& it);
 
-
   long long render(const XPCPointCloud* pointCloud,
                    const std::string& treeID,
                    const G3MRenderContext* rc,
                    GLState* glState,
                    const Frustum* frustum,
-                   long long nowInMS);
+                   long long nowInMS,
+                   bool renderDebug);
 
   const Sector* getSector() const;
 

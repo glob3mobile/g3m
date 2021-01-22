@@ -118,8 +118,6 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                          );
   }
 
-#warning DIEGO AT WORK!
-
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile);
   const Vector2S meshResolution = calculateResolution(prc, tile, meshSector);

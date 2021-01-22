@@ -283,14 +283,14 @@ double EllipsoidalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
   const double lonP = g2._longitude._radians;
   const double latQ = g1._latitude._radians;
   const double lonQ = g1._longitude._radians;
-  const double coslatP = mu->cos(latP);
-  const double sinlatP = mu->sin(latP);
-  const double coslonP = mu->cos(lonP);
-  const double sinlonP = mu->sin(lonP);
-  const double coslatQ = mu->cos(latQ);
-  const double sinlatQ = mu->sin(latQ);
-  const double coslonQ = mu->cos(lonQ);
-  const double sinlonQ = mu->sin(lonQ);
+  const double coslatP = COS(latP);
+  const double sinlatP = SIN(latP);
+  const double coslonP = COS(lonP);
+  const double sinlonP = SIN(lonP);
+  const double coslatQ = COS(latQ);
+  const double sinlatQ = SIN(latQ);
+  const double coslonQ = COS(lonQ);
+  const double sinlonQ = SIN(lonQ);
   const double pq = (coslatP * sinlonP * coslatQ * sinlonQ +
                      sinlatP * sinlatQ +
                      coslatP * coslonP * coslatQ * coslonQ);

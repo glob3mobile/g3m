@@ -261,13 +261,15 @@ RenderState XPCPointCloud::getRenderState(const G3MRenderContext* rc) {
 void XPCPointCloud::render(const G3MRenderContext* rc,
                            GLState* glState,
                            const Frustum* frustum,
-                           long long nowInMS) {
+                           long long nowInMS,
+                           bool renderDebug) {
   if (_metadata != NULL) {
     const long long renderedCount = _metadata->render(this,
                                                       rc,
                                                       glState,
                                                       frustum,
-                                                      nowInMS);
+                                                      nowInMS,
+                                                      renderDebug);
 
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {

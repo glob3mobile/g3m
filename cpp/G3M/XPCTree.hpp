@@ -34,7 +34,8 @@ public:
                    const G3MRenderContext* rc,
                    GLState* glState,
                    const Frustum* frustum,
-                   long long nowInMS) const;
+                   long long nowInMS,
+                   bool renderDebug) const;
 
   const Sector* getSector() const;
 
