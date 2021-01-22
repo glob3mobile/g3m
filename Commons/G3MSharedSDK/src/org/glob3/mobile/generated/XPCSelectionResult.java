@@ -22,76 +22,67 @@ package org.glob3.mobile.generated;
 
 public class XPCSelectionResult
 {
-  private Sphere _hotArea;
-  private double _minimumSquaredDistanceToRay;
-  private MutableVector3D _bestPoint = new MutableVector3D();
+  private double _nearestSquaredDistance;
+  private MutableVector3D _nearestPoint = new MutableVector3D();
+  private Sphere _selectionSphere;
 
   public final Ray _ray;
 
   public XPCSelectionResult(Ray ray)
   {
      _ray = ray;
-     _hotArea = null;
-     _minimumSquaredDistanceToRay = Double.NaN;
+     _selectionSphere = null;
+     _nearestSquaredDistance = Double.NaN;
   }
 
   public void dispose()
   {
     if (_ray != null)
        _ray.dispose();
-    if (_hotArea != null)
-       _hotArea.dispose();
+    if (_selectionSphere != null)
+       _selectionSphere.dispose();
   }
 
-//  const Ray* getRay() const;
-
-  public final Sphere getHotArea()
+  public final Sphere getSelectionSphere()
   {
-    if (_hotArea == null)
+    if (_selectionSphere == null)
     {
-      _hotArea = new Sphere(_bestPoint.asVector3D(), IMathUtils.instance().sqrt(_minimumSquaredDistanceToRay));
+      _selectionSphere = new Sphere(_nearestPoint.asVector3D(), IMathUtils.instance().sqrt(_nearestSquaredDistance));
     }
-    return _hotArea;
+    return _selectionSphere;
   }
 
-
-  //const Ray* XPCSelectionResult::getRay() const {
-  //  return _ray;
-  //}
-  
   public final void render(G3MRenderContext rc, GLState glState)
   {
     _ray.render(rc, glState, Color.YELLOW, 1);
   
-    getHotArea().render(rc, glState, Color.YELLOW);
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO__ RENDER SELECTED POINT
+    getSelectionSphere().render(rc, glState, Color.YELLOW);
   }
 
   public final boolean isInterestedIn(Sphere area)
   {
-    if ((_minimumSquaredDistanceToRay != _minimumSquaredDistanceToRay))
+    if ((_nearestSquaredDistance != _nearestSquaredDistance))
     {
       return true;
     }
-    if (_hotArea == null)
-    {
-      _hotArea = new Sphere(_bestPoint.asVector3D(), IMathUtils.instance().sqrt(_minimumSquaredDistanceToRay));
-    }
-    return getHotArea().touchesSphere(area);
+  
+    final double squaredDistanceToCenter = _ray.squaredDistanceTo(area._center);
+  
+    return (squaredDistanceToCenter - area.getRadiusSquared()) < _nearestSquaredDistance;
   }
 
-  public final boolean evaluateCantidate(MutableVector3D point)
+  public final boolean evaluateCantidate(MutableVector3D candidate)
   {
-    final double squaredDistanceToRay = _ray.squaredDistanceTo(point);
-    if ((_minimumSquaredDistanceToRay != _minimumSquaredDistanceToRay) || (squaredDistanceToRay < _minimumSquaredDistanceToRay))
+    final double candidateSquaredDistance = _ray.squaredDistanceTo(candidate);
+    if ((_nearestSquaredDistance != _nearestSquaredDistance) || (candidateSquaredDistance < _nearestSquaredDistance))
     {
-      _bestPoint.copyFrom(point);
-      _minimumSquaredDistanceToRay = squaredDistanceToRay;
   
-      if (_hotArea != null)
-         _hotArea.dispose();
-      _hotArea = null;
+      _nearestPoint.copyFrom(candidate);
+      _nearestSquaredDistance = candidateSquaredDistance;
+  
+      if (_selectionSphere != null)
+         _selectionSphere.dispose();
+      _selectionSphere = null;
   
       return true;
     }

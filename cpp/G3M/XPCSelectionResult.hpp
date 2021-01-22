@@ -17,9 +17,9 @@ class Sphere;
 
 class XPCSelectionResult {
 private:
-  mutable Sphere* _hotArea;
-  double _minimumSquaredDistanceToRay;
-  MutableVector3D _bestPoint;
+  double          _nearestSquaredDistance;
+  MutableVector3D _nearestPoint;
+  mutable Sphere* _selectionSphere;
 
 public:
   const Ray* _ray;
@@ -28,9 +28,7 @@ public:
 
   ~XPCSelectionResult();
 
-//  const Ray* getRay() const;
-
-  const Sphere* getHotArea() const;
+  const Sphere* getSelectionSphere() const;
 
   void render(const G3MRenderContext* rc,
               GLState* glState) const;
