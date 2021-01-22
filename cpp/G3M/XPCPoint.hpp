@@ -20,11 +20,11 @@ public:
 
 
   const double _latitudeDegrees;
-  const double _longitueDegrees;
+  const double _longitudeDegrees;
   const double _height;
 
   XPCPoint(const double latitudeDegrees,
-           const double longitueDegrees,
+           const double longitudeDegrees,
            const double height);
 
   ~XPCPoint();

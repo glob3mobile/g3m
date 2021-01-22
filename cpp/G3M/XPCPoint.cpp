@@ -14,19 +14,19 @@ XPCPoint* XPCPoint::fromByteBufferIterator(ByteBufferIterator& it,
                                            const float centerLatitudeDegrees,
                                            const float centerLongitudeDegrees,
                                            const float centerHeight) {
-  const double latitudeDegrees = (double) it.nextFloat() + centerLatitudeDegrees;
-  const double longitueDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
-  const double height          = (double) it.nextFloat() + centerHeight;
+  const double latitudeDegrees  = (double) it.nextFloat() + centerLatitudeDegrees;
+  const double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
+  const double height           = (double) it.nextFloat() + centerHeight;
 
-  return new XPCPoint(latitudeDegrees, longitueDegrees, height);
+  return new XPCPoint(latitudeDegrees, longitudeDegrees, height);
 }
 
 
 XPCPoint::XPCPoint(const double latitudeDegrees,
-                   const double longitueDegrees,
+                   const double longitudeDegrees,
                    const double height) :
 _latitudeDegrees(latitudeDegrees),
-_longitueDegrees(longitueDegrees),
+_longitudeDegrees(longitudeDegrees),
 _height(height)
 {
 

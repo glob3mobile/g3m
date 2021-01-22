@@ -16,6 +16,7 @@ class G3MRenderContext;
 class GLState;
 class Frustum;
 class Sector;
+class Ray;
 
 
 class XPCTree {
@@ -30,6 +31,8 @@ public:
 
   ~XPCTree();
 
+  const Sector* getSector() const;
+
   long long render(const XPCPointCloud* pointCloud,
                    const G3MRenderContext* rc,
                    GLState* glState,
@@ -37,9 +40,8 @@ public:
                    long long nowInMS,
                    bool renderDebug) const;
 
-  const Sector* getSector() const;
+  const bool touchesRay(const Ray& ray) const;
 
 };
 
 #endif
-

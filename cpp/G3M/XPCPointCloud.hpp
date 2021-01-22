@@ -23,6 +23,7 @@ class XPCMetadata;
 class IDownloader;
 class IBufferDownloadListener;
 class IIntBuffer;
+class Ray;
 
 
 class XPCPointCloud : public RCObject {
@@ -125,6 +126,8 @@ public:
   XPCPointColorizer* getPointsColorizer() const {
     return _pointColorizer;
   }
+
+  const bool touchesRay(const Ray& ray) const;
 
 };
 

@@ -165,7 +165,7 @@ public:
     for (int i = 0; i < pointsSize; i++) {
       XPCPoint* point = _points->at(i);
       vertices->addDegrees(point->_latitudeDegrees,
-                           point->_longitueDegrees,
+                           point->_longitudeDegrees,
                            (point->_height + deltaHeight) * verticalExaggeration);
 
       if (pointsColorizer != NULL) {
@@ -481,12 +481,9 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
   return renderedCount;
 }
 
-//void XPCNode::cancelTasks() {
-//  if (_featuresTask != NULL) {
-//    _featuresTask->cancel();
-//    _featuresTask = NULL;
-//  }
-//}
+const bool XPCNode::touchesRay(const Ray& ray) const {
+  return (_bounds != NULL) && _bounds->touchesRay(ray);
+}
 
 void XPCNode::cancelLoadContent() {
   if (_contentRequestID != -1) {
@@ -526,7 +523,6 @@ void XPCNode::unloadChildren() {
 }
 
 void XPCNode::unload() {
-//  cancelTasks();
   _canceled = true;
 
   if (_loadingContent) {

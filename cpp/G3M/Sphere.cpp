@@ -13,6 +13,8 @@
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "G3MRenderContext.hpp"
+#include "Ray.hpp"
+#include "Ellipsoid.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
@@ -261,15 +263,7 @@ bool Sphere::fullContainedInBox(const Box* that) const {
 
 
 bool Sphere::fullContainedInSphere(const Sphere* that) const {
-  //  const double d = _center.distanceTo(that->_center);
-  //  return (d + _radius <= that->_radius);
-
   if (_radius <= that->_radius) {
-    //    const double squaredDistance    = _center.squaredDistanceTo(that->_center);
-    //    const double squaredDeltaRadius = IMathUtils::instance()->squared(that->_radius - _radius);
-    //    if (squaredDeltaRadius >= squaredDistance) {
-    //      return true;
-    //    }
     const double distance    = _center.distanceTo(that->_center);
     const double deltaRadius = that->_radius - _radius;
     if (deltaRadius >= distance) {
@@ -286,4 +280,24 @@ Sphere* Sphere::createSphere() const {
 
 Sphere* Sphere::copy() const {
   return new Sphere(*this);
+}
+
+
+const bool Sphere::touchesRay(const Ray& ray) const {
+  // from Real-Time Collision Detection - Christer Ericson
+  //   page 178
+
+  const Vector3D m = ray._origin.sub(_center);
+
+  const double b = m.dot(ray._direction);
+  const double c = m.dot(m) - _radiusSquared;
+
+  // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
+  if ((c > 0.0) && (b > 0.0)) {
+    return false;
+  }
+
+  const double discr = (b * b) - c;
+  // A negative discriminant corresponds to ray missing sphere
+  return (discr >= 0.0);
 }

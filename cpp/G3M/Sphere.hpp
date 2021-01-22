@@ -16,6 +16,7 @@
 #include "Vector3D.hpp"
 
 class Mesh;
+class Ray;
 
 
 class Sphere : public BoundingVolume {
@@ -106,7 +107,8 @@ public:
   Sphere* createSphere() const;
   
   Sphere* copy() const;
-  
+
+  const bool touchesRay(const Ray& ray) const;
   
 };
 

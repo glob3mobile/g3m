@@ -20,6 +20,7 @@
 #include "IDownloader.hpp"
 #include "TouchEvent.hpp"
 #include "G3MEventContext.hpp"
+#include "Ray.hpp"
 
 
 XPCRenderer::XPCRenderer() :
@@ -178,7 +179,6 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
   _renderDebug = false;
 
   if (_cloudsSize > 0) {
-
     if (_lastCamera != NULL) {
       if ((touchEvent->getTouchCount() == 1) &&
           (touchEvent->getTapCount()   == 1) &&
@@ -188,17 +188,21 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
         const Vector3D rayDirection = _lastCamera->pixel2Ray(touchedPixel);
 
         if (!rayDirection.isNan()) {
-          _renderDebug = true;
+//          _renderDebug = true;
 
           const Vector3D rayOrigin = _lastCamera->getCartesianPosition();
+
+          const Ray ray = Ray(rayOrigin,
+                              rayDirection);
 
           //const Planet* planet = ec->getPlanet();
 
           for (int i = 0; i < _cloudsSize; i++) {
             XPCPointCloud* cloud = _clouds[i];
-//            if (cloud->touchesRay(rayOrigin, rayDirection)) {
-//              _renderDebug = true;
-//            }
+            if (cloud->touchesRay(ray)) {
+              _renderDebug = true;
+              return true;
+            }
           }
 
 //          std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);

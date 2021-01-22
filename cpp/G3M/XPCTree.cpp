@@ -24,6 +24,11 @@ XPCTree::~XPCTree() {
 }
 
 
+const Sector* XPCTree::getSector() const {
+  return _rootNode->getSector();
+}
+
+
 long long XPCTree::render(const XPCPointCloud* pointCloud,
                           const G3MRenderContext* rc,
                           GLState* glState,
@@ -40,6 +45,7 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                                                      renderDebug);
 }
 
-const Sector* XPCTree::getSector() const {
-  return _rootNode->getSector();
+
+const bool XPCTree::touchesRay(const Ray& ray) const {
+  return (_rootNode != NULL) && _rootNode->touchesRay(ray);
 }

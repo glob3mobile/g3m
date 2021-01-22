@@ -134,3 +134,13 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
 
   return renderedCount;
 }
+
+const bool XPCMetadata::touchesRay(const Ray& ray) const {
+  for (size_t i = 0; i < _treesSize; i++) {
+    const XPCTree* tree = _trees->at(i);
+    if (tree->touchesRay(ray)) {
+      return true;
+    }
+  }
+  return false;
+}

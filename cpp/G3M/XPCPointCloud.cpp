@@ -258,34 +258,6 @@ RenderState XPCPointCloud::getRenderState(const G3MRenderContext* rc) {
   return RenderState::ready();
 }
 
-void XPCPointCloud::render(const G3MRenderContext* rc,
-                           GLState* glState,
-                           const Frustum* frustum,
-                           long long nowInMS,
-                           bool renderDebug) {
-  if (_metadata != NULL) {
-    const long long renderedCount = _metadata->render(this,
-                                                      rc,
-                                                      glState,
-                                                      frustum,
-                                                      nowInMS,
-                                                      renderDebug);
-
-    if (_lastRenderedCount != renderedCount) {
-      if (_verbose) {
-#ifdef C_CODE
-        ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);
-#endif
-#ifdef JAVA_CODE
-        ILogger.instance().logInfo("\"%s\": Rendered %d points", _cloudName, renderedCount);
-#endif
-      }
-      _lastRenderedCount = renderedCount;
-    }
-  }
-}
-
-
 const IIntBuffer* XPCPointCloud::getRequiredDimensionIndices() const {
   return _requiredDimensionIndices;
 }
@@ -321,4 +293,35 @@ long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
                                    _readExpired,
                                    listener,
                                    deleteListener);
+}
+
+void XPCPointCloud::render(const G3MRenderContext* rc,
+                           GLState* glState,
+                           const Frustum* frustum,
+                           long long nowInMS,
+                           bool renderDebug) {
+  if (_metadata != NULL) {
+    const long long renderedCount = _metadata->render(this,
+                                                      rc,
+                                                      glState,
+                                                      frustum,
+                                                      nowInMS,
+                                                      renderDebug);
+
+    if (_lastRenderedCount != renderedCount) {
+      if (_verbose) {
+#ifdef C_CODE
+        ILogger::instance()->logInfo("\"%s\": Rendered %ld points", _cloudName.c_str(), renderedCount);
+#endif
+#ifdef JAVA_CODE
+        ILogger.instance().logInfo("\"%s\": Rendered %d points", _cloudName, renderedCount);
+#endif
+      }
+      _lastRenderedCount = renderedCount;
+    }
+  }
+}
+
+const bool XPCPointCloud::touchesRay(const Ray& ray) const {
+  return (_metadata != NULL) && _metadata->touchesRay(ray);
 }

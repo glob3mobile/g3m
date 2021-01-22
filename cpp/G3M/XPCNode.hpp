@@ -23,6 +23,7 @@ class IDownloader;
 class ByteBufferIterator;
 class XPCPoint;
 class DirectMesh;
+class Ray;
 
 
 class XPCNode : public RCObject {
@@ -93,6 +94,8 @@ public:
                    const Frustum* frustum,
                    long long nowInMS,
                    bool renderDebug);
+
+  const bool touchesRay(const Ray& ray) const;
 
   const Sector* getSector() const;
 

@@ -277,11 +277,11 @@ std::vector<double> BoxShape::intersectionsDistances(const Planet* planet,
   double t1, t2;
   // transform 6 planes
   MutableMatrix44D* M = createTransformMatrix(planet);
-  const Quadric transformedFront = _frontQuadric.transformBy(*M);
-  const Quadric transformedBack = _backQuadric.transformBy(*M);
-  const Quadric transformedLeft = _leftQuadric.transformBy(*M);
-  const Quadric transformedRight = _rightQuadric.transformBy(*M);
-  const Quadric transformedTop = _topQuadric.transformBy(*M);
+  const Quadric transformedFront  = _frontQuadric.transformBy(*M);
+  const Quadric transformedBack   = _backQuadric.transformBy(*M);
+  const Quadric transformedLeft   = _leftQuadric.transformBy(*M);
+  const Quadric transformedRight  = _rightQuadric.transformBy(*M);
+  const Quadric transformedTop    = _topQuadric.transformBy(*M);
   const Quadric transformedBottom = _bottomQuadric.transformBy(*M);
   delete M;
 
