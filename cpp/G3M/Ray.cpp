@@ -66,7 +66,8 @@ const std::string Ray::description() const {
 
 void Ray::render(const G3MRenderContext* rc,
                  const GLState* parentState,
-                 const Color& color) const {
+                 const Color& color,
+                 float lineWidth) const {
   if (_mesh == NULL) {
     FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithGivenCenter(_origin);
 
@@ -77,7 +78,7 @@ void Ray::render(const G3MRenderContext* rc,
                            true,
                            vertices->getCenter(),
                            vertices->create(),
-                           2,
+                           lineWidth,
                            1,
                            new Color(color),
                            NULL, // const IFloatBuffer* colors

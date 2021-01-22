@@ -40,7 +40,8 @@ public:
 
   void render(const G3MRenderContext* rc,
               const GLState* parentState,
-              const Color& color) const;
+              const Color& color,
+              float lineWidth) const;
 
   const std::string description() const;
 #ifdef JAVA_CODE

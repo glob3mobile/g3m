@@ -46,7 +46,7 @@ public abstract class AbstractGeometryMesh extends Mesh
   protected BoundingVolume _extent;
   protected final BoundingVolume computeBoundingVolume()
   {
-    final int vertexCount = getVertexCount();
+    final int vertexCount = getVerticesCount();
   
     if (vertexCount == 0)
     {
@@ -161,7 +161,7 @@ public abstract class AbstractGeometryMesh extends Mesh
     return _extent;
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
     return _vertices.size() / 3;
   }

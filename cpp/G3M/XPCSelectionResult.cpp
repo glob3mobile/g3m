@@ -30,7 +30,7 @@ XPCSelectionResult::~XPCSelectionResult() {
 
 void XPCSelectionResult::render(const G3MRenderContext* rc,
                                 GLState* glState) const {
-//  _ray->render(rc, glState, Color::YELLOW);
+  _ray->render(rc, glState, Color::YELLOW, 1);
 
   getHotArea()->render(rc, glState, Color::YELLOW);
 #warning TODO__ RENDER SELECTED POINT

@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 //class ByteBufferIterator;
 //class XPCPoint;
 //class DirectMesh;
-//class Ray;
+//class XPCSelectionResult;
 
 
 public class XPCNode extends RCObject
@@ -247,104 +247,6 @@ public class XPCNode extends RCObject
     return new XPCNode(nodeID, sector, minHeight, maxHeight);
   }
 
-  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, Ray selectionRay)
-  {
-  
-    long renderedCount = 0;
-  
-    boolean renderedInThisFrame = false;
-  
-    final Sphere bounds = getBounds(rc, pointCloud);
-    if (bounds != null)
-    {
-      final boolean isVisible = bounds.touchesFrustum(frustum);
-      if (isVisible)
-      {
-  
-        if (renderDebug)
-        {
-          bounds.render(rc, glState, Color.WHITE);
-        }
-  
-        if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS))
-        {
-          final double projectedArea = bounds.projectedArea(rc);
-          _projectedArea = projectedArea;
-          _projectedAreaTS = nowInMS;
-        }
-  
-        final boolean isBigEnough = (_projectedArea >= pointCloud.getMinProjectedArea());
-        if (isBigEnough)
-        {
-          renderedInThisFrame = true;
-  
-  //        if (selectionRay != NULL) {
-  //          if (touchesRay(selectionRay)) {
-  //            bounds->render(rc, glState, Color::YELLOW);
-  //          }
-  //        }
-  
-  //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
-  
-          if (_loadedContent)
-          {
-            if (_mesh != null)
-            {
-              if (selectionRay == null)
-              {
-                _mesh.render(rc, glState);
-                renderedCount += _mesh.getRenderVerticesCount();
-              }
-              else
-              {
-                if (touchesRay(selectionRay))
-                {
-                  _mesh.render(rc, glState);
-                  renderedCount += _mesh.getRenderVerticesCount();
-                }
-              }
-            }
-          }
-          else
-          {
-            if (!_loadingContent)
-            {
-              _canceled = false;
-              _loadingContent = true;
-              loadContent(pointCloud, treeID, rc);
-            }
-          }
-  
-          if (_children != null)
-          {
-            for (int i = 0; i < _childrenSize; i++)
-            {
-              XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, treeID, rc, glState, frustum, nowInMS, renderDebug, selectionRay);
-            }
-          }
-  
-        }
-      }
-    }
-  
-    if (_renderedInPreviousFrame != renderedInThisFrame)
-    {
-      if (_renderedInPreviousFrame)
-      {
-        unload();
-      }
-      _renderedInPreviousFrame = renderedInThisFrame;
-    }
-  
-    return renderedCount;
-  }
-
-  public final boolean touchesRay(Ray ray)
-  {
-    return (_bounds != null) && _bounds.touchesRay(ray);
-  }
-
   public final Sector getSector()
   {
     return _sector;
@@ -390,6 +292,146 @@ public class XPCNode extends RCObject
   public final boolean isCanceled()
   {
     return _canceled;
+  }
+
+
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
+  {
+  
+    long renderedCount = 0;
+  
+    boolean renderedInThisFrame = false;
+  
+    final Sphere bounds = getBounds(rc, pointCloud);
+    if (bounds != null)
+    {
+      final boolean isVisible = bounds.touchesFrustum(frustum);
+      if (isVisible)
+      {
+  
+        if (renderDebug)
+        {
+          bounds.render(rc, glState, Color.WHITE);
+        }
+  
+        if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS))
+        {
+          final double projectedArea = bounds.projectedArea(rc);
+          _projectedArea = projectedArea;
+          _projectedAreaTS = nowInMS;
+        }
+  
+        final boolean isBigEnough = (_projectedArea >= pointCloud.getMinProjectedArea());
+        if (isBigEnough)
+        {
+          renderedInThisFrame = true;
+  
+          //        if (selectionRay != NULL) {
+          //          if (touchesRay(selectionRay)) {
+          //            bounds->render(rc, glState, Color::YELLOW);
+          //          }
+          //        }
+  
+          //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
+  
+          if (_loadedContent)
+          {
+            if (_mesh != null)
+            {
+  //            if (selectionResult == NULL) {
+                _mesh.render(rc, glState);
+                renderedCount += _mesh.getRenderVerticesCount();
+  //            }
+  //            else {
+  //              if (_bounds->touchesRay(selectionResult->_ray)) {
+  //                _mesh->render(rc, glState);
+  //                renderedCount += _mesh->getRenderVerticesCount();
+  //              }
+  //            }
+            }
+          }
+          else
+          {
+            if (!_loadingContent)
+            {
+              _canceled = false;
+              _loadingContent = true;
+              loadContent(pointCloud, treeID, rc);
+            }
+          }
+  
+          if (_children != null)
+          {
+            for (int i = 0; i < _childrenSize; i++)
+            {
+              XPCNode child = _children.get(i);
+              renderedCount += child.render(pointCloud, treeID, rc, glState, frustum, nowInMS, renderDebug, selectionResult);
+            }
+          }
+  
+        }
+      }
+    }
+  
+    if (_renderedInPreviousFrame != renderedInThisFrame)
+    {
+      if (_renderedInPreviousFrame)
+      {
+        unload();
+      }
+      _renderedInPreviousFrame = renderedInThisFrame;
+    }
+  
+    return renderedCount;
+  }
+
+  public final boolean selectPoints(XPCSelectionResult selectionResult)
+  {
+    if (_bounds == null)
+    {
+      return false;
+    }
+  
+    if (!_bounds.touchesRay(selectionResult._ray))
+    {
+      return false;
+    }
+  
+    if (!selectionResult.isInterestedIn(_bounds))
+    {
+      return false;
+    }
+  
+    boolean selectedPoint = false;
+  
+    if (_mesh != null)
+    {
+      final int verticesCount = _mesh.getVerticesCount();
+  
+      MutableVector3D vertex = new MutableVector3D();
+      for (int i = 0; i < verticesCount; i++)
+      {
+        _mesh.getVertex(i, vertex);
+        if (selectionResult.evaluateCantidate(vertex))
+        {
+          selectedPoint = true;
+        }
+      }
+    }
+  
+    if (_children != null)
+    {
+      for (int i = 0; i < _childrenSize; i++)
+      {
+        XPCNode child = _children.get(i);
+        if (child.selectPoints(selectionResult))
+        {
+          selectedPoint = true;
+        }
+      }
+    }
+  
+    return selectedPoint;
   }
 
 }

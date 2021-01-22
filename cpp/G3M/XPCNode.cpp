@@ -574,16 +574,16 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
         if (_loadedContent) {
           if (_mesh != NULL) {
-            if (selectionResult == NULL) {
+//            if (selectionResult == NULL) {
               _mesh->render(rc, glState);
               renderedCount += _mesh->getRenderVerticesCount();
-            }
-            else {
-              if (_bounds->touchesRay(selectionResult->_ray)) {
-                _mesh->render(rc, glState);
-                renderedCount += _mesh->getRenderVerticesCount();
-              }
-            }
+//            }
+//            else {
+//              if (_bounds->touchesRay(selectionResult->_ray)) {
+//                _mesh->render(rc, glState);
+//                renderedCount += _mesh->getRenderVerticesCount();
+//              }
+//            }
           }
         }
         else {

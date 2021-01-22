@@ -70,9 +70,9 @@ public class FlatColorMesh extends Mesh
     return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
-    return _mesh.getVertexCount();
+    return _mesh.getVerticesCount();
   }
 
   public final Vector3D getVertex(int index)

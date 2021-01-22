@@ -85,7 +85,7 @@ public abstract class Mesh
     }
   }
 
-  public abstract int getVertexCount();
+  public abstract int getVerticesCount();
 
   public abstract Vector3D getVertex(int index);
 

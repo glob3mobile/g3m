@@ -60,7 +60,7 @@ public class SGMesh extends TransformableMesh
     super.dispose();
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
     throw new RuntimeException("Can't implement");
   }

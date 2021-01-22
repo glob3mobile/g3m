@@ -51,7 +51,7 @@ public abstract class AbstractMesh extends TransformableMesh
       return null;
     }
   
-    final int vertexCount = getVertexCount();
+    final int vertexCount = getVerticesCount();
   
     if (vertexCount == 0)
     {
@@ -197,7 +197,7 @@ public abstract class AbstractMesh extends TransformableMesh
     return _boundingVolume;
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
     return _vertices.size() / 3;
   }

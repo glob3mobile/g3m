@@ -103,9 +103,9 @@ public class LeveledTexturedMesh extends Mesh
     super.dispose();
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
-    return _mesh.getVertexCount();
+    return _mesh.getVerticesCount();
   }
 
   public final Vector3D getVertex(int index)

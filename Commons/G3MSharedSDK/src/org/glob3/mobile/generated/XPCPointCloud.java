@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class IBufferDownloadListener;
 //class IIntBuffer;
-//class Ray;
+//class XPCSelectionResult;
 
 
 public class XPCPointCloud extends RCObject
@@ -172,11 +172,11 @@ public class XPCPointCloud extends RCObject
     return RenderState.ready();
   }
 
-  public final void render(G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, Ray selectionRay)
+  public final void render(G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
   {
     if (_metadata != null)
     {
-      final long renderedCount = _metadata.render(this, rc, glState, frustum, nowInMS, renderDebug, selectionRay);
+      final long renderedCount = _metadata.render(this, rc, glState, frustum, nowInMS, renderDebug, selectionResult);
   
       if (_lastRenderedCount != renderedCount)
       {
@@ -209,8 +209,8 @@ public class XPCPointCloud extends RCObject
   
     if (_metadata != metadata)
     {
-        if (_metadata != null)
-           _metadata.dispose();
+      if (_metadata != null)
+         _metadata.dispose();
     }
     _metadata = metadata;
   
@@ -277,9 +277,9 @@ public class XPCPointCloud extends RCObject
     return _pointColorizer;
   }
 
-  public final boolean touchesRay(Ray ray)
+  public final boolean selectPoints(XPCSelectionResult selectionResult)
   {
-    return (_metadata != null) && _metadata.touchesRay(ray);
+    return ((_metadata != null) && _metadata.selectPoints(selectionResult));
   }
 
 }

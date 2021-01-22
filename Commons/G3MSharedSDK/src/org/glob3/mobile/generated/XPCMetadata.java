@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class XPCDimension;
 //class XPCTree;
-//class Ray;
+//class XPCSelectionResult;
 
 
 public class XPCMetadata
@@ -99,7 +99,7 @@ public class XPCMetadata
     }
   }
 
-  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, Ray selectionRay)
+  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
   {
   
     long renderedCount = 0;
@@ -108,23 +108,24 @@ public class XPCMetadata
     {
       final XPCTree tree = _trees.get(i);
   
-      renderedCount += tree.render(pointCloud, rc, glState, frustum, nowInMS, renderDebug, selectionRay);
+      renderedCount += tree.render(pointCloud, rc, glState, frustum, nowInMS, renderDebug, selectionResult);
     }
   
     return renderedCount;
   }
 
-  public final boolean touchesRay(Ray ray)
+  public final boolean selectPoints(XPCSelectionResult selectionResult)
   {
+    boolean selectedPoints = false;
     for (int i = 0; i < _treesSize; i++)
     {
       final XPCTree tree = _trees.get(i);
-      if (tree.touchesRay(ray))
+      if (tree.selectPoints(selectionResult))
       {
-        return true;
+        selectedPoints = true;
       }
     }
-    return false;
+    return selectedPoints;
   }
 
   public final int getTreesCount()

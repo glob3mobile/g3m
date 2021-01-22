@@ -46,14 +46,23 @@ public class Ray
 
   public final double distanceTo(Vector3D point)
   {
-    return _direction.cross(point.sub(_origin)).length();
+    return _direction.cross(point._x - _origin._x, point._y - _origin._y, point._z - _origin._z).length();
   }
   public final double squaredDistanceTo(Vector3D point)
   {
-    return _direction.cross(point.sub(_origin)).squaredLength();
+    return _direction.cross(point._x - _origin._x, point._y - _origin._y, point._z - _origin._z).squaredLength();
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, Color color)
+  public final double distanceTo(MutableVector3D point)
+  {
+    return _direction.cross(point._x - _origin._x, point._y - _origin._y, point._z - _origin._z).length();
+  }
+  public final double squaredDistanceTo(MutableVector3D point)
+  {
+    return _direction.cross(point._x - _origin._x, point._y - _origin._y, point._z - _origin._z).squaredLength();
+  }
+
+  public final void render(G3MRenderContext rc, GLState parentState, Color color, float lineWidth)
   {
     if (_mesh == null)
     {
@@ -62,7 +71,7 @@ public class Ray
       vertices.add(_origin);
       vertices.add(_origin.add(_direction.times(100000)));
   
-      _mesh = new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), 2, 1, new Color(color), null, true); // bool depthTest -  const IFloatBuffer* colors
+      _mesh = new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(color), null, true); // bool depthTest -  const IFloatBuffer* colors
   
       if (vertices != null)
          vertices.dispose();
