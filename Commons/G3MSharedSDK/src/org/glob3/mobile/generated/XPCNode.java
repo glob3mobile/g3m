@@ -35,8 +35,8 @@ public class XPCNode extends RCObject
 
   private final Sector _sector;
 
-  private final double _minZ;
-  private final double _maxZ;
+  private final double _minHeight;
+  private final double _maxHeight;
 
   private java.util.ArrayList<XPCNode> _children;
   private int _childrenSize;
@@ -62,16 +62,16 @@ public class XPCNode extends RCObject
     final float verticalExaggeration = pointCloud.getVerticalExaggeration();
   
     java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(10);
-    points.add( planet.toCartesian( _sector.getNE()     , (_minZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getNE()     , (_maxZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getNW()     , (_minZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getNW()     , (_maxZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getSE()     , (_minZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getSE()     , (_maxZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getSW()     , (_minZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getSW()     , (_maxZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getCenter() , (_minZ + deltaHeight) * verticalExaggeration ) );
-    points.add( planet.toCartesian( _sector.getCenter() , (_maxZ + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getNE()     , (_minHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getNE()     , (_maxHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getNW()     , (_minHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getNW()     , (_maxHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getSE()     , (_minHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getSE()     , (_maxHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getSW()     , (_minHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getSW()     , (_maxHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getCenter() , (_minHeight + deltaHeight) * verticalExaggeration ) );
+    points.add( planet.toCartesian( _sector.getCenter() , (_maxHeight + deltaHeight) * verticalExaggeration ) );
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: check if the sphere fits into the parent's one
@@ -178,12 +178,12 @@ public class XPCNode extends RCObject
   }
 
 
-  private XPCNode(String id, Sector sector, double minZ, double maxZ)
+  private XPCNode(String id, Sector sector, double minHeight, double maxHeight)
   {
      _id = id;
      _sector = sector;
-     _minZ = minZ;
-     _maxZ = maxZ;
+     _minHeight = minHeight;
+     _maxHeight = maxHeight;
      _bounds = null;
      _renderedInPreviousFrame = false;
      _projectedArea = -1;
@@ -249,14 +249,13 @@ public class XPCNode extends RCObject
   
     final Sector sector = Sector.newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees, upperLatitudeDegrees, upperLongitudeDegrees);
   
-    final double minZ = it.nextDouble();
-    final double maxZ = it.nextDouble();
+    final double minHeight = it.nextDouble();
+    final double maxHeight = it.nextDouble();
   
-    return new XPCNode(nodeID, sector, minZ, maxZ);
+    return new XPCNode(nodeID, sector, minHeight, maxHeight);
   }
 
-
-  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS)
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug)
   {
   
     long renderedCount = 0;
@@ -269,6 +268,12 @@ public class XPCNode extends RCObject
       final boolean isVisible = bounds.touchesFrustum(frustum);
       if (isVisible)
       {
+  
+        if (renderDebug)
+        {
+          bounds.render(rc, glState, Color.WHITE);
+        }
+  
         if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS))
         {
           final double projectedArea = bounds.projectedArea(rc);
@@ -282,8 +287,6 @@ public class XPCNode extends RCObject
           renderedInThisFrame = true;
   
   //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
-  
-          // bounds->render(rc, glState, Color::blue());
   
           if (_loadedContent)
           {
@@ -308,7 +311,7 @@ public class XPCNode extends RCObject
             for (int i = 0; i < _childrenSize; i++)
             {
               XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, treeID, rc, glState, frustum, nowInMS);
+              renderedCount += child.render(pointCloud, treeID, rc, glState, frustum, nowInMS, renderDebug);
             }
           }
   

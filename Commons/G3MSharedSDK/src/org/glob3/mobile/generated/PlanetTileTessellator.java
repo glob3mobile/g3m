@@ -387,9 +387,6 @@ public class PlanetTileTessellator extends TileTessellator
       return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), prc._verticalExaggeration, Geodetic3D.zero(), -11000, 9000, 15); // pointSize -  maxElevation -  minElevation -  offset
     }
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DIEGO AT WORK!
-  
     final Sector tileSector = tile._sector;
     final Sector meshSector = getRenderedSectorForTile(tile);
     final Vector2S meshResolution = calculateResolution(prc, tile, meshSector);

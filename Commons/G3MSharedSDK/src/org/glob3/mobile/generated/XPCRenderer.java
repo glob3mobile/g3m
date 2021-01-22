@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 //class TimeInterval;
 //class XPCPointColorizer;
 //class XPCMetadataListener;
+//class Camera;
 
 
 public class XPCRenderer extends DefaultRenderer
@@ -33,6 +34,9 @@ public class XPCRenderer extends DefaultRenderer
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private GLState _glState;
+
+  private Camera _lastCamera;
+  private boolean _renderDebug;
 
 
 
@@ -47,16 +51,13 @@ public class XPCRenderer extends DefaultRenderer
 
 
 
-
-  ///#include "G3MContext.hpp"
-  
-  
-  
   public XPCRenderer()
   {
      _cloudsSize = 0;
      _glState = new GLState();
      _timer = null;
+     _lastCamera = null;
+     _renderDebug = false;
   }
 
   public void dispose()
@@ -129,6 +130,8 @@ public class XPCRenderer extends DefaultRenderer
   {
     if (_cloudsSize > 0)
     {
+      _lastCamera = rc.getCurrentCamera();
+  
       if (_timer == null)
       {
         _timer = rc.getFactory().createTimer();
@@ -152,9 +155,61 @@ public class XPCRenderer extends DefaultRenderer
       for (int i = 0; i < _cloudsSize; i++)
       {
         XPCPointCloud cloud = _clouds.get(i);
-        cloud.render(rc, _glState, frustum, nowInMS);
+        cloud.render(rc, _glState, frustum, nowInMS, _renderDebug);
       }
     }
+  }
+
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  {
+    _renderDebug = false;
+  
+    if (_cloudsSize > 0)
+    {
+  
+      if (_lastCamera != null)
+      {
+        if ((touchEvent.getTouchCount() == 1) && (touchEvent.getTapCount() == 1) && (touchEvent.getType() == TouchEventType.LongPress)) //Down
+        {
+  
+          final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();
+          final Vector3D rayDirection = _lastCamera.pixel2Ray(touchedPixel);
+  
+          if (!rayDirection.isNan())
+          {
+            _renderDebug = true;
+  
+            final Vector3D rayOrigin = _lastCamera.getCartesianPosition();
+  
+            //const Planet* planet = ec->getPlanet();
+  
+            for (int i = 0; i < _cloudsSize; i++)
+            {
+              XPCPointCloud cloud = _clouds.get(i);
+  //            if (cloud->touchesRay(rayOrigin, rayDirection)) {
+  //              _renderDebug = true;
+  //            }
+            }
+  
+  //          std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
+  //
+  //          if (!shapeDistances.empty()) {
+  //            //        printf ("Found %d intersections with shapes:\n",
+  //            //                (int)shapeDistances.size());
+  //            for (int i=0; i<shapeDistances.size(); i++) {
+  //              //            printf ("   %d: shape %x to distance %f\n",
+  //              //                    i+1,
+  //              //                    (unsigned int)shapeDistances[i]._shape,
+  //              //                    shapeDistances[i]._distance);
+  //            }
+  //          }
+          }
+  
+        }
+      }
+    }
+  
+    return false;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

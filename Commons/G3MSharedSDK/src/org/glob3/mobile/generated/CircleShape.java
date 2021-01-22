@@ -27,8 +27,6 @@ public class CircleShape extends AbstractMeshShape
 
   protected final Mesh createMesh(G3MRenderContext rc)
   {
-    final IMathUtils mu = IMathUtils.instance();
-  
     FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
   
     // first is the center
@@ -39,8 +37,8 @@ public class CircleShape extends AbstractMeshShape
     for (int i = 0; i <= _steps; i++)
     {
       final double angleInRadians = i * twicePi / _steps;
-      final double x = _radius * mu.cos(angleInRadians);
-      final double y = _radius * mu.sin(angleInRadians);
+      final double x = _radius * Math.cos(angleInRadians);
+      final double y = _radius * Math.sin(angleInRadians);
       vertices.add(x, y, 0);
     }
   

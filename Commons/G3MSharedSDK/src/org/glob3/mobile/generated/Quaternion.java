@@ -98,8 +98,8 @@ public class Quaternion
     final double sinHalfTheta = mu.sqrt(1.0 - (cosHalftheta * cosHalftheta));
     final double halfTheta = mu.acos(cosHalftheta);
   
-    final double ratioA = mu.sin((1 - t) * halfTheta) / sinHalfTheta;
-    final double ratioB = mu.sin(t * halfTheta) / sinHalfTheta;
+    final double ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta;
+    final double ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
   
     final double w = (_w * ratioA) + (tempW * ratioB);
     final double x = (_x * ratioA) + (tempX * ratioB);

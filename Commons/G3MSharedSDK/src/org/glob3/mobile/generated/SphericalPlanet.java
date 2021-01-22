@@ -101,16 +101,16 @@ public class SphericalPlanet extends Planet
     java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
     // By laborious algebraic manipulation....
-    final double a = directionX * directionX + directionY * directionY + directionZ * directionZ;
+    final double a = (directionX * directionX) + (directionY * directionY) + (directionZ * directionZ);
   
-    final double b = 2.0 * (originX * directionX + originY * directionY + originZ * directionZ);
+    final double b = 2.0 * ((originX * directionX) + (originY * directionY) + (originZ * directionZ));
   
-    final double c = originX * originX + originY * originY + originZ * originZ - _sphere._radiusSquared;
+    final double c = ((originX * originX) + (originY * originY) + (originZ * originZ)) - _sphere._radiusSquared;
   
     // Solve the quadratic equation: ax^2 + bx + c = 0.
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
     // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-    final double discriminant = b * b - 4 * a * c;
+    final double discriminant = (b * b) - (4 * a * c);
     if (discriminant < 0.0)
     {
       // no intersections
@@ -119,14 +119,13 @@ public class SphericalPlanet extends Planet
     else if (discriminant == 0.0)
     {
       // one intersection at a tangent point
-      //return new double[1] { -0.5 * b / a };
-      intersections.add(-0.5 * b / a);
+      intersections.add((-0.5 * b) / a);
       return intersections;
     }
   
     final double rootDiscriminant = IMathUtils.instance().sqrt(discriminant);
-    final double root1 = (-b + rootDiscriminant) / (2 *a);
-    final double root2 = (-b - rootDiscriminant) / (2 *a);
+    final double root1 = (-b + rootDiscriminant) / (2 * a);
+    final double root2 = (-b - rootDiscriminant) / (2 * a);
   
     // Two intersections - return the smallest first.
     if (root1 < root2)
@@ -269,14 +268,14 @@ public class SphericalPlanet extends Planet
     final double lonP = g2._longitude._radians;
     final double latQ = g1._latitude._radians;
     final double lonQ = g1._longitude._radians;
-    final double coslatP = mu.cos(latP);
-    final double sinlatP = mu.sin(latP);
-    final double coslonP = mu.cos(lonP);
-    final double sinlonP = mu.sin(lonP);
-    final double coslatQ = mu.cos(latQ);
-    final double sinlatQ = mu.sin(latQ);
-    final double coslonQ = mu.cos(lonQ);
-    final double sinlonQ = mu.sin(lonQ);
+    final double coslatP = Math.cos(latP);
+    final double sinlatP = Math.sin(latP);
+    final double coslonP = Math.cos(lonP);
+    final double sinlonP = Math.sin(lonP);
+    final double coslatQ = Math.cos(latQ);
+    final double sinlatQ = Math.sin(latQ);
+    final double coslonQ = Math.cos(lonQ);
+    final double sinlonQ = Math.sin(lonQ);
     final double pq = (coslatP * sinlonP * coslatQ * sinlonQ + sinlatP * sinlatQ + coslatP * coslonP * coslatQ * coslonQ);
     return mu.acos(pq) * R;
   }

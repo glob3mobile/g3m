@@ -80,13 +80,11 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
     final int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
     final float outerRadius = minSize / 15.0f;
   
-    final IMathUtils mu = IMathUtils.instance();
-  
     for (int step = 0; step <= numStrides; step++)
     {
       final double angle = (double) step * 2 * DefineConstants.PI / numStrides;
-      final double c = mu.cos(angle);
-      final double s = mu.sin(angle);
+      final double c = Math.cos(angle);
+      final double s = Math.sin(angle);
   
       vertices.add((innerRadius * c), (innerRadius * s), 0);
       vertices.add((outerRadius * c), (outerRadius * s), 0);

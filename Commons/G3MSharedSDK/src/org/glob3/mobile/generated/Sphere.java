@@ -34,7 +34,6 @@ public class Sphere extends BoundingVolume
   
   private Mesh createWireframeMesh(Color color, short resolution)
   {
-    final IMathUtils mu = IMathUtils.instance();
     final double delta = DefineConstants.PI / (resolution-1);
   
     // create vertices
@@ -45,10 +44,10 @@ public class Sphere extends BoundingVolume
       for (int j = 0; j<resolution; j++)
       {
         final double latitude = -DefineConstants.PI/2 + j *delta;
-        final double h = mu.cos(latitude);
-        final double x = h * mu.cos(longitude);
-        final double y = h * mu.sin(longitude);
-        final double z = mu.sin(latitude);
+        final double h = Math.cos(latitude);
+        final double x = h * Math.cos(longitude);
+        final double y = h * Math.sin(longitude);
+        final double z = Math.sin(latitude);
         vertices.add(new Vector3D(x,y,z).times(_radius).add(_center));
       }
     }

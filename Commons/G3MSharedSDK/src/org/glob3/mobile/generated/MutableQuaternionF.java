@@ -163,8 +163,8 @@ public class MutableQuaternionF
       final double sinHalfTheta = mu.sqrt(1.0 - (cosHalftheta * cosHalftheta));
       final double halfTheta = mu.acos(cosHalftheta);
   
-      final double ratioA = mu.sin((1 - t) * halfTheta) / sinHalfTheta;
-      final double ratioB = mu.sin(t * halfTheta) / sinHalfTheta;
+      final double ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta;
+      final double ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
   
       output._w = (float)((_w * ratioA) + (_temp._w * ratioB));
       output._x = (float)((_x * ratioA) + (_temp._x * ratioB));

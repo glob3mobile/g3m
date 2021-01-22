@@ -72,7 +72,7 @@ public class Ellipsoid
   {
     return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
   }
- 
+
   public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
     java.util.ArrayList<Double> result = new java.util.ArrayList<Double>();

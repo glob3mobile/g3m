@@ -296,14 +296,14 @@ public class EllipsoidalPlanet extends Planet
     final double lonP = g2._longitude._radians;
     final double latQ = g1._latitude._radians;
     final double lonQ = g1._longitude._radians;
-    final double coslatP = mu.cos(latP);
-    final double sinlatP = mu.sin(latP);
-    final double coslonP = mu.cos(lonP);
-    final double sinlonP = mu.sin(lonP);
-    final double coslatQ = mu.cos(latQ);
-    final double sinlatQ = mu.sin(latQ);
-    final double coslonQ = mu.cos(lonQ);
-    final double sinlonQ = mu.sin(lonQ);
+    final double coslatP = Math.cos(latP);
+    final double sinlatP = Math.sin(latP);
+    final double coslonP = Math.cos(lonP);
+    final double sinlonP = Math.sin(lonP);
+    final double coslatQ = Math.cos(latQ);
+    final double sinlatQ = Math.sin(latQ);
+    final double coslonQ = Math.cos(lonQ);
+    final double sinlonQ = Math.sin(lonQ);
     final double pq = (coslatP * sinlonP * coslatQ * sinlonQ + sinlatP * sinlatQ + coslatP * coslonP * coslatQ * coslonQ);
     return mu.acos(pq) * R;
   }
