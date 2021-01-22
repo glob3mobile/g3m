@@ -40,8 +40,8 @@ public:
     return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
   }
   
-  size_t getVertexCount() const {
-    return _mesh->getVertexCount();
+  size_t getVerticesCount() const {
+    return _mesh->getVerticesCount();
   }
   
   const Vector3D getVertex(const size_t index) const;

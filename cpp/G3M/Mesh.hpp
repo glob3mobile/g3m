@@ -55,7 +55,7 @@ public:
 
   void setUserData(MeshUserData* userData);
 
-  virtual size_t getVertexCount() const = 0;
+  virtual size_t getVerticesCount() const = 0;
 
   virtual const Vector3D getVertex(const size_t index) const = 0;
 

@@ -17,7 +17,7 @@ class GLState;
 class Frustum;
 class XPCDimension;
 class XPCTree;
-class Ray;
+class XPCSelectionResult;
 
 
 class XPCMetadata {
@@ -33,9 +33,9 @@ public:
                    const Frustum* frustum,
                    long long nowInMS,
                    bool renderDebug,
-                   const Ray* selectionRay);
+                   const XPCSelectionResult* selectionResult);
 
-  const bool touchesRay(const Ray* ray) const;
+  const bool selectPoints(XPCSelectionResult* selectionResult) const;
 
   const size_t getTreesCount() const;
   const XPCTree* getTree(const size_t i) const;

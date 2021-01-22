@@ -67,7 +67,7 @@ public:
   
   BoundingVolume* getBoundingVolume() const;
   
-  size_t getVertexCount() const;
+  size_t getVerticesCount() const;
   
   const Vector3D getVertex(const size_t index) const;
   void getVertex(const size_t index,

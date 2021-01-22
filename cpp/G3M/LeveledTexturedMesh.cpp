@@ -107,8 +107,8 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
 #endif
 }
 
-size_t LeveledTexturedMesh::getVertexCount() const {
-  return _mesh->getVertexCount();
+size_t LeveledTexturedMesh::getVerticesCount() const {
+  return _mesh->getVerticesCount();
 }
 
 const Vector3D LeveledTexturedMesh::getVertex(const size_t index) const {

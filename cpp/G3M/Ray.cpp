@@ -13,6 +13,7 @@
 #include "DirectMesh.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "Color.hpp"
+#include "MutableVector3D.hpp"
 
 
 Ray::Ray(const Vector3D& origin,
@@ -28,11 +29,27 @@ Ray::~Ray() {
 }
 
 double Ray::distanceTo(const Vector3D& point) const {
-  return _direction.cross( point.sub(_origin) ).length();
+  return _direction.cross(point._x - _origin._x,
+                          point._y - _origin._y,
+                          point._z - _origin._z).length();
 }
 
 double Ray::squaredDistanceTo(const Vector3D& point) const {
-  return _direction.cross( point.sub(_origin) ).squaredLength();
+  return _direction.cross(point._x - _origin._x,
+                          point._y - _origin._y,
+                          point._z - _origin._z).squaredLength();
+}
+
+double Ray::distanceTo(const MutableVector3D& point) const {
+  return _direction.cross(point._x - _origin._x,
+                          point._y - _origin._y,
+                          point._z - _origin._z).length();
+}
+
+double Ray::squaredDistanceTo(const MutableVector3D& point) const {
+  return _direction.cross(point._x - _origin._x,
+                          point._y - _origin._y,
+                          point._z - _origin._z).squaredLength();
 }
 
 const std::string Ray::description() const {

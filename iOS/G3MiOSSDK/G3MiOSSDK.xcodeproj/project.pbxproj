@@ -905,6 +905,7 @@
 		CF66099E23DF332400795C7F /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CF4027DC1770E7B900D5A80C /* SRWebSocket.m */; };
 		CF66099F23DF332400795C7F /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		CF6609A023DF332400795C7F /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
+		CF8CFCDA25BB11F500326563 /* XPCSelectionResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */; };
 		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
 		CFC54DFE25B9B76300424542 /* XPCIntensityPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54DFC25B9B76300424542 /* XPCIntensityPointColorizer.cpp */; };
 		CFC54E0125B9B8CC00424542 /* XPCIntensityPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54DFD25B9B76300424542 /* XPCIntensityPointColorizer.hpp */; };
@@ -2347,6 +2348,8 @@
 		CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = SQLiteStorage_iOS.hpp; path = Specific/Derived/SQLiteStorage_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF8B21BD15DD345D0068601A /* SQDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQDatabase.h; path = Specific/SQDatabase.h; sourceTree = "<group>"; };
 		CF8B21BE15DD345D0068601A /* SQDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQDatabase.m; path = Specific/SQDatabase.m; sourceTree = "<group>"; };
+		CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCSelectionResult.cpp; sourceTree = "<group>"; };
+		CF8CFCD925BB11F500326563 /* XPCSelectionResult.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCSelectionResult.hpp; sourceTree = "<group>"; };
 		CFA1899815F8D7CA0048BF46 /* FloatBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBuffer_iOS.cpp; path = Specific/Derived/FloatBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CFA1899915F8D7CA0048BF46 /* FloatBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = FloatBuffer_iOS.hpp; path = Specific/Derived/FloatBuffer_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntBuffer_iOS.cpp; path = Specific/Derived/IntBuffer_iOS.cpp; sourceTree = "<group>"; };
@@ -2568,6 +2571,8 @@
 				CF2744FE25B1AF450056304B /* XPCRenderer.hpp */,
 				CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */,
 				CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */,
+				CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */,
+				CF8CFCD925BB11F500326563 /* XPCSelectionResult.hpp */,
 				CF4AD09525B5F574009A1E48 /* XPCTree.cpp */,
 				CF4AD09625B5F574009A1E48 /* XPCTree.hpp */,
 			);
@@ -4025,6 +4030,7 @@
 				CF66097723DF330700795C7F /* BalloonCanvasElement.cpp in Sources */,
 				CF66097823DF330700795C7F /* OLDPointCloudsRenderer.cpp in Sources */,
 				CF66097923DF330700795C7F /* GEOFeatureCollection.cpp in Sources */,
+				CF8CFCDA25BB11F500326563 /* XPCSelectionResult.cpp in Sources */,
 				CF66097A23DF330700795C7F /* BSONParser.cpp in Sources */,
 				CF66097B23DF330700795C7F /* Angle.cpp in Sources */,
 				CF66097C23DF330700795C7F /* DefaultRenderer.cpp in Sources */,

@@ -23,7 +23,7 @@ class IDownloader;
 class ByteBufferIterator;
 class XPCPoint;
 class DirectMesh;
-class Ray;
+class XPCSelectionResult;
 
 
 class XPCNode : public RCObject {
@@ -87,17 +87,6 @@ public:
 
   static XPCNode* fromByteBufferIterator(ByteBufferIterator& it);
 
-  long long render(const XPCPointCloud* pointCloud,
-                   const std::string& treeID,
-                   const G3MRenderContext* rc,
-                   GLState* glState,
-                   const Frustum* frustum,
-                   long long nowInMS,
-                   bool renderDebug,
-                   const Ray* selectionRay);
-
-  const bool touchesRay(const Ray* ray) const;
-
   const Sector* getSector() const;
 
   void errorDownloadingContent();
@@ -107,6 +96,18 @@ public:
                   DirectMesh* mesh);
 
   bool isCanceled() const;
+
+
+  long long render(const XPCPointCloud* pointCloud,
+                   const std::string& treeID,
+                   const G3MRenderContext* rc,
+                   GLState* glState,
+                   const Frustum* frustum,
+                   long long nowInMS,
+                   bool renderDebug,
+                   const XPCSelectionResult* selectionResult);
+
+  const bool selectPoints(XPCSelectionResult* selectionResult) const;
 
 };
 

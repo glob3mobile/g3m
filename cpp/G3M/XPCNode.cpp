@@ -29,6 +29,7 @@
 #include "XPCMetadata.hpp"
 #include "XPCDimension.hpp"
 #include "XPCPointColorizer.hpp"
+#include "XPCSelectionResult.hpp"
 
 
 
@@ -406,101 +407,6 @@ Sphere* XPCNode::calculateBounds(const G3MRenderContext* rc,
   return Sphere::enclosingSphere(points, 0);
 }
 
-
-long long XPCNode::render(const XPCPointCloud* pointCloud,
-                          const std::string& treeID,
-                          const G3MRenderContext* rc,
-                          GLState* glState,
-                          const Frustum* frustum,
-                          long long nowInMS,
-                          bool renderDebug,
-                          const Ray* selectionRay) {
-
-  long long renderedCount = 0;
-
-  bool renderedInThisFrame = false;
-
-  const Sphere* bounds = getBounds(rc, pointCloud);
-  if (bounds != NULL) {
-    const bool isVisible = bounds->touchesFrustum(frustum);
-    if (isVisible) {
-
-      if (renderDebug) {
-        bounds->render(rc, glState, Color::WHITE);
-      }
-
-      if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS)) {
-        const double projectedArea = bounds->projectedArea(rc);
-        _projectedArea   = projectedArea;
-        _projectedAreaTS = nowInMS;
-      }
-
-      const bool isBigEnough = (_projectedArea >= pointCloud->getMinProjectedArea());
-      if (isBigEnough) {
-        renderedInThisFrame = true;
-
-//        if (selectionRay != NULL) {
-//          if (touchesRay(selectionRay)) {
-//            bounds->render(rc, glState, Color::YELLOW);
-//          }
-//        }
-
-//        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
-
-        if (_loadedContent) {
-          if (_mesh != NULL) {
-            if (selectionRay == NULL) {
-              _mesh->render(rc, glState);
-              renderedCount += _mesh->getRenderVerticesCount();
-            }
-            else {
-              if (touchesRay(selectionRay)) {
-                _mesh->render(rc, glState);
-                renderedCount += _mesh->getRenderVerticesCount();
-              }
-            }
-          }
-        }
-        else {
-          if (!_loadingContent) {
-            _canceled = false;
-            _loadingContent = true;
-            loadContent(pointCloud, treeID, rc);
-          }
-        }
-
-        if (_children != NULL) {
-          for (size_t i = 0; i < _childrenSize; i++) {
-            XPCNode* child = _children->at(i);
-            renderedCount += child->render(pointCloud,
-                                           treeID,
-                                           rc,
-                                           glState,
-                                           frustum,
-                                           nowInMS,
-                                           renderDebug,
-                                           selectionRay);
-          }
-        }
-
-      }
-    }
-  }
-
-  if (_renderedInPreviousFrame != renderedInThisFrame) {
-    if (_renderedInPreviousFrame) {
-      unload();
-    }
-    _renderedInPreviousFrame = renderedInThisFrame;
-  }
-
-  return renderedCount;
-}
-
-const bool XPCNode::touchesRay(const Ray* ray) const {
-  return (_bounds != NULL) && _bounds->touchesRay(ray);
-}
-
 void XPCNode::cancelLoadContent() {
   if (_contentRequestID != -1) {
     _downloader->cancelRequest(_contentRequestID);
@@ -624,4 +530,133 @@ void XPCNode::setContent(std::vector<XPCNode*>* children,
 
 bool XPCNode::isCanceled() const {
   return _canceled;
+}
+
+long long XPCNode::render(const XPCPointCloud* pointCloud,
+                          const std::string& treeID,
+                          const G3MRenderContext* rc,
+                          GLState* glState,
+                          const Frustum* frustum,
+                          long long nowInMS,
+                          bool renderDebug,
+                          const XPCSelectionResult* selectionResult) {
+
+  long long renderedCount = 0;
+
+  bool renderedInThisFrame = false;
+
+  const Sphere* bounds = getBounds(rc, pointCloud);
+  if (bounds != NULL) {
+    const bool isVisible = bounds->touchesFrustum(frustum);
+    if (isVisible) {
+
+      if (renderDebug) {
+        bounds->render(rc, glState, Color::WHITE);
+      }
+
+      if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS)) {
+        const double projectedArea = bounds->projectedArea(rc);
+        _projectedArea   = projectedArea;
+        _projectedAreaTS = nowInMS;
+      }
+
+      const bool isBigEnough = (_projectedArea >= pointCloud->getMinProjectedArea());
+      if (isBigEnough) {
+        renderedInThisFrame = true;
+
+        //        if (selectionRay != NULL) {
+        //          if (touchesRay(selectionRay)) {
+        //            bounds->render(rc, glState, Color::YELLOW);
+        //          }
+        //        }
+
+        //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
+
+        if (_loadedContent) {
+          if (_mesh != NULL) {
+            if (selectionResult == NULL) {
+              _mesh->render(rc, glState);
+              renderedCount += _mesh->getRenderVerticesCount();
+            }
+            else {
+              if (_bounds->touchesRay(selectionResult->_ray)) {
+                _mesh->render(rc, glState);
+                renderedCount += _mesh->getRenderVerticesCount();
+              }
+            }
+          }
+        }
+        else {
+          if (!_loadingContent) {
+            _canceled = false;
+            _loadingContent = true;
+            loadContent(pointCloud, treeID, rc);
+          }
+        }
+
+        if (_children != NULL) {
+          for (size_t i = 0; i < _childrenSize; i++) {
+            XPCNode* child = _children->at(i);
+            renderedCount += child->render(pointCloud,
+                                           treeID,
+                                           rc,
+                                           glState,
+                                           frustum,
+                                           nowInMS,
+                                           renderDebug,
+                                           selectionResult);
+          }
+        }
+
+      }
+    }
+  }
+
+  if (_renderedInPreviousFrame != renderedInThisFrame) {
+    if (_renderedInPreviousFrame) {
+      unload();
+    }
+    _renderedInPreviousFrame = renderedInThisFrame;
+  }
+
+  return renderedCount;
+}
+
+const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult) const {
+  if (_bounds == NULL) {
+    return false;
+  }
+
+  if (!_bounds->touchesRay(selectionResult->_ray)) {
+    return false;
+  }
+
+  if (!selectionResult->isInterestedIn(_bounds)) {
+    return false;
+  }
+
+  bool selectedPoint = false;
+
+  if (_mesh != NULL) {
+    const size_t verticesCount = _mesh->getVerticesCount();
+
+    MutableVector3D vertex;
+    for (size_t i = 0; i < verticesCount; i++) {
+      _mesh->getVertex(i, vertex);
+      if ( selectionResult->evaluateCantidate(vertex) ) {
+        selectedPoint = true;
+      }
+    }
+  }
+
+  if (_children != NULL) {
+    for (size_t i = 0; i < _childrenSize; i++) {
+      XPCNode* child = _children->at(i);
+      if (child->selectPoints(selectionResult)) {
+        selectedPoint = true;
+      }
+    }
+  }
+
+  return selectedPoint;
 }

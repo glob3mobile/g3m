@@ -282,25 +282,6 @@ Sphere* Sphere::copy() const {
   return new Sphere(*this);
 }
 
-//const bool Sphere::touchesRay(const Ray* ray) const {
-//  // from Real-Time Collision Detection - Christer Ericson
-//  //   page 178
-//
-//  const Vector3D m = ray->_origin.sub(_center);
-//
-//  const double b = m.dot(ray->_direction);
-//  const double c = m.dot(m) - _radiusSquared;
-//
-//  // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
-//  if ((c > 0.0) && (b > 0.0)) {
-//    return false;
-//  }
-//
-//  const double discr = (b * b) - c;
-//  // A negative discriminant corresponds to ray missing sphere
-//  return (discr >= 0.0);
-//}
-
 const bool Sphere::touchesRay(const Ray* ray) const {
   // from Real-Time Collision Detection - Christer Ericson
   //   page 179
@@ -323,5 +304,3 @@ const bool Sphere::touchesRay(const Ray* ray) const {
   // A negative discriminant corresponds to ray missing sphere
   return (discr >= 0.0);
 }
-
-

@@ -195,7 +195,7 @@ void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
 
 
   if (_metadata != metadata) {
-      delete _metadata;
+    delete _metadata;
   }
   _metadata = metadata;
 
@@ -300,7 +300,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                            const Frustum* frustum,
                            long long nowInMS,
                            bool renderDebug,
-                           const Ray* selectionRay) {
+                           const XPCSelectionResult* selectionResult) {
   if (_metadata != NULL) {
     const long long renderedCount = _metadata->render(this,
                                                       rc,
@@ -308,7 +308,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                                                       frustum,
                                                       nowInMS,
                                                       renderDebug,
-                                                      selectionRay);
+                                                      selectionResult);
 
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {
@@ -324,6 +324,6 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
   }
 }
 
-const bool XPCPointCloud::touchesRay(const Ray* ray) const {
-  return (_metadata != NULL) && _metadata->touchesRay(ray);
+const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) const {
+  return ((_metadata != NULL) && _metadata->selectPoints(selectionResult));
 }

@@ -35,6 +35,9 @@ public:
   double distanceTo(const Vector3D& point) const;
   double squaredDistanceTo(const Vector3D& point) const;
 
+  double distanceTo(const MutableVector3D& point) const;
+  double squaredDistanceTo(const MutableVector3D& point) const;
+
   void render(const G3MRenderContext* rc,
               const GLState* parentState,
               const Color& color) const;

@@ -68,7 +68,7 @@ _culledFace(culledFace)
 }
 
 BoundingVolume* AbstractGeometryMesh::computeBoundingVolume() const {
-  const size_t vertexCount = getVertexCount();
+  const size_t vertexCount = getVerticesCount();
 
   if (vertexCount == 0) {
     return NULL;
@@ -125,7 +125,7 @@ void AbstractGeometryMesh::getVertex(const size_t index,
              _vertices->get(p+2) + _center._z);
 }
 
-size_t AbstractGeometryMesh::getVertexCount() const {
+size_t AbstractGeometryMesh::getVerticesCount() const {
   return _vertices->size() / 3;
 }
 

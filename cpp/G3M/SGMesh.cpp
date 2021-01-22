@@ -45,7 +45,7 @@ BoundingVolume* SGMesh::getBoundingVolume() const {
   return NULL;
 }
 
-size_t SGMesh::getVertexCount() const {
+size_t SGMesh::getVerticesCount() const {
   THROW_EXCEPTION("Can't implement");
 }
 

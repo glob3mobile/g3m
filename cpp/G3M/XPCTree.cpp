@@ -18,16 +18,13 @@ _rootNode(rootNode)
   
 }
 
-
 XPCTree::~XPCTree() {
   _rootNode->_release();
 }
 
-
 const Sector* XPCTree::getSector() const {
   return _rootNode->getSector();
 }
-
 
 long long XPCTree::render(const XPCPointCloud* pointCloud,
                           const G3MRenderContext* rc,
@@ -35,8 +32,7 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                           const Frustum* frustum,
                           long long nowInMS,
                           bool renderDebug,
-                          const Ray* selectionRay) const {
-  
+                          const XPCSelectionResult* selectionResult) const {
   return (_rootNode == NULL) ? 0 : _rootNode->render(pointCloud,
                                                      _id,
                                                      rc,
@@ -44,10 +40,9 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                                                      frustum,
                                                      nowInMS,
                                                      renderDebug,
-                                                     selectionRay);
+                                                     selectionResult);
 }
 
-
-const bool XPCTree::touchesRay(const Ray* ray) const {
-  return (_rootNode != NULL) && _rootNode->touchesRay(ray);
+const bool XPCTree::selectPoints(XPCSelectionResult* selectionResult) const {
+  return (_rootNode != NULL) && _rootNode->selectPoints(selectionResult);
 }

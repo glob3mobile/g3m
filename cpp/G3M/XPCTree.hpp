@@ -16,7 +16,7 @@ class G3MRenderContext;
 class GLState;
 class Frustum;
 class Sector;
-class Ray;
+class XPCSelectionResult;
 
 
 class XPCTree {
@@ -39,9 +39,9 @@ public:
                    const Frustum* frustum,
                    long long nowInMS,
                    bool renderDebug,
-                   const Ray* selectionRay) const;
+                   const XPCSelectionResult* selectionResult) const;
 
-  const bool touchesRay(const Ray* ray) const;
+  const bool selectPoints(XPCSelectionResult* selectionResult) const;
 
 };
 

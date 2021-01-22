@@ -21,6 +21,7 @@
 #include "TouchEvent.hpp"
 #include "G3MEventContext.hpp"
 #include "Ray.hpp"
+#include "XPCSelectionResult.hpp"
 
 
 XPCRenderer::XPCRenderer() :
@@ -29,7 +30,7 @@ _glState(new GLState()),
 _timer(NULL),
 _lastCamera(NULL),
 _renderDebug(false),
-_ray(NULL)
+_selectionResult(NULL)
 {
 }
 
@@ -43,7 +44,7 @@ XPCRenderer::~XPCRenderer() {
   _glState->_release();
   delete _timer;
 
-  delete _ray;
+  delete _selectionResult;
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -171,11 +172,11 @@ void XPCRenderer::render(const G3MRenderContext* rc,
                     frustum,
                     nowInMS,
                     _renderDebug,
-                    _ray);
+                    _selectionResult);
     }
 
-    if (_ray != NULL) {
-      _ray->render(rc, _glState, Color::YELLOW);
+    if (_selectionResult != NULL) {
+      _selectionResult->render(rc, _glState);
     }
   }
 }
@@ -186,10 +187,7 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
 
   if (_cloudsSize > 0) {
     if (_lastCamera != NULL) {
-      if ((touchEvent->getTouchCount() == 1) &&
-          (touchEvent->getTapCount()   == 1) &&
-          (touchEvent->getType()       == LongPress)) {
-
+      if (touchEvent->getType() == LongPress) {
         const Vector2F touchedPixel = touchEvent->getTouch(0)->getPos();
         const Vector3D rayDirection = _lastCamera->pixel2Ray(touchedPixel);
 
@@ -198,40 +196,39 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
 
           const Vector3D rayOrigin = _lastCamera->getCartesianPosition();
 
-          Ray* ray = new Ray(rayOrigin, rayDirection);
+          XPCSelectionResult* selectionResult = new XPCSelectionResult(new Ray(rayOrigin, rayDirection));
 
-          //const Planet* planet = ec->getPlanet();
-
-
-#warning SELECTION (pointCloud, tree, node, pointID)
-#warning     currentXYZ, minimumSquaredDistance
-
-          for (int i = 0; i < _cloudsSize; i++) {
+          bool selectedPoints = false;
+          for (size_t i = 0; i < _cloudsSize; i++) {
             XPCPointCloud* cloud = _clouds[i];
-            if (cloud->touchesRay(ray)) {
-              delete _ray;
-              _ray = ray;
-//              _renderDebug = true;
-              return true;
+            if (cloud->selectPoints(selectionResult)) {
+              selectedPoints = true;
             }
           }
 
-          delete ray;
-        }
+          if (selectedPoints) {
+            delete _selectionResult;
+            _selectionResult = selectionResult;
 
+            return true;
+          }
+
+          delete selectionResult;
+          selectionResult = NULL;
+        }
       }
     }
   }
 
   if (touchEvent->getType() == LongPress) {
-    delete _ray;
-    _ray = NULL;
+    delete _selectionResult;
+    _selectionResult = NULL;
   }
 
-//  if (!_renderDebug) {
-//    delete _ray;
-//    _ray = NULL;
-//  }
+  //  if (!_renderDebug) {
+  //    delete _ray;
+  //    _ray = NULL;
+  //  }
 
   return false;
 }

@@ -27,12 +27,12 @@ CompositeMesh::~CompositeMesh() {
 #endif
 }
 
-size_t CompositeMesh::getVertexCount() const {
+size_t CompositeMesh::getVerticesCount() const {
   size_t result = 0;
   const size_t childrenCount = _children.size();
   for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    result += child->getVertexCount();
+    result += child->getVerticesCount();
   }
   return result;
 }
@@ -54,7 +54,7 @@ const Vector3D CompositeMesh::getVertex(const size_t index) const {
   for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     const size_t childIndex = index - acumIndex;
-    const size_t childSize = child->getVertexCount();
+    const size_t childSize = child->getVerticesCount();
     if (childIndex < childSize) {
       return child->getVertex(childIndex);
     }
@@ -70,7 +70,7 @@ void CompositeMesh::getVertex(const size_t index,
   for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     const size_t childIndex = index - acumIndex;
-    const size_t childSize = child->getVertexCount();
+    const size_t childSize = child->getVerticesCount();
     if (childIndex < childSize) {
       child->getVertex(childIndex, result);
       return;

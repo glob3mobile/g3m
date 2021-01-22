@@ -118,7 +118,7 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                               const Frustum* frustum,
                               long long nowInMS,
                               bool renderDebug,
-                              const Ray* selectionRay) {
+                              const XPCSelectionResult* selectionResult) {
 
   long long renderedCount = 0;
 
@@ -131,18 +131,19 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                                   frustum,
                                   nowInMS,
                                   renderDebug,
-                                   selectionRay);
+                                  selectionResult);
   }
 
   return renderedCount;
 }
 
-const bool XPCMetadata::touchesRay(const Ray* ray) const {
+const bool XPCMetadata::selectPoints(XPCSelectionResult* selectionResult) const {
+  bool selectedPoints = false;
   for (size_t i = 0; i < _treesSize; i++) {
     const XPCTree* tree = _trees->at(i);
-    if (tree->touchesRay(ray)) {
-      return true;
+    if (tree->selectPoints(selectionResult)) {
+      selectedPoints = true;
     }
   }
-  return false;
+  return selectedPoints;
 }

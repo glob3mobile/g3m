@@ -79,7 +79,7 @@ BoundingVolume* AbstractMesh::computeBoundingVolume() const {
     return NULL;
   }
 
-  const size_t vertexCount = getVertexCount();
+  const size_t vertexCount = getVerticesCount();
 
   if (vertexCount == 0) {
     return NULL;
@@ -137,7 +137,7 @@ const Vector3D AbstractMesh::getVertex(const size_t index) const {
                   _vertices->get(p+2) + _center._z);
 }
 
-size_t AbstractMesh::getVertexCount() const {
+size_t AbstractMesh::getVerticesCount() const {
   return _vertices->size() / 3;
 }
 

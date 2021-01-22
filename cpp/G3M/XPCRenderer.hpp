@@ -17,7 +17,7 @@ class TimeInterval;
 class XPCPointColorizer;
 class XPCMetadataListener;
 class Camera;
-class Ray;
+class XPCSelectionResult;
 
 
 class XPCRenderer : public DefaultRenderer {
@@ -38,7 +38,7 @@ private:
   private Camera _lastCamera;
 #endif
   bool _renderDebug;
-  Ray* _ray;
+  XPCSelectionResult* _selectionResult;
   
 protected:
 
@@ -54,12 +54,6 @@ public:
   void removeAllPointClouds();
 
   RenderState getRenderState(const G3MRenderContext* rc);
-
-  void render(const G3MRenderContext* rc,
-              GLState* glState);
-
-  bool onTouchEvent(const G3MEventContext* ec,
-                    const TouchEvent* touchEvent);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
@@ -81,6 +75,12 @@ public:
                      XPCMetadataListener* metadataListener = NULL,
                      bool deleteMetadataListener = true,
                      bool verbose = false);
+
+  void render(const G3MRenderContext* rc,
+              GLState* glState);
+
+  bool onTouchEvent(const G3MEventContext* ec,
+                    const TouchEvent* touchEvent);
 
 };
 

@@ -23,7 +23,7 @@ class XPCMetadata;
 class IDownloader;
 class IBufferDownloadListener;
 class IIntBuffer;
-class Ray;
+class XPCSelectionResult;
 
 
 class XPCPointCloud : public RCObject {
@@ -109,7 +109,7 @@ public:
               const Frustum* frustum,
               long long nowInMS,
               bool renderDebug,
-              const Ray* selectionRay);
+              const XPCSelectionResult* selectionResult);
 
   void errorDownloadingMetadata();
   void errorParsingMetadata();
@@ -128,7 +128,7 @@ public:
     return _pointColorizer;
   }
 
-  const bool touchesRay(const Ray* ray) const;
+  const bool selectPoints(XPCSelectionResult* selectionResult) const;
 
 };
 
