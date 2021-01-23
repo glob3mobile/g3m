@@ -93,8 +93,6 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       MutableVector3D bufferCartesian = new MutableVector3D();
       for (int i = 0; i < pointsCount; i++)
       {
-        //          XPCPoint* point = XPCPoint::fromByteBufferIterator(it, centerLatitudeDegrees, centerLongitudeDegrees, centerHeight);
-
         final double latitudeDegrees = (double) it.nextFloat() + centerLatitudeDegrees;
         final double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
         final double height = (((double) it.nextFloat() + centerHeight) + deltaHeight) * verticalExaggeration;

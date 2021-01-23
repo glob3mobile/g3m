@@ -20,10 +20,18 @@ package org.glob3.mobile.generated;
 //class Sphere;
 
 
+
 public class XPCSelectionResult
 {
   private double _nearestSquaredDistance;
   private MutableVector3D _nearestPoint = new MutableVector3D();
+
+  // point full id
+  private String _cloudName;
+  private String _treeID;
+  private String _nodeID;
+  private int _pointIndex;
+
   private Sphere _selectionSphere;
 
   public final Ray _ray;
@@ -33,6 +41,10 @@ public class XPCSelectionResult
      _ray = ray;
      _selectionSphere = null;
      _nearestSquaredDistance = Double.NaN;
+     _cloudName = "";
+     _treeID = "";
+     _nodeID = "";
+     _pointIndex = -1;
   }
 
   public void dispose()
@@ -71,18 +83,19 @@ public class XPCSelectionResult
     return (squaredDistanceToCenter - area.getRadiusSquared()) < _nearestSquaredDistance;
   }
 
-  public final boolean evaluateCantidate(MutableVector3D candidate)
+  public final boolean evaluateCantidate(MutableVector3D cartesianPoint, String cloudName, String treeID, String nodeID, int pointIndex)
   {
-    final double candidateSquaredDistance = _ray.squaredDistanceTo(candidate);
+    final double candidateSquaredDistance = _ray.squaredDistanceTo(cartesianPoint);
     if ((_nearestSquaredDistance != _nearestSquaredDistance) || (candidateSquaredDistance < _nearestSquaredDistance))
     {
   
-      _nearestPoint.copyFrom(candidate);
+      _nearestPoint.copyFrom(cartesianPoint);
       _nearestSquaredDistance = candidateSquaredDistance;
   
-  //    ILogger::instance()->logInfo("--> %s  %f",
-  //                                 _nearestPoint.description().c_str(),
-  //                                 _nearestSquaredDistance);
+      _cloudName = cloudName;
+      _treeID = treeID;
+      _nodeID = nodeID;
+      _pointIndex = pointIndex;
   
       if (_selectionSphere != null)
          _selectionSphere.dispose();

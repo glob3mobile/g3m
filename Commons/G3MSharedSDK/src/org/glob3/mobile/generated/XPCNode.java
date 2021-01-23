@@ -80,7 +80,6 @@ public class XPCNode extends RCObject
     //    _parent->updateBoundingSphereWith(rc, vectorSet, _boundingSphere);
     //  }
   
-    //return Sphere::enclosingSphere(points, 0.1);
     return Sphere.enclosingSphere(points, 0);
   }
 
@@ -101,9 +100,8 @@ public class XPCNode extends RCObject
   {
     _downloader = rc.getDownloader();
   
-  //  const long long deltaPriority = 100 - _id.length() + _pointsCount;
-  //  const long long deltaPriority = ((100 - _id.length()) * 1000)  + _pointsCount;
-    final long deltaPriority = (_id.length() * 1000) + _pointsCount;
+    final long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
+  //  const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
   
     _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
@@ -351,7 +349,7 @@ public class XPCNode extends RCObject
     return renderedCount;
   }
 
-  public final boolean selectPoints(XPCSelectionResult selectionResult)
+  public final boolean selectPoints(XPCSelectionResult selectionResult, String cloudName, String treeID)
   {
     if (_bounds == null)
     {
@@ -372,13 +370,16 @@ public class XPCNode extends RCObject
   
     if (_mesh != null)
     {
+      final String nodeID = getID();
+  
       final int verticesCount = _mesh.getVerticesCount();
   
       MutableVector3D vertex = new MutableVector3D();
       for (int i = 0; i < verticesCount; i++)
       {
         _mesh.getVertex(i, vertex);
-        if (selectionResult.evaluateCantidate(vertex))
+  
+        if (selectionResult.evaluateCantidate(vertex, cloudName, treeID, nodeID, i))
         {
           selectedPoint = true;
         }
@@ -390,7 +391,7 @@ public class XPCNode extends RCObject
       for (int i = 0; i < _childrenSize; i++)
       {
         XPCNode child = _children.get(i);
-        if (child.selectPoints(selectionResult))
+        if (child.selectPoints(selectionResult, cloudName, treeID))
         {
           selectedPoint = true;
         }

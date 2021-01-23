@@ -114,13 +114,13 @@ public class XPCMetadata
     return renderedCount;
   }
 
-  public final boolean selectPoints(XPCSelectionResult selectionResult)
+  public final boolean selectPoints(XPCSelectionResult selectionResult, String cloudName)
   {
     boolean selectedPoints = false;
     for (int i = 0; i < _treesSize; i++)
     {
       final XPCTree tree = _trees.get(i);
-      if (tree.selectPoints(selectionResult))
+      if (tree.selectPoints(selectionResult, cloudName))
       {
         selectedPoints = true;
       }

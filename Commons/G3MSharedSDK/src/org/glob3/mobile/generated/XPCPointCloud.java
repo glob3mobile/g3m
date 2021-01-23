@@ -286,7 +286,7 @@ public class XPCPointCloud extends RCObject
 
   public final boolean selectPoints(XPCSelectionResult selectionResult)
   {
-    return ((_metadata != null) && _metadata.selectPoints(selectionResult));
+    return ((_metadata != null) && _metadata.selectPoints(selectionResult, _cloudName));
   }
 
 }
