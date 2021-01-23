@@ -95,7 +95,7 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
     return requiredDimensionIndices;
   }
 
-  public final Color colorize(XPCMetadata metadata, java.util.ArrayList<XPCPoint> points, java.util.ArrayList<IByteBuffer> dimensionsValues, int i)
+  public final Color colorize(XPCMetadata metadata, java.util.ArrayList<IByteBuffer> dimensionsValues, int i)
   {
     if (!_ok)
     {

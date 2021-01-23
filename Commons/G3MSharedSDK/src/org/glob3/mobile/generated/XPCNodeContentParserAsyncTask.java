@@ -9,7 +9,6 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
   private final Planet _planet;
 
   private java.util.ArrayList<XPCNode> _children;
-  private java.util.ArrayList<XPCPoint> _points;
   private DirectMesh _mesh;
 
   public XPCNodeContentParserAsyncTask(XPCPointCloud pointCloud, XPCNode node, IByteBuffer buffer, Planet planet)
@@ -19,7 +18,6 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
      _buffer = buffer;
      _planet = planet;
      _children = null;
-     _points = null;
      _mesh = null;
     _pointCloud._retain();
     _node._retain();
@@ -38,17 +36,6 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
         child._release();
       }
       _children = null;
-    }
-
-    if (_points != null)
-    {
-      for (int i = 0; i < _points.size(); i++)
-      {
-        XPCPoint point = _points.get(i);
-        if (point != null)
-           point.dispose();
-      }
-      _points = null;
     }
 
     if (_mesh != null)
@@ -85,23 +72,38 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       }
     }
 
+    final int pointsCount = it.nextInt32();
+
+    if (pointsCount <= 0)
     {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO____ points should be a floatbuffer + center
+      return;
+    }
 
-      _points = new java.util.ArrayList<XPCPoint>();
+    IFloatBuffer cartesianVertices = IFactory.instance().createFloatBuffer(pointsCount * 3); // X, Y, Z
 
-      final int pointsCount = it.nextInt32();
-      if (pointsCount > 0)
+    final float deltaHeight = _pointCloud.getDeltaHeight();
+    final float verticalExaggeration = _pointCloud.getVerticalExaggeration();
+
+    final float centerLatitudeDegrees = it.nextFloat();
+    final float centerLongitudeDegrees = it.nextFloat();
+    final float centerHeight = it.nextFloat();
+
+    final Vector3D cartesianCenter = _planet.toCartesian(Angle.fromDegrees(centerLatitudeDegrees), Angle.fromDegrees(centerLongitudeDegrees), ((double) centerHeight + deltaHeight) * verticalExaggeration);
+    {
+      MutableVector3D bufferCartesian = new MutableVector3D();
+      for (int i = 0; i < pointsCount; i++)
       {
-        final float centerLatitudeDegrees = it.nextFloat();
-        final float centerLongitudeDegrees = it.nextFloat();
-        final float centerHeight = it.nextFloat();
-        for (int i = 0; i < pointsCount; i++)
-        {
-          XPCPoint point = XPCPoint.fromByteBufferIterator(it, centerLatitudeDegrees, centerLongitudeDegrees, centerHeight);
-          _points.add(point);
-        }
+        //          XPCPoint* point = XPCPoint::fromByteBufferIterator(it, centerLatitudeDegrees, centerLongitudeDegrees, centerHeight);
+
+        final double latitudeDegrees = (double) it.nextFloat() + centerLatitudeDegrees;
+        final double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
+        final double height = (((double) it.nextFloat() + centerHeight) + deltaHeight) * verticalExaggeration;
+
+        _planet.toCartesianFromDegrees(latitudeDegrees, longitudeDegrees, height, bufferCartesian);
+
+        cartesianVertices.rawPut((i * 3) + 0, (float)(bufferCartesian._x - cartesianCenter._x));
+        cartesianVertices.rawPut((i * 3) + 1, (float)(bufferCartesian._y - cartesianCenter._y));
+        cartesianVertices.rawPut((i * 3) + 2, (float)(bufferCartesian._z - cartesianCenter._z));
       }
     }
 
@@ -137,27 +139,20 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     }
 
     XPCPointColorizer pointsColorizer = _pointCloud.getPointsColorizer();
-    final float deltaHeight = _pointCloud.getDeltaHeight();
-    final float verticalExaggeration = _pointCloud.getVerticalExaggeration();
 
-    FloatBufferBuilderFromGeodetic vertices = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_planet);
     FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 
-    final int pointsSize = _points.size();
-    for (int i = 0; i < pointsSize; i++)
+    for (int i = 0; i < pointsCount; i++)
     {
-      XPCPoint point = _points.get(i);
-      vertices.addDegrees(point._latitudeDegrees, point._longitudeDegrees, (point._height + deltaHeight) * verticalExaggeration);
-
-      if (pointsColorizer != null)
+      if (pointsColorizer == null)
       {
-        final Color color = pointsColorizer.colorize(metadata, _points, dimensionsValues, i);
-
-        colors.add(color);
+        colors.add(1, 1, 1, 1);
       }
       else
       {
-        colors.add(1, 1, 1, 1);
+        final Color color = pointsColorizer.colorize(metadata, dimensionsValues, i);
+
+        colors.add(color);
       }
     }
 
@@ -170,10 +165,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       }
     }
 
-    _mesh = new DirectMesh(GLPrimitive.points(), true, vertices.getCenter(), vertices.create(), 1, _pointCloud.getDevicePointSize(), null, colors.create(), true); // depthTest -  const IFloatBuffer* colors -  flatColor
-
-    if (vertices != null)
-       vertices.dispose();
+    _mesh = new DirectMesh(GLPrimitive.points(), true, cartesianCenter, cartesianVertices, 1, _pointCloud.getDevicePointSize(), null, colors.create(), _pointCloud.depthTest()); // depthTest -  const IFloatBuffer* colors -  flatColor
   }
 
   public final void onPostExecute(G3MContext context)
@@ -183,9 +175,8 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       return;
     }
 
-    _node.setContent(_children, _points, _mesh);
+    _node.setContent(_children, _mesh);
     _children = null; // moved ownership to _node
-    _points = null; // moved ownership to _node
     _mesh = null; // moved ownership to _node
   }
 

@@ -80,6 +80,10 @@ public class XPCSelectionResult
       _nearestPoint.copyFrom(candidate);
       _nearestSquaredDistance = candidateSquaredDistance;
   
+  //    ILogger::instance()->logInfo("--> %s  %f",
+  //                                 _nearestPoint.description().c_str(),
+  //                                 _nearestSquaredDistance);
+  
       if (_selectionSphere != null)
          _selectionSphere.dispose();
       _selectionSphere = null;

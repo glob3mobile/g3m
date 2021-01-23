@@ -40,6 +40,7 @@ public class XPCPointCloud extends RCObject
   private final double _minProjectedArea;
   private final float _pointSize;
   private final boolean _dynamicPointSize;
+  private final boolean _depthTest;
   private final float _verticalExaggeration;
   private final float _deltaHeight;
   private XPCMetadataListener _metadataListener;
@@ -78,7 +79,7 @@ public class XPCPointCloud extends RCObject
     super.dispose();
   }
 
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, boolean verbose)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, boolean verbose)
   {
      _serverURL = serverURL;
      _cloudName = cloudName;
@@ -90,6 +91,7 @@ public class XPCPointCloud extends RCObject
      _minProjectedArea = minProjectedArea;
      _pointSize = pointSize;
      _dynamicPointSize = dynamicPointSize;
+     _depthTest = depthTest;
      _verticalExaggeration = verticalExaggeration;
      _deltaHeight = deltaHeight;
      _metadataListener = metadataListener;
@@ -137,6 +139,11 @@ public class XPCPointCloud extends RCObject
   public final float getDevicePointSize()
   {
     return _pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+  }
+
+  public final boolean depthTest()
+  {
+    return _depthTest;
   }
 
   public final void initialize(G3MContext context)

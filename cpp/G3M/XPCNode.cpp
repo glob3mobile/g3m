@@ -120,8 +120,6 @@ public:
     {
       MutableVector3D bufferCartesian;
       for (int i = 0; i < pointsCount; i++) {
-        //          XPCPoint* point = XPCPoint::fromByteBufferIterator(it, centerLatitudeDegrees, centerLongitudeDegrees, centerHeight);
-
         const double latitudeDegrees  = (double) it.nextFloat() + centerLatitudeDegrees;
         const double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
         const double height           = (((double) it.nextFloat() + centerHeight) + deltaHeight) * verticalExaggeration;
@@ -391,7 +389,6 @@ Sphere* XPCNode::calculateBounds(const G3MRenderContext* rc,
   //    _parent->updateBoundingSphereWith(rc, vectorSet, _boundingSphere);
   //  }
 
-  //return Sphere::enclosingSphere(points, 0.1);
   return Sphere::enclosingSphere(points, 0);
 }
 
@@ -444,7 +441,6 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                           const G3MRenderContext* rc) {
   _downloader = rc->getDownloader();
 
-//  const long long deltaPriority = 100 - _id.length() + _pointsCount;
 //  const long long deltaPriority = ((100 - _id.length()) * 1000)  + _pointsCount;
   const long long deltaPriority = (_id.length() * 1000)  + _pointsCount;
 

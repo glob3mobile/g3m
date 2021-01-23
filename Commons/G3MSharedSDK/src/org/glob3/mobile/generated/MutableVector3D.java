@@ -305,4 +305,24 @@ public class MutableVector3D
     return (dx * dx) + (dy * dy) + (dz * dz);
   }
 
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(MV3D ");
+    isb.addDouble(_x);
+    isb.addString(", ");
+    isb.addDouble(_y);
+    isb.addString(", ");
+    isb.addDouble(_z);
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+  @Override
+  public String toString() {
+    return description();
+  }
+
 }

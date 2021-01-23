@@ -117,9 +117,9 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
     return new FloatBufferBuilderFromGeodetic(CenterStrategy.GIVEN_CENTER, planet, center);
   }
 
-  public final void addDegrees(double latitudeDegrees, double longitudeDegress, double height)
+  public final void addDegrees(double latitudeDegrees, double longitudeDegrees, double height)
   {
-    _planet.toCartesianFromDegrees(latitudeDegrees, longitudeDegress, height, _cartesianVector);
+    _planet.toCartesianFromDegrees(latitudeDegrees, longitudeDegrees, height, _cartesianVector);
   
     addCartesianVector();
   }

@@ -24,7 +24,6 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //class IDownloader;
 //class ByteBufferIterator;
-//class XPCPoint;
 //class DirectMesh;
 //class XPCSelectionResult;
 
@@ -36,13 +35,14 @@ public class XPCNode extends RCObject
 
   private final Sector _sector;
 
+  private final int _pointsCount;
+
   private final double _minHeight;
   private final double _maxHeight;
 
   private java.util.ArrayList<XPCNode> _children;
   private int _childrenSize;
 
-  private java.util.ArrayList<XPCPoint> _points;
   private DirectMesh _mesh;
 
   private Sphere _bounds;
@@ -101,7 +101,9 @@ public class XPCNode extends RCObject
   {
     _downloader = rc.getDownloader();
   
-    final long deltaPriority = 100 - _id.length(); // + _pointsCount
+  //  const long long deltaPriority = 100 - _id.length() + _pointsCount;
+  //  const long long deltaPriority = ((100 - _id.length()) * 1000)  + _pointsCount;
+    final long deltaPriority = (_id.length() * 1000) + _pointsCount;
   
     _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
@@ -116,18 +118,6 @@ public class XPCNode extends RCObject
   }
   private void unloadContent()
   {
-    if (_points != null)
-    {
-      for (int i = 0; i < _points.size(); i++)
-      {
-        XPCPoint point = _points.get(i);
-        if (point != null)
-           point.dispose();
-      }
-      _points = null;
-      _points = null;
-    }
-  
     if (_mesh != null)
        _mesh.dispose();
     _mesh = null;
@@ -170,10 +160,11 @@ public class XPCNode extends RCObject
   }
 
 
-  private XPCNode(String id, Sector sector, double minHeight, double maxHeight)
+  private XPCNode(String id, Sector sector, int pointsCount, double minHeight, double maxHeight)
   {
      _id = id;
      _sector = sector;
+     _pointsCount = pointsCount;
      _minHeight = minHeight;
      _maxHeight = maxHeight;
      _bounds = null;
@@ -186,7 +177,6 @@ public class XPCNode extends RCObject
      _childrenSize = 0;
      _downloader = null;
      _contentRequestID = -1;
-     _points = null;
      _mesh = null;
      _canceled = false;
   
@@ -207,18 +197,6 @@ public class XPCNode extends RCObject
     }
   
     _children = null;
-  
-    if (_points != null)
-    {
-      for (int i = 0; i < _points.size(); i++)
-      {
-        XPCPoint point = _points.get(i);
-        if (point != null)
-           point.dispose();
-      }
-  
-      _points = null;
-    }
   
     if (_mesh != null)
        _mesh.dispose();
@@ -241,10 +219,12 @@ public class XPCNode extends RCObject
   
     final Sector sector = Sector.newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees, upperLatitudeDegrees, upperLongitudeDegrees);
   
+    final int pointsCount = it.nextInt32();
+  
     final double minHeight = it.nextDouble();
     final double maxHeight = it.nextDouble();
   
-    return new XPCNode(nodeID, sector, minHeight, maxHeight);
+    return new XPCNode(nodeID, sector, pointsCount, minHeight, maxHeight);
   }
 
   public final Sector getSector()
@@ -257,7 +237,7 @@ public class XPCNode extends RCObject
     // I don't know how to deal with it (DGD)  :(
   }
 
-  public final void setContent(java.util.ArrayList<XPCNode> children, java.util.ArrayList<XPCPoint> points, DirectMesh mesh)
+  public final void setContent(java.util.ArrayList<XPCNode> children, DirectMesh mesh)
   {
     _loadedContent = true;
   
@@ -269,20 +249,6 @@ public class XPCNode extends RCObject
   
     _children = children;
     _childrenSize = (_children == null) ? 0 : _children.size();
-  
-    if (_points != null)
-    {
-      for (int i = 0; i < _points.size(); i++)
-      {
-        XPCPoint point = _points.get(i);
-        if (point != null)
-           point.dispose();
-      }
-  
-      _points = null;
-    }
-  
-    _points = points;
   
     if (_mesh != null)
        _mesh.dispose();
