@@ -7,10 +7,12 @@
 
 #include "XPCSelectionResult.hpp"
 
-#include "Ray.hpp"
-#include "Color.hpp"
-#include "Sphere.hpp"
 #include "IMathUtils.hpp"
+#include "Ray.hpp"
+#include "Sphere.hpp"
+#include "Color.hpp"
+#include "ILogger.hpp"
+
 
 XPCSelectionResult::XPCSelectionResult(const Ray* ray) :
 _ray(ray),
@@ -56,6 +58,10 @@ bool XPCSelectionResult::evaluateCantidate(const MutableVector3D& candidate) {
 
     _nearestPoint.copyFrom(candidate);
     _nearestSquaredDistance = candidateSquaredDistance;
+
+//    ILogger::instance()->logInfo("--> %s  %f",
+//                                 _nearestPoint.description().c_str(),
+//                                 _nearestSquaredDistance);
 
     delete _selectionSphere;
     _selectionSphere = NULL;

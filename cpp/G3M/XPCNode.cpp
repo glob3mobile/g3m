@@ -198,9 +198,9 @@ public:
                            vertices->create(),
                            1,
                            _pointCloud->getDevicePointSize(),
-                           NULL,            // flatColor
-                           colors.create(), // const IFloatBuffer* colors
-                           true            // depthTest
+                           NULL,                    // flatColor
+                           colors.create(),         // const IFloatBuffer* colors
+                           _pointCloud->depthTest() // depthTest
                            );
 
     delete vertices;

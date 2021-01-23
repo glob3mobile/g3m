@@ -11,6 +11,7 @@
 #include "Angle.hpp"
 #include "IMathUtils.hpp"
 #include "MutableMatrix44D.hpp"
+#include "IStringBuilder.hpp"
 
 
 MutableVector3D::MutableVector3D(const Vector3D &v) :
@@ -191,4 +192,18 @@ const double MutableVector3D::squaredDistanceTo(const Vector3D& that) const {
   const double dy = _y - that._y;
   const double dz = _z - that._z;
   return (dx * dx) + (dy * dy) + (dz * dz);
+}
+
+const std::string MutableVector3D::description() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("(MV3D ");
+  isb->addDouble(_x);
+  isb->addString(", ");
+  isb->addDouble(_y);
+  isb->addString(", ");
+  isb->addDouble(_z);
+  isb->addString(")");
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

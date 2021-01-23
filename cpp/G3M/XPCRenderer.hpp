@@ -70,6 +70,7 @@ public:
                      const double minProjectedArea,
                      float pointSize = 1.0f,
                      bool dynamicPointSize = true,
+                     const bool depthTest = true,
                      float verticalExaggeration = 1.0f,
                      float deltaHeight = 0,
                      XPCMetadataListener* metadataListener = NULL,

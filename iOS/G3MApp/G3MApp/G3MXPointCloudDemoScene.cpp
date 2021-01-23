@@ -57,9 +57,15 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const float  pointSize            = 1;
   const bool   dynamicPointSize     = true;
   const float  verticalExaggeration = 1;
-  // const float  deltaHeight          = -210;
-  // const float  deltaHeight          = -580;
-  const float  deltaHeight          = -385;
+
+//  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
+//  const float       deltaHeight = -210;
+
+  const std::string cloudName   = "Leica_M40_LOD";
+  const float       deltaHeight = -580;
+
+//  const std::string cloudName   = "NEON_LOD";
+//  const float       deltaHeight = -385;
 
   const double minProjectedArea = 50000; //50000;
 
@@ -71,17 +77,19 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   //                                                                                    Vector2I(2048, 1024));
   //  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
+  BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+                                           TimeInterval::fromDays(30),
+                                           true, // readExpired
+                                           2,    // initialLevel
+                                           19    // maxLevel     = 25
+                                           );
   model->getLayerSet()->addLayer(layer);
 
 
 #warning TODO cache
   model->getXPCRenderer()->addPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
-                                         // "Leica_FFCC_SMALL_LOD",
-                                         //"Leica_M40_LOD",
-                                         "NEON_LOD",
+                                         cloudName,
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
@@ -92,6 +100,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          minProjectedArea,
                                          pointSize,
                                          dynamicPointSize,
+                                         false, // depthTest
                                          verticalExaggeration,
                                          deltaHeight,
                                          new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),

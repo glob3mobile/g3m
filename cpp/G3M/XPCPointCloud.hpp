@@ -38,6 +38,7 @@ private:
   const double         _minProjectedArea;
   const float          _pointSize;
   const bool           _dynamicPointSize;
+  const bool           _depthTest;
   const float          _verticalExaggeration;
   const float          _deltaHeight;
   XPCMetadataListener* _metadataListener;
@@ -68,6 +69,7 @@ public:
                 const double minProjectedArea,
                 float pointSize,
                 bool dynamicPointSize,
+                const bool depthTest,
                 float verticalExaggeration,
                 float deltaHeight,
                 XPCMetadataListener* metadataListener,
@@ -99,6 +101,10 @@ public:
   }
 
   const float getDevicePointSize() const;
+
+  const bool depthTest() const {
+    return _depthTest;
+  }
 
   void initialize(const G3MContext* context);
 

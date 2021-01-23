@@ -8,6 +8,7 @@
 #ifndef G3M_MutableVector3D
 #define G3M_MutableVector3D
 
+#include <string>
 class Vector3D;
 class Angle;
 class MutableMatrix44D;
@@ -182,6 +183,14 @@ public:
     const double dz = _z - that._z;
     return (dx * dx) + (dy * dy) + (dz * dz);
   }
+
+  const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
   
 };
 
