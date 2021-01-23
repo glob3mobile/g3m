@@ -17,20 +17,18 @@
 #include "GAsyncTask.hpp"
 #include "ByteBufferIterator.hpp"
 #include "ILogger.hpp"
-#include "FloatBufferBuilderFromGeodetic.hpp"
 #include "DirectMesh.hpp"
 #include "Color.hpp"
 #include "IDownloader.hpp"
 #include "IIntBuffer.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
+#include "IFactory.hpp"
 
 #include "XPCPointCloud.hpp"
-#include "XPCPoint.hpp"
 #include "XPCMetadata.hpp"
 #include "XPCDimension.hpp"
 #include "XPCPointColorizer.hpp"
 #include "XPCSelectionResult.hpp"
-
 
 
 class XPCNodeContentParserAsyncTask : public GAsyncTask {
@@ -43,7 +41,6 @@ private:
   const Planet* _planet;
 
   std::vector<XPCNode*>*  _children;
-  std::vector<XPCPoint*>* _points;
   DirectMesh*             _mesh;
 
 public:
@@ -56,7 +53,6 @@ public:
   _buffer(buffer),
   _planet(planet),
   _children(NULL),
-  _points(NULL),
   _mesh(NULL)
   {
     _pointCloud->_retain();
@@ -72,14 +68,6 @@ public:
         child->_release();
       }
       delete _children;
-    }
-
-    if (_points != NULL) {
-      for (size_t i = 0; i < _points->size(); i++) {
-        XPCPoint* point = _points->at(i);
-        delete point;
-      }
-      delete _points;
     }
 
     delete _mesh;
@@ -111,20 +99,41 @@ public:
       }
     }
 
-    {
-#warning TODO____ points should be a floatbuffer + center
-      
-      _points = new std::vector<XPCPoint*>();
+    const int pointsCount = it.nextInt32();
 
-      const int pointsCount = it.nextInt32();
-      if (pointsCount > 0) {
-        const float centerLatitudeDegrees  = it.nextFloat();
-        const float centerLongitudeDegrees = it.nextFloat();
-        const float centerHeight           = it.nextFloat();
-        for (int i = 0; i < pointsCount; i++) {
-          XPCPoint* point = XPCPoint::fromByteBufferIterator(it, centerLatitudeDegrees, centerLongitudeDegrees, centerHeight);
-          _points->push_back( point );
-        }
+    if (pointsCount <= 0) {
+      return;
+    }
+
+    IFloatBuffer* cartesianVertices = IFactory::instance()->createFloatBuffer( pointsCount * 3 /* X, Y, Z */ );
+
+    const float deltaHeight            = _pointCloud->getDeltaHeight();
+    const float verticalExaggeration   = _pointCloud->getVerticalExaggeration();
+
+    const float centerLatitudeDegrees  = it.nextFloat();
+    const float centerLongitudeDegrees = it.nextFloat();
+    const float centerHeight           = it.nextFloat();
+
+    const Vector3D cartesianCenter = _planet->toCartesian(Angle::fromDegrees(centerLatitudeDegrees),
+                                                          Angle::fromDegrees(centerLongitudeDegrees),
+                                                          ((double) centerHeight + deltaHeight) * verticalExaggeration);
+    {
+      MutableVector3D bufferCartesian;
+      for (int i = 0; i < pointsCount; i++) {
+        //          XPCPoint* point = XPCPoint::fromByteBufferIterator(it, centerLatitudeDegrees, centerLongitudeDegrees, centerHeight);
+
+        const double latitudeDegrees  = (double) it.nextFloat() + centerLatitudeDegrees;
+        const double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
+        const double height           = (((double) it.nextFloat() + centerHeight) + deltaHeight) * verticalExaggeration;
+
+        _planet->toCartesianFromDegrees(latitudeDegrees,
+                                        longitudeDegrees,
+                                        height,
+                                        bufferCartesian);
+
+        cartesianVertices->rawPut((i * 3) + 0, (float) (bufferCartesian._x - cartesianCenter._x) );
+        cartesianVertices->rawPut((i * 3) + 1, (float) (bufferCartesian._y - cartesianCenter._y) );
+        cartesianVertices->rawPut((i * 3) + 2, (float) (bufferCartesian._z - cartesianCenter._z) );
       }
     }
 
@@ -156,29 +165,19 @@ public:
     }
 
     XPCPointColorizer* pointsColorizer = _pointCloud->getPointsColorizer();
-    const float deltaHeight            = _pointCloud->getDeltaHeight();
-    const float verticalExaggeration   = _pointCloud->getVerticalExaggeration();
 
-    FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
     FloatBufferBuilderFromColor colors;
 
-    const size_t pointsSize = _points->size();
-    for (int i = 0; i < pointsSize; i++) {
-      XPCPoint* point = _points->at(i);
-      vertices->addDegrees(point->_latitudeDegrees,
-                           point->_longitudeDegrees,
-                           (point->_height + deltaHeight) * verticalExaggeration);
-
-      if (pointsColorizer != NULL) {
+    for (int i = 0; i < pointsCount; i++) {
+      if (pointsColorizer == NULL) {
+        colors.add(1, 1, 1, 1);
+      }
+      else {
         const Color color = pointsColorizer->colorize(metadata,
-                                                      _points,
                                                       dimensionsValues,
                                                       i);
 
         colors.add(color);
-      }
-      else {
-        colors.add(1, 1, 1, 1);
       }
     }
 
@@ -194,16 +193,14 @@ public:
 
     _mesh = new DirectMesh(GLPrimitive::points(),
                            true,
-                           vertices->getCenter(),
-                           vertices->create(),
+                           cartesianCenter,
+                           cartesianVertices,
                            1,
                            _pointCloud->getDevicePointSize(),
                            NULL,                    // flatColor
                            colors.create(),         // const IFloatBuffer* colors
                            _pointCloud->depthTest() // depthTest
                            );
-
-    delete vertices;
   }
 
   void onPostExecute(const G3MContext* context) {
@@ -211,9 +208,8 @@ public:
       return;
     }
 
-    _node->setContent( _children, _points, _mesh );
+    _node->setContent( _children, _mesh );
     _children = NULL; // moved ownership to _node
-    _points   = NULL; // moved ownership to _node
     _mesh     = NULL; // moved ownership to _node
   }
 
@@ -298,10 +294,12 @@ public:
 
 XPCNode::XPCNode(const std::string& id,
                  const Sector* sector,
+                 const int pointsCount,
                  const double minHeight,
                  const double maxHeight) :
 _id(id),
 _sector(sector),
+_pointsCount(pointsCount),
 _minHeight(minHeight),
 _maxHeight(maxHeight),
 _bounds(NULL),
@@ -314,7 +312,6 @@ _children(NULL),
 _childrenSize(0),
 _downloader(NULL),
 _contentRequestID(-1),
-_points(NULL),
 _mesh(NULL),
 _canceled(false)
 {
@@ -333,15 +330,6 @@ XPCNode::~XPCNode() {
   }
 
   delete _children;
-
-  if (_points != NULL) {
-    for (size_t i = 0; i < _points->size(); i++) {
-      XPCPoint* point = _points->at(i);
-      delete point;
-    }
-
-    delete _points;
-  }
 
   delete _mesh;
 }
@@ -415,15 +403,6 @@ void XPCNode::cancelLoadContent() {
 }
 
 void XPCNode::unloadContent() {
-  if (_points != NULL) {
-    for (size_t i = 0; i < _points->size(); i++) {
-      XPCPoint* point = _points->at(i);
-      delete point;
-    }
-    delete _points;
-    _points = NULL;
-  }
-
   delete _mesh;
   _mesh = NULL;
 
@@ -465,7 +444,9 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                           const G3MRenderContext* rc) {
   _downloader = rc->getDownloader();
 
-  const long long deltaPriority = 100 - _id.length() /* + _pointsCount */;
+//  const long long deltaPriority = 100 - _id.length() + _pointsCount;
+//  const long long deltaPriority = ((100 - _id.length()) * 1000)  + _pointsCount;
+  const long long deltaPriority = (_id.length() * 1000)  + _pointsCount;
 
   _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
                                                            treeID,
@@ -493,15 +474,16 @@ XPCNode* XPCNode::fromByteBufferIterator(ByteBufferIterator& it) {
   const Sector* sector = Sector::newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees,
                                                 upperLatitudeDegrees, upperLongitudeDegrees);
 
+  const int pointsCount = it.nextInt32();
+
   const double minHeight = it.nextDouble();
   const double maxHeight = it.nextDouble();
 
-  return new XPCNode(nodeID, sector, minHeight, maxHeight);
+  return new XPCNode(nodeID, sector, pointsCount, minHeight, maxHeight);
 }
 
 
 void XPCNode::setContent(std::vector<XPCNode*>* children,
-                         std::vector<XPCPoint*>* points,
                          DirectMesh* mesh) {
   _loadedContent = true;
 
@@ -512,17 +494,6 @@ void XPCNode::setContent(std::vector<XPCNode*>* children,
 
   _children     = children;
   _childrenSize = (_children == NULL) ? 0 : _children->size();
-
-  if (_points != NULL) {
-    for (size_t i = 0; i < _points->size(); i++) {
-      XPCPoint* point = _points->at(i);
-      delete point;
-    }
-
-    delete _points;
-  }
-
-  _points = points;
 
   delete _mesh;
   _mesh = mesh;

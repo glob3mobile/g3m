@@ -58,6 +58,9 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const bool   dynamicPointSize     = true;
   const float  verticalExaggeration = 1;
 
+//  const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
+//  const float       deltaHeight = -210;
+
 //  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
 //  const float       deltaHeight = -210;
 

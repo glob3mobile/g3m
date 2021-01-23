@@ -82,7 +82,6 @@ IIntBuffer* XPCClassificationPointColorizer::initialize(const XPCMetadata* metad
 }
 
 Color XPCClassificationPointColorizer::colorize(const XPCMetadata* metadata,
-                                                const std::vector<XPCPoint*>* points,
                                                 const std::vector<const IByteBuffer*>* dimensionsValues,
                                                 const size_t i) {
   if (!_ok) {

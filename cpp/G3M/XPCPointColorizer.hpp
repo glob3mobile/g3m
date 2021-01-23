@@ -12,7 +12,6 @@
 #include "Color.hpp"
 
 class XPCMetadata;
-class XPCPoint;
 class IIntBuffer;
 class IByteBuffer;
 
@@ -25,7 +24,6 @@ public:
   virtual IIntBuffer* initialize(const XPCMetadata* metadata) = 0;
 
   virtual Color colorize(const XPCMetadata* metadata,
-                         const std::vector<XPCPoint*>* points,
                          const std::vector<const IByteBuffer*>* dimensionsValues,
                          const size_t i) = 0;
 

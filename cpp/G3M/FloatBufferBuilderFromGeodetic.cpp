@@ -52,10 +52,10 @@ void FloatBufferBuilderFromGeodetic::addCartesianVector() {
 }
 
 void FloatBufferBuilderFromGeodetic::addDegrees(const double latitudeDegrees,
-                                                const double longitudeDegress,
+                                                const double longitudeDegrees,
                                                 const double height) {
   _planet->toCartesianFromDegrees(latitudeDegrees,
-                                  longitudeDegress,
+                                  longitudeDegrees,
                                   height,
                                   _cartesianVector);
 

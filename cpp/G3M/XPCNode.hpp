@@ -21,7 +21,6 @@ class GLState;
 class Frustum;
 class IDownloader;
 class ByteBufferIterator;
-class XPCPoint;
 class DirectMesh;
 class XPCSelectionResult;
 
@@ -33,13 +32,14 @@ private:
 
   const Sector* _sector;
 
+  const int _pointsCount;
+
   const double _minHeight;
   const double _maxHeight;
 
   std::vector<XPCNode*>* _children;
   size_t _childrenSize;
 
-  std::vector<XPCPoint*>* _points;
   DirectMesh* _mesh;
 
   Sphere* _bounds;
@@ -74,6 +74,7 @@ private:
 
   XPCNode(const std::string& id,
           const Sector* sector,
+          const int pointsCount,
           const double minHeight,
           const double maxHeight);
 
@@ -92,7 +93,6 @@ public:
   void errorDownloadingContent();
 
   void setContent(std::vector<XPCNode*>* children,
-                  std::vector<XPCPoint*>* points,
                   DirectMesh* mesh);
 
   bool isCanceled() const;

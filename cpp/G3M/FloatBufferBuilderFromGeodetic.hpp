@@ -64,7 +64,7 @@ public:
                                                                 const Geodetic3D& center);
 
   void addDegrees(const double latitudeDegrees,
-                  const double longitudeDegress,
+                  const double longitudeDegrees,
                   const double height);
 
   void add(const Angle& latitude,
