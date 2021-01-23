@@ -96,14 +96,14 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
-                                         // new XPCRGBPointColorizer(),         // pointColorizer
+                                         new XPCRGBPointColorizer(),         // pointColorizer
                                          // new XPCIntensityPointColorizer(),   // pointColorizer
-                                         new XPCClassificationPointColorizer(), // pointColorizer
+                                         // new XPCClassificationPointColorizer(), // pointColorizer
                                          true,                                  // deletePointColorizer,
                                          minProjectedArea,
                                          pointSize,
                                          dynamicPointSize,
-                                         false, // depthTest
+                                         true, // depthTest
                                          verticalExaggeration,
                                          deltaHeight,
                                          new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),

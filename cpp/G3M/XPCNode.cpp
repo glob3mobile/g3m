@@ -441,8 +441,8 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                           const G3MRenderContext* rc) {
   _downloader = rc->getDownloader();
 
-//  const long long deltaPriority = ((100 - _id.length()) * 1000)  + _pointsCount;
-  const long long deltaPriority = (_id.length() * 1000)  + _pointsCount;
+  const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
+//  const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
 
   _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
                                                            treeID,
