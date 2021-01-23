@@ -35,7 +35,8 @@ public:
                    bool renderDebug,
                    const XPCSelectionResult* selectionResult);
 
-  const bool selectPoints(XPCSelectionResult* selectionResult) const;
+  const bool selectPoints(XPCSelectionResult* selectionResult,
+                          const std::string& cloudName) const;
 
   const size_t getTreesCount() const;
   const XPCTree* getTree(const size_t i) const;

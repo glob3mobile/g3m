@@ -137,11 +137,12 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
   return renderedCount;
 }
 
-const bool XPCMetadata::selectPoints(XPCSelectionResult* selectionResult) const {
+const bool XPCMetadata::selectPoints(XPCSelectionResult* selectionResult,
+                                     const std::string& cloudName) const {
   bool selectedPoints = false;
   for (size_t i = 0; i < _treesSize; i++) {
     const XPCTree* tree = _trees->at(i);
-    if (tree->selectPoints(selectionResult)) {
+    if (tree->selectPoints(selectionResult, cloudName)) {
       selectedPoints = true;
     }
   }

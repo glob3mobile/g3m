@@ -327,5 +327,5 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
 }
 
 const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) const {
-  return ((_metadata != NULL) && _metadata->selectPoints(selectionResult));
+  return ((_metadata != NULL) && _metadata->selectPoints(selectionResult, _cloudName));
 }

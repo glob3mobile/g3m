@@ -107,7 +107,9 @@ public:
                    bool renderDebug,
                    const XPCSelectionResult* selectionResult);
 
-  const bool selectPoints(XPCSelectionResult* selectionResult) const;
+  const bool selectPoints(XPCSelectionResult* selectionResult,
+                          const std::string& cloudName,
+                          const std::string& treeID) const;
 
 };
 

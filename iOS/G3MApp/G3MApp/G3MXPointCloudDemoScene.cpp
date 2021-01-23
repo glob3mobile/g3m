@@ -61,11 +61,11 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 //  const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
 //  const float       deltaHeight = -210;
 
-//  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
-//  const float       deltaHeight = -210;
+  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
+  const float       deltaHeight = -210;
 
-  const std::string cloudName   = "Leica_M40_LOD";
-  const float       deltaHeight = -580;
+//  const std::string cloudName   = "Leica_M40_LOD";
+//  const float       deltaHeight = -580;
 
 //  const std::string cloudName   = "NEON_LOD";
 //  const float       deltaHeight = -385;

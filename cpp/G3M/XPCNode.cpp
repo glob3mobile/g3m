@@ -589,7 +589,9 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
   return renderedCount;
 }
 
-const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult) const {
+const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult,
+                                 const std::string& cloudName,
+                                 const std::string& treeID) const {
   if (_bounds == NULL) {
     return false;
   }
@@ -605,12 +607,19 @@ const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult) const {
   bool selectedPoint = false;
 
   if (_mesh != NULL) {
+    const std::string nodeID = getID();
+
     const size_t verticesCount = _mesh->getVerticesCount();
 
     MutableVector3D vertex;
-    for (size_t i = 0; i < verticesCount; i++) {
+    for (int i = 0; i < verticesCount; i++) {
       _mesh->getVertex(i, vertex);
-      if ( selectionResult->evaluateCantidate(vertex) ) {
+
+      if ( selectionResult->evaluateCantidate(vertex,
+                                              cloudName,
+                                              treeID,
+                                              nodeID,
+                                              i) ) {
         selectedPoint = true;
       }
     }
@@ -619,7 +628,9 @@ const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult) const {
   if (_children != NULL) {
     for (size_t i = 0; i < _childrenSize; i++) {
       XPCNode* child = _children->at(i);
-      if (child->selectPoints(selectionResult)) {
+      if (child->selectPoints(selectionResult,
+                              cloudName,
+                              treeID)) {
         selectedPoint = true;
       }
     }

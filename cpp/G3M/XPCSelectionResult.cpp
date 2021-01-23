@@ -12,12 +12,17 @@
 #include "Sphere.hpp"
 #include "Color.hpp"
 #include "ILogger.hpp"
+#include "XPCNode.hpp"
 
 
 XPCSelectionResult::XPCSelectionResult(const Ray* ray) :
 _ray(ray),
 _selectionSphere(NULL),
-_nearestSquaredDistance(NAND)
+_nearestSquaredDistance(NAND),
+_cloudName(""),
+_treeID(""),
+_nodeID(""),
+_pointIndex(-1)
 {
 }
 
@@ -51,17 +56,22 @@ bool XPCSelectionResult::isInterestedIn(const Sphere* area) const {
   return (squaredDistanceToCenter - area->getRadiusSquared()) < _nearestSquaredDistance;
 }
 
-bool XPCSelectionResult::evaluateCantidate(const MutableVector3D& candidate) {
-  const double candidateSquaredDistance = _ray->squaredDistanceTo(candidate);
+bool XPCSelectionResult::evaluateCantidate(const MutableVector3D& cartesianPoint,
+                                           const std::string& cloudName,
+                                           const std::string& treeID,
+                                           const std::string& nodeID,
+                                           const int pointIndex) {
+  const double candidateSquaredDistance = _ray->squaredDistanceTo(cartesianPoint);
   if (ISNAN(_nearestSquaredDistance) ||
       (candidateSquaredDistance < _nearestSquaredDistance) ) {
 
-    _nearestPoint.copyFrom(candidate);
+    _nearestPoint.copyFrom(cartesianPoint);
     _nearestSquaredDistance = candidateSquaredDistance;
 
-//    ILogger::instance()->logInfo("--> %s  %f",
-//                                 _nearestPoint.description().c_str(),
-//                                 _nearestSquaredDistance);
+    _cloudName  = cloudName;
+    _treeID     = treeID;
+    _nodeID     = nodeID;
+    _pointIndex = pointIndex;
 
     delete _selectionSphere;
     _selectionSphere = NULL;
