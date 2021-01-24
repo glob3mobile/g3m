@@ -230,6 +230,16 @@ public class XPCNode extends RCObject
     return _sector;
   }
 
+  public final double getMinHeight()
+  {
+    return _minHeight;
+  }
+
+  public final double getMaxHeight()
+  {
+    return _maxHeight;
+  }
+
   public final void errorDownloadingContent()
   {
     // I don't know how to deal with it (DGD)  :(
