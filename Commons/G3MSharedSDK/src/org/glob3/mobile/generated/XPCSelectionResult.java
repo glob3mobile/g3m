@@ -14,10 +14,12 @@ package org.glob3.mobile.generated;
 //
 
 
+//class XPCPointCloud;
 //class Ray;
 //class G3MRenderContext;
 //class GLState;
 //class Sphere;
+//class Planet;
 
 
 
@@ -26,11 +28,13 @@ public class XPCSelectionResult
   private double _nearestSquaredDistance;
   private MutableVector3D _nearestPoint = new MutableVector3D();
 
+
   // point full id
-  private String _cloudName;
+  private XPCPointCloud _pointCloud;
   private String _treeID;
   private String _nodeID;
   private int _pointIndex;
+
 
   private Sphere _selectionSphere;
 
@@ -41,7 +45,7 @@ public class XPCSelectionResult
      _ray = ray;
      _selectionSphere = null;
      _nearestSquaredDistance = Double.NaN;
-     _cloudName = "";
+     _pointCloud = null;
      _treeID = "";
      _nodeID = "";
      _pointIndex = -1;
@@ -53,6 +57,11 @@ public class XPCSelectionResult
        _ray.dispose();
     if (_selectionSphere != null)
        _selectionSphere.dispose();
+  
+    if (_pointCloud != null)
+    {
+      _pointCloud._release();
+    }
   }
 
   public final Sphere getSelectionSphere()
@@ -62,6 +71,14 @@ public class XPCSelectionResult
       _selectionSphere = new Sphere(_nearestPoint.asVector3D(), IMathUtils.instance().sqrt(_nearestSquaredDistance));
     }
     return _selectionSphere;
+  }
+
+  public final boolean notifyPointCloud(Planet planet)
+  {
+    final Vector3D cartesian = _nearestPoint.asVector3D();
+    final Geodetic3D geodetic = planet.toGeodetic3D(cartesian);
+  
+    return _pointCloud.selectedPoint(cartesian, geodetic, _treeID, _nodeID, _pointIndex, IMathUtils.instance().sqrt(_nearestSquaredDistance));
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -83,7 +100,7 @@ public class XPCSelectionResult
     return (squaredDistanceToCenter - area.getRadiusSquared()) < _nearestSquaredDistance;
   }
 
-  public final boolean evaluateCantidate(MutableVector3D cartesianPoint, String cloudName, String treeID, String nodeID, int pointIndex)
+  public final boolean evaluateCantidate(MutableVector3D cartesianPoint, XPCPointCloud pointCloud, String treeID, String nodeID, int pointIndex)
   {
     final double candidateSquaredDistance = _ray.squaredDistanceTo(cartesianPoint);
     if ((_nearestSquaredDistance != _nearestSquaredDistance) || (candidateSquaredDistance < _nearestSquaredDistance))
@@ -92,7 +109,18 @@ public class XPCSelectionResult
       _nearestPoint.copyFrom(cartesianPoint);
       _nearestSquaredDistance = candidateSquaredDistance;
   
-      _cloudName = cloudName;
+      if (pointCloud != _pointCloud)
+      {
+        if (_pointCloud != null)
+        {
+          _pointCloud._release();
+        }
+        _pointCloud = pointCloud;
+        if (_pointCloud != null)
+        {
+          _pointCloud._retain();
+        }
+      }
       _treeID = treeID;
       _nodeID = nodeID;
       _pointIndex = pointIndex;

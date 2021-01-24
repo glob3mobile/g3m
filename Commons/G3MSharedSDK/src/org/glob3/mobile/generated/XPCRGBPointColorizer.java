@@ -102,14 +102,10 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
       return Color.RED;
     }
   
-  //  redValue = dimensionsValues->at(0)->;
-  
     final float red = metadata.getDimension(_redDimensionIndex).getNormalizedValue(dimensionsValues.get(0), i);
     final float green = metadata.getDimension(_greenDimensionIndex).getNormalizedValue(dimensionsValues.get(1), i);
     final float blue = metadata.getDimension(_blueDimensionIndex).getNormalizedValue(dimensionsValues.get(2), i);
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ______DIEGO AT WORK
     return Color.fromRGBA(red, green, blue, 1);
   }
 

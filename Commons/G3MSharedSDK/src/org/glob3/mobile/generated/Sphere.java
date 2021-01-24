@@ -27,12 +27,6 @@ public class Sphere extends BoundingVolume
 {
 
   private Mesh _mesh;
-
-  //Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
-  //  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
-  //  return Vector2I::zero();
-  //}
-  
   private Mesh createWireframeMesh(Color color, short resolution)
   {
     final double delta = DefineConstants.PI / (resolution-1);

@@ -101,7 +101,7 @@ public class XPCNode extends RCObject
     _downloader = rc.getDownloader();
   
     final long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
-  //  const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
+    // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
   
     _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
@@ -359,7 +359,7 @@ public class XPCNode extends RCObject
     return renderedCount;
   }
 
-  public final boolean selectPoints(XPCSelectionResult selectionResult, String cloudName, String treeID)
+  public final boolean selectPoints(XPCSelectionResult selectionResult, XPCPointCloud pointCloud, String treeID)
   {
     if (_bounds == null)
     {
@@ -389,7 +389,7 @@ public class XPCNode extends RCObject
       {
         _mesh.getVertex(i, vertex);
   
-        if (selectionResult.evaluateCantidate(vertex, cloudName, treeID, nodeID, i))
+        if (selectionResult.evaluateCantidate(vertex, pointCloud, treeID, nodeID, i))
         {
           selectedPoint = true;
         }
@@ -401,7 +401,7 @@ public class XPCNode extends RCObject
       for (int i = 0; i < _childrenSize; i++)
       {
         XPCNode child = _children.get(i);
-        if (child.selectPoints(selectionResult, cloudName, treeID))
+        if (child.selectPoints(selectionResult, pointCloud, treeID))
         {
           selectedPoint = true;
         }

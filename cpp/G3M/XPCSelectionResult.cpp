@@ -101,10 +101,10 @@ const bool XPCSelectionResult::notifyPointCloud(const Planet* planet) const {
   const Vector3D   cartesian = _nearestPoint.asVector3D();
   const Geodetic3D geodetic  = planet->toGeodetic3D(cartesian);
 
-  _pointCloud->selectedPoint(cartesian,
-                             geodetic,
-                             _treeID,
-                             _nodeID,
-                             _pointIndex,
-                             IMathUtils::instance()->sqrt( _nearestSquaredDistance ));
+  return _pointCloud->selectedPoint(cartesian,
+                                    geodetic,
+                                    _treeID,
+                                    _nodeID,
+                                    _pointIndex,
+                                    IMathUtils::instance()->sqrt( _nearestSquaredDistance ));
 }

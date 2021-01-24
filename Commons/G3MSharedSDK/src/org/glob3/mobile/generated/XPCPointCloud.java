@@ -26,6 +26,9 @@ package org.glob3.mobile.generated;
 //class IBufferDownloadListener;
 //class IIntBuffer;
 //class XPCSelectionResult;
+//class XPCPointSelectionListener;
+//class Vector3D;
+//class Geodetic3D;
 
 
 public class XPCPointCloud extends RCObject
@@ -33,18 +36,28 @@ public class XPCPointCloud extends RCObject
   private final URL _serverURL;
   private final String _cloudName;
   private final long _downloadPriority;
+
   private final TimeInterval _timeToCache;
   private final boolean _readExpired;
+
   private XPCPointColorizer _pointColorizer;
   private final boolean _deletePointColorizer;
+
   private final double _minProjectedArea;
+
   private final float _pointSize;
   private final boolean _dynamicPointSize;
   private final boolean _depthTest;
+
   private final float _verticalExaggeration;
   private final float _deltaHeight;
+
   private XPCMetadataListener _metadataListener;
   private final boolean _deleteMetadataListener;
+
+  private XPCPointSelectionListener _pointSelectionListener;
+  private final boolean _deletePointSelectionListener;
+
   private final boolean _verbose;
 
   private boolean _downloadingMetadata;
@@ -70,6 +83,12 @@ public class XPCPointCloud extends RCObject
          _metadataListener.dispose();
     }
   
+    if (_deletePointSelectionListener)
+    {
+      if (_pointSelectionListener != null)
+         _pointSelectionListener.dispose();
+    }
+  
     if (_metadata != null)
        _metadata.dispose();
   
@@ -79,7 +98,7 @@ public class XPCPointCloud extends RCObject
     super.dispose();
   }
 
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, boolean verbose)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener, boolean deletePointSelectionListener, boolean verbose)
   {
      _serverURL = serverURL;
      _cloudName = cloudName;
@@ -96,6 +115,8 @@ public class XPCPointCloud extends RCObject
      _deltaHeight = deltaHeight;
      _metadataListener = metadataListener;
      _deleteMetadataListener = deleteMetadataListener;
+     _pointSelectionListener = pointSelectionListener;
+     _deletePointSelectionListener = deletePointSelectionListener;
      _verbose = verbose;
      _downloadingMetadata = false;
      _errorDownloadingMetadata = false;
@@ -286,7 +307,22 @@ public class XPCPointCloud extends RCObject
 
   public final boolean selectPoints(XPCSelectionResult selectionResult)
   {
-    return ((_metadata != null) && _metadata.selectPoints(selectionResult, _cloudName));
+    if ((_pointSelectionListener == null) || (_metadata == null))
+    {
+      return false;
+    }
+  
+    return _metadata.selectPoints(selectionResult, this);
+  }
+
+  public final boolean selectedPoint(Vector3D cartesian, Geodetic3D geodetic, String treeID, String nodeID, int pointIndex, double distanceToRay)
+  {
+    if (_pointSelectionListener == null)
+    {
+      return false;
+    }
+  
+    return _pointSelectionListener.onSelectedPoint(this, cartesian, geodetic, treeID, nodeID, pointIndex, distanceToRay);
   }
 
 }

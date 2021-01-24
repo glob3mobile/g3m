@@ -62,9 +62,9 @@ public class XPCTree
     return (_rootNode == null) ? 0 : _rootNode.render(pointCloud, _id, rc, glState, frustum, nowInMS, renderDebug, selectionResult);
   }
 
-  public final boolean selectPoints(XPCSelectionResult selectionResult, String cloudName)
+  public final boolean selectPoints(XPCSelectionResult selectionResult, XPCPointCloud pointCloud)
   {
-    return (_rootNode != null) && _rootNode.selectPoints(selectionResult, cloudName, _id);
+    return (_rootNode != null) && _rootNode.selectPoints(selectionResult, pointCloud, _id);
   }
 
 }
