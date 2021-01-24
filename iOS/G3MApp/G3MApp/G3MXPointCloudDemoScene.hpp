@@ -11,6 +11,7 @@
 #include "G3MDemoScene.hpp"
 
 class G3MXPointCloudDemoScene : public G3MDemoScene {
+
 protected:
   void rawActivate(const G3MContext* context);
 

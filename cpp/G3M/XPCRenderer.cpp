@@ -58,6 +58,9 @@ void XPCRenderer::removeAllPointClouds() {
   }
   _clouds.clear();
   _cloudsSize = _clouds.size();
+
+  delete _selectionResult;
+  _selectionResult = NULL;
 }
 
 

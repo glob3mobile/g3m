@@ -24,12 +24,37 @@
 #include <G3M/XPCIntensityPointColorizer.hpp>
 #include <G3M/XPCClassificationPointColorizer.hpp>
 #include <G3M/XPCPointSelectionListener.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/EllipsoidShape.hpp>
+#include <G3M/FloatBufferBuilderFromGeodetic.hpp>
+#include <G3M/DirectMesh.hpp>
+#include <G3M/MeshRenderer.hpp>
+#include <G3M/G3MContext.hpp>
+#include <G3M/MarksRenderer.hpp>
+#include <G3M/Mark.hpp>
 
 #include "G3MDemoModel.hpp"
 
 
 class G3MXPointCloudDemoScene_PointSelectionListener : public XPCPointSelectionListener {
+private:
+  G3MXPointCloudDemoScene* _scene;
+
+  mutable Geodetic3D* _previousPosition;
+
 public:
+
+  G3MXPointCloudDemoScene_PointSelectionListener(G3MXPointCloudDemoScene* scene) :
+  _scene(scene),
+  _previousPosition(NULL)
+  {
+
+  }
+
+  ~G3MXPointCloudDemoScene_PointSelectionListener() {
+    delete _previousPosition;
+  }
+
   bool onSelectedPoint(const XPCPointCloud* pointCloud,
                        const Vector3D& cartesian,
                        const Geodetic3D& geodetic,
@@ -37,6 +62,87 @@ public:
                        const std::string& nodeID,
                        const int pointIndex,
                        const double distanceToRay) const {
+    G3MDemoModel* model = _scene->getModel();
+
+    {
+      Shape* sphere = new EllipsoidShape(new Geodetic3D(geodetic),
+                                         AltitudeMode::ABSOLUTE,
+                                         Vector3D(0.2,0.2,0.2),
+                                         (short) 16, // resolution,
+                                         0,  // float borderWidth,
+                                         false, // bool texturedInside,
+                                         false, // bool mercator,
+                                         Color::fromRGBA(1, 1, 0, 0.6f) // const Color& surfaceColor,
+                                         );
+
+
+      model->getShapesRenderer()->addShape( sphere );
+    }
+
+    if (_previousPosition != NULL) {
+      const Planet* planet = model->getG3MWidget()->getG3MContext()->getPlanet();
+
+      FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
+
+      fbb->add( *_previousPosition );
+      fbb->add(geodetic);
+
+      Mesh* mesh = new DirectMesh(GLPrimitive::lines(),
+                                  true,
+                                  fbb->getCenter(),
+                                  fbb->create(),
+                                  25.0f, // float lineWidth
+                                  1.0f, // float pointSize
+                                  Color::newFromRGBA(1, 1, 0, 0.6f), // const Color* flatColor
+                                  NULL,  // const IFloatBuffer* colors
+                                  false, // depthTest
+                                  NULL,  // const IFloatBuffer* normals = NULL,
+                                  true,  // bool polygonOffsetFill      = false,
+                                  10,    // float polygonOffsetFactor   = 0,
+                                  10     // float polygonOffsetUnits    = 0,
+                                  );
+
+
+//      DirectMesh(const int primitive,
+//                 bool owner,
+//                 const Vector3D& center,
+//                 const IFloatBuffer* vertices,
+//                 float lineWidth,
+//                 float pointSize,
+//                 const Color* flatColor      = NULL,
+//                 const IFloatBuffer* colors  = NULL,
+//                 bool depthTest              = true,
+//                 const IFloatBuffer* normals = NULL,
+//                 bool polygonOffsetFill      = false,
+//                 float polygonOffsetFactor   = 0,
+//                 float polygonOffsetUnits    = 0,
+//                 bool cullFace               = false,
+//                 int  culledFace             = GLCullFace::back());
+
+      model->getMeshRenderer()->addMesh( mesh );
+
+      Geodetic3D middle = Geodetic3D::linearInterpolation(geodetic, *_previousPosition, 0.5);
+      Mark* mark = new Mark( IStringUtils::instance()->toString(   10  ),
+                            middle,
+                            ABSOLUTE);
+
+//      Mark(const std::string& label,
+//           const Geodetic3D&  position,
+//           AltitudeMode       altitudeMode,
+//           double             minDistanceToCamera=4.5e+06,
+//           const float        labelFontSize=20,
+//           const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
+//           const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
+//           MarkUserData*      userData=NULL,
+//           bool               autoDeleteUserData=true,
+//           MarkTouchListener* listener=NULL,
+//           bool               autoDeleteListener=false);
+
+      model->getMarksRenderer()->addMark( mark );
+    }
+
+    delete _previousPosition;
+    _previousPosition = new Geodetic3D(geodetic);
 
 
     return true; // accepted point
@@ -117,10 +223,10 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
-                                         new XPCRGBPointColorizer(),               // pointColorizer
-                                         // new XPCIntensityPointColorizer(),      // pointColorizer
-                                         // new XPCClassificationPointColorizer(), // pointColorizer
-                                         true,                                     // deletePointColorizer,
+                                         new XPCRGBPointColorizer(),
+                                         // new XPCIntensityPointColorizer(),
+                                         // new XPCClassificationPointColorizer(),
+                                         true, // deletePointColorizer,
                                          minProjectedArea,
                                          pointSize,
                                          dynamicPointSize,
@@ -129,7 +235,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          deltaHeight,
                                          new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
                                          true,  // deleteMetadataListener,
-                                         new G3MXPointCloudDemoScene_PointSelectionListener(),
+                                         new G3MXPointCloudDemoScene_PointSelectionListener(this),
                                          true,  //  deletePointSelectionListener,
                                          verbose);
 
