@@ -84,12 +84,9 @@ Color XPCRGBPointColorizer::colorize(const XPCMetadata* metadata,
     return Color::RED;
   }
 
-//  redValue = dimensionsValues->at(0)->;
-
   const float red   = metadata->getDimension(_redDimensionIndex  )->getNormalizedValue( dimensionsValues->at(0), i );
   const float green = metadata->getDimension(_greenDimensionIndex)->getNormalizedValue( dimensionsValues->at(1), i );
   const float blue  = metadata->getDimension(_blueDimensionIndex )->getNormalizedValue( dimensionsValues->at(2), i );
 
-#warning ______DIEGO AT WORK
   return Color::fromRGBA(red, green, blue, 1);
 }

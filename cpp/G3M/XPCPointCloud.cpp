@@ -20,6 +20,7 @@
 
 #include "XPCMetadata.hpp"
 #include "XPCMetadataListener.hpp"
+#include "XPCPointSelectionListener.hpp"
 #include "XPCPointColorizer.hpp"
 
 
@@ -27,9 +28,9 @@ class XPCMetadataParserAsyncTask : public GAsyncTask {
 private:
   XPCPointCloud* _pointCloud;
   IByteBuffer*   _buffer;
-
+  
   XPCMetadata* _metadata;
-
+  
 public:
   XPCMetadataParserAsyncTask(XPCPointCloud* pointCloud,
                              IByteBuffer* buffer) :
@@ -39,22 +40,22 @@ public:
   {
     _pointCloud->_retain();
   }
-
+  
   ~XPCMetadataParserAsyncTask() {
     _pointCloud->_release();
-
+    
     delete _buffer;
-
+    
     delete _metadata;
   }
-
+  
   void runInBackground(const G3MContext* context) {
     _metadata = XPCMetadata::fromBuffer(_buffer);
-
+    
     delete _buffer;
     _buffer = NULL;
   }
-
+  
   void onPostExecute(const G3MContext* context) {
     if (_metadata) {
       _pointCloud->parsedMetadata(_metadata);
@@ -64,7 +65,7 @@ public:
       _pointCloud->errorParsingMetadata();
     }
   }
-
+  
 };
 
 
@@ -72,9 +73,9 @@ class XPCMetadataDownloadListener : public IBufferDownloadListener {
 private:
   XPCPointCloud*      _pointCloud;
   const IThreadUtils* _threadUtils;
-
+  
 public:
-
+  
   XPCMetadataDownloadListener(XPCPointCloud* pointCloud,
                               const IThreadUtils* threadUtils) :
   _pointCloud(pointCloud),
@@ -82,7 +83,7 @@ public:
   {
     _pointCloud->_retain();
   }
-
+  
   void onDownload(const URL& url,
                   IByteBuffer* buffer,
                   bool expired) {
@@ -94,29 +95,29 @@ public:
 #ifdef JAVA_CODE
     ILogger.instance().logInfo("Downloaded metadata for \"%s\" (bytes=%d)", _pointCloud.getCloudName(), buffer.size());
 #endif
-
+    
     _threadUtils->invokeAsyncTask(new XPCMetadataParserAsyncTask(_pointCloud, buffer),
                                   true);
   }
-
+  
   void onError(const URL& url) {
     _pointCloud->errorDownloadingMetadata();
   }
-
+  
   void onCancel(const URL& url) {
     // do nothing
   }
-
+  
   void onCanceledDownload(const URL& url,
                           IByteBuffer* buffer,
                           bool expired) {
     // do nothing
   }
-
+  
   ~XPCMetadataDownloadListener() {
     _pointCloud->_release();
   }
-
+  
 };
 
 
@@ -135,6 +136,8 @@ XPCPointCloud::XPCPointCloud(const URL& serverURL,
                              float deltaHeight,
                              XPCMetadataListener* metadataListener,
                              bool deleteMetadataListener,
+                             XPCPointSelectionListener* pointSelectionListener,
+                             bool deletePointSelectionListener,
                              bool verbose) :
 _serverURL(serverURL),
 _cloudName(cloudName),
@@ -151,6 +154,8 @@ _verticalExaggeration(verticalExaggeration),
 _deltaHeight(deltaHeight),
 _metadataListener(metadataListener),
 _deleteMetadataListener(deleteMetadataListener),
+_pointSelectionListener(pointSelectionListener),
+_deletePointSelectionListener(deletePointSelectionListener),
 _verbose(verbose),
 _downloadingMetadata(false),
 _errorDownloadingMetadata(false),
@@ -159,18 +164,18 @@ _metadata(NULL),
 _lastRenderedCount(0),
 _requiredDimensionIndices(NULL)
 {
-
+  
 }
 
 void XPCPointCloud::initialize(const G3MContext* context) {
   _downloadingMetadata      = true;
   _errorDownloadingMetadata = false;
   _errorParsingMetadata     = false;
-
+  
   const URL metadataURL(_serverURL, _cloudName);
-
+  
   ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
-
+  
   context->getDownloader()->requestBuffer(metadataURL,
                                           _downloadPriority,
                                           _timeToCache,
@@ -192,16 +197,16 @@ void XPCPointCloud::errorParsingMetadata() {
 void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
   _lastRenderedCount   = 0;
   _downloadingMetadata = false;
-
+  
   ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _cloudName.c_str());
-
-
+  
+  
   if (_metadata != metadata) {
     delete _metadata;
   }
   _metadata = metadata;
-
-
+  
+  
   IIntBuffer* requiredDimensionIndices = NULL;
   if (_pointColorizer != NULL) {
     requiredDimensionIndices = _pointColorizer->initialize(_metadata);
@@ -210,8 +215,8 @@ void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
     delete _requiredDimensionIndices;
   }
   _requiredDimensionIndices = requiredDimensionIndices;
-
-
+  
+  
   if (_metadataListener != NULL) {
     _metadataListener->onMetadata(_metadata);
     if (_deleteMetadataListener) {
@@ -229,11 +234,15 @@ XPCPointCloud::~XPCPointCloud() {
   if (_deleteMetadataListener) {
     delete _metadataListener;
   }
-
+  
+  if (_deletePointSelectionListener) {
+    delete _pointSelectionListener;
+  }
+  
   delete _metadata;
-
+  
   delete _requiredDimensionIndices;
-
+  
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -248,15 +257,15 @@ RenderState XPCPointCloud::getRenderState(const G3MRenderContext* rc) {
   if (_downloadingMetadata) {
     return RenderState::busy();
   }
-
+  
   if (_errorDownloadingMetadata) {
     return RenderState::error("Error downloading metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
   }
-
+  
   if (_errorParsingMetadata) {
     return RenderState::error("Error parsing metadata of \"" + _cloudName + "\" from \"" + _serverURL._path + "\"");
   }
-
+  
   return RenderState::ready();
 }
 
@@ -276,19 +285,19 @@ long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
   isb->addString(treeID);
   isb->addString("/");
   isb->addString(nodeID);
-
+  
   if (_requiredDimensionIndices != NULL) {
     for (size_t i = 0; i < _requiredDimensionIndices->size(); i++) {
       isb->addString( (i == 0) ? "?requiredDimensionIndices=" : ",");
       isb->addInt( _requiredDimensionIndices->get(i) );
     }
   }
-
+  
   const std::string path = isb->getString();
   delete isb;
-
+  
   const URL nodeContentURL(_serverURL, path);
-
+  
   return downloader->requestBuffer(nodeContentURL,
                                    _downloadPriority + deltaPriority,
                                    _timeToCache,
@@ -311,7 +320,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                                                       nowInMS,
                                                       renderDebug,
                                                       selectionResult);
-
+    
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {
 #ifdef C_CODE
@@ -327,5 +336,29 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
 }
 
 const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) const {
-  return ((_metadata != NULL) && _metadata->selectPoints(selectionResult, _cloudName));
+  if ((_pointSelectionListener == NULL) || (_metadata == NULL)) {
+    return false;
+  }
+  
+  return _metadata->selectPoints(selectionResult, this);
+}
+
+
+const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
+                                        const Geodetic3D& geodetic,
+                                        const std::string& treeID,
+                                        const std::string& nodeID,
+                                        const int pointIndex,
+                                        const double distanceToRay) const {
+  if (_pointSelectionListener == NULL) {
+    return false;
+  }
+
+  return _pointSelectionListener->onSelectedPoint(this,
+                                                  cartesian,
+                                                  geodetic,
+                                                  treeID,
+                                                  nodeID,
+                                                  pointIndex,
+                                                  distanceToRay);
 }

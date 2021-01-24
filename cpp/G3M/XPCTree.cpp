@@ -52,6 +52,6 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
 }
 
 const bool XPCTree::selectPoints(XPCSelectionResult* selectionResult,
-                                 const std::string& cloudName) const {
-  return (_rootNode != NULL) && _rootNode->selectPoints(selectionResult, cloudName, _id);
+                                 const XPCPointCloud* pointCloud) const {
+  return (_rootNode != NULL) && _rootNode->selectPoints(selectionResult, pointCloud, _id);
 }

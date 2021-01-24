@@ -76,6 +76,8 @@ void XPCRenderer::addPointCloud(const URL& serverURL,
                                 float deltaHeight,
                                 XPCMetadataListener* metadataListener,
                                 bool deleteMetadataListener,
+                                XPCPointSelectionListener* pointSelectionListener,
+                                bool deletePointSelectionListener,
                                 bool verbose) {
   
   XPCPointCloud* pointCloud = new XPCPointCloud(serverURL,
@@ -86,6 +88,7 @@ void XPCRenderer::addPointCloud(const URL& serverURL,
                                                 pointSize, dynamicPointSize, depthTest,
                                                 verticalExaggeration, deltaHeight,
                                                 metadataListener, deleteMetadataListener,
+                                                pointSelectionListener, deletePointSelectionListener,
                                                 verbose);
   
   if (_context != NULL) {
@@ -211,7 +214,7 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
             delete _selectionResult;
             _selectionResult = selectionResult;
 
-            return true;
+            return _selectionResult->notifyPointCloud(ec->getPlanet());
           }
 
           delete selectionResult;

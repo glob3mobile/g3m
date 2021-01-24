@@ -69,11 +69,6 @@ double Sphere::projectedArea(const G3MRenderContext* rc) const {
   return rc->getCurrentCamera()->getProjectedSphereArea(*this);
 }
 
-//Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
-//  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
-//  return Vector2I::zero();
-//}
-
 Mesh* Sphere::createWireframeMesh(const Color& color,
                                   short resolution) const {
   const double delta = PI / (resolution-1);

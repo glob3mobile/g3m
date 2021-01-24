@@ -43,6 +43,8 @@
 		CF4AD09D25B5F90D009A1E48 /* XPCPointCloud.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452025B1D2CC0056304B /* XPCPointCloud.hpp */; };
 		CF4AD09E25B5F90D009A1E48 /* XPCTree.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4AD09625B5F574009A1E48 /* XPCTree.hpp */; };
 		CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */; };
+		CF64ADEF25BDC6C500815620 /* XPCPointSelectionListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */; };
+		CF64ADF325BDCE8300815620 /* XPCPointSelectionListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF64ADEE25BDC6C500815620 /* XPCPointSelectionListener.hpp */; };
 		CF66063E23DF2FFD00795C7F /* BufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66016C23DF2DA500795C7F /* BufferElevationData.hpp */; };
 		CF66063F23DF2FFD00795C7F /* GPUAttributeValueVecFloat.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66016D23DF2DA500795C7F /* GPUAttributeValueVecFloat.hpp */; };
 		CF66064023DF2FFD00795C7F /* ILogger.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66016E23DF2DA500795C7F /* ILogger.hpp */; };
@@ -949,6 +951,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF64ADF325BDCE8300815620 /* XPCPointSelectionListener.hpp in CopyFiles */,
 				CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */,
 				CFC54E0125B9B8CC00424542 /* XPCIntensityPointColorizer.hpp in CopyFiles */,
 				CF05D55E25B82D9500220105 /* XPCPoint.hpp in CopyFiles */,
@@ -1505,6 +1508,8 @@
 		CF4AD09625B5F574009A1E48 /* XPCTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCTree.hpp; sourceTree = "<group>"; };
 		CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = DeviceInfo_iOS.mm; path = Specific/Derived/DeviceInfo_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceInfo_iOS.hpp; path = Specific/Derived/DeviceInfo_iOS.hpp; sourceTree = "<group>"; };
+		CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCPointSelectionListener.cpp; sourceTree = "<group>"; };
+		CF64ADEE25BDC6C500815620 /* XPCPointSelectionListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCPointSelectionListener.hpp; sourceTree = "<group>"; };
 		CF66016B23DF2DA500795C7F /* SGTranslateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGTranslateNode.cpp; sourceTree = "<group>"; };
 		CF66016C23DF2DA500795C7F /* BufferElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BufferElevationData.hpp; sourceTree = "<group>"; };
 		CF66016D23DF2DA500795C7F /* GPUAttributeValueVecFloat.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValueVecFloat.hpp; sourceTree = "<group>"; };
@@ -2567,6 +2572,8 @@
 				CF27452025B1D2CC0056304B /* XPCPointCloud.hpp */,
 				CF27451325B1D0700056304B /* XPCPointColorizer.cpp */,
 				CF27451425B1D0700056304B /* XPCPointColorizer.hpp */,
+				CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */,
+				CF64ADEE25BDC6C500815620 /* XPCPointSelectionListener.hpp */,
 				CF2744FD25B1AF450056304B /* XPCRenderer.cpp */,
 				CF2744FE25B1AF450056304B /* XPCRenderer.hpp */,
 				CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */,
@@ -3945,6 +3952,7 @@
 				CF66092623DF330700795C7F /* BufferDEMGrid.cpp in Sources */,
 				CF66092723DF330700795C7F /* AbstractMesh.cpp in Sources */,
 				CF66092823DF330700795C7F /* HUDQuadWidget.cpp in Sources */,
+				CF64ADEF25BDC6C500815620 /* XPCPointSelectionListener.cpp in Sources */,
 				CF66092923DF330700795C7F /* GEO3DCoordinatesData.cpp in Sources */,
 				CF66092A23DF330700795C7F /* ProtoRenderer.cpp in Sources */,
 				CF66092B23DF330700795C7F /* QuadTree.cpp in Sources */,

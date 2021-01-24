@@ -23,8 +23,26 @@
 #include <G3M/XPCRGBPointColorizer.hpp>
 #include <G3M/XPCIntensityPointColorizer.hpp>
 #include <G3M/XPCClassificationPointColorizer.hpp>
+#include <G3M/XPCPointSelectionListener.hpp>
 
 #include "G3MDemoModel.hpp"
+
+
+class G3MXPointCloudDemoScene_PointSelectionListener : public XPCPointSelectionListener {
+public:
+  bool onSelectedPoint(const XPCPointCloud* pointCloud,
+                       const Vector3D& cartesian,
+                       const Geodetic3D& geodetic,
+                       const std::string& treeID,
+                       const std::string& nodeID,
+                       const int pointIndex,
+                       const double distanceToRay) const {
+
+
+    return true; // accepted point
+  }
+
+};
 
 
 class G3MXPointCloudDemoScene_PointCloudMetadataListener : public XPCMetadataListener {
@@ -59,9 +77,9 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const bool  dynamicPointSize     = true;
   const float verticalExaggeration = 1;
   const bool  depthTest            = true;
+  const bool  verbose              = true;
 
   const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
-//  const float       deltaHeight = -210;
   const float       deltaHeight = -170;
 
 //  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
@@ -99,10 +117,10 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
-                                         new XPCRGBPointColorizer(),         // pointColorizer
-                                         // new XPCIntensityPointColorizer(),   // pointColorizer
+                                         new XPCRGBPointColorizer(),               // pointColorizer
+                                         // new XPCIntensityPointColorizer(),      // pointColorizer
                                          // new XPCClassificationPointColorizer(), // pointColorizer
-                                         true,                                  // deletePointColorizer,
+                                         true,                                     // deletePointColorizer,
                                          minProjectedArea,
                                          pointSize,
                                          dynamicPointSize,
@@ -110,7 +128,9 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          verticalExaggeration,
                                          deltaHeight,
                                          new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
-                                         true,
-                                         true);
+                                         true,  // deleteMetadataListener,
+                                         new G3MXPointCloudDemoScene_PointSelectionListener(),
+                                         true,  //  deletePointSelectionListener,
+                                         verbose);
 
 }

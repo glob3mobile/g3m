@@ -8,10 +8,12 @@
 #ifndef XPCSelectionResult_hpp
 #define XPCSelectionResult_hpp
 
+class XPCPointCloud;
 class Ray;
 class G3MRenderContext;
 class GLState;
 class Sphere;
+class Planet;
 
 #include "MutableVector3D.hpp"
 
@@ -21,11 +23,13 @@ private:
   double          _nearestSquaredDistance;
   MutableVector3D _nearestPoint;
 
+
   // point full id
-  std::string _cloudName;
+  const XPCPointCloud* _pointCloud;
   std::string _treeID;
   std::string _nodeID;
   int _pointIndex;
+
 
   mutable Sphere* _selectionSphere;
 
@@ -38,13 +42,15 @@ public:
 
   const Sphere* getSelectionSphere() const;
 
+  const bool notifyPointCloud(const Planet* planet) const;
+
   void render(const G3MRenderContext* rc,
               GLState* glState) const;
 
   bool isInterestedIn(const Sphere* area) const;
 
   bool evaluateCantidate(const MutableVector3D& cartesianPoint,
-                         const std::string& cloudName,
+                         const XPCPointCloud* pointCloud,
                          const std::string& treeID,
                          const std::string& nodeID,
                          const int pointIndex);

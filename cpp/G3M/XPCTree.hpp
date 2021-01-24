@@ -46,7 +46,7 @@ public:
                    const XPCSelectionResult* selectionResult) const;
 
   const bool selectPoints(XPCSelectionResult* selectionResult,
-                          const std::string& cloudName) const;
+                          const XPCPointCloud* pointCloud) const;
 
 };
 

@@ -24,26 +24,39 @@ class IDownloader;
 class IBufferDownloadListener;
 class IIntBuffer;
 class XPCSelectionResult;
+class XPCPointSelectionListener;
+class Vector3D;
+class Geodetic3D;
 
 
 class XPCPointCloud : public RCObject {
 private:
-  const URL            _serverURL;
-  const std::string    _cloudName;
-  const long long      _downloadPriority;
-  const TimeInterval   _timeToCache;
-  const bool           _readExpired;
-  XPCPointColorizer*   _pointColorizer;
-  const bool           _deletePointColorizer;
-  const double         _minProjectedArea;
-  const float          _pointSize;
-  const bool           _dynamicPointSize;
-  const bool           _depthTest;
-  const float          _verticalExaggeration;
-  const float          _deltaHeight;
-  XPCMetadataListener* _metadataListener;
-  const bool           _deleteMetadataListener;
-  const bool           _verbose;
+  const URL                  _serverURL;
+  const std::string          _cloudName;
+  const long long            _downloadPriority;
+
+  const TimeInterval         _timeToCache;
+  const bool                 _readExpired;
+
+  XPCPointColorizer*         _pointColorizer;
+  const bool                 _deletePointColorizer;
+
+  const double               _minProjectedArea;
+
+  const float                _pointSize;
+  const bool                 _dynamicPointSize;
+  const bool                 _depthTest;
+
+  const float                _verticalExaggeration;
+  const float                _deltaHeight;
+
+  XPCMetadataListener*       _metadataListener;
+  const bool                 _deleteMetadataListener;
+
+  XPCPointSelectionListener* _pointSelectionListener;
+  const bool                 _deletePointSelectionListener;
+
+  const bool                 _verbose;
 
   bool _downloadingMetadata;
   bool _errorDownloadingMetadata;
@@ -74,6 +87,8 @@ public:
                 float deltaHeight,
                 XPCMetadataListener* metadataListener,
                 bool deleteMetadataListener,
+                XPCPointSelectionListener* pointSelectionListener,
+                bool deletePointSelectionListener,
                 bool verbose);
 
   const std::string getCloudName() const {
@@ -135,6 +150,13 @@ public:
   }
 
   const bool selectPoints(XPCSelectionResult* selectionResult) const;
+
+  const bool selectedPoint(const Vector3D& cartesian,
+                           const Geodetic3D& geodetic,
+                           const std::string& treeID,
+                           const std::string& nodeID,
+                           const int pointIndex,
+                           const double distanceToRay) const;
 
 };
 

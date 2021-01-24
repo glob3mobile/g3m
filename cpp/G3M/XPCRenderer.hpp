@@ -16,6 +16,7 @@ class URL;
 class TimeInterval;
 class XPCPointColorizer;
 class XPCMetadataListener;
+class XPCPointSelectionListener;
 class Camera;
 class XPCSelectionResult;
 
@@ -75,6 +76,8 @@ public:
                      float deltaHeight = 0,
                      XPCMetadataListener* metadataListener = NULL,
                      bool deleteMetadataListener = true,
+                     XPCPointSelectionListener* pointSelectionListener = NULL,
+                     bool deletePointSelectionListener = true,
                      bool verbose = false);
 
   void render(const G3MRenderContext* rc,

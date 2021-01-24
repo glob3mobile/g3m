@@ -449,7 +449,7 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
   _downloader = rc->getDownloader();
 
   const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
-//  const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
+  // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
 
   _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
                                                            treeID,
@@ -597,7 +597,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 }
 
 const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult,
-                                 const std::string& cloudName,
+                                 const XPCPointCloud* pointCloud,
                                  const std::string& treeID) const {
   if (_bounds == NULL) {
     return false;
@@ -623,7 +623,7 @@ const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult,
       _mesh->getVertex(i, vertex);
 
       if ( selectionResult->evaluateCantidate(vertex,
-                                              cloudName,
+                                              pointCloud,
                                               treeID,
                                               nodeID,
                                               i) ) {
@@ -636,7 +636,7 @@ const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult,
     for (size_t i = 0; i < _childrenSize; i++) {
       XPCNode* child = _children->at(i);
       if (child->selectPoints(selectionResult,
-                              cloudName,
+                              pointCloud,
                               treeID)) {
         selectedPoint = true;
       }
