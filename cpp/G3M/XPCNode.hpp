@@ -90,6 +90,10 @@ public:
 
   const Sector* getSector() const;
 
+  const double getMinHeight() const;
+
+  const double getMaxHeight() const;
+
   void errorDownloadingContent();
 
   void setContent(std::vector<XPCNode*>* children,

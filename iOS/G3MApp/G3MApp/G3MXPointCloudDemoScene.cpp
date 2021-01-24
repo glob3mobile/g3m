@@ -42,8 +42,9 @@ public:
       const XPCTree* tree = metadata->getTree(0);
 
       const Geodetic2D center = tree->getSector()->_center;
+      const double height = tree->getMaxHeight() * 10;
       
-      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, 500) );
+      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, height) );
     }
   }
 
@@ -54,15 +55,17 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  const float  pointSize            = 1;
-  const bool   dynamicPointSize     = true;
-  const float  verticalExaggeration = 1;
+  const float pointSize            = 2;
+  const bool  dynamicPointSize     = true;
+  const float verticalExaggeration = 1;
+  const bool  depthTest            = true;
 
-//  const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
+  const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
 //  const float       deltaHeight = -210;
+  const float       deltaHeight = -170;
 
-  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
-  const float       deltaHeight = -210;
+//  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
+//  const float       deltaHeight = -210;
 
 //  const std::string cloudName   = "Leica_M40_LOD";
 //  const float       deltaHeight = -580;
@@ -103,7 +106,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          minProjectedArea,
                                          pointSize,
                                          dynamicPointSize,
-                                         true, // depthTest
+                                         depthTest,
                                          verticalExaggeration,
                                          deltaHeight,
                                          new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),

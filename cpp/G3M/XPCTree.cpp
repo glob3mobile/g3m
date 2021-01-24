@@ -26,6 +26,14 @@ const Sector* XPCTree::getSector() const {
   return _rootNode->getSector();
 }
 
+const double XPCTree::getMinHeight() const {
+  return _rootNode->getMinHeight();
+}
+
+const double XPCTree::getMaxHeight() const {
+  return _rootNode->getMaxHeight();
+}
+
 long long XPCTree::render(const XPCPointCloud* pointCloud,
                           const G3MRenderContext* rc,
                           GLState* glState,

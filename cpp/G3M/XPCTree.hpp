@@ -33,6 +33,10 @@ public:
 
   const Sector* getSector() const;
 
+  const double getMinHeight() const;
+
+  const double getMaxHeight() const;
+
   long long render(const XPCPointCloud* pointCloud,
                    const G3MRenderContext* rc,
                    GLState* glState,

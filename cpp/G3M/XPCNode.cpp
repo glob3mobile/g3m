@@ -337,6 +337,13 @@ const Sector* XPCNode::getSector() const {
   return _sector;
 }
 
+const double XPCNode::getMinHeight() const {
+  return _minHeight;
+}
+
+const double XPCNode::getMaxHeight() const {
+  return _maxHeight;
+}
 
 const Sphere* XPCNode::getBounds(const G3MRenderContext* rc,
                                  const XPCPointCloud* pointCloud) {
