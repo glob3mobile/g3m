@@ -90,6 +90,10 @@ public class XPCRenderer extends DefaultRenderer
     }
     _clouds.clear();
     _cloudsSize = _clouds.size();
+  
+    if (_selectionResult != null)
+       _selectionResult.dispose();
+    _selectionResult = null;
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)

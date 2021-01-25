@@ -46,7 +46,6 @@ public class CircleShape extends AbstractMeshShape
   
     if (_useNormals)
     {
-  
       FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
       for (int i = 0; i <= _steps+1; i++)
       {
@@ -61,7 +60,6 @@ public class CircleShape extends AbstractMeshShape
          vertices.dispose();
   
       return result;
-  
     }
   
     Mesh result = new DirectMesh(GLPrimitive.triangleFan(), true, Vector3D.ZERO, vertices.create(), 1, 1, color);
@@ -95,8 +93,7 @@ public class CircleShape extends AbstractMeshShape
     if (_color != null)
        _color.dispose();
 
-  super.dispose();
-
+    super.dispose();
   }
 
   public final void setRadius(float radius)

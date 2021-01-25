@@ -12,6 +12,7 @@
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 
+
 class CircleShape : public AbstractMeshShape {
 private:
   float  _radius;
