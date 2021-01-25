@@ -70,6 +70,10 @@ void G3MDemoBuilder::build() {
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
 
+  XPCRenderer* xPointCloudsRenderer = new XPCRenderer();
+  builder->addRenderer(xPointCloudsRenderer);
+
+
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder->addRenderer(meshRenderer);
 
@@ -81,9 +85,6 @@ void G3MDemoBuilder::build() {
 
   OLDPointCloudsRenderer* oldPointCloudsRenderer = new OLDPointCloudsRenderer();
   builder->addRenderer(oldPointCloudsRenderer);
-
-  XPCRenderer* xPointCloudsRenderer = new XPCRenderer();
-  builder->addRenderer(xPointCloudsRenderer);
 
   GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
                                              meshRenderer,

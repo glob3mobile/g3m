@@ -40,19 +40,22 @@ class G3MXPointCloudDemoScene_PointSelectionListener : public XPCPointSelectionL
 private:
   G3MXPointCloudDemoScene* _scene;
 
-  mutable Geodetic3D* _previousPosition;
+  mutable Geodetic3D* _previousGeodetic;
+  mutable Vector3D*   _previousCartesian;
 
 public:
 
   G3MXPointCloudDemoScene_PointSelectionListener(G3MXPointCloudDemoScene* scene) :
   _scene(scene),
-  _previousPosition(NULL)
+  _previousGeodetic(NULL),
+  _previousCartesian(NULL)
   {
 
   }
 
   ~G3MXPointCloudDemoScene_PointSelectionListener() {
-    delete _previousPosition;
+    delete _previousGeodetic;
+    delete _previousCartesian;
   }
 
   bool onSelectedPoint(const XPCPointCloud* pointCloud,
@@ -67,11 +70,11 @@ public:
     {
       Shape* sphere = new EllipsoidShape(new Geodetic3D(geodetic),
                                          AltitudeMode::ABSOLUTE,
-                                         Vector3D(0.2,0.2,0.2),
-                                         (short) 16, // resolution,
-                                         0,  // float borderWidth,
-                                         false, // bool texturedInside,
-                                         false, // bool mercator,
+                                         Vector3D(0.1, 0.1, 0.1),
+                                         (short) 16,  // resolution,
+                                         0,           // float borderWidth,
+                                         false,       // bool texturedInside,
+                                         false,       // bool mercator,
                                          Color::fromRGBA(1, 1, 0, 0.6f) // const Color& surfaceColor,
                                          );
 
@@ -79,27 +82,27 @@ public:
       model->getShapesRenderer()->addShape( sphere );
     }
 
-    if (_previousPosition != NULL) {
+    if (_previousGeodetic != NULL) {
       const Planet* planet = model->getG3MWidget()->getG3MContext()->getPlanet();
 
       FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
 
-      fbb->add( *_previousPosition );
+      fbb->add( *_previousGeodetic );
       fbb->add(geodetic);
 
       Mesh* mesh = new DirectMesh(GLPrimitive::lines(),
                                   true,
                                   fbb->getCenter(),
                                   fbb->create(),
-                                  25.0f, // float lineWidth
+                                  5.0f, // float lineWidth
                                   1.0f, // float pointSize
                                   Color::newFromRGBA(1, 1, 0, 0.6f), // const Color* flatColor
                                   NULL,  // const IFloatBuffer* colors
-                                  false, // depthTest
-                                  NULL,  // const IFloatBuffer* normals = NULL,
-                                  true,  // bool polygonOffsetFill      = false,
-                                  10,    // float polygonOffsetFactor   = 0,
-                                  10     // float polygonOffsetUnits    = 0,
+                                  false  // depthTest
+//                                  NULL,  // const IFloatBuffer* normals = NULL,
+//                                  true,  // bool polygonOffsetFill      = false,
+//                                  10,    // float polygonOffsetFactor   = 0,
+//                                  10     // float polygonOffsetUnits    = 0,
                                   );
 
 
@@ -121,8 +124,8 @@ public:
 
       model->getMeshRenderer()->addMesh( mesh );
 
-      Geodetic3D middle = Geodetic3D::linearInterpolation(geodetic, *_previousPosition, 0.5);
-      Mark* mark = new Mark( IStringUtils::instance()->toString(   10  ),
+      Geodetic3D middle = Geodetic3D::linearInterpolation(geodetic, *_previousGeodetic, 0.5);
+      Mark* mark = new Mark( IStringUtils::instance()->toString(     (float)  _previousCartesian->distanceTo(cartesian)    ),
                             middle,
                             ABSOLUTE);
 
@@ -141,9 +144,11 @@ public:
       model->getMarksRenderer()->addMark( mark );
     }
 
-    delete _previousPosition;
-    _previousPosition = new Geodetic3D(geodetic);
+    delete _previousGeodetic;
+    _previousGeodetic = new Geodetic3D(geodetic);
 
+    delete _previousCartesian;
+    _previousCartesian = new Vector3D(cartesian);
 
     return true; // accepted point
   }
