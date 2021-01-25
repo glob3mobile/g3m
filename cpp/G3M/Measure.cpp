@@ -162,8 +162,13 @@ void Measure::reset() {
 
     {
       // create edges distance labels
+#ifdef C_CODE
       const Geodetic3D* previousGeodetic  = _vertices[0];
       const Vector3D*   previousCartesian = new Vector3D(_planet->toCartesian(*previousGeodetic));
+#else
+      Geodetic3D* previousGeodetic  = _vertices[0];
+      Vector3D*   previousCartesian = new Vector3D(_planet->toCartesian(*previousGeodetic));
+#endif
       for (size_t i = 1; i < verticesCount; i++) {
         const Geodetic3D* currentGeodetic  = _vertices[i];
         const Vector3D*   currentCartesian = new Vector3D(_planet->toCartesian(*currentGeodetic));
@@ -175,16 +180,13 @@ void Measure::reset() {
 
         _marksRenderer->addMark(distanceLabel);
 
-        //        delete previousGeodetic;
         previousGeodetic = currentGeodetic;
 
         delete previousCartesian;
         previousCartesian = currentCartesian;
       }
 
-      //      delete previousGeodetic;
       delete previousCartesian;
-
     }
 
 #warning TODO:   vertices angle labels

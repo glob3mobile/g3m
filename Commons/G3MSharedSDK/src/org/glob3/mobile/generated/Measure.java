@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class MeshRenderer;
 //class MarksRenderer;
 //class Planet;
-
+//class MeasureVertexShape;
 
 public class Measure
 {
@@ -45,6 +45,8 @@ public class Measure
     _meshRenderer.clearMeshes();
     _marksRenderer.removeAllMarks();
   
+    _verticesSpheres.clear();
+  
     final int verticesCount = _vertices.size();
   
     // create vertices spheres
@@ -52,8 +54,9 @@ public class Measure
     {
       final Geodetic3D geodetic = _vertices.get(i);
   
-      Shape vertexSphere = new EllipsoidShape(new Geodetic3D(geodetic), AltitudeMode.ABSOLUTE, new Vector3D(_vertexSphereRadius, _vertexSphereRadius, _vertexSphereRadius), (short) 16, 0, false, false, _vertexColor); // const Color& surfaceColor -  bool mercator -  bool texturedInside -  float borderWidth -  resolution
+      MeasureVertexShape vertexSphere = new MeasureVertexShape(new Geodetic3D(geodetic), _vertexSphereRadius, _vertexColor, _vertexSelectedColor, this, i);
   
+      _verticesSpheres.add(vertexSphere);
   
       _shapesRenderer.addShape(vertexSphere);
     }
@@ -78,8 +81,8 @@ public class Measure
   
       {
         // create edges distance labels
-        final Geodetic3D previousGeodetic = _vertices.get(0);
-        final Vector3D previousCartesian = new Vector3D(_planet.toCartesian(previousGeodetic));
+        Geodetic3D previousGeodetic = _vertices.get(0);
+        Vector3D previousCartesian = new Vector3D(_planet.toCartesian(previousGeodetic));
         for (int i = 1; i < verticesCount; i++)
         {
           final Geodetic3D currentGeodetic = _vertices.get(i);
@@ -90,7 +93,6 @@ public class Measure
   
           _marksRenderer.addMark(distanceLabel);
   
-  //        delete previousGeodetic;
           previousGeodetic = currentGeodetic;
   
           if (previousCartesian != null)
@@ -98,10 +100,8 @@ public class Measure
           previousCartesian = currentCartesian;
         }
   
-  //      delete previousGeodetic;
         if (previousCartesian != null)
            previousCartesian.dispose();
-  
       }
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
@@ -110,6 +110,9 @@ public class Measure
     }
   
   }
+
+  private int _selectedVertexIndex;
+  private java.util.ArrayList<MeasureVertexShape> _verticesSpheres = new java.util.ArrayList<MeasureVertexShape>();
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: add vertexSelectionHandler onVertexSelection(measure, geodetic, i);
@@ -125,6 +128,7 @@ public class Measure
      _meshRenderer = meshRenderer;
      _marksRenderer = marksRenderer;
      _planet = planet;
+     _selectedVertexIndex = -1;
     addVertex(firstVertex);
   }
 
@@ -176,4 +180,23 @@ public class Measure
          vertex.dispose();
     }
   }
+
+  public final void touchedOn(int vertexIndex)
+  {
+    if (vertexIndex == _selectedVertexIndex)
+    {
+      _verticesSpheres.get(_selectedVertexIndex).setSelected(false);
+      _selectedVertexIndex = -1;
+    }
+    else
+    {
+      if (_selectedVertexIndex >= 0)
+      {
+        _verticesSpheres.get(_selectedVertexIndex).setSelected(false);
+      }
+      _selectedVertexIndex = vertexIndex;
+      _verticesSpheres.get(_selectedVertexIndex).setSelected(true);
+    }
+  }
+
 }

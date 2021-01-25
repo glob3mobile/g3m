@@ -363,9 +363,14 @@ public class EllipsoidShape extends AbstractMeshShape
     return result;
   }
 
-  public final boolean touched(G3MEventContext ec)
+  public final void setSurfaceColor(Color surfaceColor)
   {
-    return true;
+    if (_surfaceColor != null)
+       _surfaceColor.dispose();
+  
+    _surfaceColor = surfaceColor;
+  
+    cleanMesh();
   }
 
 }

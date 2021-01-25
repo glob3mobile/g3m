@@ -88,4 +88,5 @@ public abstract class AbstractMeshShape extends Shape
     }
     return mesh.isTransparent(rc);
   }
+
 }
