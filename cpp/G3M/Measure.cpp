@@ -19,7 +19,51 @@
 #include "GLConstants.hpp"
 #include "Mark.hpp"
 #include "Planet.hpp"
+#include "IndexedMesh.hpp"
 
+
+class MeasureVertexShape : public EllipsoidShape {
+private:
+  const Color  _color;
+  const Color  _selectedColor;
+  Measure*     _measure;
+  const int    _vertexIndex;
+
+public:
+
+  MeasureVertexShape(Geodetic3D* position,
+                     const double radius,
+                     const Color& color,
+                     const Color& selectedColor,
+                     Measure* measure,
+                     const int vertexIndex) :
+  EllipsoidShape(position,
+                 AltitudeMode::ABSOLUTE,
+                 Vector3D(radius, radius, radius),
+                 (short) 16,  // resolution
+                 0,           // float borderWidth
+                 false,       // bool texturedInside
+                 false,       // bool mercator
+                 color),
+  _color(color),
+  _selectedColor(selectedColor),
+  _measure(measure),
+  _vertexIndex(vertexIndex)
+  {
+
+  }
+
+  void setSelected(const bool selected) {
+    setSurfaceColor( selected ? _selectedColor : _color );
+  }
+
+  bool touched(const G3MEventContext* ec) {
+    _measure->touchedOn(_vertexIndex);
+
+    return true;
+  }
+
+};
 
 Measure::Measure(const double vertexSphereRadius,
                  const Color& vertexColor,
@@ -39,7 +83,8 @@ _segmentColor(segmentColor),
 _shapesRenderer(shapesRenderer),
 _meshRenderer(meshRenderer),
 _marksRenderer(marksRenderer),
-_planet(planet)
+_planet(planet),
+_selectedVertexIndex(-1)
 {
   addVertex( firstVertex );
 }
@@ -51,29 +96,41 @@ Measure::~Measure() {
   }
 }
 
+void Measure::touchedOn(const int vertexIndex) {
+  if (vertexIndex == _selectedVertexIndex) {
+    _verticesSpheres[_selectedVertexIndex]->setSelected(false);
+    _selectedVertexIndex = -1;
+  }
+  else {
+    if (_selectedVertexIndex >= 0) {
+      _verticesSpheres[_selectedVertexIndex]->setSelected(false);
+    }
+    _selectedVertexIndex = vertexIndex;
+    _verticesSpheres[_selectedVertexIndex]->setSelected(true);
+  }
+}
+
 void Measure::reset() {
   _shapesRenderer->removeAllShapes();
   _meshRenderer->clearMeshes();
   _marksRenderer->removeAllMarks();
 
+  _verticesSpheres.clear();
+
   const size_t verticesCount = _vertices.size();
 
   // create vertices spheres
-  for (size_t i = 0; i < verticesCount; i++) {
+  for (int i = 0; i < verticesCount; i++) {
     const Geodetic3D* geodetic = _vertices[i];
 
-    Shape* vertexSphere = new EllipsoidShape(new Geodetic3D(*geodetic),
-                                             AltitudeMode::ABSOLUTE,
-                                             Vector3D(_vertexSphereRadius,
-                                                      _vertexSphereRadius,
-                                                      _vertexSphereRadius),
-                                             (short) 16,  // resolution
-                                             0,           // float borderWidth
-                                             false,       // bool texturedInside
-                                             false,       // bool mercator
-                                             _vertexColor // const Color& surfaceColor
-                                             );
+    MeasureVertexShape* vertexSphere = new MeasureVertexShape(new Geodetic3D(*geodetic),
+                                                              _vertexSphereRadius,
+                                                              _vertexColor,
+                                                              _vertexSelectedColor,
+                                                              this,
+                                                              i);
 
+    _verticesSpheres.push_back( vertexSphere );
 
     _shapesRenderer->addShape( vertexSphere );
   }
@@ -118,14 +175,14 @@ void Measure::reset() {
 
         _marksRenderer->addMark(distanceLabel);
 
-//        delete previousGeodetic;
+        //        delete previousGeodetic;
         previousGeodetic = currentGeodetic;
 
         delete previousCartesian;
         previousCartesian = currentCartesian;
       }
 
-//      delete previousGeodetic;
+      //      delete previousGeodetic;
       delete previousCartesian;
 
     }

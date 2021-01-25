@@ -1074,4 +1074,5 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _tileVisibilityTester.onTileHasChangedMesh(tile);
   }
 
+
 }

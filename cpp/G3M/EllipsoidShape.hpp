@@ -93,7 +93,7 @@ public:
                                              const Vector3D& origin,
                                              const Vector3D& direction) const;
 
-  bool touched(const G3MEventContext* ec);
+  void setSurfaceColor(const Color& surfaceColor);
 
 };
 

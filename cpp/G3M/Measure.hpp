@@ -17,7 +17,7 @@ class ShapesRenderer;
 class MeshRenderer;
 class MarksRenderer;
 class Planet;
-
+class MeasureVertexShape;
 
 class Measure {
 private:
@@ -36,6 +36,9 @@ private:
   const Planet* _planet;
 
   void reset();
+
+  int _selectedVertexIndex;
+  std::vector<MeasureVertexShape*> _verticesSpheres;
 
 public:
 #warning TODO: add vertexSelectionHandler   onVertexSelection(measure, geodetic, i);
@@ -61,6 +64,9 @@ public:
   bool removeVertex(const size_t i);
 
   ~Measure();
+
+  void touchedOn(const int vertexIndex);
+
 };
 
 #endif

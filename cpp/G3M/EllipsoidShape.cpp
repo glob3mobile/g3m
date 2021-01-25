@@ -93,6 +93,13 @@ _texID(NULL)
 
 }
 
+void EllipsoidShape::setSurfaceColor(const Color& surfaceColor) {
+  delete _surfaceColor;
+
+  _surfaceColor = new Color(surfaceColor);
+
+  cleanMesh();
+}
 
 EllipsoidShape::~EllipsoidShape() {
   delete _surfaceColor;
@@ -395,6 +402,3 @@ std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
   return result;
 }
 
-bool EllipsoidShape::touched(const G3MEventContext* ec) {
-  return true;
-}

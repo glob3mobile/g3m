@@ -125,7 +125,7 @@ public class Measure
      _meshRenderer = meshRenderer;
      _marksRenderer = marksRenderer;
      _planet = planet;
-    _vertices.add(firstVertex);
+    addVertex(firstVertex);
   }
 
   public final int getVexticesCount()

@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 
 //class ShapePendingEffect;
 //class GLState;
+//class G3MEventContext;
 
 
 public abstract class Shape implements SurfaceElevationListener, EffectTarget
@@ -466,5 +467,9 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
 
+  public boolean touched(G3MEventContext ec)
+  {
+    return false;
+  }
 
 }
