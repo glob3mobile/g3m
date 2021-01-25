@@ -18,6 +18,7 @@
 #include "DirectMesh.hpp"
 #include "GLConstants.hpp"
 #include "Mark.hpp"
+#include "Planet.hpp"
 
 
 Measure::Measure(const double vertexSphereRadius,
@@ -40,7 +41,7 @@ _meshRenderer(meshRenderer),
 _marksRenderer(marksRenderer),
 _planet(planet)
 {
-  _vertices.push_back( firstVertex );
+  addVertex( firstVertex );
 }
 
 Measure::~Measure() {

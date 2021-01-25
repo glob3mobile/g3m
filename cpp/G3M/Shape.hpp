@@ -19,6 +19,7 @@
 
 class ShapePendingEffect;
 class GLState;
+class G3MEventContext;
 
 
 class Shape : public SurfaceElevationListener, EffectTarget {
@@ -195,8 +196,9 @@ public:
   virtual std::vector<double> intersectionsDistances(const Planet* planet,
                                                      const Vector3D& origin,
                                                      const Vector3D& direction) const = 0;
-  
-  
+
+  virtual bool touched(const G3MEventContext* ec);
+
 };
 
 #endif

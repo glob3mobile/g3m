@@ -17,6 +17,10 @@ package org.glob3.mobile.generated;
 
 
 //class Geodetic3D;
+//class ShapesRenderer;
+//class MeshRenderer;
+//class MarksRenderer;
+//class Planet;
 
 
 public class Measure
@@ -29,24 +33,98 @@ public class Measure
 
   private final java.util.ArrayList<Geodetic3D> _vertices = new java.util.ArrayList<Geodetic3D>();
 
+  private ShapesRenderer _shapesRenderer;
+  private MeshRenderer _meshRenderer;
+  private MarksRenderer _marksRenderer;
+
+  private final Planet _planet;
+
   private void reset()
   {
+    _shapesRenderer.removeAllShapes();
+    _meshRenderer.clearMeshes();
+    _marksRenderer.removeAllMarks();
+  
+    final int verticesCount = _vertices.size();
+  
+    // create vertices spheres
+    for (int i = 0; i < verticesCount; i++)
+    {
+      final Geodetic3D geodetic = _vertices.get(i);
+  
+      Shape vertexSphere = new EllipsoidShape(new Geodetic3D(geodetic), AltitudeMode.ABSOLUTE, new Vector3D(_vertexSphereRadius, _vertexSphereRadius, _vertexSphereRadius), (short) 16, 0, false, false, _vertexColor); // const Color& surfaceColor -  bool mercator -  bool texturedInside -  float borderWidth -  resolution
+  
+  
+      _shapesRenderer.addShape(vertexSphere);
+    }
+  
+  
+    if (verticesCount > 1)
+    {
+      {
+        // create edges lines
+        FloatBufferBuilderFromGeodetic fbb = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_planet);
+  
+        for (int i = 0; i < verticesCount; i++)
+        {
+          final Geodetic3D geodetic = _vertices.get(i);
+          fbb.add(geodetic);
+        }
+  
+        Mesh edgesLines = new DirectMesh(GLPrimitive.lineStrip(), true, fbb.getCenter(), fbb.create(), _segmentLineWidth, 1.0f, new Color(_segmentColor), null, false); // depthTest -  const IFloatBuffer* colors -  float pointSize
+  
+        _meshRenderer.addMesh(edgesLines);
+      }
+  
+      {
+        // create edges distance labels
+        final Geodetic3D previousGeodetic = _vertices.get(0);
+        final Vector3D previousCartesian = new Vector3D(_planet.toCartesian(previousGeodetic));
+        for (int i = 1; i < verticesCount; i++)
+        {
+          final Geodetic3D currentGeodetic = _vertices.get(i);
+          final Vector3D currentCartesian = new Vector3D(_planet.toCartesian(currentGeodetic));
+  
+          Geodetic3D middle = Geodetic3D.linearInterpolation(previousGeodetic, currentGeodetic, 0.5);
+          Mark distanceLabel = new Mark(IStringUtils.instance().toString((float) previousCartesian.distanceTo(currentCartesian)) + "m", middle, AltitudeMode.ABSOLUTE);
+  
+          _marksRenderer.addMark(distanceLabel);
+  
+  //        delete previousGeodetic;
+          previousGeodetic = currentGeodetic;
+  
+          if (previousCartesian != null)
+             previousCartesian.dispose();
+          previousCartesian = currentCartesian;
+        }
+  
+  //      delete previousGeodetic;
+        if (previousCartesian != null)
+           previousCartesian.dispose();
+  
+      }
+  
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: recreate vertices spheres
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: recreate edges lines
+//#warning TODO: vertices angle labels
+  
+    }
+  
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: add vertexSelectionHandler onVertexSelection(measure, geodetic, i);
 
-  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex)
+  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet)
   {
      _vertexSphereRadius = vertexSphereRadius;
      _vertexColor = vertexColor;
      _vertexSelectedColor = vertexSelectedColor;
      _segmentLineWidth = segmentLineWidth;
      _segmentColor = segmentColor;
+     _shapesRenderer = shapesRenderer;
+     _meshRenderer = meshRenderer;
+     _marksRenderer = marksRenderer;
+     _planet = planet;
     _vertices.add(firstVertex);
   }
 
@@ -70,16 +148,23 @@ public class Measure
       if (current != null)
          current.dispose();
       _vertices.set(i, vertex);
-    }
   
-    reset();
+      reset();
+    }
   }
 
-  public final void removeVertex(int i)
+  public final boolean removeVertex(int i)
   {
+    if (_vertices.size() == 1)
+    {
+      return false;
+    }
+  
     _vertices.remove(i);
   
     reset();
+  
+    return true;
   }
 
   public void dispose()

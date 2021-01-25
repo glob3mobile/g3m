@@ -10,39 +10,23 @@
 #define __G3M__EllipsoidShape__
 
 #include "AbstractMeshShape.hpp"
-#include "Ellipsoid.hpp"
-#include "Planet.hpp"
-#include "Quadric.hpp"
 
+#include "Vector3D.hpp"
+#include "URL.hpp"
 
-class Color;
 class FloatBufferBuilderFromGeodetic;
 class FloatBufferBuilderFromCartesian2D;
 class FloatBufferBuilderFromCartesian3D;
 class TextureIDReference;
-
-class IGLTextureID;
-
-#include "URL.hpp"
+class G3MEventContext;
 
 
 class EllipsoidShape : public AbstractMeshShape {
 private:
-  
-#ifdef C_CODE
-  const Ellipsoid* _ellipsoid;
-//  const Quadric    _quadric;
-#endif
-#ifdef JAVA_CODE
-  private Ellipsoid _ellipsoid;
-//  private final Quadric _quadric;
-#endif
+  const Vector3D _radius;
+  const Vector3D _oneOverRadiiSquared;
 
   const URL _textureURL;
-
-  /*const double _radiusX;
-  const double _radiusY;
-  const double _radiusZ;*/
 
   const short _resolution;
 
@@ -58,7 +42,7 @@ private:
   Color* _borderColor;
 
   Mesh* createBorderMesh(const G3MRenderContext* rc,
-                         FloatBufferBuilderFromGeodetic *vertices);
+                         FloatBufferBuilderFromGeodetic* vertices);
   Mesh* createSurfaceMesh(const G3MRenderContext* rc,
                           FloatBufferBuilderFromGeodetic* vertices,
                           FloatBufferBuilderFromCartesian2D* texCoords,
@@ -99,35 +83,18 @@ public:
                  float borderWidth,
                  bool texturedInside,
                  bool mercator,
-                 bool withNormals = true) :
-  AbstractMeshShape(position, altitudeMode),
-  _ellipsoid(new Ellipsoid(Vector3D::ZERO, radius)),
-//  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
-  _textureURL(textureURL),
-  _resolution(resolution < 3 ? 3 : resolution),
-  _borderWidth(borderWidth),
-  _texturedInside(texturedInside),
-  _mercator(mercator),
-  _surfaceColor(NULL),
-  _borderColor(NULL),
-  _textureRequested(false),
-  _textureImage(NULL),
-  _withNormals(withNormals),
-  _texID(NULL)
-  {
-    
-  }
-
+                 bool withNormals = true);
 
   ~EllipsoidShape();
 
   void imageDownloaded(IImage* image);
-  
-  
+
   std::vector<double> intersectionsDistances(const Planet* planet,
                                              const Vector3D& origin,
                                              const Vector3D& direction) const;
-  
+
+  bool touched(const G3MEventContext* ec);
+
 };
 
 #endif

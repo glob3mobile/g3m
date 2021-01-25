@@ -327,11 +327,50 @@ public class EllipsoidShape extends AbstractMeshShape
 
   public final java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction)
   {
-    //  MutableMatrix44D* M = createTransformMatrix(_planet);
-    //  const Quadric transformedQuadric = _quadric.transformBy(*M);
-    //  delete M;
-    //  return transformedQuadric.intersectionsDistances(origin, direction);
-    return new java.util.ArrayList<Double>();
+    java.util.ArrayList<Double> result = new java.util.ArrayList<Double>();
+  
+    final Vector3D oneOverRadiiSquared = _ellipsoid._oneOverRadiiSquared;
+  
+    // By laborious algebraic manipulation....
+    final double a = (direction._x * direction._x * oneOverRadiiSquared._x + direction._y * direction._y * oneOverRadiiSquared._y + direction._z * direction._z * oneOverRadiiSquared._z);
+  
+    final double b = 2.0 * (origin._x * direction._x * oneOverRadiiSquared._x + origin._y * direction._y * oneOverRadiiSquared._y + origin._z * direction._z * oneOverRadiiSquared._z);
+  
+    final double c = (origin._x * origin._x * oneOverRadiiSquared._x + origin._y * origin._y * oneOverRadiiSquared._y + origin._z * origin._z * oneOverRadiiSquared._z - 1.0);
+  
+    // Solve the quadratic equation: ax^2 + bx + c = 0.
+    // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+    // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+    final double discriminant = b * b - 4 * a * c;
+    if (discriminant < 0.0)
+    {
+      // no intersections
+    }
+    else if (discriminant == 0.0)
+    {
+      // one intersection at a tangent point
+      result.add(-0.5 * b / a);
+    }
+    else
+    {
+      final double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * IMathUtils.instance().sqrt(discriminant));
+      final double root1 = t / a;
+      final double root2 = c / t;
+  
+      // Two intersections - return the smallest first.
+      if (root1 < root2)
+      {
+        result.add(root1);
+        result.add(root2);
+      }
+      else
+      {
+        result.add(root2);
+        result.add(root1);
+      }
+    }
+  
+    return result;
   }
 
 }

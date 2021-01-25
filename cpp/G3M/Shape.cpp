@@ -421,3 +421,7 @@ void Shape::initialize(const G3MContext* context) {
     }
   }
 }
+
+bool Shape::touched(const G3MEventContext* ec) {
+  return false;
+}

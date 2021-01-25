@@ -42,6 +42,7 @@
 #include "Geodetic3D.hpp"
 #include "GLState.hpp"
 #include "FrustumData.hpp"
+#include "Planet.hpp"
 
 
 class VisibleSectorListenerEntry {

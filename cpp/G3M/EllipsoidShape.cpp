@@ -29,6 +29,7 @@
 #include "IImage.hpp"
 #include "EllipsoidalPlanet.hpp"
 #include "IMathUtils.hpp"
+#include "Geodetic3D.hpp"
 
 
 EllipsoidShape::EllipsoidShape(Geodetic3D* position,
@@ -42,7 +43,10 @@ EllipsoidShape::EllipsoidShape(Geodetic3D* position,
                                Color* borderColor,
                                bool withNormals) :
 AbstractMeshShape(position, altitudeMode),
-_ellipsoid(new Ellipsoid(Vector3D::ZERO, radius)),
+_radius(radius),
+_oneOverRadiiSquared(Vector3D(1.0 / (radius._x * radius._x ),
+                              1.0 / (radius._y * radius._y),
+                              1.0 / (radius._z * radius._z))),
 //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
 _textureURL(URL("", false)),
 _resolution(resolution < 3 ? 3 : resolution),
@@ -59,9 +63,38 @@ _texID(NULL)
 
 }
 
+EllipsoidShape::EllipsoidShape(Geodetic3D* position,
+                               AltitudeMode altitudeMode,
+                               const Planet* planet,
+                               const URL& textureURL,
+                               const Vector3D& radius,
+                               short resolution,
+                               float borderWidth,
+                               bool texturedInside,
+                               bool mercator,
+                               bool withNormals) :
+AbstractMeshShape(position, altitudeMode),
+_radius(radius),
+_oneOverRadiiSquared(Vector3D(1.0 / (radius._x * radius._x ),
+                              1.0 / (radius._y * radius._y),
+                              1.0 / (radius._z * radius._z))),
+_textureURL(textureURL),
+_resolution(resolution < 3 ? 3 : resolution),
+_borderWidth(borderWidth),
+_texturedInside(texturedInside),
+_mercator(mercator),
+_surfaceColor(NULL),
+_borderColor(NULL),
+_textureRequested(false),
+_textureImage(NULL),
+_withNormals(withNormals),
+_texID(NULL)
+{
+
+}
+
 
 EllipsoidShape::~EllipsoidShape() {
-  delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
 
@@ -260,8 +293,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::ZERO,
-                                              _ellipsoid->_radii));
+  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::ZERO, _radius));
   const Sector sector(Sector::FULL_SPHERE);
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::ZERO);
@@ -316,22 +348,22 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
                                                            const Vector3D& origin,
                                                            const Vector3D& direction) const {
+  const Vector3D m = origin.sub( planet->toCartesian(getPosition()) );
+
   std::vector<double> result;
 
-  const Vector3D oneOverRadiiSquared = _ellipsoid->_oneOverRadiiSquared;
-
   // By laborious algebraic manipulation....
-  const double a = (direction._x * direction._x * oneOverRadiiSquared._x +
-                    direction._y * direction._y * oneOverRadiiSquared._y +
-                    direction._z * direction._z * oneOverRadiiSquared._z);
+  const double a = (direction._x * direction._x * _oneOverRadiiSquared._x +
+                    direction._y * direction._y * _oneOverRadiiSquared._y +
+                    direction._z * direction._z * _oneOverRadiiSquared._z);
 
-  const double b = 2.0 * (origin._x * direction._x * oneOverRadiiSquared._x +
-                          origin._y * direction._y * oneOverRadiiSquared._y +
-                          origin._z * direction._z * oneOverRadiiSquared._z);
+  const double b = 2.0 * (m._x * direction._x * _oneOverRadiiSquared._x +
+                          m._y * direction._y * _oneOverRadiiSquared._y +
+                          m._z * direction._z * _oneOverRadiiSquared._z);
 
-  const double c = (origin._x * origin._x * oneOverRadiiSquared._x +
-                    origin._y * origin._y * oneOverRadiiSquared._y +
-                    origin._z * origin._z * oneOverRadiiSquared._z - 1.0);
+  const double c = (m._x * m._x * _oneOverRadiiSquared._x +
+                    m._y * m._y * _oneOverRadiiSquared._y +
+                    m._z * m._z * _oneOverRadiiSquared._z - 1.0);
 
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -361,4 +393,8 @@ std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
   }
 
   return result;
+}
+
+bool EllipsoidShape::touched(const G3MEventContext* ec) {
+  return true;
 }

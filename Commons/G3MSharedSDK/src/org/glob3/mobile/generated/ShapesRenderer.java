@@ -280,6 +280,7 @@ public class ShapesRenderer extends DefaultRenderer
             //                (int)shapeDistances.size());
             for (int i = 0; i<shapeDistances.size(); i++)
             {
+  
   //            printf ("   %d: shape %x to distance %f\n",
   //                    i+1,
   //                    (unsigned int)shapeDistances[i]._shape,
