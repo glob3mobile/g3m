@@ -124,24 +124,35 @@ public:
 
       model->getMeshRenderer()->addMesh( mesh );
 
-      Geodetic3D middle = Geodetic3D::linearInterpolation(geodetic, *_previousGeodetic, 0.5);
-      Mark* mark = new Mark( IStringUtils::instance()->toString( (float) _previousCartesian->distanceTo(cartesian) ),
-                            middle,
-                            ABSOLUTE);
+      {
+        Geodetic3D middle = Geodetic3D::linearInterpolation(geodetic, *_previousGeodetic, 0.5);
+        Mark* distanceLabel = new Mark( IStringUtils::instance()->toString( (float) _previousCartesian->distanceTo(cartesian) ) + "m",
+                                       middle,
+                                       ABSOLUTE);
 
-//      Mark(const std::string& label,
-//           const Geodetic3D&  position,
-//           AltitudeMode       altitudeMode,
-//           double             minDistanceToCamera=4.5e+06,
-//           const float        labelFontSize=20,
-//           const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-//           const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-//           MarkUserData*      userData=NULL,
-//           bool               autoDeleteUserData=true,
-//           MarkTouchListener* listener=NULL,
-//           bool               autoDeleteListener=false);
+        //      Mark(const std::string& label,
+        //           const Geodetic3D&  position,
+        //           AltitudeMode       altitudeMode,
+        //           double             minDistanceToCamera=4.5e+06,
+        //           const float        labelFontSize=20,
+        //           const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
+        //           const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
+        //           MarkUserData*      userData=NULL,
+        //           bool               autoDeleteUserData=true,
+        //           MarkTouchListener* listener=NULL,
+        //           bool               autoDeleteListener=false);
 
-      model->getMarksRenderer()->addMark( mark );
+        model->getMarksRenderer()->addMark( distanceLabel );
+
+
+//        const Angle angle = _previousCartesian->angleBetween(cartesian);
+//        Mark* angleLabel = new Mark( IStringUtils::instance()->toString( (float) angle._degrees ) + "d",
+//                                    geodetic ,
+//                                    ABSOLUTE);
+//
+//        model->getMarksRenderer()->addMark( angleLabel );
+      }
+
     }
 
     delete _previousGeodetic;
