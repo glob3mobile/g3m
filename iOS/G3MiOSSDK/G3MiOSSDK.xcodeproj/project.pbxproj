@@ -36,6 +36,8 @@
 		CF4027D51770DEA800D5A80C /* WebSocket_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4027D11770DD5C00D5A80C /* WebSocket_iOS.hpp */; };
 		CF4027E31770E84E00D5A80C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E21770E84E00D5A80C /* CFNetwork.framework */; platformFilter = ios; };
 		CF4027E51770E85500D5A80C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF4027E41770E85500D5A80C /* Security.framework */; platformFilter = ios; };
+		CF42264525BED63D003CF0A3 /* Measure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF42264325BED63D003CF0A3 /* Measure.cpp */; };
+		CF42264725BEFA69003CF0A3 /* Measure.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF42264425BED63D003CF0A3 /* Measure.hpp */; };
 		CF4AD09725B5F574009A1E48 /* XPCTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4AD09525B5F574009A1E48 /* XPCTree.cpp */; };
 		CF4AD09A25B5F90C009A1E48 /* XPCDimension.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452425B1F2C20056304B /* XPCDimension.hpp */; };
 		CF4AD09B25B5F90D009A1E48 /* XPCNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452825B2047B0056304B /* XPCNode.hpp */; };
@@ -951,6 +953,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF42264725BEFA69003CF0A3 /* Measure.hpp in CopyFiles */,
 				CF64ADF325BDCE8300815620 /* XPCPointSelectionListener.hpp in CopyFiles */,
 				CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */,
 				CFC54E0125B9B8CC00424542 /* XPCIntensityPointColorizer.hpp in CopyFiles */,
@@ -1502,6 +1505,8 @@
 		CF4027E01770E84700D5A80C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		CF4027E21770E84E00D5A80C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		CF4027E41770E85500D5A80C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CF42264325BED63D003CF0A3 /* Measure.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Measure.cpp; sourceTree = "<group>"; };
+		CF42264425BED63D003CF0A3 /* Measure.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Measure.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
 		CF4AD09525B5F574009A1E48 /* XPCTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCTree.cpp; sourceTree = "<group>"; };
@@ -2579,6 +2584,8 @@
 				CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */,
 				CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */,
 				CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */,
+				CF42264325BED63D003CF0A3 /* Measure.cpp */,
+				CF42264425BED63D003CF0A3 /* Measure.hpp */,
 				CF8CFCD925BB11F500326563 /* XPCSelectionResult.hpp */,
 				CF4AD09525B5F574009A1E48 /* XPCTree.cpp */,
 				CF4AD09625B5F574009A1E48 /* XPCTree.hpp */,
@@ -3950,6 +3957,7 @@
 				CF66092423DF330700795C7F /* GAsyncTask.cpp in Sources */,
 				CF66092523DF330700795C7F /* SGMaterialNode.cpp in Sources */,
 				CF66092623DF330700795C7F /* BufferDEMGrid.cpp in Sources */,
+				CF42264525BED63D003CF0A3 /* Measure.cpp in Sources */,
 				CF66092723DF330700795C7F /* AbstractMesh.cpp in Sources */,
 				CF66092823DF330700795C7F /* HUDQuadWidget.cpp in Sources */,
 				CF64ADEF25BDC6C500815620 /* XPCPointSelectionListener.cpp in Sources */,
