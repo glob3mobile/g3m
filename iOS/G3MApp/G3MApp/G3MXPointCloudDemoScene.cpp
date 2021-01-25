@@ -125,7 +125,7 @@ public:
       model->getMeshRenderer()->addMesh( mesh );
 
       Geodetic3D middle = Geodetic3D::linearInterpolation(geodetic, *_previousGeodetic, 0.5);
-      Mark* mark = new Mark( IStringUtils::instance()->toString(     (float)  _previousCartesian->distanceTo(cartesian)    ),
+      Mark* mark = new Mark( IStringUtils::instance()->toString( (float) _previousCartesian->distanceTo(cartesian) ),
                             middle,
                             ABSOLUTE);
 

@@ -43,9 +43,8 @@ public:
     delete _color;
     
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
   }
 
   void setRadius(float radius) {
