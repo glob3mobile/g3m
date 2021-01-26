@@ -67,8 +67,7 @@ void CameraPositionGLFeature::update(const Camera* cam) {
                        (float) p._z);
 }
 
-BillboardGLFeature::BillboardGLFeature(const Vector3D& position,
-                                       float billboardWidth,
+BillboardGLFeature::BillboardGLFeature(float billboardWidth,
                                        float billboardHeight,
                                        float anchorU, float anchorV) :
 GLFeature(NO_GROUP, GLF_BILLBOARD)
@@ -85,12 +84,9 @@ GLFeature(NO_GROUP, GLF_BILLBOARD)
                            _size,
                            false);
   
-  _values->addUniformValue(BILLBOARD_POSITION,
-                           new GPUUniformValueVec4Float((float) position._x,
-                                                        (float) position._y,
-                                                        (float) position._z,
-                                                        1),
-                           false);
+    _values->addUniformValue(BILLBOARD_POSITION,
+                             new GPUUniformValueVec4Float(0,0,0, 1),
+                             false);
 }
 
 void BillboardGLFeature::applyOnGlobalGLState(GLGlobalState* state)  const {

@@ -138,6 +138,22 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
                                        Angle::zero(), // heading
                                        Angle::fromDegrees(30 - 90) // pitch
                                        );
+    
+    
+    Mark* mark = new Mark("Las Palmas",
+                          URL("https://icons-for-free.com/iconfiles/png/512/sun+sunny+weather+icon-1320196635525068067.png"),
+                          Geodetic3D::fromDegrees(28.09973, -15.41343, 0),
+                          RELATIVE_TO_GROUND,
+                          0,                              // minDistanceToCamera
+                          true,                           // labelBottom
+                          13,                             // labelFontSize
+                          Color::newFromRGBA(1, 1, 1, 1), // labelFontColor
+                          Color::newFromRGBA(0, 0, 0, 1), // labelShadowColor
+                          -10                             // labelGapSize
+                          );
+
+    addMark(mark);
+    
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {

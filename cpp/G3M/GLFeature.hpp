@@ -84,8 +84,7 @@ private:
   GPUUniformValueVec2FloatMutable* _anchor;
 
 public:
-  BillboardGLFeature(const Vector3D& position,
-                     float billboardWidth,
+  BillboardGLFeature(float billboardWidth,
                      float billboardHeight,
                      float anchorU, float anchorV);
 
