@@ -83,7 +83,8 @@ GLFeature(NO_GROUP, GLF_BILLBOARD)
   _values->addUniformValue(TEXTURE_EXTENT,
                            _size,
                            false);
-  
+    
+#warning CHECK DIEGO
     _values->addUniformValue(BILLBOARD_POSITION,
                              new GPUUniformValueVec4Float(0,0,0, 1),
                              false);

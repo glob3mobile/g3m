@@ -783,7 +783,7 @@ void Mark::createGLState(const Planet* planet,
   _glState->addGLFeature(_billboardGLF,
                          false);
     
-    
+#warning CHECK DIEGO
     Vector3D* position = getCartesianPosition(planet);
     MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(*position);
     delete position;
