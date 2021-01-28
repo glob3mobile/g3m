@@ -528,7 +528,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         bounds->render(rc, glState, Color::WHITE);
       }
 
-      if ((_projectedArea == -1) || ((_projectedAreaTS + 100) < nowInMS)) {
+      if ((_projectedArea == -1) || ((_projectedAreaTS + 167) < nowInMS)) {
         const double projectedArea = bounds->projectedArea(rc);
         _projectedArea   = projectedArea;
         _projectedAreaTS = nowInMS;

@@ -223,11 +223,16 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const bool  depthTest            = true;
   const bool  verbose              = true;
 
+
+//  const std::string cloudName   = "TOPCON_IPS3_LOD";
+//  const float       deltaHeight = -50;
+
+
   const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
-  const float       deltaHeight = -170;
+  const float       deltaHeight = -180;
 
 //  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
-//  const float       deltaHeight = -210;
+//  const float       deltaHeight = -170;
 
 //  const std::string cloudName   = "Leica_M40_LOD";
 //  const float       deltaHeight = -580;
@@ -261,7 +266,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
-                                         new XPCRGBPointColorizer(),
+                                          new XPCRGBPointColorizer(),
                                          // new XPCIntensityPointColorizer(),
                                          // new XPCClassificationPointColorizer(),
                                          true, // deletePointColorizer,
