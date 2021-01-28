@@ -139,7 +139,7 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
                                        Angle::fromDegrees(30 - 90) // pitch
                                        );
     
-    
+#warning CHECK DIEGO
     Mark* mark = new Mark("Las Palmas",
                           URL("https://icons-for-free.com/iconfiles/png/512/sun+sunny+weather+icon-1320196635525068067.png"),
                           Geodetic3D::fromDegrees(28.09973, -15.41343, 0),
