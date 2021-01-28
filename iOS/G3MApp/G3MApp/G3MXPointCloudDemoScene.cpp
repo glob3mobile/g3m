@@ -266,7 +266,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                          DownloadPriority::LOWER,
                                          TimeInterval::zero(),
                                          false,
-                                          new XPCRGBPointColorizer(),
+                                         new XPCRGBPointColorizer(),
                                          // new XPCIntensityPointColorizer(),
                                          // new XPCClassificationPointColorizer(),
                                          true, // deletePointColorizer,
