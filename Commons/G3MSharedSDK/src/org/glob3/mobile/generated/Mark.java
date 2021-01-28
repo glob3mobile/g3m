@@ -111,9 +111,17 @@ public class Mark implements SurfaceElevationListener
   {
     _glState = new GLState();
   
-    _billboardGLF = new BillboardGLFeature(getCartesianPosition(planet), _textureWidth, _textureHeight, _anchorU, _anchorV);
+    _billboardGLF = new BillboardGLFeature(_textureWidth, _textureHeight, _anchorU, _anchorV);
   
     _glState.addGLFeature(_billboardGLF, false);
+  
+  
+    final Vector3D position = getCartesianPosition(planet);
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(position);
+  
+    ModelTransformGLFeature modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
+    _glState.addGLFeature(modelTransformGLF, false);
+  
   
     if (_textureID != null)
     {
@@ -619,6 +627,7 @@ public class Mark implements SurfaceElevationListener
   
     if (_cartesianPosition != null)
        _cartesianPosition.dispose();
+  
     if (_autoDeleteListener)
     {
       if (_listener != null)
@@ -762,8 +771,8 @@ public class Mark implements SurfaceElevationListener
     //  delete _labelShadowColor;
     //  _labelShadowColor = NULL;
   
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
+    //  delete _imageBuilder;
+    //  _imageBuilder = NULL;
     _imageBuilderListener = null;
   
     _textureImage = image;
@@ -790,8 +799,8 @@ public class Mark implements SurfaceElevationListener
     //  delete _labelShadowColor;
     //  _labelShadowColor = NULL;
   
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
+    //  delete _imageBuilder;
+    //  _imageBuilder = NULL;
     _imageBuilderListener = null;
   
     ILogger.instance().logError("Can't create image for Mark: \"%s\"", error);
@@ -854,7 +863,6 @@ public class Mark implements SurfaceElevationListener
   {
     if (_cartesianPosition == null)
     {
-  
       double altitude = _position._height;
       if (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND)
       {

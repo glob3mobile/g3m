@@ -77,6 +77,9 @@ public class Measure
         Mesh edgesLines = new DirectMesh(GLPrimitive.lineStrip(), true, fbb.getCenter(), fbb.create(), _segmentLineWidth, 1.0f, new Color(_segmentColor), null, false); // depthTest -  const IFloatBuffer* colors -  float pointSize
   
         _meshRenderer.addMesh(edgesLines);
+  
+        if (fbb != null)
+           fbb.dispose();
       }
   
       {
