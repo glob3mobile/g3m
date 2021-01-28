@@ -158,6 +158,8 @@ void Measure::reset() {
                                         );
 
       _meshRenderer->addMesh(edgesLines);
+
+      delete fbb;
     }
 
     {

@@ -630,7 +630,7 @@
 				ORGANIZATIONNAME = "Igo Software SL";
 				TargetAttributes = {
 					E7D1B60416D2436700AF47C1 = {
-						DevelopmentTeam = T7H86739Q3;
+						DevelopmentTeam = AAG2G2435H;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -923,7 +923,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = T7H86739Q3;
+				DEVELOPMENT_TEAM = AAG2G2435H;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";
@@ -962,7 +962,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = T7H86739Q3;
+				DEVELOPMENT_TEAM = AAG2G2435H;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";

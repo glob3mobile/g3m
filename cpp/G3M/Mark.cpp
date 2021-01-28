@@ -713,6 +713,7 @@ Mark::~Mark() {
   }
 
   delete _cartesianPosition;
+
   if (_autoDeleteListener) {
     delete _listener;
   }
@@ -735,9 +736,8 @@ Mark::~Mark() {
   }
 }
 
-Vector3D* Mark::getCartesianPosition(const Planet* planet) {
+const Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   if (_cartesianPosition == NULL) {
-
     double altitude = _position->_height;
     if (_altitudeMode == RELATIVE_TO_GROUND) {
       altitude += _currentSurfaceElevation;
@@ -782,13 +782,14 @@ void Mark::createGLState(const Planet* planet,
 
   _glState->addGLFeature(_billboardGLF,
                          false);
-    
-#warning CHECK DIEGO
-    Vector3D* position = getCartesianPosition(planet);
-    MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(*position);
-    delete position;
-    ModelTransformGLFeature* modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
-    _glState->addGLFeature(modelTransformGLF, false);
+  
+
+  const Vector3D* position = getCartesianPosition(planet);
+  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(*position);
+
+  ModelTransformGLFeature* modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
+  _glState->addGLFeature(modelTransformGLF, false);
+
 
   if (_textureID != NULL) {
 
@@ -1077,8 +1078,8 @@ void Mark::onImageCreationError(const std::string& error) {
   //  delete _labelShadowColor;
   //  _labelShadowColor = NULL;
 
-//  delete _imageBuilder;
-//  _imageBuilder = NULL;
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
   _imageBuilderListener = NULL;
 
   ILogger::instance()->logError("Can't create image for Mark: \"%s\"",
@@ -1095,8 +1096,8 @@ void Mark::onImageCreated(const IImage* image,
   //  delete _labelShadowColor;
   //  _labelShadowColor = NULL;
 
-//  delete _imageBuilder;
-//  _imageBuilder = NULL;
+  //  delete _imageBuilder;
+  //  _imageBuilder = NULL;
   _imageBuilderListener = NULL;
 
   _textureImage = image;

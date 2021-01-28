@@ -84,7 +84,6 @@ private:
   GPUUniformValueVec2FloatMutable* _anchor;
 
 public:
-#warning CHECK DIEGO
   BillboardGLFeature(float billboardWidth,
                      float billboardHeight,
                      float anchorU, float anchorV);

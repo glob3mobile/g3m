@@ -339,7 +339,7 @@ public:
   void setMaxDistanceToCamera(double maxDistanceToCamera);
   double getMaxDistanceToCamera();
 
-  Vector3D* getCartesianPosition(const Planet* planet);
+  const Vector3D* getCartesianPosition(const Planet* planet);
 
   void render(const G3MRenderContext* rc,
               MarksRenderer* renderer,
