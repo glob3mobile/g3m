@@ -158,7 +158,7 @@ void XPCRenderer::render(const G3MRenderContext* rc,
     if (_timer == NULL) {
       _timer = rc->getFactory()->createTimer();
     }
-    const long long nowInMS = _timer->elapsedTimeInMilliseconds();
+    const long long nowInMS = _timer->nowInMilliseconds();
 
     const Camera* camera = rc->getCurrentCamera();
     ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
@@ -182,9 +182,9 @@ void XPCRenderer::render(const G3MRenderContext* rc,
                     _selectionResult);
     }
 
-    if (_selectionResult != NULL) {
-      _selectionResult->render(rc, _glState);
-    }
+//    if (_selectionResult != NULL) {
+//      _selectionResult->render(rc, _glState);
+//    }
   }
 }
 
