@@ -204,7 +204,7 @@ public class XPCRenderer extends DefaultRenderer
       {
         _timer = rc.getFactory().createTimer();
       }
-      final long nowInMS = _timer.elapsedTimeInMilliseconds();
+      final long nowInMS = _timer.nowInMilliseconds();
   
       final Camera camera = rc.getCurrentCamera();
       ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
@@ -226,10 +226,9 @@ public class XPCRenderer extends DefaultRenderer
         cloud.render(rc, _glState, frustum, nowInMS, _renderDebug, _selectionResult);
       }
   
-      if (_selectionResult != null)
-      {
-        _selectionResult.render(rc, _glState);
-      }
+  //    if (_selectionResult != NULL) {
+  //      _selectionResult->render(rc, _glState);
+  //    }
     }
   }
 
