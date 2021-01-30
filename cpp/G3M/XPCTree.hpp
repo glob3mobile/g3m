@@ -17,6 +17,7 @@ class GLState;
 class Frustum;
 class Sector;
 class XPCSelectionResult;
+class ITimer;
 
 
 class XPCTree {
@@ -39,6 +40,7 @@ public:
 
   long long render(const XPCPointCloud* pointCloud,
                    const G3MRenderContext* rc,
+                   ITimer* lastSplitTimer,
                    GLState* glState,
                    const Frustum* frustum,
                    long long nowInMS,

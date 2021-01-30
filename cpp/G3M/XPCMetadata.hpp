@@ -18,7 +18,7 @@ class Frustum;
 class XPCDimension;
 class XPCTree;
 class XPCSelectionResult;
-
+class ITimer;
 
 class XPCMetadata {
 public:
@@ -29,6 +29,7 @@ public:
 
   long long render(const XPCPointCloud* pointCloud,
                    const G3MRenderContext* rc,
+                   ITimer* lastSplitTimer,
                    GLState* glState,
                    const Frustum* frustum,
                    long long nowInMS,

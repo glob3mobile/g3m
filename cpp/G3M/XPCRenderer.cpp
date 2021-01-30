@@ -30,7 +30,8 @@ _glState(new GLState()),
 _timer(NULL),
 _lastCamera(NULL),
 _renderDebug(false),
-_selectionResult(NULL)
+_selectionResult(NULL),
+_lastSplitTimer(NULL)
 {
 }
 
@@ -45,6 +46,8 @@ XPCRenderer::~XPCRenderer() {
   delete _timer;
 
   delete _selectionResult;
+
+  delete _lastSplitTimer;
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -155,6 +158,12 @@ void XPCRenderer::render(const G3MRenderContext* rc,
   if (_cloudsSize > 0) {
     _lastCamera = rc->getCurrentCamera();
 
+
+    if (_lastSplitTimer == NULL) {
+      _lastSplitTimer = rc->getFactory()->createTimer();
+      _lastSplitTimer->start();
+    }
+
     if (_timer == NULL) {
       _timer = rc->getFactory()->createTimer();
     }
@@ -175,6 +184,7 @@ void XPCRenderer::render(const G3MRenderContext* rc,
     for (int i = 0; i < _cloudsSize; i++) {
       XPCPointCloud* cloud = _clouds[i];
       cloud->render(rc,
+                    _lastSplitTimer,
                     _glState,
                     frustum,
                     nowInMS,

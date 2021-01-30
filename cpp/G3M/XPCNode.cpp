@@ -23,6 +23,7 @@
 #include "IIntBuffer.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 #include "IFactory.hpp"
+#include "ITimer.hpp"
 
 #include "XPCPointCloud.hpp"
 #include "XPCMetadata.hpp"
@@ -509,6 +510,7 @@ bool XPCNode::isCanceled() const {
 long long XPCNode::render(const XPCPointCloud* pointCloud,
                           const std::string& treeID,
                           const G3MRenderContext* rc,
+                          ITimer* lastSplitTimer,
                           GLState* glState,
                           const Frustum* frustum,
                           long long nowInMS,
@@ -562,9 +564,16 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         }
         else {
           if (!_loadingContent) {
-            _canceled = false;
-            _loadingContent = true;
-            loadContent(pointCloud, treeID, rc);
+#warning TODO _delayInMs
+            if ( _id.length() == 0 || lastSplitTimer->elapsedTimeInMilliseconds() > 0 ) {
+              lastSplitTimer->start();
+              _canceled = false;
+              _loadingContent = true;
+              loadContent(pointCloud, treeID, rc);
+            }
+            else {
+              printf("BREAK ON ME\n");
+            }
           }
         }
 
@@ -574,6 +583,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
             renderedCount += child->render(pointCloud,
                                            treeID,
                                            rc,
+                                           lastSplitTimer,
                                            glState,
                                            frustum,
                                            nowInMS,

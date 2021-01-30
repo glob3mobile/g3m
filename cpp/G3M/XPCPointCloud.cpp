@@ -307,6 +307,7 @@ long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
 }
 
 void XPCPointCloud::render(const G3MRenderContext* rc,
+                           ITimer* lastSplitTimer,
                            GLState* glState,
                            const Frustum* frustum,
                            long long nowInMS,
@@ -315,6 +316,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
   if (_metadata != NULL) {
     const long long renderedCount = _metadata->render(this,
                                                       rc,
+                                                      lastSplitTimer,
                                                       glState,
                                                       frustum,
                                                       nowInMS,

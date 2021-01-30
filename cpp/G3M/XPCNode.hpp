@@ -23,6 +23,7 @@ class IDownloader;
 class ByteBufferIterator;
 class DirectMesh;
 class XPCSelectionResult;
+class ITimer;
 
 
 class XPCNode : public RCObject {
@@ -105,6 +106,7 @@ public:
   long long render(const XPCPointCloud* pointCloud,
                    const std::string& treeID,
                    const G3MRenderContext* rc,
+                   ITimer* lastSplitTimer,
                    GLState* glState,
                    const Frustum* frustum,
                    long long nowInMS,

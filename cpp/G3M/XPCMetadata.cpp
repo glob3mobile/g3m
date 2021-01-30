@@ -114,6 +114,7 @@ XPCMetadata::~XPCMetadata() {
 
 long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                               const G3MRenderContext* rc,
+                              ITimer* lastSplitTimer,
                               GLState* glState,
                               const Frustum* frustum,
                               long long nowInMS,
@@ -127,6 +128,7 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
 
     renderedCount += tree->render(pointCloud,
                                   rc,
+                                  lastSplitTimer,
                                   glState,
                                   frustum,
                                   nowInMS,

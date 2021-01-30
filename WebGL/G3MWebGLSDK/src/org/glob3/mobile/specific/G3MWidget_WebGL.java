@@ -55,7 +55,8 @@ public class G3MWidget_WebGL
    private GL                   _gl;
    private G3MWidget            _g3mWidget;
    private float                _devicePixelRatio = 1;
-   private boolean              _running;
+
+   private boolean _running = true;
 
 
    public G3MWidget_WebGL() {

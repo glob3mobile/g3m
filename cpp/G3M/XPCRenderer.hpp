@@ -40,6 +40,8 @@ private:
 #endif
   bool _renderDebug;
   XPCSelectionResult* _selectionResult;
+
+  ITimer* _lastSplitTimer;
   
 protected:
 

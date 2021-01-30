@@ -2,16 +2,13 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.BasicShadersGL2;
-import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IG3MBuilder;
-import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IThreadUtils;
+
+import org.glob3.mobile.generated.*;
 
 
 public class G3MBuilder_WebGL
-         extends
-            IG3MBuilder {
+                              extends
+                                 IG3MBuilder {
 
    private final G3MWidget_WebGL _nativeWidget;
 
@@ -28,7 +25,7 @@ public class G3MBuilder_WebGL
 
    private void addGPUProgramSources() {
       final BasicShadersGL2 shaders = new BasicShadersGL2();
-      final int size = shaders.size();
+      final int             size    = shaders.size();
       for (int i = 0; i < size; i++) {
          addGPUProgramSources(shaders.get(i));
       }
@@ -51,9 +48,9 @@ public class G3MBuilder_WebGL
 
    @Override
    protected IDownloader createDefaultDownloader() {
-      final int maxConcurrentOperationCount = 8;
-      final int delayMillis = 10;
-      final boolean verboseErrors = true;
+      final int     maxConcurrentOperationCount = 8;
+      final int     delayMillis                 = 10;
+      final boolean verboseErrors               = true;
       return new Downloader_WebGL(maxConcurrentOperationCount, delayMillis, "", verboseErrors);
    }
 

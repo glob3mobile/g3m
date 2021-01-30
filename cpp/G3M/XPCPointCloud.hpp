@@ -27,6 +27,7 @@ class XPCSelectionResult;
 class XPCPointSelectionListener;
 class Vector3D;
 class Geodetic3D;
+class ITimer;
 
 
 class XPCPointCloud : public RCObject {
@@ -126,6 +127,7 @@ public:
   RenderState getRenderState(const G3MRenderContext* rc);
 
   void render(const G3MRenderContext* rc,
+              ITimer* lastSplitTimer,
               GLState* glState,
               const Frustum* frustum,
               long long nowInMS,
