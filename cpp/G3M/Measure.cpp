@@ -30,6 +30,22 @@
 long long Measure::INSTANCE_COUNTER = 0;
 
 
+class MeasureVertex {
+public:
+  const Geodetic3D _geodetic;
+  const Vector3D   _cartesian;
+
+  MeasureVertex(const Geodetic3D& geodetic,
+                const Planet* planet) :
+  _geodetic(geodetic),
+  _cartesian( planet->toCartesian(geodetic) )
+  {
+
+  }
+};
+
+
+
 class Measure_ShapeFilter : public ShapeFilter {
 private:
   const std::string _token;
@@ -126,7 +142,7 @@ Measure::Measure(const double vertexSphereRadius,
                  const Color& vertexSelectedColor,
                  const float segmentLineWidth,
                  const Color& segmentColor,
-                 const Geodetic3D* firstVertex,
+                 const Geodetic3D& firstVertex,
                  ShapesRenderer* shapesRenderer,
                  MeshRenderer* meshRenderer,
                  MarksRenderer* marksRenderer,
@@ -152,8 +168,7 @@ _deleteMeasureVertexSelectionHandler(deleteMeasureVertexSelectionHandler)
 
 Measure::~Measure() {
   for (size_t i = 0; i < _vertices.size(); i++) {
-    const Geodetic3D* vertex = _vertices[i];
-    delete vertex;
+    delete _vertices[i];
   }
 
   if (_deleteMeasureVertexSelectionHandler) {
@@ -175,11 +190,17 @@ void Measure::touchedOn(const int vertexIndex) {
   }
 
   if (_measureVertexSelectionHandler != NULL) {
-    const Geodetic3D* geodetic = (_selectedVertexIndex < 0) ? NULL : _vertices[_selectedVertexIndex];
+    if (_selectedVertexIndex < 0) {
+      _measureVertexSelectionHandler->onVertexDeselection(this);
+    }
+    else {
+      const MeasureVertex* vertex = _vertices[_selectedVertexIndex];
 
-    _measureVertexSelectionHandler->onVextexSelection(this,
-                                                      geodetic,
-                                                      _selectedVertexIndex);
+      _measureVertexSelectionHandler->onVertexSelection(this,
+                                                        vertex->_geodetic,
+                                                        vertex->_cartesian,
+                                                        _selectedVertexIndex);
+    }
   }
 }
 
@@ -192,27 +213,18 @@ void Measure::resetSelection() {
   _selectedVertexIndex = -1;
 
   if (_measureVertexSelectionHandler != NULL) {
-    _measureVertexSelectionHandler->onVextexSelection(this,
-                                                      NULL,
-                                                      _selectedVertexIndex);
+    _measureVertexSelectionHandler->onVertexDeselection(this);
   }
 }
 
 
-void Measure::reset() {
-  _shapesRenderer->removeAllShapes(Measure_ShapeFilter(_instanceID), true /* deleteShapes */);
-  _meshRenderer->removeAllMeshes(Measure_MeshFilter(_instanceID), true /* deleteMeshes */);
-  _marksRenderer->removeAllMarks(Measure_MarkFilter(_instanceID), false /* animated */, true /* deleteMarks */);
-
-  _verticesSpheres.clear();
-
+void Measure::createVerticesSpheres() {
   const size_t verticesCount = _vertices.size();
 
-  // create vertices spheres
   for (int i = 0; i < verticesCount; i++) {
-    const Geodetic3D* geodetic = _vertices[i];
+    const MeasureVertex* vertex = _vertices[i];
 
-    MeasureVertexShape* vertexSphere = new MeasureVertexShape(new Geodetic3D(*geodetic),
+    MeasureVertexShape* vertexSphere = new MeasureVertexShape(new Geodetic3D(vertex->_geodetic),
                                                               _vertexSphereRadius,
                                                               _vertexColor,
                                                               _vertexSelectedColor,
@@ -224,93 +236,136 @@ void Measure::reset() {
 
     _shapesRenderer->addShape( vertexSphere );
   }
-
-
-  if (verticesCount > 1) {
-    {
-      // create edges lines
-      FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
-
-      for (size_t i = 0; i < verticesCount; i++) {
-        const Geodetic3D* geodetic = _vertices[i];
-        fbb->add(*geodetic);
-      }
-
-      Mesh* edgesLines = new DirectMesh(GLPrimitive::lineStrip(),
-                                        true,
-                                        fbb->getCenter(),
-                                        fbb->create(),
-                                        _segmentLineWidth,
-                                        1.0f,  // float pointSize
-                                        new Color(_segmentColor),
-                                        NULL,  // const IFloatBuffer* colors
-                                        false  // depthTest
-                                        );
-
-      edgesLines->setToken(_instanceID);
-      _meshRenderer->addMesh(edgesLines);
-
-      delete fbb;
-    }
-
-    {
-      // create edges distance labels
-#ifdef C_CODE
-      const Geodetic3D* previousGeodetic  = _vertices[0];
-      const Vector3D*   previousCartesian = new Vector3D(_planet->toCartesian(*previousGeodetic));
-#else
-      Geodetic3D* previousGeodetic  = _vertices[0];
-      Vector3D*   previousCartesian = new Vector3D(_planet->toCartesian(*previousGeodetic));
-#endif
-      for (size_t i = 1; i < verticesCount; i++) {
-        const Geodetic3D* currentGeodetic  = _vertices[i];
-        const Vector3D*   currentCartesian = new Vector3D(_planet->toCartesian(*currentGeodetic));
-
-        Geodetic3D middle = Geodetic3D::linearInterpolation(*previousGeodetic, *currentGeodetic, 0.5);
-        Mark* distanceLabel = new Mark( IStringUtils::instance()->toString( (float) previousCartesian->distanceTo(*currentCartesian) ) + "m",
-                                       middle,
-                                       ABSOLUTE);
-
-        distanceLabel->setToken(_instanceID);
-        _marksRenderer->addMark(distanceLabel);
-
-        previousGeodetic = currentGeodetic;
-
-        delete previousCartesian;
-        previousCartesian = currentCartesian;
-      }
-
-      delete previousCartesian;
-    }
-
-#warning TODO:   vertices angle labels
-  }
-
 }
 
-const size_t Measure::getVexticesCount() const {
+void Measure::createEdgeLines() {
+  const size_t verticesCount = _vertices.size();
+  if (verticesCount < 2) {
+    return;
+  }
+
+  // create edges lines
+  FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(_planet);
+
+  for (size_t i = 0; i < verticesCount; i++) {
+    fbb->add(_vertices[i]->_geodetic);
+  }
+
+  Mesh* edgesLines = new DirectMesh(GLPrimitive::lineStrip(),
+                                    true,
+                                    fbb->getCenter(),
+                                    fbb->create(),
+                                    _segmentLineWidth,
+                                    1.0f,  // float pointSize
+                                    new Color(_segmentColor),
+                                    NULL,  // const IFloatBuffer* colors
+                                    false  // depthTest
+                                    );
+
+  edgesLines->setToken(_instanceID);
+  _meshRenderer->addMesh(edgesLines);
+
+  delete fbb;
+}
+
+
+void Measure::createEdgeDistanceLabels() {
+  const size_t verticesCount = _vertices.size();
+  if (verticesCount < 2) {
+    return;
+  }
+
+  const IStringUtils* su = IStringUtils::instance();
+  for (size_t i = 1; i < verticesCount; i++) {
+    const MeasureVertex* previous = _vertices[i - 1];
+    const MeasureVertex* current  = _vertices[i];
+
+    const std::string label = su->toString( (float) previous->_cartesian.distanceTo(current->_cartesian) ) + "m";
+
+    const Geodetic3D position = Geodetic3D::linearInterpolation(previous->_geodetic, current->_geodetic, 0.5);
+
+    Mark* mark = new Mark(label,
+                          Geodetic3D(position._latitude,
+                                     position._longitude,
+                                     position._height + _vertexSphereRadius),
+                          ABSOLUTE);
+
+    mark->setToken(_instanceID);
+
+    _marksRenderer->addMark(mark);
+  }
+}
+
+void Measure::createVertexAngleLabels() {
+  const size_t verticesCount = _vertices.size();
+  if (verticesCount < 3) {
+    return;
+  }
+
+  const IStringUtils* su = IStringUtils::instance();
+  for (size_t i = 1; i < verticesCount - 1; i++) {
+    const MeasureVertex* previous = _vertices[i - 1];
+    const MeasureVertex* current  = _vertices[i];
+    const MeasureVertex* next     = _vertices[i + 1];
+
+    const Vector3D v0 = current->_cartesian.sub(previous->_cartesian);
+    const Vector3D v1 = current->_cartesian.sub(next->_cartesian);
+
+    const Angle angle = v0.angleBetween(v1);
+    const std::string label = su->toString( (float) angle._degrees ) + "d";
+
+    Mark* mark = new Mark(label,
+                          Geodetic3D(current->_geodetic._latitude,
+                                     current->_geodetic._longitude,
+                                     current->_geodetic._height + _vertexSphereRadius*2),
+                          ABSOLUTE);
+
+    mark->setToken(_instanceID);
+
+    _marksRenderer->addMark(mark);
+  }
+}
+
+void Measure::reset() {
+  {
+    // clean up
+    _shapesRenderer->removeAllShapes(Measure_ShapeFilter(_instanceID), true /* deleteShapes */);
+    _meshRenderer->removeAllMeshes(Measure_MeshFilter(_instanceID), true /* deleteMeshes */);
+    _marksRenderer->removeAllMarks(Measure_MarkFilter(_instanceID), false /* animated */, true /* deleteMarks */);
+
+    _verticesSpheres.clear();
+  }
+
+  {
+    // create 3d objects
+    createVerticesSpheres();
+    createEdgeLines();
+    createEdgeDistanceLabels();
+    createVertexAngleLabels();
+  }
+}
+
+const size_t Measure::getVerticesCount() const {
   return _vertices.size();
 }
 
-void Measure::addVertex(const Geodetic3D* vertex) {
+void Measure::addVertex(const Geodetic3D& vertex) {
   resetSelection();
 
-  _vertices.push_back( vertex );
+  _vertices.push_back( new MeasureVertex(vertex, _planet) );
 
   reset();
 }
 
 void Measure::setVertex(const size_t i,
-                        const Geodetic3D* vertex) {
-  const Geodetic3D* current = _vertices[i];
-  if (vertex != current) {
-    resetSelection();
+                        const Geodetic3D& vertex) {
+  resetSelection();
 
-    delete current;
-    _vertices[i] = vertex;
+  delete _vertices[i];
 
-    reset();
-  }
+  _vertices[i] = new MeasureVertex(vertex, _planet);
+
+  reset();
 }
 
 bool Measure::removeVertex(const size_t i) {
@@ -321,6 +376,7 @@ bool Measure::removeVertex(const size_t i) {
   resetSelection();
 
 #ifdef C_CODE
+  delete _vertices[i];
   _vertices.erase(_vertices.begin() + i);
 #endif
 #ifdef JAVA_CODE

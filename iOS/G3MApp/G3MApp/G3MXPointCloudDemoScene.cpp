@@ -41,13 +41,17 @@
 class G3MXPointCloudDemoScene_MeasureVertexSelectionHandler : public MeasureVertexSelectionHandler {
 public:
 
-  void onVextexSelection(Measure* measure,
-                         const Geodetic3D* geodetic,
-                         int selectedIndex) {
-    if (selectedIndex >= 0) {
-      measure->removeVertex(selectedIndex);
-    }
+  void onVertexDeselection(Measure* measure) {
+
   }
+
+  void onVertexSelection(Measure* measure,
+                         const Geodetic3D& geodetic,
+                         const Vector3D& cartesian,
+                         int selectedIndex) {
+    measure->removeVertex(selectedIndex);
+  }
+
 };
 
 
@@ -92,7 +96,7 @@ public:
                              Color::fromRGBA(1, 1, 1, 0.5f),  // vertexSelectedColor
                              5.0f,                            // segmentLineWidth
                              Color::fromRGBA(1, 1, 0, 0.6f),  // segmentColor
-                             new Geodetic3D(geodetic),        // firstVertex
+                             geodetic,                        // firstVertex
                              model->getShapesRenderer(),
                              model->getMeshRenderer(),
                              model->getMarksRenderer(),
@@ -101,7 +105,7 @@ public:
                              true);
     }
     else {
-      _measure->addVertex(new Geodetic3D(geodetic));
+      _measure->addVertex( geodetic );
     }
 
 //    {

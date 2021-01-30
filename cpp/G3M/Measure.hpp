@@ -12,19 +12,21 @@
 
 #include "Color.hpp"
 
-class Geodetic3D;
+class MeasureVertex;
 class ShapesRenderer;
 class MeshRenderer;
 class MarksRenderer;
 class Planet;
 class MeasureVertexShape;
 class MeasureVertexSelectionHandler;
+class Geodetic3D;
 
 
 class Measure {
 private:
   static long long INSTANCE_COUNTER;
-  
+
+
   const std::string _instanceID;
 
 
@@ -34,7 +36,7 @@ private:
   const float  _segmentLineWidth;
   const Color  _segmentColor;
 
-  std::vector<const Geodetic3D*> _vertices;
+  std::vector<const MeasureVertex*> _vertices;
 
   ShapesRenderer* _shapesRenderer;
   MeshRenderer*   _meshRenderer;
@@ -43,6 +45,10 @@ private:
   const Planet* _planet;
 
   void reset();
+  void createVerticesSpheres();
+  void createEdgeLines();
+  void createEdgeDistanceLabels();
+  void createVertexAngleLabels();
 
   int _selectedVertexIndex;
   std::vector<MeasureVertexShape*> _verticesSpheres;
@@ -59,7 +65,7 @@ public:
           const Color& vertexSelectedColor,
           const float segmentLineWidth,
           const Color& segmentColor,
-          const Geodetic3D* firstVertex,
+          const Geodetic3D& firstVertex,
           ShapesRenderer* shapesRenderer,
           MeshRenderer* meshRenderer,
           MarksRenderer* marksRenderer,
@@ -67,12 +73,12 @@ public:
           MeasureVertexSelectionHandler* measureVertexSelectionHandler,
           const bool deleteMeasureVertexSelectionHandler);
 
-  const size_t getVexticesCount() const;
+  const size_t getVerticesCount() const;
 
-  void addVertex(const Geodetic3D* vertex);
+  void addVertex(const Geodetic3D& vertex);
 
   void setVertex(const size_t i,
-                 const Geodetic3D* vertex);
+                 const Geodetic3D& vertex);
 
   bool removeVertex(const size_t i);
 
