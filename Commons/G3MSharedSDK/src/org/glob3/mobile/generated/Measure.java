@@ -22,6 +22,8 @@ package org.glob3.mobile.generated;
 //class MarksRenderer;
 //class Planet;
 //class MeasureVertexShape;
+//class MeasureVertexSelectionHandler;
+
 
 public class Measure
 {
@@ -117,10 +119,13 @@ public class Measure
   private int _selectedVertexIndex;
   private java.util.ArrayList<MeasureVertexShape> _verticesSpheres = new java.util.ArrayList<MeasureVertexShape>();
 
+  private MeasureVertexSelectionHandler _measureVertexSelectionHandler;
+  private final boolean _deleteMeasureVertexSelectionHandler;
+
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: add vertexSelectionHandler onVertexSelection(measure, geodetic, i);
 
-  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet)
+  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureVertexSelectionHandler measureVertexSelectionHandler, boolean deleteMeasureVertexSelectionHandler)
   {
      _vertexSphereRadius = vertexSphereRadius;
      _vertexColor = vertexColor;
@@ -132,6 +137,8 @@ public class Measure
      _marksRenderer = marksRenderer;
      _planet = planet;
      _selectedVertexIndex = -1;
+     _measureVertexSelectionHandler = measureVertexSelectionHandler;
+     _deleteMeasureVertexSelectionHandler = deleteMeasureVertexSelectionHandler;
     addVertex(firstVertex);
   }
 
@@ -182,6 +189,12 @@ public class Measure
       if (vertex != null)
          vertex.dispose();
     }
+  
+    if (_deleteMeasureVertexSelectionHandler)
+    {
+      if (_measureVertexSelectionHandler != null)
+         _measureVertexSelectionHandler.dispose();
+    }
   }
 
   public final void touchedOn(int vertexIndex)
@@ -199,6 +212,13 @@ public class Measure
       }
       _selectedVertexIndex = vertexIndex;
       _verticesSpheres.get(_selectedVertexIndex).setSelected(true);
+    }
+  
+    if (_measureVertexSelectionHandler != null)
+    {
+      final Geodetic3D geodetic = (_selectedVertexIndex < 0) ? null : _vertices.get(_selectedVertexIndex);
+  
+      _measureVertexSelectionHandler.onVextexSelection(this, geodetic, _selectedVertexIndex);
     }
   }
 

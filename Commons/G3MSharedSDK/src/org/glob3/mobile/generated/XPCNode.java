@@ -329,18 +329,12 @@ public class XPCNode extends RCObject
           {
             if (!_loadingContent)
             {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO _delayInMs
-              if (_id.length() == 0 || lastSplitTimer.elapsedTimeInMilliseconds() > 0)
+              if ((_id.length() == 0) || (lastSplitTimer.elapsedTimeInMilliseconds() > 0))
               {
                 lastSplitTimer.start();
                 _canceled = false;
                 _loadingContent = true;
                 loadContent(pointCloud, treeID, rc);
-              }
-              else
-              {
-                System.out.print("BREAK ON ME\n");
               }
             }
           }
