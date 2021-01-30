@@ -423,4 +423,36 @@ public class ShapesRenderer extends DefaultRenderer
     loadBSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener);
   }
 
+  public final int removeAllShapes(ShapeFilter filter, boolean deleteShapes)
+  {
+    int removed = 0;
+    final int shapesSize = _shapes.size();
+  
+    java.util.ArrayList<Shape> surviving = new java.util.ArrayList<Shape>();
+    for (int i = 0; i < shapesSize; i++)
+    {
+      Shape shape = _shapes.get(i);
+      if (filter.test(shape))
+      {
+        if (deleteShapes)
+        {
+          if (shape != null)
+             shape.dispose();
+        }
+        removed++;
+      }
+      else
+      {
+        surviving.add(shape);
+      }
+    }
+  
+    if (removed > 0)
+    {
+      _shapes = surviving;
+    }
+  
+    return removed;
+  }
+
 }

@@ -7,14 +7,14 @@ public class MeasureVertexShape extends EllipsoidShape
   private final int _vertexIndex;
 
 
-  public MeasureVertexShape(Geodetic3D position, double radius, Color color, Color selectedColor, Measure measure, int vertexIndex) // bool mercator -  bool texturedInside -  float borderWidth -  resolution
+  public MeasureVertexShape(Geodetic3D position, double radius, Color color, Color selectedColor, Measure measure, String instanceID, int vertexIndex) // bool mercator -  bool texturedInside -  float borderWidth -  resolution
   {
      super(position, AltitudeMode.ABSOLUTE, new Vector3D(radius, radius, radius), (short) 16, 0, false, false, color);
      _color = color;
      _selectedColor = selectedColor;
      _measure = measure;
      _vertexIndex = vertexIndex;
-
+    setToken(instanceID);
   }
 
   public final void setSelected(boolean selected)

@@ -27,6 +27,11 @@ package org.glob3.mobile.generated;
 
 public class Measure
 {
+  private static long INSTANCE_COUNTER = 0;
+
+  private final String _instanceID;
+
+
   private final double _vertexSphereRadius;
   private final Color _vertexColor ;
   private final Color _vertexSelectedColor ;
@@ -43,9 +48,9 @@ public class Measure
 
   private void reset()
   {
-    _shapesRenderer.removeAllShapes();
-    _meshRenderer.clearMeshes();
-    _marksRenderer.removeAllMarks();
+    _shapesRenderer.removeAllShapes(new Measure_ShapeFilter(_instanceID), true); // deleteShapes
+    _meshRenderer.removeAllMeshes(new Measure_MeshFilter(_instanceID), true); // deleteMeshes
+    _marksRenderer.removeAllMarks(new Measure_MarkFilter(_instanceID), false, true); // deleteMarks -  animated
   
     _verticesSpheres.clear();
   
@@ -56,7 +61,7 @@ public class Measure
     {
       final Geodetic3D geodetic = _vertices.get(i);
   
-      MeasureVertexShape vertexSphere = new MeasureVertexShape(new Geodetic3D(geodetic), _vertexSphereRadius, _vertexColor, _vertexSelectedColor, this, i);
+      MeasureVertexShape vertexSphere = new MeasureVertexShape(new Geodetic3D(geodetic), _vertexSphereRadius, _vertexColor, _vertexSelectedColor, this, _instanceID, i);
   
       _verticesSpheres.add(vertexSphere);
   
@@ -78,6 +83,7 @@ public class Measure
   
         Mesh edgesLines = new DirectMesh(GLPrimitive.lineStrip(), true, fbb.getCenter(), fbb.create(), _segmentLineWidth, 1.0f, new Color(_segmentColor), null, false); // depthTest -  const IFloatBuffer* colors -  float pointSize
   
+        edgesLines.setToken(_instanceID);
         _meshRenderer.addMesh(edgesLines);
   
         if (fbb != null)
@@ -96,6 +102,7 @@ public class Measure
           Geodetic3D middle = Geodetic3D.linearInterpolation(previousGeodetic, currentGeodetic, 0.5);
           Mark distanceLabel = new Mark(IStringUtils.instance().toString((float) previousCartesian.distanceTo(currentCartesian)) + "m", middle, AltitudeMode.ABSOLUTE);
   
+          distanceLabel.setToken(_instanceID);
           _marksRenderer.addMark(distanceLabel);
   
           previousGeodetic = currentGeodetic;
@@ -111,7 +118,6 @@ public class Measure
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: vertices angle labels
-  
     }
   
   }
@@ -122,11 +128,26 @@ public class Measure
   private MeasureVertexSelectionHandler _measureVertexSelectionHandler;
   private final boolean _deleteMeasureVertexSelectionHandler;
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: add vertexSelectionHandler onVertexSelection(measure, geodetic, i);
+  private void resetSelection()
+  {
+    if (_selectedVertexIndex < 0)
+    {
+      return;
+    }
+  
+    _verticesSpheres.get(_selectedVertexIndex).setSelected(false);
+    _selectedVertexIndex = -1;
+  
+    if (_measureVertexSelectionHandler != null)
+    {
+      _measureVertexSelectionHandler.onVextexSelection(this, null, _selectedVertexIndex);
+    }
+  }
+
 
   public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureVertexSelectionHandler measureVertexSelectionHandler, boolean deleteMeasureVertexSelectionHandler)
   {
+     _instanceID = "_Measure_" + IStringUtils.instance().toString(INSTANCE_COUNTER++);
      _vertexSphereRadius = vertexSphereRadius;
      _vertexColor = vertexColor;
      _vertexSelectedColor = vertexSelectedColor;
@@ -149,6 +170,8 @@ public class Measure
 
   public final void addVertex(Geodetic3D vertex)
   {
+    resetSelection();
+  
     _vertices.add(vertex);
   
     reset();
@@ -159,6 +182,8 @@ public class Measure
     final Geodetic3D current = _vertices.get(i);
     if (vertex != current)
     {
+      resetSelection();
+  
       if (current != null)
          current.dispose();
       _vertices.set(i, vertex);
@@ -173,6 +198,8 @@ public class Measure
     {
       return false;
     }
+  
+    resetSelection();
   
     _vertices.remove(i);
   

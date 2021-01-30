@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class Geodetic3D;
 //class Camera;
 //class Planet;
+//class ShapeFilter;
 
 
 public class ShapeDistance
