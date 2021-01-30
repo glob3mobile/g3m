@@ -41,6 +41,8 @@ public class XPCRenderer extends DefaultRenderer
   private boolean _renderDebug;
   private XPCSelectionResult _selectionResult;
 
+  private ITimer _lastSplitTimer;
+
 
   protected final void onChangedContext()
   {
@@ -61,6 +63,7 @@ public class XPCRenderer extends DefaultRenderer
      _lastCamera = null;
      _renderDebug = false;
      _selectionResult = null;
+     _lastSplitTimer = null;
   }
 
   public void dispose()
@@ -77,6 +80,9 @@ public class XPCRenderer extends DefaultRenderer
   
     if (_selectionResult != null)
        _selectionResult.dispose();
+  
+    if (_lastSplitTimer != null)
+       _lastSplitTimer.dispose();
   
     super.dispose();
   }
@@ -200,6 +206,13 @@ public class XPCRenderer extends DefaultRenderer
     {
       _lastCamera = rc.getCurrentCamera();
   
+  
+      if (_lastSplitTimer == null)
+      {
+        _lastSplitTimer = rc.getFactory().createTimer();
+        _lastSplitTimer.start();
+      }
+  
       if (_timer == null)
       {
         _timer = rc.getFactory().createTimer();
@@ -223,7 +236,7 @@ public class XPCRenderer extends DefaultRenderer
       for (int i = 0; i < _cloudsSize; i++)
       {
         XPCPointCloud cloud = _clouds.get(i);
-        cloud.render(rc, _glState, frustum, nowInMS, _renderDebug, _selectionResult);
+        cloud.render(rc, _lastSplitTimer, _glState, frustum, nowInMS, _renderDebug, _selectionResult);
       }
   
   //    if (_selectionResult != NULL) {

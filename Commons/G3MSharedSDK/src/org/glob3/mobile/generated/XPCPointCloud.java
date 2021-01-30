@@ -29,6 +29,7 @@ package org.glob3.mobile.generated;
 //class XPCPointSelectionListener;
 //class Vector3D;
 //class Geodetic3D;
+//class ITimer;
 
 
 public class XPCPointCloud extends RCObject
@@ -200,11 +201,11 @@ public class XPCPointCloud extends RCObject
     return RenderState.ready();
   }
 
-  public final void render(G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
+  public final void render(G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
   {
     if (_metadata != null)
     {
-      final long renderedCount = _metadata.render(this, rc, glState, frustum, nowInMS, renderDebug, selectionResult);
+      final long renderedCount = _metadata.render(this, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult);
   
       if (_lastRenderedCount != renderedCount)
       {

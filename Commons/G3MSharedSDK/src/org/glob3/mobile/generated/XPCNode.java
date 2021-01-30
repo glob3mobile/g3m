@@ -26,6 +26,7 @@ package org.glob3.mobile.generated;
 //class ByteBufferIterator;
 //class DirectMesh;
 //class XPCSelectionResult;
+//class ITimer;
 
 
 public class XPCNode extends RCObject
@@ -269,7 +270,7 @@ public class XPCNode extends RCObject
   }
 
 
-  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
   {
   
     long renderedCount = 0;
@@ -328,9 +329,19 @@ public class XPCNode extends RCObject
           {
             if (!_loadingContent)
             {
-              _canceled = false;
-              _loadingContent = true;
-              loadContent(pointCloud, treeID, rc);
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning TODO _delayInMs
+              if (_id.length() == 0 || lastSplitTimer.elapsedTimeInMilliseconds() > 0)
+              {
+                lastSplitTimer.start();
+                _canceled = false;
+                _loadingContent = true;
+                loadContent(pointCloud, treeID, rc);
+              }
+              else
+              {
+                System.out.print("BREAK ON ME\n");
+              }
             }
           }
   
@@ -339,7 +350,7 @@ public class XPCNode extends RCObject
             for (int i = 0; i < _childrenSize; i++)
             {
               XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, treeID, rc, glState, frustum, nowInMS, renderDebug, selectionResult);
+              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult);
             }
           }
   
