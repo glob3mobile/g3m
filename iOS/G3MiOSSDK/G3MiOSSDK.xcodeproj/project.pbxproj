@@ -909,6 +909,7 @@
 		CF66099E23DF332400795C7F /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CF4027DC1770E7B900D5A80C /* SRWebSocket.m */; };
 		CF66099F23DF332400795C7F /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		CF6609A023DF332400795C7F /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
+		CF7FB77625C5759A0009313E /* MeasureVertexSelectionHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */; };
 		CF8CFCDA25BB11F500326563 /* XPCSelectionResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */; };
 		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
 		CFC54DFE25B9B76300424542 /* XPCIntensityPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54DFC25B9B76300424542 /* XPCIntensityPointColorizer.cpp */; };
@@ -2350,6 +2351,8 @@
 		CF6604AC23DF2DAB00795C7F /* InfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoDisplay.cpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
+		CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeasureVertexSelectionHandler.cpp; sourceTree = "<group>"; };
+		CF7FB77525C5759A0009313E /* MeasureVertexSelectionHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeasureVertexSelectionHandler.hpp; sourceTree = "<group>"; };
 		CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_Handler.h; path = Specific/Derived/Downloader_iOS_Handler.h; sourceTree = "<group>"; };
 		CF8A234D15C4306800FD56C9 /* Downloader_iOS_Handler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = Downloader_iOS_Handler.mm; path = Specific/Derived/Downloader_iOS_Handler.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF8A235115C4340900FD56C9 /* Downloader_iOS_Listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_Listener.h; path = Specific/Derived/Downloader_iOS_Listener.h; sourceTree = "<group>"; };
@@ -2557,6 +2560,10 @@
 		CF05D55825B82B8900220105 /* XCP */ = {
 			isa = PBXGroup;
 			children = (
+				CF42264325BED63D003CF0A3 /* Measure.cpp */,
+				CF42264425BED63D003CF0A3 /* Measure.hpp */,
+				CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */,
+				CF7FB77525C5759A0009313E /* MeasureVertexSelectionHandler.hpp */,
 				CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */,
 				CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */,
 				CF27452325B1F2C20056304B /* XPCDimension.cpp */,
@@ -2584,8 +2591,6 @@
 				CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */,
 				CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */,
 				CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */,
-				CF42264325BED63D003CF0A3 /* Measure.cpp */,
-				CF42264425BED63D003CF0A3 /* Measure.hpp */,
 				CF8CFCD925BB11F500326563 /* XPCSelectionResult.hpp */,
 				CF4AD09525B5F574009A1E48 /* XPCTree.cpp */,
 				CF4AD09625B5F574009A1E48 /* XPCTree.hpp */,
@@ -3890,6 +3895,7 @@
 				CF6608E323DF330600795C7F /* SGRotateNode.cpp in Sources */,
 				CF6608E423DF330600795C7F /* TimedCacheTileVisibilityTester.cpp in Sources */,
 				CF6608E523DF330600795C7F /* SceneLighting.cpp in Sources */,
+				CF7FB77625C5759A0009313E /* MeasureVertexSelectionHandler.cpp in Sources */,
 				CF6608E623DF330600795C7F /* GLFeature.cpp in Sources */,
 				CF6608E723DF330600795C7F /* GEOMeshSymbol.cpp in Sources */,
 				CF6608E823DF330600795C7F /* IFactory.cpp in Sources */,

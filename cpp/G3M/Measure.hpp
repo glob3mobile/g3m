@@ -18,6 +18,8 @@ class MeshRenderer;
 class MarksRenderer;
 class Planet;
 class MeasureVertexShape;
+class MeasureVertexSelectionHandler;
+
 
 class Measure {
 private:
@@ -40,6 +42,9 @@ private:
   int _selectedVertexIndex;
   std::vector<MeasureVertexShape*> _verticesSpheres;
 
+  MeasureVertexSelectionHandler* _measureVertexSelectionHandler;
+  const bool                     _deleteMeasureVertexSelectionHandler;
+
 public:
 #warning TODO: add vertexSelectionHandler   onVertexSelection(measure, geodetic, i);
 
@@ -52,7 +57,9 @@ public:
           ShapesRenderer* shapesRenderer,
           MeshRenderer* meshRenderer,
           MarksRenderer* marksRenderer,
-          const Planet* planet);
+          const Planet* planet,
+          MeasureVertexSelectionHandler* measureVertexSelectionHandler,
+          const bool deleteMeasureVertexSelectionHandler);
 
   const size_t getVexticesCount() const;
 

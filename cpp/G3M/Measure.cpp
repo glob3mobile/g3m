@@ -20,6 +20,7 @@
 #include "Mark.hpp"
 #include "Planet.hpp"
 #include "IndexedMesh.hpp"
+#include "MeasureVertexSelectionHandler.hpp"
 
 
 class MeasureVertexShape : public EllipsoidShape {
@@ -74,7 +75,9 @@ Measure::Measure(const double vertexSphereRadius,
                  ShapesRenderer* shapesRenderer,
                  MeshRenderer* meshRenderer,
                  MarksRenderer* marksRenderer,
-                 const Planet* planet) :
+                 const Planet* planet,
+                 MeasureVertexSelectionHandler* measureVertexSelectionHandler,
+                 const bool deleteMeasureVertexSelectionHandler) :
 _vertexSphereRadius(vertexSphereRadius),
 _vertexColor(vertexColor),
 _vertexSelectedColor(vertexSelectedColor),
@@ -84,7 +87,9 @@ _shapesRenderer(shapesRenderer),
 _meshRenderer(meshRenderer),
 _marksRenderer(marksRenderer),
 _planet(planet),
-_selectedVertexIndex(-1)
+_selectedVertexIndex(-1),
+_measureVertexSelectionHandler(measureVertexSelectionHandler),
+_deleteMeasureVertexSelectionHandler(deleteMeasureVertexSelectionHandler)
 {
   addVertex( firstVertex );
 }
@@ -93,6 +98,10 @@ Measure::~Measure() {
   for (size_t i = 0; i < _vertices.size(); i++) {
     const Geodetic3D* vertex = _vertices[i];
     delete vertex;
+  }
+
+  if (_deleteMeasureVertexSelectionHandler) {
+    delete _measureVertexSelectionHandler;
   }
 }
 
@@ -107,6 +116,14 @@ void Measure::touchedOn(const int vertexIndex) {
     }
     _selectedVertexIndex = vertexIndex;
     _verticesSpheres[_selectedVertexIndex]->setSelected(true);
+  }
+
+  if (_measureVertexSelectionHandler != NULL) {
+    const Geodetic3D* geodetic = (_selectedVertexIndex < 0) ? NULL : _vertices[_selectedVertexIndex];
+
+    _measureVertexSelectionHandler->onVextexSelection(this,
+                                                      geodetic,
+                                                      _selectedVertexIndex);
   }
 }
 

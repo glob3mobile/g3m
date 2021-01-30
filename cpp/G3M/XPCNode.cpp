@@ -564,15 +564,11 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         }
         else {
           if (!_loadingContent) {
-#warning TODO _delayInMs
-            if ( _id.length() == 0 || lastSplitTimer->elapsedTimeInMilliseconds() > 0 ) {
+            if ( (_id.length() == 0) || (lastSplitTimer->elapsedTimeInMilliseconds() > 0) ) {
               lastSplitTimer->start();
               _canceled = false;
               _loadingContent = true;
               loadContent(pointCloud, treeID, rc);
-            }
-            else {
-              printf("BREAK ON ME\n");
             }
           }
         }
