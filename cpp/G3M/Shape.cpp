@@ -56,7 +56,8 @@ _transformMatrix(NULL),
 _enable(true),
 _surfaceElevation(0),
 _glState(new GLState()),
-_surfaceElevationProvider(NULL)
+_surfaceElevationProvider(NULL),
+_token("")
 {
   _localTransform.setValid(false);
   if (position->isNan()) {

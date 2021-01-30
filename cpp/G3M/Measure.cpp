@@ -21,6 +21,60 @@
 #include "Planet.hpp"
 #include "IndexedMesh.hpp"
 #include "MeasureVertexSelectionHandler.hpp"
+#include "IStringUtils.hpp"
+#include "ShapeFilter.hpp"
+#include "MeshFilter.hpp"
+#include "MarkFilter.hpp"
+
+
+long long Measure::INSTANCE_COUNTER = 0;
+
+
+class Measure_ShapeFilter : public ShapeFilter {
+private:
+  const std::string _token;
+
+public:
+  Measure_ShapeFilter(const std::string& token) :
+  _token(token)
+  {
+  }
+
+  bool test(const Shape* shape) const {
+    return (shape->getToken() == _token);
+  }
+};
+
+
+class Measure_MeshFilter : public MeshFilter {
+private:
+  const std::string _token;
+
+public:
+  Measure_MeshFilter(const std::string& token) :
+  _token(token)
+  {
+  }
+
+  bool test(const Mesh* mesh) const {
+    return (mesh->getToken() == _token);
+  }
+};
+
+class Measure_MarkFilter : public MarkFilter {
+private:
+  const std::string _token;
+
+public:
+  Measure_MarkFilter(const std::string& token) :
+  _token(token)
+  {
+  }
+
+  bool test(const Mark* mark) const {
+    return (mark->getToken() == _token);
+  }
+};
 
 
 class MeasureVertexShape : public EllipsoidShape {
@@ -37,6 +91,7 @@ public:
                      const Color& color,
                      const Color& selectedColor,
                      Measure* measure,
+                     const std::string& instanceID,
                      const int vertexIndex) :
   EllipsoidShape(position,
                  AltitudeMode::ABSOLUTE,
@@ -51,7 +106,7 @@ public:
   _measure(measure),
   _vertexIndex(vertexIndex)
   {
-
+    setToken(instanceID);
   }
 
   void setSelected(const bool selected) {
@@ -78,6 +133,7 @@ Measure::Measure(const double vertexSphereRadius,
                  const Planet* planet,
                  MeasureVertexSelectionHandler* measureVertexSelectionHandler,
                  const bool deleteMeasureVertexSelectionHandler) :
+_instanceID( "_Measure_" + IStringUtils::instance()->toString(INSTANCE_COUNTER++) ),
 _vertexSphereRadius(vertexSphereRadius),
 _vertexColor(vertexColor),
 _vertexSelectedColor(vertexSelectedColor),
@@ -144,9 +200,9 @@ void Measure::resetSelection() {
 
 
 void Measure::reset() {
-  _shapesRenderer->removeAllShapes();
-  _meshRenderer->clearMeshes();
-  _marksRenderer->removeAllMarks();
+  _shapesRenderer->removeAllShapes(Measure_ShapeFilter(_instanceID), true /* deleteShapes */);
+  _meshRenderer->removeAllMeshes(Measure_MeshFilter(_instanceID), true /* deleteMeshes */);
+  _marksRenderer->removeAllMarks(Measure_MarkFilter(_instanceID), false /* animated */, true /* deleteMarks */);
 
   _verticesSpheres.clear();
 
@@ -161,6 +217,7 @@ void Measure::reset() {
                                                               _vertexColor,
                                                               _vertexSelectedColor,
                                                               this,
+                                                              _instanceID,
                                                               i);
 
     _verticesSpheres.push_back( vertexSphere );
@@ -190,6 +247,7 @@ void Measure::reset() {
                                         false  // depthTest
                                         );
 
+      edgesLines->setToken(_instanceID);
       _meshRenderer->addMesh(edgesLines);
 
       delete fbb;
@@ -213,6 +271,7 @@ void Measure::reset() {
                                        middle,
                                        ABSOLUTE);
 
+        distanceLabel->setToken(_instanceID);
         _marksRenderer->addMark(distanceLabel);
 
         previousGeodetic = currentGeodetic;

@@ -912,6 +912,7 @@
 		CF7FB77625C5759A0009313E /* MeasureVertexSelectionHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */; };
 		CF7FB77925C57A2E0009313E /* MeasureVertexSelectionHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FB77525C5759A0009313E /* MeasureVertexSelectionHandler.hpp */; };
 		CF7FB77A25C57A2E0009313E /* XPCSelectionResult.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8CFCD925BB11F500326563 /* XPCSelectionResult.hpp */; };
+		CF7FB77E25C5A5500009313E /* ShapeFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7FB77C25C5A5500009313E /* ShapeFilter.cpp */; };
 		CF8CFCDA25BB11F500326563 /* XPCSelectionResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */; };
 		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
 		CFC54DFE25B9B76300424542 /* XPCIntensityPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54DFC25B9B76300424542 /* XPCIntensityPointColorizer.cpp */; };
@@ -2357,6 +2358,8 @@
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
 		CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeasureVertexSelectionHandler.cpp; sourceTree = "<group>"; };
 		CF7FB77525C5759A0009313E /* MeasureVertexSelectionHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeasureVertexSelectionHandler.hpp; sourceTree = "<group>"; };
+		CF7FB77C25C5A5500009313E /* ShapeFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShapeFilter.cpp; sourceTree = "<group>"; };
+		CF7FB77D25C5A5500009313E /* ShapeFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShapeFilter.hpp; sourceTree = "<group>"; };
 		CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_Handler.h; path = Specific/Derived/Downloader_iOS_Handler.h; sourceTree = "<group>"; };
 		CF8A234D15C4306800FD56C9 /* Downloader_iOS_Handler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = Downloader_iOS_Handler.mm; path = Specific/Derived/Downloader_iOS_Handler.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF8A235115C4340900FD56C9 /* Downloader_iOS_Listener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_Listener.h; path = Specific/Derived/Downloader_iOS_Listener.h; sourceTree = "<group>"; };
@@ -3179,6 +3182,8 @@
 				CF6603FC23DF2DA900795C7F /* MeshBoundingVolumeTileVisibilityTester.hpp */,
 				CF66033A23DF2DA700795C7F /* MeshFilter.cpp */,
 				CF66026D23DF2DA600795C7F /* MeshFilter.hpp */,
+				CF7FB77C25C5A5500009313E /* ShapeFilter.cpp */,
+				CF7FB77D25C5A5500009313E /* ShapeFilter.hpp */,
 				CF6602CC23DF2DA600795C7F /* MeshHolder.cpp */,
 				CF66038A23DF2DA800795C7F /* MeshHolder.hpp */,
 				CF6602C723DF2DA600795C7F /* MeshRenderer.cpp */,
@@ -3963,6 +3968,7 @@
 				CF66092023DF330700795C7F /* CompositeRenderer.cpp in Sources */,
 				CF66092123DF330700795C7F /* ChessboardLayer.cpp in Sources */,
 				CF66092223DF330700795C7F /* GEOSymbol.cpp in Sources */,
+				CF7FB77E25C5A5500009313E /* ShapeFilter.cpp in Sources */,
 				CF66092323DF330700795C7F /* GEORectangleRasterSymbol.cpp in Sources */,
 				CF66092423DF330700795C7F /* GAsyncTask.cpp in Sources */,
 				CF66092523DF330700795C7F /* SGMaterialNode.cpp in Sources */,

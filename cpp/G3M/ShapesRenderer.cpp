@@ -22,6 +22,7 @@
 #include "GLState.hpp"
 #include "Planet.hpp"
 #include "Geodetic3D.hpp"
+#include "ShapeFilter.hpp"
 
 
 class TransparentShapeWrapper : public OrderedRenderable {
@@ -630,4 +631,30 @@ void ShapesRenderer::disableAll() {
     Shape* shape = _shapes[i];
     shape->setEnable(false);
   }
+}
+
+size_t ShapesRenderer::removeAllShapes(const ShapeFilter& filter,
+                                       bool deleteShapes) {
+  size_t removed = 0;
+  const size_t shapesSize = _shapes.size();
+
+  std::vector<Shape*> surviving;
+  for (size_t i = 0; i < shapesSize; i++) {
+    Shape* shape = _shapes[i];
+    if (filter.test(shape)) {
+      if (deleteShapes) {
+        delete shape;
+      }
+      removed++;
+    }
+    else {
+      surviving.push_back(shape);
+    }
+  }
+
+  if (removed > 0) {
+    _shapes = surviving;
+  }
+
+  return removed;
 }

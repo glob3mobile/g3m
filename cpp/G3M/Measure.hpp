@@ -23,6 +23,11 @@ class MeasureVertexSelectionHandler;
 
 class Measure {
 private:
+  static long long INSTANCE_COUNTER;
+  
+  const std::string _instanceID;
+
+
   const double _vertexSphereRadius;
   const Color  _vertexColor;
   const Color  _vertexSelectedColor;
