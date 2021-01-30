@@ -42,6 +42,11 @@ public:
   {
 
   }
+
+  ~MeasureVertex() {
+
+  }
+
 };
 
 

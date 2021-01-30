@@ -16,18 +16,20 @@ package org.glob3.mobile.generated;
 
 
 
-//class Geodetic3D;
+//class MeasureVertex;
 //class ShapesRenderer;
 //class MeshRenderer;
 //class MarksRenderer;
 //class Planet;
 //class MeasureVertexShape;
 //class MeasureVertexSelectionHandler;
+//class Geodetic3D;
 
 
 public class Measure
 {
   private static long INSTANCE_COUNTER = 0;
+
 
   private final String _instanceID;
 
@@ -38,7 +40,7 @@ public class Measure
   private final float _segmentLineWidth;
   private final Color _segmentColor ;
 
-  private final java.util.ArrayList<Geodetic3D> _vertices = new java.util.ArrayList<Geodetic3D>();
+  private final java.util.ArrayList<MeasureVertex> _vertices = new java.util.ArrayList<MeasureVertex>();
 
   private ShapesRenderer _shapesRenderer;
   private MeshRenderer _meshRenderer;
@@ -48,78 +50,114 @@ public class Measure
 
   private void reset()
   {
-    _shapesRenderer.removeAllShapes(new Measure_ShapeFilter(_instanceID), true); // deleteShapes
-    _meshRenderer.removeAllMeshes(new Measure_MeshFilter(_instanceID), true); // deleteMeshes
-    _marksRenderer.removeAllMarks(new Measure_MarkFilter(_instanceID), false, true); // deleteMarks -  animated
+    {
+      // clean up
+      _shapesRenderer.removeAllShapes(new Measure_ShapeFilter(_instanceID), true); // deleteShapes
+      _meshRenderer.removeAllMeshes(new Measure_MeshFilter(_instanceID), true); // deleteMeshes
+      _marksRenderer.removeAllMarks(new Measure_MarkFilter(_instanceID), false, true); // deleteMarks -  animated
   
-    _verticesSpheres.clear();
+      _verticesSpheres.clear();
+    }
   
+    {
+      // create 3d objects
+      createVerticesSpheres();
+      createEdgeLines();
+      createEdgeDistanceLabels();
+      createVertexAngleLabels();
+    }
+  }
+  private void createVerticesSpheres()
+  {
     final int verticesCount = _vertices.size();
   
-    // create vertices spheres
     for (int i = 0; i < verticesCount; i++)
     {
-      final Geodetic3D geodetic = _vertices.get(i);
+      final MeasureVertex vertex = _vertices.get(i);
   
-      MeasureVertexShape vertexSphere = new MeasureVertexShape(new Geodetic3D(geodetic), _vertexSphereRadius, _vertexColor, _vertexSelectedColor, this, _instanceID, i);
+      MeasureVertexShape vertexSphere = new MeasureVertexShape(new Geodetic3D(vertex._geodetic), _vertexSphereRadius, _vertexColor, _vertexSelectedColor, this, _instanceID, i);
   
       _verticesSpheres.add(vertexSphere);
   
       _shapesRenderer.addShape(vertexSphere);
     }
-  
-  
-    if (verticesCount > 1)
+  }
+  private void createEdgeLines()
+  {
+    final int verticesCount = _vertices.size();
+    if (verticesCount < 2)
     {
-      {
-        // create edges lines
-        FloatBufferBuilderFromGeodetic fbb = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_planet);
-  
-        for (int i = 0; i < verticesCount; i++)
-        {
-          final Geodetic3D geodetic = _vertices.get(i);
-          fbb.add(geodetic);
-        }
-  
-        Mesh edgesLines = new DirectMesh(GLPrimitive.lineStrip(), true, fbb.getCenter(), fbb.create(), _segmentLineWidth, 1.0f, new Color(_segmentColor), null, false); // depthTest -  const IFloatBuffer* colors -  float pointSize
-  
-        edgesLines.setToken(_instanceID);
-        _meshRenderer.addMesh(edgesLines);
-  
-        if (fbb != null)
-           fbb.dispose();
-      }
-  
-      {
-        // create edges distance labels
-        Geodetic3D previousGeodetic = _vertices.get(0);
-        Vector3D previousCartesian = new Vector3D(_planet.toCartesian(previousGeodetic));
-        for (int i = 1; i < verticesCount; i++)
-        {
-          final Geodetic3D currentGeodetic = _vertices.get(i);
-          final Vector3D currentCartesian = new Vector3D(_planet.toCartesian(currentGeodetic));
-  
-          Geodetic3D middle = Geodetic3D.linearInterpolation(previousGeodetic, currentGeodetic, 0.5);
-          Mark distanceLabel = new Mark(IStringUtils.instance().toString((float) previousCartesian.distanceTo(currentCartesian)) + "m", middle, AltitudeMode.ABSOLUTE);
-  
-          distanceLabel.setToken(_instanceID);
-          _marksRenderer.addMark(distanceLabel);
-  
-          previousGeodetic = currentGeodetic;
-  
-          if (previousCartesian != null)
-             previousCartesian.dispose();
-          previousCartesian = currentCartesian;
-        }
-  
-        if (previousCartesian != null)
-           previousCartesian.dispose();
-      }
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: vertices angle labels
+      return;
     }
   
+    // create edges lines
+    FloatBufferBuilderFromGeodetic fbb = FloatBufferBuilderFromGeodetic.builderWithFirstVertexAsCenter(_planet);
+  
+    for (int i = 0; i < verticesCount; i++)
+    {
+      fbb.add(_vertices.get(i)._geodetic);
+    }
+  
+    Mesh edgesLines = new DirectMesh(GLPrimitive.lineStrip(), true, fbb.getCenter(), fbb.create(), _segmentLineWidth, 1.0f, new Color(_segmentColor), null, false); // depthTest -  const IFloatBuffer* colors -  float pointSize
+  
+    edgesLines.setToken(_instanceID);
+    _meshRenderer.addMesh(edgesLines);
+  
+    if (fbb != null)
+       fbb.dispose();
+  }
+  private void createEdgeDistanceLabels()
+  {
+    final int verticesCount = _vertices.size();
+    if (verticesCount < 2)
+    {
+      return;
+    }
+  
+    final IStringUtils su = IStringUtils.instance();
+    for (int i = 1; i < verticesCount; i++)
+    {
+      final MeasureVertex previous = _vertices.get(i - 1);
+      final MeasureVertex current = _vertices.get(i);
+  
+      final String label = su.toString((float) previous._cartesian.distanceTo(current._cartesian)) + "m";
+  
+      final Geodetic3D position = Geodetic3D.linearInterpolation(previous._geodetic, current._geodetic, 0.5);
+  
+      Mark mark = new Mark(label, new Geodetic3D(position._latitude, position._longitude, position._height + _vertexSphereRadius), AltitudeMode.ABSOLUTE);
+  
+      mark.setToken(_instanceID);
+  
+      _marksRenderer.addMark(mark);
+    }
+  }
+  private void createVertexAngleLabels()
+  {
+    final int verticesCount = _vertices.size();
+    if (verticesCount < 3)
+    {
+      return;
+    }
+  
+    final IStringUtils su = IStringUtils.instance();
+    for (int i = 1; i < verticesCount - 1; i++)
+    {
+      final MeasureVertex previous = _vertices.get(i - 1);
+      final MeasureVertex current = _vertices.get(i);
+      final MeasureVertex next = _vertices.get(i + 1);
+  
+      final Vector3D v0 = current._cartesian.sub(previous._cartesian);
+      final Vector3D v1 = current._cartesian.sub(next._cartesian);
+  
+      final Angle angle = v0.angleBetween(v1);
+      final String label = su.toString((float) angle._degrees) + "d";
+  
+      Mark mark = new Mark(label, new Geodetic3D(current._geodetic._latitude, current._geodetic._longitude, current._geodetic._height + _vertexSphereRadius *2), AltitudeMode.ABSOLUTE);
+  
+      mark.setToken(_instanceID);
+  
+      _marksRenderer.addMark(mark);
+    }
   }
 
   private int _selectedVertexIndex;
@@ -140,7 +178,7 @@ public class Measure
   
     if (_measureVertexSelectionHandler != null)
     {
-      _measureVertexSelectionHandler.onVextexSelection(this, null, _selectedVertexIndex);
+      _measureVertexSelectionHandler.onVertexDeselection(this);
     }
   }
 
@@ -163,7 +201,7 @@ public class Measure
     addVertex(firstVertex);
   }
 
-  public final int getVexticesCount()
+  public final int getVerticesCount()
   {
     return _vertices.size();
   }
@@ -172,24 +210,21 @@ public class Measure
   {
     resetSelection();
   
-    _vertices.add(vertex);
+    _vertices.add(new MeasureVertex(vertex, _planet));
   
     reset();
   }
 
   public final void setVertex(int i, Geodetic3D vertex)
   {
-    final Geodetic3D current = _vertices.get(i);
-    if (vertex != current)
-    {
-      resetSelection();
+    resetSelection();
   
-      if (current != null)
-         current.dispose();
-      _vertices.set(i, vertex);
+    if (_vertices.get(i) != null)
+       _vertices.get(i).dispose();
   
-      reset();
-    }
+    _vertices.set(i, new MeasureVertex(vertex, _planet));
+  
+    reset();
   }
 
   public final boolean removeVertex(int i)
@@ -212,9 +247,8 @@ public class Measure
   {
     for (int i = 0; i < _vertices.size(); i++)
     {
-      final Geodetic3D vertex = _vertices.get(i);
-      if (vertex != null)
-         vertex.dispose();
+      if (_vertices.get(i) != null)
+         _vertices.get(i).dispose();
     }
   
     if (_deleteMeasureVertexSelectionHandler)
@@ -243,9 +277,16 @@ public class Measure
   
     if (_measureVertexSelectionHandler != null)
     {
-      final Geodetic3D geodetic = (_selectedVertexIndex < 0) ? null : _vertices.get(_selectedVertexIndex);
+      if (_selectedVertexIndex < 0)
+      {
+        _measureVertexSelectionHandler.onVertexDeselection(this);
+      }
+      else
+      {
+        final MeasureVertex vertex = _vertices.get(_selectedVertexIndex);
   
-      _measureVertexSelectionHandler.onVextexSelection(this, geodetic, _selectedVertexIndex);
+        _measureVertexSelectionHandler.onVertexSelection(this, vertex._geodetic, vertex._cartesian, _selectedVertexIndex);
+      }
     }
   }
 

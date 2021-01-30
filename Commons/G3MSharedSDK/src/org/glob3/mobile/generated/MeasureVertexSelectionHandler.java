@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 
 //class Measure;
 //class Geodetic3D;
+//class Vector3D;
 
 
 public abstract class MeasureVertexSelectionHandler
@@ -26,6 +27,8 @@ public abstract class MeasureVertexSelectionHandler
 
   }
 
-  public abstract void onVextexSelection(Measure measure, Geodetic3D geodetic, int selectedIndex);
+  public abstract void onVertexDeselection(Measure measure);
+
+  public abstract void onVertexSelection(Measure measure, Geodetic3D geodetic, Vector3D cartesian, int selectedIndex);
 
 }
