@@ -910,6 +910,8 @@
 		CF66099F23DF332400795C7F /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		CF6609A023DF332400795C7F /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
 		CF7FB77625C5759A0009313E /* MeasureVertexSelectionHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */; };
+		CF7FB77925C57A2E0009313E /* MeasureVertexSelectionHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FB77525C5759A0009313E /* MeasureVertexSelectionHandler.hpp */; };
+		CF7FB77A25C57A2E0009313E /* XPCSelectionResult.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8CFCD925BB11F500326563 /* XPCSelectionResult.hpp */; };
 		CF8CFCDA25BB11F500326563 /* XPCSelectionResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */; };
 		CFA59ED01714856A0095E2EF /* Canvas_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFA59ECD171482560095E2EF /* Canvas_iOS.hpp */; };
 		CFC54DFE25B9B76300424542 /* XPCIntensityPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54DFC25B9B76300424542 /* XPCIntensityPointColorizer.cpp */; };
@@ -954,6 +956,8 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF7FB77925C57A2E0009313E /* MeasureVertexSelectionHandler.hpp in CopyFiles */,
+				CF7FB77A25C57A2E0009313E /* XPCSelectionResult.hpp in CopyFiles */,
 				CF42264725BEFA69003CF0A3 /* Measure.hpp in CopyFiles */,
 				CF64ADF325BDCE8300815620 /* XPCPointSelectionListener.hpp in CopyFiles */,
 				CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */,

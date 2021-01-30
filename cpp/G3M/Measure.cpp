@@ -127,6 +127,22 @@ void Measure::touchedOn(const int vertexIndex) {
   }
 }
 
+void Measure::resetSelection() {
+  if (_selectedVertexIndex < 0) {
+    return;
+  }
+
+  _verticesSpheres[_selectedVertexIndex]->setSelected(false);
+  _selectedVertexIndex = -1;
+
+  if (_measureVertexSelectionHandler != NULL) {
+    _measureVertexSelectionHandler->onVextexSelection(this,
+                                                      NULL,
+                                                      _selectedVertexIndex);
+  }
+}
+
+
 void Measure::reset() {
   _shapesRenderer->removeAllShapes();
   _meshRenderer->clearMeshes();
@@ -209,7 +225,6 @@ void Measure::reset() {
     }
 
 #warning TODO:   vertices angle labels
-
   }
 
 }
@@ -219,6 +234,8 @@ const size_t Measure::getVexticesCount() const {
 }
 
 void Measure::addVertex(const Geodetic3D* vertex) {
+  resetSelection();
+
   _vertices.push_back( vertex );
 
   reset();
@@ -228,6 +245,8 @@ void Measure::setVertex(const size_t i,
                         const Geodetic3D* vertex) {
   const Geodetic3D* current = _vertices[i];
   if (vertex != current) {
+    resetSelection();
+
     delete current;
     _vertices[i] = vertex;
 
@@ -239,6 +258,8 @@ bool Measure::removeVertex(const size_t i) {
   if (_vertices.size() == 1) {
     return false;
   }
+
+  resetSelection();
 
 #ifdef C_CODE
   _vertices.erase(_vertices.begin() + i);

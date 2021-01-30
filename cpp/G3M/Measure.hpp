@@ -45,8 +45,9 @@ private:
   MeasureVertexSelectionHandler* _measureVertexSelectionHandler;
   const bool                     _deleteMeasureVertexSelectionHandler;
 
+  void resetSelection();
+
 public:
-#warning TODO: add vertexSelectionHandler   onVertexSelection(measure, geodetic, i);
 
   Measure(const double vertexSphereRadius,
           const Color& vertexColor,

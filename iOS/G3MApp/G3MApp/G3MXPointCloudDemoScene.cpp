@@ -33,9 +33,22 @@
 //#include <G3M/MarksRenderer.hpp>
 //#include <G3M/Mark.hpp>
 #include <G3M/Measure.hpp>
-
+#include <G3M/MeasureVertexSelectionHandler.hpp>
 
 #include "G3MDemoModel.hpp"
+
+
+class G3MXPointCloudDemoScene_MeasureVertexSelectionHandler : public MeasureVertexSelectionHandler {
+public:
+
+  void onVextexSelection(Measure* measure,
+                         const Geodetic3D* geodetic,
+                         int selectedIndex) {
+    if (selectedIndex >= 0) {
+      measure->removeVertex(selectedIndex);
+    }
+  }
+};
 
 
 class G3MXPointCloudDemoScene_PointSelectionListener : public XPCPointSelectionListener {
@@ -83,7 +96,9 @@ public:
                              model->getShapesRenderer(),
                              model->getMeshRenderer(),
                              model->getMarksRenderer(),
-                             model->getG3MWidget()->getG3MContext()->getPlanet());
+                             model->getG3MWidget()->getG3MContext()->getPlanet(),
+                             new G3MXPointCloudDemoScene_MeasureVertexSelectionHandler(),
+                             true);
     }
     else {
       _measure->addVertex(new Geodetic3D(geodetic));
