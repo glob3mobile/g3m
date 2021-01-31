@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated;
-public class MeasureVertexShape extends EllipsoidShape
+public class Measure_VertexShape extends EllipsoidShape
 {
   private final Color _color ;
   private final Color _selectedColor ;
@@ -7,7 +7,7 @@ public class MeasureVertexShape extends EllipsoidShape
   private final int _vertexIndex;
 
 
-  public MeasureVertexShape(Geodetic3D position, double radius, Color color, Color selectedColor, Measure measure, String instanceID, int vertexIndex) // bool mercator -  bool texturedInside -  float borderWidth -  resolution
+  public Measure_VertexShape(Geodetic3D position, double radius, Color color, Color selectedColor, Measure measure, String instanceID, int vertexIndex) // bool mercator -  bool texturedInside -  float borderWidth -  resolution
   {
      super(position, AltitudeMode.ABSOLUTE, new Vector3D(radius, radius, radius), (short) 16, 0, false, false, color);
      _color = color;
