@@ -24,22 +24,33 @@
 #include <G3M/XPCIntensityPointColorizer.hpp>
 #include <G3M/XPCClassificationPointColorizer.hpp>
 #include <G3M/XPCPointSelectionListener.hpp>
-//#include <G3M/ShapesRenderer.hpp>
-//#include <G3M/EllipsoidShape.hpp>
-//#include <G3M/FloatBufferBuilderFromGeodetic.hpp>
-//#include <G3M/DirectMesh.hpp>
-//#include <G3M/MeshRenderer.hpp>
 #include <G3M/G3MContext.hpp>
-//#include <G3M/MarksRenderer.hpp>
-//#include <G3M/Mark.hpp>
 #include <G3M/Measure.hpp>
-#include <G3M/MeasureVertexSelectionHandler.hpp>
+#include <G3M/MeasureHandler.hpp>
+
+#import <G3MiOSSDK/NSString_CppAdditions.h>
 
 #include "G3MDemoModel.hpp"
 
 
-class G3MXPointCloudDemoScene_MeasureVertexSelectionHandler : public MeasureVertexSelectionHandler {
+class G3MXPointCloudDemoScene_MeasureHandler : public MeasureHandler {
+  NSNumberFormatter* _angleFormatter;
+  NSNumberFormatter* _distanceFormatter;
+
 public:
+
+  G3MXPointCloudDemoScene_MeasureHandler() {
+    _angleFormatter = [[NSNumberFormatter alloc] init];
+    _angleFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+    _angleFormatter.minimumFractionDigits = 0;
+    _angleFormatter.maximumFractionDigits = 1;
+
+    _distanceFormatter = [[NSNumberFormatter alloc] init];
+    _distanceFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+    _distanceFormatter.minimumFractionDigits = 0;
+    _distanceFormatter.maximumFractionDigits = 3;
+  }
+
 
   void onVertexDeselection(Measure* measure) {
 
@@ -50,6 +61,23 @@ public:
                          const Vector3D& cartesian,
                          int selectedIndex) {
     measure->removeVertex(selectedIndex);
+  }
+
+  std::string getAngleLabel(Measure* measure,
+                            size_t vertexIndex,
+                            const Angle& angle) {
+    NSString* nsString = [_angleFormatter stringFromNumber:[NSNumber numberWithDouble:angle._degrees]];
+
+    return [nsString toCppString] + "°";
+  }
+
+  std::string getDistanceLabel(Measure* measure,
+                               size_t vertexIndexFrom,
+                               size_t vertexIndexTo,
+                               const double distanceInMeters) {
+    NSString* nsString = [_distanceFormatter stringFromNumber:[NSNumber numberWithDouble:distanceInMeters]];
+
+    return [nsString toCppString] + "m";
   }
 
 };
@@ -101,7 +129,7 @@ public:
                              model->getMeshRenderer(),
                              model->getMarksRenderer(),
                              model->getG3MWidget()->getG3MContext()->getPlanet(),
-                             new G3MXPointCloudDemoScene_MeasureVertexSelectionHandler(),
+                             new G3MXPointCloudDemoScene_MeasureHandler(),
                              true);
     }
     else {

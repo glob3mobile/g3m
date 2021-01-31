@@ -10,7 +10,7 @@
 		CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */; };
 		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
 		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
-		CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.cpp */; };
+		CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */; };
 		CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
@@ -154,7 +154,7 @@
 		CF162FE11AB739C800673D44 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CF162FE31AB739D700673D44 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CF2744F825B1A8990056304B /* G3MXPointCloudDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MXPointCloudDemoScene.hpp; sourceTree = "<group>"; };
-		CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MXPointCloudDemoScene.cpp; sourceTree = "<group>"; };
+		CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MXPointCloudDemoScene.mm; sourceTree = "<group>"; };
 		CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DLandDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3M3DLandDemoScene.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -416,7 +416,7 @@
 				CFECA7761B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.hpp */,
 				CFC664C81BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp */,
 				CFC664C91BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.hpp */,
-				CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.cpp */,
+				CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */,
 				CF2744F825B1A8990056304B /* G3MXPointCloudDemoScene.hpp */,
 			);
 			name = DemoBuilder;
@@ -754,7 +754,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D1B61516D2436700AF47C1 /* main.m in Sources */,
-				CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.cpp in Sources */,
+				CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */,
 				CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */,
 				CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */,
 				CFE3B3D0183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp in Sources */,

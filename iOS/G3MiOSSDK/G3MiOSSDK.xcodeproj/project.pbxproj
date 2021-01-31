@@ -909,8 +909,8 @@
 		CF66099E23DF332400795C7F /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CF4027DC1770E7B900D5A80C /* SRWebSocket.m */; };
 		CF66099F23DF332400795C7F /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		CF6609A023DF332400795C7F /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
-		CF7FB77625C5759A0009313E /* MeasureVertexSelectionHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */; };
-		CF7FB77925C57A2E0009313E /* MeasureVertexSelectionHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FB77525C5759A0009313E /* MeasureVertexSelectionHandler.hpp */; };
+		CF7FB77625C5759A0009313E /* MeasureHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7FB77425C5759A0009313E /* MeasureHandler.cpp */; };
+		CF7FB77925C57A2E0009313E /* MeasureHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FB77525C5759A0009313E /* MeasureHandler.hpp */; };
 		CF7FB77A25C57A2E0009313E /* XPCSelectionResult.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8CFCD925BB11F500326563 /* XPCSelectionResult.hpp */; };
 		CF7FB77E25C5A5500009313E /* ShapeFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7FB77C25C5A5500009313E /* ShapeFilter.cpp */; };
 		CF8CFCDA25BB11F500326563 /* XPCSelectionResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */; };
@@ -957,7 +957,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
-				CF7FB77925C57A2E0009313E /* MeasureVertexSelectionHandler.hpp in CopyFiles */,
+				CF7FB77925C57A2E0009313E /* MeasureHandler.hpp in CopyFiles */,
 				CF7FB77A25C57A2E0009313E /* XPCSelectionResult.hpp in CopyFiles */,
 				CF42264725BEFA69003CF0A3 /* Measure.hpp in CopyFiles */,
 				CF64ADF325BDCE8300815620 /* XPCPointSelectionListener.hpp in CopyFiles */,
@@ -2356,8 +2356,8 @@
 		CF6604AC23DF2DAB00795C7F /* InfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoDisplay.cpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
-		CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeasureVertexSelectionHandler.cpp; sourceTree = "<group>"; };
-		CF7FB77525C5759A0009313E /* MeasureVertexSelectionHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeasureVertexSelectionHandler.hpp; sourceTree = "<group>"; };
+		CF7FB77425C5759A0009313E /* MeasureHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeasureHandler.cpp; sourceTree = "<group>"; };
+		CF7FB77525C5759A0009313E /* MeasureHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeasureHandler.hpp; sourceTree = "<group>"; };
 		CF7FB77C25C5A5500009313E /* ShapeFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShapeFilter.cpp; sourceTree = "<group>"; };
 		CF7FB77D25C5A5500009313E /* ShapeFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShapeFilter.hpp; sourceTree = "<group>"; };
 		CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_Handler.h; path = Specific/Derived/Downloader_iOS_Handler.h; sourceTree = "<group>"; };
@@ -2569,8 +2569,8 @@
 			children = (
 				CF42264325BED63D003CF0A3 /* Measure.cpp */,
 				CF42264425BED63D003CF0A3 /* Measure.hpp */,
-				CF7FB77425C5759A0009313E /* MeasureVertexSelectionHandler.cpp */,
-				CF7FB77525C5759A0009313E /* MeasureVertexSelectionHandler.hpp */,
+				CF7FB77425C5759A0009313E /* MeasureHandler.cpp */,
+				CF7FB77525C5759A0009313E /* MeasureHandler.hpp */,
 				CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */,
 				CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */,
 				CF27452325B1F2C20056304B /* XPCDimension.cpp */,
@@ -3904,7 +3904,7 @@
 				CF6608E323DF330600795C7F /* SGRotateNode.cpp in Sources */,
 				CF6608E423DF330600795C7F /* TimedCacheTileVisibilityTester.cpp in Sources */,
 				CF6608E523DF330600795C7F /* SceneLighting.cpp in Sources */,
-				CF7FB77625C5759A0009313E /* MeasureVertexSelectionHandler.cpp in Sources */,
+				CF7FB77625C5759A0009313E /* MeasureHandler.cpp in Sources */,
 				CF6608E623DF330600795C7F /* GLFeature.cpp in Sources */,
 				CF6608E723DF330600795C7F /* GEOMeshSymbol.cpp in Sources */,
 				CF6608E823DF330600795C7F /* IFactory.cpp in Sources */,
