@@ -45,6 +45,7 @@ public:
   const size_t getDimensionsCount() const;
   const XPCDimension* getDimension(const size_t i) const;
 
+  void cancel();
 
 private:
   XPCMetadata(const XPCMetadata& that);

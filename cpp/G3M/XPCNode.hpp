@@ -71,7 +71,6 @@ private:
   void unloadContent();
   void unloadChildren();
 
-
   XPCNode(const std::string& id,
           const Sector* sector,
           const int pointsCount,
@@ -116,7 +115,7 @@ public:
                           const XPCPointCloud* pointCloud,
                           const std::string& treeID) const;
 
-  void unload();
+  void cancel();
 
 };
 

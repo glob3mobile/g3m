@@ -84,18 +84,19 @@ public class XPCMetadata
 
   public void dispose()
   {
+    for (int i = 0; i < _trees.size(); i++)
+    {
+      final XPCTree tree = _trees.get(i);
+      tree.cancel();
+      if (tree != null)
+         tree.dispose();
+    }
+  
     for (int i = 0; i < _dimensions.size(); i++)
     {
       final XPCDimension dimension = _dimensions.get(i);
       if (dimension != null)
          dimension.dispose();
-    }
-  
-    for (int i = 0; i < _trees.size(); i++)
-    {
-      final XPCTree tree = _trees.get(i);
-      if (tree != null)
-         tree.dispose();
     }
   }
 
@@ -146,6 +147,14 @@ public class XPCMetadata
     return _dimensions.get(i);
   }
 
+  public final void cancel()
+  {
+    for (int i = 0; i < _trees.size(); i++)
+    {
+      final XPCTree tree = _trees.get(i);
+      tree.cancel();
+    }
+  }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  XPCMetadata(XPCMetadata that);

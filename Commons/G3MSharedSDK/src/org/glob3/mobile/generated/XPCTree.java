@@ -40,6 +40,7 @@ public class XPCTree
 
   public void dispose()
   {
+    _rootNode.cancel();
     _rootNode._release();
   }
 
@@ -66,6 +67,11 @@ public class XPCTree
   public final boolean selectPoints(XPCSelectionResult selectionResult, XPCPointCloud pointCloud)
   {
     return (_rootNode != null) && _rootNode.selectPoints(selectionResult, pointCloud, _id);
+  }
+
+  public final void cancel()
+  {
+    _rootNode.cancel();
   }
 
 }

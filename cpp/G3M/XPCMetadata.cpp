@@ -97,6 +97,7 @@ const XPCDimension* XPCMetadata::getDimension(const size_t i) const {
 XPCMetadata::~XPCMetadata() {
   for (size_t i = 0; i < _trees->size(); i++) {
     const XPCTree* tree = _trees->at(i);
+    tree->cancel();
     delete tree;
   }
 #ifdef C_CODE
@@ -110,6 +111,13 @@ XPCMetadata::~XPCMetadata() {
 #ifdef C_CODE
   delete _dimensions;
 #endif
+}
+
+void XPCMetadata::cancel() {
+  for (size_t i = 0; i < _trees->size(); i++) {
+    const XPCTree* tree = _trees->at(i);
+    tree->cancel();
+  }
 }
 
 long long XPCMetadata::render(const XPCPointCloud* pointCloud,

@@ -71,6 +71,7 @@ public class XPCRenderer extends DefaultRenderer
     for (int i = 0; i < _cloudsSize; i++)
     {
       XPCPointCloud cloud = _clouds.get(i);
+      cloud.cancel();
       cloud._release();
     }
   
@@ -92,6 +93,7 @@ public class XPCRenderer extends DefaultRenderer
     for (int i = 0; i < _cloudsSize; i++)
     {
       XPCPointCloud cloud = _clouds.get(i);
+      cloud.cancel();
       cloud._release();
     }
     _clouds.clear();

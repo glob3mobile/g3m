@@ -101,8 +101,9 @@ public class XPCNode extends RCObject
   {
     _downloader = rc.getDownloader();
   
-    final long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
+    // const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
     // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
+    final long deltaPriority = 100 - _id.length();
   
     _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
@@ -130,7 +131,7 @@ public class XPCNode extends RCObject
       for (int i = 0; i < _childrenSize; i++)
       {
         XPCNode child = _children.get(i);
-        child.unload();
+        child.cancel();
         child._release();
       }
   
@@ -139,25 +140,6 @@ public class XPCNode extends RCObject
       _childrenSize = 0;
     }
   }
-  private void unload()
-  {
-    _canceled = true;
-  
-    if (_loadingContent)
-    {
-      _loadingContent = false;
-      cancelLoadContent();
-    }
-  
-    if (_loadedContent)
-    {
-      _loadedContent = false;
-      unloadContent();
-    }
-  
-    unloadChildren();
-  }
-
 
   private XPCNode(String id, Sector sector, int pointsCount, double minHeight, double maxHeight)
   {
@@ -356,7 +338,7 @@ public class XPCNode extends RCObject
     {
       if (_renderedInPreviousFrame)
       {
-        unload();
+        cancel();
       }
       _renderedInPreviousFrame = renderedInThisFrame;
     }
@@ -414,6 +396,25 @@ public class XPCNode extends RCObject
     }
   
     return selectedPoint;
+  }
+
+  public final void cancel()
+  {
+    _canceled = true;
+  
+    if (_loadingContent)
+    {
+      _loadingContent = false;
+      cancelLoadContent();
+    }
+  
+    if (_loadedContent)
+    {
+      _loadedContent = false;
+      unloadContent();
+    }
+  
+    unloadChildren();
   }
 
 }

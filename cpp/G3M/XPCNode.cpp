@@ -418,7 +418,7 @@ void XPCNode::unloadChildren() {
   if (_children != NULL) {
     for (size_t i = 0; i < _childrenSize; i++) {
       XPCNode* child = _children->at(i);
-      child->unload();
+      child->cancel();
       child->_release();
     }
 
@@ -428,7 +428,7 @@ void XPCNode::unloadChildren() {
   }
 }
 
-void XPCNode::unload() {
+void XPCNode::cancel() {
   _canceled = true;
 
   if (_loadingContent) {
@@ -595,7 +595,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
   if (_renderedInPreviousFrame != renderedInThisFrame) {
     if (_renderedInPreviousFrame) {
-      unload();
+      cancel();
     }
     _renderedInPreviousFrame = renderedInThisFrame;
   }

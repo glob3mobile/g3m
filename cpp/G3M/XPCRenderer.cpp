@@ -39,6 +39,7 @@ _lastSplitTimer(NULL)
 XPCRenderer::~XPCRenderer() {
   for (int i = 0; i < _cloudsSize; i++) {
     XPCPointCloud* cloud = _clouds[i];
+    cloud->cancel();
     cloud->_release();
   }
   
@@ -57,6 +58,7 @@ XPCRenderer::~XPCRenderer() {
 void XPCRenderer::removeAllPointClouds() {
   for (int i = 0; i < _cloudsSize; i++) {
     XPCPointCloud* cloud = _clouds[i];
+    cloud->cancel();
     cloud->_release();
   }
   _clouds.clear();

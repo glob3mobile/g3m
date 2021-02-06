@@ -19,8 +19,12 @@ _rootNode(rootNode)
 }
 
 XPCTree::~XPCTree() {
-  _rootNode->unload();
+  _rootNode->cancel();
   _rootNode->_release();
+}
+
+void XPCTree::cancel() const {
+  _rootNode->cancel();
 }
 
 const Sector* XPCTree::getSector() const {

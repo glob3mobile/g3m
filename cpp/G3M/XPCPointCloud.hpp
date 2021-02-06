@@ -63,6 +63,8 @@ private:
   bool _errorDownloadingMetadata;
   bool _errorParsingMetadata;
 
+  bool _canceled;
+
   IIntBuffer* _requiredDimensionIndices;
 
   XPCMetadata* _metadata;
@@ -159,6 +161,8 @@ public:
                            const std::string& nodeID,
                            const int pointIndex,
                            const double distanceToRay) const;
+
+  void cancel();
 
 };
 

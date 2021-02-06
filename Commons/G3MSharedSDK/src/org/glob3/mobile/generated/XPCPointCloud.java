@@ -65,6 +65,8 @@ public class XPCPointCloud extends RCObject
   private boolean _errorDownloadingMetadata;
   private boolean _errorParsingMetadata;
 
+  private boolean _canceled;
+
   private IIntBuffer _requiredDimensionIndices;
 
   private XPCMetadata _metadata;
@@ -90,6 +92,10 @@ public class XPCPointCloud extends RCObject
          _pointSelectionListener.dispose();
     }
   
+    if (_metadata != null)
+    {
+      _metadata.cancel();
+    }
     if (_metadata != null)
        _metadata.dispose();
   
@@ -125,6 +131,7 @@ public class XPCPointCloud extends RCObject
      _metadata = null;
      _lastRenderedCount = 0;
      _requiredDimensionIndices = null;
+     _canceled = false;
   
   }
 
@@ -178,7 +185,7 @@ public class XPCPointCloud extends RCObject
   
     ILogger.instance().logInfo("Downloading metadata for \"%s\"", _cloudName);
   
-    context.getDownloader().requestBuffer(metadataURL, _downloadPriority, _timeToCache, _readExpired, new XPCMetadataDownloadListener(this, context.getThreadUtils()), true);
+    context.getDownloader().requestBuffer(metadataURL, _downloadPriority + 200, _timeToCache, _readExpired, new XPCMetadataDownloadListener(this, context.getThreadUtils()), true);
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
@@ -235,6 +242,12 @@ public class XPCPointCloud extends RCObject
   
     ILogger.instance().logInfo("Parsed metadata for \"%s\"", _cloudName);
   
+    if (_canceled)
+    {
+      if (metadata != null)
+         metadata.dispose();
+      return;
+    }
   
     if (_metadata != metadata)
     {
@@ -324,6 +337,15 @@ public class XPCPointCloud extends RCObject
     }
   
     return _pointSelectionListener.onSelectedPoint(this, cartesian, geodetic, treeID, nodeID, pointIndex, distanceToRay);
+  }
+
+  public final void cancel()
+  {
+    _canceled = true;
+    if (_metadata != null)
+    {
+      _metadata.cancel();
+    }
   }
 
 }

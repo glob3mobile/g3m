@@ -50,6 +50,8 @@ public:
   const bool selectPoints(XPCSelectionResult* selectionResult,
                           const XPCPointCloud* pointCloud) const;
 
+  void cancel() const;
+
 };
 
 #endif

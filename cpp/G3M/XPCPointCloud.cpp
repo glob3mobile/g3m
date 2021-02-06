@@ -162,7 +162,8 @@ _errorDownloadingMetadata(false),
 _errorParsingMetadata(false),
 _metadata(NULL),
 _lastRenderedCount(0),
-_requiredDimensionIndices(NULL)
+_requiredDimensionIndices(NULL),
+_canceled(false)
 {
   
 }
@@ -199,7 +200,11 @@ void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
   _downloadingMetadata = false;
   
   ILogger::instance()->logInfo("Parsed metadata for \"%s\"", _cloudName.c_str());
-  
+
+  if (_canceled) {
+    delete metadata;
+    return;
+  }
   
   if (_metadata != metadata) {
     delete _metadata;
@@ -238,7 +243,10 @@ XPCPointCloud::~XPCPointCloud() {
   if (_deletePointSelectionListener) {
     delete _pointSelectionListener;
   }
-  
+
+  if (_metadata != NULL) {
+    _metadata->cancel();
+  }
   delete _metadata;
   
   delete _requiredDimensionIndices;
@@ -248,10 +256,16 @@ XPCPointCloud::~XPCPointCloud() {
 #endif
 }
 
+void XPCPointCloud::cancel() {
+  _canceled = true;
+  if (_metadata != NULL) {
+    _metadata->cancel();
+  }
+}
+
 const float XPCPointCloud::getDevicePointSize() const {
   return _pointSize * IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
 }
-
 
 RenderState XPCPointCloud::getRenderState(const G3MRenderContext* rc) {
   if (_downloadingMetadata) {
