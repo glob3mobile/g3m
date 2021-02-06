@@ -15,6 +15,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class IByteBuffer;
 //class XPCPointCloud;
 //class G3MRenderContext;
@@ -24,6 +25,7 @@ package org.glob3.mobile.generated;
 //class XPCTree;
 //class XPCSelectionResult;
 //class ITimer;
+
 
 public class XPCMetadata
 {
@@ -41,9 +43,17 @@ public class XPCMetadata
     byte version = it.nextUInt8();
     if (version != 1)
     {
-      ILogger.instance().logError("Unssuported format version");
+      ILogger.instance().logError("Unsupported format version");
       return null;
     }
+  
+    final double averageLatDeg = it.nextDouble();
+    final double averageLonDeg = it.nextDouble();
+    final double averageHeight = it.nextDouble();
+    final Geodetic3D averagePosition = new Geodetic3D(Angle.fromDegrees(averageLatDeg), Angle.fromDegrees(averageLonDeg), averageHeight);
+  
+    final double minHeight = it.nextDouble();
+    final double maxHeight = it.nextDouble();
   
     java.util.ArrayList<XPCDimension> dimensions = new java.util.ArrayList<XPCDimension>();
     {
@@ -79,8 +89,13 @@ public class XPCMetadata
       throw new RuntimeException("Logic error");
     }
   
-    return new XPCMetadata(dimensions, trees);
+    return new XPCMetadata(averagePosition, minHeight, maxHeight, dimensions, trees);
   }
+
+  public final Geodetic3D _averagePosition ;
+  public final double _minHeight;
+  public final double _maxHeight;
+
 
   public void dispose()
   {
@@ -163,8 +178,11 @@ public class XPCMetadata
   private final java.util.ArrayList<XPCTree> _trees;
   private final int _treesSize;
 
-  private XPCMetadata(java.util.ArrayList<XPCDimension> dimensions, java.util.ArrayList<XPCTree> trees)
+  private XPCMetadata(Geodetic3D averagePosition, double minHeight, double maxHeight, java.util.ArrayList<XPCDimension> dimensions, java.util.ArrayList<XPCTree> trees)
   {
+     _averagePosition = new Geodetic3D(averagePosition);
+     _minHeight = minHeight;
+     _maxHeight = maxHeight;
      _dimensions = dimensions;
      _trees = trees;
      _treesSize = _trees.size();
