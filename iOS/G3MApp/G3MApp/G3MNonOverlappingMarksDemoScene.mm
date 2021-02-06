@@ -137,6 +137,7 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
 //#warning Testing infos
   std::vector<const Info*>* layerInfo = new std::vector<const Info*>();
 //  layerInfo->push_back( new Info("(C) Stamen") );
+
   URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://[abcd].tile.stamen.com/watercolor/{level}/{x}/{y}.png",
                                                           Sector::fullSphere(),
                                                           true,

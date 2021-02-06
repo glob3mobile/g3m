@@ -70,7 +70,6 @@ private:
   void cancelLoadContent();
   void unloadContent();
   void unloadChildren();
-  void unload();
 
 
   XPCNode(const std::string& id,
@@ -116,6 +115,8 @@ public:
   const bool selectPoints(XPCSelectionResult* selectionResult,
                           const XPCPointCloud* pointCloud,
                           const std::string& treeID) const;
+
+  void unload();
 
 };
 

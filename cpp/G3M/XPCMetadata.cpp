@@ -95,20 +95,20 @@ const XPCDimension* XPCMetadata::getDimension(const size_t i) const {
 
 
 XPCMetadata::~XPCMetadata() {
-  for (size_t i = 0; i < _dimensions->size(); i++) {
-    const XPCDimension* dimension = _dimensions->at(i);
-    delete dimension;
-  }
-#ifdef C_CODE
-  delete _dimensions;
-#endif
-
   for (size_t i = 0; i < _trees->size(); i++) {
     const XPCTree* tree = _trees->at(i);
     delete tree;
   }
 #ifdef C_CODE
   delete _trees;
+#endif
+
+  for (size_t i = 0; i < _dimensions->size(); i++) {
+    const XPCDimension* dimension = _dimensions->at(i);
+    delete dimension;
+  }
+#ifdef C_CODE
+  delete _dimensions;
 #endif
 }
 

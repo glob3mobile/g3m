@@ -19,6 +19,7 @@ _rootNode(rootNode)
 }
 
 XPCTree::~XPCTree() {
+  _rootNode->unload();
   _rootNode->_release();
 }
 

@@ -177,7 +177,7 @@ void XPCPointCloud::initialize(const G3MContext* context) {
   ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
   
   context->getDownloader()->requestBuffer(metadataURL,
-                                          _downloadPriority,
+                                          _downloadPriority + 200,
                                           _timeToCache,
                                           _readExpired,
                                           new XPCMetadataDownloadListener(this, context->getThreadUtils()),
