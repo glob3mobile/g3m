@@ -10,6 +10,8 @@
 
 #include <vector>
 
+#include "Geodetic3D.hpp"
+
 class IByteBuffer;
 class XPCPointCloud;
 class G3MRenderContext;
@@ -20,11 +22,17 @@ class XPCTree;
 class XPCSelectionResult;
 class ITimer;
 
+
 class XPCMetadata {
 public:
   
   static XPCMetadata* fromBuffer(const IByteBuffer* buffer);
-  
+
+  const Geodetic3D _averagePosition;
+  const double _minHeight;
+  const double _maxHeight;
+
+
   ~XPCMetadata();
 
   long long render(const XPCPointCloud* pointCloud,
@@ -54,7 +62,10 @@ private:
   const std::vector<XPCTree*>*      _trees;
   const size_t                      _treesSize;
   
-  XPCMetadata(const std::vector<XPCDimension*>* dimensions,
+  XPCMetadata(const Geodetic3D& averagePosition,
+              const double minHeight,
+              const double maxHeight,
+              const std::vector<XPCDimension*>* dimensions,
               const std::vector<XPCTree*>*      trees);
 
 };

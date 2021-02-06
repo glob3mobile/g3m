@@ -28,9 +28,19 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
 
   unsigned char version = it.nextUInt8();
   if (version != 1) {
-    ILogger::instance()->logError("Unssuported format version");
+    ILogger::instance()->logError("Unsupported format version");
     return NULL;
   }
+
+  const double averageLatDeg = it.nextDouble();
+  const double averageLonDeg = it.nextDouble();
+  const double averageHeight = it.nextDouble();
+  const Geodetic3D averagePosition(Angle::fromDegrees(averageLatDeg),
+                                   Angle::fromDegrees(averageLonDeg),
+                                   averageHeight);
+
+  const double minHeight = it.nextDouble();
+  const double maxHeight = it.nextDouble();
 
   std::vector<XPCDimension*>* dimensions = new std::vector<XPCDimension*>();
   {
@@ -63,12 +73,22 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
     THROW_EXCEPTION("Logic error");
   }
 
-  return new XPCMetadata(dimensions, trees);
+  return new XPCMetadata(averagePosition,
+                         minHeight,
+                         maxHeight,
+                         dimensions,
+                         trees);
 }
 
 
-XPCMetadata::XPCMetadata(const std::vector<XPCDimension*>* dimensions,
+XPCMetadata::XPCMetadata(const Geodetic3D& averagePosition,
+                         const double minHeight,
+                         const double maxHeight,
+                         const std::vector<XPCDimension*>* dimensions,
                          const std::vector<XPCTree*>*      trees) :
+_averagePosition(averagePosition),
+_minHeight(minHeight),
+_maxHeight(maxHeight),
 _dimensions(dimensions),
 _trees(trees),
 _treesSize( _trees->size() )

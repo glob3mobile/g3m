@@ -86,7 +86,7 @@ public:
 
     unsigned char version = it.nextUInt8();
     if (version != 1) {
-      ILogger::instance()->logError("Unssuported format version");
+      ILogger::instance()->logError("Unsupported format version");
       return;
     }
 
