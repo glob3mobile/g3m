@@ -451,7 +451,11 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
 
   // const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
   // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
-  const long long deltaPriority = 100 - _id.length();
+
+//  const long long deltaPriority = 100 - _id.length();
+
+  const size_t depth = _id.length();
+  const long long deltaPriority =  (depth == 0) ? 100 : _id.length();
 
   _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
                                                            treeID,
@@ -531,7 +535,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         bounds->render(rc, glState, Color::WHITE);
       }
 
-      if ((_projectedArea == -1) || ((_projectedAreaTS + 167) < nowInMS)) {
+      if ((_projectedArea == -1) || ((_projectedAreaTS + 33 /* 167 */) < nowInMS)) {
         const double projectedArea = bounds->projectedArea(rc);
         _projectedArea   = projectedArea;
         _projectedAreaTS = nowInMS;
@@ -549,31 +553,6 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
         //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
 
-        if (_loadedContent) {
-          if (_mesh != NULL) {
-//            if (selectionResult == NULL) {
-              _mesh->render(rc, glState);
-              renderedCount += _mesh->getRenderVerticesCount();
-//            }
-//            else {
-//              if (_bounds->touchesRay(selectionResult->_ray)) {
-//                _mesh->render(rc, glState);
-//                renderedCount += _mesh->getRenderVerticesCount();
-//              }
-//            }
-          }
-        }
-        else {
-          if (!_loadingContent) {
-            if ( (_id.length() == 0) || (lastSplitTimer->elapsedTimeInMilliseconds() > 0) ) {
-              lastSplitTimer->start();
-              _canceled = false;
-              _loadingContent = true;
-              loadContent(pointCloud, treeID, rc);
-            }
-          }
-        }
-
         if (_children != NULL) {
           for (size_t i = 0; i < _childrenSize; i++) {
             XPCNode* child = _children->at(i);
@@ -588,6 +567,33 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                                            selectionResult);
           }
         }
+
+        if (_loadedContent) {
+          if (_mesh != NULL) {
+            renderedCount += _mesh->getRenderVerticesCount();
+            if (pointCloud->isDynamicPointSize()) {
+              const float pointSize = pointCloud->getDevicePointSize();
+
+              const IMathUtils* mu = IMathUtils::instance();
+
+              float dynPointSize = pointSize * mu->sqrt( (float) (_projectedArea / renderedCount) );
+              dynPointSize = mu->clamp(dynPointSize, pointSize, pointSize*16);
+              _mesh->setPointSize(dynPointSize);
+            }
+            _mesh->render(rc, glState);
+          }
+        }
+        else {
+          if (!_loadingContent) {
+            if ( (_id.length() == 0) || (lastSplitTimer->elapsedTimeInMilliseconds() > 0) ) {
+              lastSplitTimer->start();
+              _canceled = false;
+              _loadingContent = true;
+              loadContent(pointCloud, treeID, rc);
+            }
+          }
+        }
+
 
       }
     }

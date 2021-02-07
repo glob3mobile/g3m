@@ -102,6 +102,10 @@ public:
     return _verbose;
   }
 
+  const bool isDynamicPointSize() const {
+    return _dynamicPointSize;
+  }
+
   const float getVerticalExaggeration() const {
     return _verticalExaggeration;
   }

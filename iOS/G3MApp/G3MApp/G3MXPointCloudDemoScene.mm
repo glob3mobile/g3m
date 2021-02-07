@@ -264,7 +264,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  const float pointSize            = 2;
+  const float pointSize            = 1;
   const bool  dynamicPointSize     = true;
   const float verticalExaggeration = 1;
   const bool  depthTest            = true;
@@ -278,7 +278,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 //  const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
 //  const float       deltaHeight = -180;
 
-  const std::string cloudName   = "PC_601d8bfec711a001aa2635a0_LOD";
+  const std::string cloudName   = "PC_601fa9f0fe459753703dca36_LOD";
   const float       deltaHeight = -180;
 
 //  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
