@@ -47,15 +47,22 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                           long long nowInMS,
                           bool renderDebug,
                           const XPCSelectionResult* selectionResult) const {
-  return (_rootNode == NULL) ? 0 : _rootNode->render(pointCloud,
-                                                     _id,
-                                                     rc,
-                                                     lastSplitTimer,
-                                                     glState,
-                                                     frustum,
-                                                     nowInMS,
-                                                     renderDebug,
-                                                     selectionResult);
+  if (_rootNode == NULL) {
+    return 0;
+  }
+
+  _renderingState.reset();
+
+  return _rootNode->render(pointCloud,
+                           _id,
+                           rc,
+                           lastSplitTimer,
+                           glState,
+                           frustum,
+                           nowInMS,
+                           renderDebug,
+                           selectionResult,
+                           _renderingState);
 }
 
 const bool XPCTree::selectPoints(XPCSelectionResult* selectionResult,

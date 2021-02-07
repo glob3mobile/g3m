@@ -264,7 +264,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  const float pointSize            = 1;
+  const float pointSize            = 2;
   const bool  dynamicPointSize     = true;
   const float verticalExaggeration = 1;
   const bool  depthTest            = true;

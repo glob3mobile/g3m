@@ -44,6 +44,9 @@
 		CF4AD09C25B5F90D009A1E48 /* XPCParsing.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452D25B2F73C0056304B /* XPCParsing.hpp */; };
 		CF4AD09D25B5F90D009A1E48 /* XPCPointCloud.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF27452025B1D2CC0056304B /* XPCPointCloud.hpp */; };
 		CF4AD09E25B5F90D009A1E48 /* XPCTree.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4AD09625B5F574009A1E48 /* XPCTree.hpp */; };
+		CF4E996C25D03CAC008EE532 /* XPCRenderingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4E996A25D03CAC008EE532 /* XPCRenderingState.cpp */; };
+		CF4E996E25D03DFD008EE532 /* ShapeFilter.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FB77D25C5A5500009313E /* ShapeFilter.hpp */; };
+		CF4E996F25D03DFD008EE532 /* XPCRenderingState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4E996B25D03CAC008EE532 /* XPCRenderingState.hpp */; };
 		CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */; };
 		CF64ADEF25BDC6C500815620 /* XPCPointSelectionListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */; };
 		CF64ADF325BDCE8300815620 /* XPCPointSelectionListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF64ADEE25BDC6C500815620 /* XPCPointSelectionListener.hpp */; };
@@ -957,6 +960,8 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF4E996E25D03DFD008EE532 /* ShapeFilter.hpp in CopyFiles */,
+				CF4E996F25D03DFD008EE532 /* XPCRenderingState.hpp in CopyFiles */,
 				CF7FB77925C57A2E0009313E /* MeasureHandler.hpp in CopyFiles */,
 				CF7FB77A25C57A2E0009313E /* XPCSelectionResult.hpp in CopyFiles */,
 				CF42264725BEFA69003CF0A3 /* Measure.hpp in CopyFiles */,
@@ -1517,6 +1522,8 @@
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
 		CF4AD09525B5F574009A1E48 /* XPCTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCTree.cpp; sourceTree = "<group>"; };
 		CF4AD09625B5F574009A1E48 /* XPCTree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCTree.hpp; sourceTree = "<group>"; };
+		CF4E996A25D03CAC008EE532 /* XPCRenderingState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCRenderingState.cpp; sourceTree = "<group>"; };
+		CF4E996B25D03CAC008EE532 /* XPCRenderingState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCRenderingState.hpp; sourceTree = "<group>"; };
 		CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = DeviceInfo_iOS.mm; path = Specific/Derived/DeviceInfo_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceInfo_iOS.hpp; path = Specific/Derived/DeviceInfo_iOS.hpp; sourceTree = "<group>"; };
 		CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCPointSelectionListener.cpp; sourceTree = "<group>"; };
@@ -2595,6 +2602,8 @@
 				CF64ADEE25BDC6C500815620 /* XPCPointSelectionListener.hpp */,
 				CF2744FD25B1AF450056304B /* XPCRenderer.cpp */,
 				CF2744FE25B1AF450056304B /* XPCRenderer.hpp */,
+				CF4E996A25D03CAC008EE532 /* XPCRenderingState.cpp */,
+				CF4E996B25D03CAC008EE532 /* XPCRenderingState.hpp */,
 				CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */,
 				CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */,
 				CF8CFCD825BB11F500326563 /* XPCSelectionResult.cpp */,
@@ -3644,6 +3653,7 @@
 				CF66099423DF332400795C7F /* TextUtils_iOS.mm in Sources */,
 				CF66099523DF332400795C7F /* ThreadUtils_iOS.mm in Sources */,
 				CF66099623DF332400795C7F /* WebSocket_iOS.mm in Sources */,
+				CF4E996C25D03CAC008EE532 /* XPCRenderingState.cpp in Sources */,
 				CF66099723DF332400795C7F /* DeviceInfo_iOS.mm in Sources */,
 				CF66099823DF332400795C7F /* DeviceAttitude_iOS.mm in Sources */,
 				CF66099923DF332400795C7F /* DeviceLocation_iOS.mm in Sources */,

@@ -25,10 +25,13 @@ package org.glob3.mobile.generated;
 //class ITimer;
 
 
+
 public class XPCTree
 {
   private final String _id;
   private XPCNode _rootNode;
+
+  private XPCRenderingState _renderingState = new XPCRenderingState();
 
 
   public XPCTree(String id, XPCNode rootNode)
@@ -61,7 +64,14 @@ public class XPCTree
 
   public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
   {
-    return (_rootNode == null) ? 0 : _rootNode.render(pointCloud, _id, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult);
+    if (_rootNode == null)
+    {
+      return 0;
+    }
+  
+    _renderingState.reset();
+  
+    return _rootNode.render(pointCloud, _id, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult, _renderingState);
   }
 
   public final boolean selectPoints(XPCSelectionResult selectionResult, XPCPointCloud pointCloud)

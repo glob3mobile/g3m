@@ -30,6 +30,7 @@
 #include "XPCDimension.hpp"
 #include "XPCPointColorizer.hpp"
 #include "XPCSelectionResult.hpp"
+#include "XPCRenderingState.hpp"
 
 
 class XPCNodeContentParserAsyncTask : public GAsyncTask {
@@ -392,7 +393,7 @@ Sphere* XPCNode::calculateBounds(const G3MRenderContext* rc,
   points.add( planet.toCartesian( _sector.getCenter() , (_maxHeight + deltaHeight) * verticalExaggeration ) );
 #endif
 
-#warning TODO: check if the sphere fits into the parent's one
+//#warning TODO: check if the sphere fits into the parent's one
   //  if (_parent) {
   //    _parent->updateBoundingSphereWith(rc, vectorSet, _boundingSphere);
   //  }
@@ -520,7 +521,8 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                           const Frustum* frustum,
                           long long nowInMS,
                           bool renderDebug,
-                          const XPCSelectionResult* selectionResult) {
+                          const XPCSelectionResult* selectionResult,
+                          XPCRenderingState& renderingState) {
 
   long long renderedCount = 0;
 
@@ -535,11 +537,10 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         bounds->render(rc, glState, Color::WHITE);
       }
 
-      if ((_projectedArea == -1) || ((_projectedAreaTS + 33 /* 167 */) < nowInMS)) {
-        const double projectedArea = bounds->projectedArea(rc);
-        _projectedArea   = projectedArea;
+//      if ((_projectedArea == -1) || ((_projectedAreaTS + 33 /* 167 */) < nowInMS)) {
+        _projectedArea   = bounds->projectedArea(rc);
         _projectedAreaTS = nowInMS;
-      }
+//      }
 
       const bool isBigEnough = (_projectedArea >= pointCloud->getMinProjectedArea());
       if (isBigEnough) {
@@ -564,8 +565,12 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                                            frustum,
                                            nowInMS,
                                            renderDebug,
-                                           selectionResult);
+                                           selectionResult,
+                                           renderingState);
           }
+        }
+        else {
+          renderingState.reset();
         }
 
         if (_loadedContent) {
@@ -577,7 +582,13 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
               const IMathUtils* mu = IMathUtils::instance();
 
               float dynPointSize = pointSize * mu->sqrt( (float) (_projectedArea / renderedCount) );
-              dynPointSize = mu->clamp(dynPointSize, pointSize, pointSize*16);
+
+              dynPointSize = mu->min(renderingState._pointSize, dynPointSize);
+              dynPointSize = mu->max(dynPointSize, pointSize);
+              dynPointSize = mu->clamp(dynPointSize, pointSize, pointSize*32);
+
+              renderingState._pointSize = dynPointSize;
+
               _mesh->setPointSize(dynPointSize);
             }
             _mesh->render(rc, glState);

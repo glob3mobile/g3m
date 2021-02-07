@@ -145,6 +145,11 @@ public class XPCPointCloud extends RCObject
     return _verbose;
   }
 
+  public final boolean isDynamicPointSize()
+  {
+    return _dynamicPointSize;
+  }
+
   public final float getVerticalExaggeration()
   {
     return _verticalExaggeration;

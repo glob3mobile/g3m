@@ -24,6 +24,7 @@ class ByteBufferIterator;
 class DirectMesh;
 class XPCSelectionResult;
 class ITimer;
+class XPCRenderingState;
 
 
 class XPCNode : public RCObject {
@@ -109,7 +110,8 @@ public:
                    const Frustum* frustum,
                    long long nowInMS,
                    bool renderDebug,
-                   const XPCSelectionResult* selectionResult);
+                   const XPCSelectionResult* selectionResult,
+                   XPCRenderingState& renderingState);
 
   const bool selectPoints(XPCSelectionResult* selectionResult,
                           const XPCPointCloud* pointCloud,

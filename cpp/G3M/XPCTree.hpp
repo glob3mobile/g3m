@@ -19,11 +19,15 @@ class Sector;
 class XPCSelectionResult;
 class ITimer;
 
+#include "XPCRenderingState.hpp"
+
 
 class XPCTree {
 private:
   const std::string _id;
   XPCNode*          _rootNode;
+
+  mutable XPCRenderingState _renderingState;
 
 public:
 

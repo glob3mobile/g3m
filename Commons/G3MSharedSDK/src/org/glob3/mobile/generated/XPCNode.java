@@ -27,6 +27,7 @@ package org.glob3.mobile.generated;
 //class DirectMesh;
 //class XPCSelectionResult;
 //class ITimer;
+//class XPCRenderingState;
 
 
 public class XPCNode extends RCObject
@@ -75,8 +76,7 @@ public class XPCNode extends RCObject
     points.add( planet.toCartesian( _sector.getCenter() , (_minHeight + deltaHeight) * verticalExaggeration ) );
     points.add( planet.toCartesian( _sector.getCenter() , (_maxHeight + deltaHeight) * verticalExaggeration ) );
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: check if the sphere fits into the parent's one
+  ///#warning TODO: check if the sphere fits into the parent's one
     //  if (_parent) {
     //    _parent->updateBoundingSphereWith(rc, vectorSet, _boundingSphere);
     //  }
@@ -103,7 +103,11 @@ public class XPCNode extends RCObject
   
     // const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
     // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
-    final long deltaPriority = 100 - _id.length();
+  
+  //  const long long deltaPriority = 100 - _id.length();
+  
+    final int depth = _id.length();
+    final long deltaPriority = (depth == 0) ? 100 : _id.length();
   
     _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
   }
@@ -252,7 +256,7 @@ public class XPCNode extends RCObject
   }
 
 
-  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult, XPCRenderingState renderingState)
   {
   
     long renderedCount = 0;
@@ -271,12 +275,10 @@ public class XPCNode extends RCObject
           bounds.render(rc, glState, Color.WHITE);
         }
   
-        if ((_projectedArea == -1) || ((_projectedAreaTS + 167) < nowInMS))
-        {
-          final double projectedArea = bounds.projectedArea(rc);
-          _projectedArea = projectedArea;
+  //      if ((_projectedArea == -1) || ((_projectedAreaTS + 33 /* 167 */) < nowInMS)) {
+          _projectedArea = bounds.projectedArea(rc);
           _projectedAreaTS = nowInMS;
-        }
+  //      }
   
         final boolean isBigEnough = (_projectedArea >= pointCloud.getMinProjectedArea());
         if (isBigEnough)
@@ -291,20 +293,41 @@ public class XPCNode extends RCObject
   
           //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
   
+          if (_children != null)
+          {
+            for (int i = 0; i < _childrenSize; i++)
+            {
+              XPCNode child = _children.get(i);
+              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult, renderingState);
+            }
+          }
+          else
+          {
+            renderingState.reset();
+          }
+  
           if (_loadedContent)
           {
             if (_mesh != null)
             {
-  //            if (selectionResult == NULL) {
-                _mesh.render(rc, glState);
-                renderedCount += _mesh.getRenderVerticesCount();
-  //            }
-  //            else {
-  //              if (_bounds->touchesRay(selectionResult->_ray)) {
-  //                _mesh->render(rc, glState);
-  //                renderedCount += _mesh->getRenderVerticesCount();
-  //              }
-  //            }
+              renderedCount += _mesh.getRenderVerticesCount();
+              if (pointCloud.isDynamicPointSize())
+              {
+                final float pointSize = pointCloud.getDevicePointSize();
+  
+                final IMathUtils mu = IMathUtils.instance();
+  
+                float dynPointSize = pointSize * mu.sqrt((float)(_projectedArea / renderedCount));
+  
+                dynPointSize = mu.min(renderingState._pointSize, dynPointSize);
+                dynPointSize = mu.max(dynPointSize, pointSize);
+                dynPointSize = mu.clamp(dynPointSize, pointSize, pointSize *32);
+  
+                renderingState._pointSize = dynPointSize;
+  
+                _mesh.setPointSize(dynPointSize);
+              }
+              _mesh.render(rc, glState);
             }
           }
           else
@@ -321,14 +344,6 @@ public class XPCNode extends RCObject
             }
           }
   
-          if (_children != null)
-          {
-            for (int i = 0; i < _childrenSize; i++)
-            {
-              XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult);
-            }
-          }
   
         }
       }
