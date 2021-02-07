@@ -50,8 +50,9 @@ public class G3MBuilder_WebGL
    protected IDownloader createDefaultDownloader() {
       final int     maxConcurrentOperationCount = 8;
       final int     delayMillis                 = 10;
+      final String  proxy                       = null;
       final boolean verboseErrors               = true;
-      return new Downloader_WebGL(maxConcurrentOperationCount, delayMillis, "", verboseErrors);
+      return new Downloader_WebGL(maxConcurrentOperationCount, delayMillis, proxy, verboseErrors);
    }
 
 

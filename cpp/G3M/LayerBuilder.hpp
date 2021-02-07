@@ -9,20 +9,16 @@
 #ifndef __G3M__LayerBuilder__
 #define __G3M__LayerBuilder__
 
-#include "WMSLayer.hpp"
-#include <vector>
+class Layer;
+class LayerSet;
 
 class LayerBuilder {
 public:
+  
+  static Layer* createOSMLayer();
+  
   static LayerSet* createDefault();
-  static LayerSet* createDefaultSatelliteImagery();
-  static std::vector<std::string> getDefaultLayersNames();
-  static WMSLayer* createBingLayer(bool enabled);
-  static WMSLayer* createOSMLayer(bool enabled);
-  static WMSLayer* createPNOALayer(bool enabled);
-  static WMSLayer* createBlueMarbleLayer(bool enabled);
-  static WMSLayer* createI3LandSatLayer(bool enabled);
-  static WMSLayer* createPoliticalLayer(bool enabled);
+  
 };
 
 #endif
