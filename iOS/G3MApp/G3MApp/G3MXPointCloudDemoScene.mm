@@ -17,6 +17,7 @@
 #include <G3M/PlanetRenderer.hpp>
 
 #include <G3M/XPCRenderer.hpp>
+#include <G3M/XPCPointCloud.hpp>
 #include <G3M/XPCMetadataListener.hpp>
 #include <G3M/XPCMetadata.hpp>
 #include <G3M/XPCTree.hpp>
@@ -311,25 +312,27 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 
 #warning TODO cache
-  model->getXPCRenderer()->addPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
-                                         cloudName,
-                                         DownloadPriority::LOWER,
-                                         TimeInterval::zero(),
-                                         false,
-                                         new XPCRGBPointColorizer(),
-                                         // new XPCIntensityPointColorizer(),
-                                         // new XPCClassificationPointColorizer(),
-                                         true, // deletePointColorizer,
-                                         minProjectedArea,
-                                         pointSize,
-                                         dynamicPointSize,
-                                         depthTest,
-                                         verticalExaggeration,
-                                         deltaHeight,
-                                         new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
-                                         true,  // deleteMetadataListener,
-                                         new G3MXPointCloudDemoScene_PointSelectionListener(this),
-                                         true,  //  deletePointSelectionListener,
-                                         verbose);
+  XPCPointCloud* pointCould = new XPCPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
+                                                cloudName,
+                                                DownloadPriority::LOWER,
+                                                TimeInterval::zero(),
+                                                false,
+                                                new XPCRGBPointColorizer(),
+                                                // new XPCIntensityPointColorizer(),
+                                                // new XPCClassificationPointColorizer(),
+                                                true, // deletePointColorizer,
+                                                minProjectedArea,
+                                                pointSize,
+                                                dynamicPointSize,
+                                                depthTest,
+                                                verticalExaggeration,
+                                                deltaHeight,
+                                                new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
+                                                true,  // deleteMetadataListener,
+                                                new G3MXPointCloudDemoScene_PointSelectionListener(this),
+                                                true,  //  deletePointSelectionListener,
+                                                verbose);
+
+  model->getXPCRenderer()->addPointCloud(pointCould);
 
 }

@@ -12,11 +12,6 @@
 
 class ITimer;
 class XPCPointCloud;
-class URL;
-class TimeInterval;
-class XPCPointColorizer;
-class XPCMetadataListener;
-class XPCPointSelectionListener;
 class Camera;
 class XPCSelectionResult;
 
@@ -63,24 +58,7 @@ public:
 
   }
 
-  void addPointCloud(const URL& serverURL,
-                     const std::string& cloudName,
-                     long long downloadPriority,
-                     const TimeInterval& timeToCache,
-                     bool readExpired,
-                     XPCPointColorizer* pointColorizer,
-                     bool deletePointColorizer,
-                     const double minProjectedArea,
-                     float pointSize = 1.0f,
-                     bool dynamicPointSize = true,
-                     const bool depthTest = true,
-                     float verticalExaggeration = 1.0f,
-                     float deltaHeight = 0,
-                     XPCMetadataListener* metadataListener = NULL,
-                     bool deleteMetadataListener = true,
-                     XPCPointSelectionListener* pointSelectionListener = NULL,
-                     bool deletePointSelectionListener = true,
-                     bool verbose = false);
+  void addPointCloud(XPCPointCloud* pointCloud);
 
   void render(const G3MRenderContext* rc,
               GLState* glState);

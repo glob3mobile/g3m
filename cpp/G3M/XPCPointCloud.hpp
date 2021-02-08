@@ -83,16 +83,16 @@ public:
                 XPCPointColorizer* pointColorizer,
                 bool deletePointColorizer,
                 const double minProjectedArea,
-                float pointSize,
-                bool dynamicPointSize,
-                const bool depthTest,
-                float verticalExaggeration,
-                float deltaHeight,
-                XPCMetadataListener* metadataListener,
-                bool deleteMetadataListener,
-                XPCPointSelectionListener* pointSelectionListener,
-                bool deletePointSelectionListener,
-                bool verbose);
+                float pointSize = 1.0f,
+                bool dynamicPointSize = true,
+                const bool depthTest = true,
+                float verticalExaggeration = 1.0f,
+                float deltaHeight = 0,
+                XPCMetadataListener* metadataListener = NULL,
+                bool deleteMetadataListener = true,
+                XPCPointSelectionListener* pointSelectionListener = NULL,
+                bool deletePointSelectionListener = true,
+                bool verbose = false);
 
   const std::string getCloudName() const {
     return _cloudName;

@@ -453,10 +453,10 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
   // const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
   // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
 
-//  const long long deltaPriority = 100 - _id.length();
+  const long long deltaPriority = 100 - _id.length();
 
-  const size_t depth = _id.length();
-  const long long deltaPriority =  (depth == 0) ? 100 : _id.length();
+//  const size_t depth = _id.length();
+//  const long long deltaPriority =  (depth == 0) ? 100 : _id.length();
 
   _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
                                                            treeID,

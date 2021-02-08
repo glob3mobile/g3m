@@ -69,36 +69,7 @@ void XPCRenderer::removeAllPointClouds() {
 }
 
 
-void XPCRenderer::addPointCloud(const URL& serverURL,
-                                const std::string& cloudName,
-                                long long downloadPriority,
-                                const TimeInterval& timeToCache,
-                                bool readExpired,
-                                XPCPointColorizer* pointColorizer,
-                                bool deletePointColorizer,
-                                const double minProjectedArea,
-                                float pointSize,
-                                bool dynamicPointSize,
-                                const bool depthTest,
-                                float verticalExaggeration,
-                                float deltaHeight,
-                                XPCMetadataListener* metadataListener,
-                                bool deleteMetadataListener,
-                                XPCPointSelectionListener* pointSelectionListener,
-                                bool deletePointSelectionListener,
-                                bool verbose) {
-  
-  XPCPointCloud* pointCloud = new XPCPointCloud(serverURL,
-                                                cloudName,
-                                                downloadPriority, timeToCache, readExpired,
-                                                pointColorizer, deletePointColorizer,
-                                                minProjectedArea,
-                                                pointSize, dynamicPointSize, depthTest,
-                                                verticalExaggeration, deltaHeight,
-                                                metadataListener, deleteMetadataListener,
-                                                pointSelectionListener, deletePointSelectionListener,
-                                                verbose);
-  
+void XPCRenderer::addPointCloud(XPCPointCloud* pointCloud) {
   if (_context != NULL) {
     pointCloud->initialize(_context);
   }
@@ -244,10 +215,10 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
     _selectionResult = NULL;
   }
 
-  //  if (!_renderDebug) {
-  //    delete _ray;
-  //    _ray = NULL;
-  //  }
+//  if (!_renderDebug) {
+//    delete _ray;
+//    _ray = NULL;
+//  }
 
   return false;
 }
