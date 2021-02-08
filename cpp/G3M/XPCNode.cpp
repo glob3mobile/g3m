@@ -537,10 +537,10 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         bounds->render(rc, glState, Color::WHITE);
       }
 
-//      if ((_projectedArea == -1) || ((_projectedAreaTS + 33 /* 167 */) < nowInMS)) {
+      if ((_projectedArea == -1) || ((_projectedAreaTS + 50 /* 167 */) < nowInMS)) {
         _projectedArea   = bounds->projectedArea(rc);
         _projectedAreaTS = nowInMS;
-//      }
+      }
 
       const bool isBigEnough = (_projectedArea >= pointCloud->getMinProjectedArea());
       if (isBigEnough) {
@@ -568,29 +568,35 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                                            selectionResult,
                                            renderingState);
           }
+          if (_childrenSize == 0) {
+            renderingState._pointSize = pointCloud->getDevicePointSize();
+          }
         }
-        else {
+
+        if (_children == NULL) {
           renderingState.reset();
         }
 
         if (_loadedContent) {
           if (_mesh != NULL) {
             renderedCount += _mesh->getRenderVerticesCount();
-            if (pointCloud->isDynamicPointSize()) {
-              const float pointSize = pointCloud->getDevicePointSize();
 
+            const float pointSize = pointCloud->getDevicePointSize();
+            if (pointCloud->isDynamicPointSize()) {
               const IMathUtils* mu = IMathUtils::instance();
 
-              float dynPointSize = pointSize * mu->sqrt( (float) (_projectedArea / renderedCount) );
-
-              dynPointSize = mu->min(renderingState._pointSize, dynPointSize);
-              dynPointSize = mu->max(dynPointSize, pointSize);
-              dynPointSize = mu->clamp(dynPointSize, pointSize, pointSize*32);
+              const float dynPointSize = mu->clamp(mu->sqrt( (float) (_projectedArea / renderedCount) ),
+                                                   pointSize,
+                                                   renderingState._pointSize);
 
               renderingState._pointSize = dynPointSize;
 
               _mesh->setPointSize(dynPointSize);
             }
+            else {
+              _mesh->setPointSize(pointSize);
+            }
+
             _mesh->render(rc, glState);
           }
         }
