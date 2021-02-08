@@ -275,10 +275,11 @@ public class XPCNode extends RCObject
           bounds.render(rc, glState, Color.WHITE);
         }
   
-  //      if ((_projectedArea == -1) || ((_projectedAreaTS + 33 /* 167 */) < nowInMS)) {
+        if ((_projectedArea == -1) || ((_projectedAreaTS + 50) < nowInMS)) // 167
+        {
           _projectedArea = bounds.projectedArea(rc);
           _projectedAreaTS = nowInMS;
-  //      }
+        }
   
         final boolean isBigEnough = (_projectedArea >= pointCloud.getMinProjectedArea());
         if (isBigEnough)
@@ -300,8 +301,13 @@ public class XPCNode extends RCObject
               XPCNode child = _children.get(i);
               renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult, renderingState);
             }
+            if (_childrenSize == 0)
+            {
+              renderingState._pointSize = pointCloud.getDevicePointSize();
+            }
           }
-          else
+  
+          if (_children == null)
           {
             renderingState.reset();
           }
@@ -311,22 +317,23 @@ public class XPCNode extends RCObject
             if (_mesh != null)
             {
               renderedCount += _mesh.getRenderVerticesCount();
+  
+              final float pointSize = pointCloud.getDevicePointSize();
               if (pointCloud.isDynamicPointSize())
               {
-                final float pointSize = pointCloud.getDevicePointSize();
-  
                 final IMathUtils mu = IMathUtils.instance();
   
-                float dynPointSize = pointSize * mu.sqrt((float)(_projectedArea / renderedCount));
-  
-                dynPointSize = mu.min(renderingState._pointSize, dynPointSize);
-                dynPointSize = mu.max(dynPointSize, pointSize);
-                dynPointSize = mu.clamp(dynPointSize, pointSize, pointSize *32);
+                final float dynPointSize = mu.clamp(mu.sqrt((float)(_projectedArea / renderedCount)), pointSize, renderingState._pointSize);
   
                 renderingState._pointSize = dynPointSize;
   
                 _mesh.setPointSize(dynPointSize);
               }
+              else
+              {
+                _mesh.setPointSize(pointSize);
+              }
+  
               _mesh.render(rc, glState);
             }
           }
