@@ -44,10 +44,10 @@ public class XPCPointCloud extends RCObject
   private XPCPointColorizer _pointColorizer;
   private final boolean _deletePointColorizer;
 
-  private final double _minProjectedArea;
+  private double _minProjectedArea;
 
-  private final float _pointSize;
-  private final boolean _dynamicPointSize;
+  private float _pointSize;
+  private boolean _dynamicPointSize;
   private final boolean _depthTest;
 
   private final float _verticalExaggeration;
@@ -190,6 +190,11 @@ public class XPCPointCloud extends RCObject
     return _dynamicPointSize;
   }
 
+  public final void setDynamicPointSize(boolean dynamicPointSize)
+  {
+    _dynamicPointSize = dynamicPointSize;
+  }
+
   public final float getVerticalExaggeration()
   {
     return _verticalExaggeration;
@@ -205,6 +210,11 @@ public class XPCPointCloud extends RCObject
     return _minProjectedArea;
   }
 
+  public final void setMinProjectedArea(double minProjectedArea)
+  {
+    _minProjectedArea = minProjectedArea;
+  }
+
   public final XPCMetadata getMetadada()
   {
     return _metadata;
@@ -213,6 +223,16 @@ public class XPCPointCloud extends RCObject
   public final float getDevicePointSize()
   {
     return _pointSize * IFactory.instance().getDeviceInfo().getDevicePixelRatio();
+  }
+
+  public final float getPointSize()
+  {
+    return _pointSize;
+  }
+
+  public final void setPointSize(float pointSize)
+  {
+    _pointSize = pointSize;
   }
 
   public final boolean depthTest()
