@@ -42,10 +42,10 @@ private:
   XPCPointColorizer*         _pointColorizer;
   const bool                 _deletePointColorizer;
 
-  const double               _minProjectedArea;
+  double                     _minProjectedArea;
 
-  const float                _pointSize;
-  const bool                 _dynamicPointSize;
+  float                      _pointSize;
+  bool                       _dynamicPointSize;
   const bool                 _depthTest;
 
   const float                _verticalExaggeration;
@@ -106,6 +106,10 @@ public:
     return _dynamicPointSize;
   }
 
+  void setDynamicPointSize(const bool dynamicPointSize) {
+    _dynamicPointSize = dynamicPointSize;
+  }
+
   const float getVerticalExaggeration() const {
     return _verticalExaggeration;
   }
@@ -118,11 +122,23 @@ public:
     return _minProjectedArea;
   }
 
+  void setMinProjectedArea(const double minProjectedArea) {
+    _minProjectedArea = minProjectedArea;
+  }
+
   const XPCMetadata* getMetadada() const {
     return _metadata;
   }
 
   const float getDevicePointSize() const;
+
+  const float getPointSize() const {
+    return _pointSize;
+  }
+
+  void setPointSize(const float pointSize) {
+    _pointSize = pointSize;
+  }
 
   const bool depthTest() const {
     return _depthTest;
