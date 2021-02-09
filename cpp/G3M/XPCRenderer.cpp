@@ -110,9 +110,9 @@ RenderState XPCRenderer::getRenderState(const G3MRenderContext* rc) {
       _errors.addAll(childErrors);
 #endif
     }
-    else if (childRenderStateType == RENDER_BUSY) {
-      busyFlag = true;
-    }
+//    else if (childRenderStateType == RENDER_BUSY) {
+//      busyFlag = true;
+//    }
   }
 
   if (errorFlag) {

@@ -119,10 +119,9 @@ public class XPCRenderer extends DefaultRenderer
         final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
         _errors.addAll(childErrors);
       }
-      else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
-      {
-        busyFlag = true;
-      }
+  //    else if (childRenderStateType == RENDER_BUSY) {
+  //      busyFlag = true;
+  //    }
     }
   
     if (errorFlag)
