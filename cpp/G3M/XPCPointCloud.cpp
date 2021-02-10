@@ -389,6 +389,9 @@ void XPCPointCloud::setPointColorizer(XPCPointColorizer* pointColorizer,
     _deletePointColorizer = deletePointColorizer;
 
     if (_metadata != NULL) {
+      if (_pointColorizer != NULL) {
+        _pointColorizer->initialize(_metadata);
+      }
       _metadata->reloadNodes();
     }
   }
