@@ -57,7 +57,7 @@ public class XPCPointCloud extends RCObject
   private final boolean _deleteMetadataListener;
 
   private XPCPointSelectionListener _pointSelectionListener;
-  private final boolean _deletePointSelectionListener;
+  private boolean _deletePointSelectionListener;
 
   private final boolean _verbose;
 
@@ -210,7 +210,6 @@ public class XPCPointCloud extends RCObject
       }
   
       _pointColorizer = pointColorizer;
-      _deletePointColorizer = deletePointColorizer;
   
       if (_metadata != null)
       {
@@ -218,6 +217,22 @@ public class XPCPointCloud extends RCObject
         _metadata.reloadNodes();
       }
     }
+    _deletePointColorizer = deletePointColorizer;
+  }
+
+  public final void setPointSelectionListener(XPCPointSelectionListener pointSelectionListener, boolean deletePointSelectionListener)
+  {
+    if (_pointSelectionListener != pointSelectionListener)
+    {
+      if (_deletePointSelectionListener)
+      {
+        if (_pointSelectionListener != null)
+           _pointSelectionListener.dispose();
+      }
+  
+      _pointSelectionListener = pointSelectionListener;
+    }
+    _deletePointSelectionListener = deletePointSelectionListener;
   }
 
   public final boolean isDynamicPointSize()

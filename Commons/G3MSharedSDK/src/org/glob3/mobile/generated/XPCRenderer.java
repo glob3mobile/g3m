@@ -200,8 +200,6 @@ public class XPCRenderer extends DefaultRenderer
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    _renderDebug = false;
-  
     if (_cloudsSize > 0)
     {
       if (_lastCamera != null)
@@ -213,8 +211,6 @@ public class XPCRenderer extends DefaultRenderer
   
           if (!rayDirection.isNan())
           {
-            // _renderDebug = true;
-  
             final Vector3D rayOrigin = _lastCamera.getCartesianPosition();
   
             XPCSelectionResult selectionResult = new XPCSelectionResult(new Ray(rayOrigin, rayDirection));
@@ -252,11 +248,6 @@ public class XPCRenderer extends DefaultRenderer
          _selectionResult.dispose();
       _selectionResult = null;
     }
-  
-  //  if (!_renderDebug) {
-  //    delete _ray;
-  //    _ray = NULL;
-  //  }
   
     return false;
   }
