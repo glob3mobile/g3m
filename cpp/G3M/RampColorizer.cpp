@@ -13,6 +13,42 @@
 #include "Color.hpp"
 #include "MutableColor.hpp"
 
+const RampColorizer* RampColorizer::colorSpectrum() {
+  std::vector<Color> colors;
+  colors.push_back( Color::NAVY   );
+  colors.push_back( Color::BLUE   );
+  colors.push_back( Color::GREEN  );
+  colors.push_back( Color::YELLOW );
+  colors.push_back( Color::RED    );
+  return createRampColorizer(colors);
+}
+
+const RampColorizer* RampColorizer::visibleSpectrum() {
+  std::vector<Color> colors;
+  colors.push_back( Color::fromRGBA255(255,   0, 255) );
+  colors.push_back( Color::fromRGBA255(  0,   0, 255) );
+  colors.push_back( Color::fromRGBA255(  0, 255,   0) );
+  colors.push_back( Color::fromRGBA255(255, 255,   0) );
+  colors.push_back( Color::fromRGBA255(255,   0,   0) );
+  return createRampColorizer(colors);
+}
+
+const RampColorizer* RampColorizer::sunrise() {
+  std::vector<Color> colors;
+  colors.push_back( Color::WHITE  );
+  colors.push_back( Color::YELLOW );
+  colors.push_back( Color::RED    );
+  return createRampColorizer(colors);
+}
+
+const RampColorizer* RampColorizer::reds() {
+  std::vector<Color> colors;
+  colors.push_back( Color::fromRGBA255(255, 255, 255) );
+  colors.push_back( Color::fromRGBA255(254, 224, 210) );
+  colors.push_back( Color::fromRGBA255(252, 146, 114) );
+  colors.push_back( Color::fromRGBA255(222,  45,  38) );
+  return createRampColorizer(colors);
+}
 
 const RampColorizer* RampColorizer::createRampColorizer(const std::vector<Color>& colors,
                                                         const std::vector<float>& steps) {

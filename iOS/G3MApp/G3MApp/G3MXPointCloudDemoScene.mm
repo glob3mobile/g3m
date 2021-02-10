@@ -29,6 +29,7 @@
 #include <G3M/G3MContext.hpp>
 #include <G3M/Measure.hpp>
 #include <G3M/MeasureHandler.hpp>
+#include <G3M/RampColorizer.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
@@ -318,8 +319,10 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                 DownloadPriority::LOWER,
                                                 TimeInterval::zero(),
                                                 false,
-                                                // new XPCHeightPointColorizer(0.5f),
-                                                new XPCRGBPointColorizer(0.5f),
+                                                new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(),
+                                                                            true,
+                                                                            0.5f),
+                                                // new XPCRGBPointColorizer(0.5f),
                                                 // new XPCIntensityPointColorizer(0.5f),
                                                 // new XPCClassificationPointColorizer(0.5f),
                                                 true, // deletePointColorizer,
