@@ -200,6 +200,10 @@ public class XPCPointCloud extends RCObject
   
       if (_metadata != null)
       {
+        if (_pointColorizer != null)
+        {
+          _pointColorizer.initialize(_metadata);
+        }
         _metadata.reloadNodes();
       }
     }
