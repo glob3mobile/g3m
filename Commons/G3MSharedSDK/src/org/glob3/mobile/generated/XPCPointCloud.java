@@ -42,7 +42,7 @@ public class XPCPointCloud extends RCObject
   private final boolean _readExpired;
 
   private XPCPointColorizer _pointColorizer;
-  private final boolean _deletePointColorizer;
+  private boolean _deletePointColorizer;
 
   private double _minProjectedArea;
 
@@ -183,6 +183,26 @@ public class XPCPointCloud extends RCObject
   public final boolean isVerbose()
   {
     return _verbose;
+  }
+
+  public final void setPointColorizer(XPCPointColorizer pointColorizer, boolean deletePointColorizer)
+  {
+    if (_pointColorizer != pointColorizer)
+    {
+      if (_deletePointColorizer)
+      {
+        if (_pointColorizer != null)
+           _pointColorizer.dispose();
+      }
+  
+      _pointColorizer = pointColorizer;
+      _deletePointColorizer = deletePointColorizer;
+  
+      if (_metadata != null)
+      {
+        _metadata.reloadNodes();
+      }
+    }
   }
 
   public final boolean isDynamicPointSize()

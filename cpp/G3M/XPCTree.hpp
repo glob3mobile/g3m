@@ -56,6 +56,8 @@ public:
 
   void cancel() const;
 
+  void reloadNodes();
+
 };
 
 #endif

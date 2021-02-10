@@ -27,6 +27,10 @@ void XPCTree::cancel() const {
   _rootNode->cancel();
 }
 
+void XPCTree::reloadNodes() {
+  _rootNode->reload();
+}
+
 const Sector* XPCTree::getSector() const {
   return _rootNode->getSector();
 }

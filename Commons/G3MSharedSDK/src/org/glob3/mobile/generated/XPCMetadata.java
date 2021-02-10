@@ -171,6 +171,15 @@ public class XPCMetadata
     }
   }
 
+  public final void reloadNodes()
+  {
+    for (int i = 0; i < _treesSize; i++)
+    {
+      XPCTree tree = _trees.get(i);
+      tree.reloadNodes();
+    }
+  }
+
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  XPCMetadata(XPCMetadata that);
 

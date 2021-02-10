@@ -12,9 +12,7 @@
 		44AFBB2319D4273A00EB78E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */; platformFilter = ios; };
 		44AFBB2719D4276000EB78E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2619D4276000EB78E9 /* QuartzCore.framework */; platformFilter = ios; };
 		44AFBB2919D4286C00EB78E9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2819D4286C00EB78E9 /* CoreData.framework */; platformFilter = ios; };
-		CF05D55525B7490600220105 /* XPCPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05D55325B7490600220105 /* XPCPoint.cpp */; };
 		CF05D55C25B82C1700220105 /* XPCRGBPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */; };
-		CF05D55E25B82D9500220105 /* XPCPoint.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF05D55425B7490600220105 /* XPCPoint.hpp */; };
 		CF05D55F25B82D9500220105 /* XPCRGBPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */; };
 		CF2744FF25B1AF450056304B /* XPCRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2744FD25B1AF450056304B /* XPCRenderer.cpp */; };
 		CF27450125B1B0260056304B /* XPCRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2744FE25B1AF450056304B /* XPCRenderer.hpp */; };
@@ -972,7 +970,6 @@
 				CF64ADF325BDCE8300815620 /* XPCPointSelectionListener.hpp in CopyFiles */,
 				CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */,
 				CFC54E0125B9B8CC00424542 /* XPCIntensityPointColorizer.hpp in CopyFiles */,
-				CF05D55E25B82D9500220105 /* XPCPoint.hpp in CopyFiles */,
 				CF05D55F25B82D9500220105 /* XPCRGBPointColorizer.hpp in CopyFiles */,
 				CF4AD09A25B5F90C009A1E48 /* XPCDimension.hpp in CopyFiles */,
 				CF4AD09B25B5F90D009A1E48 /* XPCNode.hpp in CopyFiles */,
@@ -1480,8 +1477,6 @@
 		44AFBB2819D4286C00EB78E9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = JSONParser_iOS.hpp; path = Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A70F560C161B5CD800340256 /* JSONParser_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JSONParser_iOS.mm; path = Specific/Derived/JSONParser_iOS.mm; sourceTree = "<group>"; };
-		CF05D55325B7490600220105 /* XPCPoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCPoint.cpp; sourceTree = "<group>"; };
-		CF05D55425B7490600220105 /* XPCPoint.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCPoint.hpp; sourceTree = "<group>"; };
 		CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCRGBPointColorizer.cpp; sourceTree = "<group>"; };
 		CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCRGBPointColorizer.hpp; sourceTree = "<group>"; };
 		CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ByteBuffer_iOS.cpp; path = Specific/Derived/ByteBuffer_iOS.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -2602,8 +2597,6 @@
 				CF27452825B2047B0056304B /* XPCNode.hpp */,
 				CF27452C25B2F73C0056304B /* XPCParsing.cpp */,
 				CF27452D25B2F73C0056304B /* XPCParsing.hpp */,
-				CF05D55325B7490600220105 /* XPCPoint.cpp */,
-				CF05D55425B7490600220105 /* XPCPoint.hpp */,
 				CF27451F25B1D2CC0056304B /* XPCPointCloud.cpp */,
 				CF27452025B1D2CC0056304B /* XPCPointCloud.hpp */,
 				CF27451325B1D0700056304B /* XPCPointColorizer.cpp */,
@@ -3857,7 +3850,6 @@
 				CF66089F23DF330600795C7F /* CameraDoubleTapHandler.cpp in Sources */,
 				CF6608A023DF330600795C7F /* DefaultTileTexturizer.cpp in Sources */,
 				CF6608A123DF330600795C7F /* Frustum.cpp in Sources */,
-				CF05D55525B7490600220105 /* XPCPoint.cpp in Sources */,
 				CF6608A223DF330600795C7F /* MutableVector2D.cpp in Sources */,
 				CF6608A323DF330600795C7F /* GLState.cpp in Sources */,
 				CF6608A423DF330600795C7F /* SceneJSParserParameters.cpp in Sources */,

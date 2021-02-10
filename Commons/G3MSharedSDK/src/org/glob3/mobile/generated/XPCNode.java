@@ -439,4 +439,21 @@ public class XPCNode extends RCObject
     unloadChildren();
   }
 
+  public final void reload()
+  {
+    if (_loadingContent)
+    {
+      _loadingContent = false;
+      cancelLoadContent();
+    }
+  
+    if (_loadedContent)
+    {
+      _loadedContent = false;
+      unloadContent();
+    }
+  
+    unloadChildren();
+  }
+
 }

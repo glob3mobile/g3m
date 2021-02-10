@@ -40,7 +40,7 @@ private:
   const bool                 _readExpired;
 
   XPCPointColorizer*         _pointColorizer;
-  const bool                 _deletePointColorizer;
+  bool                       _deletePointColorizer;
 
   double                     _minProjectedArea;
 
@@ -101,6 +101,9 @@ public:
   const bool isVerbose() const {
     return _verbose;
   }
+
+  void setPointColorizer(XPCPointColorizer* pointColorizer,
+                         bool deletePointColorizer);
 
   const bool isDynamicPointSize() const {
     return _dynamicPointSize;

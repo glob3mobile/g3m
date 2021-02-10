@@ -377,3 +377,19 @@ const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
                                                   pointIndex,
                                                   distanceToRay);
 }
+
+void XPCPointCloud::setPointColorizer(XPCPointColorizer* pointColorizer,
+                                      bool deletePointColorizer) {
+  if (_pointColorizer != pointColorizer) {
+    if (_deletePointColorizer) {
+      delete _pointColorizer;
+    }
+
+    _pointColorizer       = pointColorizer;
+    _deletePointColorizer = deletePointColorizer;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}

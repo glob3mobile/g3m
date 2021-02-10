@@ -461,6 +461,20 @@ void XPCNode::cancel() {
   unloadChildren();
 }
 
+void XPCNode::reload() {
+  if (_loadingContent) {
+    _loadingContent = false;
+    cancelLoadContent();
+  }
+
+  if (_loadedContent) {
+    _loadedContent = false;
+    unloadContent();
+  }
+
+  unloadChildren();
+}
+
 void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                           const std::string& treeID,
                           const G3MRenderContext* rc) {

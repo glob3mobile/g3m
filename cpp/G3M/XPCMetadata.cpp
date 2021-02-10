@@ -178,3 +178,10 @@ const bool XPCMetadata::selectPoints(XPCSelectionResult* selectionResult,
   }
   return selectedPoints;
 }
+
+void XPCMetadata::reloadNodes() {
+  for (size_t i = 0; i < _treesSize; i++) {
+    XPCTree* tree = _trees->at(i);
+    tree->reloadNodes();
+  }
+}

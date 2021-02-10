@@ -119,6 +119,8 @@ public:
 
   void cancel();
 
+  void reload();
+
 };
 
 #endif

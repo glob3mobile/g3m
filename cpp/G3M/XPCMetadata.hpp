@@ -55,6 +55,8 @@ public:
 
   void cancel();
 
+  void reloadNodes();
+
 private:
   XPCMetadata(const XPCMetadata& that);
 
