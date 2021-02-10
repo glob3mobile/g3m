@@ -72,6 +72,20 @@ public class XPCPointCloud extends RCObject
   private XPCMetadata _metadata;
   private long _lastRenderedCount;
 
+  private void initializePointColorizer()
+  {
+    IIntBuffer requiredDimensionIndices = null;
+    if (_pointColorizer != null)
+    {
+      requiredDimensionIndices = _pointColorizer.initialize(_metadata);
+    }
+    if (_requiredDimensionIndices != requiredDimensionIndices)
+    {
+      if (_requiredDimensionIndices != null)
+         _requiredDimensionIndices.dispose();
+      _requiredDimensionIndices = requiredDimensionIndices;
+    }
+  }
 
   public void dispose()
   {
@@ -200,10 +214,7 @@ public class XPCPointCloud extends RCObject
   
       if (_metadata != null)
       {
-        if (_pointColorizer != null)
-        {
-          _pointColorizer.initialize(_metadata);
-        }
+        initializePointColorizer();
         _metadata.reloadNodes();
       }
     }
@@ -345,18 +356,7 @@ public class XPCPointCloud extends RCObject
     }
     _metadata = metadata;
   
-  
-    IIntBuffer requiredDimensionIndices = null;
-    if (_pointColorizer != null)
-    {
-      requiredDimensionIndices = _pointColorizer.initialize(_metadata);
-    }
-    if (_requiredDimensionIndices != requiredDimensionIndices)
-    {
-      if (_requiredDimensionIndices != null)
-         _requiredDimensionIndices.dispose();
-      _requiredDimensionIndices = requiredDimensionIndices;
-    }
+    initializePointColorizer();
   
     if (_metadataListener != null)
     {
