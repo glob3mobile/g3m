@@ -8,7 +8,7 @@
 #ifndef XPCClassificationPointColorizer_hpp
 #define XPCClassificationPointColorizer_hpp
 
-#include "XPCPointColorizer.hpp"
+#include "XPCFixedAlphaPointColorizer.hpp"
 
 #include <string>
 #include <vector>
@@ -16,11 +16,10 @@
 #include "Color.hpp"
 
 
-class XPCClassificationPointColorizer : public XPCPointColorizer {
+class XPCClassificationPointColorizer : public XPCFixedAlphaPointColorizer {
 private:
 
   const std::string _classificationDimensionName;
-  const float       _alpha;
 
   int _classificationDimensionIndex;
   
@@ -39,7 +38,7 @@ public:
                                   const float alpha);
   
   ~XPCClassificationPointColorizer();
-  
+
   IIntBuffer* initialize(const XPCMetadata* metadata);
   
   void colorize(const XPCMetadata* metadata,

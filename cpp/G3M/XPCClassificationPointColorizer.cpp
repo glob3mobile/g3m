@@ -44,8 +44,8 @@ void XPCClassificationPointColorizer::initializeColors(std::vector<const Color>&
 }
 
 XPCClassificationPointColorizer::XPCClassificationPointColorizer(const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _classificationDimensionName("Classification"),
-_alpha(alpha),
 _classificationDimensionIndex(-1),
 _ok(false)
 {
@@ -54,8 +54,8 @@ _ok(false)
 
 XPCClassificationPointColorizer::XPCClassificationPointColorizer(const std::string& classificationDimensionName,
                                                                  const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _classificationDimensionName(classificationDimensionName),
-_alpha(alpha),
 _classificationDimensionIndex(-1),
 _ok(false)
 {

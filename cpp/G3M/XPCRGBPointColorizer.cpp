@@ -17,10 +17,10 @@
 
 
 XPCRGBPointColorizer::XPCRGBPointColorizer(const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _redDimensionName("Red"),
 _greenDimensionName("Green"),
 _blueDimensionName("Blue"),
-_alpha(alpha),
 _redDimensionIndex(-1),
 _greenDimensionIndex(-1),
 _blueDimensionIndex(-1),
@@ -33,10 +33,10 @@ XPCRGBPointColorizer::XPCRGBPointColorizer(const std::string& redDimensionName,
                                            const std::string& greenDimensionName,
                                            const std::string& blueDimensionName,
                                            const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _redDimensionName(redDimensionName),
 _greenDimensionName(greenDimensionName),
 _blueDimensionName(blueDimensionName),
-_alpha(alpha),
 _redDimensionIndex(-1),
 _greenDimensionIndex(-1),
 _blueDimensionIndex(-1),

@@ -16,9 +16,9 @@
 XPCHeightPointColorizer::XPCHeightPointColorizer(const RampColorizer* ramp,
                                                  const bool deleteRamp,
                                                  const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _ramp(ramp),
 _deleteRamp(deleteRamp),
-_alpha(alpha),
 _minHeight(NAND),
 _maxHeight(NAND),
 _deltaHeight(NAND)

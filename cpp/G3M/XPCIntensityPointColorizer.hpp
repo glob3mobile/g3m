@@ -8,15 +8,14 @@
 #ifndef XPCIntensityPointColorizer_hpp
 #define XPCIntensityPointColorizer_hpp
 
-#include "XPCPointColorizer.hpp"
+#include "XPCFixedAlphaPointColorizer.hpp"
 
 #include <string>
 
 
-class XPCIntensityPointColorizer : public XPCPointColorizer {
+class XPCIntensityPointColorizer : public XPCFixedAlphaPointColorizer {
 private:
   const std::string _intensityDimensionName;
-  const float       _alpha;
 
   int _intensityDimensionIndex;
 

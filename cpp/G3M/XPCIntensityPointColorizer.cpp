@@ -18,8 +18,8 @@
 
 
 XPCIntensityPointColorizer::XPCIntensityPointColorizer(const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _intensityDimensionName("Intensity"),
-_alpha(alpha),
 _intensityDimensionIndex(-1),
 _ok(false)
 {
@@ -28,8 +28,8 @@ _ok(false)
 
 XPCIntensityPointColorizer::XPCIntensityPointColorizer(const std::string& intensityDimensionName,
                                                        const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _intensityDimensionName(intensityDimensionName),
-_alpha(alpha),
 _intensityDimensionIndex(-1),
 _ok(false)
 {

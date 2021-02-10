@@ -8,16 +8,15 @@
 #ifndef XPCHeightPointColorizer_hpp
 #define XPCHeightPointColorizer_hpp
 
-#include "XPCPointColorizer.hpp"
+#include "XPCFixedAlphaPointColorizer.hpp"
 
 class RampColorizer;
 
 
-class XPCHeightPointColorizer : public XPCPointColorizer {
+class XPCHeightPointColorizer : public XPCFixedAlphaPointColorizer {
 private:
   const RampColorizer* _ramp;
   const bool           _deleteRamp;
-  const float          _alpha;
 
   double _minHeight;
   double _maxHeight;

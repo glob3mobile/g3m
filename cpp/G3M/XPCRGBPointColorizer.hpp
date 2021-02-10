@@ -8,17 +8,16 @@
 #ifndef XPCRGBPointColorizer_hpp
 #define XPCRGBPointColorizer_hpp
 
-#include "XPCPointColorizer.hpp"
+#include "XPCFixedAlphaPointColorizer.hpp"
 
 #include <string>
 
 
-class XPCRGBPointColorizer : public XPCPointColorizer {
+class XPCRGBPointColorizer : public XPCFixedAlphaPointColorizer {
 private:
   const std::string _redDimensionName;
   const std::string _greenDimensionName;
   const std::string _blueDimensionName;
-  const float       _alpha;
 
   int _redDimensionIndex;
   int _greenDimensionIndex;
