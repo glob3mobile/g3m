@@ -262,20 +262,20 @@ public:
       delete buffer;
     }
     else {
-      if (_pointCloud->isVerbose()) {
-#ifdef C_CODE
-        ILogger::instance()->logInfo("Downloaded content for \"%s\" node \"%s\" (bytes=%ld)",
-                                     _pointCloud->getCloudName().c_str(),
-                                     _node->getID().c_str(),
-                                     buffer->size());
-#endif
-#ifdef JAVA_CODE
-        ILogger.instance().logInfo("Downloaded metadata for \"%s\" node \"%s\" (bytes=%d)",
-                                   _pointCloud.getCloudName(),
-                                   _node.getID(),
-                                   buffer.size());
-#endif
-      }
+//      if (_pointCloud->isVerbose()) {
+//#ifdef C_CODE
+//        ILogger::instance()->logInfo("Downloaded content for \"%s\" node \"%s\" (bytes=%ld)",
+//                                     _pointCloud->getCloudName().c_str(),
+//                                     _node->getID().c_str(),
+//                                     buffer->size());
+//#endif
+//#ifdef JAVA_CODE
+//        ILogger.instance().logInfo("Downloaded content for \"%s\" node \"%s\" (bytes=%d)",
+//                                   _pointCloud.getCloudName(),
+//                                   _node.getID(),
+//                                   buffer.size());
+//#endif
+//      }
 
       _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud,
                                                                       _node,
