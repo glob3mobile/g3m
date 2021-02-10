@@ -73,9 +73,10 @@ public class XPCHeightPointColorizer extends XPCPointColorizer
   
     final double height = heights[i];
   
-    final double alpha = (height - _minHeight) / _deltaHeight;
+    final double a = (height - _minHeight) / _deltaHeight;
   
-    _ramp.getColor((float) alpha, color);
+    _ramp.getColor((float) a, color);
+    color._alpha = _alpha;
   }
 
 }
