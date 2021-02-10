@@ -18,11 +18,10 @@ package org.glob3.mobile.generated;
 //class RampColorizer;
 
 
-public class XPCHeightPointColorizer extends XPCPointColorizer
+public class XPCHeightPointColorizer extends XPCFixedAlphaPointColorizer
 {
   private final RampColorizer _ramp;
   private final boolean _deleteRamp;
-  private final float _alpha;
 
   private double _minHeight;
   private double _maxHeight;
@@ -31,9 +30,9 @@ public class XPCHeightPointColorizer extends XPCPointColorizer
 
   public XPCHeightPointColorizer(RampColorizer ramp, boolean deleteRamp, float alpha)
   {
+     super(alpha);
      _ramp = ramp;
      _deleteRamp = deleteRamp;
-     _alpha = alpha;
      _minHeight = Double.NaN;
      _maxHeight = Double.NaN;
      _deltaHeight = Double.NaN;

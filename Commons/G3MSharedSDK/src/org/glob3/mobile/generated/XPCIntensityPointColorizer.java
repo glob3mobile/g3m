@@ -17,10 +17,9 @@ package org.glob3.mobile.generated;
 
 
 
-public class XPCIntensityPointColorizer extends XPCPointColorizer
+public class XPCIntensityPointColorizer extends XPCFixedAlphaPointColorizer
 {
   private final String _intensityDimensionName;
-  private final float _alpha;
 
   private int _intensityDimensionIndex;
 
@@ -29,8 +28,8 @@ public class XPCIntensityPointColorizer extends XPCPointColorizer
 
   public XPCIntensityPointColorizer(float alpha)
   {
+     super(alpha);
      _intensityDimensionName = "Intensity";
-     _alpha = alpha;
      _intensityDimensionIndex = -1;
      _ok = false;
   
@@ -38,8 +37,8 @@ public class XPCIntensityPointColorizer extends XPCPointColorizer
 
   public XPCIntensityPointColorizer(String intensityDimensionName, float alpha)
   {
+     super(alpha);
      _intensityDimensionName = intensityDimensionName;
-     _alpha = alpha;
      _intensityDimensionIndex = -1;
      _ok = false;
   

@@ -17,12 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-public class XPCRGBPointColorizer extends XPCPointColorizer
+public class XPCRGBPointColorizer extends XPCFixedAlphaPointColorizer
 {
   private final String _redDimensionName;
   private final String _greenDimensionName;
   private final String _blueDimensionName;
-  private final float _alpha;
 
   private int _redDimensionIndex;
   private int _greenDimensionIndex;
@@ -32,10 +31,10 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
 
   public XPCRGBPointColorizer(float alpha)
   {
+     super(alpha);
      _redDimensionName = "Red";
      _greenDimensionName = "Green";
      _blueDimensionName = "Blue";
-     _alpha = alpha;
      _redDimensionIndex = -1;
      _greenDimensionIndex = -1;
      _blueDimensionIndex = -1;
@@ -45,10 +44,10 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
 
   public XPCRGBPointColorizer(String redDimensionName, String greenDimensionName, String blueDimensionName, float alpha)
   {
+     super(alpha);
      _redDimensionName = redDimensionName;
      _greenDimensionName = greenDimensionName;
      _blueDimensionName = blueDimensionName;
-     _alpha = alpha;
      _redDimensionIndex = -1;
      _greenDimensionIndex = -1;
      _blueDimensionIndex = -1;

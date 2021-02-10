@@ -18,11 +18,10 @@ package org.glob3.mobile.generated;
 
 
 
-public class XPCClassificationPointColorizer extends XPCPointColorizer
+public class XPCClassificationPointColorizer extends XPCFixedAlphaPointColorizer
 {
 
   private final String _classificationDimensionName;
-  private final float _alpha;
 
   private int _classificationDimensionIndex;
 
@@ -58,8 +57,8 @@ public class XPCClassificationPointColorizer extends XPCPointColorizer
 
   public XPCClassificationPointColorizer(float alpha)
   {
+     super(alpha);
      _classificationDimensionName = "Classification";
-     _alpha = alpha;
      _classificationDimensionIndex = -1;
      _ok = false;
     initializeColors(_colors, _alpha);
@@ -67,8 +66,8 @@ public class XPCClassificationPointColorizer extends XPCPointColorizer
 
   public XPCClassificationPointColorizer(String classificationDimensionName, float alpha)
   {
+     super(alpha);
      _classificationDimensionName = classificationDimensionName;
-     _alpha = alpha;
      _classificationDimensionIndex = -1;
      _ok = false;
     initializeColors(_colors, _alpha);
