@@ -195,6 +195,17 @@ void XPCPointCloud::errorParsingMetadata() {
   _errorParsingMetadata = true;
 }
 
+void XPCPointCloud::initializePointColorizer() {
+  IIntBuffer* requiredDimensionIndices = NULL;
+  if (_pointColorizer != NULL) {
+    requiredDimensionIndices = _pointColorizer->initialize(_metadata);
+  }
+  if (_requiredDimensionIndices != requiredDimensionIndices) {
+    delete _requiredDimensionIndices;
+    _requiredDimensionIndices = requiredDimensionIndices;
+  }
+}
+
 void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
   _lastRenderedCount   = 0;
   _downloadingMetadata = false;
@@ -210,16 +221,8 @@ void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
     delete _metadata;
   }
   _metadata = metadata;
-  
-  
-  IIntBuffer* requiredDimensionIndices = NULL;
-  if (_pointColorizer != NULL) {
-    requiredDimensionIndices = _pointColorizer->initialize(_metadata);
-  }
-  if (_requiredDimensionIndices != requiredDimensionIndices) {
-    delete _requiredDimensionIndices;
-    _requiredDimensionIndices = requiredDimensionIndices;
-  }
+
+  initializePointColorizer();
   
   if (_metadataListener != NULL) {
     _metadataListener->onMetadata(_metadata);
@@ -389,9 +392,7 @@ void XPCPointCloud::setPointColorizer(XPCPointColorizer* pointColorizer,
     _deletePointColorizer = deletePointColorizer;
 
     if (_metadata != NULL) {
-      if (_pointColorizer != NULL) {
-        _pointColorizer->initialize(_metadata);
-      }
+      initializePointColorizer();
       _metadata->reloadNodes();
     }
   }

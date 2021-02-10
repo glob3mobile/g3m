@@ -70,6 +70,7 @@ private:
   XPCMetadata* _metadata;
   long long _lastRenderedCount;
 
+  void initializePointColorizer();
 
 protected:
   virtual ~XPCPointCloud();
