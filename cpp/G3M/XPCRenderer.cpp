@@ -173,8 +173,6 @@ void XPCRenderer::render(const G3MRenderContext* rc,
 
 bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
                                const TouchEvent* touchEvent) {
-  _renderDebug = false;
-
   if (_cloudsSize > 0) {
     if (_lastCamera != NULL) {
       if (touchEvent->getType() == LongPress) {
@@ -182,8 +180,6 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
         const Vector3D rayDirection = _lastCamera->pixel2Ray(touchedPixel);
 
         if (!rayDirection.isNan()) {
-          // _renderDebug = true;
-
           const Vector3D rayOrigin = _lastCamera->getCartesianPosition();
 
           XPCSelectionResult* selectionResult = new XPCSelectionResult(new Ray(rayOrigin, rayDirection));
@@ -214,11 +210,6 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
     delete _selectionResult;
     _selectionResult = NULL;
   }
-
-//  if (!_renderDebug) {
-//    delete _ray;
-//    _ray = NULL;
-//  }
 
   return false;
 }

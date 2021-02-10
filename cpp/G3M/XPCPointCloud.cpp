@@ -388,12 +388,24 @@ void XPCPointCloud::setPointColorizer(XPCPointColorizer* pointColorizer,
       delete _pointColorizer;
     }
 
-    _pointColorizer       = pointColorizer;
-    _deletePointColorizer = deletePointColorizer;
+    _pointColorizer = pointColorizer;
 
     if (_metadata != NULL) {
       initializePointColorizer();
       _metadata->reloadNodes();
     }
   }
+  _deletePointColorizer = deletePointColorizer;
+}
+
+void XPCPointCloud::setPointSelectionListener(XPCPointSelectionListener* pointSelectionListener,
+                                              bool deletePointSelectionListener) {
+  if (_pointSelectionListener != pointSelectionListener) {
+    if (_deletePointSelectionListener) {
+      delete _pointSelectionListener;
+    }
+
+    _pointSelectionListener = pointSelectionListener;
+  }
+  _deletePointSelectionListener = deletePointSelectionListener;
 }

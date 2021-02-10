@@ -55,7 +55,7 @@ private:
   const bool                 _deleteMetadataListener;
 
   XPCPointSelectionListener* _pointSelectionListener;
-  const bool                 _deletePointSelectionListener;
+  bool                       _deletePointSelectionListener;
 
   const bool                 _verbose;
 
@@ -105,6 +105,9 @@ public:
 
   void setPointColorizer(XPCPointColorizer* pointColorizer,
                          bool deletePointColorizer);
+
+  void setPointSelectionListener(XPCPointSelectionListener* pointSelectionListener,
+                                 bool deletePointSelectionListener);
 
   const bool isDynamicPointSize() const {
     return _dynamicPointSize;
