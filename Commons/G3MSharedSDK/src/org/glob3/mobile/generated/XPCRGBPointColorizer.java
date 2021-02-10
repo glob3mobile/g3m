@@ -16,6 +16,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class XPCRGBPointColorizer extends XPCPointColorizer
 {
   private final String _redDimensionName;
@@ -98,18 +99,19 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
     return requiredDimensionIndices;
   }
 
-  public final Color colorize(XPCMetadata metadata, java.util.ArrayList<IByteBuffer> dimensionsValues, int i)
+  public final void colorize(XPCMetadata metadata, double[] heights, java.util.ArrayList<IByteBuffer> dimensionsValues, int i, MutableColor color)
   {
     if (!_ok)
     {
-      return Color.RED;
+      color.set(1, 0, 0, 1);
+      return;
     }
   
     final float red = metadata.getDimension(_redDimensionIndex).getNormalizedValue(dimensionsValues.get(0), i);
     final float green = metadata.getDimension(_greenDimensionIndex).getNormalizedValue(dimensionsValues.get(1), i);
     final float blue = metadata.getDimension(_blueDimensionIndex).getNormalizedValue(dimensionsValues.get(2), i);
   
-    return Color.fromRGBA(red, green, blue, _alpha);
+    color.set(red, green, blue, _alpha);
   }
 
 }

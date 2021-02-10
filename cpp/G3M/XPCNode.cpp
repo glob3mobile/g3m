@@ -21,9 +21,9 @@
 #include "Color.hpp"
 #include "IDownloader.hpp"
 #include "IIntBuffer.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
 #include "IFactory.hpp"
 #include "ITimer.hpp"
+#include "MutableColor.hpp"
 
 #include "XPCPointCloud.hpp"
 #include "XPCMetadata.hpp"
@@ -109,6 +109,8 @@ public:
 
     IFloatBuffer* cartesianVertices = IFactory::instance()->createFloatBuffer( pointsCount * 3 /* X, Y, Z */ );
 
+    double* heights = new double[pointsCount];
+
     const float deltaHeight            = _pointCloud->getDeltaHeight();
     const float verticalExaggeration   = _pointCloud->getVerticalExaggeration();
 
@@ -121,14 +123,20 @@ public:
                                                           ((double) centerHeight + deltaHeight) * verticalExaggeration);
     {
       MutableVector3D bufferCartesian;
+
       for (int i = 0; i < pointsCount; i++) {
         const double latitudeDegrees  = (double) it.nextFloat() + centerLatitudeDegrees;
         const double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
-        const double height           = (((double) it.nextFloat() + centerHeight) + deltaHeight) * verticalExaggeration;
+
+        const double rawHeight    = (double) it.nextFloat() + centerHeight;
+
+        heights[i] = rawHeight;
+
+        const double scaledHeight = (rawHeight + deltaHeight) * verticalExaggeration;
 
         _planet->toCartesianFromDegrees(latitudeDegrees,
                                         longitudeDegrees,
-                                        height,
+                                        scaledHeight,
                                         bufferCartesian);
 
         cartesianVertices->rawPut((i * 3) + 0, (float) (bufferCartesian._x - cartesianCenter._x) );
@@ -146,7 +154,6 @@ public:
       dimensionsValues = NULL;
     }
     else {
-
       const size_t dimensionsCount = dimensionIndices->size();
       dimensionsValues = new std::vector<const IByteBuffer*>();
       for (size_t j = 0; j < dimensionsCount; j++) {
@@ -164,22 +171,32 @@ public:
       THROW_EXCEPTION("Logic error");
     }
 
-    XPCPointColorizer* pointsColorizer = _pointCloud->getPointsColorizer();
+    IFloatBuffer* colors = IFactory::instance()->createFloatBuffer( pointsCount * 4 /* R, G, B, A */ );
+    MutableColor  bufferColor;
 
-    FloatBufferBuilderFromColor colors;
+    XPCPointColorizer* pointsColorizer = _pointCloud->getPointsColorizer();
 
     for (int i = 0; i < pointsCount; i++) {
       if (pointsColorizer == NULL) {
-        colors.add(1, 1, 1, 1);
+        colors->rawPut((i * 4) + 0, 1 /* red   */);
+        colors->rawPut((i * 4) + 1, 1 /* green */);
+        colors->rawPut((i * 4) + 2, 1 /* blue  */);
+        colors->rawPut((i * 4) + 3, 1 /* alpha */);
       }
       else {
-        const Color color = pointsColorizer->colorize(metadata,
-                                                      dimensionsValues,
-                                                      i);
-
-        colors.add(color);
+        pointsColorizer->colorize(metadata,
+                                  heights,
+                                  dimensionsValues,
+                                  i,
+                                  bufferColor);
+        colors->rawPut((i * 4) + 0, bufferColor._red);
+        colors->rawPut((i * 4) + 1, bufferColor._green);
+        colors->rawPut((i * 4) + 2, bufferColor._blue);
+        colors->rawPut((i * 4) + 3, bufferColor._alpha);
       }
     }
+
+    delete [] heights;
 
     if (dimensionsValues != NULL) {
       for (size_t i = 0; i < dimensionsValues->size(); i++) {
@@ -198,9 +215,8 @@ public:
                            1,
                            _pointCloud->getDevicePointSize(),
                            NULL,                    // flatColor
-                           colors.create(),         // const IFloatBuffer* colors
-                           _pointCloud->depthTest() // depthTest
-                           );
+                           colors,
+                           _pointCloud->depthTest());
   }
 
   void onPostExecute(const G3MContext* context) {

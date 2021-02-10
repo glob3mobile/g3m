@@ -10,6 +10,8 @@
 
 #include "XPCPointColorizer.hpp"
 
+#include <string>
+
 
 class XPCIntensityPointColorizer : public XPCPointColorizer {
 private:
@@ -31,9 +33,11 @@ public:
 
   IIntBuffer* initialize(const XPCMetadata* metadata);
 
-  Color colorize(const XPCMetadata* metadata,
-                 const std::vector<const IByteBuffer*>* dimensionsValues,
-                 const size_t i);
+  void colorize(const XPCMetadata* metadata,
+                const double heights[],
+                const std::vector<const IByteBuffer*>* dimensionsValues,
+                const size_t i,
+                MutableColor& color);
 
 };
 

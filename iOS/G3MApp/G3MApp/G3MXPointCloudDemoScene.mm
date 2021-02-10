@@ -24,6 +24,7 @@
 #include <G3M/XPCRGBPointColorizer.hpp>
 #include <G3M/XPCIntensityPointColorizer.hpp>
 #include <G3M/XPCClassificationPointColorizer.hpp>
+#include <G3M/XPCHeightPointColorizer.hpp>
 #include <G3M/XPCPointSelectionListener.hpp>
 #include <G3M/G3MContext.hpp>
 #include <G3M/Measure.hpp>
@@ -317,6 +318,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                 DownloadPriority::LOWER,
                                                 TimeInterval::zero(),
                                                 false,
+                                                // new XPCHeightPointColorizer(0.5f),
                                                 new XPCRGBPointColorizer(0.5f),
                                                 // new XPCIntensityPointColorizer(0.5f),
                                                 // new XPCClassificationPointColorizer(0.5f),

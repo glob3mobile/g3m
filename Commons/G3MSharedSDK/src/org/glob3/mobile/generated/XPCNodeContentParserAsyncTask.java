@@ -81,6 +81,8 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 
     IFloatBuffer cartesianVertices = IFactory.instance().createFloatBuffer(pointsCount * 3); // X, Y, Z
 
+    double[] heights = new double[pointsCount];
+
     final float deltaHeight = _pointCloud.getDeltaHeight();
     final float verticalExaggeration = _pointCloud.getVerticalExaggeration();
 
@@ -91,13 +93,19 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     final Vector3D cartesianCenter = _planet.toCartesian(Angle.fromDegrees(centerLatitudeDegrees), Angle.fromDegrees(centerLongitudeDegrees), ((double) centerHeight + deltaHeight) * verticalExaggeration);
     {
       MutableVector3D bufferCartesian = new MutableVector3D();
+
       for (int i = 0; i < pointsCount; i++)
       {
         final double latitudeDegrees = (double) it.nextFloat() + centerLatitudeDegrees;
         final double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
-        final double height = (((double) it.nextFloat() + centerHeight) + deltaHeight) * verticalExaggeration;
 
-        _planet.toCartesianFromDegrees(latitudeDegrees, longitudeDegrees, height, bufferCartesian);
+        final double rawHeight = (double) it.nextFloat() + centerHeight;
+
+        heights[i] = rawHeight;
+
+        final double scaledHeight = (rawHeight + deltaHeight) * verticalExaggeration;
+
+        _planet.toCartesianFromDegrees(latitudeDegrees, longitudeDegrees, scaledHeight, bufferCartesian);
 
         cartesianVertices.rawPut((i * 3) + 0, (float)(bufferCartesian._x - cartesianCenter._x));
         cartesianVertices.rawPut((i * 3) + 1, (float)(bufferCartesian._y - cartesianCenter._y));
@@ -116,7 +124,6 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     }
     else
     {
-
       final int dimensionsCount = dimensionIndices.size();
       dimensionsValues = new java.util.ArrayList<IByteBuffer>();
       for (int j = 0; j < dimensionsCount; j++)
@@ -136,23 +143,31 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       throw new RuntimeException("Logic error");
     }
 
-    XPCPointColorizer pointsColorizer = _pointCloud.getPointsColorizer();
+    IFloatBuffer colors = IFactory.instance().createFloatBuffer(pointsCount * 4); // R, G, B, A
+    MutableColor bufferColor = new MutableColor();
 
-    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+    XPCPointColorizer pointsColorizer = _pointCloud.getPointsColorizer();
 
     for (int i = 0; i < pointsCount; i++)
     {
       if (pointsColorizer == null)
       {
-        colors.add(1, 1, 1, 1);
+        colors.rawPut((i * 4) + 0, 1); // red
+        colors.rawPut((i * 4) + 1, 1); // green
+        colors.rawPut((i * 4) + 2, 1); // blue
+        colors.rawPut((i * 4) + 3, 1); // alpha
       }
       else
       {
-        final Color color = pointsColorizer.colorize(metadata, dimensionsValues, i);
-
-        colors.add(color);
+        pointsColorizer.colorize(metadata, heights, dimensionsValues, i, bufferColor);
+        colors.rawPut((i * 4) + 0, bufferColor._red);
+        colors.rawPut((i * 4) + 1, bufferColor._green);
+        colors.rawPut((i * 4) + 2, bufferColor._blue);
+        colors.rawPut((i * 4) + 3, bufferColor._alpha);
       }
     }
+
+    heights = null;
 
     if (dimensionsValues != null)
     {
@@ -163,7 +178,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       }
     }
 
-    _mesh = new DirectMesh(GLPrimitive.points(), true, cartesianCenter, cartesianVertices, 1, _pointCloud.getDevicePointSize(), null, colors.create(), _pointCloud.depthTest()); // depthTest -  const IFloatBuffer* colors -  flatColor
+    _mesh = new DirectMesh(GLPrimitive.points(), true, cartesianCenter, cartesianVertices, 1, _pointCloud.getDevicePointSize(), null, colors, _pointCloud.depthTest()); // flatColor
   }
 
   public final void onPostExecute(G3MContext context)

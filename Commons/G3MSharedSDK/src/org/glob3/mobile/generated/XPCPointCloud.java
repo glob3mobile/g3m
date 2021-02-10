@@ -331,9 +331,8 @@ public class XPCPointCloud extends RCObject
     {
       if (_requiredDimensionIndices != null)
          _requiredDimensionIndices.dispose();
+      _requiredDimensionIndices = requiredDimensionIndices;
     }
-    _requiredDimensionIndices = requiredDimensionIndices;
-  
   
     if (_metadataListener != null)
     {

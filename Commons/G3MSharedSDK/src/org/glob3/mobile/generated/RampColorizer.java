@@ -6,6 +6,8 @@ package org.glob3.mobile.generated;
 //  Created by Nico on 21/02/2019.
 //
 
+
+
 //
 //  RampColorizer.hpp
 //  G3M
@@ -14,6 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
+
+
+//class MutableColor;
 
 
 public class RampColorizer
@@ -102,6 +107,11 @@ public class RampColorizer
     final float localAlpha = 1 - (deltaStep * (_colorsLength - 1));
   
     return _colors.get(baseColorIndex - 1).mixedWith((_colors.get(baseColorIndex)), localAlpha);
+  }
+
+  public final void getColor(float alpha, MutableColor color)
+  {
+    color.set(getColor(alpha));
   }
 
 }

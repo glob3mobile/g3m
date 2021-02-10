@@ -9,7 +9,10 @@
 #define RampColorizer_hpp
 
 #include <vector>
+
 #include "Color.hpp"
+
+class MutableColor;
 
 
 class RampColorizer {
@@ -41,6 +44,9 @@ public:
   ~RampColorizer();
 
   const Color getColor(const float alpha) const;
+
+  const void getColor(const float alpha,
+                      MutableColor& color) const;
 
 };
 

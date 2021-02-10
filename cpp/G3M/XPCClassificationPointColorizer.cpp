@@ -15,6 +15,7 @@
 #include "IIntBuffer.hpp"
 #include "IByteBuffer.hpp"
 #include "IMathUtils.hpp"
+#include "MutableColor.hpp"
 
 
 void XPCClassificationPointColorizer::initializeColors(std::vector<const Color>& colors,
@@ -88,16 +89,22 @@ IIntBuffer* XPCClassificationPointColorizer::initialize(const XPCMetadata* metad
   return requiredDimensionIndices;
 }
 
-Color XPCClassificationPointColorizer::colorize(const XPCMetadata* metadata,
-                                                const std::vector<const IByteBuffer*>* dimensionsValues,
-                                                const size_t i) {
+void XPCClassificationPointColorizer::colorize(const XPCMetadata* metadata,
+                                               const double heights[],
+                                               const std::vector<const IByteBuffer*>* dimensionsValues,
+                                               const size_t i,
+                                               MutableColor& color) {
   if (!_ok) {
-    return Color::RED;
+    color.set(1, 0, 0, 1);
+    return;
   }
 
-  unsigned char classification = dimensionsValues->at(0)->get(i);
+  const unsigned char classification = dimensionsValues->at(0)->get(i);
 
-  return ((classification >= _colors.size())
-          ? Color::RED
-          : _colors[classification]);
+  if (classification >= _colors.size()) {
+    color.set(1, 0, 0, 1);
+    return;
+  }
+
+  color.set( _colors[classification] );
 }

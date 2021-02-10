@@ -6,9 +6,12 @@
 //
 
 #include "ErrorHandling.hpp"
+
 #include <vector>
+
 #include "RampColorizer.hpp"
 #include "Color.hpp"
+#include "MutableColor.hpp"
 
 
 const RampColorizer* RampColorizer::createRampColorizer(const std::vector<Color>& colors,
@@ -80,3 +83,7 @@ const Color RampColorizer::getColor(const float alpha) const {
   return _colors[baseColorIndex - 1].mixedWith((_colors[baseColorIndex]), localAlpha);
 }
 
+const void RampColorizer::getColor(const float alpha,
+                                   MutableColor& color) const {
+  color.set( getColor(alpha) );
+}

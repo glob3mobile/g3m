@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class XPCClassificationPointColorizer extends XPCPointColorizer
 {
 
@@ -105,16 +106,23 @@ public class XPCClassificationPointColorizer extends XPCPointColorizer
     return requiredDimensionIndices;
   }
 
-  public final Color colorize(XPCMetadata metadata, java.util.ArrayList<IByteBuffer> dimensionsValues, int i)
+  public final void colorize(XPCMetadata metadata, double[] heights, java.util.ArrayList<IByteBuffer> dimensionsValues, int i, MutableColor color)
   {
     if (!_ok)
     {
-      return Color.RED;
+      color.set(1, 0, 0, 1);
+      return;
     }
   
-    byte classification = dimensionsValues.get(0).get(i);
+    final byte classification = dimensionsValues.get(0).get(i);
   
-    return ((classification >= _colors.size()) ? Color.RED : _colors.get(classification));
+    if (classification >= _colors.size())
+    {
+      color.set(1, 0, 0, 1);
+      return;
+    }
+  
+    color.set(_colors.get(classification));
   }
 
 }

@@ -218,9 +218,8 @@ void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
   }
   if (_requiredDimensionIndices != requiredDimensionIndices) {
     delete _requiredDimensionIndices;
+    _requiredDimensionIndices = requiredDimensionIndices;
   }
-  _requiredDimensionIndices = requiredDimensionIndices;
-  
   
   if (_metadataListener != NULL) {
     _metadataListener->onMetadata(_metadata);
