@@ -14,6 +14,7 @@
 class XPCIntensityPointColorizer : public XPCPointColorizer {
 private:
   const std::string _intensityDimensionName;
+  const float       _alpha;
 
   int _intensityDimensionIndex;
 
@@ -21,9 +22,10 @@ private:
 
 public:
 
-  XPCIntensityPointColorizer();
+  XPCIntensityPointColorizer(const float alpha);
 
-  XPCIntensityPointColorizer(const std::string& intensityDimensionName);
+  XPCIntensityPointColorizer(const std::string& intensityDimensionName,
+                             const float alpha);
 
   ~XPCIntensityPointColorizer();
 

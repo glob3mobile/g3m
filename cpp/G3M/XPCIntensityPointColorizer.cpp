@@ -15,16 +15,19 @@
 #include "IIntBuffer.hpp"
 
 
-XPCIntensityPointColorizer::XPCIntensityPointColorizer() :
+XPCIntensityPointColorizer::XPCIntensityPointColorizer(const float alpha) :
 _intensityDimensionName("Intensity"),
+_alpha(alpha),
 _intensityDimensionIndex(-1),
 _ok(false)
 {
 
 }
 
-XPCIntensityPointColorizer::XPCIntensityPointColorizer(const std::string& intensityDimensionName) :
+XPCIntensityPointColorizer::XPCIntensityPointColorizer(const std::string& intensityDimensionName,
+                                                       const float alpha) :
 _intensityDimensionName(intensityDimensionName),
+_alpha(alpha),
 _intensityDimensionIndex(-1),
 _ok(false)
 {
@@ -67,5 +70,5 @@ Color XPCIntensityPointColorizer::colorize(const XPCMetadata* metadata,
 
   const float intensity = metadata->getDimension(_intensityDimensionIndex  )->getNormalizedValue( dimensionsValues->at(0), i );
 
-  return Color::fromRGBA(intensity, intensity, intensity, 1);
+  return Color::fromRGBA(intensity, intensity, intensity, _alpha);
 }

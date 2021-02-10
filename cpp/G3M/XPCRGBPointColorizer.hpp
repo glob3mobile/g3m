@@ -16,6 +16,7 @@ private:
   const std::string _redDimensionName;
   const std::string _greenDimensionName;
   const std::string _blueDimensionName;
+  const float       _alpha;
 
   int _redDimensionIndex;
   int _greenDimensionIndex;
@@ -24,11 +25,12 @@ private:
 
 public:
 
-  XPCRGBPointColorizer();
+  XPCRGBPointColorizer(const float alpha);
 
   XPCRGBPointColorizer(const std::string& redDimensionName,
                        const std::string& greenDimensionName,
-                       const std::string& blueDimensionName);
+                       const std::string& blueDimensionName,
+                       const float alpha);
 
   ~XPCRGBPointColorizer();
 

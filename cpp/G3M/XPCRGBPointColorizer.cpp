@@ -15,10 +15,11 @@
 #include "IIntBuffer.hpp"
 
 
-XPCRGBPointColorizer::XPCRGBPointColorizer() :
+XPCRGBPointColorizer::XPCRGBPointColorizer(const float alpha) :
 _redDimensionName("Red"),
 _greenDimensionName("Green"),
 _blueDimensionName("Blue"),
+_alpha(alpha),
 _redDimensionIndex(-1),
 _greenDimensionIndex(-1),
 _blueDimensionIndex(-1),
@@ -29,10 +30,12 @@ _ok(false)
 
 XPCRGBPointColorizer::XPCRGBPointColorizer(const std::string& redDimensionName,
                                            const std::string& greenDimensionName,
-                                           const std::string& blueDimensionName) :
+                                           const std::string& blueDimensionName,
+                                           const float alpha) :
 _redDimensionName(redDimensionName),
 _greenDimensionName(greenDimensionName),
 _blueDimensionName(blueDimensionName),
+_alpha(alpha),
 _redDimensionIndex(-1),
 _greenDimensionIndex(-1),
 _blueDimensionIndex(-1),
@@ -88,5 +91,5 @@ Color XPCRGBPointColorizer::colorize(const XPCMetadata* metadata,
   const float green = metadata->getDimension(_greenDimensionIndex)->getNormalizedValue( dimensionsValues->at(1), i );
   const float blue  = metadata->getDimension(_blueDimensionIndex )->getNormalizedValue( dimensionsValues->at(2), i );
 
-  return Color::fromRGBA(red, green, blue, 1);
+  return Color::fromRGBA(red, green, blue, _alpha);
 }

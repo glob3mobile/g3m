@@ -19,23 +19,26 @@ package org.glob3.mobile.generated;
 public class XPCIntensityPointColorizer extends XPCPointColorizer
 {
   private final String _intensityDimensionName;
+  private final float _alpha;
 
   private int _intensityDimensionIndex;
 
   private boolean _ok;
 
 
-  public XPCIntensityPointColorizer()
+  public XPCIntensityPointColorizer(float alpha)
   {
      _intensityDimensionName = "Intensity";
+     _alpha = alpha;
      _intensityDimensionIndex = -1;
      _ok = false;
   
   }
 
-  public XPCIntensityPointColorizer(String intensityDimensionName)
+  public XPCIntensityPointColorizer(String intensityDimensionName, float alpha)
   {
      _intensityDimensionName = intensityDimensionName;
+     _alpha = alpha;
      _intensityDimensionIndex = -1;
      _ok = false;
   
@@ -82,7 +85,7 @@ public class XPCIntensityPointColorizer extends XPCPointColorizer
   
     final float intensity = metadata.getDimension(_intensityDimensionIndex).getNormalizedValue(dimensionsValues.get(0), i);
   
-    return Color.fromRGBA(intensity, intensity, intensity, 1);
+    return Color.fromRGBA(intensity, intensity, intensity, _alpha);
   }
 
 }

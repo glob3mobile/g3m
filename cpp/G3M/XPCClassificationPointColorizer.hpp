@@ -10,24 +10,30 @@
 
 #include "XPCPointColorizer.hpp"
 
+#include <vector>
+
 
 class XPCClassificationPointColorizer : public XPCPointColorizer {
 private:
 
-  const static Color COLORS[];
-
-
   const std::string _classificationDimensionName;
-  
+  const float       _alpha;
+
   int _classificationDimensionIndex;
   
   bool _ok;
-  
+
+  std::vector<const Color> _colors;
+
+  static void initializeColors(std::vector<const Color>& colors,
+                               const float alpha);
+
 public:
   
-  XPCClassificationPointColorizer();
+  XPCClassificationPointColorizer(const float alpha);
   
-  XPCClassificationPointColorizer(const std::string& classificationDimensionName);
+  XPCClassificationPointColorizer(const std::string& classificationDimensionName,
+                                  const float alpha);
   
   ~XPCClassificationPointColorizer();
   

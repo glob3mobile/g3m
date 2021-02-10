@@ -21,6 +21,7 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
   private final String _redDimensionName;
   private final String _greenDimensionName;
   private final String _blueDimensionName;
+  private final float _alpha;
 
   private int _redDimensionIndex;
   private int _greenDimensionIndex;
@@ -28,11 +29,12 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
   private boolean _ok;
 
 
-  public XPCRGBPointColorizer()
+  public XPCRGBPointColorizer(float alpha)
   {
      _redDimensionName = "Red";
      _greenDimensionName = "Green";
      _blueDimensionName = "Blue";
+     _alpha = alpha;
      _redDimensionIndex = -1;
      _greenDimensionIndex = -1;
      _blueDimensionIndex = -1;
@@ -40,11 +42,12 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
   
   }
 
-  public XPCRGBPointColorizer(String redDimensionName, String greenDimensionName, String blueDimensionName)
+  public XPCRGBPointColorizer(String redDimensionName, String greenDimensionName, String blueDimensionName, float alpha)
   {
      _redDimensionName = redDimensionName;
      _greenDimensionName = greenDimensionName;
      _blueDimensionName = blueDimensionName;
+     _alpha = alpha;
      _redDimensionIndex = -1;
      _greenDimensionIndex = -1;
      _blueDimensionIndex = -1;
@@ -106,7 +109,7 @@ public class XPCRGBPointColorizer extends XPCPointColorizer
     final float green = metadata.getDimension(_greenDimensionIndex).getNormalizedValue(dimensionsValues.get(1), i);
     final float blue = metadata.getDimension(_blueDimensionIndex).getNormalizedValue(dimensionsValues.get(2), i);
   
-    return Color.fromRGBA(red, green, blue, 1);
+    return Color.fromRGBA(red, green, blue, _alpha);
   }
 
 }

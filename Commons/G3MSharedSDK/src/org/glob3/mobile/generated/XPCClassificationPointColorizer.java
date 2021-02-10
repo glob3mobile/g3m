@@ -16,33 +16,61 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class XPCClassificationPointColorizer extends XPCPointColorizer
 {
 
-  private static final Color[] COLORS = { Color.fromRGBA255(215, 30, 30), Color.fromRGBA255(219, 61, 61), Color.fromRGBA255(255, 0, 255), Color.fromRGBA255(0, 143, 0), Color.fromRGBA255(0, 191, 0), Color.fromRGBA255(0, 255, 0), Color.fromRGBA255(255, 0, 0), Color.fromRGBA255(207, 44, 44), Color.fromRGBA255(255, 255, 0), Color.fromRGBA255(0, 0, 255), Color.fromRGBA255(0, 224, 224), Color.fromRGBA255(224, 0, 224), Color.fromRGBA255(66, 249, 63), Color.fromRGBA255(189, 158, 3), Color.fromRGBA255(89, 214, 125), Color.fromRGBA255(147, 163, 120), Color.fromRGBA255(123, 50, 42), Color.fromRGBA255(36, 120, 60), Color.fromRGBA255(87, 38, 65) };
-
-
   private final String _classificationDimensionName;
+  private final float _alpha;
 
   private int _classificationDimensionIndex;
 
   private boolean _ok;
 
+  private final java.util.ArrayList<Color> _colors = new java.util.ArrayList<Color>();
 
-  public XPCClassificationPointColorizer()
+  private static void initializeColors(java.util.ArrayList<Color> colors, float alpha)
   {
-     _classificationDimensionName = "Classification";
-     _classificationDimensionIndex = -1;
-     _ok = false;
+    final int alpha255 = IMathUtils.instance().round(alpha * 255.0f);
   
+    colors.add(Color.fromRGBA255(215, 30, 30, alpha255)); // 0 - Never Classified
+    colors.add(Color.fromRGBA255(219, 61, 61, alpha255)); // 1 - Unclassified
+    colors.add(Color.fromRGBA255(255, 0, 255, alpha255)); // 2 - Ground
+    colors.add(Color.fromRGBA255(0, 143, 0, alpha255)); // 3 - Low Vegetation
+    colors.add(Color.fromRGBA255(0, 191, 0, alpha255)); // 4 - Medium Vegetation
+    colors.add(Color.fromRGBA255(0, 255, 0, alpha255)); // 5 - High Vegetation
+    colors.add(Color.fromRGBA255(255, 0, 0, alpha255)); // 6 - Building
+    colors.add(Color.fromRGBA255(207, 44, 44, alpha255)); // 7 - Low Point / Noise
+    colors.add(Color.fromRGBA255(255, 255, 0, alpha255)); // 8 - Key Point / Reserved
+    colors.add(Color.fromRGBA255(0, 0, 255, alpha255)); // 9 - Water
+    colors.add(Color.fromRGBA255(0, 224, 224, alpha255)); // 10 - Rail
+    colors.add(Color.fromRGBA255(224, 0, 224, alpha255)); // 11 - Road Surface
+    colors.add(Color.fromRGBA255(66, 249, 63, alpha255)); // 12 - Reserved
+    colors.add(Color.fromRGBA255(189, 158, 3, alpha255)); // 13 - Wire Guard / Shield
+    colors.add(Color.fromRGBA255(89, 214, 125, alpha255)); // 14 - Wire Conductor / Phase
+    colors.add(Color.fromRGBA255(147, 163, 120, alpha255)); // 15 - Transmission Tower
+    colors.add(Color.fromRGBA255(123, 50, 42, alpha255)); // 16 - Wire Structure Connection
+    colors.add(Color.fromRGBA255(36, 120, 60, alpha255)); // 17 - Bridge Deck
+    colors.add(Color.fromRGBA255(87, 38, 65, alpha255)); // 18 - High Noise
   }
 
-  public XPCClassificationPointColorizer(String classificationDimensionName)
+
+  public XPCClassificationPointColorizer(float alpha)
   {
-     _classificationDimensionName = classificationDimensionName;
+     _classificationDimensionName = "Classification";
+     _alpha = alpha;
      _classificationDimensionIndex = -1;
      _ok = false;
-  
+    initializeColors(_colors, _alpha);
+  }
+
+  public XPCClassificationPointColorizer(String classificationDimensionName, float alpha)
+  {
+     _classificationDimensionName = classificationDimensionName;
+     _alpha = alpha;
+     _classificationDimensionIndex = -1;
+     _ok = false;
+    initializeColors(_colors, _alpha);
   }
 
   public void dispose()
@@ -85,7 +113,8 @@ public class XPCClassificationPointColorizer extends XPCPointColorizer
     }
   
     byte classification = dimensionsValues.get(0).get(i);
-    return (classification > 18) ? Color.RED : COLORS[classification];
+  
+    return ((classification >= _colors.size()) ? Color.RED : _colors.get(classification));
   }
 
 }
