@@ -30,7 +30,7 @@ public:
 
   Touch(const Vector2F& pos,
         const Vector2F& prev,
-        const unsigned char tapCount=(unsigned char)0):
+        const unsigned char tapCount=(unsigned char)1):
   _pos(pos),
   _prevPos(prev),
   _tapCount(tapCount)

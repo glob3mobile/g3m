@@ -33,7 +33,7 @@ public class Touch
 
   public Touch(Vector2F pos, Vector2F prev)
   {
-     this(pos, prev, (byte)0);
+     this(pos, prev, (byte)1);
   }
   public Touch(Vector2F pos, Vector2F prev, byte tapCount)
   {

@@ -63,7 +63,8 @@ public:
                          const Geodetic3D& geodetic,
                          const Vector3D& cartesian,
                          int selectedIndex) {
-    measure->removeVertex(selectedIndex);
+//    measure->removeVertex(selectedIndex);
+
   }
 
   std::string getAngleLabel(Measure* measure,
@@ -122,7 +123,7 @@ public:
     G3MDemoModel* model = _scene->getModel();
 
     if (_measure == NULL) {
-      _measure = new Measure(0.1,                             // vertexSphereRadius
+      _measure = new Measure(0.5,                             // vertexSphereRadius
                              Color::fromRGBA(1, 1, 0, 0.6f),  // vertexColor
                              Color::fromRGBA(1, 1, 1, 0.5f),  // vertexSelectedColor
                              5.0f,                            // segmentLineWidth
@@ -281,7 +282,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 //  const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
 //  const float       deltaHeight = -180;
 
-  const std::string cloudName   = "PC_601fa9f0fe459753703dca36_LOD";
+  // const std::string cloudName   = "PC_601fa9f0fe459753703dca36_LOD";
+  const std::string cloudName   = "PC_6024eaa3bb098a3ad6a9176d_LOD";
   const float       deltaHeight = -180;
 
 //  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
