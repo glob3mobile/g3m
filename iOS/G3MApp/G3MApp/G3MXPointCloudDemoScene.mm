@@ -255,7 +255,7 @@ public:
       const XPCTree* tree = metadata->getTree(0);
 
       const Geodetic2D center = tree->getSector()->_center;
-      const double height = tree->getMaxHeight() * 10;
+      const double height = (tree->getMaxHeight() - metadata->_averagePosition._height) * 10;
       
       _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, height) );
     }
@@ -271,7 +271,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const float pointSize            = 2;
   const bool  dynamicPointSize     = true;
   const float verticalExaggeration = 1;
-  const bool  depthTest            = true;
+  const bool  depthTest            = false;
   const bool  verbose              = true;
 
 
@@ -283,8 +283,9 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 //  const float       deltaHeight = -180;
 
   // const std::string cloudName   = "PC_601fa9f0fe459753703dca36_LOD";
+//  const float       deltaHeight = -180;
   const std::string cloudName   = "PC_6024eaa3bb098a3ad6a9176d_LOD";
-  const float       deltaHeight = -180;
+  const float       deltaHeight = -396;
 
 //  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
 //  const float       deltaHeight = -170;
@@ -321,10 +322,10 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                 DownloadPriority::LOWER,
                                                 TimeInterval::zero(),
                                                 false,
-                                                // new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(), true, 0.75f),
-                                                new XPCRGBPointColorizer(0.75f),
-                                                // new XPCIntensityPointColorizer(0.75f),
-                                                // new XPCClassificationPointColorizer(0.75f),
+                                                // new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(), true, 1),
+                                                new XPCRGBPointColorizer(1),
+                                                // new XPCIntensityPointColorizer(1),
+                                                // new XPCClassificationPointColorizer(1),
                                                 true, // deletePointColorizer,
                                                 minProjectedArea,
                                                 pointSize,

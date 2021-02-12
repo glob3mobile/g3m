@@ -286,13 +286,13 @@ public class XPCNode extends RCObject
         {
           renderedInThisFrame = true;
   
-          //        if (selectionRay != NULL) {
-          //          if (touchesRay(selectionRay)) {
-          //            bounds->render(rc, glState, Color::YELLOW);
-          //          }
-          //        }
+          //if (selectionRay != NULL) {
+          //  if (touchesRay(selectionRay)) {
+          //    bounds->render(rc, glState, Color::YELLOW);
+          //  }
+          //}
   
-          //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
+          //ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
   
           if (_children != null)
           {
@@ -301,10 +301,9 @@ public class XPCNode extends RCObject
               XPCNode child = _children.get(i);
               renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult, renderingState);
             }
-            if (_childrenSize == 0)
-            {
-              renderingState._pointSize = pointCloud.getDevicePointSize();
-            }
+            //if (_childrenSize == 0) {
+            //  renderingState._pointSize = pointCloud->getDevicePointSize();
+            //}
           }
   
           if (_children == null)
