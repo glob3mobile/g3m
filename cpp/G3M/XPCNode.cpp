@@ -575,7 +575,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         _projectedAreaTS = nowInMS;
       }
 
-      const bool isBigEnough = (_projectedArea >= pointCloud->getMinProjectedArea());
+      const bool isBigEnough = (_id.length() == 0) || (_projectedArea >= pointCloud->getMinProjectedArea());
       if (isBigEnough) {
         renderedInThisFrame = true;
 

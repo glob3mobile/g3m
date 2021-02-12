@@ -281,7 +281,7 @@ public class XPCNode extends RCObject
           _projectedAreaTS = nowInMS;
         }
   
-        final boolean isBigEnough = (_projectedArea >= pointCloud.getMinProjectedArea());
+        final boolean isBigEnough = (_id.length() == 0) || (_projectedArea >= pointCloud.getMinProjectedArea());
         if (isBigEnough)
         {
           renderedInThisFrame = true;
