@@ -23,13 +23,8 @@ public class Touch
   private final Vector2F _prevPos;
   private final byte _tapCount;
 
-  public Touch(Touch other)
-  {
-     _pos = other._pos;
-     _prevPos = other._prevPos;
-     _tapCount = other._tapCount;
-
-  }
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Touch(Touch other);
 
   public Touch(Vector2F pos, Vector2F prev)
   {
@@ -41,6 +36,11 @@ public class Touch
      _prevPos = prev;
      _tapCount = tapCount;
 
+  }
+
+  public final Touch clone()
+  {
+    return new Touch(_pos, _prevPos, _tapCount);
   }
 
   public final Vector2F getPos()

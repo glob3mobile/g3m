@@ -2,15 +2,13 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.ArrayList;
 
-import org.glob3.mobile.generated.Touch;
-import org.glob3.mobile.generated.TouchEvent;
-import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2F;
+import java.util.*;
 
-import android.view.MotionEvent;
-import android.view.MotionEvent.PointerCoords;
+import org.glob3.mobile.generated.*;
+
+import android.view.*;
+import android.view.MotionEvent.*;
 
 
 public final class MotionEventProcessor {
@@ -28,8 +26,8 @@ public final class MotionEventProcessor {
       protected EventProcessed clone() {
          final EventProcessed e = new EventProcessed();
          e._pointersID = (ArrayList<Integer>) _pointersID.clone();
-         e._touchs = (ArrayList<Touch>) _touchs.clone();
-         e._type = _type;
+         e._touchs     = (ArrayList<Touch>) _touchs.clone();
+         e._type       = _type;
          return e;
       }
 
@@ -40,6 +38,7 @@ public final class MotionEventProcessor {
       }
 
    }
+
 
    private EventProcessed       _prevLastEvent = new EventProcessed();
    private final EventProcessed _lastEvent     = new EventProcessed();
@@ -53,8 +52,8 @@ public final class MotionEventProcessor {
 
       for (int i = 0; i < event.getPointerCount(); i++) {
 
-         final int pointerID = event.getPointerId(i);
-         final PointerCoords pc = new PointerCoords();
+         final int           pointerID = event.getPointerId(i);
+         final PointerCoords pc        = new PointerCoords();
          event.getPointerCoords(i, pc);
          // TOUCH EVENT
          final Vector2F pos = new Vector2F(pc.x, pc.y);
@@ -94,8 +93,8 @@ public final class MotionEventProcessor {
 
          // Log.d("", "TE MOVE");
          double dist = 0;
-         for (int i = 0; i < _lastEvent._touchs.size(); i++) {
-            final double d = _lastEvent._touchs.get(i).getPos().sub(_lastEvent._touchs.get(i).getPrevPos()).squaredLength();
+         for (final Touch element : _lastEvent._touchs) {
+            final double d = element.getPos().sub(element.getPrevPos()).squaredLength();
 
             if ((d == 0) && (auxEvent._type == TouchEventType.Down)) {
                return null;
@@ -114,33 +113,33 @@ public final class MotionEventProcessor {
 
       switch (event.getAction()) {
 
-         case MotionEvent.ACTION_MOVE:
-            _lastEvent._type = TouchEventType.Move;
-            break;
-         /**
-          * MotionEvent.ACTION_POINTER_1_UP and MotionEvent.ACTION_POINTER_2_UP are deprecated. MotionEvent.ACTION_POINTER_UP
-          * added as fallback
-          */
-         //         case MotionEvent.ACTION_POINTER_1_UP:
-         //         case MotionEvent.ACTION_POINTER_2_UP:
-         case MotionEvent.ACTION_POINTER_UP:
-         case MotionEvent.ACTION_UP:
-            _lastEvent._type = TouchEventType.Up;
-            break;
-         /**
-          * MotionEvent.ACTION_POINTER_2_DOWN is deprecated.
-          */
-         //         case MotionEvent.ACTION_POINTER_2_DOWN:
-         case MotionEvent.ACTION_POINTER_DOWN:
-         case MotionEvent.ACTION_DOWN:
-            _lastEvent._type = TouchEventType.Down;
-            break;
-         default:
-            break;
+      case MotionEvent.ACTION_MOVE:
+         _lastEvent._type = TouchEventType.Move;
+         break;
+      /**
+       * MotionEvent.ACTION_POINTER_1_UP and MotionEvent.ACTION_POINTER_2_UP are
+       * deprecated. MotionEvent.ACTION_POINTER_UP added as fallback
+       */
+      //         case MotionEvent.ACTION_POINTER_1_UP:
+      //         case MotionEvent.ACTION_POINTER_2_UP:
+      case MotionEvent.ACTION_POINTER_UP:
+      case MotionEvent.ACTION_UP:
+         _lastEvent._type = TouchEventType.Up;
+         break;
+      /**
+       * MotionEvent.ACTION_POINTER_2_DOWN is deprecated.
+       */
+      //         case MotionEvent.ACTION_POINTER_2_DOWN:
+      case MotionEvent.ACTION_POINTER_DOWN:
+      case MotionEvent.ACTION_DOWN:
+         _lastEvent._type = TouchEventType.Down;
+         break;
+      default:
+         break;
       }
 
       @SuppressWarnings("unchecked")
-      final TouchEvent te = new TouchEvent(TouchEvent.create(_lastEvent._type, (ArrayList<Touch>) _lastEvent._touchs.clone()));
+      final TouchEvent te = TouchEvent.create(_lastEvent._type, (ArrayList<Touch>) _lastEvent._touchs.clone());
 
       //		Log.d("", "TE " + type.toString());
       //		for (int i = 0; i < touchs.size(); i++)
@@ -157,12 +156,11 @@ public final class MotionEventProcessor {
    static public TouchEvent processDoubleTapEvent(final MotionEvent event) {
       final PointerCoords pc = new PointerCoords();
       event.getPointerCoords(0, pc);
-      final Vector2F pos = new Vector2F(pc.x, pc.y);
-      final Touch t = new Touch(pos, pos, (byte) 2);
 
-      final TouchEvent te = TouchEvent.create(TouchEventType.Down, t);
+      final Vector2F pos      = new Vector2F(pc.x, pc.y);
+      final byte     tapCount = (byte) 2;
 
-      return te;
+      return TouchEvent.create(TouchEventType.Down, new Touch(pos, pos, tapCount));
    }
 
 }

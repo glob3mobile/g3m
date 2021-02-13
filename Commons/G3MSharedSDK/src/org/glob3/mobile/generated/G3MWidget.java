@@ -300,7 +300,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
           if (_clickOnProcess)
           {
             final Touch touch = touchEvent.getTouch(0);
-            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, new Touch(touch));
+            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, touch.clone());
             notifyTouchEvent(ec, downUpEvent);
             if (downUpEvent != null)
                downUpEvent.dispose();
