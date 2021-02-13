@@ -209,7 +209,7 @@ void Measure::touchedOn(const int vertexIndex) {
   }
 }
 
-void Measure::resetSelection() {
+void Measure::clearSelection() {
   if (_selectedVertexIndex < 0) {
     return;
   }
@@ -309,6 +309,7 @@ void Measure::createEdgeDistanceLabels() {
                                      position._longitude,
                                      position._height + _vertexSphereRadius),
                           ABSOLUTE);
+    mark->setZoomInAppears(false);
 
     mark->setToken(_instanceID);
 
@@ -347,6 +348,7 @@ void Measure::createVertexAngleLabels() {
                                      current->_geodetic._longitude,
                                      current->_geodetic._height + _vertexSphereRadius*2),
                           ABSOLUTE);
+    mark->setZoomInAppears(false);
 
     mark->setToken(_instanceID);
 
@@ -374,7 +376,7 @@ const size_t Measure::getVerticesCount() const {
 }
 
 void Measure::addVertex(const Geodetic3D& vertex) {
-  resetSelection();
+  clearSelection();
 
   _vertices.push_back( new MeasureVertex(vertex, _planet) );
 
@@ -383,7 +385,7 @@ void Measure::addVertex(const Geodetic3D& vertex) {
 
 void Measure::setVertex(const size_t i,
                         const Geodetic3D& vertex) {
-  resetSelection();
+  clearSelection();
 
   delete _vertices[i];
 
@@ -397,7 +399,7 @@ bool Measure::removeVertex(const size_t i) {
     return false;
   }
 
-  resetSelection();
+  clearSelection();
 
 #ifdef C_CODE
   delete _vertices[i];

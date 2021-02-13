@@ -25,11 +25,9 @@ class Geodetic3D;
 class Measure {
 private:
   static long long INSTANCE_COUNTER;
-  
-  
+
   const std::string _instanceID;
-  
-  
+
   const double _vertexSphereRadius;
   const Color  _vertexColor;
   const Color  _vertexSelectedColor;
@@ -54,10 +52,8 @@ private:
   std::vector<Measure_VertexShape*> _verticesSpheres;
   
   MeasureHandler* _measureHandler;
-  const bool                     _deleteMeasureHandler;
-  
-  void resetSelection();
-  
+  const bool      _deleteMeasureHandler;
+
 public:
   
 #warning TODO: closed measure
@@ -85,7 +81,9 @@ public:
   bool removeVertex(const size_t i);
   
   ~Measure();
-  
+
+  void clearSelection();
+
   void touchedOn(const int vertexIndex);
   
 };

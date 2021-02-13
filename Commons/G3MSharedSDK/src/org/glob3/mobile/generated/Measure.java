@@ -30,9 +30,7 @@ public class Measure
 {
   private static long INSTANCE_COUNTER = 0;
 
-
   private final String _instanceID;
-
 
   private final double _vertexSphereRadius;
   private final Color _vertexColor ;
@@ -134,6 +132,7 @@ public class Measure
       final Geodetic3D position = Geodetic3D.linearInterpolation(previous._geodetic, current._geodetic, 0.5);
   
       Mark mark = new Mark(label, new Geodetic3D(position._latitude, position._longitude, position._height + _vertexSphereRadius), AltitudeMode.ABSOLUTE);
+      mark.setZoomInAppears(false);
   
       mark.setToken(_instanceID);
   
@@ -169,6 +168,7 @@ public class Measure
       }
   
       Mark mark = new Mark(label, new Geodetic3D(current._geodetic._latitude, current._geodetic._longitude, current._geodetic._height + _vertexSphereRadius *2), AltitudeMode.ABSOLUTE);
+      mark.setZoomInAppears(false);
   
       mark.setToken(_instanceID);
   
@@ -181,22 +181,6 @@ public class Measure
 
   private MeasureHandler _measureHandler;
   private final boolean _deleteMeasureHandler;
-
-  private void resetSelection()
-  {
-    if (_selectedVertexIndex < 0)
-    {
-      return;
-    }
-  
-    _verticesSpheres.get(_selectedVertexIndex).setSelected(false);
-    _selectedVertexIndex = -1;
-  
-    if (_measureHandler != null)
-    {
-      _measureHandler.onVertexDeselection(this);
-    }
-  }
 
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
@@ -227,7 +211,7 @@ public class Measure
 
   public final void addVertex(Geodetic3D vertex)
   {
-    resetSelection();
+    clearSelection();
   
     _vertices.add(new MeasureVertex(vertex, _planet));
   
@@ -236,7 +220,7 @@ public class Measure
 
   public final void setVertex(int i, Geodetic3D vertex)
   {
-    resetSelection();
+    clearSelection();
   
     if (_vertices.get(i) != null)
        _vertices.get(i).dispose();
@@ -253,7 +237,7 @@ public class Measure
       return false;
     }
   
-    resetSelection();
+    clearSelection();
   
     _vertices.remove(i);
   
@@ -274,6 +258,22 @@ public class Measure
     {
       if (_measureHandler != null)
          _measureHandler.dispose();
+    }
+  }
+
+  public final void clearSelection()
+  {
+    if (_selectedVertexIndex < 0)
+    {
+      return;
+    }
+  
+    _verticesSpheres.get(_selectedVertexIndex).setSelected(false);
+    _selectedVertexIndex = -1;
+  
+    if (_measureHandler != null)
+    {
+      _measureHandler.onVertexDeselection(this);
     }
   }
 

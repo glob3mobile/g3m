@@ -134,8 +134,7 @@
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
     Touch *touch = new Touch(Vector2F((float) (tapPoint.x * _devicePixelRatio),
                                       (float) (tapPoint.y * _devicePixelRatio)),
-                             Vector2F::ZERO,
-                             1);
+                             Vector2F::ZERO);
     pointers.push_back(touch);
 
     delete _lastTouchEvent;
