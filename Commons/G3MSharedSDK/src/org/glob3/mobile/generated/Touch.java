@@ -22,12 +22,14 @@ public class Touch
   private final Vector2F _pos;
   private final Vector2F _prevPos;
   private final byte _tapCount;
+  private final double _mouseWheelDelta;
 
   public Touch(Touch other)
   {
      _pos = other._pos;
      _prevPos = other._prevPos;
      _tapCount = other._tapCount;
+     _mouseWheelDelta = other._mouseWheelDelta;
 
   }
 
@@ -40,7 +42,15 @@ public class Touch
      _pos = pos;
      _prevPos = prev;
      _tapCount = tapCount;
-
+     _mouseWheelDelta = 0;
+  }
+  
+  public Touch(Vector2F pos, Vector2F prev, byte tapCount, double mouseWheelDelta)
+  {
+     _pos = pos;
+     _prevPos = prev;
+     _tapCount = tapCount;
+     _mouseWheelDelta = mouseWheelDelta;
   }
 
   public final Vector2F getPos()
@@ -55,6 +65,8 @@ public class Touch
   {
      return _tapCount;
   }
+  
+  public final double getMouseWheelDelta() { return _mouseWheelDelta;}
 
   public void dispose()
   {
