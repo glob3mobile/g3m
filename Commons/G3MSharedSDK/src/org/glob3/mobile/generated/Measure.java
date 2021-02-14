@@ -186,7 +186,7 @@ public class Measure
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: closed measure
 
-  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureHandler measureHandler, boolean deleteMeasureHandler)
+  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, float firstVerticalExaggeration, double firstVertexDeltaHeight, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureHandler measureHandler, boolean deleteMeasureHandler)
   {
      _instanceID = "_Measure_" + IStringUtils.instance().toString(INSTANCE_COUNTER++);
      _vertexSphereRadius = vertexSphereRadius;
@@ -201,7 +201,7 @@ public class Measure
      _selectedVertexIndex = -1;
      _measureHandler = measureHandler;
      _deleteMeasureHandler = deleteMeasureHandler;
-    addVertex(firstVertex);
+    addVertex(firstVertex, firstVerticalExaggeration, firstVertexDeltaHeight);
   }
 
   public final int getVerticesCount()
@@ -209,23 +209,23 @@ public class Measure
     return _vertices.size();
   }
 
-  public final void addVertex(Geodetic3D vertex)
+  public final void addVertex(Geodetic3D vertex, float verticalExaggeration, double deltaHeight)
   {
     clearSelection();
   
-    _vertices.add(new MeasureVertex(vertex, _planet));
+    _vertices.add(new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet));
   
     resetUI();
   }
 
-  public final void setVertex(int i, Geodetic3D vertex)
+  public final void setVertex(int i, Geodetic3D vertex, float verticalExaggeration, double deltaHeight)
   {
     clearSelection();
   
     if (_vertices.get(i) != null)
        _vertices.get(i).dispose();
   
-    _vertices.set(i, new MeasureVertex(vertex, _planet));
+    _vertices.set(i, new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet));
   
     resetUI();
   }
@@ -244,6 +244,19 @@ public class Measure
     resetUI();
   
     return true;
+  }
+
+  public final Geodetic3D getVertex(int i)
+  {
+    return _vertices.get(i)._geodetic;
+  }
+  public final double getDeltaHeight(int i)
+  {
+    return _vertices.get(i)._deltaHeight;
+  }
+  public final float getVerticalExaggeration(int i)
+  {
+    return _vertices.get(i)._verticalExaggeration;
   }
 
   public void dispose()

@@ -111,8 +111,8 @@ public:
 
     double* heights = new double[pointsCount];
 
-    const float deltaHeight            = _pointCloud->getDeltaHeight();
-    const float verticalExaggeration   = _pointCloud->getVerticalExaggeration();
+    const double deltaHeight          = _pointCloud->getDeltaHeight();
+    const float  verticalExaggeration = _pointCloud->getVerticalExaggeration();
 
     const float centerLatitudeDegrees  = it.nextFloat();
     const float centerLongitudeDegrees = it.nextFloat();
@@ -376,8 +376,8 @@ Sphere* XPCNode::calculateBounds(const G3MRenderContext* rc,
                                  const XPCPointCloud* pointCloud) {
   const Planet* planet = rc->getPlanet();
 
-  const float deltaHeight          = pointCloud->getDeltaHeight();
-  const float verticalExaggeration = pointCloud->getVerticalExaggeration();
+  const double deltaHeight          = pointCloud->getDeltaHeight();
+  const float  verticalExaggeration = pointCloud->getVerticalExaggeration();
 
 #ifdef C_CODE
   const Vector3D c[10] = {

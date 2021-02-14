@@ -83,7 +83,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 
     double[] heights = new double[pointsCount];
 
-    final float deltaHeight = _pointCloud.getDeltaHeight();
+    final double deltaHeight = _pointCloud.getDeltaHeight();
     final float verticalExaggeration = _pointCloud.getVerticalExaggeration();
 
     final float centerLatitudeDegrees = it.nextFloat();

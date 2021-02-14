@@ -91,17 +91,12 @@ class G3MXPointCloudDemoScene_PointSelectionListener : public XPCPointSelectionL
 private:
   G3MXPointCloudDemoScene* _scene;
 
-//  mutable Geodetic3D* _previousGeodetic;
-//  mutable Vector3D*   _previousCartesian;
-
   mutable Measure* _measure;
 
 public:
 
   G3MXPointCloudDemoScene_PointSelectionListener(G3MXPointCloudDemoScene* scene) :
   _scene(scene),
-//  _previousGeodetic(NULL),
-//  _previousCartesian(NULL)
   _measure(NULL)
   {
 
@@ -129,6 +124,8 @@ public:
                              5.0f,                            // segmentLineWidth
                              Color::fromRGBA(1, 1, 0, 0.6f),  // segmentColor
                              geodetic,                        // firstVertex
+                             pointCloud->getVerticalExaggeration(),
+                             pointCloud->getDeltaHeight(),
                              model->getShapesRenderer(),
                              model->getMeshRenderer(),
                              model->getMarksRenderer(),
@@ -137,7 +134,9 @@ public:
                              true);
     }
     else {
-      _measure->addVertex( geodetic );
+      _measure->addVertex(geodetic,
+                          pointCloud->getVerticalExaggeration(),
+                          pointCloud->getDeltaHeight());
     }
 
 //    {
@@ -276,25 +275,25 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 
 //  const std::string cloudName   = "TOPCON_IPS3_LOD";
-//  const float       deltaHeight = -50;
+//  const double      deltaHeight = -50;
 
 
 //  const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
-//  const float       deltaHeight = -180;
+//  const double      deltaHeight = -180;
 
   // const std::string cloudName   = "PC_601fa9f0fe459753703dca36_LOD";
-//  const float       deltaHeight = -180;
+//  const double       deltaHeight = -180;
   const std::string cloudName   = "PC_6024eaa3bb098a3ad6a9176d_LOD";
-  const float       deltaHeight = -396;
+  const double      deltaHeight = -396;
 
 //  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
-//  const float       deltaHeight = -170;
+//  const double      deltaHeight = -170;
 
 //  const std::string cloudName   = "Leica_M40_LOD";
-//  const float       deltaHeight = -580;
+//  const double      deltaHeight = -580;
 
 //  const std::string cloudName   = "NEON_LOD";
-//  const float       deltaHeight = -385;
+//  const double      deltaHeight = -385;
 
   const double minProjectedArea = 50000; //50000;
 

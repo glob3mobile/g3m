@@ -64,6 +64,8 @@ public:
           const float segmentLineWidth,
           const Color& segmentColor,
           const Geodetic3D& firstVertex,
+          const float firstVerticalExaggeration,
+          const double firstVertexDeltaHeight,
           ShapesRenderer* shapesRenderer,
           MeshRenderer* meshRenderer,
           MarksRenderer* marksRenderer,
@@ -73,13 +75,21 @@ public:
   
   const size_t getVerticesCount() const;
   
-  void addVertex(const Geodetic3D& vertex);
+  void addVertex(const Geodetic3D& vertex,
+                 const float verticalExaggeration,
+                 const double deltaHeight);
   
   void setVertex(const size_t i,
-                 const Geodetic3D& vertex);
+                 const Geodetic3D& vertex,
+                 const float verticalExaggeration,
+                 const double deltaHeight);
   
   bool removeVertex(const size_t i);
-  
+
+  const Geodetic3D getVertex(const size_t i) const;
+  const double getDeltaHeight(const size_t i) const;
+  const float getVerticalExaggeration(const size_t i) const;
+
   ~Measure();
 
   void clearSelection();

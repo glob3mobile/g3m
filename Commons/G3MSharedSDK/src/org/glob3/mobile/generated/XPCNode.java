@@ -61,7 +61,7 @@ public class XPCNode extends RCObject
   {
     final Planet planet = rc.getPlanet();
   
-    final float deltaHeight = pointCloud.getDeltaHeight();
+    final double deltaHeight = pointCloud.getDeltaHeight();
     final float verticalExaggeration = pointCloud.getVerticalExaggeration();
   
     java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(10);

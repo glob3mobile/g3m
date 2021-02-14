@@ -49,7 +49,7 @@ private:
   const bool                 _depthTest;
 
   const float                _verticalExaggeration;
-  const float                _deltaHeight;
+  const double               _deltaHeight;
 
   XPCMetadataListener*       _metadataListener;
   const bool                 _deleteMetadataListener;
@@ -88,7 +88,7 @@ public:
                 bool dynamicPointSize = true,
                 const bool depthTest = true,
                 float verticalExaggeration = 1.0f,
-                float deltaHeight = 0,
+                double deltaHeight = 0,
                 XPCMetadataListener* metadataListener = NULL,
                 bool deleteMetadataListener = true,
                 XPCPointSelectionListener* pointSelectionListener = NULL,
@@ -121,7 +121,7 @@ public:
     return _verticalExaggeration;
   }
 
-  const float getDeltaHeight() const {
+  const double getDeltaHeight() const {
     return _deltaHeight;
   }
 
