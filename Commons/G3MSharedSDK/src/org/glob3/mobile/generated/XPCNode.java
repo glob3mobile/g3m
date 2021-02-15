@@ -457,6 +457,10 @@ public class XPCNode extends RCObject
     if (_mesh != null)
        _mesh.dispose();
     _mesh = null;
+  
+    if (_bounds != null)
+       _bounds.dispose();
+    _bounds = null;
   }
 
 }

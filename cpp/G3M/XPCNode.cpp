@@ -476,6 +476,9 @@ void XPCNode::reload() {
 
   delete _mesh;
   _mesh = NULL;
+
+  delete _bounds;
+  _bounds = NULL;
 }
 
 void XPCNode::loadContent(const XPCPointCloud* pointCloud,

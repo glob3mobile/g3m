@@ -46,10 +46,10 @@ private:
 
   float                      _pointSize;
   bool                       _dynamicPointSize;
-  const bool                 _depthTest;
+  bool                       _depthTest;
 
-  const float                _verticalExaggeration;
-  const double               _deltaHeight;
+  float                      _verticalExaggeration;
+  double                     _deltaHeight;
 
   XPCMetadataListener*       _metadataListener;
   const bool                 _deleteMetadataListener;
@@ -116,6 +116,12 @@ public:
   void setDynamicPointSize(const bool dynamicPointSize) {
     _dynamicPointSize = dynamicPointSize;
   }
+
+  void setDepthTest(const bool depthTest);
+
+  void setVerticalExaggeration(const float verticalExaggeration);
+
+  void setDeltaHeight(const double deltaHeight);
 
   const float getVerticalExaggeration() const {
     return _verticalExaggeration;

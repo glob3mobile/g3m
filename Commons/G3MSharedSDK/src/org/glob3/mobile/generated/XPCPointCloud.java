@@ -48,10 +48,10 @@ public class XPCPointCloud extends RCObject
 
   private float _pointSize;
   private boolean _dynamicPointSize;
-  private final boolean _depthTest;
+  private boolean _depthTest;
 
-  private final float _verticalExaggeration;
-  private final double _deltaHeight;
+  private float _verticalExaggeration;
+  private double _deltaHeight;
 
   private XPCMetadataListener _metadataListener;
   private final boolean _deleteMetadataListener;
@@ -243,6 +243,42 @@ public class XPCPointCloud extends RCObject
   public final void setDynamicPointSize(boolean dynamicPointSize)
   {
     _dynamicPointSize = dynamicPointSize;
+  }
+
+  public final void setDepthTest(boolean depthTest)
+  {
+    if (_depthTest != depthTest)
+    {
+      _depthTest = depthTest;
+  
+  //    if (_metadata != NULL) {
+  //      _metadata->reloadNodes();
+  //    }
+    }
+  }
+
+  public final void setVerticalExaggeration(float verticalExaggeration)
+  {
+    if (_verticalExaggeration != verticalExaggeration)
+    {
+      _verticalExaggeration = verticalExaggeration;
+      if (_metadata != null)
+      {
+        _metadata.reloadNodes();
+      }
+    }
+  }
+
+  public final void setDeltaHeight(double deltaHeight)
+  {
+    if (_deltaHeight != deltaHeight)
+    {
+      _deltaHeight = deltaHeight;
+      if (_metadata != null)
+      {
+        _metadata.reloadNodes();
+      }
+    }
   }
 
   public final float getVerticalExaggeration()

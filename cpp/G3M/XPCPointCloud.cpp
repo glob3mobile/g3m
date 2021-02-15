@@ -409,3 +409,31 @@ void XPCPointCloud::setPointSelectionListener(XPCPointSelectionListener* pointSe
   }
   _deletePointSelectionListener = deletePointSelectionListener;
 }
+
+void XPCPointCloud::setDepthTest(const bool depthTest) {
+  if (_depthTest != depthTest) {
+    _depthTest = depthTest;
+
+//    if (_metadata != NULL) {
+//      _metadata->reloadNodes();
+//    }
+  }
+}
+
+void XPCPointCloud::setVerticalExaggeration(const float verticalExaggeration) {
+  if (_verticalExaggeration != verticalExaggeration) {
+    _verticalExaggeration = verticalExaggeration;
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
+
+void XPCPointCloud::setDeltaHeight(const double deltaHeight) {
+  if (_deltaHeight != deltaHeight) {
+    _deltaHeight = deltaHeight;
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
