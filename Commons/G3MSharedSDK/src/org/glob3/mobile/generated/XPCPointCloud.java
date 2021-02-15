@@ -30,6 +30,7 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //class Geodetic3D;
 //class ITimer;
+//class BoundingVolume;
 
 
 public class XPCPointCloud extends RCObject
@@ -71,6 +72,9 @@ public class XPCPointCloud extends RCObject
 
   private XPCMetadata _metadata;
   private long _lastRenderedCount;
+
+
+  private BoundingVolume _fence;
 
   private void initializePointColorizer()
   {
@@ -115,6 +119,9 @@ public class XPCPointCloud extends RCObject
   
     if (_requiredDimensionIndices != null)
        _requiredDimensionIndices.dispose();
+  
+    if (_fence != null)
+       _fence.dispose();
   
     super.dispose();
   }
@@ -186,6 +193,7 @@ public class XPCPointCloud extends RCObject
      _lastRenderedCount = 0;
      _requiredDimensionIndices = null;
      _canceled = false;
+     _fence = null;
   
   }
 
@@ -263,6 +271,7 @@ public class XPCPointCloud extends RCObject
     if (_verticalExaggeration != verticalExaggeration)
     {
       _verticalExaggeration = verticalExaggeration;
+  
       if (_metadata != null)
       {
         _metadata.reloadNodes();
@@ -275,6 +284,7 @@ public class XPCPointCloud extends RCObject
     if (_deltaHeight != deltaHeight)
     {
       _deltaHeight = deltaHeight;
+  
       if (_metadata != null)
       {
         _metadata.reloadNodes();
@@ -360,11 +370,11 @@ public class XPCPointCloud extends RCObject
     return RenderState.ready();
   }
 
-  public final void render(G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
+  public final void render(G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug)
   {
     if (_metadata != null)
     {
-      final long renderedCount = _metadata.render(this, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult);
+      final long renderedCount = _metadata.render(this, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, _fence);
   
       if (_lastRenderedCount != renderedCount)
       {
@@ -485,6 +495,22 @@ public class XPCPointCloud extends RCObject
     if (_metadata != null)
     {
       _metadata.cancel();
+    }
+  }
+
+  public final void setFence(BoundingVolume fence)
+  {
+    if (_fence != fence)
+    {
+      if (_fence != null)
+         _fence.dispose();
+  
+      _fence = fence;
+  
+      if (_metadata != null)
+      {
+        _metadata.reloadNodes();
+      }
     }
   }
 

@@ -364,6 +364,13 @@ public class Vector3D
     final double dz = _z - that._z;
     return (dx * dx) + (dy * dy) + (dz * dz);
   }
+  public final double squaredDistanceTo(MutableVector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
 
   public final double distanceTo(Vector3D that)
   {

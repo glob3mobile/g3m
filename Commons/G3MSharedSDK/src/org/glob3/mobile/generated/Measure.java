@@ -204,6 +204,11 @@ public class Measure
     addVertex(firstVertex, firstVerticalExaggeration, firstVertexDeltaHeight);
   }
 
+  public final double getVertexSphereRadius()
+  {
+    return _vertexSphereRadius;
+  }
+
   public final int getVerticesCount()
   {
     return _vertices.size();

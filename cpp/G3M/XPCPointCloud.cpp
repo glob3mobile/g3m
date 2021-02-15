@@ -443,7 +443,7 @@ void XPCPointCloud::setDeltaHeight(const double deltaHeight) {
   }
 }
 
-void XPCPointCloud::setFence(const BoundingVolume* fence) {
+void XPCPointCloud::setFence(BoundingVolume* fence) {
   if (_fence != fence) {
     delete _fence;
 

@@ -28,6 +28,7 @@ package org.glob3.mobile.generated;
 //class XPCSelectionResult;
 //class ITimer;
 //class XPCRenderingState;
+//class BoundingVolume;
 
 
 public class XPCNode extends RCObject
@@ -97,19 +98,13 @@ public class XPCNode extends RCObject
   private IDownloader _downloader;
   private long _contentRequestID;
 
-  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc)
+  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, BoundingVolume fence)
   {
     _downloader = rc.getDownloader();
   
-    // const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
-    // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
-  
     final long deltaPriority = 100 - _id.length();
   
-  //  const size_t depth = _id.length();
-  //  const long long deltaPriority =  (depth == 0) ? 100 : _id.length();
-  
-    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
+    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet(), (fence == null) ? null : fence.copy()), true);
   }
 
   private void cancelLoadContent()
@@ -256,7 +251,7 @@ public class XPCNode extends RCObject
   }
 
 
-  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult, XPCRenderingState renderingState)
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCRenderingState renderingState, BoundingVolume fence)
   {
   
     long renderedCount = 0;
@@ -266,10 +261,10 @@ public class XPCNode extends RCObject
     final Sphere bounds = getBounds(rc, pointCloud);
     if (bounds != null)
     {
-      final boolean isVisible = bounds.touchesFrustum(frustum);
+      final boolean isVisible = bounds.touchesFrustum(frustum) && (fence == null || bounds.touches(fence));
+  
       if (isVisible)
       {
-  
         if (renderDebug)
         {
           bounds.render(rc, glState, Color.WHITE);
@@ -299,7 +294,7 @@ public class XPCNode extends RCObject
             for (int i = 0; i < _childrenSize; i++)
             {
               XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult, renderingState);
+              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, renderingState, fence);
             }
             //if (_childrenSize == 0) {
             //  renderingState._pointSize = pointCloud->getDevicePointSize();
@@ -345,7 +340,7 @@ public class XPCNode extends RCObject
                 lastSplitTimer.start();
                 _canceled = false;
                 _loadingContent = true;
-                loadContent(pointCloud, treeID, rc);
+                loadContent(pointCloud, treeID, rc, fence);
               }
             }
           }

@@ -189,7 +189,7 @@ public class XPCRenderer extends DefaultRenderer
       for (int i = 0; i < _cloudsSize; i++)
       {
         XPCPointCloud cloud = _clouds.get(i);
-        cloud.render(rc, _lastSplitTimer, _glState, frustum, nowInMS, _renderDebug, _selectionResult);
+        cloud.render(rc, _lastSplitTimer, _glState, frustum, nowInMS, _renderDebug);
       }
   
   //    if (_selectionResult != NULL) {

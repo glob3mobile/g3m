@@ -3,20 +3,20 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 {
   private final XPCPointCloud _pointCloud;
   private XPCNode _node;
-
   private IByteBuffer _buffer;
-
   private final Planet _planet;
+  private final BoundingVolume _fence;
 
   private java.util.ArrayList<XPCNode> _children;
   private DirectMesh _mesh;
 
-  public XPCNodeContentParserAsyncTask(XPCPointCloud pointCloud, XPCNode node, IByteBuffer buffer, Planet planet)
+  public XPCNodeContentParserAsyncTask(XPCPointCloud pointCloud, XPCNode node, IByteBuffer buffer, Planet planet, BoundingVolume fence)
   {
      _pointCloud = pointCloud;
      _node = node;
      _buffer = buffer;
      _planet = planet;
+     _fence = fence;
      _children = null;
      _mesh = null;
     _pointCloud._retain();
@@ -40,6 +40,9 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 
     if (_mesh != null)
        _mesh.dispose();
+
+    if (_fence != null)
+       _fence.dispose();
 
     _node._release();
     _pointCloud._release();
@@ -82,6 +85,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
     IFloatBuffer cartesianVertices = IFactory.instance().createFloatBuffer(pointsCount * 3); // X, Y, Z
 
     double[] heights = new double[pointsCount];
+    boolean[] visible = new boolean[pointsCount];
 
     final double deltaHeight = _pointCloud.getDeltaHeight();
     final float verticalExaggeration = _pointCloud.getVerticalExaggeration();
@@ -106,6 +110,8 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
         final double scaledHeight = (rawHeight + deltaHeight) * verticalExaggeration;
 
         _planet.toCartesianFromDegrees(latitudeDegrees, longitudeDegrees, scaledHeight, bufferCartesian);
+
+        visible[i] = (_fence == null) || _fence.contains(bufferCartesian);
 
         cartesianVertices.rawPut((i * 3) + 0, (float)(bufferCartesian._x - cartesianCenter._x));
         cartesianVertices.rawPut((i * 3) + 1, (float)(bufferCartesian._y - cartesianCenter._y));
@@ -150,24 +156,35 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 
     for (int i = 0; i < pointsCount; i++)
     {
-      if (pointsColorizer == null)
+      if (visible[i])
       {
-        colors.rawPut((i * 4) + 0, 1); // red
-        colors.rawPut((i * 4) + 1, 1); // green
-        colors.rawPut((i * 4) + 2, 1); // blue
-        colors.rawPut((i * 4) + 3, 1); // alpha
+        if (pointsColorizer == null)
+        {
+          colors.rawPut((i * 4) + 0, 1); // red
+          colors.rawPut((i * 4) + 1, 1); // green
+          colors.rawPut((i * 4) + 2, 1); // blue
+          colors.rawPut((i * 4) + 3, 1); // alpha
+        }
+        else
+        {
+          pointsColorizer.colorize(metadata, heights, dimensionsValues, i, bufferColor);
+          colors.rawPut((i * 4) + 0, bufferColor._red);
+          colors.rawPut((i * 4) + 1, bufferColor._green);
+          colors.rawPut((i * 4) + 2, bufferColor._blue);
+          colors.rawPut((i * 4) + 3, bufferColor._alpha);
+        }
       }
       else
       {
-        pointsColorizer.colorize(metadata, heights, dimensionsValues, i, bufferColor);
-        colors.rawPut((i * 4) + 0, bufferColor._red);
-        colors.rawPut((i * 4) + 1, bufferColor._green);
-        colors.rawPut((i * 4) + 2, bufferColor._blue);
-        colors.rawPut((i * 4) + 3, bufferColor._alpha);
+        colors.rawPut((i * 4) + 0, 0.0f);
+        colors.rawPut((i * 4) + 1, 0.0f);
+        colors.rawPut((i * 4) + 2, 0.0f);
+        colors.rawPut((i * 4) + 3, 0.0f);
       }
     }
 
     heights = null;
+    visible = null;
 
     if (dimensionsValues != null)
     {

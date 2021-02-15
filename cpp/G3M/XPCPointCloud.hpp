@@ -72,7 +72,7 @@ private:
   long long _lastRenderedCount;
 
 
-  const BoundingVolume* _fence;
+  BoundingVolume* _fence;
 
   void initializePointColorizer();
 
@@ -200,8 +200,7 @@ public:
 
   void cancel();
 
-  void setFence(const BoundingVolume* fence);
-
+  void setFence(BoundingVolume* fence);
 
 };
 

@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class XPCTree;
 //class XPCSelectionResult;
 //class ITimer;
+//class BoundingVolume;
 
 
 public class XPCMetadata
@@ -115,7 +116,7 @@ public class XPCMetadata
     }
   }
 
-  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
+  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, BoundingVolume fence)
   {
   
     long renderedCount = 0;
@@ -124,7 +125,7 @@ public class XPCMetadata
     {
       final XPCTree tree = _trees.get(i);
   
-      renderedCount += tree.render(pointCloud, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult);
+      renderedCount += tree.render(pointCloud, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, fence);
     }
   
     return renderedCount;

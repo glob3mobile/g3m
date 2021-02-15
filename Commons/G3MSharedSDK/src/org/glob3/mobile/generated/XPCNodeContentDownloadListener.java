@@ -3,17 +3,18 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
 {
   private final XPCPointCloud _pointCloud;
   private XPCNode _node;
-
   private final IThreadUtils _threadUtils;
   private final Planet _planet;
+  private final BoundingVolume _fence;
 
 
-  public XPCNodeContentDownloadListener(XPCPointCloud pointCloud, XPCNode node, IThreadUtils threadUtils, Planet planet)
+  public XPCNodeContentDownloadListener(XPCPointCloud pointCloud, XPCNode node, IThreadUtils threadUtils, Planet planet, BoundingVolume fence)
   {
      _pointCloud = pointCloud;
      _node = node;
      _threadUtils = threadUtils;
      _planet = planet;
+     _fence = fence;
     _pointCloud._retain();
     _node._retain();
   }
@@ -42,7 +43,7 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
 ///#endif
 //      }
 
-      _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud, _node, buffer, _planet), true);
+      _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud, _node, buffer, _planet, (_fence == null) ? null : _fence.copy()), true);
     }
   }
 
@@ -65,6 +66,9 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
   {
     _node._release();
     _pointCloud._release();
+
+    if (_fence != null)
+       _fence.dispose();
   }
 
 

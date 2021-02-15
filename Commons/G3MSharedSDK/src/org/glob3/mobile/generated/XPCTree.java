@@ -23,6 +23,7 @@ package org.glob3.mobile.generated;
 //class Sector;
 //class XPCSelectionResult;
 //class ITimer;
+//class BoundingVolume;
 
 
 
@@ -62,7 +63,7 @@ public class XPCTree
     return _rootNode.getMaxHeight();
   }
 
-  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult)
+  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, BoundingVolume fence)
   {
     if (_rootNode == null)
     {
@@ -71,7 +72,7 @@ public class XPCTree
   
     _renderingState.reset();
   
-    return _rootNode.render(pointCloud, _id, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult, _renderingState);
+    return _rootNode.render(pointCloud, _id, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, _renderingState, fence);
   }
 
   public final boolean selectPoints(XPCSelectionResult selectionResult, XPCPointCloud pointCloud)

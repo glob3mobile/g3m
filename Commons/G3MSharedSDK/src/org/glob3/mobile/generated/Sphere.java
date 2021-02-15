@@ -350,6 +350,10 @@ public class Sphere extends BoundingVolume
   {
     return _center.squaredDistanceTo(point) <= _radiusSquared;
   }
+  public final boolean contains(MutableVector3D point)
+  {
+    return _center.squaredDistanceTo(point) <= _radiusSquared;
+  }
 
   public final boolean fullContains(BoundingVolume that)
   {

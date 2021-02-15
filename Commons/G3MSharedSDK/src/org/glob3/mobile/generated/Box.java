@@ -358,22 +358,42 @@ public class Box extends BoundingVolume
     return point.clamp(_lower, _upper);
   }
 
-  public final boolean contains(Vector3D p)
+  public final boolean contains(Vector3D point)
   {
     final double margin = 1e-3;
-    if (p._x < _lower._x - margin)
+    if (point._x < _lower._x - margin)
        return false;
-    if (p._x > _upper._x + margin)
-       return false;
-  
-    if (p._y < _lower._y - margin)
-       return false;
-    if (p._y > _upper._y + margin)
+    if (point._x > _upper._x + margin)
        return false;
   
-    if (p._z < _lower._z - margin)
+    if (point._y < _lower._y - margin)
        return false;
-    if (p._z > _upper._z + margin)
+    if (point._y > _upper._y + margin)
+       return false;
+  
+    if (point._z < _lower._z - margin)
+       return false;
+    if (point._z > _upper._z + margin)
+       return false;
+  
+    return true;
+  }
+  public final boolean contains(MutableVector3D point)
+  {
+    final double margin = 1e-3;
+    if (point._x < _lower._x - margin)
+       return false;
+    if (point._x > _upper._x + margin)
+       return false;
+  
+    if (point._y < _lower._y - margin)
+       return false;
+    if (point._y > _upper._y + margin)
+       return false;
+  
+    if (point._z < _lower._z - margin)
+       return false;
+    if (point._z > _upper._z + margin)
        return false;
   
     return true;
