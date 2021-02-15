@@ -251,9 +251,10 @@ public class XPCPointCloud extends RCObject
     {
       _depthTest = depthTest;
   
-  //    if (_metadata != NULL) {
-  //      _metadata->reloadNodes();
-  //    }
+      if (_metadata != null)
+      {
+        _metadata.reloadNodes();
+      }
     }
   }
 
