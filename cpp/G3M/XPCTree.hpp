@@ -18,6 +18,7 @@ class Frustum;
 class Sector;
 class XPCSelectionResult;
 class ITimer;
+class BoundingVolume;
 
 #include "XPCRenderingState.hpp"
 
@@ -49,10 +50,10 @@ public:
                    const Frustum* frustum,
                    long long nowInMS,
                    bool renderDebug,
-                   const XPCSelectionResult* selectionResult) const;
+                   const BoundingVolume* fence) const;
 
   const bool selectPoints(XPCSelectionResult* selectionResult,
-                          const XPCPointCloud* pointCloud) const;
+                          XPCPointCloud* pointCloud) const;
 
   void cancel() const;
 

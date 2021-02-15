@@ -158,17 +158,31 @@ double Box::projectedArea(const G3MRenderContext* rc) const {
   return width * height;
 }
 
-bool Box::contains(const Vector3D& p) const {
+bool Box::contains(const Vector3D& point) const {
   const static double margin = 1e-3;
-  if (p._x < _lower._x - margin) return false;
-  if (p._x > _upper._x + margin) return false;
+  if (point._x < _lower._x - margin) return false;
+  if (point._x > _upper._x + margin) return false;
   
-  if (p._y < _lower._y - margin) return false;
-  if (p._y > _upper._y + margin) return false;
+  if (point._y < _lower._y - margin) return false;
+  if (point._y > _upper._y + margin) return false;
   
-  if (p._z < _lower._z - margin) return false;
-  if (p._z > _upper._z + margin) return false;
+  if (point._z < _lower._z - margin) return false;
+  if (point._z > _upper._z + margin) return false;
   
+  return true;
+}
+
+bool Box::contains(const MutableVector3D& point) const {
+  const static double margin = 1e-3;
+  if (point._x < _lower._x - margin) return false;
+  if (point._x > _upper._x + margin) return false;
+
+  if (point._y < _lower._y - margin) return false;
+  if (point._y > _upper._y + margin) return false;
+
+  if (point._z < _lower._z - margin) return false;
+  if (point._z > _upper._z + margin) return false;
+
   return true;
 }
 

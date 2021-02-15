@@ -72,6 +72,10 @@ public:
           const Planet* planet,
           MeasureHandler* measureHandler,
           const bool deleteMeasureHandler);
+
+  const double getVertexSphereRadius() const {
+    return _vertexSphereRadius;
+  }
   
   const size_t getVerticesCount() const;
   

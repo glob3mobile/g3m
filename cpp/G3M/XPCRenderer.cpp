@@ -161,8 +161,7 @@ void XPCRenderer::render(const G3MRenderContext* rc,
                     _glState,
                     frustum,
                     nowInMS,
-                    _renderDebug,
-                    _selectionResult);
+                    _renderDebug);
     }
 
 //    if (_selectionResult != NULL) {

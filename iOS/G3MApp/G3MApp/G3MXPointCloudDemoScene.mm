@@ -30,6 +30,9 @@
 #include <G3M/Measure.hpp>
 #include <G3M/MeasureHandler.hpp>
 #include <G3M/RampColorizer.hpp>
+#include <G3M/Sphere.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/EllipsoidShape.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
@@ -108,7 +111,7 @@ public:
     delete _measure;
   }
 
-  bool onSelectedPoint(const XPCPointCloud* pointCloud,
+  bool onSelectedPoint(XPCPointCloud* pointCloud,
                        const Vector3D& cartesian,
                        const Geodetic3D& geodetic,
                        const std::string& treeID,
@@ -116,6 +119,22 @@ public:
                        const int pointIndex,
                        const double distanceToRay) const {
     G3MDemoModel* model = _scene->getModel();
+
+    const double radius = 25;
+    pointCloud->setFence( new Sphere(cartesian,
+                                      radius) );
+
+    model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
+                                                             AltitudeMode::ABSOLUTE,
+                                                             Vector3D(radius, radius, radius),
+                                                             (short) 18,                        /* resolution     */
+                                                             1,                                 /* borderWidth    */
+                                                             false,                             /* texturedInside */
+                                                             false,                             /* mercator       */
+                                                             Color::fromRGBA(0, 0, 0, 0.4f),    /* surfaceColor   */
+                                                             Color::newFromRGBA(0, 0, 0, 0.8f), /* borderColor    */
+                                                             true                               /* withNormals    */) );
+
 
     if (_measure == NULL) {
       _measure = new Measure(0.5,                             // vertexSphereRadius
@@ -138,100 +157,6 @@ public:
                           pointCloud->getVerticalExaggeration(),
                           pointCloud->getDeltaHeight());
     }
-
-//    {
-//      Shape* sphere = new EllipsoidShape(new Geodetic3D(geodetic),
-//                                         AltitudeMode::ABSOLUTE,
-//                                         Vector3D(0.1, 0.1, 0.1),
-//                                         (short) 16,  // resolution,
-//                                         0,           // float borderWidth,
-//                                         false,       // bool texturedInside,
-//                                         false,       // bool mercator,
-//                                         Color::fromRGBA(1, 1, 0, 0.6f) // const Color& surfaceColor,
-//                                         );
-//
-//
-//      model->getShapesRenderer()->addShape( sphere );
-//    }
-//
-//    if (_previousGeodetic != NULL) {
-//      const Planet* planet = model->getG3MWidget()->getG3MContext()->getPlanet();
-//
-//      FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
-//
-//      fbb->add( *_previousGeodetic );
-//      fbb->add(geodetic);
-//
-//      Mesh* mesh = new DirectMesh(GLPrimitive::lines(),
-//                                  true,
-//                                  fbb->getCenter(),
-//                                  fbb->create(),
-//                                  5.0f, // float lineWidth
-//                                  1.0f, // float pointSize
-//                                  Color::newFromRGBA(1, 1, 0, 0.6f), // const Color* flatColor
-//                                  NULL,  // const IFloatBuffer* colors
-//                                  false  // depthTest
-////                                  NULL,  // const IFloatBuffer* normals = NULL,
-////                                  true,  // bool polygonOffsetFill      = false,
-////                                  10,    // float polygonOffsetFactor   = 0,
-////                                  10     // float polygonOffsetUnits    = 0,
-//                                  );
-//
-//
-////      DirectMesh(const int primitive,
-////                 bool owner,
-////                 const Vector3D& center,
-////                 const IFloatBuffer* vertices,
-////                 float lineWidth,
-////                 float pointSize,
-////                 const Color* flatColor      = NULL,
-////                 const IFloatBuffer* colors  = NULL,
-////                 bool depthTest              = true,
-////                 const IFloatBuffer* normals = NULL,
-////                 bool polygonOffsetFill      = false,
-////                 float polygonOffsetFactor   = 0,
-////                 float polygonOffsetUnits    = 0,
-////                 bool cullFace               = false,
-////                 int  culledFace             = GLCullFace::back());
-//
-//      model->getMeshRenderer()->addMesh( mesh );
-//
-//      {
-//        Geodetic3D middle = Geodetic3D::linearInterpolation(geodetic, *_previousGeodetic, 0.5);
-//        Mark* distanceLabel = new Mark( IStringUtils::instance()->toString( (float) _previousCartesian->distanceTo(cartesian) ) + "m",
-//                                       middle,
-//                                       ABSOLUTE);
-//
-//        //      Mark(const std::string& label,
-//        //           const Geodetic3D&  position,
-//        //           AltitudeMode       altitudeMode,
-//        //           double             minDistanceToCamera=4.5e+06,
-//        //           const float        labelFontSize=20,
-//        //           const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-//        //           const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-//        //           MarkUserData*      userData=NULL,
-//        //           bool               autoDeleteUserData=true,
-//        //           MarkTouchListener* listener=NULL,
-//        //           bool               autoDeleteListener=false);
-//
-//        model->getMarksRenderer()->addMark( distanceLabel );
-//
-//
-////        const Angle angle = _previousCartesian->angleBetween(cartesian);
-////        Mark* angleLabel = new Mark( IStringUtils::instance()->toString( (float) angle._degrees ) + "d",
-////                                    geodetic ,
-////                                    ABSOLUTE);
-////
-////        model->getMarksRenderer()->addMark( angleLabel );
-//      }
-//
-//    }
-//
-//    delete _previousGeodetic;
-//    _previousGeodetic = new Geodetic3D(geodetic);
-//
-//    delete _previousCartesian;
-//    _previousCartesian = new Vector3D(cartesian);
 
     return true; // accepted point
   }

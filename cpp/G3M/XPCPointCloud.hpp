@@ -28,6 +28,7 @@ class XPCPointSelectionListener;
 class Vector3D;
 class Geodetic3D;
 class ITimer;
+class BoundingVolume;
 
 
 class XPCPointCloud : public RCObject {
@@ -69,6 +70,9 @@ private:
 
   XPCMetadata* _metadata;
   long long _lastRenderedCount;
+
+
+  const BoundingVolume* _fence;
 
   void initializePointColorizer();
 
@@ -166,8 +170,7 @@ public:
               GLState* glState,
               const Frustum* frustum,
               long long nowInMS,
-              bool renderDebug,
-              const XPCSelectionResult* selectionResult);
+              bool renderDebug);
 
   void errorDownloadingMetadata();
   void errorParsingMetadata();
@@ -186,16 +189,19 @@ public:
     return _pointColorizer;
   }
 
-  const bool selectPoints(XPCSelectionResult* selectionResult) const;
+  const bool selectPoints(XPCSelectionResult* selectionResult);
 
   const bool selectedPoint(const Vector3D& cartesian,
                            const Geodetic3D& geodetic,
                            const std::string& treeID,
                            const std::string& nodeID,
                            const int pointIndex,
-                           const double distanceToRay) const;
+                           const double distanceToRay);
 
   void cancel();
+
+  void setFence(const BoundingVolume* fence);
+
 
 };
 

@@ -64,7 +64,7 @@ bool XPCSelectionResult::isInterestedIn(const Sphere* area) const {
 }
 
 bool XPCSelectionResult::evaluateCantidate(const MutableVector3D& cartesianPoint,
-                                           const XPCPointCloud* pointCloud,
+                                           XPCPointCloud* pointCloud,
                                            const std::string& treeID,
                                            const std::string& nodeID,
                                            const int pointIndex) {
@@ -97,7 +97,7 @@ bool XPCSelectionResult::evaluateCantidate(const MutableVector3D& cartesianPoint
   return false;
 }
 
-const bool XPCSelectionResult::notifyPointCloud(const Planet* planet) const {
+const bool XPCSelectionResult::notifyPointCloud(const Planet* planet) {
   const Vector3D   cartesian = _nearestPoint.asVector3D();
   const Geodetic3D geodetic  = planet->toGeodetic3D(cartesian);
 

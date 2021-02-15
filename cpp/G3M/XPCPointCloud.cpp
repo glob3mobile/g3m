@@ -17,6 +17,7 @@
 #include "IDeviceInfo.hpp"
 #include "IIntBuffer.hpp"
 #include "IStringBuilder.hpp"
+#include "BoundingVolume.hpp"
 
 #include "XPCMetadata.hpp"
 #include "XPCMetadataListener.hpp"
@@ -163,7 +164,8 @@ _errorParsingMetadata(false),
 _metadata(NULL),
 _lastRenderedCount(0),
 _requiredDimensionIndices(NULL),
-_canceled(false)
+_canceled(false),
+_fence(NULL)
 {
   
 }
@@ -252,6 +254,8 @@ XPCPointCloud::~XPCPointCloud() {
   delete _metadata;
   
   delete _requiredDimensionIndices;
+
+  delete _fence;
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -327,8 +331,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                            GLState* glState,
                            const Frustum* frustum,
                            long long nowInMS,
-                           bool renderDebug,
-                           const XPCSelectionResult* selectionResult) {
+                           bool renderDebug) {
   if (_metadata != NULL) {
     const long long renderedCount = _metadata->render(this,
                                                       rc,
@@ -337,7 +340,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                                                       frustum,
                                                       nowInMS,
                                                       renderDebug,
-                                                      selectionResult);
+                                                      _fence);
     
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {
@@ -353,7 +356,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
   }
 }
 
-const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) const {
+const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) {
   if ((_pointSelectionListener == NULL) || (_metadata == NULL)) {
     return false;
   }
@@ -367,7 +370,7 @@ const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
                                         const std::string& treeID,
                                         const std::string& nodeID,
                                         const int pointIndex,
-                                        const double distanceToRay) const {
+                                        const double distanceToRay) {
   if (_pointSelectionListener == NULL) {
     return false;
   }
@@ -433,6 +436,18 @@ void XPCPointCloud::setVerticalExaggeration(const float verticalExaggeration) {
 void XPCPointCloud::setDeltaHeight(const double deltaHeight) {
   if (_deltaHeight != deltaHeight) {
     _deltaHeight = deltaHeight;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
+
+void XPCPointCloud::setFence(const BoundingVolume* fence) {
+  if (_fence != fence) {
+    delete _fence;
+
+    _fence = fence;
 
     if (_metadata != NULL) {
       _metadata->reloadNodes();
