@@ -410,7 +410,7 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
       if (eventType == Up) {
         if (_clickOnProcess) {
           const Touch* touch = touchEvent->getTouch(0);
-          const TouchEvent* downUpEvent = TouchEvent::create(DownUp, new Touch(*touch));
+          const TouchEvent* downUpEvent = TouchEvent::create(DownUp, touch->clone());
           notifyTouchEvent(ec, downUpEvent);
           delete downUpEvent;
         }

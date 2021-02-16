@@ -193,6 +193,7 @@ public:
                        const Vector3D& max) const;
 
   const double squaredDistanceTo(const Vector3D& that) const;
+  const double squaredDistanceTo(const MutableVector3D& that) const;
 
   const double distanceTo(const Vector3D& that) const;
   

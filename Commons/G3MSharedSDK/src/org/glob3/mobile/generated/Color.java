@@ -217,6 +217,7 @@ public class Color
   public static final Color ORANGE = Color.fromRGBA(1, 0.5f, 0, 1);
   public static final Color GREEN = Color.fromRGBA(0, 1, 0, 1);
   public static final Color BLUE = Color.fromRGBA(0, 0, 1, 1);
+  public static final Color NAVY = Color.fromRGBA(0, 0, 0.5f, 1);
 
   public static Color transparent()
   {

@@ -17,6 +17,7 @@
 #include "IDeviceInfo.hpp"
 #include "IIntBuffer.hpp"
 #include "IStringBuilder.hpp"
+#include "BoundingVolume.hpp"
 
 #include "XPCMetadata.hpp"
 #include "XPCMetadataListener.hpp"
@@ -133,7 +134,7 @@ XPCPointCloud::XPCPointCloud(const URL& serverURL,
                              bool dynamicPointSize,
                              const bool depthTest,
                              float verticalExaggeration,
-                             float deltaHeight,
+                             double deltaHeight,
                              XPCMetadataListener* metadataListener,
                              bool deleteMetadataListener,
                              XPCPointSelectionListener* pointSelectionListener,
@@ -163,7 +164,8 @@ _errorParsingMetadata(false),
 _metadata(NULL),
 _lastRenderedCount(0),
 _requiredDimensionIndices(NULL),
-_canceled(false)
+_canceled(false),
+_fence(NULL)
 {
   
 }
@@ -195,6 +197,17 @@ void XPCPointCloud::errorParsingMetadata() {
   _errorParsingMetadata = true;
 }
 
+void XPCPointCloud::initializePointColorizer() {
+  IIntBuffer* requiredDimensionIndices = NULL;
+  if (_pointColorizer != NULL) {
+    requiredDimensionIndices = _pointColorizer->initialize(_metadata);
+  }
+  if (_requiredDimensionIndices != requiredDimensionIndices) {
+    delete _requiredDimensionIndices;
+    _requiredDimensionIndices = requiredDimensionIndices;
+  }
+}
+
 void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
   _lastRenderedCount   = 0;
   _downloadingMetadata = false;
@@ -210,17 +223,8 @@ void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
     delete _metadata;
   }
   _metadata = metadata;
-  
-  
-  IIntBuffer* requiredDimensionIndices = NULL;
-  if (_pointColorizer != NULL) {
-    requiredDimensionIndices = _pointColorizer->initialize(_metadata);
-  }
-  if (_requiredDimensionIndices != requiredDimensionIndices) {
-    delete _requiredDimensionIndices;
-  }
-  _requiredDimensionIndices = requiredDimensionIndices;
-  
+
+  initializePointColorizer();
   
   if (_metadataListener != NULL) {
     _metadataListener->onMetadata(_metadata);
@@ -250,6 +254,8 @@ XPCPointCloud::~XPCPointCloud() {
   delete _metadata;
   
   delete _requiredDimensionIndices;
+
+  delete _fence;
   
 #ifdef JAVA_CODE
   super.dispose();
@@ -325,8 +331,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                            GLState* glState,
                            const Frustum* frustum,
                            long long nowInMS,
-                           bool renderDebug,
-                           const XPCSelectionResult* selectionResult) {
+                           bool renderDebug) {
   if (_metadata != NULL) {
     const long long renderedCount = _metadata->render(this,
                                                       rc,
@@ -335,7 +340,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                                                       frustum,
                                                       nowInMS,
                                                       renderDebug,
-                                                      selectionResult);
+                                                      _fence);
     
     if (_lastRenderedCount != renderedCount) {
       if (_verbose) {
@@ -351,7 +356,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
   }
 }
 
-const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) const {
+const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) {
   if ((_pointSelectionListener == NULL) || (_metadata == NULL)) {
     return false;
   }
@@ -365,7 +370,7 @@ const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
                                         const std::string& treeID,
                                         const std::string& nodeID,
                                         const int pointIndex,
-                                        const double distanceToRay) const {
+                                        const double distanceToRay) {
   if (_pointSelectionListener == NULL) {
     return false;
   }
@@ -377,4 +382,75 @@ const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
                                                   nodeID,
                                                   pointIndex,
                                                   distanceToRay);
+}
+
+void XPCPointCloud::setPointColorizer(XPCPointColorizer* pointColorizer,
+                                      bool deletePointColorizer) {
+  if (_pointColorizer != pointColorizer) {
+    if (_deletePointColorizer) {
+      delete _pointColorizer;
+    }
+
+    _pointColorizer = pointColorizer;
+
+    if (_metadata != NULL) {
+      initializePointColorizer();
+      _metadata->reloadNodes();
+    }
+  }
+  _deletePointColorizer = deletePointColorizer;
+}
+
+void XPCPointCloud::setPointSelectionListener(XPCPointSelectionListener* pointSelectionListener,
+                                              bool deletePointSelectionListener) {
+  if (_pointSelectionListener != pointSelectionListener) {
+    if (_deletePointSelectionListener) {
+      delete _pointSelectionListener;
+    }
+
+    _pointSelectionListener = pointSelectionListener;
+  }
+  _deletePointSelectionListener = deletePointSelectionListener;
+}
+
+void XPCPointCloud::setDepthTest(const bool depthTest) {
+  if (_depthTest != depthTest) {
+    _depthTest = depthTest;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
+
+void XPCPointCloud::setVerticalExaggeration(const float verticalExaggeration) {
+  if (_verticalExaggeration != verticalExaggeration) {
+    _verticalExaggeration = verticalExaggeration;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
+
+void XPCPointCloud::setDeltaHeight(const double deltaHeight) {
+  if (_deltaHeight != deltaHeight) {
+    _deltaHeight = deltaHeight;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
+
+void XPCPointCloud::setFence(BoundingVolume* fence) {
+  if (_fence != fence) {
+    delete _fence;
+
+    _fence = fence;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
 }

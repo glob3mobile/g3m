@@ -17,16 +17,22 @@
 #include <G3M/PlanetRenderer.hpp>
 
 #include <G3M/XPCRenderer.hpp>
+#include <G3M/XPCPointCloud.hpp>
 #include <G3M/XPCMetadataListener.hpp>
 #include <G3M/XPCMetadata.hpp>
 #include <G3M/XPCTree.hpp>
 #include <G3M/XPCRGBPointColorizer.hpp>
 #include <G3M/XPCIntensityPointColorizer.hpp>
 #include <G3M/XPCClassificationPointColorizer.hpp>
+#include <G3M/XPCHeightPointColorizer.hpp>
 #include <G3M/XPCPointSelectionListener.hpp>
 #include <G3M/G3MContext.hpp>
 #include <G3M/Measure.hpp>
 #include <G3M/MeasureHandler.hpp>
+#include <G3M/RampColorizer.hpp>
+#include <G3M/Sphere.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/EllipsoidShape.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
@@ -60,7 +66,8 @@ public:
                          const Geodetic3D& geodetic,
                          const Vector3D& cartesian,
                          int selectedIndex) {
-    measure->removeVertex(selectedIndex);
+//    measure->removeVertex(selectedIndex);
+
   }
 
   std::string getAngleLabel(Measure* measure,
@@ -87,17 +94,12 @@ class G3MXPointCloudDemoScene_PointSelectionListener : public XPCPointSelectionL
 private:
   G3MXPointCloudDemoScene* _scene;
 
-//  mutable Geodetic3D* _previousGeodetic;
-//  mutable Vector3D*   _previousCartesian;
-
   mutable Measure* _measure;
 
 public:
 
   G3MXPointCloudDemoScene_PointSelectionListener(G3MXPointCloudDemoScene* scene) :
   _scene(scene),
-//  _previousGeodetic(NULL),
-//  _previousCartesian(NULL)
   _measure(NULL)
   {
 
@@ -109,7 +111,7 @@ public:
     delete _measure;
   }
 
-  bool onSelectedPoint(const XPCPointCloud* pointCloud,
+  bool onSelectedPoint(XPCPointCloud* pointCloud,
                        const Vector3D& cartesian,
                        const Geodetic3D& geodetic,
                        const std::string& treeID,
@@ -118,118 +120,47 @@ public:
                        const double distanceToRay) const {
     G3MDemoModel* model = _scene->getModel();
 
-    if (_measure == NULL) {
-      _measure = new Measure(0.1,                             // vertexSphereRadius
-                             Color::fromRGBA(1, 1, 0, 0.6f),  // vertexColor
-                             Color::fromRGBA(1, 1, 1, 0.5f),  // vertexSelectedColor
-                             5.0f,                            // segmentLineWidth
-                             Color::fromRGBA(1, 1, 0, 0.6f),  // segmentColor
-                             geodetic,                        // firstVertex
-                             model->getShapesRenderer(),
-                             model->getMeshRenderer(),
-                             model->getMarksRenderer(),
-                             model->getG3MWidget()->getG3MContext()->getPlanet(),
-                             new G3MXPointCloudDemoScene_MeasureHandler(),
-                             true);
-    }
-    else {
-      _measure->addVertex( geodetic );
-    }
 
-//    {
-//      Shape* sphere = new EllipsoidShape(new Geodetic3D(geodetic),
-//                                         AltitudeMode::ABSOLUTE,
-//                                         Vector3D(0.1, 0.1, 0.1),
-//                                         (short) 16,  // resolution,
-//                                         0,           // float borderWidth,
-//                                         false,       // bool texturedInside,
-//                                         false,       // bool mercator,
-//                                         Color::fromRGBA(1, 1, 0, 0.6f) // const Color& surfaceColor,
-//                                         );
-//
-//
-//      model->getShapesRenderer()->addShape( sphere );
+    model->getShapesRenderer()->removeAllShapes();
+
+    const double radius = 50;
+    pointCloud->setFence( new Sphere(cartesian,
+                                      radius) );
+
+    model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
+                                                             AltitudeMode::ABSOLUTE,
+                                                             Vector3D(radius, radius, radius),
+                                                             (short) 24,                        /* resolution     */
+                                                             1,                                 /* borderWidth    */
+                                                             false,                             /* texturedInside */
+                                                             false,                             /* mercator       */
+                                                             Color::fromRGBA(0, 0, 0, 0.25f),   /* surfaceColor   */
+                                                             Color::newFromRGBA(0, 0, 0, 0.9f), /* borderColor    */
+                                                             true                               /* withNormals    */) );
+
+
+//    if (_measure == NULL) {
+//      _measure = new Measure(0.5,                             // vertexSphereRadius
+//                             Color::fromRGBA(1, 1, 0, 0.6f),  // vertexColor
+//                             Color::fromRGBA(1, 1, 1, 0.5f),  // vertexSelectedColor
+//                             5.0f,                            // segmentLineWidth
+//                             Color::fromRGBA(1, 1, 0, 0.6f),  // segmentColor
+//                             geodetic,                        // firstVertex
+//                             pointCloud->getVerticalExaggeration(),
+//                             pointCloud->getDeltaHeight(),
+//                             model->getShapesRenderer(),
+//                             model->getMeshRenderer(),
+//                             model->getMarksRenderer(),
+//                             model->getG3MWidget()->getG3MContext()->getPlanet(),
+//                             new G3MXPointCloudDemoScene_MeasureHandler(),
+//                             true);
+//    }
+//    else {
+//      _measure->addVertex(geodetic,
+//                          pointCloud->getVerticalExaggeration(),
+//                          pointCloud->getDeltaHeight());
 //    }
 //
-//    if (_previousGeodetic != NULL) {
-//      const Planet* planet = model->getG3MWidget()->getG3MContext()->getPlanet();
-//
-//      FloatBufferBuilderFromGeodetic* fbb = FloatBufferBuilderFromGeodetic::builderWithFirstVertexAsCenter(planet);
-//
-//      fbb->add( *_previousGeodetic );
-//      fbb->add(geodetic);
-//
-//      Mesh* mesh = new DirectMesh(GLPrimitive::lines(),
-//                                  true,
-//                                  fbb->getCenter(),
-//                                  fbb->create(),
-//                                  5.0f, // float lineWidth
-//                                  1.0f, // float pointSize
-//                                  Color::newFromRGBA(1, 1, 0, 0.6f), // const Color* flatColor
-//                                  NULL,  // const IFloatBuffer* colors
-//                                  false  // depthTest
-////                                  NULL,  // const IFloatBuffer* normals = NULL,
-////                                  true,  // bool polygonOffsetFill      = false,
-////                                  10,    // float polygonOffsetFactor   = 0,
-////                                  10     // float polygonOffsetUnits    = 0,
-//                                  );
-//
-//
-////      DirectMesh(const int primitive,
-////                 bool owner,
-////                 const Vector3D& center,
-////                 const IFloatBuffer* vertices,
-////                 float lineWidth,
-////                 float pointSize,
-////                 const Color* flatColor      = NULL,
-////                 const IFloatBuffer* colors  = NULL,
-////                 bool depthTest              = true,
-////                 const IFloatBuffer* normals = NULL,
-////                 bool polygonOffsetFill      = false,
-////                 float polygonOffsetFactor   = 0,
-////                 float polygonOffsetUnits    = 0,
-////                 bool cullFace               = false,
-////                 int  culledFace             = GLCullFace::back());
-//
-//      model->getMeshRenderer()->addMesh( mesh );
-//
-//      {
-//        Geodetic3D middle = Geodetic3D::linearInterpolation(geodetic, *_previousGeodetic, 0.5);
-//        Mark* distanceLabel = new Mark( IStringUtils::instance()->toString( (float) _previousCartesian->distanceTo(cartesian) ) + "m",
-//                                       middle,
-//                                       ABSOLUTE);
-//
-//        //      Mark(const std::string& label,
-//        //           const Geodetic3D&  position,
-//        //           AltitudeMode       altitudeMode,
-//        //           double             minDistanceToCamera=4.5e+06,
-//        //           const float        labelFontSize=20,
-//        //           const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-//        //           const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-//        //           MarkUserData*      userData=NULL,
-//        //           bool               autoDeleteUserData=true,
-//        //           MarkTouchListener* listener=NULL,
-//        //           bool               autoDeleteListener=false);
-//
-//        model->getMarksRenderer()->addMark( distanceLabel );
-//
-//
-////        const Angle angle = _previousCartesian->angleBetween(cartesian);
-////        Mark* angleLabel = new Mark( IStringUtils::instance()->toString( (float) angle._degrees ) + "d",
-////                                    geodetic ,
-////                                    ABSOLUTE);
-////
-////        model->getMarksRenderer()->addMark( angleLabel );
-//      }
-//
-//    }
-//
-//    delete _previousGeodetic;
-//    _previousGeodetic = new Geodetic3D(geodetic);
-//
-//    delete _previousCartesian;
-//    _previousCartesian = new Vector3D(cartesian);
-
     return true; // accepted point
   }
 
@@ -251,7 +182,7 @@ public:
       const XPCTree* tree = metadata->getTree(0);
 
       const Geodetic2D center = tree->getSector()->_center;
-      const double height = tree->getMaxHeight() * 10;
+      const double height = (tree->getMaxHeight() - metadata->_averagePosition._height) * 10;
       
       _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, height) );
     }
@@ -267,28 +198,30 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const float pointSize            = 2;
   const bool  dynamicPointSize     = true;
   const float verticalExaggeration = 1;
-  const bool  depthTest            = true;
+  const bool  depthTest            = false;
   const bool  verbose              = true;
 
 
 //  const std::string cloudName   = "TOPCON_IPS3_LOD";
-//  const float       deltaHeight = -50;
+//  const double      deltaHeight = -50;
 
 
 //  const std::string cloudName   = "Leica_FFCC_COMPLETE_LOD";
-//  const float       deltaHeight = -180;
+//  const double      deltaHeight = -180;
 
-  const std::string cloudName   = "PC_601fa9f0fe459753703dca36_LOD";
-  const float       deltaHeight = -180;
+  // const std::string cloudName   = "PC_601fa9f0fe459753703dca36_LOD";
+//  const double       deltaHeight = -180;
+  const std::string cloudName   = "PC_6024eaa3bb098a3ad6a9176d_LOD";
+  const double      deltaHeight = -396;
 
 //  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
-//  const float       deltaHeight = -170;
+//  const double      deltaHeight = -170;
 
 //  const std::string cloudName   = "Leica_M40_LOD";
-//  const float       deltaHeight = -580;
+//  const double      deltaHeight = -580;
 
 //  const std::string cloudName   = "NEON_LOD";
-//  const float       deltaHeight = -385;
+//  const double      deltaHeight = -385;
 
   const double minProjectedArea = 50000; //50000;
 
@@ -311,25 +244,28 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 
 #warning TODO cache
-  model->getXPCRenderer()->addPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
-                                         cloudName,
-                                         DownloadPriority::LOWER,
-                                         TimeInterval::zero(),
-                                         false,
-                                         new XPCRGBPointColorizer(),
-                                         // new XPCIntensityPointColorizer(),
-                                         // new XPCClassificationPointColorizer(),
-                                         true, // deletePointColorizer,
-                                         minProjectedArea,
-                                         pointSize,
-                                         dynamicPointSize,
-                                         depthTest,
-                                         verticalExaggeration,
-                                         deltaHeight,
-                                         new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
-                                         true,  // deleteMetadataListener,
-                                         new G3MXPointCloudDemoScene_PointSelectionListener(this),
-                                         true,  //  deletePointSelectionListener,
-                                         verbose);
+  XPCPointCloud* pointCould = new XPCPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
+                                                cloudName,
+                                                DownloadPriority::LOWER,
+                                                TimeInterval::zero(),
+                                                false,
+                                                // new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(), true, 1),
+                                                new XPCRGBPointColorizer(1),
+                                                // new XPCIntensityPointColorizer(1),
+                                                // new XPCClassificationPointColorizer(1),
+                                                true, // deletePointColorizer,
+                                                minProjectedArea,
+                                                pointSize,
+                                                dynamicPointSize,
+                                                depthTest,
+                                                verticalExaggeration,
+                                                deltaHeight,
+                                                new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
+                                                true,  // deleteMetadataListener,
+                                                new G3MXPointCloudDemoScene_PointSelectionListener(this),
+                                                true,  //  deletePointSelectionListener,
+                                                verbose);
+
+  model->getXPCRenderer()->addPointCloud(pointCould);
 
 }

@@ -8,10 +8,12 @@
 #ifndef XPCRGBPointColorizer_hpp
 #define XPCRGBPointColorizer_hpp
 
-#include "XPCPointColorizer.hpp"
+#include "XPCFixedAlphaPointColorizer.hpp"
+
+#include <string>
 
 
-class XPCRGBPointColorizer : public XPCPointColorizer {
+class XPCRGBPointColorizer : public XPCFixedAlphaPointColorizer {
 private:
   const std::string _redDimensionName;
   const std::string _greenDimensionName;
@@ -24,19 +26,22 @@ private:
 
 public:
 
-  XPCRGBPointColorizer();
+  XPCRGBPointColorizer(const float alpha);
 
   XPCRGBPointColorizer(const std::string& redDimensionName,
                        const std::string& greenDimensionName,
-                       const std::string& blueDimensionName);
+                       const std::string& blueDimensionName,
+                       const float alpha);
 
   ~XPCRGBPointColorizer();
 
   IIntBuffer* initialize(const XPCMetadata* metadata);
 
-  Color colorize(const XPCMetadata* metadata,
-                 const std::vector<const IByteBuffer*>* dimensionsValues,
-                 const size_t i);
+  void colorize(const XPCMetadata* metadata,
+                const double heights[],
+                const std::vector<const IByteBuffer*>* dimensionsValues,
+                const size_t i,
+                MutableColor& color);
 
 };
 

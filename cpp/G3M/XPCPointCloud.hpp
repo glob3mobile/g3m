@@ -28,6 +28,7 @@ class XPCPointSelectionListener;
 class Vector3D;
 class Geodetic3D;
 class ITimer;
+class BoundingVolume;
 
 
 class XPCPointCloud : public RCObject {
@@ -40,22 +41,22 @@ private:
   const bool                 _readExpired;
 
   XPCPointColorizer*         _pointColorizer;
-  const bool                 _deletePointColorizer;
+  bool                       _deletePointColorizer;
 
-  const double               _minProjectedArea;
+  double                     _minProjectedArea;
 
-  const float                _pointSize;
-  const bool                 _dynamicPointSize;
-  const bool                 _depthTest;
+  float                      _pointSize;
+  bool                       _dynamicPointSize;
+  bool                       _depthTest;
 
-  const float                _verticalExaggeration;
-  const float                _deltaHeight;
+  float                      _verticalExaggeration;
+  double                     _deltaHeight;
 
   XPCMetadataListener*       _metadataListener;
   const bool                 _deleteMetadataListener;
 
   XPCPointSelectionListener* _pointSelectionListener;
-  const bool                 _deletePointSelectionListener;
+  bool                       _deletePointSelectionListener;
 
   const bool                 _verbose;
 
@@ -71,6 +72,10 @@ private:
   long long _lastRenderedCount;
 
 
+  BoundingVolume* _fence;
+
+  void initializePointColorizer();
+
 protected:
   virtual ~XPCPointCloud();
 
@@ -83,16 +88,16 @@ public:
                 XPCPointColorizer* pointColorizer,
                 bool deletePointColorizer,
                 const double minProjectedArea,
-                float pointSize,
-                bool dynamicPointSize,
-                const bool depthTest,
-                float verticalExaggeration,
-                float deltaHeight,
-                XPCMetadataListener* metadataListener,
-                bool deleteMetadataListener,
-                XPCPointSelectionListener* pointSelectionListener,
-                bool deletePointSelectionListener,
-                bool verbose);
+                float pointSize = 1.0f,
+                bool dynamicPointSize = true,
+                const bool depthTest = true,
+                float verticalExaggeration = 1.0f,
+                double deltaHeight = 0,
+                XPCMetadataListener* metadataListener = NULL,
+                bool deleteMetadataListener = true,
+                XPCPointSelectionListener* pointSelectionListener = NULL,
+                bool deletePointSelectionListener = true,
+                bool verbose = false);
 
   const std::string getCloudName() const {
     return _cloudName;
@@ -102,15 +107,31 @@ public:
     return _verbose;
   }
 
+  void setPointColorizer(XPCPointColorizer* pointColorizer,
+                         bool deletePointColorizer);
+
+  void setPointSelectionListener(XPCPointSelectionListener* pointSelectionListener,
+                                 bool deletePointSelectionListener);
+
   const bool isDynamicPointSize() const {
     return _dynamicPointSize;
   }
+
+  void setDynamicPointSize(const bool dynamicPointSize) {
+    _dynamicPointSize = dynamicPointSize;
+  }
+
+  void setDepthTest(const bool depthTest);
+
+  void setVerticalExaggeration(const float verticalExaggeration);
+
+  void setDeltaHeight(const double deltaHeight);
 
   const float getVerticalExaggeration() const {
     return _verticalExaggeration;
   }
 
-  const float getDeltaHeight() const {
+  const double getDeltaHeight() const {
     return _deltaHeight;
   }
 
@@ -118,11 +139,23 @@ public:
     return _minProjectedArea;
   }
 
+  void setMinProjectedArea(const double minProjectedArea) {
+    _minProjectedArea = minProjectedArea;
+  }
+
   const XPCMetadata* getMetadada() const {
     return _metadata;
   }
 
   const float getDevicePointSize() const;
+
+  const float getPointSize() const {
+    return _pointSize;
+  }
+
+  void setPointSize(const float pointSize) {
+    _pointSize = pointSize;
+  }
 
   const bool depthTest() const {
     return _depthTest;
@@ -137,8 +170,7 @@ public:
               GLState* glState,
               const Frustum* frustum,
               long long nowInMS,
-              bool renderDebug,
-              const XPCSelectionResult* selectionResult);
+              bool renderDebug);
 
   void errorDownloadingMetadata();
   void errorParsingMetadata();
@@ -157,16 +189,18 @@ public:
     return _pointColorizer;
   }
 
-  const bool selectPoints(XPCSelectionResult* selectionResult) const;
+  const bool selectPoints(XPCSelectionResult* selectionResult);
 
   const bool selectedPoint(const Vector3D& cartesian,
                            const Geodetic3D& geodetic,
                            const std::string& treeID,
                            const std::string& nodeID,
                            const int pointIndex,
-                           const double distanceToRay) const;
+                           const double distanceToRay);
 
   void cancel();
+
+  void setFence(BoundingVolume* fence);
 
 };
 

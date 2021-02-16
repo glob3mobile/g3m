@@ -30,9 +30,7 @@ public class Measure
 {
   private static long INSTANCE_COUNTER = 0;
 
-
   private final String _instanceID;
-
 
   private final double _vertexSphereRadius;
   private final Color _vertexColor ;
@@ -134,6 +132,7 @@ public class Measure
       final Geodetic3D position = Geodetic3D.linearInterpolation(previous._geodetic, current._geodetic, 0.5);
   
       Mark mark = new Mark(label, new Geodetic3D(position._latitude, position._longitude, position._height + _vertexSphereRadius), AltitudeMode.ABSOLUTE);
+      mark.setZoomInAppears(false);
   
       mark.setToken(_instanceID);
   
@@ -169,6 +168,7 @@ public class Measure
       }
   
       Mark mark = new Mark(label, new Geodetic3D(current._geodetic._latitude, current._geodetic._longitude, current._geodetic._height + _vertexSphereRadius *2), AltitudeMode.ABSOLUTE);
+      mark.setZoomInAppears(false);
   
       mark.setToken(_instanceID);
   
@@ -182,27 +182,11 @@ public class Measure
   private MeasureHandler _measureHandler;
   private final boolean _deleteMeasureHandler;
 
-  private void resetSelection()
-  {
-    if (_selectedVertexIndex < 0)
-    {
-      return;
-    }
-  
-    _verticesSpheres.get(_selectedVertexIndex).setSelected(false);
-    _selectedVertexIndex = -1;
-  
-    if (_measureHandler != null)
-    {
-      _measureHandler.onVertexDeselection(this);
-    }
-  }
-
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning TODO: closed measure
 
-  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureHandler measureHandler, boolean deleteMeasureHandler)
+  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, float firstVerticalExaggeration, double firstVertexDeltaHeight, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureHandler measureHandler, boolean deleteMeasureHandler)
   {
      _instanceID = "_Measure_" + IStringUtils.instance().toString(INSTANCE_COUNTER++);
      _vertexSphereRadius = vertexSphereRadius;
@@ -217,7 +201,12 @@ public class Measure
      _selectedVertexIndex = -1;
      _measureHandler = measureHandler;
      _deleteMeasureHandler = deleteMeasureHandler;
-    addVertex(firstVertex);
+    addVertex(firstVertex, firstVerticalExaggeration, firstVertexDeltaHeight);
+  }
+
+  public final double getVertexSphereRadius()
+  {
+    return _vertexSphereRadius;
   }
 
   public final int getVerticesCount()
@@ -225,23 +214,23 @@ public class Measure
     return _vertices.size();
   }
 
-  public final void addVertex(Geodetic3D vertex)
+  public final void addVertex(Geodetic3D vertex, float verticalExaggeration, double deltaHeight)
   {
-    resetSelection();
+    clearSelection();
   
-    _vertices.add(new MeasureVertex(vertex, _planet));
+    _vertices.add(new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet));
   
     resetUI();
   }
 
-  public final void setVertex(int i, Geodetic3D vertex)
+  public final void setVertex(int i, Geodetic3D vertex, float verticalExaggeration, double deltaHeight)
   {
-    resetSelection();
+    clearSelection();
   
     if (_vertices.get(i) != null)
        _vertices.get(i).dispose();
   
-    _vertices.set(i, new MeasureVertex(vertex, _planet));
+    _vertices.set(i, new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet));
   
     resetUI();
   }
@@ -253,13 +242,26 @@ public class Measure
       return false;
     }
   
-    resetSelection();
+    clearSelection();
   
     _vertices.remove(i);
   
     resetUI();
   
     return true;
+  }
+
+  public final Geodetic3D getVertex(int i)
+  {
+    return _vertices.get(i)._geodetic;
+  }
+  public final double getDeltaHeight(int i)
+  {
+    return _vertices.get(i)._deltaHeight;
+  }
+  public final float getVerticalExaggeration(int i)
+  {
+    return _vertices.get(i)._verticalExaggeration;
   }
 
   public void dispose()
@@ -274,6 +276,22 @@ public class Measure
     {
       if (_measureHandler != null)
          _measureHandler.dispose();
+    }
+  }
+
+  public final void clearSelection()
+  {
+    if (_selectedVertexIndex < 0)
+    {
+      return;
+    }
+  
+    _verticesSpheres.get(_selectedVertexIndex).setSelected(false);
+    _selectedVertexIndex = -1;
+  
+    if (_measureHandler != null)
+    {
+      _measureHandler.onVertexDeselection(this);
     }
   }
 

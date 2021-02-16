@@ -111,6 +111,7 @@ public:
   static const Color ORANGE;
   static const Color GREEN;
   static const Color BLUE;
+  static const Color NAVY;
 
   static Color transparent() {
     return TRANSPARENT;

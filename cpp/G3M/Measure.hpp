@@ -25,11 +25,9 @@ class Geodetic3D;
 class Measure {
 private:
   static long long INSTANCE_COUNTER;
-  
-  
+
   const std::string _instanceID;
-  
-  
+
   const double _vertexSphereRadius;
   const Color  _vertexColor;
   const Color  _vertexSelectedColor;
@@ -54,10 +52,8 @@ private:
   std::vector<Measure_VertexShape*> _verticesSpheres;
   
   MeasureHandler* _measureHandler;
-  const bool                     _deleteMeasureHandler;
-  
-  void resetSelection();
-  
+  const bool      _deleteMeasureHandler;
+
 public:
   
 #warning TODO: closed measure
@@ -68,24 +64,40 @@ public:
           const float segmentLineWidth,
           const Color& segmentColor,
           const Geodetic3D& firstVertex,
+          const float firstVerticalExaggeration,
+          const double firstVertexDeltaHeight,
           ShapesRenderer* shapesRenderer,
           MeshRenderer* meshRenderer,
           MarksRenderer* marksRenderer,
           const Planet* planet,
           MeasureHandler* measureHandler,
           const bool deleteMeasureHandler);
+
+  const double getVertexSphereRadius() const {
+    return _vertexSphereRadius;
+  }
   
   const size_t getVerticesCount() const;
   
-  void addVertex(const Geodetic3D& vertex);
+  void addVertex(const Geodetic3D& vertex,
+                 const float verticalExaggeration,
+                 const double deltaHeight);
   
   void setVertex(const size_t i,
-                 const Geodetic3D& vertex);
+                 const Geodetic3D& vertex,
+                 const float verticalExaggeration,
+                 const double deltaHeight);
   
   bool removeVertex(const size_t i);
-  
+
+  const Geodetic3D getVertex(const size_t i) const;
+  const double getDeltaHeight(const size_t i) const;
+  const float getVerticalExaggeration(const size_t i) const;
+
   ~Measure();
-  
+
+  void clearSelection();
+
   void touchedOn(const int vertexIndex);
   
 };

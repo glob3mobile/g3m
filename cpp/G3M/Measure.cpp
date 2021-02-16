@@ -33,11 +33,18 @@ long long Measure::INSTANCE_COUNTER = 0;
 class MeasureVertex {
 public:
   const Geodetic3D _geodetic;
-  const Vector3D   _cartesian;
+  const float      _verticalExaggeration;
+  const double     _deltaHeight;
+
+  const Vector3D _cartesian;
 
   MeasureVertex(const Geodetic3D& geodetic,
+                const float  verticalExaggeration,
+                const double deltaHeight,
                 const Planet* planet) :
   _geodetic(geodetic),
+  _verticalExaggeration(verticalExaggeration),
+  _deltaHeight(deltaHeight),
   _cartesian( planet->toCartesian(geodetic) )
   {
 
@@ -148,6 +155,8 @@ Measure::Measure(const double vertexSphereRadius,
                  const float segmentLineWidth,
                  const Color& segmentColor,
                  const Geodetic3D& firstVertex,
+                 const float firstVerticalExaggeration,
+                 const double firstVertexDeltaHeight,
                  ShapesRenderer* shapesRenderer,
                  MeshRenderer* meshRenderer,
                  MarksRenderer* marksRenderer,
@@ -168,7 +177,9 @@ _selectedVertexIndex(-1),
 _measureHandler(measureHandler),
 _deleteMeasureHandler(deleteMeasureHandler)
 {
-  addVertex( firstVertex );
+  addVertex(firstVertex,
+            firstVerticalExaggeration,
+            firstVertexDeltaHeight);
 }
 
 Measure::~Measure() {
@@ -209,7 +220,7 @@ void Measure::touchedOn(const int vertexIndex) {
   }
 }
 
-void Measure::resetSelection() {
+void Measure::clearSelection() {
   if (_selectedVertexIndex < 0) {
     return;
   }
@@ -309,6 +320,7 @@ void Measure::createEdgeDistanceLabels() {
                                      position._longitude,
                                      position._height + _vertexSphereRadius),
                           ABSOLUTE);
+    mark->setZoomInAppears(false);
 
     mark->setToken(_instanceID);
 
@@ -347,6 +359,7 @@ void Measure::createVertexAngleLabels() {
                                      current->_geodetic._longitude,
                                      current->_geodetic._height + _vertexSphereRadius*2),
                           ABSOLUTE);
+    mark->setZoomInAppears(false);
 
     mark->setToken(_instanceID);
 
@@ -373,21 +386,25 @@ const size_t Measure::getVerticesCount() const {
   return _vertices.size();
 }
 
-void Measure::addVertex(const Geodetic3D& vertex) {
-  resetSelection();
+void Measure::addVertex(const Geodetic3D& vertex,
+                        const float verticalExaggeration,
+                        const double deltaHeight) {
+  clearSelection();
 
-  _vertices.push_back( new MeasureVertex(vertex, _planet) );
+  _vertices.push_back( new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet) );
 
   resetUI();
 }
 
 void Measure::setVertex(const size_t i,
-                        const Geodetic3D& vertex) {
-  resetSelection();
+                        const Geodetic3D& vertex,
+                        const float verticalExaggeration,
+                        const double deltaHeight) {
+  clearSelection();
 
   delete _vertices[i];
 
-  _vertices[i] = new MeasureVertex(vertex, _planet);
+  _vertices[i] = new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet);
 
   resetUI();
 }
@@ -397,7 +414,7 @@ bool Measure::removeVertex(const size_t i) {
     return false;
   }
 
-  resetSelection();
+  clearSelection();
 
 #ifdef C_CODE
   delete _vertices[i];
@@ -410,4 +427,16 @@ bool Measure::removeVertex(const size_t i) {
   resetUI();
 
   return true;
+}
+
+const Geodetic3D Measure::getVertex(const size_t i) const {
+  return _vertices[i]->_geodetic;
+}
+
+const double Measure::getDeltaHeight(const size_t i) const {
+  return _vertices[i]->_deltaHeight;
+}
+
+const float Measure::getVerticalExaggeration(const size_t i) const {
+  return _vertices[i]->_verticalExaggeration;
 }

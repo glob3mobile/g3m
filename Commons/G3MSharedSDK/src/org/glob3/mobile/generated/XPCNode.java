@@ -28,6 +28,7 @@ package org.glob3.mobile.generated;
 //class XPCSelectionResult;
 //class ITimer;
 //class XPCRenderingState;
+//class BoundingVolume;
 
 
 public class XPCNode extends RCObject
@@ -61,7 +62,7 @@ public class XPCNode extends RCObject
   {
     final Planet planet = rc.getPlanet();
   
-    final float deltaHeight = pointCloud.getDeltaHeight();
+    final double deltaHeight = pointCloud.getDeltaHeight();
     final float verticalExaggeration = pointCloud.getVerticalExaggeration();
   
     java.util.ArrayList<Vector3D> points = new java.util.ArrayList<Vector3D>(10);
@@ -97,19 +98,13 @@ public class XPCNode extends RCObject
   private IDownloader _downloader;
   private long _contentRequestID;
 
-  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc)
+  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, BoundingVolume fence, boolean nodeFullInsideFence)
   {
     _downloader = rc.getDownloader();
   
-    // const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
-    // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
+    final long deltaPriority = 100 - _id.length();
   
-  //  const long long deltaPriority = 100 - _id.length();
-  
-    final int depth = _id.length();
-    final long deltaPriority = (depth == 0) ? 100 : _id.length();
-  
-    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet()), true);
+    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet(), (fence == null) ? null : fence.copy(), nodeFullInsideFence), true);
   }
 
   private void cancelLoadContent()
@@ -256,7 +251,7 @@ public class XPCNode extends RCObject
   }
 
 
-  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCSelectionResult selectionResult, XPCRenderingState renderingState)
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCRenderingState renderingState, BoundingVolume fence)
   {
   
     long renderedCount = 0;
@@ -266,10 +261,10 @@ public class XPCNode extends RCObject
     final Sphere bounds = getBounds(rc, pointCloud);
     if (bounds != null)
     {
-      final boolean isVisible = bounds.touchesFrustum(frustum);
+      final boolean isVisible = bounds.touchesFrustum(frustum) && ((fence == null) || fence.touchesSphere(bounds));
+  
       if (isVisible)
       {
-  
         if (renderDebug)
         {
           bounds.render(rc, glState, Color.WHITE);
@@ -281,30 +276,29 @@ public class XPCNode extends RCObject
           _projectedAreaTS = nowInMS;
         }
   
-        final boolean isBigEnough = (_projectedArea >= pointCloud.getMinProjectedArea());
+        final boolean isBigEnough = (_id.length() == 0) || (_projectedArea >= pointCloud.getMinProjectedArea());
         if (isBigEnough)
         {
           renderedInThisFrame = true;
   
-          //        if (selectionRay != NULL) {
-          //          if (touchesRay(selectionRay)) {
-          //            bounds->render(rc, glState, Color::YELLOW);
-          //          }
-          //        }
+          //if (selectionRay != NULL) {
+          //  if (touchesRay(selectionRay)) {
+          //    bounds->render(rc, glState, Color::YELLOW);
+          //  }
+          //}
   
-          //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
+          //ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
   
           if (_children != null)
           {
             for (int i = 0; i < _childrenSize; i++)
             {
               XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selectionResult, renderingState);
+              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, renderingState, fence);
             }
-            if (_childrenSize == 0)
-            {
-              renderingState._pointSize = pointCloud.getDevicePointSize();
-            }
+            //if (_childrenSize == 0) {
+            //  renderingState._pointSize = pointCloud->getDevicePointSize();
+            //}
           }
   
           if (_children == null)
@@ -346,7 +340,9 @@ public class XPCNode extends RCObject
                 lastSplitTimer.start();
                 _canceled = false;
                 _loadingContent = true;
-                loadContent(pointCloud, treeID, rc);
+  
+                final boolean nodeFullInsideFence = (fence == null) || fence.fullContains(bounds);
+                loadContent(pointCloud, treeID, rc, fence, nodeFullInsideFence);
               }
             }
           }
@@ -437,6 +433,31 @@ public class XPCNode extends RCObject
     }
   
     unloadChildren();
+  }
+
+  public final void reload()
+  {
+    if (_loadingContent)
+    {
+      _loadingContent = false;
+      cancelLoadContent();
+    }
+  
+    if (_loadedContent)
+    {
+      _loadedContent = false;
+      unloadContent();
+    }
+  
+    unloadChildren();
+  
+    if (_mesh != null)
+       _mesh.dispose();
+    _mesh = null;
+  
+    if (_bounds != null)
+       _bounds.dispose();
+    _bounds = null;
   }
 
 }

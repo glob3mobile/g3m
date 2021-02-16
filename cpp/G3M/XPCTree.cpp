@@ -27,6 +27,10 @@ void XPCTree::cancel() const {
   _rootNode->cancel();
 }
 
+void XPCTree::reloadNodes() {
+  _rootNode->reload();
+}
+
 const Sector* XPCTree::getSector() const {
   return _rootNode->getSector();
 }
@@ -46,7 +50,7 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                           const Frustum* frustum,
                           long long nowInMS,
                           bool renderDebug,
-                          const XPCSelectionResult* selectionResult) const {
+                          const BoundingVolume* fence) const {
   if (_rootNode == NULL) {
     return 0;
   }
@@ -61,11 +65,11 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                            frustum,
                            nowInMS,
                            renderDebug,
-                           selectionResult,
-                           _renderingState);
+                           _renderingState,
+                           fence);
 }
 
 const bool XPCTree::selectPoints(XPCSelectionResult* selectionResult,
-                                 const XPCPointCloud* pointCloud) const {
+                                 XPCPointCloud* pointCloud) const {
   return (_rootNode != NULL) && _rootNode->selectPoints(selectionResult, pointCloud, _id);
 }

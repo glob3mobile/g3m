@@ -17,11 +17,6 @@ package org.glob3.mobile.generated;
 
 //class ITimer;
 //class XPCPointCloud;
-//class URL;
-//class TimeInterval;
-//class XPCPointColorizer;
-//class XPCMetadataListener;
-//class XPCPointSelectionListener;
 //class Camera;
 //class XPCSelectionResult;
 
@@ -124,10 +119,9 @@ public class XPCRenderer extends DefaultRenderer
         final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
         _errors.addAll(childErrors);
       }
-      else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
-      {
-        busyFlag = true;
-      }
+  //    else if (childRenderStateType == RENDER_BUSY) {
+  //      busyFlag = true;
+  //    }
     }
   
     if (errorFlag)
@@ -149,51 +143,8 @@ public class XPCRenderer extends DefaultRenderer
 
   }
 
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener, boolean deletePointSelectionListener)
+  public final void addPointCloud(XPCPointCloud pointCloud)
   {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, pointSelectionListener, deletePointSelectionListener, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, pointSelectionListener, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, null, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, true, null, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, null, true, null, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, 0, null, true, null, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, 1.0f, 0, null, true, null, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, true, 1.0f, 0, null, true, null, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, true, true, 1.0f, 0, null, true, null, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea)
-  {
-     addPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, 1.0f, true, true, 1.0f, 0, null, true, null, true, false);
-  }
-  public final void addPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, float deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener, boolean deletePointSelectionListener, boolean verbose)
-  {
-  
-    XPCPointCloud pointCloud = new XPCPointCloud(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, pointSelectionListener, deletePointSelectionListener, verbose);
-  
     if (_context != null)
     {
       pointCloud.initialize(_context);
@@ -238,7 +189,7 @@ public class XPCRenderer extends DefaultRenderer
       for (int i = 0; i < _cloudsSize; i++)
       {
         XPCPointCloud cloud = _clouds.get(i);
-        cloud.render(rc, _lastSplitTimer, _glState, frustum, nowInMS, _renderDebug, _selectionResult);
+        cloud.render(rc, _lastSplitTimer, _glState, frustum, nowInMS, _renderDebug);
       }
   
   //    if (_selectionResult != NULL) {
@@ -249,8 +200,6 @@ public class XPCRenderer extends DefaultRenderer
 
   public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
-    _renderDebug = false;
-  
     if (_cloudsSize > 0)
     {
       if (_lastCamera != null)
@@ -262,8 +211,6 @@ public class XPCRenderer extends DefaultRenderer
   
           if (!rayDirection.isNan())
           {
-            // _renderDebug = true;
-  
             final Vector3D rayOrigin = _lastCamera.getCartesianPosition();
   
             XPCSelectionResult selectionResult = new XPCSelectionResult(new Ray(rayOrigin, rayDirection));
@@ -301,11 +248,6 @@ public class XPCRenderer extends DefaultRenderer
          _selectionResult.dispose();
       _selectionResult = null;
     }
-  
-    //  if (!_renderDebug) {
-    //    delete _ray;
-    //    _ray = NULL;
-    //  }
   
     return false;
   }

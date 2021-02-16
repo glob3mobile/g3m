@@ -15,6 +15,7 @@ class Box;
 class Sphere;
 class Frustum;
 class Vector3D;
+class MutableVector3D;
 
 
 class BoundingVolume {
@@ -36,6 +37,7 @@ public:
   virtual bool touchesFrustum(const Frustum* that) const = 0;
 
   virtual bool contains(const Vector3D& point) const = 0;
+  virtual bool contains(const MutableVector3D& point) const = 0;
 
   virtual bool fullContains(const BoundingVolume* that) const = 0;
   virtual bool fullContainedInBox(const Box* that) const = 0;

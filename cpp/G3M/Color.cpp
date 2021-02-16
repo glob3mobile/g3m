@@ -27,6 +27,7 @@ const Color Color::RED         = Color::fromRGBA(1, 0, 0, 1);
 const Color Color::ORANGE      = Color::fromRGBA(1, 0.5f, 0, 1);
 const Color Color::GREEN       = Color::fromRGBA(0, 1, 0, 1);
 const Color Color::BLUE        = Color::fromRGBA(0, 0, 1, 1);
+const Color Color::NAVY        = Color::fromRGBA(0, 0, 0.5f, 1);
 
 
 Angle Color::getHue() const {

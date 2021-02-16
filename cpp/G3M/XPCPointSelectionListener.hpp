@@ -21,7 +21,7 @@ public:
   virtual ~XPCPointSelectionListener() {
   }
 
-  virtual bool onSelectedPoint(const XPCPointCloud* pointCloud,
+  virtual bool onSelectedPoint(XPCPointCloud* pointCloud,
                                const Vector3D& cartesian,
                                const Geodetic3D& geodetic,
                                const std::string& treeID,

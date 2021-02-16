@@ -13,9 +13,12 @@
 #include "XPCDimension.hpp"
 #include "IFactory.hpp"
 #include "IIntBuffer.hpp"
+#include "MutableColor.hpp"
+#include "Color.hpp"
 
 
-XPCIntensityPointColorizer::XPCIntensityPointColorizer() :
+XPCIntensityPointColorizer::XPCIntensityPointColorizer(const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _intensityDimensionName("Intensity"),
 _intensityDimensionIndex(-1),
 _ok(false)
@@ -23,7 +26,9 @@ _ok(false)
 
 }
 
-XPCIntensityPointColorizer::XPCIntensityPointColorizer(const std::string& intensityDimensionName) :
+XPCIntensityPointColorizer::XPCIntensityPointColorizer(const std::string& intensityDimensionName,
+                                                       const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _intensityDimensionName(intensityDimensionName),
 _intensityDimensionIndex(-1),
 _ok(false)
@@ -58,14 +63,17 @@ IIntBuffer* XPCIntensityPointColorizer::initialize(const XPCMetadata* metadata) 
   return requiredDimensionIndices;
 }
 
-Color XPCIntensityPointColorizer::colorize(const XPCMetadata* metadata,
-                                           const std::vector<const IByteBuffer*>* dimensionsValues,
-                                           const size_t i) {
+void XPCIntensityPointColorizer::colorize(const XPCMetadata* metadata,
+                                          const double heights[],
+                                          const std::vector<const IByteBuffer*>* dimensionsValues,
+                                          const size_t i,
+                                          MutableColor& color) {
   if (!_ok) {
-    return Color::RED;
+    color.set(1, 0, 0, 1);
+    return;
   }
 
   const float intensity = metadata->getDimension(_intensityDimensionIndex  )->getNormalizedValue( dimensionsValues->at(0), i );
 
-  return Color::fromRGBA(intensity, intensity, intensity, 1);
+  color.set(intensity, intensity, intensity, _alpha);
 }

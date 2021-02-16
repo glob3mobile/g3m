@@ -147,7 +147,7 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                               const Frustum* frustum,
                               long long nowInMS,
                               bool renderDebug,
-                              const XPCSelectionResult* selectionResult) {
+                              const BoundingVolume* fence) {
 
   long long renderedCount = 0;
 
@@ -161,14 +161,14 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                                   frustum,
                                   nowInMS,
                                   renderDebug,
-                                  selectionResult);
+                                  fence);
   }
 
   return renderedCount;
 }
 
 const bool XPCMetadata::selectPoints(XPCSelectionResult* selectionResult,
-                                     const XPCPointCloud* pointCloud) const {
+                                     XPCPointCloud* pointCloud) const {
   bool selectedPoints = false;
   for (size_t i = 0; i < _treesSize; i++) {
     const XPCTree* tree = _trees->at(i);
@@ -177,4 +177,11 @@ const bool XPCMetadata::selectPoints(XPCSelectionResult* selectionResult,
     }
   }
   return selectedPoints;
+}
+
+void XPCMetadata::reloadNodes() {
+  for (size_t i = 0; i < _treesSize; i++) {
+    XPCTree* tree = _trees->at(i);
+    tree->reloadNodes();
+  }
 }

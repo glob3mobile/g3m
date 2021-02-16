@@ -25,11 +25,7 @@ private:
 
 
   // point full id
-#ifdef C_CODE
-  const XPCPointCloud* _pointCloud;
-#else
   XPCPointCloud* _pointCloud;
-#endif
   std::string _treeID;
   std::string _nodeID;
   int _pointIndex;
@@ -46,7 +42,7 @@ public:
 
   const Sphere* getSelectionSphere() const;
 
-  const bool notifyPointCloud(const Planet* planet) const;
+  const bool notifyPointCloud(const Planet* planet);
 
   void render(const G3MRenderContext* rc,
               GLState* glState) const;
@@ -54,7 +50,7 @@ public:
   bool isInterestedIn(const Sphere* area) const;
 
   bool evaluateCantidate(const MutableVector3D& cartesianPoint,
-                         const XPCPointCloud* pointCloud,
+                         XPCPointCloud* pointCloud,
                          const std::string& treeID,
                          const std::string& nodeID,
                          const int pointIndex);

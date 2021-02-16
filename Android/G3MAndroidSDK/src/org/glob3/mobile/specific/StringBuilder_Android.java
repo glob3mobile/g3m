@@ -16,7 +16,7 @@ public final class StringBuilder_Android
    // DecimalFormatSymbols(Locale.US));
 
 
-   public StringBuilder_Android(final int floatPrecision) {
+   public StringBuilder_Android(@SuppressWarnings("unused") final int floatPrecision) {
       // _df.setMaximumFractionDigits(floatPrecision);
    }
 

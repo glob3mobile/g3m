@@ -21,6 +21,7 @@ class XPCDimension;
 class XPCTree;
 class XPCSelectionResult;
 class ITimer;
+class BoundingVolume;
 
 
 class XPCMetadata {
@@ -42,10 +43,10 @@ public:
                    const Frustum* frustum,
                    long long nowInMS,
                    bool renderDebug,
-                   const XPCSelectionResult* selectionResult);
+                   const BoundingVolume* fence);
 
   const bool selectPoints(XPCSelectionResult* selectionResult,
-                          const XPCPointCloud* pointCloud) const;
+                          XPCPointCloud* pointCloud) const;
 
   const size_t getTreesCount() const;
   const XPCTree* getTree(const size_t i) const;
@@ -54,6 +55,8 @@ public:
   const XPCDimension* getDimension(const size_t i) const;
 
   void cancel();
+
+  void reloadNodes();
 
 private:
   XPCMetadata(const XPCMetadata& that);

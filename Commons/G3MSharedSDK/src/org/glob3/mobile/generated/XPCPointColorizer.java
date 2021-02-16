@@ -15,10 +15,13 @@ package org.glob3.mobile.generated;
 
 
 
+///#include "Color.hpp"
+
 
 //class XPCMetadata;
 //class IIntBuffer;
 //class IByteBuffer;
+//class MutableColor;
 
 
 public abstract class XPCPointColorizer
@@ -29,6 +32,6 @@ public abstract class XPCPointColorizer
 
   public abstract IIntBuffer initialize(XPCMetadata metadata);
 
-  public abstract Color colorize(XPCMetadata metadata, java.util.ArrayList<IByteBuffer> dimensionsValues, int i);
+  public abstract void colorize(XPCMetadata metadata, double[] heights, java.util.ArrayList<IByteBuffer> dimensionsValues, int i, MutableColor color);
 
 }

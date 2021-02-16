@@ -165,6 +165,9 @@ final class MotionEventProcessor {
    }
 
 
+   /**
+    * @param event
+    */
    private TouchEvent processTouchCancel(final Event event) {
       _previousTouchesPositions.clear();
       return null;

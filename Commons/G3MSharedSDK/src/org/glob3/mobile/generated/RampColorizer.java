@@ -6,6 +6,8 @@ package org.glob3.mobile.generated;
 //  Created by Nico on 21/02/2019.
 //
 
+
+
 //
 //  RampColorizer.hpp
 //  G3M
@@ -14,6 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
+
+
+//class MutableColor;
 
 
 public class RampColorizer
@@ -48,6 +53,43 @@ public class RampColorizer
     }
   }
 
+  public static RampColorizer colorSpectrum()
+  {
+    java.util.ArrayList<Color> colors = new java.util.ArrayList<Color>();
+    colors.add(Color.NAVY);
+    colors.add(Color.BLUE);
+    colors.add(Color.GREEN);
+    colors.add(Color.YELLOW);
+    colors.add(Color.RED);
+    return createRampColorizer(colors);
+  }
+  public static RampColorizer visibleSpectrum()
+  {
+    java.util.ArrayList<Color> colors = new java.util.ArrayList<Color>();
+    colors.add(Color.fromRGBA255(255, 0, 255));
+    colors.add(Color.fromRGBA255(0, 0, 255));
+    colors.add(Color.fromRGBA255(0, 255, 0));
+    colors.add(Color.fromRGBA255(255, 255, 0));
+    colors.add(Color.fromRGBA255(255, 0, 0));
+    return createRampColorizer(colors);
+  }
+  public static RampColorizer sunrise()
+  {
+    java.util.ArrayList<Color> colors = new java.util.ArrayList<Color>();
+    colors.add(Color.WHITE);
+    colors.add(Color.YELLOW);
+    colors.add(Color.RED);
+    return createRampColorizer(colors);
+  }
+  public static RampColorizer reds()
+  {
+    java.util.ArrayList<Color> colors = new java.util.ArrayList<Color>();
+    colors.add(Color.fromRGBA255(255, 255, 255));
+    colors.add(Color.fromRGBA255(254, 224, 210));
+    colors.add(Color.fromRGBA255(252, 146, 114));
+    colors.add(Color.fromRGBA255(222, 45, 38));
+    return createRampColorizer(colors);
+  }
 
   public static RampColorizer createRampColorizer(java.util.ArrayList<Color> colors, java.util.ArrayList<Float> steps)
   {
@@ -102,6 +144,11 @@ public class RampColorizer
     final float localAlpha = 1 - (deltaStep * (_colorsLength - 1));
   
     return _colors.get(baseColorIndex - 1).mixedWith((_colors.get(baseColorIndex)), localAlpha);
+  }
+
+  public final void getColor(float alpha, MutableColor color)
+  {
+    color.set(getColor(alpha));
   }
 
 }

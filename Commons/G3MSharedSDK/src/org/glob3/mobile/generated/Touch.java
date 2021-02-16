@@ -14,9 +14,6 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
-
 public class Touch
 {
   private final Vector2F _pos;
@@ -30,12 +27,11 @@ public class Touch
      _prevPos = other._prevPos;
      _tapCount = other._tapCount;
      _mouseWheelDelta = other._mouseWheelDelta;
-
   }
 
   public Touch(Vector2F pos, Vector2F prev)
   {
-     this(pos, prev, (byte)0);
+     this(pos, prev, (byte)1);
   }
   public Touch(Vector2F pos, Vector2F prev, byte tapCount)
   {
@@ -51,6 +47,11 @@ public class Touch
      _prevPos = prev;
      _tapCount = tapCount;
      _mouseWheelDelta = mouseWheelDelta;
+  }
+
+  public final Touch clone()
+  {
+    return new Touch(_pos, _prevPos, _tapCount);
   }
 
   public final Vector2F getPos()

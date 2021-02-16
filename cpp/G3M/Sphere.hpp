@@ -96,7 +96,8 @@ public:
                            const double radiusDelta) const;
   
   bool contains(const Vector3D& point) const;
-  
+  bool contains(const MutableVector3D& point) const;
+
   bool fullContains(const BoundingVolume* that) const {
     return that->fullContainedInSphere(this);
   }

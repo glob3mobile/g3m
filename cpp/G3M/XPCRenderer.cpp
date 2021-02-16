@@ -69,36 +69,7 @@ void XPCRenderer::removeAllPointClouds() {
 }
 
 
-void XPCRenderer::addPointCloud(const URL& serverURL,
-                                const std::string& cloudName,
-                                long long downloadPriority,
-                                const TimeInterval& timeToCache,
-                                bool readExpired,
-                                XPCPointColorizer* pointColorizer,
-                                bool deletePointColorizer,
-                                const double minProjectedArea,
-                                float pointSize,
-                                bool dynamicPointSize,
-                                const bool depthTest,
-                                float verticalExaggeration,
-                                float deltaHeight,
-                                XPCMetadataListener* metadataListener,
-                                bool deleteMetadataListener,
-                                XPCPointSelectionListener* pointSelectionListener,
-                                bool deletePointSelectionListener,
-                                bool verbose) {
-  
-  XPCPointCloud* pointCloud = new XPCPointCloud(serverURL,
-                                                cloudName,
-                                                downloadPriority, timeToCache, readExpired,
-                                                pointColorizer, deletePointColorizer,
-                                                minProjectedArea,
-                                                pointSize, dynamicPointSize, depthTest,
-                                                verticalExaggeration, deltaHeight,
-                                                metadataListener, deleteMetadataListener,
-                                                pointSelectionListener, deletePointSelectionListener,
-                                                verbose);
-  
+void XPCRenderer::addPointCloud(XPCPointCloud* pointCloud) {
   if (_context != NULL) {
     pointCloud->initialize(_context);
   }
@@ -139,9 +110,9 @@ RenderState XPCRenderer::getRenderState(const G3MRenderContext* rc) {
       _errors.addAll(childErrors);
 #endif
     }
-    else if (childRenderStateType == RENDER_BUSY) {
-      busyFlag = true;
-    }
+//    else if (childRenderStateType == RENDER_BUSY) {
+//      busyFlag = true;
+//    }
   }
 
   if (errorFlag) {
@@ -190,8 +161,7 @@ void XPCRenderer::render(const G3MRenderContext* rc,
                     _glState,
                     frustum,
                     nowInMS,
-                    _renderDebug,
-                    _selectionResult);
+                    _renderDebug);
     }
 
 //    if (_selectionResult != NULL) {
@@ -202,8 +172,6 @@ void XPCRenderer::render(const G3MRenderContext* rc,
 
 bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
                                const TouchEvent* touchEvent) {
-  _renderDebug = false;
-
   if (_cloudsSize > 0) {
     if (_lastCamera != NULL) {
       if (touchEvent->getType() == LongPress) {
@@ -211,8 +179,6 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
         const Vector3D rayDirection = _lastCamera->pixel2Ray(touchedPixel);
 
         if (!rayDirection.isNan()) {
-          // _renderDebug = true;
-
           const Vector3D rayOrigin = _lastCamera->getCartesianPosition();
 
           XPCSelectionResult* selectionResult = new XPCSelectionResult(new Ray(rayOrigin, rayDirection));
@@ -243,11 +209,6 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
     delete _selectionResult;
     _selectionResult = NULL;
   }
-
-  //  if (!_renderDebug) {
-  //    delete _ray;
-  //    _ray = NULL;
-  //  }
 
   return false;
 }

@@ -14,44 +14,52 @@
 #include "IFactory.hpp"
 #include "IIntBuffer.hpp"
 #include "IByteBuffer.hpp"
-
-const Color XPCClassificationPointColorizer::COLORS[] = {
-  Color::fromRGBA255(215,  30,  30),    //  0 - Never Classified
-  Color::fromRGBA255(219,  61,  61),    //  1 - Unclassified
-  Color::fromRGBA255(255,   0, 255),    //  2 -  Ground
-  Color::fromRGBA255(  0, 143,   0),    //  3 - Low Vegetation
-  Color::fromRGBA255(  0, 191,   0),    //  4 - Medium Vegetation
-  Color::fromRGBA255(  0, 255,   0),    //  5 - High Vegetation
-  Color::fromRGBA255(255,   0,   0),    //  6 - Building
-  Color::fromRGBA255(207,  44,  44),    //  7 - Low Point / Noise
-  Color::fromRGBA255(255, 255,   0),    //  8 - Key Point / Reserved
-  Color::fromRGBA255(  0,   0, 255),    //  9 - Water
-  Color::fromRGBA255(  0, 224, 224),    // 10 - Rail
-  Color::fromRGBA255(224,   0, 224),    // 11 - Road Surface
-  Color::fromRGBA255( 66, 249,  63),    // 12 - Reserved
-  Color::fromRGBA255(189, 158,   3),    // 13 - Wire Guard / Shield
-  Color::fromRGBA255( 89, 214, 125),    // 14 - Wire Conductor / Phase
-  Color::fromRGBA255(147, 163, 120),    // 15 - Transmission Tower
-  Color::fromRGBA255(123,  50,  42),    // 16 - Wire Structure Connection
-  Color::fromRGBA255( 36, 120,  60),    // 17 - Bridge Deck
-  Color::fromRGBA255( 87,  38,  65)     // 18 - High Noise
-};
+#include "IMathUtils.hpp"
+#include "MutableColor.hpp"
 
 
-XPCClassificationPointColorizer::XPCClassificationPointColorizer() :
+void XPCClassificationPointColorizer::initializeColors(std::vector<const Color>& colors,
+                                                       const float alpha) {
+  const int alpha255 = IMathUtils::instance()->round( alpha * 255.0f );
+
+  colors.push_back( Color::fromRGBA255(215,  30,  30, alpha255) );   //  0 - Never Classified
+  colors.push_back( Color::fromRGBA255(219,  61,  61, alpha255) );   //  1 - Unclassified
+  colors.push_back( Color::fromRGBA255(255,   0, 255, alpha255) );   //  2 -  Ground
+  colors.push_back( Color::fromRGBA255(  0, 143,   0, alpha255) );   //  3 - Low Vegetation
+  colors.push_back( Color::fromRGBA255(  0, 191,   0, alpha255) );   //  4 - Medium Vegetation
+  colors.push_back( Color::fromRGBA255(  0, 255,   0, alpha255) );   //  5 - High Vegetation
+  colors.push_back( Color::fromRGBA255(255,   0,   0, alpha255) );   //  6 - Building
+  colors.push_back( Color::fromRGBA255(207,  44,  44, alpha255) );   //  7 - Low Point / Noise
+  colors.push_back( Color::fromRGBA255(255, 255,   0, alpha255) );   //  8 - Key Point / Reserved
+  colors.push_back( Color::fromRGBA255(  0,   0, 255, alpha255) );   //  9 - Water
+  colors.push_back( Color::fromRGBA255(  0, 224, 224, alpha255) );   // 10 - Rail
+  colors.push_back( Color::fromRGBA255(224,   0, 224, alpha255) );   // 11 - Road Surface
+  colors.push_back( Color::fromRGBA255( 66, 249,  63, alpha255) );   // 12 - Reserved
+  colors.push_back( Color::fromRGBA255(189, 158,   3, alpha255) );   // 13 - Wire Guard / Shield
+  colors.push_back( Color::fromRGBA255( 89, 214, 125, alpha255) );   // 14 - Wire Conductor / Phase
+  colors.push_back( Color::fromRGBA255(147, 163, 120, alpha255) );   // 15 - Transmission Tower
+  colors.push_back( Color::fromRGBA255(123,  50,  42, alpha255) );   // 16 - Wire Structure Connection
+  colors.push_back( Color::fromRGBA255( 36, 120,  60, alpha255) );   // 17 - Bridge Deck
+  colors.push_back( Color::fromRGBA255( 87,  38,  65, alpha255) );   // 18 - High Noise
+}
+
+XPCClassificationPointColorizer::XPCClassificationPointColorizer(const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _classificationDimensionName("Classification"),
 _classificationDimensionIndex(-1),
 _ok(false)
 {
-  
+  initializeColors(_colors, _alpha);
 }
 
-XPCClassificationPointColorizer::XPCClassificationPointColorizer(const std::string& classificationDimensionName) :
+XPCClassificationPointColorizer::XPCClassificationPointColorizer(const std::string& classificationDimensionName,
+                                                                 const float alpha) :
+XPCFixedAlphaPointColorizer(alpha),
 _classificationDimensionName(classificationDimensionName),
 _classificationDimensionIndex(-1),
 _ok(false)
 {
-  
+  initializeColors(_colors, _alpha);
 }
 
 XPCClassificationPointColorizer::~XPCClassificationPointColorizer() {
@@ -81,13 +89,22 @@ IIntBuffer* XPCClassificationPointColorizer::initialize(const XPCMetadata* metad
   return requiredDimensionIndices;
 }
 
-Color XPCClassificationPointColorizer::colorize(const XPCMetadata* metadata,
-                                                const std::vector<const IByteBuffer*>* dimensionsValues,
-                                                const size_t i) {
+void XPCClassificationPointColorizer::colorize(const XPCMetadata* metadata,
+                                               const double heights[],
+                                               const std::vector<const IByteBuffer*>* dimensionsValues,
+                                               const size_t i,
+                                               MutableColor& color) {
   if (!_ok) {
-    return Color::RED;
+    color.set(1, 0, 0, 1);
+    return;
   }
 
-  unsigned char classification = dimensionsValues->at(0)->get(i);
-  return (classification > 18) ? Color::RED : COLORS[classification];
+  const unsigned char classification = dimensionsValues->at(0)->get(i);
+
+  if (classification >= _colors.size()) {
+    color.set(1, 0, 0, 1);
+    return;
+  }
+
+  color.set( _colors[classification] );
 }

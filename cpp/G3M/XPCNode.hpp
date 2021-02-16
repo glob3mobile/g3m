@@ -25,6 +25,7 @@ class DirectMesh;
 class XPCSelectionResult;
 class ITimer;
 class XPCRenderingState;
+class BoundingVolume;
 
 
 class XPCNode : public RCObject {
@@ -66,7 +67,9 @@ private:
 
   void loadContent(const XPCPointCloud* pointCloud,
                    const std::string& treeID,
-                   const G3MRenderContext* rc);
+                   const G3MRenderContext* rc,
+                   const BoundingVolume* fence,
+                   const bool nodeFullInsideFence);
 
   void cancelLoadContent();
   void unloadContent();
@@ -110,14 +113,16 @@ public:
                    const Frustum* frustum,
                    long long nowInMS,
                    bool renderDebug,
-                   const XPCSelectionResult* selectionResult,
-                   XPCRenderingState& renderingState);
+                   XPCRenderingState& renderingState,
+                   const BoundingVolume* fence);
 
   const bool selectPoints(XPCSelectionResult* selectionResult,
-                          const XPCPointCloud* pointCloud,
+                          XPCPointCloud* pointCloud,
                           const std::string& treeID) const;
 
   void cancel();
+
+  void reload();
 
 };
 

@@ -235,6 +235,13 @@ const double Vector3D::squaredDistanceTo(const Vector3D& that) const {
   return (dx * dx) + (dy * dy) + (dz * dz);
 }
 
+const double Vector3D::squaredDistanceTo(const MutableVector3D& that) const {
+  const double dx = _x - that._x;
+  const double dy = _y - that._y;
+  const double dz = _z - that._z;
+  return (dx * dx) + (dy * dy) + (dz * dz);
+}
+
 Vector3D Vector3D::sub(const MutableVector3D& v) const {
   return Vector3D(_x - v.x(),
                   _y - v.y(),

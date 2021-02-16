@@ -8,34 +8,44 @@
 #ifndef XPCClassificationPointColorizer_hpp
 #define XPCClassificationPointColorizer_hpp
 
-#include "XPCPointColorizer.hpp"
+#include "XPCFixedAlphaPointColorizer.hpp"
+
+#include <string>
+#include <vector>
+
+#include "Color.hpp"
 
 
-class XPCClassificationPointColorizer : public XPCPointColorizer {
+class XPCClassificationPointColorizer : public XPCFixedAlphaPointColorizer {
 private:
 
-  const static Color COLORS[];
-
-
   const std::string _classificationDimensionName;
-  
+
   int _classificationDimensionIndex;
   
   bool _ok;
-  
+
+  std::vector<const Color> _colors;
+
+  static void initializeColors(std::vector<const Color>& colors,
+                               const float alpha);
+
 public:
   
-  XPCClassificationPointColorizer();
+  XPCClassificationPointColorizer(const float alpha);
   
-  XPCClassificationPointColorizer(const std::string& classificationDimensionName);
+  XPCClassificationPointColorizer(const std::string& classificationDimensionName,
+                                  const float alpha);
   
   ~XPCClassificationPointColorizer();
-  
+
   IIntBuffer* initialize(const XPCMetadata* metadata);
   
-  Color colorize(const XPCMetadata* metadata,
-                 const std::vector<const IByteBuffer*>* dimensionsValues,
-                 const size_t i);
+  void colorize(const XPCMetadata* metadata,
+                const double heights[],
+                const std::vector<const IByteBuffer*>* dimensionsValues,
+                const size_t i,
+                MutableColor& color);
   
 };
 

@@ -105,7 +105,8 @@ public:
 
   Vector3D closestPoint(const Vector3D& point) const;
 
-  bool contains(const Vector3D& p) const;
+  bool contains(const Vector3D& point) const;
+  bool contains(const MutableVector3D& point) const;
 
   bool fullContains(const BoundingVolume* that) const {
     return that->fullContainedInBox(this);

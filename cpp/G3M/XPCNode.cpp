@@ -21,9 +21,9 @@
 #include "Color.hpp"
 #include "IDownloader.hpp"
 #include "IIntBuffer.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
 #include "IFactory.hpp"
 #include "ITimer.hpp"
+#include "MutableColor.hpp"
 
 #include "XPCPointCloud.hpp"
 #include "XPCMetadata.hpp"
@@ -35,12 +35,12 @@
 
 class XPCNodeContentParserAsyncTask : public GAsyncTask {
 private:
-  const XPCPointCloud* _pointCloud;
-  XPCNode*             _node;
-
-  IByteBuffer*  _buffer;
-
-  const Planet* _planet;
+  const XPCPointCloud*  _pointCloud;
+  XPCNode*              _node;
+  IByteBuffer*          _buffer;
+  const Planet*         _planet;
+  const BoundingVolume* _fence;
+  const bool            _nodeFullInsideFence;
 
   std::vector<XPCNode*>*  _children;
   DirectMesh*             _mesh;
@@ -49,11 +49,15 @@ public:
   XPCNodeContentParserAsyncTask(const XPCPointCloud* pointCloud,
                                 XPCNode* node,
                                 IByteBuffer* buffer,
-                                const Planet* planet) :
+                                const Planet* planet,
+                                const BoundingVolume* fence,
+                                const bool nodeFullInsideFence) :
   _pointCloud(pointCloud),
   _node(node),
   _buffer(buffer),
   _planet(planet),
+  _fence(fence),
+  _nodeFullInsideFence(nodeFullInsideFence),
   _children(NULL),
   _mesh(NULL)
   {
@@ -73,6 +77,8 @@ public:
     }
 
     delete _mesh;
+
+    delete _fence;
 
     _node->_release();
     _pointCloud->_release();
@@ -109,8 +115,11 @@ public:
 
     IFloatBuffer* cartesianVertices = IFactory::instance()->createFloatBuffer( pointsCount * 3 /* X, Y, Z */ );
 
-    const float deltaHeight            = _pointCloud->getDeltaHeight();
-    const float verticalExaggeration   = _pointCloud->getVerticalExaggeration();
+    double* heights = new double[pointsCount];
+    bool*   visible = new bool[pointsCount];
+
+    const double deltaHeight          = _pointCloud->getDeltaHeight();
+    const float  verticalExaggeration = _pointCloud->getVerticalExaggeration();
 
     const float centerLatitudeDegrees  = it.nextFloat();
     const float centerLongitudeDegrees = it.nextFloat();
@@ -121,15 +130,24 @@ public:
                                                           ((double) centerHeight + deltaHeight) * verticalExaggeration);
     {
       MutableVector3D bufferCartesian;
+
       for (int i = 0; i < pointsCount; i++) {
         const double latitudeDegrees  = (double) it.nextFloat() + centerLatitudeDegrees;
         const double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
-        const double height           = (((double) it.nextFloat() + centerHeight) + deltaHeight) * verticalExaggeration;
+        const double rawHeight        = (double) it.nextFloat() + centerHeight;
+
+        heights[i] = rawHeight;
+
+        const double scaledHeight = (rawHeight + deltaHeight) * verticalExaggeration;
 
         _planet->toCartesianFromDegrees(latitudeDegrees,
                                         longitudeDegrees,
-                                        height,
+                                        scaledHeight,
                                         bufferCartesian);
+
+        visible[i] = ( (_fence == NULL) ||
+                       _nodeFullInsideFence ||
+                       _fence->contains(bufferCartesian) );
 
         cartesianVertices->rawPut((i * 3) + 0, (float) (bufferCartesian._x - cartesianCenter._x) );
         cartesianVertices->rawPut((i * 3) + 1, (float) (bufferCartesian._y - cartesianCenter._y) );
@@ -146,7 +164,6 @@ public:
       dimensionsValues = NULL;
     }
     else {
-
       const size_t dimensionsCount = dimensionIndices->size();
       dimensionsValues = new std::vector<const IByteBuffer*>();
       for (size_t j = 0; j < dimensionsCount; j++) {
@@ -164,22 +181,41 @@ public:
       THROW_EXCEPTION("Logic error");
     }
 
+    IFloatBuffer* colors = IFactory::instance()->createFloatBuffer( pointsCount * 4 /* R, G, B, A */ );
+    MutableColor  bufferColor;
+
     XPCPointColorizer* pointsColorizer = _pointCloud->getPointsColorizer();
 
-    FloatBufferBuilderFromColor colors;
-
     for (int i = 0; i < pointsCount; i++) {
-      if (pointsColorizer == NULL) {
-        colors.add(1, 1, 1, 1);
+      if ( visible[i] ) {
+        if (pointsColorizer == NULL) {
+          colors->rawPut((i * 4) + 0, 1 /* red   */);
+          colors->rawPut((i * 4) + 1, 1 /* green */);
+          colors->rawPut((i * 4) + 2, 1 /* blue  */);
+          colors->rawPut((i * 4) + 3, 1 /* alpha */);
+        }
+        else {
+          pointsColorizer->colorize(metadata,
+                                    heights,
+                                    dimensionsValues,
+                                    i,
+                                    bufferColor);
+          colors->rawPut((i * 4) + 0, bufferColor._red);
+          colors->rawPut((i * 4) + 1, bufferColor._green);
+          colors->rawPut((i * 4) + 2, bufferColor._blue);
+          colors->rawPut((i * 4) + 3, bufferColor._alpha);
+        }
       }
       else {
-        const Color color = pointsColorizer->colorize(metadata,
-                                                      dimensionsValues,
-                                                      i);
-
-        colors.add(color);
+        colors->rawPut((i * 4) + 0, 0.0f);
+        colors->rawPut((i * 4) + 1, 0.0f);
+        colors->rawPut((i * 4) + 2, 0.0f);
+        colors->rawPut((i * 4) + 3, 0.0f);
       }
     }
+
+    delete [] heights;
+    delete [] visible;
 
     if (dimensionsValues != NULL) {
       for (size_t i = 0; i < dimensionsValues->size(); i++) {
@@ -197,10 +233,9 @@ public:
                            cartesianVertices,
                            1,
                            _pointCloud->getDevicePointSize(),
-                           NULL,                    // flatColor
-                           colors.create(),         // const IFloatBuffer* colors
-                           _pointCloud->depthTest() // depthTest
-                           );
+                           NULL, // flatColor
+                           colors,
+                           _pointCloud->depthTest());
   }
 
   void onPostExecute(const G3MContext* context) {
@@ -218,22 +253,27 @@ public:
 
 class XPCNodeContentDownloadListener : public IBufferDownloadListener {
 private:
-  const XPCPointCloud* _pointCloud;
-  XPCNode*       _node;
-
-  const IThreadUtils* _threadUtils;
-  const Planet*       _planet;
+  const XPCPointCloud*  _pointCloud;
+  XPCNode*              _node;
+  const IThreadUtils*   _threadUtils;
+  const Planet*         _planet;
+  const BoundingVolume* _fence;
+  const bool            _nodeFullInsideFence;
 
 public:
 
   XPCNodeContentDownloadListener(const XPCPointCloud* pointCloud,
                                  XPCNode* node,
                                  const IThreadUtils* threadUtils,
-                                 const Planet* planet) :
+                                 const Planet* planet,
+                                 const BoundingVolume* fence,
+                                 const bool nodeFullInsideFence) :
   _pointCloud(pointCloud),
   _node(node),
   _threadUtils(threadUtils),
-  _planet(planet)
+  _planet(planet),
+  _fence(fence),
+  _nodeFullInsideFence(nodeFullInsideFence)
   {
     _pointCloud->_retain();
     _node->_retain();
@@ -246,25 +286,27 @@ public:
       delete buffer;
     }
     else {
-      if (_pointCloud->isVerbose()) {
-#ifdef C_CODE
-        ILogger::instance()->logInfo("Downloaded content for \"%s\" node \"%s\" (bytes=%ld)",
-                                     _pointCloud->getCloudName().c_str(),
-                                     _node->getID().c_str(),
-                                     buffer->size());
-#endif
-#ifdef JAVA_CODE
-        ILogger.instance().logInfo("Downloaded metadata for \"%s\" node \"%s\" (bytes=%d)",
-                                   _pointCloud.getCloudName(),
-                                   _node.getID(),
-                                   buffer.size());
-#endif
-      }
+//      if (_pointCloud->isVerbose()) {
+//#ifdef C_CODE
+//        ILogger::instance()->logInfo("Downloaded content for \"%s\" node \"%s\" (bytes=%ld)",
+//                                     _pointCloud->getCloudName().c_str(),
+//                                     _node->getID().c_str(),
+//                                     buffer->size());
+//#endif
+//#ifdef JAVA_CODE
+//        ILogger.instance().logInfo("Downloaded content for \"%s\" node \"%s\" (bytes=%d)",
+//                                   _pointCloud.getCloudName(),
+//                                   _node.getID(),
+//                                   buffer.size());
+//#endif
+//      }
 
       _threadUtils->invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud,
                                                                       _node,
                                                                       buffer,
-                                                                      _planet),
+                                                                      _planet,
+                                                                      (_fence == NULL) ? NULL : _fence->copy(),
+                                                                      _nodeFullInsideFence),
                                     true);
     }
   }
@@ -286,6 +328,8 @@ public:
   ~XPCNodeContentDownloadListener() {
     _node->_release();
     _pointCloud->_release();
+
+    delete _fence;
   }
 
 
@@ -360,8 +404,8 @@ Sphere* XPCNode::calculateBounds(const G3MRenderContext* rc,
                                  const XPCPointCloud* pointCloud) {
   const Planet* planet = rc->getPlanet();
 
-  const float deltaHeight          = pointCloud->getDeltaHeight();
-  const float verticalExaggeration = pointCloud->getVerticalExaggeration();
+  const double deltaHeight          = pointCloud->getDeltaHeight();
+  const float  verticalExaggeration = pointCloud->getVerticalExaggeration();
 
 #ifdef C_CODE
   const Vector3D c[10] = {
@@ -445,18 +489,34 @@ void XPCNode::cancel() {
   unloadChildren();
 }
 
+void XPCNode::reload() {
+  if (_loadingContent) {
+    _loadingContent = false;
+    cancelLoadContent();
+  }
+
+  if (_loadedContent) {
+    _loadedContent = false;
+    unloadContent();
+  }
+
+  unloadChildren();
+
+  delete _mesh;
+  _mesh = NULL;
+
+  delete _bounds;
+  _bounds = NULL;
+}
+
 void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                           const std::string& treeID,
-                          const G3MRenderContext* rc) {
+                          const G3MRenderContext* rc,
+                          const BoundingVolume* fence,
+                          const bool nodeFullInsideFence) {
   _downloader = rc->getDownloader();
 
-  // const long long deltaPriority = ((100 - _id.length()) * 1000) + _pointsCount;
-  // const long long deltaPriority = (_id.length() * 1000) + _pointsCount;
-
-//  const long long deltaPriority = 100 - _id.length();
-
-  const size_t depth = _id.length();
-  const long long deltaPriority =  (depth == 0) ? 100 : _id.length();
+  const long long deltaPriority = 100 - _id.length();
 
   _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
                                                            treeID,
@@ -465,7 +525,9 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                                                            new XPCNodeContentDownloadListener(pointCloud,
                                                                                               this,
                                                                                               rc->getThreadUtils(),
-                                                                                              rc->getPlanet()),
+                                                                                              rc->getPlanet(),
+                                                                                              (fence == NULL) ? NULL : fence->copy(),
+                                                                                              nodeFullInsideFence),
                                                            true);
 }
 
@@ -521,8 +583,8 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                           const Frustum* frustum,
                           long long nowInMS,
                           bool renderDebug,
-                          const XPCSelectionResult* selectionResult,
-                          XPCRenderingState& renderingState) {
+                          XPCRenderingState& renderingState,
+                          const BoundingVolume* fence) {
 
   long long renderedCount = 0;
 
@@ -530,9 +592,9 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
   const Sphere* bounds = getBounds(rc, pointCloud);
   if (bounds != NULL) {
-    const bool isVisible = bounds->touchesFrustum(frustum);
-    if (isVisible) {
+    const bool isVisible = bounds->touchesFrustum(frustum) && ((fence == NULL) || fence->touchesSphere(bounds));
 
+    if (isVisible) {
       if (renderDebug) {
         bounds->render(rc, glState, Color::WHITE);
       }
@@ -542,17 +604,17 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
         _projectedAreaTS = nowInMS;
       }
 
-      const bool isBigEnough = (_projectedArea >= pointCloud->getMinProjectedArea());
+      const bool isBigEnough = (_id.length() == 0) || (_projectedArea >= pointCloud->getMinProjectedArea());
       if (isBigEnough) {
         renderedInThisFrame = true;
 
-        //        if (selectionRay != NULL) {
-        //          if (touchesRay(selectionRay)) {
-        //            bounds->render(rc, glState, Color::YELLOW);
-        //          }
-        //        }
+        //if (selectionRay != NULL) {
+        //  if (touchesRay(selectionRay)) {
+        //    bounds->render(rc, glState, Color::YELLOW);
+        //  }
+        //}
 
-        //        ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
+        //ILogger::instance()->logInfo("- Rendering node \"%s\"", _id.c_str());
 
         if (_children != NULL) {
           for (size_t i = 0; i < _childrenSize; i++) {
@@ -565,12 +627,12 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                                            frustum,
                                            nowInMS,
                                            renderDebug,
-                                           selectionResult,
-                                           renderingState);
+                                           renderingState,
+                                           fence);
           }
-          if (_childrenSize == 0) {
-            renderingState._pointSize = pointCloud->getDevicePointSize();
-          }
+          //if (_childrenSize == 0) {
+          //  renderingState._pointSize = pointCloud->getDevicePointSize();
+          //}
         }
 
         if (_children == NULL) {
@@ -606,7 +668,9 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
               lastSplitTimer->start();
               _canceled = false;
               _loadingContent = true;
-              loadContent(pointCloud, treeID, rc);
+
+              const bool nodeFullInsideFence = (fence == NULL) || fence->fullContains(bounds) ;
+              loadContent(pointCloud, treeID, rc, fence, nodeFullInsideFence);
             }
           }
         }
@@ -627,7 +691,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 }
 
 const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult,
-                                 const XPCPointCloud* pointCloud,
+                                 XPCPointCloud* pointCloud,
                                  const std::string& treeID) const {
   if (_bounds == NULL) {
     return false;

@@ -244,6 +244,10 @@ bool Sphere::contains(const Vector3D& point) const {
   return _center.squaredDistanceTo(point) <= _radiusSquared;
 }
 
+bool Sphere::contains(const MutableVector3D& point) const {
+  return _center.squaredDistanceTo(point) <= _radiusSquared;
+}
+
 bool Sphere::fullContainedInBox(const Box* that) const {
   const Vector3D upper = that->getUpper();
   const Vector3D lower = that->getLower();
