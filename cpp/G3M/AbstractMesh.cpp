@@ -12,6 +12,7 @@
 #include "GLState.hpp"
 #include "Box.hpp"
 #include "MutableVector3D.hpp"
+#include "MutableColor.hpp"
 
 
 AbstractMesh::~AbstractMesh() {
@@ -139,16 +140,29 @@ const Vector3D AbstractMesh::getVertex(const size_t index) const {
 
 Color AbstractMesh::getColor(const size_t index) const {
   if (_colors == NULL) {
-
+    return Color::TRANSPARENT;
   }
   else {
-#error DIEGO AT WORK!
+    const size_t p = index * 4;
+    return Color::fromRGBA(_colors->get(p  ),
+                           _colors->get(p+1),
+                           _colors->get(p+2),
+                           _colors->get(p+3));
   }
 }
 
 void AbstractMesh::getColor(const size_t index,
                             MutableColor& result) const {
-#error DIEGO AT WORK!
+  if (_colors == NULL) {
+    result.set(Color::TRANSPARENT);
+  }
+  else {
+    const size_t p = index * 4;
+    result.set(_colors->get(p  ),
+               _colors->get(p+1),
+               _colors->get(p+2),
+               _colors->get(p+3));
+  }
 }
 
 size_t AbstractMesh::getVerticesCount() const {

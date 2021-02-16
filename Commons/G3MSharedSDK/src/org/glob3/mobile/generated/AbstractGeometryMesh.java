@@ -171,10 +171,21 @@ public abstract class AbstractGeometryMesh extends Mesh
     final int p = index * 3;
     return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
+
   public final void getVertex(int index, MutableVector3D result)
   {
     final int p = index * 3;
     result.set(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
+  }
+
+  public final Color getColor(int index)
+  {
+    return Color.TRANSPARENT;
+  }
+
+  public final void getColor(int index, MutableColor result)
+  {
+    result.set(Color.TRANSPARENT);
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

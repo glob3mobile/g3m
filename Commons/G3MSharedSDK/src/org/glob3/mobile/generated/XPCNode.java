@@ -390,13 +390,18 @@ public class XPCNode extends RCObject
       final int verticesCount = _mesh.getVerticesCount();
   
       MutableVector3D vertex = new MutableVector3D();
+      MutableColor color = new MutableColor();
       for (int i = 0; i < verticesCount; i++)
       {
         _mesh.getVertex(i, vertex);
+        _mesh.getColor(i, color);
   
-        if (selectionResult.evaluateCantidate(vertex, pointCloud, treeID, nodeID, i))
+        if (color._alpha <= 0)
         {
-          selectedPoint = true;
+          if (selectionResult.evaluateCantidate(vertex, pointCloud, treeID, nodeID, i))
+          {
+            selectedPoint = true;
+          }
         }
       }
     }

@@ -11,7 +11,8 @@
 #include "Vector3D.hpp"
 #include "BoundingVolume.hpp"
 #include "MutableVector3D.hpp"
-
+#include "Color.hpp"
+#include "MutableColor.hpp"
 
 CompositeMesh::~CompositeMesh() {
   const size_t childrenCount = _children.size();
@@ -103,6 +104,38 @@ BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
   }
 
   return result;
+}
+
+Color CompositeMesh::getColor(const size_t index) const {
+  int acumIndex = 0;
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    const size_t childIndex = index - acumIndex;
+    const size_t childSize = child->getVerticesCount();
+    if (childIndex < childSize) {
+      return child->getColor(childIndex);
+    }
+    acumIndex += childSize;
+  }
+  return Color::TRANSPARENT;
+}
+
+void CompositeMesh::getColor(const size_t index,
+                             MutableColor& result) const {
+  int acumIndex = 0;
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    const size_t childIndex = index - acumIndex;
+    const size_t childSize = child->getVerticesCount();
+    if (childIndex < childSize) {
+      child->getColor(childIndex, result);
+      return;
+    }
+    acumIndex += childSize;
+  }
+  result.set(Color::TRANSPARENT);
 }
 
 BoundingVolume* CompositeMesh::getBoundingVolume() const {

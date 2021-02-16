@@ -77,9 +77,20 @@ public class TexturedMesh extends Mesh
   {
     return _mesh.getVertex(index);
   }
+
   public final void getVertex(int index, MutableVector3D result)
   {
     _mesh.getVertex(index, result);
+  }
+
+  public final Color getColor(int index)
+  {
+    return _mesh.getColor(index);
+  }
+
+  public final void getColor(int index, MutableColor result)
+  {
+    _mesh.getColor(index, result);
   }
 
   public final TextureMapping getTextureMapping()

@@ -10,6 +10,7 @@
 
 #include "Box.hpp"
 #include "MutableVector3D.hpp"
+#include "MutableColor.hpp"
 
 
 AbstractGeometryMesh::~AbstractGeometryMesh() {
@@ -123,6 +124,15 @@ void AbstractGeometryMesh::getVertex(const size_t index,
   result.set(_vertices->get(p  ) + _center._x,
              _vertices->get(p+1) + _center._y,
              _vertices->get(p+2) + _center._z);
+}
+
+Color AbstractGeometryMesh::getColor(const size_t index) const {
+  return Color::TRANSPARENT;
+}
+
+void AbstractGeometryMesh::getColor(const size_t index,
+                                    MutableColor& result) const {
+  result.set(Color::TRANSPARENT);
 }
 
 size_t AbstractGeometryMesh::getVerticesCount() const {

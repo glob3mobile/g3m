@@ -103,6 +103,7 @@ public class CompositeMesh extends Mesh
     }
     return Vector3D.NANV;
   }
+
   public final void getVertex(int index, MutableVector3D result)
   {
     int acumIndex = 0;
@@ -120,6 +121,43 @@ public class CompositeMesh extends Mesh
       acumIndex += childSize;
     }
     result.copyFrom(Vector3D.NANV);
+  }
+
+  public final Color getColor(int index)
+  {
+    int acumIndex = 0;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      final int childIndex = index - acumIndex;
+      final int childSize = child.getVerticesCount();
+      if (childIndex < childSize)
+      {
+        return child.getColor(childIndex);
+      }
+      acumIndex += childSize;
+    }
+    return Color.TRANSPARENT;
+  }
+
+  public final void getColor(int index, MutableColor result)
+  {
+    int acumIndex = 0;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      final int childIndex = index - acumIndex;
+      final int childSize = child.getVerticesCount();
+      if (childIndex < childSize)
+      {
+        child.getColor(childIndex, result);
+        return;
+      }
+      acumIndex += childSize;
+    }
+    result.set(Color.TRANSPARENT);
   }
 
   public final BoundingVolume getBoundingVolume()
