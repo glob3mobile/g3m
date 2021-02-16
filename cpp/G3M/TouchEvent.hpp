@@ -18,16 +18,19 @@ private:
   const Vector2F      _pos;
   const Vector2F      _prevPos;
   const unsigned char _tapCount;
+  const double _wheelDelta;
 
   Touch(const Touch& other);
 
 public:
   Touch(const Vector2F& pos,
         const Vector2F& prev,
-        const unsigned char tapCount=(unsigned char)1):
+        const unsigned char tapCount=(unsigned char)1,
+        const double wheelDelta = 0.0):
   _pos(pos),
   _prevPos(prev),
-  _tapCount(tapCount)
+  _tapCount(tapCount),
+  _wheelDelta(wheelDelta)
   {
 
   }
@@ -35,12 +38,14 @@ public:
   const Touch* clone() const {
     return new Touch(_pos,
                      _prevPos,
-                     _tapCount);
+                     _tapCount,
+                     _wheelDelta);
   }
 
   const Vector2F getPos() const { return _pos; }
   const Vector2F getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
+  const double getMouseWheelDelta() const { return _wheelDelta; }
 
   ~Touch() {
   }

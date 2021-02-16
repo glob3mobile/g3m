@@ -928,6 +928,7 @@
 		CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */; };
 		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
+		D877330C25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; platformFilter = ios; };
 		E780A5AF16D3AEDA000F0395 /* SQDatabase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8B21BD15DD345D0068601A /* SQDatabase.h */; };
 		E780A5B016D3AEDA000F0395 /* GLUniformID_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */; };
@@ -2429,6 +2430,8 @@
 		D84625DE177732A900FC4862 /* ColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorMesh.vsh; sourceTree = "<group>"; };
 		D8769D8B17C394AC00CEF074 /* NoColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.fsh; sourceTree = "<group>"; };
 		D8769D8C17C394AC00CEF074 /* NoColorMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoColorMesh.vsh; sourceTree = "<group>"; };
+		D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraMouseWheelHandler.cpp; sourceTree = "<group>"; };
+		D877330B25DC0A8D009C6B6E /* CameraMouseWheelHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CameraMouseWheelHandler.hpp; sourceTree = "<group>"; };
 		D88EE1B51869A1D800AED85A /* MultiTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MultiTexturedMesh.fsh; sourceTree = "<group>"; };
 		D88EE1B61869A1D800AED85A /* MultiTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = MultiTexturedMesh.vsh; sourceTree = "<group>"; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -3471,6 +3474,8 @@
 				CF66019C23DF2DA500795C7F /* WrapperNearFrustumRenderer.cpp */,
 				CF66040023DF2DA900795C7F /* WrapperNearFrustumRenderer.hpp */,
 				CF05D55825B82B8900220105 /* XCP */,
+				D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */,
+				D877330B25DC0A8D009C6B6E /* CameraMouseWheelHandler.hpp */,
 			);
 			name = G3M;
 			path = ../../cpp/G3M;
@@ -3849,6 +3854,7 @@
 				CF66089523DF330600795C7F /* DownloaderImageBuilder.cpp in Sources */,
 				CF66089623DF330600795C7F /* GLFeatureGroup.cpp in Sources */,
 				CF66089723DF330600795C7F /* IG3MBuilder.cpp in Sources */,
+				D877330C25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp in Sources */,
 				CF66089823DF330600795C7F /* EllipsoidShape.cpp in Sources */,
 				CF66089923DF330600795C7F /* CenterStrategy.cpp in Sources */,
 				CF66089A23DF330600795C7F /* FloatBufferBuilderFromColor.cpp in Sources */,
