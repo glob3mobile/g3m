@@ -142,13 +142,12 @@ Color AbstractMesh::getColor(const size_t index) const {
   if (_colors == NULL) {
     return Color::TRANSPARENT;
   }
-  else {
-    const size_t p = index * 4;
-    return Color::fromRGBA(_colors->get(p  ),
-                           _colors->get(p+1),
-                           _colors->get(p+2),
-                           _colors->get(p+3));
-  }
+
+  const size_t p = index * 4;
+  return Color::fromRGBA(_colors->get(p  ),
+                         _colors->get(p+1),
+                         _colors->get(p+2),
+                         _colors->get(p+3));
 }
 
 void AbstractMesh::getColor(const size_t index,

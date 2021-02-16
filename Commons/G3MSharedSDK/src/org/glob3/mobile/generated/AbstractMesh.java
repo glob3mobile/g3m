@@ -220,11 +220,9 @@ public abstract class AbstractMesh extends TransformableMesh
     {
       return Color.TRANSPARENT;
     }
-    else
-    {
-      final int p = index * 4;
-      return Color.fromRGBA(_colors.get(p), _colors.get(p+1), _colors.get(p+2), _colors.get(p+3));
-    }
+  
+    final int p = index * 4;
+    return Color.fromRGBA(_colors.get(p), _colors.get(p+1), _colors.get(p+2), _colors.get(p+3));
   }
 
   public final void getColor(int index, MutableColor result)
