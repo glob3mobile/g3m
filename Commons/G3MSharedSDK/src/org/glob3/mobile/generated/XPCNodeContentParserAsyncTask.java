@@ -6,17 +6,19 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
   private IByteBuffer _buffer;
   private final Planet _planet;
   private final BoundingVolume _fence;
+  private final boolean _nodeFullInsideFence;
 
   private java.util.ArrayList<XPCNode> _children;
   private DirectMesh _mesh;
 
-  public XPCNodeContentParserAsyncTask(XPCPointCloud pointCloud, XPCNode node, IByteBuffer buffer, Planet planet, BoundingVolume fence)
+  public XPCNodeContentParserAsyncTask(XPCPointCloud pointCloud, XPCNode node, IByteBuffer buffer, Planet planet, BoundingVolume fence, boolean nodeFullInsideFence)
   {
      _pointCloud = pointCloud;
      _node = node;
      _buffer = buffer;
      _planet = planet;
      _fence = fence;
+     _nodeFullInsideFence = nodeFullInsideFence;
      _children = null;
      _mesh = null;
     _pointCloud._retain();
@@ -102,7 +104,6 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       {
         final double latitudeDegrees = (double) it.nextFloat() + centerLatitudeDegrees;
         final double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
-
         final double rawHeight = (double) it.nextFloat() + centerHeight;
 
         heights[i] = rawHeight;
@@ -111,7 +112,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
 
         _planet.toCartesianFromDegrees(latitudeDegrees, longitudeDegrees, scaledHeight, bufferCartesian);
 
-        visible[i] = (_fence == null) || _fence.contains(bufferCartesian);
+        visible[i] = ((_fence == null) || _nodeFullInsideFence || _fence.contains(bufferCartesian));
 
         cartesianVertices.rawPut((i * 3) + 0, (float)(bufferCartesian._x - cartesianCenter._x));
         cartesianVertices.rawPut((i * 3) + 1, (float)(bufferCartesian._y - cartesianCenter._y));

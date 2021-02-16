@@ -98,13 +98,13 @@ public class XPCNode extends RCObject
   private IDownloader _downloader;
   private long _contentRequestID;
 
-  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, BoundingVolume fence)
+  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, BoundingVolume fence, boolean nodeFullInsideFence)
   {
     _downloader = rc.getDownloader();
   
     final long deltaPriority = 100 - _id.length();
   
-    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet(), (fence == null) ? null : fence.copy()), true);
+    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet(), (fence == null) ? null : fence.copy(), nodeFullInsideFence), true);
   }
 
   private void cancelLoadContent()
@@ -261,7 +261,7 @@ public class XPCNode extends RCObject
     final Sphere bounds = getBounds(rc, pointCloud);
     if (bounds != null)
     {
-      final boolean isVisible = bounds.touchesFrustum(frustum) && (fence == null || bounds.touches(fence));
+      final boolean isVisible = bounds.touchesFrustum(frustum) && ((fence == null) || fence.touchesSphere(bounds));
   
       if (isVisible)
       {
@@ -340,7 +340,9 @@ public class XPCNode extends RCObject
                 lastSplitTimer.start();
                 _canceled = false;
                 _loadingContent = true;
-                loadContent(pointCloud, treeID, rc, fence);
+  
+                final boolean nodeFullInsideFence = (fence == null) || fence.fullContains(bounds);
+                loadContent(pointCloud, treeID, rc, fence, nodeFullInsideFence);
               }
             }
           }
