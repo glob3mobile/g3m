@@ -55,6 +55,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
     {
       return false;
     }
+    
+    if (touchEvent.getTouch(0).getMouseWheelDelta() != 0.0) {
+    	return false;
+    }
   
     switch (touchEvent.getType())
     {
