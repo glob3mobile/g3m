@@ -612,10 +612,10 @@ public class MutableMatrix44D
   public final void print(String name, ILogger log)
   {
     log.logInfo("MutableMatrix44D %s:\n", name);
-    log.logInfo("%f  %f %f %f\n", _m00, _m01,_m02, _m03);
-    log.logInfo("%f  %f %f %f\n", _m10, _m11,_m12, _m13);
-    log.logInfo("%f  %f %f %f\n", _m20, _m21,_m22, _m23);
-    log.logInfo("%f  %f %f %f\n", _m30, _m31,_m32, _m33);
+    log.logInfo("%.2f  %.2f %.2f %.2f\n", _m00, _m01,_m02, _m03);
+    log.logInfo("%.2f  %.2f %.2f %.2f\n", _m10, _m11,_m12, _m13);
+    log.logInfo("%.2f  %.2f %.2f %.2f\n", _m20, _m21,_m22, _m23);
+    log.logInfo("%.2f  %.2f %.2f %.2f\n", _m30, _m31,_m32, _m33);
     log.logInfo("\n");
   }
 
