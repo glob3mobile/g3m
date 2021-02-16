@@ -68,7 +68,8 @@ private:
   void loadContent(const XPCPointCloud* pointCloud,
                    const std::string& treeID,
                    const G3MRenderContext* rc,
-                   const BoundingVolume* fence);
+                   const BoundingVolume* fence,
+                   const bool nodeFullInsideFence);
 
   void cancelLoadContent();
   void unloadContent();

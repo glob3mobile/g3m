@@ -40,6 +40,7 @@ private:
   IByteBuffer*          _buffer;
   const Planet*         _planet;
   const BoundingVolume* _fence;
+  const bool            _nodeFullInsideFence;
 
   std::vector<XPCNode*>*  _children;
   DirectMesh*             _mesh;
@@ -49,12 +50,14 @@ public:
                                 XPCNode* node,
                                 IByteBuffer* buffer,
                                 const Planet* planet,
-                                const BoundingVolume* fence) :
+                                const BoundingVolume* fence,
+                                const bool nodeFullInsideFence) :
   _pointCloud(pointCloud),
   _node(node),
   _buffer(buffer),
   _planet(planet),
   _fence(fence),
+  _nodeFullInsideFence(nodeFullInsideFence),
   _children(NULL),
   _mesh(NULL)
   {
@@ -131,8 +134,7 @@ public:
       for (int i = 0; i < pointsCount; i++) {
         const double latitudeDegrees  = (double) it.nextFloat() + centerLatitudeDegrees;
         const double longitudeDegrees = (double) it.nextFloat() + centerLongitudeDegrees;
-
-        const double rawHeight    = (double) it.nextFloat() + centerHeight;
+        const double rawHeight        = (double) it.nextFloat() + centerHeight;
 
         heights[i] = rawHeight;
 
@@ -143,7 +145,9 @@ public:
                                         scaledHeight,
                                         bufferCartesian);
 
-        visible[i] = (_fence == NULL) || _fence->contains(bufferCartesian);
+        visible[i] = ( (_fence == NULL) ||
+                       _nodeFullInsideFence ||
+                       _fence->contains(bufferCartesian) );
 
         cartesianVertices->rawPut((i * 3) + 0, (float) (bufferCartesian._x - cartesianCenter._x) );
         cartesianVertices->rawPut((i * 3) + 1, (float) (bufferCartesian._y - cartesianCenter._y) );
@@ -254,6 +258,7 @@ private:
   const IThreadUtils*   _threadUtils;
   const Planet*         _planet;
   const BoundingVolume* _fence;
+  const bool            _nodeFullInsideFence;
 
 public:
 
@@ -261,12 +266,14 @@ public:
                                  XPCNode* node,
                                  const IThreadUtils* threadUtils,
                                  const Planet* planet,
-                                 const BoundingVolume* fence) :
+                                 const BoundingVolume* fence,
+                                 const bool nodeFullInsideFence) :
   _pointCloud(pointCloud),
   _node(node),
   _threadUtils(threadUtils),
   _planet(planet),
-  _fence(fence)
+  _fence(fence),
+  _nodeFullInsideFence(nodeFullInsideFence)
   {
     _pointCloud->_retain();
     _node->_retain();
@@ -298,7 +305,8 @@ public:
                                                                       _node,
                                                                       buffer,
                                                                       _planet,
-                                                                      (_fence == NULL) ? NULL : _fence->copy()),
+                                                                      (_fence == NULL) ? NULL : _fence->copy(),
+                                                                      _nodeFullInsideFence),
                                     true);
     }
   }
@@ -504,7 +512,8 @@ void XPCNode::reload() {
 void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                           const std::string& treeID,
                           const G3MRenderContext* rc,
-                          const BoundingVolume* fence) {
+                          const BoundingVolume* fence,
+                          const bool nodeFullInsideFence) {
   _downloader = rc->getDownloader();
 
   const long long deltaPriority = 100 - _id.length();
@@ -517,7 +526,8 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                                                                                               this,
                                                                                               rc->getThreadUtils(),
                                                                                               rc->getPlanet(),
-                                                                                              (fence == NULL) ? NULL : fence->copy()),
+                                                                                              (fence == NULL) ? NULL : fence->copy(),
+                                                                                              nodeFullInsideFence),
                                                            true);
 }
 
@@ -582,7 +592,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
   const Sphere* bounds = getBounds(rc, pointCloud);
   if (bounds != NULL) {
-    const bool isVisible = bounds->touchesFrustum(frustum) && (fence == NULL || bounds->touches(fence));
+    const bool isVisible = bounds->touchesFrustum(frustum) && ((fence == NULL) || fence->touchesSphere(bounds));
 
     if (isVisible) {
       if (renderDebug) {
@@ -658,7 +668,9 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
               lastSplitTimer->start();
               _canceled = false;
               _loadingContent = true;
-              loadContent(pointCloud, treeID, rc, fence);
+
+              const bool nodeFullInsideFence = (fence == NULL) || fence->fullContains(bounds) ;
+              loadContent(pointCloud, treeID, rc, fence, nodeFullInsideFence);
             }
           }
         }

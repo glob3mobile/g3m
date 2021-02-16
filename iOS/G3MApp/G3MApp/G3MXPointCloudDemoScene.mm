@@ -120,19 +120,19 @@ public:
                        const double distanceToRay) const {
     G3MDemoModel* model = _scene->getModel();
 
-    const double radius = 25;
+    const double radius = 50;
     pointCloud->setFence( new Sphere(cartesian,
                                       radius) );
 
     model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
                                                              AltitudeMode::ABSOLUTE,
                                                              Vector3D(radius, radius, radius),
-                                                             (short) 18,                        /* resolution     */
+                                                             (short) 24,                        /* resolution     */
                                                              1,                                 /* borderWidth    */
                                                              false,                             /* texturedInside */
                                                              false,                             /* mercator       */
-                                                             Color::fromRGBA(0, 0, 0, 0.4f),    /* surfaceColor   */
-                                                             Color::newFromRGBA(0, 0, 0, 0.8f), /* borderColor    */
+                                                             Color::fromRGBA(0, 0, 0, 0.25f),   /* surfaceColor   */
+                                                             Color::newFromRGBA(0, 0, 0, 0.9f), /* borderColor    */
                                                              true                               /* withNormals    */) );
 
 
@@ -246,8 +246,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                 DownloadPriority::LOWER,
                                                 TimeInterval::zero(),
                                                 false,
-                                                new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(), true, 1),
-                                                // new XPCRGBPointColorizer(1),
+                                                // new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(), true, 1),
+                                                new XPCRGBPointColorizer(1),
                                                 // new XPCIntensityPointColorizer(1),
                                                 // new XPCClassificationPointColorizer(1),
                                                 true, // deletePointColorizer,
