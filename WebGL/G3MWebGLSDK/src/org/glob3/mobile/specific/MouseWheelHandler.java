@@ -124,30 +124,41 @@ public class MouseWheelHandler extends CameraEventHandler {
 	@Override
 	public boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext) {
 		
+		double speed = 1.;//10.;
 		
-		
-		
-		//Logger.getLogger("").log(Level.INFO, "touch");
 		Touch touch = touchEvent.getTouch(0);
 		double wheelDelta = touch.getMouseWheelDelta();
 		if (wheelDelta != 0) {
 			Camera cam = cameraContext.getNextCamera();
-		    Vector2F pixel = touch.getPos().times(2.0f); //PIXEL COORDS ARE WRONG
-		    
-		    
+		    Vector2F pixel = touch.getPos();//.times(2.0f); //PIXEL COORDS ARE WRONG
+
 			Vector3D rayDir = cam.pixel2Ray(pixel);
 			Planet planet = eventContext.getPlanet();
+
 			Vector3D pos0 = cam.getCartesianPosition();
 			Vector3D p1 = planet.closestIntersection(pos0, rayDir);
 			
-		    cam.move(pos0.normalized().times(-1), cam.getGeodeticHeight() * 0.05 * wheelDelta);
+			double heightDelta = cam.getGeodeticHeight() * 0.05 * wheelDelta * speed;
+			
+		    if (!planet.isFlat()) {
 		    
-		    Vector3D p2 = planet.closestIntersection(cam.getCartesianPosition(), cam.pixel2Ray(pixel));
+			    cam.move(pos0.normalized().times(-1), heightDelta);
+			    
+			    Vector3D p2 = planet.closestIntersection(cam.getCartesianPosition(), cam.pixel2Ray(pixel));
+			    Angle angleP1P2 = Vector3D.angleBetween(p1, p2);
+			    Vector3D rotAxis = p2.cross(p1);
+			    
+			    if (!rotAxis.isNan() && !angleP1P2.isNan()) {
+				    MutableMatrix44D mat = MutableMatrix44D.createGeneralRotationMatrix(angleP1P2, rotAxis, Vector3D.ZERO);
+				    //log(mat.description() + " " + rotAxis.description() + " " + angleP1P2.description());
+				    cam.applyTransform(mat);
+				}
+		    }else {
+		    	Vector3D moveDir = p1.sub(pos0).normalized();
+		    	cam.move(moveDir, heightDelta);
+		    }
 		    
-		    Angle angleP1P2 = Vector3D.angleBetween(p1, p2);
-		    Vector3D rotAxis = p2.cross(p1);
-		    MutableMatrix44D mat = MutableMatrix44D.createGeneralRotationMatrix(angleP1P2, rotAxis, Vector3D.ZERO);
-		    cam.applyTransform(mat);
+		    log(cam.getGeodeticPosition().description() + " " + cam.getHeadingPitchRoll().description());
 		    
 			return true;
 		}

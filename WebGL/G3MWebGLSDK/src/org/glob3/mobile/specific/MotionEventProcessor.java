@@ -49,8 +49,6 @@ final class MotionEventProcessor {
                         final CanvasElement canvasElement) {
       _widget        = widget;
       _canvasElement = canvasElement;
-
-      jsAddMouseWheelListener();
    }
 
 
@@ -97,6 +95,7 @@ final class MotionEventProcessor {
 
       case Event.ONMOUSEWHEEL:
          event.preventDefault();
+         touchEvent = processMouseWheel(event);
          break;
 
       default:
@@ -265,78 +264,20 @@ final class MotionEventProcessor {
       return TouchEvent.create(TouchEventType.LongPress, touch);
    }
 
-
-//   private void processMouseWheel(final int delta,
-//                                  final int x,
-//                                  final int y) {
-//      final Vector2F beginFirstPosition  = new Vector2F(x - 10, y - 10);
-//      final Vector2F beginSecondPosition = new Vector2F(x + 10, y + 10);
-//
-//      final ArrayList<Touch> beginTouches = new ArrayList<>(2);
-//      beginTouches.add(new Touch(beginFirstPosition, beginFirstPosition));
-//      beginTouches.add(new Touch(beginSecondPosition, beginSecondPosition));
-//
-//
-//      final Vector2F endFirstPosition  = new Vector2F(beginFirstPosition._x - delta, beginFirstPosition._y - delta);
-//      final Vector2F endSecondPosition = new Vector2F(beginSecondPosition._x + delta, beginSecondPosition._y + delta);
-//
-//      final ArrayList<Touch> endTouches = new ArrayList<>(2);
-//      endTouches.add(new Touch(endFirstPosition, beginFirstPosition));
-//      endTouches.add(new Touch(endSecondPosition, beginSecondPosition));
-//
-//      dispatchEvents( //
-//            TouchEvent.create(TouchEventType.Down, beginTouches), //
-//            TouchEvent.create(TouchEventType.Move, endTouches), //
-//            TouchEvent.create(TouchEventType.Up, endTouches) //
-//      );
-//
-//      _previousMousePosition = new Vector2F(x, y);
-//   }
-   
-   private void processMouseWheel(final int delta,
-           final int x,
-           final int y) {
-		final Vector2F position  = new Vector2F(x, y);
+   private TouchEvent processMouseWheel(final Event event) {
+	   final Vector2F position = createPosition(event);
+	   int delta = jsGetMouseWheelDelta(event);
 		
 		final ArrayList<Touch> touches = new ArrayList<>(2);
 		touches.add(new Touch(position, position, (byte)0, delta));
-		
-		dispatchEvents( //
-				TouchEvent.create(TouchEventType.Down, touches)
-		);
-		
-		_previousMousePosition = new Vector2F(x, y);
+		_previousMousePosition = new Vector2F(position);
+		return TouchEvent.create(TouchEventType.Down, touches);
 	}
-
-
-   private native void jsAddMouseWheelListener() /*-{
-		var thisInstance = this;
-
-		var canvas = this.@org.glob3.mobile.specific.MotionEventProcessor::_canvasElement;
-
-		$wnd.g3mMouseWheelHandler = function(e) {
-			// cross-browser wheel delta
-			var e = $wnd.event || e; // old IE support
-			var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
-			thisInstance.@org.glob3.mobile.specific.MotionEventProcessor::processMouseWheel(III)(delta, e.clientX, e.clientY);
-		};
-
-		if (canvas) {
-			if (canvas.addEventListener) {
-				// IE9, Chrome, Safari, Opera
-				canvas.addEventListener("mousewheel",
-						$wnd.g3mMouseWheelHandler, false);
-				// Firefox
-				canvas.addEventListener("DOMMouseScroll",
-						$wnd.g3mMouseWheelHandler, false);
-			}
-			// IE 6/7/8
-			else {
-				canvas.attachEvent("onmousewheel", $wnd.g3mMouseWheelHandler);
-			}
-		}
-
-   }-*/;
-
+   
+   private native int jsGetMouseWheelDelta(Event event) /*-{
+		var e = event;
+		var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
+		return delta;
+	}-*/;
 
 }

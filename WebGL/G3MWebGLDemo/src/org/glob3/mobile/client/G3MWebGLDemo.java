@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
+import org.glob3.mobile.generated.FlatPlanet;
 import org.glob3.mobile.specific.*;
 
 import com.google.gwt.core.client.*;
@@ -39,10 +40,13 @@ public class G3MWebGLDemo
       CameraRenderer cameraRenderer = new CameraRenderer();
       final boolean useInertia = true;
       cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-      //cameraRenderer.addHandler(new CameraDoubleDragHandler());
-      //cameraRenderer.addHandler(new CameraRotationHandler());
+      cameraRenderer.addHandler(new CameraDoubleDragHandler());
+      cameraRenderer.addHandler(new CameraRotationHandler());
       cameraRenderer.addHandler(new CameraDoubleTapHandler());
       cameraRenderer.addHandler(new MouseWheelHandler());
+      
+      //builder.setPlanet(FlatPlanet.createEarth());
+      
       builder.setCameraRenderer(cameraRenderer);
       
      
