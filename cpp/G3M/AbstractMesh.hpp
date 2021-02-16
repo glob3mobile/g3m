@@ -76,6 +76,11 @@ public:
   void getVertex(const size_t index,
                  MutableVector3D& result) const;
 
+  Color getColor(const size_t index) const;
+
+  void getColor(const size_t index,
+                MutableColor& result) const;
+
   virtual bool isTransparent(const G3MRenderContext* rc) const;
 
   void rawRender(const G3MRenderContext* rc,

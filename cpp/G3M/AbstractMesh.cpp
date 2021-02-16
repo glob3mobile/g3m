@@ -137,6 +137,20 @@ const Vector3D AbstractMesh::getVertex(const size_t index) const {
                   _vertices->get(p+2) + _center._z);
 }
 
+Color AbstractMesh::getColor(const size_t index) const {
+  if (_colors == NULL) {
+
+  }
+  else {
+#error DIEGO AT WORK!
+  }
+}
+
+void AbstractMesh::getColor(const size_t index,
+                            MutableColor& result) const {
+#error DIEGO AT WORK!
+}
+
 size_t AbstractMesh::getVerticesCount() const {
   return _vertices->size() / 3;
 }

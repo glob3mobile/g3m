@@ -713,15 +713,19 @@ const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult,
     const size_t verticesCount = _mesh->getVerticesCount();
 
     MutableVector3D vertex;
+    MutableColor    color;
     for (int i = 0; i < verticesCount; i++) {
       _mesh->getVertex(i, vertex);
+      _mesh->getColor(i, color);
 
-      if ( selectionResult->evaluateCantidate(vertex,
-                                              pointCloud,
-                                              treeID,
-                                              nodeID,
-                                              i) ) {
-        selectedPoint = true;
+      if (color._alpha <= 0) {
+        if ( selectionResult->evaluateCantidate(vertex,
+                                                pointCloud,
+                                                treeID,
+                                                nodeID,
+                                                i) ) {
+          selectedPoint = true;
+        }
       }
     }
   }
