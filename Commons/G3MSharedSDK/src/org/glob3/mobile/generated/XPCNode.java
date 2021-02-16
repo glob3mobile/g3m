@@ -396,7 +396,7 @@ public class XPCNode extends RCObject
         _mesh.getVertex(i, vertex);
         _mesh.getColor(i, color);
   
-        if (color._alpha <= 0)
+        if (color._alpha > 0)
         {
           if (selectionResult.evaluateCantidate(vertex, pointCloud, treeID, nodeID, i))
           {

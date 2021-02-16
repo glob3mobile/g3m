@@ -718,7 +718,7 @@ const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult,
       _mesh->getVertex(i, vertex);
       _mesh->getColor(i, color);
 
-      if (color._alpha <= 0.1) {
+      if (color._alpha > 0) {
         if ( selectionResult->evaluateCantidate(vertex,
                                                 pointCloud,
                                                 treeID,
