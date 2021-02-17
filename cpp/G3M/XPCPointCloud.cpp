@@ -166,6 +166,7 @@ _metadata(NULL),
 _lastRenderedCount(0),
 _requiredDimensionIndices(NULL),
 _canceled(false),
+_selection(NULL),
 _fence(NULL)
 {
   
@@ -256,6 +257,8 @@ XPCPointCloud::~XPCPointCloud() {
   
   delete _requiredDimensionIndices;
 
+  delete _selection;
+
   delete _fence;
   
 #ifdef JAVA_CODE
@@ -341,6 +344,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                                                       frustum,
                                                       nowInMS,
                                                       renderDebug,
+                                                      _selection,
                                                       _fence);
     
     if (_lastRenderedCount != renderedCount) {
@@ -460,3 +464,23 @@ void XPCPointCloud::setFence(BoundingVolume* fence) {
     }
   }
 }
+
+const BoundingVolume* XPCPointCloud::getFence() const {
+  return _fence;
+};
+
+void XPCPointCloud::setSelection(BoundingVolume* selection) {
+  if (_selection != selection) {
+    delete _selection;
+
+    _selection = selection;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
+
+const BoundingVolume* XPCPointCloud::getSelection() const {
+  return _selection;
+};

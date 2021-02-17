@@ -124,7 +124,7 @@ public:
     model->getShapesRenderer()->removeAllShapes();
 
     const double radius = 50;
-    pointCloud->setFence( new Sphere(cartesian,
+    pointCloud->setSelection( new Sphere(cartesian,
                                       radius) );
 
     model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
@@ -134,8 +134,8 @@ public:
                                                              1,                                 /* borderWidth    */
                                                              false,                             /* texturedInside */
                                                              false,                             /* mercator       */
-                                                             Color::fromRGBA(0, 0, 0, 0.25f),   /* surfaceColor   */
-                                                             Color::newFromRGBA(0, 0, 0, 0.9f), /* borderColor    */
+                                                             Color::fromRGBA(0, 0, 0, 0.1f),   /* surfaceColor   */
+                                                             Color::newFromRGBA(0, 0, 0, 1.0f), /* borderColor    */
                                                              true                               /* withNormals    */) );
 
 

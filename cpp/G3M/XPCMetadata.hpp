@@ -43,6 +43,7 @@ public:
                    const Frustum* frustum,
                    long long nowInMS,
                    bool renderDebug,
+                   const BoundingVolume* selection,
                    const BoundingVolume* fence);
 
   const bool selectPoints(XPCSelectionResult* selectionResult,

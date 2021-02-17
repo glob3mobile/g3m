@@ -68,6 +68,9 @@ private:
   void loadContent(const XPCPointCloud* pointCloud,
                    const std::string& treeID,
                    const G3MRenderContext* rc,
+                   const bool isSelectedNode,
+                   const BoundingVolume* selection,
+                   const bool nodeFullInsideSelection,
                    const BoundingVolume* fence,
                    const bool nodeFullInsideFence);
 
@@ -114,6 +117,7 @@ public:
                    long long nowInMS,
                    bool renderDebug,
                    XPCRenderingState& renderingState,
+                   const BoundingVolume* selection,
                    const BoundingVolume* fence);
 
   const bool selectPoints(XPCSelectionResult* selectionResult,
