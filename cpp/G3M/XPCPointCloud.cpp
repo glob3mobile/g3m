@@ -308,7 +308,7 @@ long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
   isb->addString("/");
   isb->addString(treeID);
   isb->addString("/");
-  isb->addString(nodeID);
+  isb->addString(nodeID.empty() ? "-root-" : nodeID);
   
   if (_requiredDimensionIndices != NULL) {
     for (size_t i = 0; i < _requiredDimensionIndices->size(); i++) {
