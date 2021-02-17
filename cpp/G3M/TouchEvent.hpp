@@ -18,7 +18,7 @@ private:
   const Vector2F      _pos;
   const Vector2F      _prevPos;
   const unsigned char _tapCount;
-  const double _wheelDelta;
+  const double        _wheelDelta;
 
   Touch(const Touch& other);
 
