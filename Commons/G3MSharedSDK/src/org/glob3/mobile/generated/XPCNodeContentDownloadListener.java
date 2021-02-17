@@ -5,16 +5,23 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
   private XPCNode _node;
   private final IThreadUtils _threadUtils;
   private final Planet _planet;
+
+  private final BoundingVolume _selection;
+  private final boolean _nodeFullInsideSelection;
+
   private final BoundingVolume _fence;
   private final boolean _nodeFullInsideFence;
 
 
-  public XPCNodeContentDownloadListener(XPCPointCloud pointCloud, XPCNode node, IThreadUtils threadUtils, Planet planet, BoundingVolume fence, boolean nodeFullInsideFence)
+  public XPCNodeContentDownloadListener(XPCPointCloud pointCloud, XPCNode node, IThreadUtils threadUtils, Planet planet, BoundingVolume selection, boolean nodeFullInsideSelection, BoundingVolume fence, boolean nodeFullInsideFence)
+
   {
      _pointCloud = pointCloud;
      _node = node;
      _threadUtils = threadUtils;
      _planet = planet;
+     _selection = selection;
+     _nodeFullInsideSelection = nodeFullInsideSelection;
      _fence = fence;
      _nodeFullInsideFence = nodeFullInsideFence;
     _pointCloud._retain();
@@ -45,7 +52,7 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
 ///#endif
 //      }
 
-      _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud, _node, buffer, _planet, (_fence == null) ? null : _fence.copy(), _nodeFullInsideFence), true);
+      _threadUtils.invokeAsyncTask(new XPCNodeContentParserAsyncTask(_pointCloud, _node, buffer, _planet, (_selection == null) ? null : _selection.copy(), _nodeFullInsideSelection, (_fence == null) ? null : _fence.copy(), _nodeFullInsideFence), true);
     }
   }
 
@@ -71,6 +78,8 @@ public class XPCNodeContentDownloadListener extends IBufferDownloadListener
 
     if (_fence != null)
        _fence.dispose();
+    if (_selection != null)
+       _selection.dispose();
   }
 
 

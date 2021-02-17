@@ -63,7 +63,7 @@ public class XPCTree
     return _rootNode.getMaxHeight();
   }
 
-  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, BoundingVolume fence)
+  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, BoundingVolume selection, BoundingVolume fence)
   {
     if (_rootNode == null)
     {
@@ -72,7 +72,7 @@ public class XPCTree
   
     _renderingState.reset();
   
-    return _rootNode.render(pointCloud, _id, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, _renderingState, fence);
+    return _rootNode.render(pointCloud, _id, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, _renderingState, selection, fence);
   }
 
   public final boolean selectPoints(XPCSelectionResult selectionResult, XPCPointCloud pointCloud)

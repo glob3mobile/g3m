@@ -74,6 +74,7 @@ public class XPCPointCloud extends RCObject
   private long _lastRenderedCount;
 
 
+  private BoundingVolume _selection;
   private BoundingVolume _fence;
 
   private void initializePointColorizer()
@@ -119,6 +120,9 @@ public class XPCPointCloud extends RCObject
   
     if (_requiredDimensionIndices != null)
        _requiredDimensionIndices.dispose();
+  
+    if (_selection != null)
+       _selection.dispose();
   
     if (_fence != null)
        _fence.dispose();
@@ -193,6 +197,7 @@ public class XPCPointCloud extends RCObject
      _lastRenderedCount = 0;
      _requiredDimensionIndices = null;
      _canceled = false;
+     _selection = null;
      _fence = null;
   
   }
@@ -374,7 +379,7 @@ public class XPCPointCloud extends RCObject
   {
     if (_metadata != null)
     {
-      final long renderedCount = _metadata.render(this, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, _fence);
+      final long renderedCount = _metadata.render(this, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, _selection, _fence);
   
       if (_lastRenderedCount != renderedCount)
       {
@@ -506,6 +511,26 @@ public class XPCPointCloud extends RCObject
     }
   }
 
+  public final void setSelection(BoundingVolume selection)
+  {
+    if (_selection != selection)
+    {
+      if (_selection != null)
+         _selection.dispose();
+  
+      _selection = selection;
+  
+      if (_metadata != null)
+      {
+        _metadata.reloadNodes();
+      }
+    }
+  }
+  public final BoundingVolume getSelection()
+  {
+    return _selection;
+  }
+
   public final void setFence(BoundingVolume fence)
   {
     if (_fence != fence)
@@ -520,6 +545,10 @@ public class XPCPointCloud extends RCObject
         _metadata.reloadNodes();
       }
     }
+  }
+  public final BoundingVolume getFence()
+  {
+    return _fence;
   }
 
 }
