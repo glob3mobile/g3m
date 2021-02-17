@@ -267,20 +267,22 @@ final class MotionEventProcessor {
       return TouchEvent.create(TouchEventType.LongPress, touch);
    }
 
+
    private TouchEvent processMouseWheel(final Event event) {
-	   final Vector2F position = createPosition(event);
-	   int delta = jsGetMouseWheelDelta(event);
-		
-		final ArrayList<Touch> touches = new ArrayList<>(2);
-		touches.add(new Touch(position, position, (byte)0, delta));
-		_previousMousePosition = new Vector2F(position);
-		return TouchEvent.create(TouchEventType.Down, touches);
-	}
-   
+      final Vector2F position = createPosition(event);
+      final int      delta    = jsGetMouseWheelDelta(event);
+
+      final ArrayList<Touch> touches = new ArrayList<>(2);
+      touches.add(new Touch(position, position, (byte) 0, delta));
+      _previousMousePosition = new Vector2F(position);
+      return TouchEvent.create(TouchEventType.Down, touches);
+   }
+
+
    private native int jsGetMouseWheelDelta(Event event) /*-{
 		var e = event;
 		var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
 		return delta;
-	}-*/;
+   }-*/;
 
 }

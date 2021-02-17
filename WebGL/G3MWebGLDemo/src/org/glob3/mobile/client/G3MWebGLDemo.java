@@ -3,17 +3,11 @@
 package org.glob3.mobile.client;
 
 
-import org.glob3.mobile.generated.CameraDoubleDragHandler;
-import org.glob3.mobile.generated.CameraDoubleTapHandler;
-import org.glob3.mobile.generated.CameraMouseWheelHandler;
-import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.CameraRotationHandler;
-import org.glob3.mobile.generated.CameraSingleDragHandler;
-import org.glob3.mobile.generated.FlatPlanet;
 import org.glob3.mobile.specific.*;
 
 import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.ui.*;
+
 
 public class G3MWebGLDemo
                           implements
@@ -37,7 +31,7 @@ public class G3MWebGLDemo
        */
 
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
-      
+
       builder.setAtmosphere(true);
 
       _widget = builder.createWidget();
