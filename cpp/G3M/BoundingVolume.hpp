@@ -16,7 +16,7 @@ class Sphere;
 class Frustum;
 class Vector3D;
 class MutableVector3D;
-
+class Ray;
 
 class BoundingVolume {
 public:
@@ -50,6 +50,8 @@ public:
   virtual Sphere* createSphere() const = 0;
 
   virtual BoundingVolume* copy() const = 0;
+
+  virtual const bool touchesRay(const Ray* ray) const = 0;
 
 };
 

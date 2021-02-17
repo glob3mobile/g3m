@@ -223,55 +223,60 @@ public class Box extends BoundingVolume
 
   public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
   {
-    //MIN X
+    // MIN X
     {
-      Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _lower._x);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_X, _lower._x);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX X
+    // MAX X
     {
-      Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _upper._x);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_X, _upper._x);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MIN Y
+    // MIN Y
     {
-      Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _lower._y);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_Y, _lower._y);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX Y
+    // MAX Y
     {
-      Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _upper._y);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_Y, _upper._y);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MIN Z
+    // MIN Z
     {
-      Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _lower._z);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_Z, _lower._z);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX Z
+    // MAX Z
     {
-      Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _upper._z);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_Z, _upper._z);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
     return Vector3D.NANV;
+  }
+
+  public final boolean touchesRay(Ray ray)
+  {
+    return !(intersectionWithRay(ray._origin, ray._direction).isNan());
   }
 
   public final void render(G3MRenderContext rc, GLState parentState, Color color)

@@ -98,13 +98,13 @@ public class XPCNode extends RCObject
   private IDownloader _downloader;
   private long _contentRequestID;
 
-  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, BoundingVolume fence, boolean nodeFullInsideFence)
+  private void loadContent(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, boolean isSelectedNode, BoundingVolume selection, boolean nodeFullInsideSelection, BoundingVolume fence, boolean nodeFullInsideFence)
   {
     _downloader = rc.getDownloader();
   
-    final long deltaPriority = 100 - _id.length();
+    final long deltaPriority = (isSelectedNode ? 200 : 100) - _id.length();
   
-    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet(), (fence == null) ? null : fence.copy(), nodeFullInsideFence), true);
+    _contentRequestID = pointCloud.requestNodeContentBuffer(_downloader, treeID, _id, deltaPriority, new XPCNodeContentDownloadListener(pointCloud, this, rc.getThreadUtils(), rc.getPlanet(), (selection == null) ? null : selection.copy(), nodeFullInsideSelection, (fence == null) ? null : fence.copy(), nodeFullInsideFence), true);
   }
 
   private void cancelLoadContent()
@@ -251,7 +251,7 @@ public class XPCNode extends RCObject
   }
 
 
-  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCRenderingState renderingState, BoundingVolume fence)
+  public final long render(XPCPointCloud pointCloud, String treeID, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, XPCRenderingState renderingState, BoundingVolume selection, BoundingVolume fence)
   {
   
     long renderedCount = 0;
@@ -294,7 +294,7 @@ public class XPCNode extends RCObject
             for (int i = 0; i < _childrenSize; i++)
             {
               XPCNode child = _children.get(i);
-              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, renderingState, fence);
+              renderedCount += child.render(pointCloud, treeID, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, renderingState, selection, fence);
             }
             //if (_childrenSize == 0) {
             //  renderingState._pointSize = pointCloud->getDevicePointSize();
@@ -341,8 +341,10 @@ public class XPCNode extends RCObject
                 _canceled = false;
                 _loadingContent = true;
   
+                final boolean nodeFullInsideSelection = (selection == null) || selection.fullContains(bounds);
+                final boolean isSelectedNode = (selection == null) || nodeFullInsideSelection || selection.touches(bounds);
                 final boolean nodeFullInsideFence = (fence == null) || fence.fullContains(bounds);
-                loadContent(pointCloud, treeID, rc, fence, nodeFullInsideFence);
+                loadContent(pointCloud, treeID, rc, isSelectedNode, selection, nodeFullInsideSelection, fence, nodeFullInsideFence);
               }
             }
           }
@@ -390,13 +392,18 @@ public class XPCNode extends RCObject
       final int verticesCount = _mesh.getVerticesCount();
   
       MutableVector3D vertex = new MutableVector3D();
+      MutableColor color = new MutableColor();
       for (int i = 0; i < verticesCount; i++)
       {
         _mesh.getVertex(i, vertex);
+        _mesh.getColor(i, color);
   
-        if (selectionResult.evaluateCantidate(vertex, pointCloud, treeID, nodeID, i))
+        if (color._alpha > 0)
         {
-          selectedPoint = true;
+          if (selectionResult.evaluateCantidate(vertex, pointCloud, treeID, nodeID, i))
+          {
+            selectedPoint = true;
+          }
         }
       }
     }

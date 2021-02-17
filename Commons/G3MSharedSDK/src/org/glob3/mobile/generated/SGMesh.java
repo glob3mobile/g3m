@@ -69,7 +69,18 @@ public class SGMesh extends TransformableMesh
   {
     throw new RuntimeException("Can't implement");
   }
+
   public final void getVertex(int index, MutableVector3D result)
+  {
+    throw new RuntimeException("Can't implement");
+  }
+
+  public final Color getColor(int index)
+  {
+    throw new RuntimeException("Can't implement");
+  }
+
+  public final void getColor(int index, MutableColor result)
   {
     throw new RuntimeException("Can't implement");
   }

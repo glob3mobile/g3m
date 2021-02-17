@@ -116,7 +116,7 @@ public class XPCMetadata
     }
   }
 
-  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, BoundingVolume fence)
+  public final long render(XPCPointCloud pointCloud, G3MRenderContext rc, ITimer lastSplitTimer, GLState glState, Frustum frustum, long nowInMS, boolean renderDebug, BoundingVolume selection, BoundingVolume fence)
   {
   
     long renderedCount = 0;
@@ -125,7 +125,7 @@ public class XPCMetadata
     {
       final XPCTree tree = _trees.get(i);
   
-      renderedCount += tree.render(pointCloud, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, fence);
+      renderedCount += tree.render(pointCloud, rc, lastSplitTimer, glState, frustum, nowInMS, renderDebug, selection, fence);
     }
   
     return renderedCount;

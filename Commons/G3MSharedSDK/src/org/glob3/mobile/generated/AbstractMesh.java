@@ -214,6 +214,30 @@ public abstract class AbstractMesh extends TransformableMesh
     result.set(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
 
+  public final Color getColor(int index)
+  {
+    if (_colors == null)
+    {
+      return Color.TRANSPARENT;
+    }
+  
+    final int p = index * 4;
+    return Color.fromRGBA(_colors.get(p), _colors.get(p+1), _colors.get(p+2), _colors.get(p+3));
+  }
+
+  public final void getColor(int index, MutableColor result)
+  {
+    if (_colors == null)
+    {
+      result.set(Color.TRANSPARENT);
+    }
+    else
+    {
+      final int p = index * 4;
+      result.set(_colors.get(p), _colors.get(p+1), _colors.get(p+2), _colors.get(p+3));
+    }
+  }
+
   public boolean isTransparent(G3MRenderContext rc)
   {
     if (_flatColor == null)

@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class FlatColorMesh extends Mesh
+public abstract class FlatColorMesh extends Mesh
 {
   private Mesh _mesh;
   private final boolean _ownedMesh;

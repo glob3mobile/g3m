@@ -39,6 +39,10 @@ private:
   XPCNode*              _node;
   IByteBuffer*          _buffer;
   const Planet*         _planet;
+
+  const BoundingVolume* _selection;
+  const bool            _nodeFullInsideSelection;
+
   const BoundingVolume* _fence;
   const bool            _nodeFullInsideFence;
 
@@ -50,12 +54,16 @@ public:
                                 XPCNode* node,
                                 IByteBuffer* buffer,
                                 const Planet* planet,
+                                const BoundingVolume* selection,
+                                const bool nodeFullInsideSelection,
                                 const BoundingVolume* fence,
                                 const bool nodeFullInsideFence) :
   _pointCloud(pointCloud),
   _node(node),
   _buffer(buffer),
   _planet(planet),
+  _selection(selection),
+  _nodeFullInsideSelection(nodeFullInsideSelection),
   _fence(fence),
   _nodeFullInsideFence(nodeFullInsideFence),
   _children(NULL),
@@ -66,8 +74,6 @@ public:
   }
 
   ~XPCNodeContentParserAsyncTask() {
-    delete _buffer;
-
     if (_children != NULL) {
       for (size_t i = 0; i < _children->size(); i++) {
         XPCNode* child = _children->at(i);
@@ -76,7 +82,11 @@ public:
       delete _children;
     }
 
+    delete _buffer;
+
     delete _mesh;
+
+    delete _selection;
 
     delete _fence;
 
@@ -115,8 +125,9 @@ public:
 
     IFloatBuffer* cartesianVertices = IFactory::instance()->createFloatBuffer( pointsCount * 3 /* X, Y, Z */ );
 
-    double* heights = new double[pointsCount];
-    bool*   visible = new bool[pointsCount];
+    double* heights  = new double[pointsCount];
+    bool*   visible  = new bool[pointsCount];
+    bool*   selected = new bool[pointsCount];
 
     const double deltaHeight          = _pointCloud->getDeltaHeight();
     const float  verticalExaggeration = _pointCloud->getVerticalExaggeration();
@@ -145,9 +156,8 @@ public:
                                         scaledHeight,
                                         bufferCartesian);
 
-        visible[i] = ( (_fence == NULL) ||
-                       _nodeFullInsideFence ||
-                       _fence->contains(bufferCartesian) );
+        visible[i]  = ( (_fence     == NULL) || _nodeFullInsideFence     || _fence->contains(bufferCartesian) );
+        selected[i] = ( (_selection == NULL) || _nodeFullInsideSelection || _selection->contains(bufferCartesian) );
 
         cartesianVertices->rawPut((i * 3) + 0, (float) (bufferCartesian._x - cartesianCenter._x) );
         cartesianVertices->rawPut((i * 3) + 1, (float) (bufferCartesian._y - cartesianCenter._y) );
@@ -188,11 +198,14 @@ public:
 
     for (int i = 0; i < pointsCount; i++) {
       if ( visible[i] ) {
+
+        const float selectedAlpha = selected[i] ? 1 : 0.25f;
+
         if (pointsColorizer == NULL) {
           colors->rawPut((i * 4) + 0, 1 /* red   */);
           colors->rawPut((i * 4) + 1, 1 /* green */);
           colors->rawPut((i * 4) + 2, 1 /* blue  */);
-          colors->rawPut((i * 4) + 3, 1 /* alpha */);
+          colors->rawPut((i * 4) + 3, selectedAlpha /* alpha */);
         }
         else {
           pointsColorizer->colorize(metadata,
@@ -203,7 +216,7 @@ public:
           colors->rawPut((i * 4) + 0, bufferColor._red);
           colors->rawPut((i * 4) + 1, bufferColor._green);
           colors->rawPut((i * 4) + 2, bufferColor._blue);
-          colors->rawPut((i * 4) + 3, bufferColor._alpha);
+          colors->rawPut((i * 4) + 3, bufferColor._alpha * selectedAlpha);
         }
       }
       else {
@@ -216,6 +229,7 @@ public:
 
     delete [] heights;
     delete [] visible;
+    delete [] selected;
 
     if (dimensionsValues != NULL) {
       for (size_t i = 0; i < dimensionsValues->size(); i++) {
@@ -257,6 +271,10 @@ private:
   XPCNode*              _node;
   const IThreadUtils*   _threadUtils;
   const Planet*         _planet;
+
+  const BoundingVolume* _selection;
+  const bool            _nodeFullInsideSelection;
+
   const BoundingVolume* _fence;
   const bool            _nodeFullInsideFence;
 
@@ -266,14 +284,19 @@ public:
                                  XPCNode* node,
                                  const IThreadUtils* threadUtils,
                                  const Planet* planet,
+                                 const BoundingVolume* selection,
+                                 const bool nodeFullInsideSelection,
                                  const BoundingVolume* fence,
                                  const bool nodeFullInsideFence) :
   _pointCloud(pointCloud),
   _node(node),
   _threadUtils(threadUtils),
   _planet(planet),
+  _selection(selection),
+  _nodeFullInsideSelection(nodeFullInsideSelection),
   _fence(fence),
   _nodeFullInsideFence(nodeFullInsideFence)
+
   {
     _pointCloud->_retain();
     _node->_retain();
@@ -305,8 +328,9 @@ public:
                                                                       _node,
                                                                       buffer,
                                                                       _planet,
-                                                                      (_fence == NULL) ? NULL : _fence->copy(),
-                                                                      _nodeFullInsideFence),
+                                                                      (_selection == NULL) ? NULL : _selection->copy(), _nodeFullInsideSelection,
+                                                                      (_fence     == NULL) ? NULL : _fence->copy(),     _nodeFullInsideFence
+                                                                      ),
                                     true);
     }
   }
@@ -330,6 +354,7 @@ public:
     _pointCloud->_release();
 
     delete _fence;
+    delete _selection;
   }
 
 
@@ -512,11 +537,14 @@ void XPCNode::reload() {
 void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                           const std::string& treeID,
                           const G3MRenderContext* rc,
+                          const bool isSelectedNode,
+                          const BoundingVolume* selection,
+                          const bool nodeFullInsideSelection,
                           const BoundingVolume* fence,
                           const bool nodeFullInsideFence) {
   _downloader = rc->getDownloader();
 
-  const long long deltaPriority = 100 - _id.length();
+  const long long deltaPriority = (isSelectedNode ? 200 : 100) - _id.length();
 
   _contentRequestID = pointCloud->requestNodeContentBuffer(_downloader,
                                                            treeID,
@@ -526,8 +554,9 @@ void XPCNode::loadContent(const XPCPointCloud* pointCloud,
                                                                                               this,
                                                                                               rc->getThreadUtils(),
                                                                                               rc->getPlanet(),
-                                                                                              (fence == NULL) ? NULL : fence->copy(),
-                                                                                              nodeFullInsideFence),
+                                                                                              (selection == NULL) ? NULL : selection->copy(), nodeFullInsideSelection,
+                                                                                              (fence     == NULL) ? NULL : fence->copy(), nodeFullInsideFence
+                                                                                              ),
                                                            true);
 }
 
@@ -584,6 +613,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                           long long nowInMS,
                           bool renderDebug,
                           XPCRenderingState& renderingState,
+                          const BoundingVolume* selection,
                           const BoundingVolume* fence) {
 
   long long renderedCount = 0;
@@ -628,6 +658,7 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
                                            nowInMS,
                                            renderDebug,
                                            renderingState,
+                                           selection,
                                            fence);
           }
           //if (_childrenSize == 0) {
@@ -669,8 +700,15 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
               _canceled = false;
               _loadingContent = true;
 
-              const bool nodeFullInsideFence = (fence == NULL) || fence->fullContains(bounds) ;
-              loadContent(pointCloud, treeID, rc, fence, nodeFullInsideFence);
+              const bool nodeFullInsideSelection = (selection == NULL) || selection->fullContains(bounds) ;
+              const bool isSelectedNode          = (selection == NULL) || nodeFullInsideSelection || selection->touches(bounds);
+              const bool nodeFullInsideFence     = (fence     == NULL) || fence->fullContains(bounds) ;
+              loadContent(pointCloud,
+                          treeID,
+                          rc,
+                          isSelectedNode,
+                          selection, nodeFullInsideSelection,
+                          fence, nodeFullInsideFence);
             }
           }
         }
@@ -713,15 +751,19 @@ const bool XPCNode::selectPoints(XPCSelectionResult* selectionResult,
     const size_t verticesCount = _mesh->getVerticesCount();
 
     MutableVector3D vertex;
+    MutableColor    color;
     for (int i = 0; i < verticesCount; i++) {
       _mesh->getVertex(i, vertex);
+      _mesh->getColor(i, color);
 
-      if ( selectionResult->evaluateCantidate(vertex,
-                                              pointCloud,
-                                              treeID,
-                                              nodeID,
-                                              i) ) {
-        selectedPoint = true;
+      if (color._alpha > 0) {
+        if ( selectionResult->evaluateCantidate(vertex,
+                                                pointCloud,
+                                                treeID,
+                                                nodeID,
+                                                i) ) {
+          selectedPoint = true;
+        }
       }
     }
   }

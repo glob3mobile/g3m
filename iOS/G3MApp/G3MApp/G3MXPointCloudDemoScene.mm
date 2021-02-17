@@ -123,9 +123,8 @@ public:
 
     model->getShapesRenderer()->removeAllShapes();
 
-    const double radius = 50;
-    pointCloud->setFence( new Sphere(cartesian,
-                                      radius) );
+    const double radius = 75;
+    pointCloud->setSelection( new Sphere(cartesian, radius) );
 
     model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
                                                              AltitudeMode::ABSOLUTE,
@@ -134,10 +133,9 @@ public:
                                                              1,                                 /* borderWidth    */
                                                              false,                             /* texturedInside */
                                                              false,                             /* mercator       */
-                                                             Color::fromRGBA(0, 0, 0, 0.25f),   /* surfaceColor   */
-                                                             Color::newFromRGBA(0, 0, 0, 0.9f), /* borderColor    */
+                                                             Color::fromRGBA(0, 0, 0, 0.0f),    /* surfaceColor   */
+                                                             Color::newFromRGBA(0, 0, 0, 1.0f), /* borderColor    */
                                                              true                               /* withNormals    */) );
-
 
 //    if (_measure == NULL) {
 //      _measure = new Measure(0.5,                             // vertexSphereRadius
@@ -160,7 +158,7 @@ public:
 //                          pointCloud->getVerticalExaggeration(),
 //                          pointCloud->getDeltaHeight());
 //    }
-//
+
     return true; // accepted point
   }
 

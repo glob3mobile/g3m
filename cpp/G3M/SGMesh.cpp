@@ -58,6 +58,15 @@ void SGMesh::getVertex(const size_t index,
   THROW_EXCEPTION("Can't implement");
 }
 
+Color SGMesh::getColor(const size_t index) const {
+  THROW_EXCEPTION("Can't implement");
+}
+
+void SGMesh::getColor(const size_t index,
+                      MutableColor& result) const {
+  THROW_EXCEPTION("Can't implement");
+}
+
 void SGMesh::initializeGLState(GLState* glState) const {
   TransformableMesh::initializeGLState(glState);
 

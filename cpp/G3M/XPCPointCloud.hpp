@@ -72,6 +72,7 @@ private:
   long long _lastRenderedCount;
 
 
+  BoundingVolume* _selection;
   BoundingVolume* _fence;
 
   void initializePointColorizer();
@@ -200,7 +201,11 @@ public:
 
   void cancel();
 
+  void setSelection(BoundingVolume* selection);
+  const BoundingVolume* getSelection() const;
+
   void setFence(BoundingVolume* fence);
+  const BoundingVolume* getFence() const;
 
 };
 

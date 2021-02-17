@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 
 
 //class Mesh;
-//class Ray;
 
 
 public class Sphere extends BoundingVolume

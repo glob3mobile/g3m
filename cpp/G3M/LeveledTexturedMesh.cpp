@@ -120,6 +120,15 @@ void LeveledTexturedMesh::getVertex(const size_t index,
   _mesh->getVertex(index, result);
 }
 
+Color LeveledTexturedMesh::getColor(const size_t index) const {
+  return _mesh->getColor(index);
+}
+
+void LeveledTexturedMesh::getColor(const size_t index,
+                                   MutableColor& result) const {
+  _mesh->getColor(index, result);
+}
+
 BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {
   return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
 }

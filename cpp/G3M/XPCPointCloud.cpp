@@ -23,6 +23,7 @@
 #include "XPCMetadataListener.hpp"
 #include "XPCPointSelectionListener.hpp"
 #include "XPCPointColorizer.hpp"
+#include "XPCSelectionResult.hpp"
 
 
 class XPCMetadataParserAsyncTask : public GAsyncTask {
@@ -165,6 +166,7 @@ _metadata(NULL),
 _lastRenderedCount(0),
 _requiredDimensionIndices(NULL),
 _canceled(false),
+_selection(NULL),
 _fence(NULL)
 {
   
@@ -255,6 +257,8 @@ XPCPointCloud::~XPCPointCloud() {
   
   delete _requiredDimensionIndices;
 
+  delete _selection;
+
   delete _fence;
   
 #ifdef JAVA_CODE
@@ -304,7 +308,7 @@ long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
   isb->addString("/");
   isb->addString(treeID);
   isb->addString("/");
-  isb->addString(nodeID);
+  isb->addString(nodeID.empty() ? "-root-" : nodeID);
   
   if (_requiredDimensionIndices != NULL) {
     for (size_t i = 0; i < _requiredDimensionIndices->size(); i++) {
@@ -340,6 +344,7 @@ void XPCPointCloud::render(const G3MRenderContext* rc,
                                                       frustum,
                                                       nowInMS,
                                                       renderDebug,
+                                                      _selection,
                                                       _fence);
     
     if (_lastRenderedCount != renderedCount) {
@@ -360,10 +365,15 @@ const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) {
   if ((_pointSelectionListener == NULL) || (_metadata == NULL)) {
     return false;
   }
-  
+
+  if (_fence != NULL) {
+    if (!_fence->touchesRay(selectionResult->_ray)) {
+      return false;
+    }
+  }
+
   return _metadata->selectPoints(selectionResult, this);
 }
-
 
 const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
                                         const Geodetic3D& geodetic,
@@ -454,3 +464,23 @@ void XPCPointCloud::setFence(BoundingVolume* fence) {
     }
   }
 }
+
+const BoundingVolume* XPCPointCloud::getFence() const {
+  return _fence;
+};
+
+void XPCPointCloud::setSelection(BoundingVolume* selection) {
+  if (_selection != selection) {
+    delete _selection;
+
+    _selection = selection;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
+
+const BoundingVolume* XPCPointCloud::getSelection() const {
+  return _selection;
+};

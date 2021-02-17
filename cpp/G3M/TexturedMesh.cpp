@@ -63,3 +63,12 @@ void TexturedMesh::getVertex(const size_t index,
                              MutableVector3D& result) const {
   _mesh->getVertex(index, result);
 }
+
+Color TexturedMesh::getColor(const size_t index) const {
+  return _mesh->getColor(index);
+}
+
+void TexturedMesh::getColor(const size_t index,
+                            MutableColor& result) const {
+  _mesh->getColor(index, result);
+}

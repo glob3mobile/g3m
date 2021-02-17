@@ -50,6 +50,7 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                           const Frustum* frustum,
                           long long nowInMS,
                           bool renderDebug,
+                          const BoundingVolume* selection,
                           const BoundingVolume* fence) const {
   if (_rootNode == NULL) {
     return 0;
@@ -66,6 +67,7 @@ long long XPCTree::render(const XPCPointCloud* pointCloud,
                            nowInMS,
                            renderDebug,
                            _renderingState,
+                           selection,
                            fence);
 }
 

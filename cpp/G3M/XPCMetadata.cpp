@@ -147,6 +147,7 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                               const Frustum* frustum,
                               long long nowInMS,
                               bool renderDebug,
+                              const BoundingVolume* selection,
                               const BoundingVolume* fence) {
 
   long long renderedCount = 0;
@@ -161,6 +162,7 @@ long long XPCMetadata::render(const XPCPointCloud* pointCloud,
                                   frustum,
                                   nowInMS,
                                   renderDebug,
+                                  selection,
                                   fence);
   }
 
