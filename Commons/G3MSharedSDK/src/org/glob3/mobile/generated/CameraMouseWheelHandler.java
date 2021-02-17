@@ -29,8 +29,9 @@ public class CameraMouseWheelHandler extends CameraEventHandler
      _zoomSpeed = zoomSpeed;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  public void dispose()
+  public void dispose()
+  {
+  }
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
