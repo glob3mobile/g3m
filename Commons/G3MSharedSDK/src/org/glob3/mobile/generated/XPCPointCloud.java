@@ -444,7 +444,7 @@ public class XPCPointCloud extends RCObject
     isb.addString("/");
     isb.addString(treeID);
     isb.addString("/");
-    isb.addString(nodeID);
+    isb.addString(nodeID.length() == 0 ? "-root-" : nodeID);
   
     if (_requiredDimensionIndices != null)
     {
