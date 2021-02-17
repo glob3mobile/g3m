@@ -16,7 +16,6 @@
 #include "Vector3D.hpp"
 
 class Mesh;
-class Ray;
 
 
 class Sphere : public BoundingVolume {

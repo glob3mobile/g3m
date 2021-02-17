@@ -23,6 +23,7 @@
 #include "XPCMetadataListener.hpp"
 #include "XPCPointSelectionListener.hpp"
 #include "XPCPointColorizer.hpp"
+#include "XPCSelectionResult.hpp"
 
 
 class XPCMetadataParserAsyncTask : public GAsyncTask {
@@ -360,10 +361,15 @@ const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) {
   if ((_pointSelectionListener == NULL) || (_metadata == NULL)) {
     return false;
   }
-  
+
+  if (_fence != NULL) {
+    if (!_fence->touchesRay(selectionResult->_ray)) {
+      return false;
+    }
+  }
+
   return _metadata->selectPoints(selectionResult, this);
 }
-
 
 const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
                                         const Geodetic3D& geodetic,

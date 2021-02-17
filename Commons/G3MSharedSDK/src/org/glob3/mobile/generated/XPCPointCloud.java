@@ -476,6 +476,14 @@ public class XPCPointCloud extends RCObject
       return false;
     }
   
+    if (_fence != null)
+    {
+      if (!_fence.touchesRay(selectionResult._ray))
+      {
+        return false;
+      }
+    }
+  
     return _metadata.selectPoints(selectionResult, this);
   }
 

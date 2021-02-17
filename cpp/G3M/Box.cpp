@@ -16,6 +16,7 @@
 #include "Sphere.hpp"
 #include "Vector2F.hpp"
 #include "G3MRenderContext.hpp"
+#include "Ray.hpp"
 
 
 Box::~Box() {
@@ -188,51 +189,54 @@ bool Box::contains(const MutableVector3D& point) const {
 
 Vector3D Box::intersectionWithRay(const Vector3D& origin,
                                   const Vector3D& direction) const {
-  //MIN X
+  // MIN X
   {
-    Plane p( Vector3D(1.0, 0.0, 0.0), _lower._x);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_X, _lower._x);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MAX X
+  // MAX X
   {
-    Plane p( Vector3D(1.0, 0.0, 0.0), _upper._x);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_X, _upper._x);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MIN Y
+  // MIN Y
   {
-    Plane p( Vector3D(0.0, 1.0, 0.0), _lower._y);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_Y, _lower._y);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MAX Y
+  // MAX Y
   {
-    Plane p( Vector3D(0.0, 1.0, 0.0), _upper._y);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_Y, _upper._y);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MIN Z
+  // MIN Z
   {
-    Plane p( Vector3D(0.0, 0.0, 1.0), _lower._z);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_Z, _lower._z);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MAX Z
+  // MAX Z
   {
-    Plane p( Vector3D(0.0, 0.0, 1.0), _upper._z);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_Z, _upper._z);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
   return Vector3D::NANV;
 }
 
+const bool Box::touchesRay(const Ray* ray) const {
+  return !( intersectionWithRay(ray->_origin, ray->_direction).isNan() );
+}
 
 Mesh* Box::createMesh(const Color& color) const {
   double v[] = {
