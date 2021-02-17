@@ -18,11 +18,12 @@
 #include "MutableMatrix44D.hpp"
 
 bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
-                  const TouchEvent* touchEvent,
-                  CameraContext *cameraContext){
+                                           const TouchEvent* touchEvent,
+                                           CameraContext *cameraContext){
   
   const Touch* touch = touchEvent->getTouch(0);
-  double wheelDelta = touch->getMouseWheelDelta();
+  const double wheelDelta = touch->getMouseWheelDelta();
+
   if (wheelDelta != 0) {
     Camera& cam = *cameraContext->getNextCamera();
     Vector2F pixel = touch->getPos();
@@ -33,10 +34,13 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
     Vector3D pos0 = cam.getCartesianPosition();
     Vector3D p1 = planet.closestIntersection(pos0, rayDir);
     
-    double heightDelta = cam.getGeodeticHeight() * wheelDelta * _zoomSpeed;
+    const double heightDelta = cam.getGeodeticHeight() * wheelDelta * _zoomSpeed;
     
-    if (!planet.isFlat()) {
-      
+    if (planet.isFlat()) {
+      Vector3D moveDir = p1.sub(pos0).normalized();
+      cam.move(moveDir, heightDelta);
+    }
+    else {
       cam.move(pos0.normalized().times(-1), heightDelta);
       
       Vector3D p2 = planet.closestIntersection(cam.getCartesianPosition(), cam.pixel2Ray(pixel));
@@ -47,15 +51,10 @@ bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
         MutableMatrix44D mat = MutableMatrix44D::createGeneralRotationMatrix(angleP1P2, rotAxis, Vector3D::ZERO);
         cam.applyTransform(mat);
       }
-    }else {
-      Vector3D moveDir = p1.sub(pos0).normalized();
-      cam.move(moveDir, heightDelta);
     }
-    
+
     return true;
   }
   
   return false;
-  
 }
-

@@ -8,8 +8,6 @@
 #ifndef CameraMouseWheelHandler_hpp
 #define CameraMouseWheelHandler_hpp
 
-#include <stdio.h>
-
 #include "CameraEventHandler.hpp"
 #include "RenderState.hpp"
 
@@ -46,5 +44,4 @@ public:
             CameraContext *cameraContext){}
 };
 
-
-#endif /* CameraMouseWheelHandler_hpp */
+#endif
