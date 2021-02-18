@@ -22,6 +22,9 @@
 #include <G3M/MarksRenderer.hpp>
 #include <G3M/BingMapsLayer.hpp>
 
+#include <G3M/Cylinder.hpp>
+#include <G3M/MeshRenderer.hpp>
+
 #include "G3MDemoModel.hpp"
 
 
@@ -139,19 +142,29 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
                                        Angle::fromDegrees(30 - 90) // pitch
                                        );
 
-  Mark* mark = new Mark("Las Palmas",
-                        URL("https://icons-for-free.com/iconfiles/png/512/sun+sunny+weather+icon-1320196635525068067.png"),
-                        Geodetic3D::fromDegrees(28.09973, -15.41343, 0),
-                        RELATIVE_TO_GROUND,
-                        0,                              // minDistanceToCamera
-                        true,                           // labelBottom
-                        13,                             // labelFontSize
-                        Color::newFromRGBA(1, 1, 1, 1), // labelFontColor
-                        Color::newFromRGBA(0, 0, 0, 1), // labelShadowColor
-                        -10                             // labelGapSize
-                        );
-
-  addMark(mark);
+//  Mark* mark = new Mark("Las Palmas",
+//                        URL("https://icons-for-free.com/iconfiles/png/512/sun+sunny+weather+icon-1320196635525068067.png"),
+//                        Geodetic3D::fromDegrees(28.09973, -15.41343, 0),
+//                        RELATIVE_TO_GROUND,
+//                        0,                              // minDistanceToCamera
+//                        true,                           // labelBottom
+//                        13,                             // labelFontSize
+//                        Color::newFromRGBA(1, 1, 1, 1), // labelFontColor
+//                        Color::newFromRGBA(0, 0, 0, 1), // labelShadowColor
+//                        -10                             // labelGapSize
+//                        );
+//
+//  addMark(mark);
+  
+  Cylinder cylinder(context->getPlanet()->toCartesian(Geodetic3D::fromDegrees(0,0, 0)),
+                    context->getPlanet()->toCartesian(Geodetic3D::fromDegrees(0,0, 1000000)),
+                    0.1,
+                    Angle::fromDegrees(0),
+                    Angle::fromDegrees(0));
+  
+  Mesh* mesh = cylinder.createMesh(Color::RED, 5);
+  model->getMeshRenderer()->addMesh(mesh);
+  
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {
