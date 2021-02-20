@@ -24,6 +24,7 @@
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/AtmosphereRenderer.hpp>
 #include <G3M/WrapperNearFrustumRenderer.hpp>
+#include <G3M/CompositeRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -101,6 +102,9 @@ void G3MDemoBuilder::build() {
 
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer, meshRenderer);
   builder->addRenderer(vectorStreamingRenderer);
+  
+  CompositeRenderer* compositeRenderer = new CompositeRenderer();
+  builder->addRenderer(compositeRenderer);
 
   //Uncomment to see render debug mesh on top of tiles
   //#warning remove setRenderDebug(true);
@@ -117,7 +121,8 @@ void G3MDemoBuilder::build() {
                             xPointCloudsRenderer,
                             hudRenderer,
                             nonOverlappingMarksRenderer,
-                            vectorStreamingRenderer);
+                            vectorStreamingRenderer,
+                            compositeRenderer);
 
   const double zNear = 0.1;
   Renderer* renderer = new MeshRenderer();

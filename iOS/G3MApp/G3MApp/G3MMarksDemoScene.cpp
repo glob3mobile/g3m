@@ -24,6 +24,8 @@
 
 #include <G3M/Cylinder.hpp>
 #include <G3M/MeshRenderer.hpp>
+#include <G3M/CompositeRenderer.hpp>
+#include <G3M/Arrow.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -156,14 +158,34 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 //
 //  addMark(mark);
   
-  Cylinder cylinder(context->getPlanet()->toCartesian(Geodetic3D::fromDegrees(0,0, 0)),
-                    context->getPlanet()->toCartesian(Geodetic3D::fromDegrees(0,0, 1000000)),
-                    0.1,
-                    Angle::fromDegrees(0),
-                    Angle::fromDegrees(0));
+  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
+  Vector3D arrowLength = context->getPlanet()->geodeticSurfaceNormal(geoPos).times(100000.0);
+  double radius = 10000.0;
+  Vector3D arrowPos = context->getPlanet()->toCartesian(geoPos);
+  Vector3D arrowTipPos = arrowPos.add(arrowLength);
+
+  Cylinder cylinder(arrowPos, arrowTipPos, radius, radius);
+
+  Cylinder arrowTip(arrowTipPos,
+                    arrowTipPos.add(arrowLength.times(0.4)),
+                    radius * 2.0, 0.0);
+
+//  model->getMeshRenderer()->addMesh(cylinder.createMesh(Color::GREEN, 10));
+//  model->getMeshRenderer()->addMesh(arrowTip.createMesh(Color::GREEN, 20));
+  MeshRenderer* mr = new MeshRenderer();
+  mr->addMesh(cylinder.createMesh(Color::GREEN, 10));
+  mr->addMesh(arrowTip.createMesh(Color::GREEN, 20));
   
-  Mesh* mesh = cylinder.createMesh(Color::RED, 5);
-  model->getMeshRenderer()->addMesh(mesh);
+//  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
+  
+  Arrow* arrow = new Arrow(context->getPlanet()->toCartesian(geoPos),
+                           context->getPlanet()->toCartesian(geoPos.add(Geodetic3D::fromDegrees(0, 0, 1000))),
+                           1000.0,
+                           Color::GREEN);
+  
+//  model->getCompositeRenderer()->addRenderer(mr);
+  model->getCompositeRenderer()->addRenderer(arrow);
+  
   
 }
 

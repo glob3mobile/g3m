@@ -27,6 +27,7 @@ class XPCRenderer;
 class HUDRenderer;
 class NonOverlappingMarksRenderer;
 class VectorStreamingRenderer;
+class CompositeRenderer;
 
 
 class G3MDemoModel {
@@ -45,6 +46,7 @@ private:
   HUDRenderer*                 _hudRenderer;
   NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
   VectorStreamingRenderer*     _vectorStreamingRenderer;
+  CompositeRenderer*           _compositeRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -63,7 +65,8 @@ public:
                XPCRenderer*                 xpcloudsRenderer,
                HUDRenderer*                 hudRenderer,
                NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
-               VectorStreamingRenderer*     vectorStreamingRenderer);
+               VectorStreamingRenderer*     vectorStreamingRenderer,
+               CompositeRenderer*           compositeRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -112,6 +115,10 @@ public:
 
   VectorStreamingRenderer* getVectorStreamingRenderer() const {
     return _vectorStreamingRenderer;
+  }
+  
+  CompositeRenderer* getCompositeRenderer() const {
+    return _compositeRenderer;
   }
 
 

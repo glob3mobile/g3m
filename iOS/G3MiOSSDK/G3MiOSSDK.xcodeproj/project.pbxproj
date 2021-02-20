@@ -931,6 +931,8 @@
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; platformFilter = ios; };
 		D8FF649125DEEA1100B6C9D4 /* Cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FF648F25DEEA1100B6C9D4 /* Cylinder.cpp */; };
 		D8FF649A25DEEDCF00B6C9D4 /* Cylinder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FF649025DEEA1100B6C9D4 /* Cylinder.hpp */; };
+		D8FF64A025E0897700B6C9D4 /* Arrow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FF649E25E0897700B6C9D4 /* Arrow.cpp */; };
+		D8FF64A225E08F3F00B6C9D4 /* Arrow.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FF649F25E0897700B6C9D4 /* Arrow.hpp */; };
 		E780A5AF16D3AEDA000F0395 /* SQDatabase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8B21BD15DD345D0068601A /* SQDatabase.h */; };
 		E780A5B016D3AEDA000F0395 /* GLUniformID_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */; };
 		E780A5B116D3AEDA000F0395 /* NativeGL2_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */; };
@@ -966,6 +968,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				D8FF64A225E08F3F00B6C9D4 /* Arrow.hpp in CopyFiles */,
 				D8FF649A25DEEDCF00B6C9D4 /* Cylinder.hpp in CopyFiles */,
 				CF12DC8B25D4380B00240D6F /* MutableColor.hpp in CopyFiles */,
 				CF12DC8C25D4380B00240D6F /* XPCFixedAlphaPointColorizer.hpp in CopyFiles */,
@@ -2462,6 +2465,8 @@
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 		D8FF648F25DEEA1100B6C9D4 /* Cylinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cylinder.cpp; sourceTree = "<group>"; };
 		D8FF649025DEEA1100B6C9D4 /* Cylinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cylinder.hpp; sourceTree = "<group>"; };
+		D8FF649E25E0897700B6C9D4 /* Arrow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Arrow.cpp; sourceTree = "<group>"; };
+		D8FF649F25E0897700B6C9D4 /* Arrow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Arrow.hpp; sourceTree = "<group>"; };
 		D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.fsh; sourceTree = "<group>"; };
 		D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
@@ -3478,6 +3483,8 @@
 				CF66019C23DF2DA500795C7F /* WrapperNearFrustumRenderer.cpp */,
 				CF66040023DF2DA900795C7F /* WrapperNearFrustumRenderer.hpp */,
 				CF05D55825B82B8900220105 /* XCP */,
+				D8FF649E25E0897700B6C9D4 /* Arrow.cpp */,
+				D8FF649F25E0897700B6C9D4 /* Arrow.hpp */,
 			);
 			name = G3M;
 			path = ../../cpp/G3M;
@@ -3883,6 +3890,7 @@
 				CF6608B023DF330600795C7F /* CanvasImageBuilder.cpp in Sources */,
 				CF6608B123DF330600795C7F /* MercatorTiledLayer.cpp in Sources */,
 				CF6608B223DF330600795C7F /* GEO3DGeometry.cpp in Sources */,
+				D8FF64A025E0897700B6C9D4 /* Arrow.cpp in Sources */,
 				CF6608B323DF330600795C7F /* HereLayer.cpp in Sources */,
 				CF6608B423DF330600795C7F /* PlanetRenderer.cpp in Sources */,
 				CF6608B523DF330600795C7F /* JSONNumber.cpp in Sources */,
