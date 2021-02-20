@@ -20,17 +20,28 @@ public:
         const Vector3D& tip,
         double radius,
         const Color& color,
-        double headLengthRatio = 0.3,
-        double headWidthRatio = 1.2){
-    Vector3D headBase = tip.add(tip.sub(base).times(1.0 - headLengthRatio));
+        double headLength = 3.0,
+        double headWidthRatio = 1.2 ){
+    Vector3D dir = tip.sub(base);
+    
+    Vector3D headBase = base.add(dir.normalized().times(dir.length() - headLength));
     Cylinder cylinder(base, headBase, radius, radius);
     
     Cylinder arrowTip(headBase,
                       tip,
                       radius * headWidthRatio, 0.0);
     
+    Cylinder arrowTipCover(headBase,
+                           headBase.sub(dir.normalized().times(0.0001)),
+                           radius * headWidthRatio, 0.0);
+    
     addMesh(cylinder.createMesh(color, 10));
     addMesh(arrowTip.createMesh(color, 20));
+    addMesh(arrowTipCover.createMesh(color, 20));
+  }
+  
+  bool onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) override {
+    return false;
   }
   
 };

@@ -26,6 +26,7 @@
 #include <G3M/MeshRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/Arrow.hpp>
+#include <G3M/TranslateScaleGizmo.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -178,13 +179,19 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   
 //  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
   
-  Arrow* arrow = new Arrow(context->getPlanet()->toCartesian(geoPos),
-                           context->getPlanet()->toCartesian(geoPos.add(Geodetic3D::fromDegrees(0, 0, 1000))),
-                           1000.0,
-                           Color::GREEN);
+//  double length = 1000;
+//  Arrow* arrow = new Arrow(context->getPlanet()->toCartesian(geoPos),
+//                           context->getPlanet()->toCartesian(geoPos.add(Geodetic3D::fromDegrees(0, 0, length))),
+//                           10.0,
+//                           Color::GREEN,
+//                           length * 0.05,
+//                           1.3);
   
 //  model->getCompositeRenderer()->addRenderer(mr);
-  model->getCompositeRenderer()->addRenderer(arrow);
+//  model->getCompositeRenderer()->addRenderer(arrow);
+  
+  TranslateScaleGizmo* gizmo = new TranslateScaleGizmo(context->getPlanet()->getCoordinateSystemAt(geoPos), 1000.0);
+  model->getCompositeRenderer()->addRenderer(gizmo);
   
   
 }

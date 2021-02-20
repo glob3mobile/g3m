@@ -928,6 +928,8 @@
 		CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */; };
 		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
+		D8AB49C625E15301002AB306 /* TranslateScaleGizmo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8AB49C425E15301002AB306 /* TranslateScaleGizmo.cpp */; };
+		D8AB49C825E15330002AB306 /* TranslateScaleGizmo.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8AB49C525E15301002AB306 /* TranslateScaleGizmo.hpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; platformFilter = ios; };
 		D8FF649125DEEA1100B6C9D4 /* Cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FF648F25DEEA1100B6C9D4 /* Cylinder.cpp */; };
 		D8FF649A25DEEDCF00B6C9D4 /* Cylinder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FF649025DEEA1100B6C9D4 /* Cylinder.hpp */; };
@@ -968,6 +970,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				D8AB49C825E15330002AB306 /* TranslateScaleGizmo.hpp in CopyFiles */,
 				D8FF64A225E08F3F00B6C9D4 /* Arrow.hpp in CopyFiles */,
 				D8FF649A25DEEDCF00B6C9D4 /* Cylinder.hpp in CopyFiles */,
 				CF12DC8B25D4380B00240D6F /* MutableColor.hpp in CopyFiles */,
@@ -2442,6 +2445,8 @@
 		D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Image_iOS.mm; path = Specific/Derived/Image_iOS.mm; sourceTree = "<group>"; };
 		D8A723AB15E4D42B00ABDF07 /* StringBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringBuilder_iOS.hpp; path = Specific/Derived/StringBuilder_iOS.hpp; sourceTree = "<group>"; };
 		D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringBuilder_iOS.cpp; path = Specific/Derived/StringBuilder_iOS.cpp; sourceTree = "<group>"; };
+		D8AB49C425E15301002AB306 /* TranslateScaleGizmo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TranslateScaleGizmo.cpp; sourceTree = "<group>"; };
+		D8AB49C525E15301002AB306 /* TranslateScaleGizmo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TranslateScaleGizmo.hpp; sourceTree = "<group>"; };
 		D8B3A95F160B691C0085D553 /* GLTextureID_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GLTextureID_iOS.hpp; path = Specific/GL/GLTextureID_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8B3A961160B69620085D553 /* GLUniformID_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLUniformID_iOS.hpp; path = Specific/GL/GLUniformID_iOS.hpp; sourceTree = "<group>"; };
 		D8B50F821DABCBDA00FA96FA /* SphericalAtmosphere.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; lineEnding = 0; path = SphericalAtmosphere.fsh; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
@@ -3485,6 +3490,8 @@
 				CF05D55825B82B8900220105 /* XCP */,
 				D8FF649E25E0897700B6C9D4 /* Arrow.cpp */,
 				D8FF649F25E0897700B6C9D4 /* Arrow.hpp */,
+				D8AB49C425E15301002AB306 /* TranslateScaleGizmo.cpp */,
+				D8AB49C525E15301002AB306 /* TranslateScaleGizmo.hpp */,
 			);
 			name = G3M;
 			path = ../../cpp/G3M;
@@ -3994,6 +4001,7 @@
 				CF66091223DF330700795C7F /* LeveledMesh.cpp in Sources */,
 				CF66091323DF330700795C7F /* LayerBuilder.cpp in Sources */,
 				CF66091423DF330700795C7F /* ColumnCanvasElement.cpp in Sources */,
+				D8AB49C625E15301002AB306 /* TranslateScaleGizmo.cpp in Sources */,
 				CF66091523DF330700795C7F /* GradualSplitsTileLODTester.cpp in Sources */,
 				CF66091623DF330700795C7F /* TileTexturizer.cpp in Sources */,
 				CF66091723DF330700795C7F /* CompositeElevationDataProvider.cpp in Sources */,

@@ -21,19 +21,20 @@ class Mesh;
 class Sphere : public BoundingVolume {
 private:
   
-  mutable Mesh* _mesh;
+  mutable Mesh* _mesh; //TODO Check Leaking?
+
+public:
+  
   Mesh* createWireframeMesh(const Color& color,
                             short resolution) const;
   
-  
-public:
   static Sphere* enclosingSphere(const std::vector<Vector3D>& points,
                                  const double radiusDelta);
   
   const Vector3D _center;
   const double   _radius;
   const double   _radiusSquared;
-  
+
   
   Sphere(const Vector3D& center,
          double radius):

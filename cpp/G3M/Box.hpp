@@ -23,7 +23,6 @@ class Box: public BoundingVolume {
 private:
 
   mutable Mesh* _mesh;
-  Mesh* createMesh(const Color& color) const;
 
 #ifdef C_CODE
   explicit Box(const Box& that) :
@@ -38,6 +37,10 @@ private:
 
 
 public:
+  
+  
+  Mesh* createMesh(const Color& color) const;
+  
   const Vector3D _lower;
   const Vector3D _upper;
 
