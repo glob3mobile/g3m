@@ -392,7 +392,8 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _effectsScheduler,
                      _storage,
                      _surfaceElevationProvider,
-                     _viewMode);
+                     _viewMode,
+                     getCurrentCamera());
 
   // notify the original event
   notifyTouchEvent(ec, touchEvent);
@@ -449,7 +450,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                      _effectsScheduler,
                      _storage,
                      _surfaceElevationProvider,
-                     _viewMode);
+                     _viewMode,
+                     getCurrentCamera());
 
   _nextCamera->resizeViewport(width, height);
   _currentCamera->resizeViewport(width, height);

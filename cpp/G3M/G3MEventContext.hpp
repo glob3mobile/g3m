@@ -11,9 +11,13 @@
 
 #include "G3MContext.hpp"
 
+class Camera;
 
 class G3MEventContext : public G3MContext {
 public:
+
+  const Camera*             _currentCamera;
+  
   G3MEventContext(const IFactory*           factory,
                   const IStringUtils*       stringUtils,
                   const IThreadUtils*       threadUtils,
@@ -25,7 +29,8 @@ public:
                   EffectsScheduler*         scheduler,
                   IStorage*                 storage,
                   SurfaceElevationProvider* surfaceElevationProvider,
-                  ViewMode                  viewMode) :
+                  ViewMode                  viewMode,
+                  const Camera*             currentCamera) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -37,7 +42,8 @@ public:
              scheduler,
              storage,
              surfaceElevationProvider,
-             viewMode)
+             viewMode),
+  _currentCamera(currentCamera)
   {
   }
 
