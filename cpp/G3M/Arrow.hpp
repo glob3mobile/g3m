@@ -16,12 +16,17 @@
 #include "G3MEventContext.hpp"
 #include "Camera.hpp"
 #include "TouchEvent.hpp"
+#include "GLFeature.hpp"
+#include "GLState.hpp"
 
 class Arrow: public MeshRenderer{
 private:
   bool _grabbed;
   MutableVector3D _grabbedPos;
   MutableVector3D _baseWhenGrabbed;
+  
+  GLState* _state;
+  ModelTransformGLFeature* _transformGLFeature;
   
   MutableVector3D _base, _vector;
   const double _radius;
@@ -50,6 +55,17 @@ public:
     addMesh(cylinder.createMesh(color, 10));
     addMesh(arrowTip.createMesh(color, 20));
     addMesh(arrowTipCover.createMesh(color, 20));
+    
+    
+    _state = new GLState();
+    _transformGLFeature = new ModelTransformGLFeature(Matrix44D::createIdentity());
+    _state->addGLFeature(_transformGLFeature, false);
+    
+    //_transformGLFeature->setMatrix(MutableMatrix44D::createTranslationMatrix(_base.asVector3D()).asMatrix44D());
+  }
+  
+  ~Arrow(){
+    _state->_release();
   }
   
   bool onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) override {
@@ -82,7 +98,6 @@ public:
       case TouchEventType::Move:{
         if (_grabbed){
           MutableVector3D disp = arrowPoint.sub(_grabbedPos);
-//         TODO DIR!!!
           _base = _baseWhenGrabbed.add(disp);
           printf("Arrow new base %s\n", _base.description().c_str());
         }
@@ -94,6 +109,14 @@ public:
     }
     
     return false;
+  }
+  
+  void render(const G3MRenderContext* rc, GLState* glState) override{
+    
+    _state->setParent(glState);
+    
+    
+    MeshRenderer::render(rc, _state);
   }
   
 };
