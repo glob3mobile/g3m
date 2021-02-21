@@ -19,7 +19,11 @@
 
 class Arrow: public MeshRenderer{
 private:
-  const Vector3D _base, _tip;
+  bool _grabbed;
+  MutableVector3D _grabbedPos;
+  MutableVector3D _baseWhenGrabbed;
+  
+  MutableVector3D _base, _tip;
   const double _radius;
 public:
   Arrow(const Vector3D& base,
@@ -28,7 +32,7 @@ public:
         const Color& color,
         double headLength = 3.0,
         double headWidthRatio = 1.2 ):
-  _base(base), _tip(tip), _radius(radius){
+  _base(base), _tip(tip), _radius(radius), _grabbed(false){
     Vector3D dir = tip.sub(base);
     
     Vector3D headBase = base.add(dir.normalized().times(dir.length() - headLength));
@@ -49,21 +53,43 @@ public:
   
   bool onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) override {
     
-    if (touchEvent->getTouchCount() != 1 || touchEvent->getTapCount() != 1){
+    if (touchEvent->getTouchCount() != 1 || touchEvent->getTapCount() != 1 || touchEvent->getType() == TouchEventType::Up){
+      _grabbed = false;
       return false;
     }
     const Touch& touch = *touchEvent->getTouch(0);
     
-    Ray arrowRay(_base, _tip.sub(_base));
+    Ray arrowRay(_base.asVector3D(), _tip.sub(_base).asVector3D());
     Ray camRay(ec->_currentCamera->getCartesianPosition(), ec->_currentCamera->pixel2Ray(touch.getPos()));
     
     MutableVector3D arrowPoint, camRayPoint;
     Ray::closestPointsOnTwoRays(arrowRay, camRay, arrowPoint, camRayPoint);
-    double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
     
-    if (dist < _radius){
-      printf("Touched Arrow %f %s\n", dist, arrowPoint.sub(camRayPoint).description().c_str());
-      return true;
+    switch (touchEvent->getType()) {
+      case TouchEventType::Down:{
+        double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
+        
+        if (dist < _radius){
+          printf("Touched Arrow Base %s\n", arrowPoint.sub(camRayPoint).description().c_str());
+          _grabbedPos = arrowPoint;
+          _baseWhenGrabbed = _base;
+          _grabbed = true;
+          return true;
+        }
+        break;
+      }
+      case TouchEventType::Move:{
+        if (_grabbed){
+          MutableVector3D disp = arrowPoint.sub(_grabbedPos);
+//         TODO DIR!!!
+          _base = _baseWhenGrabbed.add(disp);
+          printf("Arrow new base %s\n", _base.description().c_str());
+        }
+        
+        break;
+      }
+      default:
+        break;
     }
     
     return false;
