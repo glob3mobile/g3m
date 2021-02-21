@@ -30,7 +30,7 @@ public:
     Vector3D z = _cs._z.normalized().times(_size);
     
     _xArrow = new Arrow(_cs._origin,
-                        _cs._origin.add(x),
+                        x,
                         lineWidth,
                         Color::RED,
                         size * 0.05,
@@ -38,7 +38,7 @@ public:
     addRenderer(_xArrow);
     
     _yArrow = new Arrow(_cs._origin,
-                        _cs._origin.add(y),
+                        y,
                         lineWidth,
                         Color::GREEN,
                         size * 0.05,
@@ -46,7 +46,7 @@ public:
     addRenderer(_yArrow);
     
     _zArrow = new Arrow(_cs._origin,
-                        _cs._origin.add(z),
+                        z,
                         lineWidth,
                         Color::BLUE,
                         size * 0.05,

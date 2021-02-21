@@ -23,27 +23,28 @@ private:
   MutableVector3D _grabbedPos;
   MutableVector3D _baseWhenGrabbed;
   
-  MutableVector3D _base, _tip;
+  MutableVector3D _base, _vector;
   const double _radius;
 public:
   Arrow(const Vector3D& base,
-        const Vector3D& tip,
+        const Vector3D& vector,
         double radius,
         const Color& color,
         double headLength = 3.0,
         double headWidthRatio = 1.2 ):
-  _base(base), _tip(tip), _radius(radius), _grabbed(false){
-    Vector3D dir = tip.sub(base);
+  _base(base), _vector(vector), _radius(radius), _grabbed(false){
     
-    Vector3D headBase = base.add(dir.normalized().times(dir.length() - headLength));
+    Vector3D tipVector = _vector.normalized().times(headLength).asVector3D();
+    
+    Vector3D headBase = _base.add(_vector).sub(tipVector);
     Cylinder cylinder(base, headBase, radius, radius);
     
     Cylinder arrowTip(headBase,
-                      tip,
+                      headBase.add(tipVector),
                       radius * headWidthRatio, 0.0);
     
     Cylinder arrowTipCover(headBase,
-                           headBase.sub(dir.normalized().times(0.0001)),
+                           headBase.sub(_vector.normalized().times(0.0001)),
                            radius * headWidthRatio, 0.0);
     
     addMesh(cylinder.createMesh(color, 10));
@@ -59,7 +60,7 @@ public:
     }
     const Touch& touch = *touchEvent->getTouch(0);
     
-    Ray arrowRay(_base.asVector3D(), _tip.sub(_base).asVector3D());
+    Ray arrowRay(_base.asVector3D(), _vector.asVector3D());
     Ray camRay(ec->_currentCamera->getCartesianPosition(), ec->_currentCamera->pixel2Ray(touch.getPos()));
     
     MutableVector3D arrowPoint, camRayPoint;
