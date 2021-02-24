@@ -190,7 +190,9 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 //  model->getCompositeRenderer()->addRenderer(mr);
 //  model->getCompositeRenderer()->addRenderer(arrow);
   
-  TranslateScaleGizmo* gizmo = new TranslateScaleGizmo(context->getPlanet()->getCoordinateSystemAt(geoPos), 1000.0);
+  TranslateScaleGizmo* gizmo = new TranslateScaleGizmo(context->getPlanet()->getCoordinateSystemAt(geoPos),
+                                                       1.0,
+                                                       1000000.0);//1000.0);
   model->getCompositeRenderer()->addRenderer(gizmo);
   
   

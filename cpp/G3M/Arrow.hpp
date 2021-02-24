@@ -19,6 +19,14 @@
 #include "GLFeature.hpp"
 #include "GLState.hpp"
 
+class Arrow;
+
+class ArrowListener{
+public:
+  virtual ~ArrowListener(){}
+  virtual void onBaseChanged(const Arrow& arrow) = 0;
+};
+
 class Arrow: public MeshRenderer{
 private:
   bool _grabbed;
@@ -30,19 +38,37 @@ private:
   
   MutableVector3D _base, _vector;
   const double _radius;
+  
+  ArrowListener* _listener;
+  
 public:
   Arrow(const Vector3D& base,
         const Vector3D& vector,
         double radius,
         const Color& color,
         double headLength = 3.0,
-        double headWidthRatio = 1.2 ):
-  _base(base), _vector(vector), _radius(radius), _grabbed(false){
+        double headWidthRatio = 1.2,
+        bool doubleHeaded = false):
+  MeshRenderer(false), //No culling as geometry is displaced!!!
+  _base(base), _vector(vector), _radius(radius), _grabbed(false),
+  _listener(NULL){
     
     Vector3D tipVector = _vector.normalized().times(headLength).asVector3D();
+    Vector3D headBase = _vector.sub(tipVector);
     
-    Vector3D headBase = _base.add(_vector).sub(tipVector);
-    Cylinder cylinder(base, headBase, radius, radius);
+    if (doubleHeaded){
+      Cylinder arrowTip(Vector3D::ZERO,
+                        tipVector,
+                        0.0, radius * headWidthRatio);
+      addMesh(arrowTip.createMesh(color, 10));
+      
+      Cylinder arrowTipCover(tipVector,
+                             tipVector.add(_vector.normalized().times(0.0001).asVector3D()),
+                             radius * headWidthRatio, 0.0);
+      addMesh(arrowTipCover.createMesh(color, 10));
+    }
+    
+    Cylinder cylinder(doubleHeaded? tipVector : Vector3D::ZERO, headBase, radius, radius);
     
     Cylinder arrowTip(headBase,
                       headBase.add(tipVector),
@@ -56,12 +82,9 @@ public:
     addMesh(arrowTip.createMesh(color, 20));
     addMesh(arrowTipCover.createMesh(color, 20));
     
-    
     _state = new GLState();
-    _transformGLFeature = new ModelTransformGLFeature(Matrix44D::createIdentity());
+    _transformGLFeature = new ModelTransformGLFeature(MutableMatrix44D::createTranslationMatrix(_base.asVector3D()).asMatrix44D());
     _state->addGLFeature(_transformGLFeature, false);
-    
-    //_transformGLFeature->setMatrix(MutableMatrix44D::createTranslationMatrix(_base.asVector3D()).asMatrix44D());
   }
   
   ~Arrow(){
@@ -86,7 +109,7 @@ public:
       case TouchEventType::Down:{
         double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
         
-        if (dist < _radius){
+        if (dist < _radius * 2.0){
           printf("Touched Arrow Base %s\n", arrowPoint.sub(camRayPoint).description().c_str());
           _grabbedPos = arrowPoint;
           _baseWhenGrabbed = _base;
@@ -98,7 +121,8 @@ public:
       case TouchEventType::Move:{
         if (_grabbed){
           MutableVector3D disp = arrowPoint.sub(_grabbedPos);
-          _base = _baseWhenGrabbed.add(disp);
+          setBase(_baseWhenGrabbed.add(disp).asVector3D());
+          
           printf("Arrow new base %s\n", _base.description().c_str());
         }
         
@@ -114,9 +138,23 @@ public:
   void render(const G3MRenderContext* rc, GLState* glState) override{
     
     _state->setParent(glState);
-    
-    
     MeshRenderer::render(rc, _state);
+  }
+  
+  void setBase(const Vector3D& base, bool notifyListeners = true){
+    if (!base.isEquals(_base.asVector3D())){
+      _base = base.asMutableVector3D();
+      _transformGLFeature->setMatrix(MutableMatrix44D::createTranslationMatrix(_base.asVector3D()).asMatrix44D());
+      if (_listener && notifyListeners){
+        _listener->onBaseChanged(*this);
+      }
+    }
+  }
+  
+  const Vector3D getBase() const{ return _base.asVector3D(); }
+  
+  void setArrowListener(ArrowListener* listener){
+    _listener = listener;
   }
   
 };

@@ -16,50 +16,15 @@
 //#include "MeshRenderer.hpp"
 //#include "Box.hpp"
 
-class TranslateScaleGizmo: public CompositeRenderer{
-  CoordinateSystem _cs;
+class TranslateScaleGizmo: public CompositeRenderer, public ArrowListener{
+  CoordinateSystem* _cs;
   double _size;
   
-  Arrow* _xArrow, *_yArrow, *_zArrow;
+  Arrow  *_xArrow, *_yArrow, *_zArrow, *_scaleArrow;
 public:
-  TranslateScaleGizmo(const CoordinateSystem& cs, double size): _cs(cs), _size(size){
-    
-    double lineWidth = size * 0.01;
-    Vector3D x = _cs._x.normalized().times(_size);
-    Vector3D y = _cs._y.normalized().times(_size);
-    Vector3D z = _cs._z.normalized().times(_size);
-    
-    _xArrow = new Arrow(_cs._origin,
-                        x,
-                        lineWidth,
-                        Color::RED,
-                        size * 0.05,
-                        1.3);
-    addRenderer(_xArrow);
-    
-    _yArrow = new Arrow(_cs._origin,
-                        y,
-                        lineWidth,
-                        Color::GREEN,
-                        size * 0.05,
-                        1.3);
-    addRenderer(_yArrow);
-    
-    _zArrow = new Arrow(_cs._origin,
-                        z,
-                        lineWidth,
-                        Color::BLUE,
-                        size * 0.05,
-                        1.3);
-    addRenderer(_zArrow);
-    
-//    Vector3D boxSize(100,100,100);
-//    Box box(_cs._origin.sub(boxSize),
-//            _cs._origin.add(boxSize));
-//    MeshRenderer* mr = new MeshRenderer();
-//    mr->addMesh(box.createMesh(Color::GRAY));
-//    addRenderer(mr);
-  }
+  TranslateScaleGizmo(const CoordinateSystem& cs, double scale, double size);
+  
+  void onBaseChanged(const Arrow& arrow) override;
   
 };
 
