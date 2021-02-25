@@ -120,6 +120,14 @@ void G3MMarksDemoScene::addMark(Mark* mark) {
   getModel()->getMarksRenderer()->addMark(mark);
 }
 
+class GizmoListener : public TranslateScaleGizmoListener{
+public:
+  void onChanged(const TranslateScaleGizmo& gizmo) override{
+    printf("Gizmo P: %s S: %0.2f", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
+  }
+};
+
+
 void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
@@ -160,39 +168,41 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 //  addMark(mark);
   
   Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
-  Vector3D arrowLength = context->getPlanet()->geodeticSurfaceNormal(geoPos).times(100000.0);
-  double radius = 10000.0;
-  Vector3D arrowPos = context->getPlanet()->toCartesian(geoPos);
-  Vector3D arrowTipPos = arrowPos.add(arrowLength);
-
-  Cylinder cylinder(arrowPos, arrowTipPos, radius, radius);
-
-  Cylinder arrowTip(arrowTipPos,
-                    arrowTipPos.add(arrowLength.times(0.4)),
-                    radius * 2.0, 0.0);
-
-//  model->getMeshRenderer()->addMesh(cylinder.createMesh(Color::GREEN, 10));
-//  model->getMeshRenderer()->addMesh(arrowTip.createMesh(Color::GREEN, 20));
-  MeshRenderer* mr = new MeshRenderer();
-  mr->addMesh(cylinder.createMesh(Color::GREEN, 10));
-  mr->addMesh(arrowTip.createMesh(Color::GREEN, 20));
-  
-//  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
-  
-//  double length = 1000;
-//  Arrow* arrow = new Arrow(context->getPlanet()->toCartesian(geoPos),
-//                           context->getPlanet()->toCartesian(geoPos.add(Geodetic3D::fromDegrees(0, 0, length))),
-//                           10.0,
-//                           Color::GREEN,
-//                           length * 0.05,
-//                           1.3);
-  
-//  model->getCompositeRenderer()->addRenderer(mr);
-//  model->getCompositeRenderer()->addRenderer(arrow);
-  
+//  Vector3D arrowLength = context->getPlanet()->geodeticSurfaceNormal(geoPos).times(100000.0);
+//  double radius = 10000.0;
+//  Vector3D arrowPos = context->getPlanet()->toCartesian(geoPos);
+//  Vector3D arrowTipPos = arrowPos.add(arrowLength);
+//
+//  Cylinder cylinder(arrowPos, arrowTipPos, radius, radius);
+//
+//  Cylinder arrowTip(arrowTipPos,
+//                    arrowTipPos.add(arrowLength.times(0.4)),
+//                    radius * 2.0, 0.0);
+//
+////  model->getMeshRenderer()->addMesh(cylinder.createMesh(Color::GREEN, 10));
+////  model->getMeshRenderer()->addMesh(arrowTip.createMesh(Color::GREEN, 20));
+//  MeshRenderer* mr = new MeshRenderer();
+//  mr->addMesh(cylinder.createMesh(Color::GREEN, 10));
+//  mr->addMesh(arrowTip.createMesh(Color::GREEN, 20));
+//
+////  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
+//
+////  double length = 1000;
+////  Arrow* arrow = new Arrow(context->getPlanet()->toCartesian(geoPos),
+////                           context->getPlanet()->toCartesian(geoPos.add(Geodetic3D::fromDegrees(0, 0, length))),
+////                           10.0,
+////                           Color::GREEN,
+////                           length * 0.05,
+////                           1.3);
+//
+////  model->getCompositeRenderer()->addRenderer(mr);
+////  model->getCompositeRenderer()->addRenderer(arrow);
+//
   TranslateScaleGizmo* gizmo = new TranslateScaleGizmo(context->getPlanet()->getCoordinateSystemAt(geoPos),
                                                        1.0,
-                                                       1000000.0);//1000.0);
+                                                       1000000.0);
+  gizmo->setListener(new GizmoListener());
+  
   model->getCompositeRenderer()->addRenderer(gizmo);
   
   

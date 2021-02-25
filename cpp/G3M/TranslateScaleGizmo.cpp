@@ -7,13 +7,14 @@
 
 #include "TranslateScaleGizmo.hpp"
 
-TranslateScaleGizmo::TranslateScaleGizmo(const CoordinateSystem& cs, double scale, double size):
-_cs(new CoordinateSystem(cs)), _size(size){
+TranslateScaleGizmo::TranslateScaleGizmo(const CoordinateSystem& cs, double scale, double size, double maxScale):
+_cs(new CoordinateSystem(cs)), _size(size), _scale(scale), _maxScale(maxScale),
+_listener(NULL){
   
-#define LINE_WIDTH_RATIO 0.02
+#define LINE_WIDTH_RATIO 0.01
 #define HEAD_LENGTH_RATIO 0.05
 #define HEAD_WIDTH_RATIO 1.5
-#define SCALE_ARROW_LENGTH_SIZE_RATIO 0.2
+#define SCALE_ARROW_LENGTH_SIZE_RATIO 0.15
   
   double lineWidth = size * LINE_WIDTH_RATIO;
   Vector3D x = _cs->_x.normalized().times(_size);
@@ -47,7 +48,7 @@ _cs(new CoordinateSystem(cs)), _size(size){
   _zArrow->setArrowListener(this);
   addRenderer(_zArrow);
   
-  Vector3D scaleVector = x.add(y).add(z).normalized().times(_size); //Center of arrow
+  Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
   _scaleArrow = new Arrow(_cs->_origin.add(scaleVector.times(1.0 - SCALE_ARROW_LENGTH_SIZE_RATIO / 2.0)),
                           scaleVector.times(SCALE_ARROW_LENGTH_SIZE_RATIO),
                           lineWidth,
@@ -61,8 +62,17 @@ _cs(new CoordinateSystem(cs)), _size(size){
 
 void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
   
-  if (_scaleArrow == & arrow){
-    printf("Scaling\n");
+  if (_scaleArrow == &arrow){
+    
+    Vector3D scaleVector = getScale1Vector();
+    Vector3D scaleV = arrow.getBase().sub(_cs->_origin).div(scaleVector);
+    double scale = scaleV.maxAxis();
+    
+    if (scale < 0){
+      _scaleArrow->setBase(_cs->_origin, false);
+    }else if (scale > _maxScale){
+      _scaleArrow->setBase(_cs->_origin.add(scaleVector.times(_maxScale)), false);
+    }
   }else{
     //Translating
     Vector3D base = arrow.getBase();
@@ -83,7 +93,9 @@ void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
     Vector3D xDisp = xBase2.sub(xBase);
     
     _scaleArrow->setBase(_scaleArrow->getBase().add(disp), false);
-    
-    printf("Translating to %s\n", _cs->_origin.description().c_str());
+  }
+  
+  if (_listener){
+    _listener->onChanged(*this);
   }
 }
