@@ -27,6 +27,8 @@
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/Arrow.hpp>
 #include <G3M/TranslateScaleGizmo.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/EllipsoidShape.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -121,9 +123,19 @@ void G3MMarksDemoScene::addMark(Mark* mark) {
 }
 
 class GizmoListener : public TranslateScaleGizmoListener{
+  EllipsoidShape* _shape;
+  const Planet* _planet;
 public:
+  
+  GizmoListener(EllipsoidShape* shape, const Planet* planet):
+  _shape(shape), _planet(planet){}
+  
   void onChanged(const TranslateScaleGizmo& gizmo) override{
     printf("Gizmo P: %s S: %0.2f", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
+    
+    Geodetic3D geoPos = _planet->toGeodetic3D(gizmo.getCoordinateSystem()._origin);
+    _shape->setPosition(geoPos);
+    _shape->setScale(gizmo.getScale());
   }
 };
 
@@ -168,44 +180,25 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 //  addMark(mark);
   
   Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
-//  Vector3D arrowLength = context->getPlanet()->geodeticSurfaceNormal(geoPos).times(100000.0);
-//  double radius = 10000.0;
-//  Vector3D arrowPos = context->getPlanet()->toCartesian(geoPos);
-//  Vector3D arrowTipPos = arrowPos.add(arrowLength);
-//
-//  Cylinder cylinder(arrowPos, arrowTipPos, radius, radius);
-//
-//  Cylinder arrowTip(arrowTipPos,
-//                    arrowTipPos.add(arrowLength.times(0.4)),
-//                    radius * 2.0, 0.0);
-//
-////  model->getMeshRenderer()->addMesh(cylinder.createMesh(Color::GREEN, 10));
-////  model->getMeshRenderer()->addMesh(arrowTip.createMesh(Color::GREEN, 20));
-//  MeshRenderer* mr = new MeshRenderer();
-//  mr->addMesh(cylinder.createMesh(Color::GREEN, 10));
-//  mr->addMesh(arrowTip.createMesh(Color::GREEN, 20));
-//
-////  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
-//
-////  double length = 1000;
-////  Arrow* arrow = new Arrow(context->getPlanet()->toCartesian(geoPos),
-////                           context->getPlanet()->toCartesian(geoPos.add(Geodetic3D::fromDegrees(0, 0, length))),
-////                           10.0,
-////                           Color::GREEN,
-////                           length * 0.05,
-////                           1.3);
-//
-////  model->getCompositeRenderer()->addRenderer(mr);
-////  model->getCompositeRenderer()->addRenderer(arrow);
-//
+  double size = 1000.0;
+  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),
+                                                 AltitudeMode::ABSOLUTE,
+                                                 Vector3D(size, size, size),
+                                                 10,
+                                                 3.0,
+                                                 false,
+                                                 false,
+                                                 Color::fromRGBA255(128, 128, 128, 128),
+                                                 new Color(Color::WHITE),
+                                                 true);
+  model->getShapesRenderer()->addShape(ellipsoid);
+  
   TranslateScaleGizmo* gizmo = new TranslateScaleGizmo(context->getPlanet()->getCoordinateSystemAt(geoPos),
                                                        1.0,
-                                                       1000000.0);
-  gizmo->setListener(new GizmoListener());
+                                                       size);
+  gizmo->setListener(new GizmoListener(ellipsoid, context->getPlanet()));
   
   model->getCompositeRenderer()->addRenderer(gizmo);
-  
-  
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {

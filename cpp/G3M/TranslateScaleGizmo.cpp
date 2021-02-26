@@ -49,7 +49,7 @@ _listener(NULL){
   addRenderer(_zArrow);
   
   Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
-  _scaleArrow = new Arrow(_cs->_origin.add(scaleVector.times(1.0 - SCALE_ARROW_LENGTH_SIZE_RATIO / 2.0)),
+  _scaleArrow = new Arrow(_cs->_origin.add(scaleVector),
                           scaleVector.times(SCALE_ARROW_LENGTH_SIZE_RATIO),
                           lineWidth,
                           Color::fromRGBA255(255, 0, 255, 255),
@@ -66,12 +66,14 @@ void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
     
     Vector3D scaleVector = getScale1Vector();
     Vector3D scaleV = arrow.getBase().sub(_cs->_origin).div(scaleVector);
-    double scale = scaleV.maxAxis();
+    _scale = scaleV.maxAxis();
     
-    if (scale < 0){
+    if (_scale < 0){
       _scaleArrow->setBase(_cs->_origin, false);
-    }else if (scale > _maxScale){
+      _scale = 0;
+    }else if (_scale > _maxScale){
       _scaleArrow->setBase(_cs->_origin.add(scaleVector.times(_maxScale)), false);
+      _scale = _maxScale;
     }
   }else{
     //Translating

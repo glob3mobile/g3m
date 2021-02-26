@@ -105,11 +105,16 @@ public:
     MutableVector3D arrowPoint, camRayPoint;
     Ray::closestPointsOnTwoRays(arrowRay, camRay, arrowPoint, camRayPoint);
     
+    //double distArrow = arrowPoint.asVector3D().sub(arrowRay._origin).div(arrowRay._direction).maxAxis();
+    //bool onArrow = distArrow >= 0. && distArrow <= 1.;
+    
+#define SELECTION_RADIUS_RATIO 4.0
+    
     switch (touchEvent->getType()) {
       case TouchEventType::Down:{
         double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
         
-        if (dist < _radius * 2.0){
+        if (dist < _radius * SELECTION_RADIUS_RATIO){
           printf("Touched Arrow Base %s\n", arrowPoint.sub(camRayPoint).description().c_str());
           _grabbedPos = arrowPoint;
           _baseWhenGrabbed = _base;
