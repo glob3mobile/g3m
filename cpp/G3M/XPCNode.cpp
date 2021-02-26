@@ -156,7 +156,7 @@ public:
                                         scaledHeight,
                                         bufferCartesian);
 
-        visible[i]  = ( (_fence     == NULL) || _nodeFullInsideFence     || _fence->contains(bufferCartesian) );
+        visible[i]  = ( (_fence     == NULL) || _nodeFullInsideFence     || _fence->contains(bufferCartesian)     );
         selected[i] = ( (_selection == NULL) || _nodeFullInsideSelection || _selection->contains(bufferCartesian) );
 
         cartesianVertices->rawPut((i * 3) + 0, (float) (bufferCartesian._x - cartesianCenter._x) );
@@ -199,7 +199,7 @@ public:
     for (int i = 0; i < pointsCount; i++) {
       if ( visible[i] ) {
 
-        const float selectedAlpha = selected[i] ? 1 : 0.25f;
+        const float selectedAlpha = selected[i] ? 1 : 0.2f;
 
         if (pointsColorizer == NULL) {
           colors->rawPut((i * 4) + 0, 1 /* red   */);

@@ -55,20 +55,6 @@ XPCRenderer::~XPCRenderer() {
 #endif
 }
 
-void XPCRenderer::removeAllPointClouds() {
-  for (int i = 0; i < _cloudsSize; i++) {
-    XPCPointCloud* cloud = _clouds[i];
-    cloud->cancel();
-    cloud->_release();
-  }
-  _clouds.clear();
-  _cloudsSize = _clouds.size();
-
-  delete _selectionResult;
-  _selectionResult = NULL;
-}
-
-
 void XPCRenderer::addPointCloud(XPCPointCloud* pointCloud) {
   if (_context != NULL) {
     pointCloud->initialize(_context);
@@ -95,6 +81,19 @@ bool XPCRenderer::removePointCloud(XPCPointCloud* pointCloud) {
     }
   }
   return false;
+}
+
+void XPCRenderer::removeAllPointClouds() {
+  for (int i = 0; i < _cloudsSize; i++) {
+    XPCPointCloud* cloud = _clouds[i];
+    cloud->cancel();
+    cloud->_release();
+  }
+  _clouds.clear();
+  _cloudsSize = _clouds.size();
+
+  delete _selectionResult;
+  _selectionResult = NULL;
 }
 
 

@@ -171,7 +171,7 @@ public class XPCNodeContentParserAsyncTask extends GAsyncTask
       if (visible[i])
       {
 
-        final float selectedAlpha = selected[i] ? 1 : 0.25f;
+        final float selectedAlpha = selected[i] ? 1 : 0.2f;
 
         if (pointsColorizer == null)
         {
