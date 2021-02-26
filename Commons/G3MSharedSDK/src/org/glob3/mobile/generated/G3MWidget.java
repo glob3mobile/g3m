@@ -277,7 +277,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   public final void onTouchEvent(TouchEvent touchEvent)
   {
   
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode, getCurrentCamera());
   
     // notify the original event
     notifyTouchEvent(ec, touchEvent);
@@ -334,7 +334,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
 
   public final void onResizeViewportEvent(int width, int height)
   {
-    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode);
+    G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode, getCurrentCamera());
   
     _nextCamera.resizeViewport(width, height);
     _currentCamera.resizeViewport(width, height);

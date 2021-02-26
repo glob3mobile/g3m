@@ -24,7 +24,14 @@ public class Box extends BoundingVolume
 {
 
   private Mesh _mesh;
-  private Mesh createMesh(Color color)
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Box(Box that);
+
+
+
+
+  public final Mesh createMesh(Color color)
   {
     double[] v = { _lower._x, _lower._y, _lower._z, _lower._x, _upper._y, _lower._z, _lower._x, _upper._y, _upper._z, _lower._x, _lower._y, _upper._z, _upper._x, _lower._y, _lower._z, _upper._x, _upper._y, _lower._z, _upper._x, _upper._y, _upper._z, _upper._x, _lower._y, _upper._z };
   
@@ -51,10 +58,6 @@ public class Box extends BoundingVolume
   
     return mesh;
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Box(Box that);
-
 
   public final Vector3D _lower ;
   public final Vector3D _upper ;
