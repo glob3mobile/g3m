@@ -49,7 +49,6 @@ public:
 
   ~XPCRenderer();
 
-  void removeAllPointClouds();
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
@@ -59,6 +58,10 @@ public:
   }
 
   void addPointCloud(XPCPointCloud* pointCloud);
+
+  bool removePointCloud(XPCPointCloud* pointCloud);
+
+  void removeAllPointClouds();
 
   void render(const G3MRenderContext* rc,
               GLState* glState);
