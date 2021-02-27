@@ -25,8 +25,10 @@ package org.glob3.mobile.generated;
 public class Sphere extends BoundingVolume
 {
 
-  private Mesh _mesh;
-  private Mesh createWireframeMesh(Color color, short resolution)
+  private Mesh _mesh; //TODO Check Leaking?
+
+
+  public final Mesh createWireframeMesh(Color color, short resolution)
   {
     final double delta = DefineConstants.PI / (resolution-1);
   
@@ -80,7 +82,6 @@ public class Sphere extends BoundingVolume
   
     return mesh;
   }
-
 
   public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points, double radiusDelta)
   {

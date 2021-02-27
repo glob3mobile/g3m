@@ -80,6 +80,46 @@ public class Ray
     _mesh.render(rc, parentState);
   }
 
+  public final Vector3D pointAtTime(double t)
+  {
+    return _origin.add(_direction.times(t));
+  }
+
+  public static boolean closestPointsOnTwoRays(Ray ray1, Ray ray2, MutableVector3D closestPointRay1, MutableVector3D closestPointRay2)
+  {
+  
+    closestPointRay1 = new MutableVector3D(0,0,0);
+    closestPointRay2 = new MutableVector3D(0,0,0);
+  
+    double a = ray1._direction.dot(ray1._direction);
+    double b = ray1._direction.dot(ray2._direction);
+    double e = ray2._direction.dot(ray2._direction);
+  
+    double d = a *e - b *b;
+  
+    //lines are not parallel
+    if(d != 0.0)
+    {
+  
+      Vector3D r = ray1._origin.sub(ray2._origin);
+      double c = ray1._direction.dot(r);
+      double f = ray2._direction.dot(r);
+  
+      double s = (b *f - c *e) / d;
+      double t = (a *f - c *b) / d;
+  
+      closestPointRay1 = ray1.pointAtTime(s).asMutableVector3D();
+      closestPointRay2 = ray2.pointAtTime(t).asMutableVector3D();
+  
+      return true;
+    }
+  
+    else
+    {
+      return false;
+    }
+  }
+
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
