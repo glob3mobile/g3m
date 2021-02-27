@@ -15,13 +15,18 @@ package org.glob3.mobile.generated;
 
 
 
+//class ModelTransformGLFeature;
 //class Arrow;
 
 public abstract class ArrowListener
 {
   public void dispose()
   {
+
   }
+
   public abstract void onBaseChanged(Arrow arrow);
+
   public abstract void onDraggingEnded(Arrow arrow);
+
 }

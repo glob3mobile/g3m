@@ -110,15 +110,15 @@ void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
     delete _cs;
     _cs = cs;
     
-    Vector3D xBase = _xArrow->getBase();
+//    Vector3D xBase = _xArrow->getBase();
     
     Arrow* arrows[3] = {_xArrow, _yArrow, _zArrow};
     for (size_t i = 0; i < 3; i++) {
       arrows[i]->setBase(_cs->_origin, false);
     }
     
-    Vector3D xBase2 = _xArrow->getBase();
-    Vector3D xDisp = xBase2.sub(xBase);
+//    Vector3D xBase2 = _xArrow->getBase();
+//    Vector3D xDisp = xBase2.sub(xBase);
     
     _scaleArrow->setBase(_scaleArrow->getBase().add(disp), false);
   }

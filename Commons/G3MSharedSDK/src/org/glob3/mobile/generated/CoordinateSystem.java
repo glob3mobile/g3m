@@ -79,6 +79,11 @@ public class CoordinateSystem
     }
   }
 
+  public void dispose()
+  {
+
+  }
+
   public final CoordinateSystem applyTaitBryanAngles(TaitBryanAngles angles)
   {
     return applyTaitBryanAngles(angles._heading, angles._pitch, angles._roll);

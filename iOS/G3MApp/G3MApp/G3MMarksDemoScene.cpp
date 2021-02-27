@@ -131,7 +131,7 @@ public:
   _shape(shape), _planet(planet){}
   
   void onChanged(const TranslateScaleGizmo& gizmo) override{
-    printf("Gizmo P: %s S: %0.2f", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
+    printf("Gizmo P: %s S: %0.2f\n", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
     
     Geodetic3D geoPos = _planet->toGeodetic3D(gizmo.getCoordinateSystem()._origin);
     _shape->setPosition(geoPos);
@@ -139,7 +139,7 @@ public:
   }
   
   void onChangeEnded(const TranslateScaleGizmo& gizmo) override{
-    printf("Change ended on gizmo P: %s S: %0.2f", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
+    printf("Change ended on gizmo P: %s S: %0.2f\n", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
   }
 };
 

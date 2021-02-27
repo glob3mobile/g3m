@@ -91,34 +91,34 @@ void Ray::render(const G3MRenderContext* rc,
   _mesh->render(rc, parentState);
 }
 
-bool Ray::closestPointsOnTwoRays(const Ray& ray1, const Ray& ray2, MutableVector3D& closestPointRay1, MutableVector3D& closestPointRay2){
+bool Ray::closestPointsOnTwoRays(const Ray& ray1,
+                                 const Ray& ray2,
+                                 MutableVector3D& closestPointRay1,
+                                 MutableVector3D& closestPointRay2) {
   
-  closestPointRay1 = MutableVector3D(0,0,0);
-  closestPointRay2 = MutableVector3D(0,0,0);
+  closestPointRay1.set(0,0,0);
+  closestPointRay2.set(0,0,0);
   
-  double a = ray1._direction.dot(ray1._direction);
-  double b = ray1._direction.dot(ray2._direction);;
-  double e = ray2._direction.dot(ray2._direction);;
+  const double a = ray1._direction.dot(ray1._direction);
+  const double b = ray1._direction.dot(ray2._direction);
+  const double e = ray2._direction.dot(ray2._direction);
   
-  double d = a*e - b*b;
+  const double d = a*e - b*b;
   
   //lines are not parallel
-  if(d != 0.0){
+  if (d != 0.0) {
+    const Vector3D r = ray1._origin.sub(ray2._origin);
+    const double c = ray1._direction.dot(r);
+    const double f = ray2._direction.dot(r);
     
-    Vector3D r = ray1._origin.sub(ray2._origin);
-    double c = ray1._direction.dot(r);
-    double f = ray2._direction.dot(r);
+    const double s = (b*f - c*e) / d;
+    const double t = (a*f - c*b) / d;
     
-    double s = (b*f - c*e) / d;
-    double t = (a*f - c*b) / d;
-    
-    closestPointRay1 = ray1.pointAtTime(s).asMutableVector3D();
-    closestPointRay2 = ray2.pointAtTime(t).asMutableVector3D();
+    closestPointRay1.copyFrom( ray1.pointAtTime(s) );
+    closestPointRay2.copyFrom( ray2.pointAtTime(t) );
     
     return true;
   }
   
-  else{
-    return false;
-  }
+  return false;
 }

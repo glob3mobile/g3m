@@ -74,7 +74,6 @@ public class TranslateScaleGizmo extends CompositeRenderer
 
   public final void onBaseChanged(Arrow arrow)
   {
-  
     if (_scaleArrow == arrow)
     {
   
@@ -112,8 +111,8 @@ public class TranslateScaleGizmo extends CompositeRenderer
         arrows[i].setBase(_cs._origin, false);
       }
   
-      Vector3D xBase2 = _xArrow.getBase();
-      Vector3D xDisp = xBase2.sub(xBase);
+  //    Vector3D xBase2 = _xArrow->getBase();
+  //    Vector3D xDisp = xBase2.sub(xBase);
   
       _scaleArrow.setBase(_scaleArrow.getBase().add(disp), false);
     }
@@ -136,7 +135,7 @@ public class TranslateScaleGizmo extends CompositeRenderer
 
   public final void setListener(TranslateScaleGizmoListener listener)
   {
-      _listener = listener;
+    _listener = listener;
   }
 
   public final void onDraggingEnded(Arrow arrow)
