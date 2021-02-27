@@ -26,4 +26,5 @@ public abstract class TranslateScaleGizmoListener
   {
   }
   public abstract void onChanged(TranslateScaleGizmo gizmo);
+  public abstract void onChangeEnded(TranslateScaleGizmo gizmo);
 }

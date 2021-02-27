@@ -67,12 +67,15 @@ public class Arrow extends MeshRenderer
     _state._release();
   }
 
-  @Override
-  public boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 
     if (touchEvent.getTouchCount() != 1 || touchEvent.getTapCount() != 1 || touchEvent.getType() == TouchEventType.Up)
     {
+      if (_grabbed && _listener != null)
+      {
+        _listener.onDraggingEnded(this);
+      }
       _grabbed = false;
       return false;
     }
@@ -85,25 +88,30 @@ public class Arrow extends MeshRenderer
     MutableVector3D camRayPoint = new MutableVector3D();
     Ray.closestPointsOnTwoRays(arrowRay, camRay, arrowPoint, camRayPoint);
 
-    //double distArrow = arrowPoint.asVector3D().sub(arrowRay._origin).div(arrowRay._direction).maxAxis();
-    //bool onArrow = distArrow >= 0. && distArrow <= 1.;
-
    final double SELECTION_RADIUS_RATIO = 4.0;
 
     switch (touchEvent.getType())
     {
       case TouchEventType.Down:
       {
-        double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
+        double distArrow = arrowPoint.asVector3D().sub(arrowRay._origin).div(_vector.asVector3D()).maxAxis();
+        boolean onArrow = distArrow >= 0.&& distArrow <= 1.;
 
-        if (dist < _radius * SELECTION_RADIUS_RATIO)
+        if (onArrow)
         {
-          System.out.printf("Touched Arrow Base %s\n", arrowPoint.sub(camRayPoint).description());
-          _grabbedPos = arrowPoint;
-          _baseWhenGrabbed = _base;
-          _grabbed = true;
-          return true;
+
+          double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
+
+          if (dist < _radius * SELECTION_RADIUS_RATIO && onArrow)
+          {
+            _grabbedPos = arrowPoint;
+            _baseWhenGrabbed = _base;
+            _grabbed = true;
+            return true;
+          }
         }
+
+
         break;
       }
       case TouchEventType.Move:
@@ -112,8 +120,6 @@ public class Arrow extends MeshRenderer
         {
           MutableVector3D disp = arrowPoint.sub(_grabbedPos);
           setBase(_baseWhenGrabbed.add(disp).asVector3D());
-
-          System.out.printf("Arrow new base %s\n", _base.description());
         }
 
         break;
@@ -125,8 +131,7 @@ public class Arrow extends MeshRenderer
     return false;
   }
 
-  @Override
-  public void render(G3MRenderContext rc, GLState glState)
+  public final void render(G3MRenderContext rc, GLState glState)
   {
 
     _state.setParent(glState);

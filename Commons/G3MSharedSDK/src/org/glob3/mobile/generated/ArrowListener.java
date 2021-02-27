@@ -23,4 +23,5 @@ public abstract class ArrowListener
   {
   }
   public abstract void onBaseChanged(Arrow arrow);
+  public abstract void onDraggingEnded(Arrow arrow);
 }

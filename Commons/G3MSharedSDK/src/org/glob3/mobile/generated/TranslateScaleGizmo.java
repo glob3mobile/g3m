@@ -1,11 +1,14 @@
 package org.glob3.mobile.generated;
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class TranslateScaleGizmo extends CompositeRenderer, ArrowListener
+//class TranslateScaleGizmoArrowListener;
+
+public class TranslateScaleGizmo extends CompositeRenderer
 {
   private CoordinateSystem _cs;
   private double _scale;
   private final double _maxScale;
   private final double _size;
+
+  private TranslateScaleGizmoArrowListener _arrowListener;
 
   private TranslateScaleGizmoListener _listener;
 
@@ -41,32 +44,35 @@ public class TranslateScaleGizmo extends CompositeRenderer, ArrowListener
     Vector3D y = _cs._y.normalized().times(_size);
     Vector3D z = _cs._z.normalized().times(_size);
   
+    _arrowListener = new TranslateScaleGizmoArrowListener(this);
+  
     _xArrow = new Arrow(_cs._origin, x, lineWidth, Color.RED, size * DefineConstants.HEAD_LENGTH_RATIO, DefineConstants.HEAD_WIDTH_RATIO);
-    _xArrow.setArrowListener(this);
+    _xArrow.setArrowListener(_arrowListener);
     addRenderer(_xArrow);
   
     _yArrow = new Arrow(_cs._origin, y, lineWidth, Color.GREEN, size * DefineConstants.HEAD_LENGTH_RATIO, DefineConstants.HEAD_WIDTH_RATIO);
-    _yArrow.setArrowListener(this);
+    _yArrow.setArrowListener(_arrowListener);
     addRenderer(_yArrow);
   
     _zArrow = new Arrow(_cs._origin, z, lineWidth, Color.BLUE, size * DefineConstants.HEAD_LENGTH_RATIO, DefineConstants.HEAD_WIDTH_RATIO);
-    _zArrow.setArrowListener(this);
+    _zArrow.setArrowListener(_arrowListener);
     addRenderer(_zArrow);
   
     Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
     _scaleArrow = new Arrow(_cs._origin.add(scaleVector), scaleVector.times(DefineConstants.SCALE_ARROW_LENGTH_SIZE_RATIO), lineWidth, Color.fromRGBA255(255, 0, 255, 255), size * DefineConstants.HEAD_LENGTH_RATIO, DefineConstants.HEAD_WIDTH_RATIO, true);
-    _scaleArrow.setArrowListener(this);
+    _scaleArrow.setArrowListener(_arrowListener);
     addRenderer(_scaleArrow);
   }
 
   public void dispose()
   {
+    if (_arrowListener != null)
+       _arrowListener.dispose();
     if (_cs != null)
        _cs.dispose();
   }
 
-  @Override
-  public void onBaseChanged(Arrow arrow)
+  public final void onBaseChanged(Arrow arrow)
   {
   
     if (_scaleArrow == arrow)
@@ -131,6 +137,14 @@ public class TranslateScaleGizmo extends CompositeRenderer, ArrowListener
   public final void setListener(TranslateScaleGizmoListener listener)
   {
       _listener = listener;
+  }
+
+  public final void onDraggingEnded(Arrow arrow)
+  {
+    if (_listener != null)
+    {
+      _listener.onChangeEnded(this);
+    }
   }
 
 }

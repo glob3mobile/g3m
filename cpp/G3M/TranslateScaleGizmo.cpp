@@ -6,25 +6,26 @@
 //
 
 #include "TranslateScaleGizmo.hpp"
+#include "Color.hpp"
 
 
-class TranslateScaleGizmoArrowListener : public ArrowListener{
+class TranslateScaleGizmoArrowListener : public ArrowListener {
   TranslateScaleGizmo* _gizmo;
 public:
   
   TranslateScaleGizmoArrowListener(TranslateScaleGizmo* gizmo):
-  _gizmo(gizmo){}
+  _gizmo(gizmo) {}
   
-  void onBaseChanged(const Arrow& arrow){
+  void onBaseChanged(const Arrow& arrow) {
     _gizmo->onBaseChanged(arrow);
   }
   
-  void onDraggingEnded(const Arrow& arrow){
+  void onDraggingEnded(const Arrow& arrow) {
     _gizmo->onDraggingEnded(arrow);
   }
 };
 
-TranslateScaleGizmo::~TranslateScaleGizmo(){
+TranslateScaleGizmo::~TranslateScaleGizmo() {
   delete _arrowListener;
   delete _cs;
 }
@@ -32,7 +33,7 @@ TranslateScaleGizmo::~TranslateScaleGizmo(){
 
 TranslateScaleGizmo::TranslateScaleGizmo(const CoordinateSystem& cs, double scale, double size, double maxScale):
 _cs(new CoordinateSystem(cs)), _size(size), _scale(scale), _maxScale(maxScale),
-_listener(NULL){
+_listener(NULL) {
   
 #define LINE_WIDTH_RATIO 0.01
 #define HEAD_LENGTH_RATIO 0.05
@@ -86,21 +87,21 @@ _listener(NULL){
 }
 
 void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
-  
-  if (_scaleArrow == &arrow){
+  if (_scaleArrow == &arrow) {
     
     Vector3D scaleVector = getScale1Vector();
     Vector3D scaleV = arrow.getBase().sub(_cs->_origin).div(scaleVector);
     _scale = scaleV.maxAxis();
     
-    if (_scale < 0){
+    if (_scale < 0) {
       _scaleArrow->setBase(_cs->_origin, false);
       _scale = 0;
-    }else if (_scale > _maxScale){
+    }else if (_scale > _maxScale) {
       _scaleArrow->setBase(_cs->_origin.add(scaleVector.times(_maxScale)), false);
       _scale = _maxScale;
     }
-  }else{
+  }
+  else {
     //Translating
     Vector3D base = arrow.getBase();
     Vector3D disp = base.sub(_cs->_origin);
@@ -112,7 +113,7 @@ void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
     Vector3D xBase = _xArrow->getBase();
     
     Arrow* arrows[3] = {_xArrow, _yArrow, _zArrow};
-    for (size_t i = 0; i < 3; i++){
+    for (size_t i = 0; i < 3; i++) {
       arrows[i]->setBase(_cs->_origin, false);
     }
     
@@ -122,13 +123,13 @@ void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
     _scaleArrow->setBase(_scaleArrow->getBase().add(disp), false);
   }
   
-  if (_listener){
+  if (_listener) {
     _listener->onChanged(*this);
   }
 }
 
-void TranslateScaleGizmo::onDraggingEnded(const Arrow& arrow){
-  if (_listener){
+void TranslateScaleGizmo::onDraggingEnded(const Arrow& arrow) {
+  if (_listener) {
     _listener->onChangeEnded(*this);
   }
 }

@@ -59,11 +59,11 @@ public:
   }
   
   void setListener(TranslateScaleGizmoListener* listener){
-      _listener = listener;
+    _listener = listener;
   }
   
   void onDraggingEnded(const Arrow& arrow);
   
 };
 
-#endif /* TranslateScaleGizmo_hpp */
+#endif
