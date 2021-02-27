@@ -47,49 +47,60 @@ _maxScale(maxScale),
 _listener(NULL)
 {
   const double lineWidth = size * lineWidthRatio;
-  Vector3D x = _cs->_x.normalized().times(_size);
-  Vector3D y = _cs->_y.normalized().times(_size);
-  Vector3D z = _cs->_z.normalized().times(_size);
-  
+
   _arrowListener = new TranslateScaleGizmoArrowListener(this);
-  
-  _xArrow = new Arrow(_cs->_origin,
-                      x,
-                      lineWidth,
-                      Color::RED,
-                      size * lineWidthRatio,
-                      headLengthRatio);
-  _xArrow->setArrowListener(_arrowListener);
-  addRenderer(_xArrow);
-  
-  _yArrow = new Arrow(_cs->_origin,
-                      y,
-                      lineWidth,
-                      Color::GREEN,
-                      size * lineWidthRatio,
-                      headLengthRatio);
-  _yArrow->setArrowListener(_arrowListener);
-  addRenderer(_yArrow);
-  
-  _zArrow = new Arrow(_cs->_origin,
-                      z,
-                      lineWidth,
-                      Color::BLUE,
-                      size * lineWidthRatio,
-                      headLengthRatio);
-  _zArrow->setArrowListener(_arrowListener);
-  addRenderer(_zArrow);
-  
-  Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
-  _scaleArrow = new Arrow(_cs->_origin.add(scaleVector),
-                          scaleVector.times(scaleArrowLengthSizeRatio),
-                          lineWidth,
-                          Color::fromRGBA255(255, 0, 255, 255),
-                          size * lineWidthRatio,
-                          headLengthRatio,
-                          true);
-  _scaleArrow->setArrowListener(_arrowListener);
-  addRenderer(_scaleArrow);
+
+  {
+    const Vector3D x = _cs->_x.normalized().times(_size);
+
+    _xArrow = new Arrow(_cs->_origin,
+                        x,
+                        lineWidth,
+                        Color::RED,
+                        size * headLengthRatio,
+                        headWidthRatio);
+    _xArrow->setArrowListener(_arrowListener);
+    addRenderer(_xArrow);
+  }
+
+  {
+    const Vector3D y = _cs->_y.normalized().times(_size);
+
+    _yArrow = new Arrow(_cs->_origin,
+                        y,
+                        lineWidth,
+                        Color::GREEN,
+                        size * headLengthRatio,
+                        headWidthRatio);
+    _yArrow->setArrowListener(_arrowListener);
+    addRenderer(_yArrow);
+  }
+
+  {
+    const Vector3D z = _cs->_z.normalized().times(_size);
+
+    _zArrow = new Arrow(_cs->_origin,
+                        z,
+                        lineWidth,
+                        Color::BLUE,
+                        size * headLengthRatio,
+                        headWidthRatio);
+    _zArrow->setArrowListener(_arrowListener);
+    addRenderer(_zArrow);
+  }
+
+  {
+    Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
+    _scaleArrow = new Arrow(_cs->_origin.add(scaleVector),
+                            scaleVector.times(scaleArrowLengthSizeRatio),
+                            lineWidth,
+                            Color::fromRGBA255(255, 0, 255, 255),
+                            size * headLengthRatio,
+                            headWidthRatio,
+                            true);
+    _scaleArrow->setArrowListener(_arrowListener);
+    addRenderer(_scaleArrow);
+  }
 }
 
 void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
