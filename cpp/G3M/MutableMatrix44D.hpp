@@ -63,6 +63,9 @@ private:
   }
 
 
+  MutableMatrix44D& operator=(const MutableMatrix44D& that);
+
+
 public:
 
   //Contructor parameters in column major order

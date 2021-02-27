@@ -80,6 +80,10 @@ public class MutableMatrix44D
   }
 
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableMatrix44D operator =(MutableMatrix44D that);
+
+
 
   //Contructor parameters in column major order
   public MutableMatrix44D(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)

@@ -98,8 +98,8 @@ bool Arrow::onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent
         const double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
 
         if (dist < _radius * SELECTION_RADIUS_RATIO && onArrow) {
-          _grabbedPos = arrowPoint;
-          _baseWhenGrabbed = _base;
+          _grabbedPos.set(arrowPoint);
+          _baseWhenGrabbed.set(_base);
           _grabbed = true;
           return true;
         }
@@ -132,7 +132,7 @@ void Arrow::render(const G3MRenderContext* rc, GLState* glState) {
 void Arrow::setBase(const Vector3D& base,
                     bool notifyListeners) {
   if (!base.isEquals(_base.asVector3D())) {
-    _base = base.asMutableVector3D();
+    _base.set(base);
     _transformGLFeature->setMatrix(MutableMatrix44D::createTranslationMatrix(_base.asVector3D()).asMatrix44D());
     if (_listener && notifyListeners) {
       _listener->onBaseChanged(*this);

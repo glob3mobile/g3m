@@ -24,6 +24,9 @@ public class MutableVector2I
   private int _x;
   private int _y;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableVector2I operator =(MutableVector2I that);
+
   public MutableVector2I()
   {
      _x = 0;
@@ -45,11 +48,10 @@ public class MutableVector2I
 
   }
 
-  public final MutableVector2I copyFrom(MutableVector2I that)
+  public final void set(MutableVector2I that)
   {
     _x = that._x;
     _y = that._y;
-    return this;
   }
 
   public static MutableVector2I zero()

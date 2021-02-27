@@ -120,7 +120,7 @@ public class CompositeMesh extends Mesh
       }
       acumIndex += childSize;
     }
-    result.copyFrom(Vector3D.NANV);
+    result.set(Vector3D.NANV);
   }
 
   public final Color getColor(int index)

@@ -21,6 +21,9 @@ public class MutableVector2D
   private double _x;
   private double _y;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableVector2D operator =(MutableVector2D that);
+
 
   public MutableVector2D()
   {

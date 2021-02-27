@@ -12,6 +12,9 @@
 class Vector2F;
 
 class MutableVector2F {
+private:
+  MutableVector2F& operator=(const MutableVector2F& that);
+
 public:
   float _x;
   float _y;
@@ -51,10 +54,9 @@ public:
     _y *= k;
   }
 
-  MutableVector2F& operator=(const MutableVector2F& that) {
+  void set(const MutableVector2F& that) {
     _x = that._x;
     _y = that._y;
-    return *this;
   }
 
   static MutableVector2F zero() {

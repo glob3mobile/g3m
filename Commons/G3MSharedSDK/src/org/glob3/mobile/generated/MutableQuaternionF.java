@@ -25,6 +25,9 @@ public class MutableQuaternionF
 
   private MutableQuaternionF _temp;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableQuaternionF operator =(MutableQuaternionF that);
+
   public MutableQuaternionF()
   {
      _x = 0.0f;

@@ -106,7 +106,7 @@ public class XPCSelectionResult
     if ((_nearestSquaredDistance != _nearestSquaredDistance) || (candidateSquaredDistance < _nearestSquaredDistance))
     {
   
-      _nearestPoint.copyFrom(cartesianPoint);
+      _nearestPoint.set(cartesianPoint);
       _nearestSquaredDistance = candidateSquaredDistance;
   
       if (pointCloud != _pointCloud)

@@ -103,8 +103,8 @@ public class Arrow extends MeshRenderer
   
           if (dist < _radius * DefineConstants.SELECTION_RADIUS_RATIO && onArrow)
           {
-            _grabbedPos = arrowPoint;
-            _baseWhenGrabbed = _base;
+            _grabbedPos.set(arrowPoint);
+            _baseWhenGrabbed.set(_base);
             _grabbed = true;
             return true;
           }
@@ -145,7 +145,7 @@ public class Arrow extends MeshRenderer
   {
     if (!base.isEquals(_base.asVector3D()))
     {
-      _base = base.asMutableVector3D();
+      _base.set(base);
       _transformGLFeature.setMatrix(MutableMatrix44D.createTranslationMatrix(_base.asVector3D()).asMatrix44D());
       if (_listener != null && notifyListeners)
       {

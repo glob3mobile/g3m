@@ -14,6 +14,8 @@ package org.glob3.mobile.generated;
 //
 
 
+
+
 //class Vector3D;
 //class Angle;
 //class MutableMatrix44D;
@@ -21,6 +23,10 @@ package org.glob3.mobile.generated;
 
 public class MutableVector3D
 {
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableVector3D operator =(MutableVector3D that);
+
   public double _x;
   public double _y;
   public double _z;
@@ -61,14 +67,14 @@ public class MutableVector3D
     _z = z;
   }
 
-  public final void copyFrom(MutableVector3D that)
+  public final void set(MutableVector3D that)
   {
     _x = that._x;
     _y = that._y;
     _z = that._z;
   }
 
-  public final void copyFrom(Vector3D that)
+  public final void set(Vector3D that)
   {
     _x = that._x;
     _y = that._y;

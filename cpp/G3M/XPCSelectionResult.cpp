@@ -72,7 +72,7 @@ bool XPCSelectionResult::evaluateCantidate(const MutableVector3D& cartesianPoint
   if (ISNAN(_nearestSquaredDistance) ||
       (candidateSquaredDistance < _nearestSquaredDistance) ) {
 
-    _nearestPoint.copyFrom(cartesianPoint);
+    _nearestPoint.set(cartesianPoint);
     _nearestSquaredDistance = candidateSquaredDistance;
 
     if (pointCloud != _pointCloud) {

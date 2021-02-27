@@ -107,8 +107,8 @@ public class Ray
       final double s = (b *f - c *e) / d;
       final double t = (a *f - c *b) / d;
   
-      closestPointRay1.copyFrom(ray1.pointAtTime(s));
-      closestPointRay2.copyFrom(ray2.pointAtTime(t));
+      closestPointRay1.set(ray1.pointAtTime(s));
+      closestPointRay2.set(ray2.pointAtTime(t));
   
       return true;
     }

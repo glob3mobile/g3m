@@ -21,12 +21,6 @@ _z(v._z)
 {
 }
 
-void MutableVector3D::copyFrom(const Vector3D& that) {
-  _x = that._x;
-  _y = that._y;
-  _z = that._z;
-}
-
 MutableVector3D MutableVector3D::nan() {
   return MutableVector3D(NAND, NAND, NAND);
 }

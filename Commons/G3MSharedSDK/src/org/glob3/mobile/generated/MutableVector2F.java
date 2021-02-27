@@ -20,6 +20,9 @@ package org.glob3.mobile.generated;
 
 public class MutableVector2F
 {
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableVector2F operator =(MutableVector2F that);
+
   public float _x;
   public float _y;
 
@@ -66,11 +69,10 @@ public class MutableVector2F
     _y *= k;
   }
 
-  public final MutableVector2F copyFrom(MutableVector2F that)
+  public final void set(MutableVector2F that)
   {
     _x = that._x;
     _y = that._y;
-    return this;
   }
 
   public static MutableVector2F zero()

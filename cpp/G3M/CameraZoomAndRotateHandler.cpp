@@ -53,8 +53,8 @@ void CameraZoomAndRotateHandler::onDown(const G3MEventContext *eventContext,
   cameraContext->setCurrentGesture(DoubleDrag);
 
   // double dragging
-  _initialPixel0 = MutableVector2F(touchEvent.getTouch(0)->getPos());
-  _initialPixel1 = MutableVector2F(touchEvent.getTouch(1)->getPos());
+  _initialPixel0.set(MutableVector2F(touchEvent.getTouch(0)->getPos()));
+  _initialPixel1.set(MutableVector2F(touchEvent.getTouch(1)->getPos()));
 }
 
 
@@ -86,9 +86,9 @@ void CameraZoomAndRotateHandler::onMove(const G3MEventContext *eventContext,
                                                           _cameraCenter.sub(_cameraPosition).asVector3D());
       if (!intersection.isNan()) {
         //        _centralGlobePoint = intersection.asMutableVector3D();
-        _centralGlobePoint.copyFrom(intersection);
+        _centralGlobePoint.set(intersection);
         //        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
-        _centralGlobeNormal.copyFrom(planet->geodeticSurfaceNormal(_centralGlobePoint));
+        _centralGlobeNormal.set(planet->geodeticSurfaceNormal(_centralGlobePoint));
         _fingerSep0 = sqrt((difCurrentPixels._x*difCurrentPixels._x+difCurrentPixels._y*difCurrentPixels._y));
         _lastAngle = _angle0 = atan2(difCurrentPixels._y, difCurrentPixels._x);
         cameraContext->setCurrentGesture(Zoom);

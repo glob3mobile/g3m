@@ -18,6 +18,10 @@ package org.glob3.mobile.generated;
 
 public class MutableColor255
 {
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableColor255 operator =(MutableColor255 that);
+
+
   public byte _red;
   public byte _green;
   public byte _blue;

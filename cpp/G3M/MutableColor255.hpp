@@ -10,6 +10,10 @@
 #define MutableColor255_hpp
 
 class MutableColor255 {
+private:
+  MutableColor255& operator=(const MutableColor255& that);
+
+
 public:
   unsigned char _red;
   unsigned char _green;

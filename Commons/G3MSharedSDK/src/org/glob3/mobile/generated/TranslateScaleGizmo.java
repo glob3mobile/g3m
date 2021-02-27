@@ -103,7 +103,7 @@ public class TranslateScaleGizmo extends CompositeRenderer
          _cs.dispose();
       _cs = cs;
   
-      Vector3D xBase = _xArrow.getBase();
+  //    Vector3D xBase = _xArrow->getBase();
   
       Arrow[] arrows = {_xArrow, _yArrow, _zArrow};
       for (int i = 0; i < 3; i++)

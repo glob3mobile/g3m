@@ -12,6 +12,9 @@
 
 
 class MutableColor {
+private:
+  MutableColor& operator=(const MutableColor& that);
+
 public:
   float _red;
   float _green;

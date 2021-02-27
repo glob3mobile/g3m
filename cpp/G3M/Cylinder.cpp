@@ -44,8 +44,8 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments) const{
   for (int i = 0; i < nSegments; ++i){
     
     //Tube
-    newStartPoint = newStartPoint.transformedBy(mStart, 1.0);
-    newEndPoint =  newEndPoint.transformedBy(mEnd, 1.0);
+    newStartPoint.set(newStartPoint.transformedBy(mStart, 1.0));
+    newEndPoint.set(newEndPoint.transformedBy(mEnd, 1.0));
     
     fbb->add(newStartPoint.asVector3D());
     fbb->add(newEndPoint.asVector3D());

@@ -53,8 +53,8 @@ public class Cylinder
     {
   
       //Tube
-      newStartPoint = newStartPoint.transformedBy(mStart, 1.0);
-      newEndPoint = newEndPoint.transformedBy(mEnd, 1.0);
+      newStartPoint.set(newStartPoint.transformedBy(mStart, 1.0));
+      newEndPoint.set(newEndPoint.transformedBy(mEnd, 1.0));
   
       fbb.add(newStartPoint.asVector3D());
       fbb.add(newEndPoint.asVector3D());
