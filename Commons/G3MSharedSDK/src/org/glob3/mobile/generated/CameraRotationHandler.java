@@ -107,7 +107,7 @@ public class CameraRotationHandler extends CameraEventHandler
     Vector2F pixel1 = touchEvent.getTouch(1).getPos();
     Vector2F pixel2 = touchEvent.getTouch(2).getPos();
     Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3.0f);
-    _pivotPixel.set(new MutableVector2F(averagePixel._x, averagePixel._y));
+    _pivotPixel.set(averagePixel._x, averagePixel._y);
     //_lastYValid = _initialPixel.y();
   
     // compute center of view

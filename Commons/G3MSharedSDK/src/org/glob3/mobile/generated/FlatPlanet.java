@@ -213,7 +213,7 @@ public class FlatPlanet extends Planet
   public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
   {
     _origin.set(origin.asMutableVector3D());
-    _initialPoint.set(Plane.intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D());
+    _initialPoint.set(Plane.intersectionXYPlaneWithRay(origin, initialRay));
     _lastFinalPoint.set(_initialPoint);
     _validSingleDrag = false;
   }

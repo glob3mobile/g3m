@@ -14,9 +14,7 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include "Sphere.hpp"
-///#include "MeshRenderer.hpp"
-///#include "Box.hpp"
+
 
 //class TranslateScaleGizmo;
 

@@ -21,13 +21,18 @@ package org.glob3.mobile.generated;
 
 public class G3MEventContext extends G3MContext
 {
-
-  public final Camera _currentCamera;
+  private final Camera _currentCamera;
 
   public G3MEventContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler scheduler, IStorage storage, SurfaceElevationProvider surfaceElevationProvider, ViewMode viewMode, Camera currentCamera)
   {
      super(factory, stringUtils, threadUtils, logger, mathUtils, jsonParser, planet, downloader, scheduler, storage, surfaceElevationProvider, viewMode);
      _currentCamera = currentCamera;
+  }
+
+
+  public final Camera getCurrentCamera()
+  {
+    return _currentCamera;
   }
 
 }

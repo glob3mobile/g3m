@@ -8,13 +8,10 @@
 #ifndef TranslateScaleGizmo_hpp
 #define TranslateScaleGizmo_hpp
 
-#include <stdio.h>
 #include "CompositeRenderer.hpp"
 #include "Arrow.hpp"
 #include "CoordinateSystem.hpp"
-//#include "Sphere.hpp"
-//#include "MeshRenderer.hpp"
-//#include "Box.hpp"
+
 
 class TranslateScaleGizmo;
 

@@ -82,7 +82,8 @@ bool Arrow::onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent
   const Touch& touch = *touchEvent->getTouch(0);
 
   Ray arrowRay(_base.asVector3D(), _vector.asVector3D());
-  Ray camRay(ec->_currentCamera->getCartesianPosition(), ec->_currentCamera->pixel2Ray(touch.getPos()));
+  Ray camRay(ec->getCurrentCamera()->getCartesianPosition(),
+             ec->getCurrentCamera()->pixel2Ray(touch.getPos()));
 
   MutableVector3D arrowPoint, camRayPoint;
   Ray::closestPointsOnTwoRays(arrowRay, camRay, arrowPoint, camRayPoint);

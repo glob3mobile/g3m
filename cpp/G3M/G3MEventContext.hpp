@@ -14,10 +14,10 @@
 class Camera;
 
 class G3MEventContext : public G3MContext {
-public:
+private:
+  const Camera* _currentCamera;
 
-  const Camera*             _currentCamera;
-  
+public:
   G3MEventContext(const IFactory*           factory,
                   const IStringUtils*       stringUtils,
                   const IThreadUtils*       threadUtils,
@@ -45,6 +45,11 @@ public:
              viewMode),
   _currentCamera(currentCamera)
   {
+  }
+
+
+  const Camera* getCurrentCamera() const {
+    return _currentCamera;
   }
 
 };

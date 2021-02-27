@@ -82,7 +82,7 @@ public class Arrow extends MeshRenderer
     final Touch touch = touchEvent.getTouch(0);
   
     Ray arrowRay = new Ray(_base.asVector3D(), _vector.asVector3D());
-    Ray camRay = new Ray(ec._currentCamera.getCartesianPosition(), ec._currentCamera.pixel2Ray(touch.getPos()));
+    Ray camRay = new Ray(ec.getCurrentCamera().getCartesianPosition(), ec.getCurrentCamera().pixel2Ray(touch.getPos()));
   
     MutableVector3D arrowPoint = new MutableVector3D();
     MutableVector3D camRayPoint = new MutableVector3D();
