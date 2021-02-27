@@ -18,6 +18,10 @@ public:
   void onBaseChanged(const Arrow& arrow) override{
     _gizmo->onBaseChanged(arrow);
   }
+  
+  void onDraggingEnded(const Arrow& arrow) override{
+    _gizmo->onDraggingEnded(arrow);
+  }
 };
 
 TranslateScaleGizmo::~TranslateScaleGizmo(){
@@ -120,5 +124,11 @@ void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
   
   if (_listener){
     _listener->onChanged(*this);
+  }
+}
+
+void TranslateScaleGizmo::onDraggingEnded(const Arrow& arrow){
+  if (_listener){
+    _listener->onChangeEnded(*this);
   }
 }

@@ -25,6 +25,7 @@ class ArrowListener{
 public:
   virtual ~ArrowListener(){}
   virtual void onBaseChanged(const Arrow& arrow) = 0;
+  virtual void onDraggingEnded(const Arrow& arrow) = 0;
 };
 
 class Arrow: public MeshRenderer{
@@ -94,6 +95,9 @@ public:
   bool onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) override {
     
     if (touchEvent->getTouchCount() != 1 || touchEvent->getTapCount() != 1 || touchEvent->getType() == TouchEventType::Up){
+      if (_grabbed && _listener){
+        _listener->onDraggingEnded(*this);
+      }
       _grabbed = false;
       return false;
     }
@@ -104,23 +108,28 @@ public:
     
     MutableVector3D arrowPoint, camRayPoint;
     Ray::closestPointsOnTwoRays(arrowRay, camRay, arrowPoint, camRayPoint);
-    
-    //double distArrow = arrowPoint.asVector3D().sub(arrowRay._origin).div(arrowRay._direction).maxAxis();
-    //bool onArrow = distArrow >= 0. && distArrow <= 1.;
-    
+
 #define SELECTION_RADIUS_RATIO 4.0
     
     switch (touchEvent->getType()) {
       case TouchEventType::Down:{
-        double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
+        double distArrow = arrowPoint.asVector3D().sub(arrowRay._origin).div(_vector.asVector3D()).maxAxis();
+        bool onArrow = distArrow >= 0. && distArrow <= 1.;
         
-        if (dist < _radius * SELECTION_RADIUS_RATIO){
-          printf("Touched Arrow Base %s\n", arrowPoint.sub(camRayPoint).description().c_str());
-          _grabbedPos = arrowPoint;
-          _baseWhenGrabbed = _base;
-          _grabbed = true;
-          return true;
+        if (onArrow){
+          
+          double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
+            
+          if (dist < _radius * SELECTION_RADIUS_RATIO && onArrow){
+            printf("Touched Arrow Base %s\n", arrowPoint.sub(camRayPoint).description().c_str());
+            _grabbedPos = arrowPoint;
+            _baseWhenGrabbed = _base;
+            _grabbed = true;
+            return true;
+          }
         }
+        
+        
         break;
       }
       case TouchEventType::Move:{

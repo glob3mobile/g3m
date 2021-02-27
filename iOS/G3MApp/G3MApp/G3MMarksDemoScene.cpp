@@ -137,6 +137,10 @@ public:
     _shape->setPosition(geoPos);
     _shape->setScale(gizmo.getScale());
   }
+  
+  void onChangeEnded(const TranslateScaleGizmo& gizmo) override{
+    printf("Change ended on gizmo P: %s S: %0.2f", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
+  }
 };
 
 

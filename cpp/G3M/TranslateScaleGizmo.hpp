@@ -22,6 +22,7 @@ class TranslateScaleGizmoListener{
 public:
   virtual ~TranslateScaleGizmoListener(){}
   virtual void onChanged(const TranslateScaleGizmo& gizmo) = 0;
+  virtual void onChangeEnded(const TranslateScaleGizmo& gizmo) = 0;
 };
 
 class TranslateScaleGizmoArrowListener;
@@ -60,6 +61,8 @@ public:
   void setListener(TranslateScaleGizmoListener* listener){
       _listener = listener;
   }
+  
+  void onDraggingEnded(const Arrow& arrow);
   
 };
 
