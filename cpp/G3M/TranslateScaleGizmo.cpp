@@ -15,11 +15,11 @@ public:
   TranslateScaleGizmoArrowListener(TranslateScaleGizmo* gizmo):
   _gizmo(gizmo){}
   
-  void onBaseChanged(const Arrow& arrow) override{
+  void onBaseChanged(const Arrow& arrow){
     _gizmo->onBaseChanged(arrow);
   }
   
-  void onDraggingEnded(const Arrow& arrow) override{
+  void onDraggingEnded(const Arrow& arrow){
     _gizmo->onDraggingEnded(arrow);
   }
 };

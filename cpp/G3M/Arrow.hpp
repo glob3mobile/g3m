@@ -92,7 +92,7 @@ public:
     _state->_release();
   }
   
-  bool onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) override {
+  bool onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent) {
     
     if (touchEvent->getTouchCount() != 1 || touchEvent->getTapCount() != 1 || touchEvent->getType() == TouchEventType::Up){
       if (_grabbed && _listener){
@@ -121,7 +121,6 @@ public:
           double dist = arrowPoint.asVector3D().distanceTo(camRayPoint.asVector3D());
             
           if (dist < _radius * SELECTION_RADIUS_RATIO && onArrow){
-            printf("Touched Arrow Base %s\n", arrowPoint.sub(camRayPoint).description().c_str());
             _grabbedPos = arrowPoint;
             _baseWhenGrabbed = _base;
             _grabbed = true;
@@ -136,8 +135,6 @@ public:
         if (_grabbed){
           MutableVector3D disp = arrowPoint.sub(_grabbedPos);
           setBase(_baseWhenGrabbed.add(disp).asVector3D());
-          
-          printf("Arrow new base %s\n", _base.description().c_str());
         }
         
         break;
@@ -149,7 +146,7 @@ public:
     return false;
   }
   
-  void render(const G3MRenderContext* rc, GLState* glState) override{
+  void render(const G3MRenderContext* rc, GLState* glState){
     
     _state->setParent(glState);
     MeshRenderer::render(rc, _state);
