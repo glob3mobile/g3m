@@ -55,6 +55,34 @@ XPCRenderer::~XPCRenderer() {
 #endif
 }
 
+void XPCRenderer::addPointCloud(XPCPointCloud* pointCloud) {
+  if (_context != NULL) {
+    pointCloud->initialize(_context);
+  }
+  _clouds.push_back(pointCloud);
+  _cloudsSize = _clouds.size();
+}
+
+bool XPCRenderer::removePointCloud(XPCPointCloud* pointCloud) {
+  for (int i = 0; i < _cloudsSize; i++) {
+    if (_clouds[i] == pointCloud) {
+#ifdef C_CODE
+      _clouds.erase(_clouds.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _clouds.remove(i);
+#endif
+      _cloudsSize = _clouds.size();
+
+      pointCloud->cancel();
+      pointCloud->_release();
+
+      return true;
+    }
+  }
+  return false;
+}
+
 void XPCRenderer::removeAllPointClouds() {
   for (int i = 0; i < _cloudsSize; i++) {
     XPCPointCloud* cloud = _clouds[i];
@@ -66,15 +94,6 @@ void XPCRenderer::removeAllPointClouds() {
 
   delete _selectionResult;
   _selectionResult = NULL;
-}
-
-
-void XPCRenderer::addPointCloud(XPCPointCloud* pointCloud) {
-  if (_context != NULL) {
-    pointCloud->initialize(_context);
-  }
-  _clouds.push_back(pointCloud);
-  _cloudsSize = _clouds.size();
 }
 
 

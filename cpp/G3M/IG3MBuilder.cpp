@@ -42,6 +42,7 @@
 #include "DynamicFrustumPolicy.hpp"
 #include "CameraRenderer.hpp"
 #include "NearFrustumRenderer.hpp"
+#include "CameraMouseWheelHandler.hpp"
 
 
 IG3MBuilder::IG3MBuilder() :
@@ -838,6 +839,8 @@ CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  const double zoomSpeed = 0.05;
+  cameraRenderer->addHandler(new CameraMouseWheelHandler(zoomSpeed));
 
   return cameraRenderer;
 }

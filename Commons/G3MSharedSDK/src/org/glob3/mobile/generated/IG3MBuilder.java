@@ -287,6 +287,8 @@ public abstract class IG3MBuilder
     //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
     cameraRenderer.addHandler(new CameraRotationHandler());
     cameraRenderer.addHandler(new CameraDoubleTapHandler());
+    final double zoomSpeed = 0.05;
+    cameraRenderer.addHandler(new CameraMouseWheelHandler(zoomSpeed));
   
     return cameraRenderer;
   }

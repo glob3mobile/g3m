@@ -83,21 +83,6 @@ public class XPCRenderer extends DefaultRenderer
     super.dispose();
   }
 
-  public final void removeAllPointClouds()
-  {
-    for (int i = 0; i < _cloudsSize; i++)
-    {
-      XPCPointCloud cloud = _clouds.get(i);
-      cloud.cancel();
-      cloud._release();
-    }
-    _clouds.clear();
-    _cloudsSize = _clouds.size();
-  
-    if (_selectionResult != null)
-       _selectionResult.dispose();
-    _selectionResult = null;
-  }
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
@@ -151,6 +136,40 @@ public class XPCRenderer extends DefaultRenderer
     }
     _clouds.add(pointCloud);
     _cloudsSize = _clouds.size();
+  }
+
+  public final boolean removePointCloud(XPCPointCloud pointCloud)
+  {
+    for (int i = 0; i < _cloudsSize; i++)
+    {
+      if (_clouds.get(i) == pointCloud)
+      {
+        _clouds.remove(i);
+        _cloudsSize = _clouds.size();
+  
+        pointCloud.cancel();
+        pointCloud._release();
+  
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public final void removeAllPointClouds()
+  {
+    for (int i = 0; i < _cloudsSize; i++)
+    {
+      XPCPointCloud cloud = _clouds.get(i);
+      cloud.cancel();
+      cloud._release();
+    }
+    _clouds.clear();
+    _cloudsSize = _clouds.size();
+  
+    if (_selectionResult != null)
+       _selectionResult.dispose();
+    _selectionResult = null;
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

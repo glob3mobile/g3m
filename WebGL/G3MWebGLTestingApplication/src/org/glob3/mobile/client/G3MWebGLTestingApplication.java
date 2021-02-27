@@ -50,7 +50,8 @@ public class G3MWebGLTestingApplication
       builder.setDownloader(new Downloader_WebGL( //
                8, // maxConcurrentOperationCount
                10, // delayMillis
-               proxy));
+               proxy,
+               true));
 
 
       final LayerTilesRenderParameters parameters = LayerTilesRenderParameters.createDefaultWGS84( //
