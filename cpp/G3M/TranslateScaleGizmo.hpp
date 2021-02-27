@@ -24,11 +24,15 @@ public:
   virtual void onChanged(const TranslateScaleGizmo& gizmo) = 0;
 };
 
-class TranslateScaleGizmo: public CompositeRenderer, public ArrowListener{
+class TranslateScaleGizmoArrowListener;
+
+class TranslateScaleGizmo: public CompositeRenderer{
   CoordinateSystem* _cs;
   double _scale;
   const double _maxScale;
   const double _size;
+  
+  TranslateScaleGizmoArrowListener* _arrowListener;
   
   TranslateScaleGizmoListener* _listener;
   
@@ -41,11 +45,9 @@ class TranslateScaleGizmo: public CompositeRenderer, public ArrowListener{
 public:
   TranslateScaleGizmo(const CoordinateSystem& cs, double scale, double size, double maxScale = 2.0);
   
-  ~TranslateScaleGizmo(){
-    delete _cs;
-  }
+  ~TranslateScaleGizmo();
   
-  void onBaseChanged(const Arrow& arrow) override;
+  void onBaseChanged(const Arrow& arrow);
   
   const CoordinateSystem getCoordinateSystem() const{
     return *_cs;

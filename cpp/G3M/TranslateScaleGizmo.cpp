@@ -7,6 +7,25 @@
 
 #include "TranslateScaleGizmo.hpp"
 
+
+class TranslateScaleGizmoArrowListener : public ArrowListener{
+  TranslateScaleGizmo* _gizmo;
+public:
+  
+  TranslateScaleGizmoArrowListener(TranslateScaleGizmo* gizmo):
+  _gizmo(gizmo){}
+  
+  void onBaseChanged(const Arrow& arrow) override{
+    _gizmo->onBaseChanged(arrow);
+  }
+};
+
+TranslateScaleGizmo::~TranslateScaleGizmo(){
+  delete _arrowListener;
+  delete _cs;
+}
+
+
 TranslateScaleGizmo::TranslateScaleGizmo(const CoordinateSystem& cs, double scale, double size, double maxScale):
 _cs(new CoordinateSystem(cs)), _size(size), _scale(scale), _maxScale(maxScale),
 _listener(NULL){
@@ -21,13 +40,15 @@ _listener(NULL){
   Vector3D y = _cs->_y.normalized().times(_size);
   Vector3D z = _cs->_z.normalized().times(_size);
   
+  _arrowListener = new TranslateScaleGizmoArrowListener(this);
+  
   _xArrow = new Arrow(_cs->_origin,
                       x,
                       lineWidth,
                       Color::RED,
                       size * HEAD_LENGTH_RATIO,
                       HEAD_WIDTH_RATIO);
-  _xArrow->setArrowListener(this);
+  _xArrow->setArrowListener(_arrowListener);
   addRenderer(_xArrow);
   
   _yArrow = new Arrow(_cs->_origin,
@@ -36,7 +57,7 @@ _listener(NULL){
                       Color::GREEN,
                       size * HEAD_LENGTH_RATIO,
                       HEAD_WIDTH_RATIO);
-  _yArrow->setArrowListener(this);
+  _yArrow->setArrowListener(_arrowListener);
   addRenderer(_yArrow);
   
   _zArrow = new Arrow(_cs->_origin,
@@ -45,7 +66,7 @@ _listener(NULL){
                       Color::BLUE,
                       size * HEAD_LENGTH_RATIO,
                       HEAD_WIDTH_RATIO);
-  _zArrow->setArrowListener(this);
+  _zArrow->setArrowListener(_arrowListener);
   addRenderer(_zArrow);
   
   Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
@@ -56,7 +77,7 @@ _listener(NULL){
                           size * HEAD_LENGTH_RATIO,
                           HEAD_WIDTH_RATIO,
                           true);
-  _scaleArrow->setArrowListener(this);
+  _scaleArrow->setArrowListener(_arrowListener);
   addRenderer(_scaleArrow);
 }
 
