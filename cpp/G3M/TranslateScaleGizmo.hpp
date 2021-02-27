@@ -24,12 +24,14 @@ public:
 
 class TranslateScaleGizmoArrowListener;
 
-class TranslateScaleGizmo: public CompositeRenderer{
+
+class TranslateScaleGizmo: public CompositeRenderer {
+private:
   CoordinateSystem* _cs;
-  double _scale;
-  const double _maxScale;
-  const double _size;
-  
+  const double      _size;
+  double            _scale;
+  const double      _maxScale;
+
   TranslateScaleGizmoArrowListener* _arrowListener;
   
   TranslateScaleGizmoListener* _listener;
@@ -40,8 +42,16 @@ class TranslateScaleGizmo: public CompositeRenderer{
     return _cs->_x.add(_cs->_y).add(_cs->_z).normalized().times(_size);
   }
 
+
 public:
-  TranslateScaleGizmo(const CoordinateSystem& cs, double scale, double size, double maxScale = 2.0);
+  TranslateScaleGizmo(const CoordinateSystem& cs,
+                      double size,
+                      double scale,
+                      double maxScale,
+                      double lineWidthRatio,
+                      double headLengthRatio,
+                      double headWidthRatio,
+                      double scaleArrowLengthSizeRatio);
   
   ~TranslateScaleGizmo();
   

@@ -26,21 +26,27 @@ public:
 };
 
 TranslateScaleGizmo::~TranslateScaleGizmo() {
+  delete _listener;
   delete _arrowListener;
   delete _cs;
 }
 
 
-TranslateScaleGizmo::TranslateScaleGizmo(const CoordinateSystem& cs, double scale, double size, double maxScale):
-_cs(new CoordinateSystem(cs)), _size(size), _scale(scale), _maxScale(maxScale),
-_listener(NULL) {
-  
-#define LINE_WIDTH_RATIO 0.01
-#define HEAD_LENGTH_RATIO 0.05
-#define HEAD_WIDTH_RATIO 1.5
-#define SCALE_ARROW_LENGTH_SIZE_RATIO 0.15
-  
-  double lineWidth = size * LINE_WIDTH_RATIO;
+TranslateScaleGizmo::TranslateScaleGizmo(const CoordinateSystem& cs,
+                                         double size,
+                                         double scale,
+                                         double maxScale,
+                                         double lineWidthRatio,
+                                         double headLengthRatio,
+                                         double headWidthRatio,
+                                         double scaleArrowLengthSizeRatio):
+_cs(new CoordinateSystem(cs)),
+_size(size),
+_scale(scale),
+_maxScale(maxScale),
+_listener(NULL)
+{
+  const double lineWidth = size * lineWidthRatio;
   Vector3D x = _cs->_x.normalized().times(_size);
   Vector3D y = _cs->_y.normalized().times(_size);
   Vector3D z = _cs->_z.normalized().times(_size);
@@ -51,8 +57,8 @@ _listener(NULL) {
                       x,
                       lineWidth,
                       Color::RED,
-                      size * HEAD_LENGTH_RATIO,
-                      HEAD_WIDTH_RATIO);
+                      size * lineWidthRatio,
+                      headLengthRatio);
   _xArrow->setArrowListener(_arrowListener);
   addRenderer(_xArrow);
   
@@ -60,8 +66,8 @@ _listener(NULL) {
                       y,
                       lineWidth,
                       Color::GREEN,
-                      size * HEAD_LENGTH_RATIO,
-                      HEAD_WIDTH_RATIO);
+                      size * lineWidthRatio,
+                      headLengthRatio);
   _yArrow->setArrowListener(_arrowListener);
   addRenderer(_yArrow);
   
@@ -69,18 +75,18 @@ _listener(NULL) {
                       z,
                       lineWidth,
                       Color::BLUE,
-                      size * HEAD_LENGTH_RATIO,
-                      HEAD_WIDTH_RATIO);
+                      size * lineWidthRatio,
+                      headLengthRatio);
   _zArrow->setArrowListener(_arrowListener);
   addRenderer(_zArrow);
   
   Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
   _scaleArrow = new Arrow(_cs->_origin.add(scaleVector),
-                          scaleVector.times(SCALE_ARROW_LENGTH_SIZE_RATIO),
+                          scaleVector.times(scaleArrowLengthSizeRatio),
                           lineWidth,
                           Color::fromRGBA255(255, 0, 255, 255),
-                          size * HEAD_LENGTH_RATIO,
-                          HEAD_WIDTH_RATIO,
+                          size * lineWidthRatio,
+                          headLengthRatio,
                           true);
   _scaleArrow->setArrowListener(_arrowListener);
   addRenderer(_scaleArrow);
@@ -110,15 +116,15 @@ void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
     delete _cs;
     _cs = cs;
     
-//    Vector3D xBase = _xArrow->getBase();
+    // Vector3D xBase = _xArrow->getBase();
     
     Arrow* arrows[3] = {_xArrow, _yArrow, _zArrow};
     for (size_t i = 0; i < 3; i++) {
       arrows[i]->setBase(_cs->_origin, false);
     }
     
-//    Vector3D xBase2 = _xArrow->getBase();
-//    Vector3D xDisp = xBase2.sub(xBase);
+    // Vector3D xBase2 = _xArrow->getBase();
+    // Vector3D xDisp = xBase2.sub(xBase);
     
     _scaleArrow->setBase(_scaleArrow->getBase().add(disp), false);
   }

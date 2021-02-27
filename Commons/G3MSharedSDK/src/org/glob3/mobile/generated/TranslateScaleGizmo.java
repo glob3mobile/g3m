@@ -1,12 +1,13 @@
 package org.glob3.mobile.generated;
 //class TranslateScaleGizmoArrowListener;
 
+
 public class TranslateScaleGizmo extends CompositeRenderer
 {
   private CoordinateSystem _cs;
+  private final double _size;
   private double _scale;
   private final double _maxScale;
-  private final double _size;
 
   private TranslateScaleGizmoArrowListener _arrowListener;
 
@@ -22,50 +23,43 @@ public class TranslateScaleGizmo extends CompositeRenderer
     return _cs._x.add(_cs._y).add(_cs._z).normalized().times(_size);
   }
 
-  public TranslateScaleGizmo(CoordinateSystem cs, double scale, double size)
-  {
-     this(cs, scale, size, 2.0);
-  }
-  public TranslateScaleGizmo(CoordinateSystem cs, double scale, double size, double maxScale)
+
+  public TranslateScaleGizmo(CoordinateSystem cs, double size, double scale, double maxScale, double lineWidthRatio, double headLengthRatio, double headWidthRatio, double scaleArrowLengthSizeRatio)
   {
      _cs = new CoordinateSystem(cs);
      _size = size;
      _scale = scale;
      _maxScale = maxScale;
      _listener = null;
-  
-//#define LINE_WIDTH_RATIO 0.01
-//#define HEAD_LENGTH_RATIO 0.05
-//#define HEAD_WIDTH_RATIO 1.5
-//#define SCALE_ARROW_LENGTH_SIZE_RATIO 0.15
-  
-    double lineWidth = size * DefineConstants.LINE_WIDTH_RATIO;
+    final double lineWidth = size * lineWidthRatio;
     Vector3D x = _cs._x.normalized().times(_size);
     Vector3D y = _cs._y.normalized().times(_size);
     Vector3D z = _cs._z.normalized().times(_size);
   
     _arrowListener = new TranslateScaleGizmoArrowListener(this);
   
-    _xArrow = new Arrow(_cs._origin, x, lineWidth, Color.RED, size * DefineConstants.HEAD_LENGTH_RATIO, DefineConstants.HEAD_WIDTH_RATIO);
+    _xArrow = new Arrow(_cs._origin, x, lineWidth, Color.RED, size * lineWidthRatio, headLengthRatio);
     _xArrow.setArrowListener(_arrowListener);
     addRenderer(_xArrow);
   
-    _yArrow = new Arrow(_cs._origin, y, lineWidth, Color.GREEN, size * DefineConstants.HEAD_LENGTH_RATIO, DefineConstants.HEAD_WIDTH_RATIO);
+    _yArrow = new Arrow(_cs._origin, y, lineWidth, Color.GREEN, size * lineWidthRatio, headLengthRatio);
     _yArrow.setArrowListener(_arrowListener);
     addRenderer(_yArrow);
   
-    _zArrow = new Arrow(_cs._origin, z, lineWidth, Color.BLUE, size * DefineConstants.HEAD_LENGTH_RATIO, DefineConstants.HEAD_WIDTH_RATIO);
+    _zArrow = new Arrow(_cs._origin, z, lineWidth, Color.BLUE, size * lineWidthRatio, headLengthRatio);
     _zArrow.setArrowListener(_arrowListener);
     addRenderer(_zArrow);
   
     Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
-    _scaleArrow = new Arrow(_cs._origin.add(scaleVector), scaleVector.times(DefineConstants.SCALE_ARROW_LENGTH_SIZE_RATIO), lineWidth, Color.fromRGBA255(255, 0, 255, 255), size * DefineConstants.HEAD_LENGTH_RATIO, DefineConstants.HEAD_WIDTH_RATIO, true);
+    _scaleArrow = new Arrow(_cs._origin.add(scaleVector), scaleVector.times(scaleArrowLengthSizeRatio), lineWidth, Color.fromRGBA255(255, 0, 255, 255), size * lineWidthRatio, headLengthRatio, true);
     _scaleArrow.setArrowListener(_arrowListener);
     addRenderer(_scaleArrow);
   }
 
   public void dispose()
   {
+    if (_listener != null)
+       _listener.dispose();
     if (_arrowListener != null)
        _arrowListener.dispose();
     if (_cs != null)
@@ -103,7 +97,7 @@ public class TranslateScaleGizmo extends CompositeRenderer
          _cs.dispose();
       _cs = cs;
   
-  //    Vector3D xBase = _xArrow->getBase();
+      // Vector3D xBase = _xArrow->getBase();
   
       Arrow[] arrows = {_xArrow, _yArrow, _zArrow};
       for (int i = 0; i < 3; i++)
@@ -111,8 +105,8 @@ public class TranslateScaleGizmo extends CompositeRenderer
         arrows[i].setBase(_cs._origin, false);
       }
   
-  //    Vector3D xBase2 = _xArrow->getBase();
-  //    Vector3D xDisp = xBase2.sub(xBase);
+      // Vector3D xBase2 = _xArrow->getBase();
+      // Vector3D xDisp = xBase2.sub(xBase);
   
       _scaleArrow.setBase(_scaleArrow.getBase().add(disp), false);
     }
