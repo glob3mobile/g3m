@@ -44,9 +44,7 @@ public:
     //    _renderers = std::vector<Renderer*>();
   }
 
-  virtual ~CompositeRenderer() {
-
-  }
+  virtual ~CompositeRenderer();
 
   bool isEnable() const;
 
@@ -70,6 +68,8 @@ public:
                    const std::vector<const Info*>& info);
   
   void addChildRenderer(ChildRenderer* renderer);
+
+  bool removeRenderer(Renderer* renderer);
 
   void start(const G3MRenderContext* rc);
 

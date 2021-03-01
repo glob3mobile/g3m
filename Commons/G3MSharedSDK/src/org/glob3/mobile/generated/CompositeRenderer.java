@@ -55,7 +55,11 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
 
   public void dispose()
   {
-
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      if (_renderers.get(i) != null)
+         _renderers.get(i).dispose();
+    }
   }
 
   public final boolean isEnable()
@@ -196,6 +200,23 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     }
   
     renderer.getRenderer().setChangedRendererInfoListener(this, (_renderers.size() - 1));
+  }
+
+  public final boolean removeRenderer(Renderer renderer)
+  {
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      ChildRenderer childRenderer = _renderers.get(i);
+      if (childRenderer.getRenderer() == renderer)
+      {
+        _renderers.remove(i);
+        _renderersSize = _renderers.size();
+        if (childRenderer != null)
+           childRenderer.dispose();
+        return true;
+      }
+    }
+    return false;
   }
 
   public final void start(G3MRenderContext rc)

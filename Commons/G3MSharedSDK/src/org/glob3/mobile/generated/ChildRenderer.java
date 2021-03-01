@@ -37,7 +37,8 @@ public class ChildRenderer
 
   public void dispose()
   {
-    _renderer = null;
+    if (_renderer != null)
+       _renderer.dispose();
     _info.clear();
   }
 

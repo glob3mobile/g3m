@@ -23,8 +23,7 @@ public class TranslateScaleGizmo extends CompositeRenderer
     return _cs._x.add(_cs._y).add(_cs._z).normalized().times(_size);
   }
 
-
-  public TranslateScaleGizmo(CoordinateSystem cs, double size, double scale, double maxScale, double lineWidthRatio, double headLengthRatio, double headWidthRatio, double scaleArrowLengthSizeRatio)
+  private TranslateScaleGizmo(CoordinateSystem cs, double size, double scale, double maxScale, double lineWidthRatio, double headLengthRatio, double headWidthRatio, double scaleArrowLengthSizeRatio, boolean scaleOption)
   {
      _cs = new CoordinateSystem(cs);
      _size = size;
@@ -60,11 +59,29 @@ public class TranslateScaleGizmo extends CompositeRenderer
     }
   
     {
-      Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
-      _scaleArrow = new Arrow(_cs._origin.add(scaleVector), scaleVector.times(scaleArrowLengthSizeRatio), lineWidth, Color.fromRGBA255(255, 0, 255, 255), size * headLengthRatio, headWidthRatio, true);
-      _scaleArrow.setArrowListener(_arrowListener);
-      addRenderer(_scaleArrow);
+      if (scaleOption)
+      {
+        Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
+        _scaleArrow = new Arrow(_cs._origin.add(scaleVector), scaleVector.times(scaleArrowLengthSizeRatio), lineWidth, Color.fromRGBA255(255, 0, 255, 255), size * headLengthRatio, headWidthRatio, true);
+        _scaleArrow.setArrowListener(_arrowListener);
+        addRenderer(_scaleArrow);
+      }
+      else
+      {
+        _scaleArrow = null;
+      }
     }
+  }
+
+
+  public static TranslateScaleGizmo translateAndScale(CoordinateSystem cs, double size, double scale, double maxScale, double lineWidthRatio, double headLengthRatio, double headWidthRatio, double scaleArrowLengthSizeRatio)
+  {
+    return new TranslateScaleGizmo(cs, size, scale, maxScale, lineWidthRatio, headLengthRatio, headWidthRatio, scaleArrowLengthSizeRatio, true); // scaleOption
+  }
+
+  public static TranslateScaleGizmo translate(CoordinateSystem cs, double size, double lineWidthRatio, double headLengthRatio, double headWidthRatio)
+  {
+    return new TranslateScaleGizmo(cs, size, 1, 1, lineWidthRatio, headLengthRatio, headWidthRatio, 1, false); // scaleOption -  scaleArrowLengthSizeRatio -  maxScale -  scale
   }
 
   public void dispose()
@@ -81,9 +98,8 @@ public class TranslateScaleGizmo extends CompositeRenderer
   {
     if (_scaleArrow == arrow)
     {
-  
-      Vector3D scaleVector = getScale1Vector();
-      Vector3D scaleV = arrow.getBase().sub(_cs._origin).div(scaleVector);
+      final Vector3D scaleVector = getScale1Vector();
+      final Vector3D scaleV = arrow.getBase().sub(_cs._origin).div(scaleVector);
       _scale = scaleV.maxAxis();
   
       if (_scale < 0)
@@ -99,9 +115,9 @@ public class TranslateScaleGizmo extends CompositeRenderer
     }
     else
     {
-      //Translating
-      Vector3D base = arrow.getBase();
-      Vector3D disp = base.sub(_cs._origin);
+      // Translating
+      final Vector3D base = arrow.getBase();
+      final Vector3D disp = base.sub(_cs._origin);
   
       CoordinateSystem cs = new CoordinateSystem(_cs.changeOrigin(base));
       if (_cs != null)
@@ -119,7 +135,10 @@ public class TranslateScaleGizmo extends CompositeRenderer
       // Vector3D xBase2 = _xArrow->getBase();
       // Vector3D xDisp = xBase2.sub(xBase);
   
-      _scaleArrow.setBase(_scaleArrow.getBase().add(disp), false);
+      if (_scaleArrow != null)
+      {
+        _scaleArrow.setBase(_scaleArrow.getBase().add(disp), false);
+      }
     }
   
     if (_listener != null)

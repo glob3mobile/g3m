@@ -42,8 +42,6 @@ private:
     return _cs->_x.add(_cs->_y).add(_cs->_z).normalized().times(_size);
   }
 
-
-public:
   TranslateScaleGizmo(const CoordinateSystem& cs,
                       double size,
                       double scale,
@@ -51,8 +49,26 @@ public:
                       double lineWidthRatio,
                       double headLengthRatio,
                       double headWidthRatio,
-                      double scaleArrowLengthSizeRatio);
-  
+                      double scaleArrowLengthSizeRatio,
+                      bool scaleOption);
+
+public:
+
+  static TranslateScaleGizmo* translateAndScale(const CoordinateSystem& cs,
+                                                double size,
+                                                double scale,
+                                                double maxScale,
+                                                double lineWidthRatio,
+                                                double headLengthRatio,
+                                                double headWidthRatio,
+                                                double scaleArrowLengthSizeRatio);
+
+  static TranslateScaleGizmo* translate(const CoordinateSystem& cs,
+                                        double size,
+                                        double lineWidthRatio,
+                                        double headLengthRatio,
+                                        double headWidthRatio);
+
   ~TranslateScaleGizmo();
   
   void onBaseChanged(const Arrow& arrow);

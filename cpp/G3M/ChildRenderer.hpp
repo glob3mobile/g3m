@@ -32,7 +32,7 @@ public:
   }
   
   ~ChildRenderer() {
-    _renderer = NULL;
+    delete _renderer;
     _info.clear();
   }
   

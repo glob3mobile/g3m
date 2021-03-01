@@ -25,12 +25,47 @@ public:
   }
 };
 
+TranslateScaleGizmo* TranslateScaleGizmo::translateAndScale(const CoordinateSystem& cs,
+                                                            double size,
+                                                            double scale,
+                                                            double maxScale,
+                                                            double lineWidthRatio,
+                                                            double headLengthRatio,
+                                                            double headWidthRatio,
+                                                            double scaleArrowLengthSizeRatio) {
+  return new TranslateScaleGizmo(cs,
+                                 size,
+                                 scale,
+                                 maxScale,
+                                 lineWidthRatio,
+                                 headLengthRatio,
+                                 headWidthRatio,
+                                 scaleArrowLengthSizeRatio,
+                                 true /* scaleOption */);
+}
+
+TranslateScaleGizmo* TranslateScaleGizmo::translate(const CoordinateSystem& cs,
+                                                    double size,
+                                                    double lineWidthRatio,
+                                                    double headLengthRatio,
+                                                    double headWidthRatio) {
+  return new TranslateScaleGizmo(cs,
+                                 size,
+                                 1, // scale
+                                 1, // maxScale
+                                 lineWidthRatio,
+                                 headLengthRatio,
+                                 headWidthRatio,
+                                 1, // scaleArrowLengthSizeRatio
+                                 false /* scaleOption */);
+}
+
+
 TranslateScaleGizmo::~TranslateScaleGizmo() {
   delete _listener;
   delete _arrowListener;
   delete _cs;
 }
-
 
 TranslateScaleGizmo::TranslateScaleGizmo(const CoordinateSystem& cs,
                                          double size,
@@ -39,7 +74,8 @@ TranslateScaleGizmo::TranslateScaleGizmo(const CoordinateSystem& cs,
                                          double lineWidthRatio,
                                          double headLengthRatio,
                                          double headWidthRatio,
-                                         double scaleArrowLengthSizeRatio):
+                                         double scaleArrowLengthSizeRatio,
+                                         bool scaleOption):
 _cs(new CoordinateSystem(cs)),
 _size(size),
 _scale(scale),
@@ -90,38 +126,43 @@ _listener(NULL)
   }
 
   {
-    Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
-    _scaleArrow = new Arrow(_cs->_origin.add(scaleVector),
-                            scaleVector.times(scaleArrowLengthSizeRatio),
-                            lineWidth,
-                            Color::fromRGBA255(255, 0, 255, 255),
-                            size * headLengthRatio,
-                            headWidthRatio,
-                            true);
-    _scaleArrow->setArrowListener(_arrowListener);
-    addRenderer(_scaleArrow);
+    if (scaleOption) {
+      Vector3D scaleVector = getScale1Vector().times(scale); //Center of arrow
+      _scaleArrow = new Arrow(_cs->_origin.add(scaleVector),
+                              scaleVector.times(scaleArrowLengthSizeRatio),
+                              lineWidth,
+                              Color::fromRGBA255(255, 0, 255, 255),
+                              size * headLengthRatio,
+                              headWidthRatio,
+                              true);
+      _scaleArrow->setArrowListener(_arrowListener);
+      addRenderer(_scaleArrow);
+    }
+    else {
+      _scaleArrow = NULL;
+    }
   }
 }
 
 void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
   if (_scaleArrow == &arrow) {
-    
-    Vector3D scaleVector = getScale1Vector();
-    Vector3D scaleV = arrow.getBase().sub(_cs->_origin).div(scaleVector);
+    const Vector3D scaleVector = getScale1Vector();
+    const Vector3D scaleV = arrow.getBase().sub(_cs->_origin).div(scaleVector);
     _scale = scaleV.maxAxis();
     
     if (_scale < 0) {
       _scaleArrow->setBase(_cs->_origin, false);
       _scale = 0;
-    }else if (_scale > _maxScale) {
+    }
+    else if (_scale > _maxScale) {
       _scaleArrow->setBase(_cs->_origin.add(scaleVector.times(_maxScale)), false);
       _scale = _maxScale;
     }
   }
   else {
-    //Translating
-    Vector3D base = arrow.getBase();
-    Vector3D disp = base.sub(_cs->_origin);
+    // Translating
+    const Vector3D base = arrow.getBase();
+    const Vector3D disp = base.sub(_cs->_origin);
     
     CoordinateSystem* cs = new CoordinateSystem( _cs->changeOrigin(base) );
     delete _cs;
@@ -136,8 +177,10 @@ void TranslateScaleGizmo::onBaseChanged(const Arrow& arrow) {
     
     // Vector3D xBase2 = _xArrow->getBase();
     // Vector3D xDisp = xBase2.sub(xBase);
-    
-    _scaleArrow->setBase(_scaleArrow->getBase().add(disp), false);
+
+    if (_scaleArrow != NULL) {
+      _scaleArrow->setBase(_scaleArrow->getBase().add(disp), false);
+    }
   }
   
   if (_listener) {

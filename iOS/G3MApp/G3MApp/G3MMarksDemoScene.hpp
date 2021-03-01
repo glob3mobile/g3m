@@ -11,10 +11,14 @@
 #include "G3MDemoScene.hpp"
 
 class Mark;
+class TranslateScaleGizmo;
+
 
 class G3MMarksDemoScene : public G3MDemoScene {
 private:
   long long _requestID;
+
+  TranslateScaleGizmo* _gizmo;
 
 protected:
   void rawActivate(const G3MContext* context);
@@ -26,7 +30,8 @@ public:
 
   G3MMarksDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "Marks", "", -1),
-  _requestID(-1)
+  _requestID(-1),
+  _gizmo(NULL)
   {
   }
 

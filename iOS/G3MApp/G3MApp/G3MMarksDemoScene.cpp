@@ -215,21 +215,31 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 //#define HEAD_WIDTH_RATIO 1.5
 //#define SCALE_ARROW_LENGTH_SIZE_RATIO 0.15
 
-  TranslateScaleGizmo* gizmo = new TranslateScaleGizmo(context->getPlanet()->getCoordinateSystemAt(geoPos),
-                                                       size,
-                                                       scale,
-                                                       maxScale,
-                                                       lineWidthRatio,
-                                                       headLengthRatio,
-                                                       headWidthRatio,
-                                                       scaleArrowLengthSizeRatio);
-  gizmo->setListener(new GizmoListener(ellipsoid, context->getPlanet()));
+  _gizmo = TranslateScaleGizmo::translateAndScale(context->getPlanet()->getCoordinateSystemAt(geoPos),
+                                                  size,
+                                                  scale,
+                                                  maxScale,
+                                                  lineWidthRatio,
+                                                  headLengthRatio,
+                                                  headWidthRatio,
+                                                  scaleArrowLengthSizeRatio);
+
+//  _gizmo = TranslateScaleGizmo::translate(context->getPlanet()->getCoordinateSystemAt(geoPos),
+//                                                              size,
+//                                                              lineWidthRatio,
+//                                                              headLengthRatio,
+//                                                              headWidthRatio);
+
+  _gizmo->setListener(new GizmoListener(ellipsoid, context->getPlanet()));
   
-  model->getCompositeRenderer()->addRenderer(gizmo);
+  model->getCompositeRenderer()->addRenderer(_gizmo);
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {
   context->getDownloader()->cancelRequest(_requestID);
+
+  getModel()->getCompositeRenderer()->removeRenderer(_gizmo);
+  _gizmo = NULL;
 
   G3MDemoScene::deactivate(context);
 }
