@@ -45,6 +45,8 @@ private:
 
   double                     _minProjectedArea;
 
+  bool                       _draftPoints;
+
   float                      _pointSize;
   bool                       _dynamicPointSize;
   bool                       _depthTest;
@@ -89,6 +91,7 @@ public:
                 XPCPointColorizer* pointColorizer,
                 bool deletePointColorizer,
                 const double minProjectedArea,
+                const bool draftPoints,
                 float pointSize = 1.0f,
                 bool dynamicPointSize = true,
                 const bool depthTest = true,
@@ -206,6 +209,8 @@ public:
 
   void setFence(BoundingVolume* fence);
   const BoundingVolume* getFence() const;
+
+  void setDraftPoints(bool draftPoints);
 
 };
 

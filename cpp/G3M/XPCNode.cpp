@@ -363,12 +363,10 @@ public:
 
 XPCNode::XPCNode(const std::string& id,
                  const Sector* sector,
-                 const int pointsCount,
                  const double minHeight,
                  const double maxHeight) :
 _id(id),
 _sector(sector),
-_pointsCount(pointsCount),
 _minHeight(minHeight),
 _maxHeight(maxHeight),
 _bounds(NULL),
@@ -575,12 +573,10 @@ XPCNode* XPCNode::fromByteBufferIterator(ByteBufferIterator& it) {
   const Sector* sector = Sector::newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees,
                                                 upperLatitudeDegrees, upperLongitudeDegrees);
 
-  const int pointsCount = it.nextInt32();
-
   const double minHeight = it.nextDouble();
   const double maxHeight = it.nextDouble();
 
-  return new XPCNode(nodeID, sector, pointsCount, minHeight, maxHeight);
+  return new XPCNode(nodeID, sector, minHeight, maxHeight);
 }
 
 

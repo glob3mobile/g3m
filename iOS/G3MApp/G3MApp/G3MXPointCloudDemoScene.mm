@@ -222,6 +222,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 //  const double      deltaHeight = -385;
 
   const double minProjectedArea = 50000; //50000;
+  const double draftPoints      = true;
 
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
@@ -253,6 +254,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                 // new XPCClassificationPointColorizer(1),
                                                 true, // deletePointColorizer,
                                                 minProjectedArea,
+                                                draftPoints,
                                                 pointSize,
                                                 dynamicPointSize,
                                                 depthTest,

@@ -131,6 +131,7 @@ XPCPointCloud::XPCPointCloud(const URL& serverURL,
                              XPCPointColorizer* pointColorizer,
                              bool deletePointColorizer,
                              const double minProjectedArea,
+                             const bool draftPoints,
                              float pointSize,
                              bool dynamicPointSize,
                              const bool depthTest,
@@ -149,6 +150,7 @@ _readExpired(readExpired),
 _pointColorizer(pointColorizer),
 _deletePointColorizer(deletePointColorizer),
 _minProjectedArea(minProjectedArea),
+_draftPoints(draftPoints),
 _pointSize(pointSize),
 _dynamicPointSize(dynamicPointSize),
 _depthTest(depthTest),
@@ -310,13 +312,19 @@ long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
   isb->addString("/");
   isb->addString(nodeID.empty() ? "-root-" : nodeID);
   
-  if (_requiredDimensionIndices != NULL) {
+  if (_requiredDimensionIndices == NULL) {
+    isb->addString("?draftPoints");
+    isb->addBool(_draftPoints);
+  }
+  else {
     for (size_t i = 0; i < _requiredDimensionIndices->size(); i++) {
       isb->addString( (i == 0) ? "?requiredDimensionIndices=" : ",");
       isb->addInt( _requiredDimensionIndices->get(i) );
     }
+    isb->addString("&draftPoints");
+    isb->addBool(_draftPoints);
   }
-  
+
   const std::string path = isb->getString();
   delete isb;
   
@@ -484,3 +492,13 @@ void XPCPointCloud::setSelection(BoundingVolume* selection) {
 const BoundingVolume* XPCPointCloud::getSelection() const {
   return _selection;
 };
+
+void XPCPointCloud::setDraftPoints(bool draftPoints) {
+  if (_draftPoints != draftPoints) {
+    _draftPoints = draftPoints;
+
+    if (_metadata != NULL) {
+      _metadata->reloadNodes();
+    }
+  }
+}
