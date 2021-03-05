@@ -312,7 +312,7 @@ long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
   isb->addString("/");
   isb->addString(nodeID.empty() ? "-root-" : nodeID);
   
-  if (_requiredDimensionIndices == NULL) {
+  if ((_requiredDimensionIndices == NULL) || (_requiredDimensionIndices->size() == 0)) {
     isb->addString("?draftPoints");
     isb->addBool(_draftPoints);
   }

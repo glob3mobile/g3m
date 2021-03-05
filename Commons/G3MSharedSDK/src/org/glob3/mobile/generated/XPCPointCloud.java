@@ -449,7 +449,7 @@ public class XPCPointCloud extends RCObject
     isb.addString("/");
     isb.addString(nodeID.length() == 0 ? "-root-" : nodeID);
   
-    if (_requiredDimensionIndices == null)
+    if ((_requiredDimensionIndices == null) || (_requiredDimensionIndices.size() == 0))
     {
       isb.addString("?draftPoints");
       isb.addBool(_draftPoints);
