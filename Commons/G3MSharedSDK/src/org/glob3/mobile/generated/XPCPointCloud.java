@@ -47,6 +47,8 @@ public class XPCPointCloud extends RCObject
 
   private double _minProjectedArea;
 
+  private boolean _draftPoints;
+
   private float _pointSize;
   private boolean _dynamicPointSize;
   private boolean _depthTest;
@@ -130,47 +132,47 @@ public class XPCPointCloud extends RCObject
     super.dispose();
   }
 
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener, boolean deletePointSelectionListener)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener, boolean deletePointSelectionListener)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, pointSelectionListener, deletePointSelectionListener, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, pointSelectionListener, deletePointSelectionListener, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, pointSelectionListener, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, pointSelectionListener, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, null, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, deleteMetadataListener, null, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, true, null, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, metadataListener, true, null, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, null, true, null, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, dynamicPointSize, depthTest, verticalExaggeration, deltaHeight, null, true, null, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, verticalExaggeration, 0, null, true, null, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, dynamicPointSize, depthTest, verticalExaggeration, 0, null, true, null, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize, boolean depthTest)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, depthTest, 1.0f, 0, null, true, null, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, dynamicPointSize, depthTest, 1.0f, 0, null, true, null, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, dynamicPointSize, true, 1.0f, 0, null, true, null, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, dynamicPointSize, true, 1.0f, 0, null, true, null, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, pointSize, true, true, 1.0f, 0, null, true, null, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, pointSize, true, true, 1.0f, 0, null, true, null, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints)
   {
-     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, 1.0f, true, true, 1.0f, 0, null, true, null, true, false);
+     this(serverURL, cloudName, downloadPriority, timeToCache, readExpired, pointColorizer, deletePointColorizer, minProjectedArea, draftPoints, 1.0f, true, true, 1.0f, 0, null, true, null, true, false);
   }
-  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener, boolean deletePointSelectionListener, boolean verbose)
+  public XPCPointCloud(URL serverURL, String cloudName, long downloadPriority, TimeInterval timeToCache, boolean readExpired, XPCPointColorizer pointColorizer, boolean deletePointColorizer, double minProjectedArea, boolean draftPoints, float pointSize, boolean dynamicPointSize, boolean depthTest, float verticalExaggeration, double deltaHeight, XPCMetadataListener metadataListener, boolean deleteMetadataListener, XPCPointSelectionListener pointSelectionListener, boolean deletePointSelectionListener, boolean verbose)
   {
      _serverURL = serverURL;
      _cloudName = cloudName;
@@ -180,6 +182,7 @@ public class XPCPointCloud extends RCObject
      _pointColorizer = pointColorizer;
      _deletePointColorizer = deletePointColorizer;
      _minProjectedArea = minProjectedArea;
+     _draftPoints = draftPoints;
      _pointSize = pointSize;
      _dynamicPointSize = dynamicPointSize;
      _depthTest = depthTest;
@@ -446,13 +449,20 @@ public class XPCPointCloud extends RCObject
     isb.addString("/");
     isb.addString(nodeID.length() == 0 ? "-root-" : nodeID);
   
-    if (_requiredDimensionIndices != null)
+    if (_requiredDimensionIndices == null)
+    {
+      isb.addString("?draftPoints");
+      isb.addBool(_draftPoints);
+    }
+    else
     {
       for (int i = 0; i < _requiredDimensionIndices.size(); i++)
       {
         isb.addString((i == 0) ? "?requiredDimensionIndices=" : ",");
         isb.addInt(_requiredDimensionIndices.get(i));
       }
+      isb.addString("&draftPoints");
+      isb.addBool(_draftPoints);
     }
   
     final String path = isb.getString();
@@ -549,6 +559,19 @@ public class XPCPointCloud extends RCObject
   public final BoundingVolume getFence()
   {
     return _fence;
+  }
+
+  public final void setDraftPoints(boolean draftPoints)
+  {
+    if (_draftPoints != draftPoints)
+    {
+      _draftPoints = draftPoints;
+  
+      if (_metadata != null)
+      {
+        _metadata.reloadNodes();
+      }
+    }
   }
 
 }

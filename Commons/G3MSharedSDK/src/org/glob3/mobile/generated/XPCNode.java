@@ -38,8 +38,6 @@ public class XPCNode extends RCObject
 
   private final Sector _sector;
 
-  private final int _pointsCount;
-
   private final double _minHeight;
   private final double _maxHeight;
 
@@ -140,11 +138,10 @@ public class XPCNode extends RCObject
     }
   }
 
-  private XPCNode(String id, Sector sector, int pointsCount, double minHeight, double maxHeight)
+  private XPCNode(String id, Sector sector, double minHeight, double maxHeight)
   {
      _id = id;
      _sector = sector;
-     _pointsCount = pointsCount;
      _minHeight = minHeight;
      _maxHeight = maxHeight;
      _bounds = null;
@@ -199,12 +196,10 @@ public class XPCNode extends RCObject
   
     final Sector sector = Sector.newFromDegrees(lowerLatitudeDegrees, lowerLongitudeDegrees, upperLatitudeDegrees, upperLongitudeDegrees);
   
-    final int pointsCount = it.nextInt32();
-  
     final double minHeight = it.nextDouble();
     final double maxHeight = it.nextDouble();
   
-    return new XPCNode(nodeID, sector, pointsCount, minHeight, maxHeight);
+    return new XPCNode(nodeID, sector, minHeight, maxHeight);
   }
 
   public final Sector getSector()
