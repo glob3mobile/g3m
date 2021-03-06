@@ -8,13 +8,11 @@
 #ifndef Cylinder_hpp
 #define Cylinder_hpp
 
-#include <stdio.h>
-
 #include "Vector3D.hpp"
-#include "Planet.hpp"
-#include "Color.hpp"
-#include "Mesh.hpp"
-#include "Angle.hpp"
+
+class Mesh;
+class Color;
+
 
 class Cylinder{
   
@@ -33,4 +31,4 @@ public:
   
 };
 
-#endif /* Cylinder_hpp */
+#endif

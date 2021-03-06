@@ -15,6 +15,9 @@ package org.glob3.mobile.generated;
 
 
 
+//class Mesh;
+//class Color;
+
 
 public class Cylinder
 {
@@ -36,16 +39,15 @@ public class Cylinder
   {
   
     Vector3D d = _end.sub(_start);
-    Vector3D r = d._z == 0? new Vector3D(0.0,0.0,1.0) : new Vector3D(1.0, 1.0, (-d._x -d._y) / d._z);
+    Vector3D r = (d._z == 0) ? new Vector3D(0.0,0.0,1.0) : new Vector3D(1.0, 1.0, (-d._x -d._y) / d._z);
   
     Vector3D pStart = _start.add(r.times(_startRadius / r.length()));
     Vector3D pEnd = _end.add(r.times(_endRadius / r.length()));
     MutableMatrix44D mStart = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(360.0 / nSegments), d, _start);
     MutableMatrix44D mEnd = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(360.0 / nSegments), d, _end);
   
-    FloatBufferBuilderFromCartesian3D fbb = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
     FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
-    FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
     MutableVector3D newStartPoint = new MutableVector3D(pStart);
     MutableVector3D newEndPoint = new MutableVector3D(pEnd);
@@ -56,30 +58,27 @@ public class Cylinder
       newStartPoint.set(newStartPoint.transformedBy(mStart, 1.0));
       newEndPoint.set(newEndPoint.transformedBy(mEnd, 1.0));
   
-      fbb.add(newStartPoint.asVector3D());
-      fbb.add(newEndPoint.asVector3D());
+      vertices.add(newStartPoint.asVector3D());
+      vertices.add(newEndPoint.asVector3D());
   
       normals.add(newStartPoint.sub(_start));
       normals.add(newEndPoint.sub(_end));
-  
-      colors.add(color);
-      colors.add(color);
     }
   
-    ShortBufferBuilder ind = new ShortBufferBuilder();
+    ShortBufferBuilder indices = new ShortBufferBuilder();
     for (int i = 0; i < nSegments *2; ++i)
     {
-      ind.add((short)i);
+      indices.add((short) i);
     }
-    ind.add((short)0);
-    ind.add((short)1);
+    indices.add((short) 0);
+    indices.add((short) 1);
   
-    IFloatBuffer vertices = fbb.create();
-    IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), fbb.getCenter(), vertices, true, ind.create(), true, 1.0f, 1.0f, new Color(color), null, true, normals.create(), false, 0, 0); //colors.create(),
+    IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1.0f, 1.0f, new Color(color), null, true, normals.create(), false, 0, 0); //colors.create(),
     if (normals != null)
        normals.dispose();
-    if (fbb != null)
-       fbb.dispose();
+    if (vertices != null)
+       vertices.dispose();
+  
     return im;
   }
 

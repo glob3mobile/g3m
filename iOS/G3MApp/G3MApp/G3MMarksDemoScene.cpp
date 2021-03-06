@@ -29,6 +29,7 @@
 #include <G3M/TranslateScaleGizmo.hpp>
 #include <G3M/ShapesRenderer.hpp>
 #include <G3M/EllipsoidShape.hpp>
+#include <G3M/Planet.hpp>
 
 #include "G3MDemoModel.hpp"
 
