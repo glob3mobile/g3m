@@ -157,6 +157,7 @@ Measure::Measure(const double vertexSphereRadius,
                  const Geodetic3D& firstVertex,
                  const float firstVerticalExaggeration,
                  const double firstVertexDeltaHeight,
+                 const bool closed,
                  ShapesRenderer* shapesRenderer,
                  MeshRenderer* meshRenderer,
                  MarksRenderer* marksRenderer,
@@ -169,6 +170,7 @@ _vertexColor(vertexColor),
 _vertexSelectedColor(vertexSelectedColor),
 _segmentLineWidth(segmentLineWidth),
 _segmentColor(segmentColor),
+_closed(closed),
 _shapesRenderer(shapesRenderer),
 _meshRenderer(meshRenderer),
 _marksRenderer(marksRenderer),
@@ -267,6 +269,10 @@ void Measure::createEdgeLines() {
     fbb->add(_vertices[i]->_geodetic);
   }
 
+  if (_closed && (verticesCount >= 3) ) {
+    fbb->add(_vertices[0]->_geodetic);
+  }
+
   Mesh* edgesLines = new DirectMesh(GLPrimitive::lineStrip(),
                                     true,
                                     fbb->getCenter(),
@@ -284,6 +290,41 @@ void Measure::createEdgeLines() {
   delete fbb;
 }
 
+void Measure::createDistanceLabel(const size_t vertexIndexFrom,
+                                  const size_t vertexIndexTo) {
+  const MeasureVertex* from = _vertices[vertexIndexFrom];
+  const MeasureVertex* to   = _vertices[vertexIndexTo];
+
+  const double distanceInMeters = from->_cartesian.distanceTo(to->_cartesian);
+
+  const std::string label = _measureHandler->getDistanceLabel(this,
+                                                              vertexIndexFrom,
+                                                              vertexIndexTo,
+                                                              distanceInMeters);
+#ifdef JAVA_CODE
+  if (label == null) {
+    return;
+  }
+#endif
+  if (label.empty()) {
+    return;
+  }
+
+  const Geodetic3D position = Geodetic3D::linearInterpolation(from->_geodetic,
+                                                              to->_geodetic,
+                                                              0.5);
+
+  Mark* mark = new Mark(label,
+                        Geodetic3D(position._latitude,
+                                   position._longitude,
+                                   position._height + _vertexSphereRadius),
+                        ABSOLUTE);
+  mark->setZoomInAppears(false);
+
+  mark->setToken(_instanceID);
+
+  _marksRenderer->addMark(mark);
+}
 
 void Measure::createEdgeDistanceLabels() {
   const size_t verticesCount = _vertices.size();
@@ -296,35 +337,11 @@ void Measure::createEdgeDistanceLabels() {
   }
 
   for (size_t i = 1; i < verticesCount; i++) {
-    const MeasureVertex* previous = _vertices[i - 1];
-    const MeasureVertex* current  = _vertices[i];
+    createDistanceLabel(i - 1, i);
+  }
 
-    const double distanceInMeters = previous->_cartesian.distanceTo(current->_cartesian);
-
-    const std::string label = _measureHandler->getDistanceLabel(this, i-1, i, distanceInMeters);
-#ifdef JAVA_CODE
-    if (label == null) {
-      continue;
-    }
-#endif
-    if (label.empty()) {
-      continue;
-    }
-
-    const Geodetic3D position = Geodetic3D::linearInterpolation(previous->_geodetic,
-                                                                current->_geodetic,
-                                                                0.5);
-
-    Mark* mark = new Mark(label,
-                          Geodetic3D(position._latitude,
-                                     position._longitude,
-                                     position._height + _vertexSphereRadius),
-                          ABSOLUTE);
-    mark->setZoomInAppears(false);
-
-    mark->setToken(_instanceID);
-
-    _marksRenderer->addMark(mark);
+  if (_closed && (verticesCount >= 3) ) {
+    createDistanceLabel(verticesCount - 1, 0);
   }
 }
 
@@ -439,4 +456,12 @@ const double Measure::getDeltaHeight(const size_t i) const {
 
 const float Measure::getVerticalExaggeration(const size_t i) const {
   return _vertices[i]->_verticalExaggeration;
+}
+
+void Measure::setClosed(const bool closed) {
+  if (_closed != closed) {
+    _closed = closed;
+
+    resetUI();
+  }
 }

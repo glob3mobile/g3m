@@ -33,6 +33,8 @@ private:
   const Color  _vertexSelectedColor;
   const float  _segmentLineWidth;
   const Color  _segmentColor;
+
+  bool _closed;
   
   std::vector<const MeasureVertex*> _vertices;
   
@@ -45,6 +47,9 @@ private:
   void resetUI();
   void createVerticesSpheres();
   void createEdgeLines();
+  void createDistanceLabel(const size_t vertexIndexFrom,
+                           const size_t vertexIndexTo);
+
   void createEdgeDistanceLabels();
   void createVertexAngleLabels();
   
@@ -55,9 +60,7 @@ private:
   const bool      _deleteMeasureHandler;
 
 public:
-  
-#warning TODO: closed measure
-  
+
   Measure(const double vertexSphereRadius,
           const Color& vertexColor,
           const Color& vertexSelectedColor,
@@ -66,6 +69,7 @@ public:
           const Geodetic3D& firstVertex,
           const float firstVerticalExaggeration,
           const double firstVertexDeltaHeight,
+          const bool closed,
           ShapesRenderer* shapesRenderer,
           MeshRenderer* meshRenderer,
           MarksRenderer* marksRenderer,
@@ -99,7 +103,9 @@ public:
   void clearSelection();
 
   void touchedOn(const int vertexIndex);
-  
+
+  void setClosed(const bool closed);
+
 };
 
 #endif

@@ -38,6 +38,8 @@ public class Measure
   private final float _segmentLineWidth;
   private final Color _segmentColor ;
 
+  private boolean _closed;
+
   private final java.util.ArrayList<MeasureVertex> _vertices = new java.util.ArrayList<MeasureVertex>();
 
   private ShapesRenderer _shapesRenderer;
@@ -92,6 +94,11 @@ public class Measure
       fbb.add(_vertices.get(i)._geodetic);
     }
   
+    if (_closed && (verticesCount >= 3))
+    {
+      fbb.add(_vertices.get(0)._geodetic);
+    }
+  
     Mesh edgesLines = new DirectMesh(GLPrimitive.lineStrip(), true, fbb.getCenter(), fbb.create(), _segmentLineWidth, 1.0f, new Color(_segmentColor), null, false); // depthTest -  const IFloatBuffer* colors -  float pointSize
   
     edgesLines.setToken(_instanceID);
@@ -100,6 +107,32 @@ public class Measure
     if (fbb != null)
        fbb.dispose();
   }
+  private void createDistanceLabel(int vertexIndexFrom, int vertexIndexTo)
+  {
+    final MeasureVertex from = _vertices.get(vertexIndexFrom);
+    final MeasureVertex to = _vertices.get(vertexIndexTo);
+  
+    final double distanceInMeters = from._cartesian.distanceTo(to._cartesian);
+  
+    final String label = _measureHandler.getDistanceLabel(this, vertexIndexFrom, vertexIndexTo, distanceInMeters);
+    if (label == null) {
+      return;
+    }
+    if (label.length() == 0)
+    {
+      return;
+    }
+  
+    final Geodetic3D position = Geodetic3D.linearInterpolation(from._geodetic, to._geodetic, 0.5);
+  
+    Mark mark = new Mark(label, new Geodetic3D(position._latitude, position._longitude, position._height + _vertexSphereRadius), AltitudeMode.ABSOLUTE);
+    mark.setZoomInAppears(false);
+  
+    mark.setToken(_instanceID);
+  
+    _marksRenderer.addMark(mark);
+  }
+
   private void createEdgeDistanceLabels()
   {
     final int verticesCount = _vertices.size();
@@ -115,28 +148,12 @@ public class Measure
   
     for (int i = 1; i < verticesCount; i++)
     {
-      final MeasureVertex previous = _vertices.get(i - 1);
-      final MeasureVertex current = _vertices.get(i);
+      createDistanceLabel(i - 1, i);
+    }
   
-      final double distanceInMeters = previous._cartesian.distanceTo(current._cartesian);
-  
-      final String label = _measureHandler.getDistanceLabel(this, i-1, i, distanceInMeters);
-      if (label == null) {
-        continue;
-      }
-      if (label.length() == 0)
-      {
-        continue;
-      }
-  
-      final Geodetic3D position = Geodetic3D.linearInterpolation(previous._geodetic, current._geodetic, 0.5);
-  
-      Mark mark = new Mark(label, new Geodetic3D(position._latitude, position._longitude, position._height + _vertexSphereRadius), AltitudeMode.ABSOLUTE);
-      mark.setZoomInAppears(false);
-  
-      mark.setToken(_instanceID);
-  
-      _marksRenderer.addMark(mark);
+    if (_closed && (verticesCount >= 3))
+    {
+      createDistanceLabel(verticesCount - 1, 0);
     }
   }
   private void createVertexAngleLabels()
@@ -183,10 +200,7 @@ public class Measure
   private final boolean _deleteMeasureHandler;
 
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning TODO: closed measure
-
-  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, float firstVerticalExaggeration, double firstVertexDeltaHeight, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureHandler measureHandler, boolean deleteMeasureHandler)
+  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, float firstVerticalExaggeration, double firstVertexDeltaHeight, boolean closed, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureHandler measureHandler, boolean deleteMeasureHandler)
   {
      _instanceID = "_Measure_" + IStringUtils.instance().toString(INSTANCE_COUNTER++);
      _vertexSphereRadius = vertexSphereRadius;
@@ -194,6 +208,7 @@ public class Measure
      _vertexSelectedColor = vertexSelectedColor;
      _segmentLineWidth = segmentLineWidth;
      _segmentColor = segmentColor;
+     _closed = closed;
      _shapesRenderer = shapesRenderer;
      _meshRenderer = meshRenderer;
      _marksRenderer = marksRenderer;
@@ -324,6 +339,16 @@ public class Measure
   
         _measureHandler.onVertexSelection(this, vertex._geodetic, vertex._cartesian, _selectedVertexIndex);
       }
+    }
+  }
+
+  public final void setClosed(boolean closed)
+  {
+    if (_closed != closed)
+    {
+      _closed = closed;
+  
+      resetUI();
     }
   }
 

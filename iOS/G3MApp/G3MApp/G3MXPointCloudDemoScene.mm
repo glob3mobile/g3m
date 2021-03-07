@@ -121,43 +121,44 @@ public:
     G3MDemoModel* model = _scene->getModel();
 
 
-    model->getShapesRenderer()->removeAllShapes();
+//    model->getShapesRenderer()->removeAllShapes();
+//
+//    const double radius = 75;
+//    pointCloud->setSelection( new Sphere(cartesian, radius) );
+//
+//    model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
+//                                                             AltitudeMode::ABSOLUTE,
+//                                                             Vector3D(radius, radius, radius),
+//                                                             (short) 24,                        /* resolution     */
+//                                                             1,                                 /* borderWidth    */
+//                                                             false,                             /* texturedInside */
+//                                                             false,                             /* mercator       */
+//                                                             Color::fromRGBA(0, 0, 0, 0.0f),    /* surfaceColor   */
+//                                                             Color::newFromRGBA(0, 0, 0, 1.0f), /* borderColor    */
+//                                                             true                               /* withNormals    */) );
 
-    const double radius = 75;
-    pointCloud->setSelection( new Sphere(cartesian, radius) );
-
-    model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
-                                                             AltitudeMode::ABSOLUTE,
-                                                             Vector3D(radius, radius, radius),
-                                                             (short) 24,                        /* resolution     */
-                                                             1,                                 /* borderWidth    */
-                                                             false,                             /* texturedInside */
-                                                             false,                             /* mercator       */
-                                                             Color::fromRGBA(0, 0, 0, 0.0f),    /* surfaceColor   */
-                                                             Color::newFromRGBA(0, 0, 0, 1.0f), /* borderColor    */
-                                                             true                               /* withNormals    */) );
-
-//    if (_measure == NULL) {
-//      _measure = new Measure(0.5,                             // vertexSphereRadius
-//                             Color::fromRGBA(1, 1, 0, 0.6f),  // vertexColor
-//                             Color::fromRGBA(1, 1, 1, 0.5f),  // vertexSelectedColor
-//                             5.0f,                            // segmentLineWidth
-//                             Color::fromRGBA(1, 1, 0, 0.6f),  // segmentColor
-//                             geodetic,                        // firstVertex
-//                             pointCloud->getVerticalExaggeration(),
-//                             pointCloud->getDeltaHeight(),
-//                             model->getShapesRenderer(),
-//                             model->getMeshRenderer(),
-//                             model->getMarksRenderer(),
-//                             model->getG3MWidget()->getG3MContext()->getPlanet(),
-//                             new G3MXPointCloudDemoScene_MeasureHandler(),
-//                             true);
-//    }
-//    else {
-//      _measure->addVertex(geodetic,
-//                          pointCloud->getVerticalExaggeration(),
-//                          pointCloud->getDeltaHeight());
-//    }
+    if (_measure == NULL) {
+      _measure = new Measure(0.5,                             // vertexSphereRadius
+                             Color::fromRGBA(1, 1, 0, 0.6f),  // vertexColor
+                             Color::fromRGBA(1, 1, 1, 0.5f),  // vertexSelectedColor
+                             5.0f,                            // segmentLineWidth
+                             Color::fromRGBA(1, 1, 0, 0.6f),  // segmentColor
+                             geodetic,                        // firstVertex
+                             pointCloud->getVerticalExaggeration(),
+                             pointCloud->getDeltaHeight(),
+                             true,                            // closed
+                             model->getShapesRenderer(),
+                             model->getMeshRenderer(),
+                             model->getMarksRenderer(),
+                             model->getG3MWidget()->getG3MContext()->getPlanet(),
+                             new G3MXPointCloudDemoScene_MeasureHandler(),
+                             true);
+    }
+    else {
+      _measure->addVertex(geodetic,
+                          pointCloud->getVerticalExaggeration(),
+                          pointCloud->getDeltaHeight());
+    }
 
     return true; // accepted point
   }
