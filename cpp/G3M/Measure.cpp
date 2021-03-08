@@ -8,23 +8,19 @@
 #include "Measure.hpp"
 
 #include "Geodetic3D.hpp"
-#include "ErrorHandling.hpp"
-
-#include "ShapesRenderer.hpp"
-#include "MeshRenderer.hpp"
-#include "MarksRenderer.hpp"
-#include "EllipsoidShape.hpp"
-#include "FloatBufferBuilderFromGeodetic.hpp"
-#include "DirectMesh.hpp"
-#include "GLConstants.hpp"
-#include "Mark.hpp"
+#include "Vector3D.hpp"
 #include "Planet.hpp"
-#include "IndexedMesh.hpp"
-#include "MeasureHandler.hpp"
-#include "IStringUtils.hpp"
 #include "ShapeFilter.hpp"
 #include "MeshFilter.hpp"
 #include "MarkFilter.hpp"
+#include "EllipsoidShape.hpp"
+#include "DirectMesh.hpp"
+#include "Mark.hpp"
+#include "MeasureHandler.hpp"
+#include "ShapesRenderer.hpp"
+#include "MeshRenderer.hpp"
+#include "MarksRenderer.hpp"
+#include "FloatBufferBuilderFromGeodetic.hpp"
 
 
 long long Measure::INSTANCE_COUNTER = 0;
