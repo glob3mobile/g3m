@@ -47,8 +47,10 @@ public:
     return _origin.add(_direction.times(t));
   }
   
-  static bool closestPointsOnTwoRays(const Ray& ray1, const Ray& ray2,
-                                     MutableVector3D& closestPointRay1, MutableVector3D& closestPointRay2);
+  static bool closestPointsOnTwoRays(const Ray& ray1,
+                                     const Ray& ray2,
+                                     MutableVector3D& closestPointRay1,
+                                     MutableVector3D& closestPointRay2);
 
   const std::string description() const;
 #ifdef JAVA_CODE

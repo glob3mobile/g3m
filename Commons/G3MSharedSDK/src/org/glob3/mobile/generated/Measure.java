@@ -352,4 +352,9 @@ public class Measure
     }
   }
 
+  public final boolean isClosed()
+  {
+    return _closed;
+  }
+
 }

@@ -97,7 +97,7 @@ public class Ray
   
     final double d = a *e - b *b;
   
-    //lines are not parallel
+    // lines are not parallel
     if (d != 0.0)
     {
       final Vector3D r = ray1._origin.sub(ray2._origin);

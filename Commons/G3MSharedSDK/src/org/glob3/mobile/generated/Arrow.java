@@ -110,7 +110,6 @@ public class Arrow extends MeshRenderer
           }
         }
   
-  
         break;
       }
   

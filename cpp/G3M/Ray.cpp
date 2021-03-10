@@ -105,7 +105,7 @@ bool Ray::closestPointsOnTwoRays(const Ray& ray1,
   
   const double d = a*e - b*b;
   
-  //lines are not parallel
+  // lines are not parallel
   if (d != 0.0) {
     const Vector3D r = ray1._origin.sub(ray2._origin);
     const double c = ray1._direction.dot(r);

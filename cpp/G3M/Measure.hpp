@@ -106,6 +106,10 @@ public:
 
   void setClosed(const bool closed);
 
+  bool isClosed() const {
+    return _closed;
+  }
+
 };
 
 #endif

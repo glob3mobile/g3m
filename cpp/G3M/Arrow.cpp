@@ -106,7 +106,6 @@ bool Arrow::onTouchEvent(const G3MEventContext* ec, const TouchEvent* touchEvent
         }
       }
 
-
       break;
     }
 
