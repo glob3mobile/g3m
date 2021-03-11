@@ -341,13 +341,16 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
 
   public final void changedRendererInfo(int rendererID, java.util.ArrayList<Info> info)
   {
-    if (rendererID < _renderersSize)
+    if (rendererID >= 0)
     {
-      _renderers.get(rendererID).setInfo(info);
-    }
-    else
-    {
-      ILogger.instance().logWarning("Child Render not found: %d", rendererID);
+      if (rendererID < _renderersSize)
+      {
+        _renderers.get(rendererID).setInfo(info);
+      }
+      else
+      {
+        ILogger.instance().logWarning("Child Render not found: %d", rendererID);
+      }
     }
   
     if (_changedInfoListener != null)
