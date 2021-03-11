@@ -71,6 +71,8 @@ public:
 
   bool removeRenderer(Renderer* renderer);
 
+  void removeAllRenderers();
+
   void start(const G3MRenderContext* rc);
 
   void stop(const G3MRenderContext* rc);

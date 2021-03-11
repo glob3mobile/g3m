@@ -219,6 +219,19 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     return false;
   }
 
+  public final void removeAllRenderers()
+  {
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      ChildRenderer childRenderer = _renderers.get(i);
+      if (childRenderer != null)
+         childRenderer.dispose();
+    }
+  
+    _renderers.clear();
+    _renderersSize = 0;
+  }
+
   public final void start(G3MRenderContext rc)
   {
     for (int i = 0; i < _renderersSize; i++)

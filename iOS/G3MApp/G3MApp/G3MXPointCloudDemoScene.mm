@@ -32,6 +32,7 @@
 #include <G3M/RampColorizer.hpp>
 #include <G3M/Sphere.hpp>
 #include <G3M/ShapesRenderer.hpp>
+#include <G3M/MeasureRenderer.hpp>
 #include <G3M/EllipsoidShape.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
@@ -66,7 +67,7 @@ public:
                          const Geodetic3D& geodetic,
                          const Vector3D& cartesian,
                          int selectedIndex) {
-//    measure->removeVertex(selectedIndex);
+    //    measure->removeVertex(selectedIndex);
 
   }
 
@@ -106,8 +107,8 @@ public:
   }
 
   ~G3MXPointCloudDemoScene_PointSelectionListener() {
-//    delete _previousGeodetic;
-//    delete _previousCartesian;
+    //    delete _previousGeodetic;
+    //    delete _previousCartesian;
     delete _measure;
   }
 
@@ -120,22 +121,21 @@ public:
                        const double distanceToRay) const {
     G3MDemoModel* model = _scene->getModel();
 
-
-//    model->getShapesRenderer()->removeAllShapes();
-//
-//    const double radius = 75;
-//    pointCloud->setSelection( new Sphere(cartesian, radius) );
-//
-//    model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
-//                                                             AltitudeMode::ABSOLUTE,
-//                                                             Vector3D(radius, radius, radius),
-//                                                             (short) 24,                        /* resolution     */
-//                                                             1,                                 /* borderWidth    */
-//                                                             false,                             /* texturedInside */
-//                                                             false,                             /* mercator       */
-//                                                             Color::fromRGBA(0, 0, 0, 0.0f),    /* surfaceColor   */
-//                                                             Color::newFromRGBA(0, 0, 0, 1.0f), /* borderColor    */
-//                                                             true                               /* withNormals    */) );
+    //model->getShapesRenderer()->removeAllShapes();
+    //
+    //const double radius = 75;
+    //pointCloud->setSelection( new Sphere(cartesian, radius) );
+    //
+    //model->getShapesRenderer()->addShape( new EllipsoidShape(new Geodetic3D(geodetic),
+    //                                                         AltitudeMode::ABSOLUTE,
+    //                                                         Vector3D(radius, radius, radius),
+    //                                                         (short) 24,                        /* resolution     */
+    //                                                         1,                                 /* borderWidth    */
+    //                                                         false,                             /* texturedInside */
+    //                                                         false,                             /* mercator       */
+    //                                                         Color::fromRGBA(0, 0, 0, 0.0f),    /* surfaceColor   */
+    //                                                         Color::newFromRGBA(0, 0, 0, 1.0f), /* borderColor    */
+    //                                                         true                               /* withNormals    */) );
 
     if (_measure == NULL) {
       _measure = new Measure(0.5,                             // vertexSphereRadius
@@ -145,14 +145,12 @@ public:
                              Color::fromRGBA(1, 1, 0, 0.6f),  // segmentColor
                              geodetic,                        // firstVertex
                              pointCloud->getVerticalExaggeration(),
-                             pointCloud->getDeltaHeight(),
+                              pointCloud->getDeltaHeight(),
                              true,                            // closed
-                             model->getShapesRenderer(),
-                             model->getMeshRenderer(),
-                             model->getMarksRenderer(),
-                             model->getG3MWidget()->getG3MContext()->getPlanet(),
                              new G3MXPointCloudDemoScene_MeasureHandler(),
                              true);
+
+      model->getMeasureRenderer()->addMeasure(_measure);
     }
     else {
       _measure->addVertex(geodetic,
@@ -214,14 +212,14 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   // const double      deltaHeight = -396;
   const double      deltaHeight = -590;
 
-//  const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
-//  const double      deltaHeight = -170;
+  // const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
+  // const double      deltaHeight = -170;
 
-//  const std::string cloudName   = "Leica_M40_LOD";
-//  const double      deltaHeight = -580;
+  // const std::string cloudName   = "Leica_M40_LOD";
+  // const double      deltaHeight = -580;
 
-//  const std::string cloudName   = "NEON_LOD";
-//  const double      deltaHeight = -385;
+  // const std::string cloudName   = "NEON_LOD";
+  // const double      deltaHeight = -385;
 
   const double minProjectedArea = 50000; //50000;
   const double draftPoints      = true;
@@ -229,10 +227,10 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(verticalExaggeration);
 
-  //  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
-  //                                                                                    Sector::fullSphere(),
-  //                                                                                    Vector2I(2048, 1024));
-  //  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+  // ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+  //                                                                                   Sector::fullSphere(),
+  //                                                                                   Vector2I(2048, 1024));
+  // planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
   BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
                                            "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",

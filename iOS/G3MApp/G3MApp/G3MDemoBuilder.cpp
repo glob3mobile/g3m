@@ -25,6 +25,7 @@
 #include <G3M/AtmosphereRenderer.hpp>
 #include <G3M/WrapperNearFrustumRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
+#include <G3M/MeasureRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -106,6 +107,12 @@ void G3MDemoBuilder::build() {
   CompositeRenderer* compositeRenderer = new CompositeRenderer();
   builder->addRenderer(compositeRenderer);
 
+  MeasureRenderer* measureRenderer = new MeasureRenderer(shapesRenderer,
+                                                         meshRenderer,
+                                                         marksRenderer,
+                                                         compositeRenderer);
+  builder->addRenderer(measureRenderer);
+
   //Uncomment to see render debug mesh on top of tiles
   //#warning remove setRenderDebug(true);
   //builder->getPlanetRendererBuilder()->setRenderDebug(true);
@@ -122,7 +129,8 @@ void G3MDemoBuilder::build() {
                             hudRenderer,
                             nonOverlappingMarksRenderer,
                             vectorStreamingRenderer,
-                            compositeRenderer);
+                            compositeRenderer,
+                            measureRenderer);
 
   const double zNear = 0.1;
   Renderer* renderer = new MeshRenderer();

@@ -20,6 +20,7 @@
 #include "ShapesRenderer.hpp"
 #include "MeshRenderer.hpp"
 #include "MarksRenderer.hpp"
+#include "CompositeRenderer.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 
 
@@ -27,27 +28,35 @@ long long Measure::INSTANCE_COUNTER = 0;
 
 
 class MeasureVertex {
+private:
+  mutable Vector3D* _cartesian;
+
 public:
   const Geodetic3D _geodetic;
   const float      _verticalExaggeration;
   const double     _deltaHeight;
 
-  const Vector3D _cartesian;
-
   MeasureVertex(const Geodetic3D& geodetic,
                 const float  verticalExaggeration,
-                const double deltaHeight,
-                const Planet* planet) :
+                const double deltaHeight) :
   _geodetic(geodetic),
   _verticalExaggeration(verticalExaggeration),
   _deltaHeight(deltaHeight),
-  _cartesian( planet->toCartesian(geodetic) )
+  _cartesian(NULL)
   {
 
   }
 
-  ~MeasureVertex() {
 
+  const Vector3D getCartesian(const Planet* planet) const {
+    if (_cartesian == NULL) {
+      _cartesian = new Vector3D(planet->toCartesian(_geodetic));
+    }
+    return *_cartesian;
+  }
+
+  ~MeasureVertex() {
+    delete _cartesian;
   }
 
 };
@@ -154,10 +163,6 @@ Measure::Measure(const double vertexSphereRadius,
                  const float firstVerticalExaggeration,
                  const double firstVertexDeltaHeight,
                  const bool closed,
-                 ShapesRenderer* shapesRenderer,
-                 MeshRenderer* meshRenderer,
-                 MarksRenderer* marksRenderer,
-                 const Planet* planet,
                  MeasureHandler* measureHandler,
                  const bool deleteMeasureHandler) :
 _instanceID( "_Measure_" + IStringUtils::instance()->toString(INSTANCE_COUNTER++) ),
@@ -167,13 +172,14 @@ _vertexSelectedColor(vertexSelectedColor),
 _segmentLineWidth(segmentLineWidth),
 _segmentColor(segmentColor),
 _closed(closed),
-_shapesRenderer(shapesRenderer),
-_meshRenderer(meshRenderer),
-_marksRenderer(marksRenderer),
-_planet(planet),
-_selectedVertexIndex(-1),
 _measureHandler(measureHandler),
-_deleteMeasureHandler(deleteMeasureHandler)
+_deleteMeasureHandler(deleteMeasureHandler),
+_selectedVertexIndex(-1),
+_shapesRenderer(NULL),
+_meshRenderer(NULL),
+_marksRenderer(NULL),
+_compositeRenderer(NULL),
+_planet(NULL)
 {
   addVertex(firstVertex,
             firstVerticalExaggeration,
@@ -188,6 +194,20 @@ Measure::~Measure() {
   if (_deleteMeasureHandler) {
     delete _measureHandler;
   }
+}
+
+void Measure::initialize(ShapesRenderer*    shapesRenderer,
+                         MeshRenderer*      meshRenderer,
+                         MarksRenderer*     marksRenderer,
+                         CompositeRenderer* compositeRenderer,
+                         const Planet*      planet) {
+  _shapesRenderer    = shapesRenderer;
+  _meshRenderer      = meshRenderer;
+  _marksRenderer     = marksRenderer;
+  _compositeRenderer = compositeRenderer;
+  _planet            = planet;
+
+  resetUI();
 }
 
 void Measure::touchedOn(const int vertexIndex) {
@@ -212,7 +232,7 @@ void Measure::touchedOn(const int vertexIndex) {
 
       _measureHandler->onVertexSelection(this,
                                          vertex->_geodetic,
-                                         vertex->_cartesian,
+                                         vertex->getCartesian(_planet),
                                          _selectedVertexIndex);
     }
   }
@@ -233,6 +253,10 @@ void Measure::clearSelection() {
 
 
 void Measure::createVerticesSpheres() {
+  if (_shapesRenderer == NULL) {
+    return;
+  }
+
   const size_t verticesCount = _vertices.size();
 
   for (int i = 0; i < verticesCount; i++) {
@@ -253,6 +277,10 @@ void Measure::createVerticesSpheres() {
 }
 
 void Measure::createEdgeLines() {
+  if (_meshRenderer == NULL) {
+    return;
+  }
+
   const size_t verticesCount = _vertices.size();
   if (verticesCount < 2) {
     return;
@@ -291,7 +319,7 @@ void Measure::createDistanceLabel(const size_t vertexIndexFrom,
   const MeasureVertex* from = _vertices[vertexIndexFrom];
   const MeasureVertex* to   = _vertices[vertexIndexTo];
 
-  const double distanceInMeters = from->_cartesian.distanceTo(to->_cartesian);
+  const double distanceInMeters = from->getCartesian(_planet).distanceTo(to->getCartesian(_planet));
 
   const std::string label = _measureHandler->getDistanceLabel(this,
                                                               vertexIndexFrom,
@@ -323,6 +351,10 @@ void Measure::createDistanceLabel(const size_t vertexIndexFrom,
 }
 
 void Measure::createEdgeDistanceLabels() {
+  if (_marksRenderer == NULL) {
+    return;
+  }
+
   const size_t verticesCount = _vertices.size();
   if (verticesCount < 2) {
     return;
@@ -342,6 +374,10 @@ void Measure::createEdgeDistanceLabels() {
 }
 
 void Measure::createVertexAngleLabels() {
+  if (_marksRenderer == NULL) {
+    return;
+  }
+
   const size_t verticesCount = _vertices.size();
   if (verticesCount < 3) {
     return;
@@ -352,8 +388,8 @@ void Measure::createVertexAngleLabels() {
     const MeasureVertex* current  = _vertices[i];
     const MeasureVertex* next     = _vertices[i + 1];
 
-    const Vector3D v0 = current->_cartesian.sub(previous->_cartesian);
-    const Vector3D v1 = current->_cartesian.sub(next->_cartesian);
+    const Vector3D v0 = current->getCartesian(_planet).sub(previous->getCartesian(_planet));
+    const Vector3D v1 = current->getCartesian(_planet).sub(next->getCartesian(_planet));
 
     const Angle angle = v0.angleBetween(v1);
 
@@ -381,11 +417,24 @@ void Measure::createVertexAngleLabels() {
 }
 
 void Measure::resetUI() {
-  // clean up
-  _verticesSpheres.clear();
-  _shapesRenderer->removeAllShapes(Measure_ShapeFilter(_instanceID), true /* deleteShapes */);
-  _meshRenderer->removeAllMeshes(Measure_MeshFilter(_instanceID), true /* deleteMeshes */);
-  _marksRenderer->removeAllMarks(Measure_MarkFilter(_instanceID), false /* animated */, true /* deleteMarks */);
+  {
+    // clean up
+    _verticesSpheres.clear();
+
+    if (_shapesRenderer != NULL) {
+      _shapesRenderer->removeAllShapes(Measure_ShapeFilter(_instanceID), true /* deleteShapes */);
+    }
+    if (_meshRenderer != NULL) {
+      _meshRenderer->removeAllMeshes(Measure_MeshFilter(_instanceID), true /* deleteMeshes */);
+    }
+    if (_marksRenderer != NULL) {
+      _marksRenderer->removeAllMarks(Measure_MarkFilter(_instanceID), false /* animated */, true /* deleteMarks */);
+    }
+
+    if (_compositeRenderer != NULL) {
+      _compositeRenderer->removeAllRenderers();
+    }
+  }
 
 
   // create 3d objects
@@ -404,7 +453,7 @@ void Measure::addVertex(const Geodetic3D& vertex,
                         const double deltaHeight) {
   clearSelection();
 
-  _vertices.push_back( new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet) );
+  _vertices.push_back( new MeasureVertex(vertex, verticalExaggeration, deltaHeight) );
 
   resetUI();
 }
@@ -417,7 +466,7 @@ void Measure::setVertex(const size_t i,
 
   delete _vertices[i];
 
-  _vertices[i] = new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet);
+  _vertices[i] = new MeasureVertex(vertex, verticalExaggeration, deltaHeight);
 
   resetUI();
 }

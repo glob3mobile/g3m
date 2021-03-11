@@ -44,6 +44,16 @@ bool CompositeRenderer::removeRenderer(Renderer* renderer) {
   return false;
 }
 
+void CompositeRenderer::removeAllRenderers() {
+  for (size_t i = 0; i < _renderersSize; i++) {
+    ChildRenderer* childRenderer = _renderers[i];
+    delete childRenderer;
+  }
+
+  _renderers.clear();
+  _renderersSize = 0;
+}
+
 void CompositeRenderer::addRenderer(Renderer* renderer,
                                     const std::vector<const Info*>& info) {
   addChildRenderer(new ChildRenderer(renderer, info));

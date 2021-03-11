@@ -23,6 +23,7 @@
 #include <G3M/NonOverlappingMarksRenderer.hpp>
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
+#include <G3M/MeasureRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -63,7 +64,8 @@ G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            HUDRenderer*                 hudRenderer,
                            NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
                            VectorStreamingRenderer*     vectorStreamingRenderer,
-                           CompositeRenderer*           compositeRenderer) :
+                           CompositeRenderer*           compositeRenderer,
+                           MeasureRenderer*             measureRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
@@ -77,6 +79,7 @@ _hudRenderer(hudRenderer),
 _nonOverlappingMarksRenderer(nonOverlappingMarksRenderer),
 _vectorStreamingRenderer(vectorStreamingRenderer),
 _compositeRenderer(compositeRenderer),
+_measureRenderer(measureRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
@@ -149,6 +152,8 @@ void G3MDemoModel::reset() {
   getNonOverlappingMarksRenderer()->removeAllMarks();
   getNonOverlappingMarksRenderer()->removeAllListeners();
   getVectorStreamingRenderer()->removeAllVectorSets();
+  getCompositeRenderer()->removeAllRenderers();
+  getMeasureRenderer()->removeAllMeasures();
 
   _layerSet->removeAllLayers(true);
 }

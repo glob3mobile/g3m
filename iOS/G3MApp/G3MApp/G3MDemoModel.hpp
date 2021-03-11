@@ -28,6 +28,7 @@ class HUDRenderer;
 class NonOverlappingMarksRenderer;
 class VectorStreamingRenderer;
 class CompositeRenderer;
+class MeasureRenderer;
 
 
 class G3MDemoModel {
@@ -47,6 +48,7 @@ private:
   NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
   VectorStreamingRenderer*     _vectorStreamingRenderer;
   CompositeRenderer*           _compositeRenderer;
+  MeasureRenderer*             _measureRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -66,7 +68,8 @@ public:
                HUDRenderer*                 hudRenderer,
                NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
                VectorStreamingRenderer*     vectorStreamingRenderer,
-               CompositeRenderer*           compositeRenderer);
+               CompositeRenderer*           compositeRenderer,
+               MeasureRenderer*             measureRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -121,6 +124,9 @@ public:
     return _compositeRenderer;
   }
 
+  MeasureRenderer* getMeasureRenderer() const {
+    return _measureRenderer;
+  }
 
   PlanetRenderer* getPlanetRenderer() const;
 

@@ -926,11 +926,14 @@
 		CFC54E0125B9B8CC00424542 /* XPCIntensityPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54DFD25B9B76300424542 /* XPCIntensityPointColorizer.hpp */; };
 		CFC54E0525B9BD7300424542 /* XPCClassificationPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */; };
 		CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */; };
+		CFF35E9425F9371C003F5265 /* MeasureRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF35E9225F9371C003F5265 /* MeasureRenderer.cpp */; };
+		CFF35E9725F93763003F5265 /* MeasureRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF35E9325F9371C003F5265 /* MeasureRenderer.hpp */; };
+		CFF35E9825F93763003F5265 /* CameraMouseWheelHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D877330B25DC0A8D009C6B6E /* CameraMouseWheelHandler.hpp */; };
 		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
+		D877330C25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */; };
 		D8AB49C625E15301002AB306 /* TranslateScaleGizmo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8AB49C425E15301002AB306 /* TranslateScaleGizmo.cpp */; };
 		D8AB49C825E15330002AB306 /* TranslateScaleGizmo.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8AB49C525E15301002AB306 /* TranslateScaleGizmo.hpp */; };
-		D877330C25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; platformFilter = ios; };
 		D8FF649125DEEA1100B6C9D4 /* Cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FF648F25DEEA1100B6C9D4 /* Cylinder.cpp */; };
 		D8FF649A25DEEDCF00B6C9D4 /* Cylinder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8FF649025DEEA1100B6C9D4 /* Cylinder.hpp */; };
@@ -971,6 +974,8 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CFF35E9725F93763003F5265 /* MeasureRenderer.hpp in CopyFiles */,
+				CFF35E9825F93763003F5265 /* CameraMouseWheelHandler.hpp in CopyFiles */,
 				D8AB49C825E15330002AB306 /* TranslateScaleGizmo.hpp in CopyFiles */,
 				D8FF64A225E08F3F00B6C9D4 /* Arrow.hpp in CopyFiles */,
 				D8FF649A25DEEDCF00B6C9D4 /* Cylinder.hpp in CopyFiles */,
@@ -2415,6 +2420,8 @@
 		CFCCFE0A16F506210082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
 		CFD66B491863505B008EC15B /* FullTransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
+		CFF35E9225F9371C003F5265 /* MeasureRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeasureRenderer.cpp; sourceTree = "<group>"; };
+		CFF35E9325F9371C003F5265 /* MeasureRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeasureRenderer.hpp; sourceTree = "<group>"; };
 		CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = TextUtils_iOS.mm; path = Specific/Derived/TextUtils_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CFFAFD72169F2E3000BCE129 /* TextUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TextUtils_iOS.hpp; path = Specific/Derived/TextUtils_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader_iOS.hpp; path = Specific/Derived/Downloader_iOS.hpp; sourceTree = "<group>"; };
@@ -2606,6 +2613,8 @@
 				CF42264425BED63D003CF0A3 /* Measure.hpp */,
 				CF7FB77425C5759A0009313E /* MeasureHandler.cpp */,
 				CF7FB77525C5759A0009313E /* MeasureHandler.hpp */,
+				CFF35E9225F9371C003F5265 /* MeasureRenderer.cpp */,
+				CFF35E9325F9371C003F5265 /* MeasureRenderer.hpp */,
 				CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */,
 				CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */,
 				CF27452325B1F2C20056304B /* XPCDimension.cpp */,
@@ -3819,6 +3828,7 @@
 				CF66086023DF330600795C7F /* GPUAttributeVec1Float.cpp in Sources */,
 				CF66086123DF330600795C7F /* FlatPlanet.cpp in Sources */,
 				CF66086223DF330600795C7F /* PlanetRendererBuilder.cpp in Sources */,
+				CFF35E9425F9371C003F5265 /* MeasureRenderer.cpp in Sources */,
 				CF66086323DF330600795C7F /* ByteBufferIterator.cpp in Sources */,
 				CF66086423DF330600795C7F /* OrderedRenderable.cpp in Sources */,
 				CF66086523DF330600795C7F /* MutableVector3D.cpp in Sources */,

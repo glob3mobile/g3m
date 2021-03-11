@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MeshRenderer;
 //class MarksRenderer;
+//class CompositeRenderer;
 //class Planet;
 //class Measure_VertexShape;
 //class MeasureHandler;
@@ -45,16 +46,34 @@ public class Measure
   private ShapesRenderer _shapesRenderer;
   private MeshRenderer _meshRenderer;
   private MarksRenderer _marksRenderer;
+  private CompositeRenderer _compositeRenderer;
 
-  private final Planet _planet;
+  private Planet _planet;
 
   private void resetUI()
   {
-    // clean up
-    _verticesSpheres.clear();
-    _shapesRenderer.removeAllShapes(new Measure_ShapeFilter(_instanceID), true); // deleteShapes
-    _meshRenderer.removeAllMeshes(new Measure_MeshFilter(_instanceID), true); // deleteMeshes
-    _marksRenderer.removeAllMarks(new Measure_MarkFilter(_instanceID), false, true); // deleteMarks -  animated
+    {
+      // clean up
+      _verticesSpheres.clear();
+  
+      if (_shapesRenderer != null)
+      {
+        _shapesRenderer.removeAllShapes(new Measure_ShapeFilter(_instanceID), true); // deleteShapes
+      }
+      if (_meshRenderer != null)
+      {
+        _meshRenderer.removeAllMeshes(new Measure_MeshFilter(_instanceID), true); // deleteMeshes
+      }
+      if (_marksRenderer != null)
+      {
+        _marksRenderer.removeAllMarks(new Measure_MarkFilter(_instanceID), false, true); // deleteMarks -  animated
+      }
+  
+      if (_compositeRenderer != null)
+      {
+        _compositeRenderer.removeAllRenderers();
+      }
+    }
   
   
     // create 3d objects
@@ -65,6 +84,11 @@ public class Measure
   }
   private void createVerticesSpheres()
   {
+    if (_shapesRenderer == null)
+    {
+      return;
+    }
+  
     final int verticesCount = _vertices.size();
   
     for (int i = 0; i < verticesCount; i++)
@@ -80,6 +104,11 @@ public class Measure
   }
   private void createEdgeLines()
   {
+    if (_meshRenderer == null)
+    {
+      return;
+    }
+  
     final int verticesCount = _vertices.size();
     if (verticesCount < 2)
     {
@@ -112,7 +141,7 @@ public class Measure
     final MeasureVertex from = _vertices.get(vertexIndexFrom);
     final MeasureVertex to = _vertices.get(vertexIndexTo);
   
-    final double distanceInMeters = from._cartesian.distanceTo(to._cartesian);
+    final double distanceInMeters = from.getCartesian(_planet).distanceTo(to.getCartesian(_planet));
   
     final String label = _measureHandler.getDistanceLabel(this, vertexIndexFrom, vertexIndexTo, distanceInMeters);
     if (label == null) {
@@ -135,6 +164,11 @@ public class Measure
 
   private void createEdgeDistanceLabels()
   {
+    if (_marksRenderer == null)
+    {
+      return;
+    }
+  
     final int verticesCount = _vertices.size();
     if (verticesCount < 2)
     {
@@ -158,6 +192,11 @@ public class Measure
   }
   private void createVertexAngleLabels()
   {
+    if (_marksRenderer == null)
+    {
+      return;
+    }
+  
     final int verticesCount = _vertices.size();
     if (verticesCount < 3)
     {
@@ -170,8 +209,8 @@ public class Measure
       final MeasureVertex current = _vertices.get(i);
       final MeasureVertex next = _vertices.get(i + 1);
   
-      final Vector3D v0 = current._cartesian.sub(previous._cartesian);
-      final Vector3D v1 = current._cartesian.sub(next._cartesian);
+      final Vector3D v0 = current.getCartesian(_planet).sub(previous.getCartesian(_planet));
+      final Vector3D v1 = current.getCartesian(_planet).sub(next.getCartesian(_planet));
   
       final Angle angle = v0.angleBetween(v1);
   
@@ -200,7 +239,7 @@ public class Measure
   private final boolean _deleteMeasureHandler;
 
 
-  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, float firstVerticalExaggeration, double firstVertexDeltaHeight, boolean closed, ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet, MeasureHandler measureHandler, boolean deleteMeasureHandler)
+  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, float firstVerticalExaggeration, double firstVertexDeltaHeight, boolean closed, MeasureHandler measureHandler, boolean deleteMeasureHandler)
   {
      _instanceID = "_Measure_" + IStringUtils.instance().toString(INSTANCE_COUNTER++);
      _vertexSphereRadius = vertexSphereRadius;
@@ -209,14 +248,26 @@ public class Measure
      _segmentLineWidth = segmentLineWidth;
      _segmentColor = segmentColor;
      _closed = closed;
-     _shapesRenderer = shapesRenderer;
-     _meshRenderer = meshRenderer;
-     _marksRenderer = marksRenderer;
-     _planet = planet;
-     _selectedVertexIndex = -1;
      _measureHandler = measureHandler;
      _deleteMeasureHandler = deleteMeasureHandler;
+     _selectedVertexIndex = -1;
+     _shapesRenderer = null;
+     _meshRenderer = null;
+     _marksRenderer = null;
+     _compositeRenderer = null;
+     _planet = null;
     addVertex(firstVertex, firstVerticalExaggeration, firstVertexDeltaHeight);
+  }
+
+  public final void initialize(ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, CompositeRenderer compositeRenderer, Planet planet)
+  {
+    _shapesRenderer = shapesRenderer;
+    _meshRenderer = meshRenderer;
+    _marksRenderer = marksRenderer;
+    _compositeRenderer = compositeRenderer;
+    _planet = planet;
+  
+    resetUI();
   }
 
   public final double getVertexSphereRadius()
@@ -233,7 +284,7 @@ public class Measure
   {
     clearSelection();
   
-    _vertices.add(new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet));
+    _vertices.add(new MeasureVertex(vertex, verticalExaggeration, deltaHeight));
   
     resetUI();
   }
@@ -245,7 +296,7 @@ public class Measure
     if (_vertices.get(i) != null)
        _vertices.get(i).dispose();
   
-    _vertices.set(i, new MeasureVertex(vertex, verticalExaggeration, deltaHeight, _planet));
+    _vertices.set(i, new MeasureVertex(vertex, verticalExaggeration, deltaHeight));
   
     resetUI();
   }
@@ -337,7 +388,7 @@ public class Measure
       {
         final MeasureVertex vertex = _vertices.get(_selectedVertexIndex);
   
-        _measureHandler.onVertexSelection(this, vertex._geodetic, vertex._cartesian, _selectedVertexIndex);
+        _measureHandler.onVertexSelection(this, vertex._geodetic, vertex.getCartesian(_planet), _selectedVertexIndex);
       }
     }
   }

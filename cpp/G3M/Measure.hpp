@@ -16,6 +16,7 @@ class MeasureVertex;
 class ShapesRenderer;
 class MeshRenderer;
 class MarksRenderer;
+class CompositeRenderer;
 class Planet;
 class Measure_VertexShape;
 class MeasureHandler;
@@ -38,11 +39,16 @@ private:
   
   std::vector<const MeasureVertex*> _vertices;
   
-  ShapesRenderer* _shapesRenderer;
-  MeshRenderer*   _meshRenderer;
-  MarksRenderer*  _marksRenderer;
-  
+  ShapesRenderer*    _shapesRenderer;
+  MeshRenderer*      _meshRenderer;
+  MarksRenderer*     _marksRenderer;
+  CompositeRenderer* _compositeRenderer;
+
+#ifdef C_CODE
   const Planet* _planet;
+#else
+  Planet*       _planet;
+#endif
   
   void resetUI();
   void createVerticesSpheres();
@@ -70,12 +76,14 @@ public:
           const float firstVerticalExaggeration,
           const double firstVertexDeltaHeight,
           const bool closed,
-          ShapesRenderer* shapesRenderer,
-          MeshRenderer* meshRenderer,
-          MarksRenderer* marksRenderer,
-          const Planet* planet,
           MeasureHandler* measureHandler,
           const bool deleteMeasureHandler);
+
+  void initialize(ShapesRenderer*    shapesRenderer,
+                  MeshRenderer*      meshRenderer,
+                  MarksRenderer*     marksRenderer,
+                  CompositeRenderer* compositeRenderer,
+                  const Planet*      planet);
 
   const double getVertexSphereRadius() const {
     return _vertexSphereRadius;
