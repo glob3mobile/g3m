@@ -416,26 +416,27 @@ void Measure::createVertexAngleLabels() {
   }
 }
 
-void Measure::resetUI() {
-  {
-    // clean up
-    _verticesSpheres.clear();
+void Measure::cleanUI() {
+  _verticesSpheres.clear();
 
-    if (_shapesRenderer != NULL) {
-      _shapesRenderer->removeAllShapes(Measure_ShapeFilter(_instanceID), true /* deleteShapes */);
-    }
-    if (_meshRenderer != NULL) {
-      _meshRenderer->removeAllMeshes(Measure_MeshFilter(_instanceID), true /* deleteMeshes */);
-    }
-    if (_marksRenderer != NULL) {
-      _marksRenderer->removeAllMarks(Measure_MarkFilter(_instanceID), false /* animated */, true /* deleteMarks */);
-    }
-
-    if (_compositeRenderer != NULL) {
-      _compositeRenderer->removeAllRenderers();
-    }
+  if (_shapesRenderer != NULL) {
+    _shapesRenderer->removeAllShapes(Measure_ShapeFilter(_instanceID), true /* deleteShapes */);
+  }
+  if (_meshRenderer != NULL) {
+    _meshRenderer->removeAllMeshes(Measure_MeshFilter(_instanceID), true /* deleteMeshes */);
+  }
+  if (_marksRenderer != NULL) {
+    _marksRenderer->removeAllMarks(Measure_MarkFilter(_instanceID), false /* animated */, true /* deleteMarks */);
   }
 
+  if (_compositeRenderer != NULL) {
+    _compositeRenderer->removeAllRenderers();
+  }
+}
+
+void Measure::resetUI() {
+  // clean up
+  cleanUI();
 
   // create 3d objects
   createVerticesSpheres();

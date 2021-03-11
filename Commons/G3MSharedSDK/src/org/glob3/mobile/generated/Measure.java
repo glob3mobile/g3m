@@ -52,29 +52,8 @@ public class Measure
 
   private void resetUI()
   {
-    {
-      // clean up
-      _verticesSpheres.clear();
-  
-      if (_shapesRenderer != null)
-      {
-        _shapesRenderer.removeAllShapes(new Measure_ShapeFilter(_instanceID), true); // deleteShapes
-      }
-      if (_meshRenderer != null)
-      {
-        _meshRenderer.removeAllMeshes(new Measure_MeshFilter(_instanceID), true); // deleteMeshes
-      }
-      if (_marksRenderer != null)
-      {
-        _marksRenderer.removeAllMarks(new Measure_MarkFilter(_instanceID), false, true); // deleteMarks -  animated
-      }
-  
-      if (_compositeRenderer != null)
-      {
-        _compositeRenderer.removeAllRenderers();
-      }
-    }
-  
+    // clean up
+    cleanUI();
   
     // create 3d objects
     createVerticesSpheres();
@@ -358,6 +337,29 @@ public class Measure
     if (_measureHandler != null)
     {
       _measureHandler.onVertexDeselection(this);
+    }
+  }
+
+  public final void cleanUI()
+  {
+    _verticesSpheres.clear();
+  
+    if (_shapesRenderer != null)
+    {
+      _shapesRenderer.removeAllShapes(new Measure_ShapeFilter(_instanceID), true); // deleteShapes
+    }
+    if (_meshRenderer != null)
+    {
+      _meshRenderer.removeAllMeshes(new Measure_MeshFilter(_instanceID), true); // deleteMeshes
+    }
+    if (_marksRenderer != null)
+    {
+      _marksRenderer.removeAllMarks(new Measure_MarkFilter(_instanceID), false, true); // deleteMarks -  animated
+    }
+  
+    if (_compositeRenderer != null)
+    {
+      _compositeRenderer.removeAllRenderers();
     }
   }
 

@@ -71,11 +71,28 @@ public class MeasureRenderer extends DefaultRenderer
     _measures.add(measure);
   }
 
+  public final boolean removeMeasure(Measure measure)
+  {
+    for (int i = 0; i < _measures.size(); i++)
+    {
+      if (_measures.get(i) == measure)
+      {
+        measure.clearSelection();
+        measure.cleanUI();
+        _measures.remove(i);
+        return true;
+      }
+    }
+    return false;
+  }
+
   public final void removeAllMeasures()
   {
     for (int i = 0; i < _measures.size(); i++)
     {
       Measure measure = _measures.get(i);
+      measure.clearSelection();
+      measure.cleanUI();
       if (measure != null)
          measure.dispose();
     }

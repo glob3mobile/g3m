@@ -45,9 +45,28 @@ void MeasureRenderer::addMeasure(Measure* measure) {
   _measures.push_back(measure);
 }
 
+bool MeasureRenderer::removeMeasure(Measure* measure) {
+  for (size_t i = 0; i < _measures.size(); i++) {
+    if (_measures[i] == measure) {
+      measure->clearSelection();
+      measure->cleanUI();
+#ifdef C_CODE
+      _measures.erase(_measures.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _measures.remove(i);
+#endif
+      return true;
+    }
+  }
+  return false;
+}
+
 void MeasureRenderer::removeAllMeasures() {
   for (size_t i = 0; i < _measures.size(); i++) {
     Measure* measure = _measures[i];
+    measure->clearSelection();
+    measure->cleanUI();
     delete measure;
   }
   _measures.clear();

@@ -109,7 +109,6 @@ public:
   ~G3MXPointCloudDemoScene_PointSelectionListener() {
     //    delete _previousGeodetic;
     //    delete _previousCartesian;
-    delete _measure;
   }
 
   bool onSelectedPoint(XPCPointCloud* pointCloud,

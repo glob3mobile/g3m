@@ -42,6 +42,8 @@ public:
 
   void addMeasure(Measure* measure);
 
+  bool removeMeasure(Measure* measure);
+
   void removeAllMeasures();
   
 };

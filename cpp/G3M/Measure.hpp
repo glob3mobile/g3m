@@ -49,7 +49,7 @@ private:
 #else
   Planet*       _planet;
 #endif
-  
+
   void resetUI();
   void createVerticesSpheres();
   void createEdgeLines();
@@ -109,6 +109,8 @@ public:
   ~Measure();
 
   void clearSelection();
+
+  void cleanUI();
 
   void touchedOn(const int vertexIndex);
 
