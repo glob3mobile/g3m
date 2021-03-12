@@ -54,6 +54,8 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
     }
   }
 
+  const bool hasChangedPoints = (it.nextUInt8() != 0);
+
   std::vector<XPCTree*>* trees = new std::vector<XPCTree*>();
   {
     const IStringUtils* su = IStringUtils::instance();
@@ -77,6 +79,7 @@ XPCMetadata* XPCMetadata::fromBuffer(const IByteBuffer* buffer) {
                          minHeight,
                          maxHeight,
                          dimensions,
+                         hasChangedPoints,
                          trees);
 }
 
@@ -85,11 +88,13 @@ XPCMetadata::XPCMetadata(const Geodetic3D& averagePosition,
                          const double minHeight,
                          const double maxHeight,
                          const std::vector<XPCDimension*>* dimensions,
-                         const std::vector<XPCTree*>*      trees) :
+                         const bool hasChangedPoints,
+                         const std::vector<XPCTree*>* trees) :
 _averagePosition(averagePosition),
 _minHeight(minHeight),
 _maxHeight(maxHeight),
 _dimensions(dimensions),
+_hasChangedPoints(hasChangedPoints),
 _trees(trees),
 _treesSize( _trees->size() )
 {

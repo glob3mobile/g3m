@@ -24,7 +24,7 @@ public class Measure_VertexShape extends EllipsoidShape
 
   public final boolean touched(G3MEventContext ec)
   {
-    _measure.touchedOn(_vertexIndex);
+    _measure.toggleSelection(_vertexIndex);
 
     return true;
   }

@@ -363,7 +363,7 @@ public class Measure
     }
   }
 
-  public final void touchedOn(int vertexIndex)
+  public final void toggleSelection(int vertexIndex)
   {
     if (vertexIndex == _selectedVertexIndex)
     {

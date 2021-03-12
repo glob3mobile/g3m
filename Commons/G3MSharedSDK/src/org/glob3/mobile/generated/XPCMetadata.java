@@ -69,6 +69,8 @@ public class XPCMetadata
       }
     }
   
+    final boolean hasChangedPoints = (it.nextUInt8() != 0);
+  
     java.util.ArrayList<XPCTree> trees = new java.util.ArrayList<XPCTree>();
     {
       final IStringUtils su = IStringUtils.instance();
@@ -90,7 +92,7 @@ public class XPCMetadata
       throw new RuntimeException("Logic error");
     }
   
-    return new XPCMetadata(averagePosition, minHeight, maxHeight, dimensions, trees);
+    return new XPCMetadata(averagePosition, minHeight, maxHeight, dimensions, hasChangedPoints, trees);
   }
 
   public final Geodetic3D _averagePosition ;
@@ -181,19 +183,26 @@ public class XPCMetadata
     }
   }
 
+  public final boolean hasChangedPoints()
+  {
+    return _hasChangedPoints;
+  }
+
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  XPCMetadata(XPCMetadata that);
 
   private final java.util.ArrayList<XPCDimension> _dimensions;
+  private final boolean _hasChangedPoints;
   private final java.util.ArrayList<XPCTree> _trees;
   private final int _treesSize;
 
-  private XPCMetadata(Geodetic3D averagePosition, double minHeight, double maxHeight, java.util.ArrayList<XPCDimension> dimensions, java.util.ArrayList<XPCTree> trees)
+  private XPCMetadata(Geodetic3D averagePosition, double minHeight, double maxHeight, java.util.ArrayList<XPCDimension> dimensions, boolean hasChangedPoints, java.util.ArrayList<XPCTree> trees)
   {
      _averagePosition = new Geodetic3D(averagePosition);
      _minHeight = minHeight;
      _maxHeight = maxHeight;
      _dimensions = dimensions;
+     _hasChangedPoints = hasChangedPoints;
      _trees = trees;
      _treesSize = _trees.size();
   

@@ -112,7 +112,7 @@ public:
 
   void cleanUI();
 
-  void touchedOn(const int vertexIndex);
+  void toggleSelection(const int vertexIndex);
 
   void setClosed(const bool closed);
 

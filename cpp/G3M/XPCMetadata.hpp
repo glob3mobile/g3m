@@ -59,10 +59,15 @@ public:
 
   void reloadNodes();
 
+  bool hasChangedPoints() const {
+    return _hasChangedPoints;
+  }
+
 private:
   XPCMetadata(const XPCMetadata& that);
 
   const std::vector<XPCDimension*>* _dimensions;
+  const bool                        _hasChangedPoints;
   const std::vector<XPCTree*>*      _trees;
   const size_t                      _treesSize;
   
@@ -70,7 +75,8 @@ private:
               const double minHeight,
               const double maxHeight,
               const std::vector<XPCDimension*>* dimensions,
-              const std::vector<XPCTree*>*      trees);
+              const bool hasChangedPoints,
+              const std::vector<XPCTree*>* trees);
 
 };
 

@@ -147,7 +147,7 @@ public:
   }
 
   bool touched(const G3MEventContext* ec) {
-    _measure->touchedOn(_vertexIndex);
+    _measure->toggleSelection(_vertexIndex);
 
     return true;
   }
@@ -210,7 +210,7 @@ void Measure::initialize(ShapesRenderer*    shapesRenderer,
   resetUI();
 }
 
-void Measure::touchedOn(const int vertexIndex) {
+void Measure::toggleSelection(const int vertexIndex) {
   if (vertexIndex == _selectedVertexIndex) {
     _verticesSpheres[_selectedVertexIndex]->setSelected(false);
     _selectedVertexIndex = -1;
