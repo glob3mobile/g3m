@@ -30,6 +30,7 @@
 #include <G3M/ShapesRenderer.hpp>
 #include <G3M/EllipsoidShape.hpp>
 #include <G3M/Planet.hpp>
+#include <G3M/LayoutUtils.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -190,8 +191,28 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height + 10000));
 
 
-
   double size = 1000.0;
+
+  {
+    std::vector<Geodetic3D*> positions = LayoutUtils::splitOverCircle(g3mWidget->getG3MContext()->getPlanet(),
+                                                                      geoPos,
+                                                                      size,
+                                                                      4);
+
+    for (size_t i = 0; i < positions.size(); i++) {
+      Geodetic3D* position = positions[i];
+
+      Mark* mark = new Mark(IStringUtils::instance()->toString( (long long) i ),
+                            *position,
+                            ABSOLUTE,
+                            0 /* minDistanceToCamera */);
+
+      model->getMarksRenderer()->addMark(mark);
+
+      delete position;
+    }
+  }
+
   EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),
                                                  AltitudeMode::ABSOLUTE,
                                                  Vector3D(size, size, size),

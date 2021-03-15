@@ -512,7 +512,7 @@ void XPCNode::cancel() {
   unloadChildren();
 }
 
-void XPCNode::reload() {
+void XPCNode::clean() {
   if (_loadingContent) {
     _loadingContent = false;
     cancelLoadContent();

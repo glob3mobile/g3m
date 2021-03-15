@@ -57,7 +57,7 @@ public:
 
   void cancel();
 
-  void reloadNodes();
+  void cleanNodes();
 
   bool hasChangedPoints() const {
     return _hasChangedPoints;

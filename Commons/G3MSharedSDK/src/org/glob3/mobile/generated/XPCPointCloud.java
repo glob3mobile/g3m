@@ -30,7 +30,11 @@ package org.glob3.mobile.generated;
 //class Vector3D;
 //class Geodetic3D;
 //class ITimer;
-//class BoundingVolume;
+//class Sphere;
+//class XPCDimension;
+//class XPCPointCloudUpdateListener;
+//class Planet;
+//class IThreadUtils;
 
 
 public class XPCPointCloud extends RCObject
@@ -76,8 +80,12 @@ public class XPCPointCloud extends RCObject
   private long _lastRenderedCount;
 
 
-  private BoundingVolume _selection;
-  private BoundingVolume _fence;
+  private Sphere _selection;
+  private Sphere _fence;
+
+  private Planet _planet;
+  private IThreadUtils _threadUtils;
+  private IDownloader _downloader;
 
   private void initializePointColorizer()
   {
@@ -202,6 +210,9 @@ public class XPCPointCloud extends RCObject
      _canceled = false;
      _selection = null;
      _fence = null;
+     _planet = null;
+     _downloader = null;
+     _threadUtils = null;
   
   }
 
@@ -230,7 +241,7 @@ public class XPCPointCloud extends RCObject
       if (_metadata != null)
       {
         initializePointColorizer();
-        _metadata.reloadNodes();
+        _metadata.cleanNodes();
       }
     }
     _deletePointColorizer = deletePointColorizer;
@@ -269,7 +280,7 @@ public class XPCPointCloud extends RCObject
   
       if (_metadata != null)
       {
-        _metadata.reloadNodes();
+        _metadata.cleanNodes();
       }
     }
   }
@@ -282,7 +293,7 @@ public class XPCPointCloud extends RCObject
   
       if (_metadata != null)
       {
-        _metadata.reloadNodes();
+        _metadata.cleanNodes();
       }
     }
   }
@@ -295,7 +306,7 @@ public class XPCPointCloud extends RCObject
   
       if (_metadata != null)
       {
-        _metadata.reloadNodes();
+        _metadata.cleanNodes();
       }
     }
   }
@@ -345,7 +356,7 @@ public class XPCPointCloud extends RCObject
     return _depthTest;
   }
 
-  public final void initialize(G3MContext context)
+  public final void loadMetadata()
   {
     _downloadingMetadata = true;
     _errorDownloadingMetadata = false;
@@ -355,7 +366,16 @@ public class XPCPointCloud extends RCObject
   
     ILogger.instance().logInfo("Downloading metadata for \"%s\"", _cloudName);
   
-    context.getDownloader().requestBuffer(metadataURL, _downloadPriority + 200, _timeToCache, _readExpired, new XPCMetadataDownloadListener(this, context.getThreadUtils()), true);
+    _downloader.requestBuffer(metadataURL, _downloadPriority + 200, _timeToCache, _readExpired, new XPCMetadataDownloadListener(this, _threadUtils), true);
+  }
+
+  public final void initialize(G3MContext context)
+  {
+    _planet = context.getPlanet();
+    _downloader = context.getDownloader();
+    _threadUtils = context.getThreadUtils();
+  
+    loadMetadata();
   }
 
   public final RenderState getRenderState(G3MRenderContext rc)
@@ -451,7 +471,7 @@ public class XPCPointCloud extends RCObject
   
     if ((_requiredDimensionIndices == null) || (_requiredDimensionIndices.size() == 0))
     {
-      isb.addString("?draftPoints");
+      isb.addString("?draftPoints=");
       isb.addBool(_draftPoints);
     }
     else
@@ -521,7 +541,7 @@ public class XPCPointCloud extends RCObject
     }
   }
 
-  public final void setSelection(BoundingVolume selection)
+  public final void setSelection(Sphere selection)
   {
     if (_selection != selection)
     {
@@ -532,16 +552,16 @@ public class XPCPointCloud extends RCObject
   
       if (_metadata != null)
       {
-        _metadata.reloadNodes();
+        _metadata.cleanNodes();
       }
     }
   }
-  public final BoundingVolume getSelection()
+  public final Sphere getSelection()
   {
     return _selection;
   }
 
-  public final void setFence(BoundingVolume fence)
+  public final void setFence(Sphere fence)
   {
     if (_fence != fence)
     {
@@ -552,11 +572,11 @@ public class XPCPointCloud extends RCObject
   
       if (_metadata != null)
       {
-        _metadata.reloadNodes();
+        _metadata.cleanNodes();
       }
     }
   }
-  public final BoundingVolume getFence()
+  public final Sphere getFence()
   {
     return _fence;
   }
@@ -569,8 +589,114 @@ public class XPCPointCloud extends RCObject
   
       if (_metadata != null)
       {
-        _metadata.reloadNodes();
+        _metadata.cleanNodes();
       }
+    }
+  }
+
+  public final void deletePointsIn(Sphere volume, XPCPointCloudUpdateListener listener, boolean deleteListener)
+  {
+    if ((_planet == null) || (_downloader == null))
+    {
+      listener.onPointCloudUpdateFail("Point Cloud is not yet initialized!");
+      if (deleteListener)
+      {
+        if (listener != null)
+           listener.dispose();
+      }
+      return;
+    }
+  
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_cloudName);
+  
+    final Geodetic3D center = _planet.toGeodetic3D(volume._center);
+    isb.addString("?sphereCenterLatitude=");
+    isb.addDouble(center._latitude._degrees);
+    isb.addString("&sphereCenterLongitude=");
+    isb.addDouble(center._longitude._degrees);
+    isb.addString("&sphereCenterHeight=");
+    isb.addDouble(center._height - _deltaHeight);
+    isb.addString("&sphereRadius=");
+    isb.addDouble(volume._radius);
+  
+    isb.addString("&operation=deletePoints");
+  
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    final URL url = new URL(_serverURL, path);
+  
+    _downloader.requestBuffer(url, DownloadPriority.HIGHEST + 1, TimeInterval.zero(), false, new XPCPointCloud_OperationBufferDownloadListener(this, listener, deleteListener), true); // deleteListener
+  }
+
+  public final void updatePointsIn(Sphere volume, XPCDimension dimension, String value, XPCPointCloudUpdateListener listener, boolean deleteListener)
+  {
+    if ((_planet == null) || (_downloader == null))
+    {
+      listener.onPointCloudUpdateFail("Point Cloud is not yet initialized!");
+      if (deleteListener)
+      {
+        if (listener != null)
+           listener.dispose();
+      }
+      return;
+    }
+  
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_cloudName);
+  
+    final Geodetic3D center = _planet.toGeodetic3D(volume._center);
+    isb.addString("?sphereCenterLatitude=");
+    isb.addDouble(center._latitude._degrees);
+    isb.addString("&sphereCenterLongitude=");
+    isb.addDouble(center._longitude._degrees);
+    isb.addString("&sphereCenterHeight=");
+    isb.addDouble(center._height - _deltaHeight);
+    isb.addString("&sphereRadius=");
+    isb.addDouble(volume._radius);
+  
+    isb.addString("&operation=updatePoints");
+  
+    isb.addString("&dimension=");
+    isb.addString(dimension._name);
+  
+    isb.addString("&value=");
+    isb.addString(value);
+  
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    final URL url = new URL(_serverURL, path);
+  
+    _downloader.requestBuffer(url, DownloadPriority.HIGHEST + 1, TimeInterval.zero(), false, new XPCPointCloud_OperationBufferDownloadListener(this, listener, deleteListener), true); // deleteListener
+  }
+
+  public final void onUpdateSuccess()
+  {
+    if (_metadata != null)
+    {
+      _metadata.cleanNodes();
+      if (_metadata != null)
+         _metadata.dispose();
+      _metadata = null;
+  
+      loadMetadata();
+    }
+  }
+
+  public final void onUpdateFail()
+  {
+    if (_metadata != null)
+    {
+      _metadata.cleanNodes();
+      if (_metadata != null)
+         _metadata.dispose();
+      _metadata = null;
+  
+      loadMetadata();
     }
   }
 

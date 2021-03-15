@@ -17,13 +17,93 @@
 #include "IDeviceInfo.hpp"
 #include "IIntBuffer.hpp"
 #include "IStringBuilder.hpp"
-#include "BoundingVolume.hpp"
+#include "Sphere.hpp"
+#include "Planet.hpp"
+#include "DownloadPriority.hpp"
+#include "XPCDimension.hpp"
+#include "XPCPointCloudUpdateListener.hpp"
+#include "ByteBufferIterator.hpp"
+#include "ErrorHandling.hpp"
 
 #include "XPCMetadata.hpp"
 #include "XPCMetadataListener.hpp"
 #include "XPCPointSelectionListener.hpp"
 #include "XPCPointColorizer.hpp"
 #include "XPCSelectionResult.hpp"
+
+
+class XPCPointCloud_OperationBufferDownloadListener : public IBufferDownloadListener {
+private:
+  XPCPointCloud*               _pointCloud;
+  XPCPointCloudUpdateListener* _listener;
+  const bool                   _deleteListener;
+
+public:
+  XPCPointCloud_OperationBufferDownloadListener(XPCPointCloud* pointCloud,
+                                                XPCPointCloudUpdateListener* listener,
+                                                bool deleteListener) :
+  _pointCloud(pointCloud),
+  _listener(listener),
+  _deleteListener(deleteListener)
+  {
+    _pointCloud->_retain();
+  }
+
+  ~XPCPointCloud_OperationBufferDownloadListener() {
+    if (_deleteListener) {
+      delete _listener;
+    }
+
+    _pointCloud->_release();
+  }
+
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+
+    ByteBufferIterator it(buffer);
+
+    unsigned char version = it.nextUInt8();
+    if (version != 1) {
+      ILogger::instance()->logError("Unsupported format version");
+      return;
+    }
+
+    const bool success = (it.nextUInt8() != 0);
+    if (success) {
+      const long long updatedPoints = it.nextInt64();
+      _listener->onPointCloudUpdateSuccess(updatedPoints);
+      _pointCloud->onUpdateSuccess();
+    }
+    else {
+      const std::string errorMessage = it.nextZeroTerminatedString();
+      _listener->onPointCloudUpdateFail(errorMessage);
+      _pointCloud->onUpdateFail();
+    }
+
+    if (it.hasNext()) {
+      THROW_EXCEPTION("Logic error");
+    }
+
+    delete buffer;
+  }
+
+  void onError(const URL& url) {
+    _listener->onPointCloudUpdateFail("Communication error: " + url._path);
+    _pointCloud->onUpdateFail();
+  }
+
+  void onCancel(const URL& url) {
+    // do nothing
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+    // do nothing
+  }
+
+};
 
 
 class XPCMetadataParserAsyncTask : public GAsyncTask {
@@ -169,26 +249,37 @@ _lastRenderedCount(0),
 _requiredDimensionIndices(NULL),
 _canceled(false),
 _selection(NULL),
-_fence(NULL)
+_fence(NULL),
+_planet(NULL),
+_downloader(NULL),
+_threadUtils(NULL)
 {
   
 }
 
-void XPCPointCloud::initialize(const G3MContext* context) {
+void XPCPointCloud::loadMetadata() {
   _downloadingMetadata      = true;
   _errorDownloadingMetadata = false;
   _errorParsingMetadata     = false;
-  
+
   const URL metadataURL(_serverURL, _cloudName);
-  
+
   ILogger::instance()->logInfo("Downloading metadata for \"%s\"", _cloudName.c_str());
-  
-  context->getDownloader()->requestBuffer(metadataURL,
-                                          _downloadPriority + 200,
-                                          _timeToCache,
-                                          _readExpired,
-                                          new XPCMetadataDownloadListener(this, context->getThreadUtils()),
-                                          true);
+
+  _downloader->requestBuffer(metadataURL,
+                             _downloadPriority + 200,
+                             _timeToCache,
+                             _readExpired,
+                             new XPCMetadataDownloadListener(this, _threadUtils),
+                             true);
+}
+
+void XPCPointCloud::initialize(const G3MContext* context) {
+  _planet      = context->getPlanet();
+  _downloader  = context->getDownloader();
+  _threadUtils = context->getThreadUtils();
+
+  loadMetadata();
 }
 
 void XPCPointCloud::errorDownloadingMetadata() {
@@ -238,7 +329,6 @@ void XPCPointCloud::parsedMetadata(XPCMetadata* metadata) {
     _metadataListener = NULL;
   }
 }
-
 
 XPCPointCloud::~XPCPointCloud() {
   if (_deletePointColorizer) {
@@ -313,7 +403,7 @@ long long XPCPointCloud::requestNodeContentBuffer(IDownloader* downloader,
   isb->addString(nodeID.empty() ? "-root-" : nodeID);
   
   if ((_requiredDimensionIndices == NULL) || (_requiredDimensionIndices->size() == 0)) {
-    isb->addString("?draftPoints");
+    isb->addString("?draftPoints=");
     isb->addBool(_draftPoints);
   }
   else {
@@ -413,7 +503,7 @@ void XPCPointCloud::setPointColorizer(XPCPointColorizer* pointColorizer,
 
     if (_metadata != NULL) {
       initializePointColorizer();
-      _metadata->reloadNodes();
+      _metadata->cleanNodes();
     }
   }
   _deletePointColorizer = deletePointColorizer;
@@ -436,7 +526,7 @@ void XPCPointCloud::setDepthTest(const bool depthTest) {
     _depthTest = depthTest;
 
     if (_metadata != NULL) {
-      _metadata->reloadNodes();
+      _metadata->cleanNodes();
     }
   }
 }
@@ -446,7 +536,7 @@ void XPCPointCloud::setVerticalExaggeration(const float verticalExaggeration) {
     _verticalExaggeration = verticalExaggeration;
 
     if (_metadata != NULL) {
-      _metadata->reloadNodes();
+      _metadata->cleanNodes();
     }
   }
 }
@@ -456,49 +546,155 @@ void XPCPointCloud::setDeltaHeight(const double deltaHeight) {
     _deltaHeight = deltaHeight;
 
     if (_metadata != NULL) {
-      _metadata->reloadNodes();
+      _metadata->cleanNodes();
     }
   }
 }
 
-void XPCPointCloud::setFence(BoundingVolume* fence) {
+void XPCPointCloud::setFence(Sphere* fence) {
   if (_fence != fence) {
     delete _fence;
 
     _fence = fence;
 
     if (_metadata != NULL) {
-      _metadata->reloadNodes();
+      _metadata->cleanNodes();
     }
   }
 }
 
-const BoundingVolume* XPCPointCloud::getFence() const {
+const Sphere* XPCPointCloud::getFence() const {
   return _fence;
-};
+}
 
-void XPCPointCloud::setSelection(BoundingVolume* selection) {
+void XPCPointCloud::setSelection(Sphere* selection) {
   if (_selection != selection) {
     delete _selection;
 
     _selection = selection;
 
     if (_metadata != NULL) {
-      _metadata->reloadNodes();
+      _metadata->cleanNodes();
     }
   }
 }
 
-const BoundingVolume* XPCPointCloud::getSelection() const {
+const Sphere* XPCPointCloud::getSelection() const {
   return _selection;
-};
+}
 
 void XPCPointCloud::setDraftPoints(bool draftPoints) {
   if (_draftPoints != draftPoints) {
     _draftPoints = draftPoints;
 
     if (_metadata != NULL) {
-      _metadata->reloadNodes();
+      _metadata->cleanNodes();
     }
+  }
+}
+
+void XPCPointCloud::deletePointsIn(const Sphere& volume,
+                                   XPCPointCloudUpdateListener* listener,
+                                   bool deleteListener) {
+  if ((_planet == NULL) || (_downloader == NULL)) {
+    listener->onPointCloudUpdateFail("Point Cloud is not yet initialized!");
+    if (deleteListener) {
+      delete listener;
+    }
+    return;
+  }
+
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_cloudName);
+
+  const Geodetic3D center = _planet->toGeodetic3D(volume._center);
+  isb->addString("?sphereCenterLatitude=");
+  isb->addDouble(center._latitude._degrees);
+  isb->addString("&sphereCenterLongitude=");
+  isb->addDouble(center._longitude._degrees);
+  isb->addString("&sphereCenterHeight=");
+  isb->addDouble(center._height - _deltaHeight);
+  isb->addString("&sphereRadius=");
+  isb->addDouble(volume._radius);
+
+  isb->addString("&operation=deletePoints");
+
+  const std::string path = isb->getString();
+  delete isb;
+
+  const URL url(_serverURL, path);
+
+  _downloader->requestBuffer(url,
+                             DownloadPriority::HIGHEST + 1,
+                             TimeInterval::zero(),
+                             false,
+                             new XPCPointCloud_OperationBufferDownloadListener(this, listener, deleteListener),
+                             true /* deleteListener */);
+}
+
+void XPCPointCloud::updatePointsIn(const Sphere& volume,
+                                   const XPCDimension& dimension,
+                                   const std::string& value,
+                                   XPCPointCloudUpdateListener* listener,
+                                   bool deleteListener) {
+  if ((_planet == NULL) || (_downloader == NULL)) {
+    listener->onPointCloudUpdateFail("Point Cloud is not yet initialized!");
+    if (deleteListener) {
+      delete listener;
+    }
+    return;
+  }
+
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_cloudName);
+
+  const Geodetic3D center = _planet->toGeodetic3D(volume._center);
+  isb->addString("?sphereCenterLatitude=");
+  isb->addDouble(center._latitude._degrees);
+  isb->addString("&sphereCenterLongitude=");
+  isb->addDouble(center._longitude._degrees);
+  isb->addString("&sphereCenterHeight=");
+  isb->addDouble(center._height - _deltaHeight);
+  isb->addString("&sphereRadius=");
+  isb->addDouble(volume._radius);
+
+  isb->addString("&operation=updatePoints");
+
+  isb->addString("&dimension=");
+  isb->addString(dimension._name);
+
+  isb->addString("&value=");
+  isb->addString(value);
+
+  const std::string path = isb->getString();
+  delete isb;
+
+  const URL url(_serverURL, path);
+
+  _downloader->requestBuffer(url,
+                             DownloadPriority::HIGHEST + 1,
+                             TimeInterval::zero(),
+                             false,
+                             new XPCPointCloud_OperationBufferDownloadListener(this, listener, deleteListener),
+                             true /* deleteListener */);
+}
+
+void XPCPointCloud::onUpdateSuccess() {
+  if (_metadata != NULL) {
+    _metadata->cleanNodes();
+    delete _metadata;
+    _metadata = NULL;
+
+    loadMetadata();
+  }
+}
+
+void XPCPointCloud::onUpdateFail() {
+  if (_metadata != NULL) {
+    _metadata->cleanNodes();
+    delete _metadata;
+    _metadata = NULL;
+
+    loadMetadata();
   }
 }

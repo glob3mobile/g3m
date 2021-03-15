@@ -174,12 +174,12 @@ public class XPCMetadata
     }
   }
 
-  public final void reloadNodes()
+  public final void cleanNodes()
   {
     for (int i = 0; i < _treesSize; i++)
     {
       XPCTree tree = _trees.get(i);
-      tree.reloadNodes();
+      tree.cleanNodes();
     }
   }
 

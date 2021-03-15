@@ -916,6 +916,7 @@
 		CF66099E23DF332400795C7F /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CF4027DC1770E7B900D5A80C /* SRWebSocket.m */; };
 		CF66099F23DF332400795C7F /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
 		CF6609A023DF332400795C7F /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
+		CF709CF225FCE254004F3191 /* XPCPointCloudUpdateListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF709CF025FCE254004F3191 /* XPCPointCloudUpdateListener.cpp */; };
 		CF7FB77625C5759A0009313E /* MeasureHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7FB77425C5759A0009313E /* MeasureHandler.cpp */; };
 		CF7FB77925C57A2E0009313E /* MeasureHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FB77525C5759A0009313E /* MeasureHandler.hpp */; };
 		CF7FB77A25C57A2E0009313E /* XPCSelectionResult.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF8CFCD925BB11F500326563 /* XPCSelectionResult.hpp */; };
@@ -2388,6 +2389,8 @@
 		CF6604AC23DF2DAB00795C7F /* InfoDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoDisplay.cpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
+		CF709CF025FCE254004F3191 /* XPCPointCloudUpdateListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCPointCloudUpdateListener.cpp; sourceTree = "<group>"; };
+		CF709CF125FCE254004F3191 /* XPCPointCloudUpdateListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCPointCloudUpdateListener.hpp; sourceTree = "<group>"; };
 		CF7FB77425C5759A0009313E /* MeasureHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeasureHandler.cpp; sourceTree = "<group>"; };
 		CF7FB77525C5759A0009313E /* MeasureHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeasureHandler.hpp; sourceTree = "<group>"; };
 		CF7FB77C25C5A5500009313E /* ShapeFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShapeFilter.cpp; sourceTree = "<group>"; };
@@ -2635,6 +2638,8 @@
 				CF27452D25B2F73C0056304B /* XPCParsing.hpp */,
 				CF27451F25B1D2CC0056304B /* XPCPointCloud.cpp */,
 				CF27452025B1D2CC0056304B /* XPCPointCloud.hpp */,
+				CF709CF025FCE254004F3191 /* XPCPointCloudUpdateListener.cpp */,
+				CF709CF125FCE254004F3191 /* XPCPointCloudUpdateListener.hpp */,
 				CF27451325B1D0700056304B /* XPCPointColorizer.cpp */,
 				CF27451425B1D0700056304B /* XPCPointColorizer.hpp */,
 				CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */,
@@ -3915,6 +3920,7 @@
 				CF6608B223DF330600795C7F /* GEO3DGeometry.cpp in Sources */,
 				D8FF64A025E0897700B6C9D4 /* Arrow.cpp in Sources */,
 				CF6608B323DF330600795C7F /* HereLayer.cpp in Sources */,
+				CF709CF225FCE254004F3191 /* XPCPointCloudUpdateListener.cpp in Sources */,
 				CF6608B423DF330600795C7F /* PlanetRenderer.cpp in Sources */,
 				CF6608B523DF330600795C7F /* JSONNumber.cpp in Sources */,
 				CF6608B623DF330600795C7F /* CanvasElement.cpp in Sources */,

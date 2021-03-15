@@ -2,14 +2,15 @@
 
 package org.glob3.mobile.specific;
 
-import java.util.Random;
 
-import org.glob3.mobile.generated.IMathUtils;
+import java.util.*;
+
+import org.glob3.mobile.generated.*;
 
 
 public class MathUtils_JavaDesktop
-         extends
-            IMathUtils {
+                                   extends
+                                      IMathUtils {
 
    private final Random _random = new Random();
 

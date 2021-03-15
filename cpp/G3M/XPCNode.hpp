@@ -123,7 +123,7 @@ public:
 
   void cancel();
 
-  void reload();
+  void clean();
 
 };
 

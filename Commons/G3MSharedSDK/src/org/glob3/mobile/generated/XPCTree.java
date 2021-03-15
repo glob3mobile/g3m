@@ -85,9 +85,9 @@ public class XPCTree
     _rootNode.cancel();
   }
 
-  public final void reloadNodes()
+  public final void cleanNodes()
   {
-    _rootNode.reload();
+    _rootNode.clean();
   }
 
 }
