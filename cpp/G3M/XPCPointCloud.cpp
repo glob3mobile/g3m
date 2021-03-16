@@ -703,7 +703,7 @@ void XPCPointCloud::cancelDraftPoints() {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_cloudName);
 
-  isb->addString("&operation=cancelDraftPoints");
+  isb->addString("?operation=cancelDraftPoints");
 
   const std::string path = isb->getString();
   delete isb;
@@ -726,7 +726,7 @@ void XPCPointCloud::acceptDraftPoints() {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString(_cloudName);
 
-  isb->addString("&operation=acceptDraftPoints");
+  isb->addString("?operation=acceptDraftPoints");
 
   const std::string path = isb->getString();
   delete isb;

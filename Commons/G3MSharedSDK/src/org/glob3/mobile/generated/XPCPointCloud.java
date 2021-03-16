@@ -684,7 +684,7 @@ public class XPCPointCloud extends RCObject
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_cloudName);
   
-    isb.addString("&operation=cancelDraftPoints");
+    isb.addString("?operation=cancelDraftPoints");
   
     final String path = isb.getString();
     if (isb != null)
@@ -705,7 +705,7 @@ public class XPCPointCloud extends RCObject
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString(_cloudName);
   
-    isb.addString("&operation=acceptDraftPoints");
+    isb.addString("?operation=acceptDraftPoints");
   
     final String path = isb.getString();
     if (isb != null)
