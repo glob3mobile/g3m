@@ -72,13 +72,17 @@ public:
     const bool success = (it.nextUInt8() != 0);
     if (success) {
       const long long updatedPoints = it.nextInt64();
-      _listener->onPointCloudUpdateSuccess(updatedPoints);
-      _pointCloud->onUpdateSuccess();
+      if (_listener != NULL) {
+        _listener->onPointCloudUpdateSuccess(updatedPoints);
+      }
+      _pointCloud->reload();
     }
     else {
       const std::string errorMessage = it.nextZeroTerminatedString();
-      _listener->onPointCloudUpdateFail(errorMessage);
-      _pointCloud->onUpdateFail();
+      if (_listener != NULL) {
+        _listener->onPointCloudUpdateFail(errorMessage);
+      }
+      _pointCloud->reload();
     }
 
     if (it.hasNext()) {
@@ -89,8 +93,10 @@ public:
   }
 
   void onError(const URL& url) {
-    _listener->onPointCloudUpdateFail("Communication error: " + url._path);
-    _pointCloud->onUpdateFail();
+    if (_listener != NULL) {
+      _listener->onPointCloudUpdateFail("Communication error: " + url._path);
+    }
+    _pointCloud->reload();
   }
 
   void onCancel(const URL& url) {
@@ -679,7 +685,7 @@ void XPCPointCloud::updatePointsIn(const Sphere& volume,
                              true /* deleteListener */);
 }
 
-void XPCPointCloud::onUpdateSuccess() {
+void XPCPointCloud::reload() {
   if (_metadata != NULL) {
     _metadata->cleanNodes();
     delete _metadata;
@@ -689,12 +695,49 @@ void XPCPointCloud::onUpdateSuccess() {
   }
 }
 
-void XPCPointCloud::onUpdateFail() {
-  if (_metadata != NULL) {
-    _metadata->cleanNodes();
-    delete _metadata;
-    _metadata = NULL;
-
-    loadMetadata();
+void XPCPointCloud::cancelDraftPoints() {
+  if ((_planet == NULL) || (_downloader == NULL)) {
+    return;
   }
+
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_cloudName);
+
+  isb->addString("&operation=cancelDraftPoints");
+
+  const std::string path = isb->getString();
+  delete isb;
+
+  const URL url(_serverURL, path);
+
+  _downloader->requestBuffer(url,
+                             DownloadPriority::HIGHEST + 1,
+                             TimeInterval::zero(),
+                             false,
+                             new XPCPointCloud_OperationBufferDownloadListener(this, NULL, false),
+                             true /* deleteListener */);
 }
+
+void XPCPointCloud::acceptDraftPoints() {
+  if ((_planet == NULL) || (_downloader == NULL)) {
+    return;
+  }
+
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_cloudName);
+
+  isb->addString("&operation=acceptDraftPoints");
+
+  const std::string path = isb->getString();
+  delete isb;
+
+  const URL url(_serverURL, path);
+
+  _downloader->requestBuffer(url,
+                             DownloadPriority::HIGHEST + 1,
+                             TimeInterval::zero(),
+                             false,
+                             new XPCPointCloud_OperationBufferDownloadListener(this, NULL, false),
+                             true /* deleteListener */);
+}
+

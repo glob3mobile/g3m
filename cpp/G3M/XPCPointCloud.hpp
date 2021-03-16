@@ -237,9 +237,11 @@ public:
                       XPCPointCloudUpdateListener* listener,
                       bool deleteListener);
 
-  void onUpdateSuccess();
+  void cancelDraftPoints();
 
-  void onUpdateFail();
+  void acceptDraftPoints();
+
+  void reload();
 
 };
 

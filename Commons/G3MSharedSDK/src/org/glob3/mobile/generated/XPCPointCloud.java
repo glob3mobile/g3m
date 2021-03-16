@@ -674,20 +674,49 @@ public class XPCPointCloud extends RCObject
     _downloader.requestBuffer(url, DownloadPriority.HIGHEST + 1, TimeInterval.zero(), false, new XPCPointCloud_OperationBufferDownloadListener(this, listener, deleteListener), true); // deleteListener
   }
 
-  public final void onUpdateSuccess()
+  public final void cancelDraftPoints()
   {
-    if (_metadata != null)
+    if ((_planet == null) || (_downloader == null))
     {
-      _metadata.cleanNodes();
-      if (_metadata != null)
-         _metadata.dispose();
-      _metadata = null;
-  
-      loadMetadata();
+      return;
     }
+  
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_cloudName);
+  
+    isb.addString("&operation=cancelDraftPoints");
+  
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    final URL url = new URL(_serverURL, path);
+  
+    _downloader.requestBuffer(url, DownloadPriority.HIGHEST + 1, TimeInterval.zero(), false, new XPCPointCloud_OperationBufferDownloadListener(this, null, false), true); // deleteListener
   }
 
-  public final void onUpdateFail()
+  public final void acceptDraftPoints()
+  {
+    if ((_planet == null) || (_downloader == null))
+    {
+      return;
+    }
+  
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_cloudName);
+  
+    isb.addString("&operation=acceptDraftPoints");
+  
+    final String path = isb.getString();
+    if (isb != null)
+       isb.dispose();
+  
+    final URL url = new URL(_serverURL, path);
+  
+    _downloader.requestBuffer(url, DownloadPriority.HIGHEST + 1, TimeInterval.zero(), false, new XPCPointCloud_OperationBufferDownloadListener(this, null, false), true); // deleteListener
+  }
+
+  public final void reload()
   {
     if (_metadata != null)
     {

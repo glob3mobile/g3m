@@ -40,18 +40,21 @@ public class XPCPointCloud_OperationBufferDownloadListener extends IBufferDownlo
     if (success)
     {
       final long updatedPoints = it.nextInt64();
-      _listener.onPointCloudUpdateSuccess(updatedPoints);
-      _pointCloud.onUpdateSuccess();
+      if (_listener != null)
+      {
+        _listener.onPointCloudUpdateSuccess(updatedPoints);
+      }
+      _pointCloud.reload();
     }
     else
     {
       final String errorMessage = it.nextZeroTerminatedString();
-      _listener.onPointCloudUpdateFail(errorMessage);
-      _pointCloud.onUpdateFail();
+      if (_listener != null)
+      {
+        _listener.onPointCloudUpdateFail(errorMessage);
+      }
+      _pointCloud.reload();
     }
-
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning ______________________ check parser, code server side ______________________
 
     if (it.hasNext())
     {
@@ -64,8 +67,11 @@ public class XPCPointCloud_OperationBufferDownloadListener extends IBufferDownlo
 
   public final void onError(URL url)
   {
-    _listener.onPointCloudUpdateFail("Communication error: " + url._path);
-    _pointCloud.onUpdateFail();
+    if (_listener != null)
+    {
+      _listener.onPointCloudUpdateFail("Communication error: " + url._path);
+    }
+    _pointCloud.reload();
   }
 
   public final void onCancel(URL url)
