@@ -144,7 +144,7 @@ public:
                              Color::fromRGBA(1, 1, 0, 0.6f),  // segmentColor
                              geodetic,                        // firstVertex
                              pointCloud->getVerticalExaggeration(),
-                              pointCloud->getDeltaHeight(),
+                             pointCloud->getDeltaHeight(),
                              true,                            // closed
                              new G3MXPointCloudDemoScene_MeasureHandler(),
                              true);
@@ -152,9 +152,7 @@ public:
       model->getMeasureRenderer()->addMeasure(_measure);
     }
     else {
-      _measure->addVertex(geodetic,
-                          pointCloud->getVerticalExaggeration(),
-                          pointCloud->getDeltaHeight());
+      _measure->addVertex(geodetic);
     }
 
     return true; // accepted point

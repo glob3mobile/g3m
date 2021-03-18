@@ -480,7 +480,7 @@ const bool XPCPointCloud::selectPoints(XPCSelectionResult* selectionResult) {
 }
 
 const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
-                                        const Geodetic3D& geodetic,
+                                        const Geodetic3D& scaledGeodetic,
                                         const std::string& treeID,
                                         const std::string& nodeID,
                                         const int pointIndex,
@@ -488,6 +488,10 @@ const bool XPCPointCloud::selectedPoint(const Vector3D& cartesian,
   if (_pointSelectionListener == NULL) {
     return false;
   }
+
+  Geodetic3D geodetic = Geodetic3D(scaledGeodetic._latitude,
+                                   scaledGeodetic._longitude,
+                                   (scaledGeodetic._height / _verticalExaggeration) - _deltaHeight);
 
   return _pointSelectionListener->onSelectedPoint(this,
                                                   cartesian,

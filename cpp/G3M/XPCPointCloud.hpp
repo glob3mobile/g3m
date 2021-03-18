@@ -211,7 +211,7 @@ public:
   const bool selectPoints(XPCSelectionResult* selectionResult);
   
   const bool selectedPoint(const Vector3D& cartesian,
-                           const Geodetic3D& geodetic,
+                           const Geodetic3D& scaledGeodetic,
                            const std::string& treeID,
                            const std::string& nodeID,
                            const int pointIndex,

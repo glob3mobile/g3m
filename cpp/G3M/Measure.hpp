@@ -35,6 +35,8 @@ private:
   const float  _segmentLineWidth;
   const Color  _segmentColor;
 
+  float  _verticalExaggeration;
+  double _deltaHeight;
   bool _closed;
   
   std::vector<const MeasureVertex*> _vertices;
@@ -73,8 +75,8 @@ public:
           const float segmentLineWidth,
           const Color& segmentColor,
           const Geodetic3D& firstVertex,
-          const float firstVerticalExaggeration,
-          const double firstVertexDeltaHeight,
+          const float verticalExaggeration,
+          const double deltaHeight,
           const bool closed,
           MeasureHandler* measureHandler,
           const bool deleteMeasureHandler);
@@ -91,20 +93,20 @@ public:
   
   const size_t getVerticesCount() const;
   
-  void addVertex(const Geodetic3D& vertex,
-                 const float verticalExaggeration,
-                 const double deltaHeight);
+  void addVertex(const Geodetic3D& vertex);
   
   void setVertex(const size_t i,
-                 const Geodetic3D& vertex,
-                 const float verticalExaggeration,
-                 const double deltaHeight);
+                 const Geodetic3D& vertex);
   
   bool removeVertex(const size_t i);
 
   const Geodetic3D getVertex(const size_t i) const;
-  const double getDeltaHeight(const size_t i) const;
-  const float getVerticalExaggeration(const size_t i) const;
+
+  const float getVerticalExaggeration() const;
+  const double getDeltaHeight() const;
+
+  void setVerticalExaggeration(float verticalExaggeration);
+  void setDeltaHeight(double deltaHeight);
 
   ~Measure();
 

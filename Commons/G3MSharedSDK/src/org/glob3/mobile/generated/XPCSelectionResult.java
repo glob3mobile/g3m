@@ -76,9 +76,9 @@ public class XPCSelectionResult
   public final boolean notifyPointCloud(Planet planet)
   {
     final Vector3D cartesian = _nearestPoint.asVector3D();
-    final Geodetic3D geodetic = planet.toGeodetic3D(cartesian);
+    final Geodetic3D scaledGeodetic = planet.toGeodetic3D(cartesian);
   
-    return _pointCloud.selectedPoint(cartesian, geodetic, _treeID, _nodeID, _pointIndex, IMathUtils.instance().sqrt(_nearestSquaredDistance));
+    return _pointCloud.selectedPoint(cartesian, scaledGeodetic, _treeID, _nodeID, _pointIndex, IMathUtils.instance().sqrt(_nearestSquaredDistance));
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

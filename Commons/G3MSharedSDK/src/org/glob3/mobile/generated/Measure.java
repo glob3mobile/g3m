@@ -39,6 +39,8 @@ public class Measure
   private final float _segmentLineWidth;
   private final Color _segmentColor ;
 
+  private float _verticalExaggeration;
+  private double _deltaHeight;
   private boolean _closed;
 
   private final java.util.ArrayList<MeasureVertex> _vertices = new java.util.ArrayList<MeasureVertex>();
@@ -74,7 +76,7 @@ public class Measure
     {
       final MeasureVertex vertex = _vertices.get(i);
   
-      Measure_VertexShape vertexSphere = new Measure_VertexShape(new Geodetic3D(vertex._geodetic), _vertexSphereRadius, _vertexColor, _vertexSelectedColor, this, _instanceID, i);
+      Measure_VertexShape vertexSphere = new Measure_VertexShape(new Geodetic3D(vertex.getScaledGeodetic(_verticalExaggeration, _deltaHeight)), _vertexSphereRadius, _vertexColor, _vertexSelectedColor, this, _instanceID, i);
   
       _verticesSpheres.add(vertexSphere);
   
@@ -99,12 +101,12 @@ public class Measure
   
     for (int i = 0; i < verticesCount; i++)
     {
-      fbb.add(_vertices.get(i)._geodetic);
+      fbb.add(_vertices.get(i).getScaledGeodetic(_verticalExaggeration, _deltaHeight));
     }
   
     if (_closed && (verticesCount >= 3))
     {
-      fbb.add(_vertices.get(0)._geodetic);
+      fbb.add(_vertices.get(0).getScaledGeodetic(_verticalExaggeration, _deltaHeight));
     }
   
     Mesh edgesLines = new DirectMesh(GLPrimitive.lineStrip(), true, fbb.getCenter(), fbb.create(), _segmentLineWidth, 1.0f, new Color(_segmentColor), null, false); // depthTest -  const IFloatBuffer* colors -  float pointSize
@@ -131,7 +133,7 @@ public class Measure
       return;
     }
   
-    final Geodetic3D position = Geodetic3D.linearInterpolation(from._geodetic, to._geodetic, 0.5);
+    final Geodetic3D position = Geodetic3D.linearInterpolation(from.getScaledGeodetic(_verticalExaggeration, _deltaHeight), to.getScaledGeodetic(_verticalExaggeration, _deltaHeight), 0.5);
   
     Mark mark = new Mark(label, new Geodetic3D(position._latitude, position._longitude, position._height + _vertexSphereRadius), AltitudeMode.ABSOLUTE);
     mark.setZoomInAppears(false);
@@ -202,7 +204,9 @@ public class Measure
         continue;
       }
   
-      Mark mark = new Mark(label, new Geodetic3D(current._geodetic._latitude, current._geodetic._longitude, current._geodetic._height + _vertexSphereRadius *2), AltitudeMode.ABSOLUTE);
+      final Geodetic3D currentGeodetic = current.getScaledGeodetic(_verticalExaggeration, _deltaHeight);
+  
+      Mark mark = new Mark(label, new Geodetic3D(currentGeodetic._latitude, currentGeodetic._longitude, currentGeodetic._height + _vertexSphereRadius *2), AltitudeMode.ABSOLUTE);
       mark.setZoomInAppears(false);
   
       mark.setToken(_instanceID);
@@ -218,7 +222,7 @@ public class Measure
   private final boolean _deleteMeasureHandler;
 
 
-  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, float firstVerticalExaggeration, double firstVertexDeltaHeight, boolean closed, MeasureHandler measureHandler, boolean deleteMeasureHandler)
+  public Measure(double vertexSphereRadius, Color vertexColor, Color vertexSelectedColor, float segmentLineWidth, Color segmentColor, Geodetic3D firstVertex, float verticalExaggeration, double deltaHeight, boolean closed, MeasureHandler measureHandler, boolean deleteMeasureHandler)
   {
      _instanceID = "_Measure_" + IStringUtils.instance().toString(INSTANCE_COUNTER++);
      _vertexSphereRadius = vertexSphereRadius;
@@ -226,6 +230,8 @@ public class Measure
      _vertexSelectedColor = vertexSelectedColor;
      _segmentLineWidth = segmentLineWidth;
      _segmentColor = segmentColor;
+     _verticalExaggeration = verticalExaggeration;
+     _deltaHeight = deltaHeight;
      _closed = closed;
      _measureHandler = measureHandler;
      _deleteMeasureHandler = deleteMeasureHandler;
@@ -235,7 +241,7 @@ public class Measure
      _marksRenderer = null;
      _compositeRenderer = null;
      _planet = null;
-    addVertex(firstVertex, firstVerticalExaggeration, firstVertexDeltaHeight);
+    addVertex(firstVertex);
   }
 
   public final void initialize(ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, CompositeRenderer compositeRenderer, Planet planet)
@@ -259,23 +265,23 @@ public class Measure
     return _vertices.size();
   }
 
-  public final void addVertex(Geodetic3D vertex, float verticalExaggeration, double deltaHeight)
+  public final void addVertex(Geodetic3D vertex)
   {
     clearSelection();
   
-    _vertices.add(new MeasureVertex(vertex, verticalExaggeration, deltaHeight));
+    _vertices.add(new MeasureVertex(vertex));
   
     resetUI();
   }
 
-  public final void setVertex(int i, Geodetic3D vertex, float verticalExaggeration, double deltaHeight)
+  public final void setVertex(int i, Geodetic3D vertex)
   {
     clearSelection();
   
     if (_vertices.get(i) != null)
        _vertices.get(i).dispose();
   
-    _vertices.set(i, new MeasureVertex(vertex, verticalExaggeration, deltaHeight));
+    _vertices.set(i, new MeasureVertex(vertex));
   
     resetUI();
   }
@@ -298,15 +304,38 @@ public class Measure
 
   public final Geodetic3D getVertex(int i)
   {
-    return _vertices.get(i)._geodetic;
+    return _vertices.get(i).getGeodetic();
+    //  return _vertices[i]->getScaledGeodetic(_verticalExaggeration, _deltaHeight);
   }
-  public final double getDeltaHeight(int i)
+
+  public final float getVerticalExaggeration()
   {
-    return _vertices.get(i)._deltaHeight;
+    return _verticalExaggeration;
   }
-  public final float getVerticalExaggeration(int i)
+  public final double getDeltaHeight()
   {
-    return _vertices.get(i)._verticalExaggeration;
+    return _deltaHeight;
+  }
+
+  public final void setVerticalExaggeration(float verticalExaggeration)
+  {
+    if (_verticalExaggeration != verticalExaggeration)
+    {
+      _verticalExaggeration = verticalExaggeration;
+  
+      clearSelection();
+      resetUI();
+    }
+  }
+  public final void setDeltaHeight(double deltaHeight)
+  {
+    if (_deltaHeight != deltaHeight)
+    {
+      _deltaHeight = deltaHeight;
+  
+      clearSelection();
+      resetUI();
+    }
   }
 
   public void dispose()
@@ -390,7 +419,7 @@ public class Measure
       {
         final MeasureVertex vertex = _vertices.get(_selectedVertexIndex);
   
-        _measureHandler.onVertexSelection(this, vertex._geodetic, vertex.getCartesian(_planet), _selectedVertexIndex);
+        _measureHandler.onVertexSelection(this, vertex.getScaledGeodetic(_verticalExaggeration, _deltaHeight), vertex.getCartesian(_planet), _selectedVertexIndex);
       }
     }
   }

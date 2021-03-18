@@ -98,11 +98,11 @@ bool XPCSelectionResult::evaluateCantidate(const MutableVector3D& cartesianPoint
 }
 
 const bool XPCSelectionResult::notifyPointCloud(const Planet* planet) {
-  const Vector3D   cartesian = _nearestPoint.asVector3D();
-  const Geodetic3D geodetic  = planet->toGeodetic3D(cartesian);
+  const Vector3D   cartesian      = _nearestPoint.asVector3D();
+  const Geodetic3D scaledGeodetic = planet->toGeodetic3D(cartesian);
 
   return _pointCloud->selectedPoint(cartesian,
-                                    geodetic,
+                                    scaledGeodetic,
                                     _treeID,
                                     _nodeID,
                                     _pointIndex,

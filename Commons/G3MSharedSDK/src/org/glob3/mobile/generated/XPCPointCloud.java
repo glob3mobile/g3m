@@ -522,12 +522,14 @@ public class XPCPointCloud extends RCObject
     return _metadata.selectPoints(selectionResult, this);
   }
 
-  public final boolean selectedPoint(Vector3D cartesian, Geodetic3D geodetic, String treeID, String nodeID, int pointIndex, double distanceToRay)
+  public final boolean selectedPoint(Vector3D cartesian, Geodetic3D scaledGeodetic, String treeID, String nodeID, int pointIndex, double distanceToRay)
   {
     if (_pointSelectionListener == null)
     {
       return false;
     }
+  
+    Geodetic3D geodetic = new Geodetic3D(scaledGeodetic._latitude, scaledGeodetic._longitude, (scaledGeodetic._height / _verticalExaggeration) - _deltaHeight);
   
     return _pointSelectionListener.onSelectedPoint(this, cartesian, geodetic, treeID, nodeID, pointIndex, distanceToRay);
   }
