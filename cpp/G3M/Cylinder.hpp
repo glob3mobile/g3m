@@ -19,15 +19,23 @@ class Cylinder{
 public:
   const Vector3D _start;
   const Vector3D _end;
-  const double _startRadius, _endRadius;
-  
+  const double   _startRadius;
+  const double   _endRadius;
+
   Cylinder(const Vector3D& start,
            const Vector3D& end,
            const double startRadius,
            const double endRadius):
-  _start(start), _end(end), _startRadius(startRadius), _endRadius(endRadius){}
+  _start(start),
+  _end(end),
+  _startRadius(startRadius),
+  _endRadius(endRadius)
+  {
+
+  }
   
-  Mesh* createMesh(const Color& color, const int nSegments) const;
+  Mesh* createMesh(const Color& color,
+                   const int nSegments) const;
   
 };
 

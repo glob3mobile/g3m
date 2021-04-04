@@ -17,7 +17,8 @@
 #include "Color.hpp"
 
 
-Mesh* Cylinder::createMesh(const Color& color, const int nSegments) const{
+Mesh* Cylinder::createMesh(const Color& color,
+                           const int nSegments) const{
   
   Vector3D d = _end.sub(_start);
   Vector3D r = (d._z == 0) ? Vector3D(0.0,0.0,1.0) : Vector3D(1.0, 1.0, (-d._x -d._y) / d._z);
@@ -54,22 +55,19 @@ Mesh* Cylinder::createMesh(const Color& color, const int nSegments) const{
   }
   indices.add((short) 0);
   indices.add((short) 1);
-  
+
   IndexedMesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     vertices->getCenter(),
                                     vertices->create(),
-                                    true,
+                                    true,              // bool ownsVertices
                                     indices.create(),
-                                    true,
-                                    1.0f,
-                                    1.0f,
-                                    new Color(color),
-                                    NULL,//colors.create(),
-                                    true,
-                                    normals->create(),
-                                    false,
-                                    0,
-                                    0);
+                                    true,              // bool ownsIndices
+                                    1.0f,              // float lineWidth
+                                    1.0f,              // float pointSize
+                                    new Color(color),  // const Color* flatColor
+                                    NULL,              // IFloatBuffer* colors
+                                    true,              // bool depthTest
+                                    normals->create());
   delete normals;
   delete vertices;
 

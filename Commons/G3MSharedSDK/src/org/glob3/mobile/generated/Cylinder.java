@@ -33,6 +33,7 @@ public class Cylinder
      _end = end;
      _startRadius = startRadius;
      _endRadius = endRadius;
+
   }
 
   public final Mesh createMesh(Color color, int nSegments)
@@ -73,7 +74,7 @@ public class Cylinder
     indices.add((short) 0);
     indices.add((short) 1);
   
-    IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1.0f, 1.0f, new Color(color), null, true, normals.create(), false, 0, 0); //colors.create(),
+    IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1.0f, 1.0f, new Color(color), null, true, normals.create()); // bool depthTest -  IFloatBuffer* colors -  const Color* flatColor -  float pointSize -  float lineWidth -  bool ownsIndices -  bool ownsVertices
     if (normals != null)
        normals.dispose();
     if (vertices != null)

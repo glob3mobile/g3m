@@ -232,11 +232,6 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   const double headWidthRatio            = 2.0;
   const double scaleArrowLengthSizeRatio = 0.15;
 
-//#define LINE_WIDTH_RATIO 0.01
-//#define HEAD_LENGTH_RATIO 0.05
-//#define HEAD_WIDTH_RATIO 1.5
-//#define SCALE_ARROW_LENGTH_SIZE_RATIO 0.15
-
   _gizmo = TranslateScaleGizmo::translateAndScale(context->getPlanet()->getCoordinateSystemAt(geoPos),
                                                   size,
                                                   scale,
@@ -245,12 +240,6 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
                                                   headLengthRatio,
                                                   headWidthRatio,
                                                   scaleArrowLengthSizeRatio);
-
-//  _gizmo = TranslateScaleGizmo::translate(context->getPlanet()->getCoordinateSystemAt(geoPos),
-//                                                              size,
-//                                                              lineWidthRatio,
-//                                                              headLengthRatio,
-//                                                              headWidthRatio);
 
   _gizmo->setListener(new GizmoListener(ellipsoid, context->getPlanet()));
   

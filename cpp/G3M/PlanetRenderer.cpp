@@ -440,7 +440,7 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
     delete _layerTilesRenderParameters;
     _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_errors);
     if (_layerTilesRenderParameters == NULL) {
-      ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
     }
     _layerTilesRenderParametersDirty = false;
 
@@ -629,7 +629,7 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
   if (_tileVisitor != NULL) {
     const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
     if (parameters == NULL) {
-      ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
       return;
     }
 

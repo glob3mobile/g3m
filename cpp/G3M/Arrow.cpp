@@ -36,12 +36,14 @@ _listener(NULL)
   if (doubleHeaded) {
     Cylinder arrowTip(Vector3D::ZERO,
                       tipVector,
-                      0.0, radius * headWidthRatio);
+                      0.0,
+                      radius * headWidthRatio);
     addMesh(arrowTip.createMesh(color, 10));
 
     Cylinder arrowTipCover(tipVector,
                            tipVector.add(_vector.normalized().times(0.0001).asVector3D()),
-                           radius * headWidthRatio, 0.0);
+                           radius * headWidthRatio,
+                           0.0);
     addMesh(arrowTipCover.createMesh(color, 10));
   }
 
@@ -53,7 +55,8 @@ _listener(NULL)
 
   Cylinder arrowTipCover(headBase,
                          headBase.sub(_vector.normalized().times(0.0001)),
-                         radius * headWidthRatio, 0.0);
+                         radius * headWidthRatio,
+                         0.0);
 
   addMesh(cylinder.createMesh(color, 10));
   addMesh(arrowTip.createMesh(color, 20));

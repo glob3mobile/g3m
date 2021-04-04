@@ -8,6 +8,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="com.gwtplugins.gwt.eclipse.core.GWT_CONTAINER/GWT 2.8.1"/>
+	<classpathentry kind="con" path="com.gwtplugins.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
