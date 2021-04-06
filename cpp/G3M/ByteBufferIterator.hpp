@@ -34,6 +34,8 @@ public:
 
   IByteBuffer* nextBufferUpTo(unsigned char sentinel);
 
+  IByteBuffer* nextBuffer(const size_t size);
+
   const std::string nextZeroTerminatedString();
 
   double nextDouble();

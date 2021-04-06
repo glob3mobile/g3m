@@ -8,6 +8,12 @@
 #include "CompositeRenderer.hpp"
 #include "ILogger.hpp"
 
+CompositeRenderer::~CompositeRenderer() {
+  for (int i = 0; i < _renderersSize; i++) {
+    delete _renderers[i];
+  }
+}
+
 void CompositeRenderer::initialize(const G3MContext* context) {
   _context = context;
 
@@ -16,16 +22,44 @@ void CompositeRenderer::initialize(const G3MContext* context) {
   }
 }
 
-void CompositeRenderer::addRenderer(Renderer *renderer) {
+void CompositeRenderer::addRenderer(Renderer* renderer) {
   addChildRenderer(new ChildRenderer(renderer));
 }
 
-void CompositeRenderer::addRenderer(Renderer *renderer,
+bool CompositeRenderer::removeRenderer(Renderer* renderer) {
+  for (size_t i = 0; i < _renderersSize; i++) {
+    ChildRenderer* childRenderer = _renderers[i];
+    if (childRenderer->getRenderer() == renderer) {
+#ifdef C_CODE
+      _renderers.erase(_renderers.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _renderers.remove(i);
+#endif
+      _renderersSize = _renderers.size();
+      delete childRenderer;
+      return true;
+    }
+  }
+  return false;
+}
+
+void CompositeRenderer::removeAllRenderers() {
+  for (size_t i = 0; i < _renderersSize; i++) {
+    ChildRenderer* childRenderer = _renderers[i];
+    delete childRenderer;
+  }
+
+  _renderers.clear();
+  _renderersSize = 0;
+}
+
+void CompositeRenderer::addRenderer(Renderer* renderer,
                                     const std::vector<const Info*>& info) {
   addChildRenderer(new ChildRenderer(renderer, info));
 }
 
-void CompositeRenderer::addChildRenderer(ChildRenderer *renderer) {
+void CompositeRenderer::addChildRenderer(ChildRenderer* renderer) {
   _renderers.push_back(renderer);
   _renderersSize = _renderers.size();
 
@@ -233,11 +267,13 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
 
 void CompositeRenderer::changedRendererInfo(const size_t rendererID,
                                             const std::vector<const Info*>& info) {
-  if (rendererID < _renderersSize) {
-    _renderers[rendererID]->setInfo(info);
-  }
-  else {
-    ILogger::instance()->logWarning("Child Render not found: %d", rendererID);
+  if (rendererID >= 0) {
+    if (rendererID < _renderersSize) {
+      _renderers[rendererID]->setInfo(info);
+    }
+    else {
+      ILogger::instance()->logWarning("Child Render not found: %d", rendererID);
+    }
   }
   
   if (_changedInfoListener != NULL) {

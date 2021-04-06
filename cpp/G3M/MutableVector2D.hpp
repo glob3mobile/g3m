@@ -17,7 +17,9 @@ class MutableVector2D {
 private:
   double _x;
   double _y;
-  
+
+  MutableVector2D& operator=(const MutableVector2D& that);
+
 public:
   
   MutableVector2D(): _x(0.0), _y(0.0) {}

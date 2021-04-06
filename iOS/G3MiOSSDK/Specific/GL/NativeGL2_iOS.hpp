@@ -204,15 +204,15 @@ public:
                   int format) const {
     const unsigned char* data = ((Image_iOS*) image)->createByteArrayRGBA8888();
 
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 format,
-                 image->getWidth(),
-                 image->getHeight(),
-                 0,
-                 format,
-                 GL_UNSIGNED_BYTE,
-                 data);
+    glTexImage2D(GL_TEXTURE_2D,      /*  GLenum target         */
+                 0,                  /*  GLint level           */
+                 format,             /*  GLint internalformat  */
+                 image->getWidth(),  /*  GLsizei width         */
+                 image->getHeight(), /*  GLsizei height        */
+                 0,                  /*  GLint border          */
+                 format,             /*  GLenum format         */
+                 GL_UNSIGNED_BYTE,   /*  GLenum type           */
+                 data                /*  const GLvoid *pixels  */);
 
     delete [] data;
   }
@@ -582,7 +582,15 @@ public:
   void viewport(int x, int y, int width, int height) const {
     glViewport(x, y, width, height);
   }
-  
+
+  int getMaxTextureSize() const {
+    GLint maxTextureSize = 0;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+
+    NSLog(@"GL_MAX_TEXTURE_SIZE=%i", maxTextureSize);
+    return maxTextureSize;
+  }
+
 };
 
 #endif

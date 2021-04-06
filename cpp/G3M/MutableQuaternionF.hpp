@@ -18,6 +18,8 @@ private:
 
   mutable MutableQuaternionF* _temp;
 
+  MutableQuaternionF& operator=(const MutableQuaternionF& that);
+
 public:
   MutableQuaternionF();
 

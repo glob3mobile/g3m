@@ -48,6 +48,7 @@ public:
   virtual ~AbstractMeshShape();
 
   bool isTransparent(const G3MRenderContext* rc);
+  
 };
 
 #endif

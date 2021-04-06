@@ -25,16 +25,11 @@ package org.glob3.mobile.generated;
 public class Sphere extends BoundingVolume
 {
 
-  private Mesh _mesh;
+  private Mesh _mesh; //TODO Check Leaking?
 
-  //Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
-  //  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
-  //  return Vector2I::zero();
-  //}
-  
-  private Mesh createWireframeMesh(Color color, short resolution)
+
+  public final Mesh createWireframeMesh(Color color, short resolution)
   {
-    final IMathUtils mu = IMathUtils.instance();
     final double delta = DefineConstants.PI / (resolution-1);
   
     // create vertices
@@ -45,10 +40,10 @@ public class Sphere extends BoundingVolume
       for (int j = 0; j<resolution; j++)
       {
         final double latitude = -DefineConstants.PI/2 + j *delta;
-        final double h = mu.cos(latitude);
-        final double x = h * mu.cos(longitude);
-        final double y = h * mu.sin(longitude);
-        final double z = mu.sin(latitude);
+        final double h = Math.cos(latitude);
+        final double x = h * Math.cos(longitude);
+        final double y = h * Math.sin(longitude);
+        final double z = Math.sin(latitude);
         vertices.add(new Vector3D(x,y,z).times(_radius).add(_center));
       }
     }
@@ -87,7 +82,6 @@ public class Sphere extends BoundingVolume
   
     return mesh;
   }
-
 
   public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points, double radiusDelta)
   {
@@ -356,6 +350,10 @@ public class Sphere extends BoundingVolume
   {
     return _center.squaredDistanceTo(point) <= _radiusSquared;
   }
+  public final boolean contains(MutableVector3D point)
+  {
+    return _center.squaredDistanceTo(point) <= _radiusSquared;
+  }
 
   public final boolean fullContains(BoundingVolume that)
   {
@@ -382,16 +380,8 @@ public class Sphere extends BoundingVolume
   }
   public final boolean fullContainedInSphere(Sphere that)
   {
-    //  const double d = _center.distanceTo(that->_center);
-    //  return (d + _radius <= that->_radius);
-  
     if (_radius <= that._radius)
     {
-      //    const double squaredDistance    = _center.squaredDistanceTo(that->_center);
-      //    const double squaredDeltaRadius = IMathUtils::instance()->squared(that->_radius - _radius);
-      //    if (squaredDeltaRadius >= squaredDistance) {
-      //      return true;
-      //    }
       final double distance = _center.distanceTo(that._center);
       final double deltaRadius = that._radius - _radius;
       if (deltaRadius >= distance)
@@ -413,5 +403,30 @@ public class Sphere extends BoundingVolume
     return new Sphere(this);
   }
 
+  public final boolean touchesRay(Ray ray)
+  {
+    // from Real-Time Collision Detection - Christer Ericson
+    //   page 179
+  
+    final Vector3D m = ray._origin.sub(_center);
+  
+    final double c = m.dot(m) - _radiusSquared;
+    // If there is definitely at least one real root, there must be an intersection
+    if (c <= 0)
+    {
+      return true;
+    }
+  
+    final double b = m.dot(ray._direction);
+    // Early exit if ray origin outside sphere and ray pointing away from sphere
+    if (b > 0)
+    {
+      return false;
+    }
+  
+    final double discr = (b * b) - c;
+    // A negative discriminant corresponds to ray missing sphere
+    return (discr >= 0.0);
+  }
 
 }

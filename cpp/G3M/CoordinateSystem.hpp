@@ -43,6 +43,10 @@ public:
                    const Vector3D& z,
                    const Vector3D& origin);
 
+  ~CoordinateSystem() {
+
+  }
+
   CoordinateSystem applyTaitBryanAngles(const TaitBryanAngles& angles) const;
 
   CoordinateSystem applyTaitBryanAngles(const Angle& heading,

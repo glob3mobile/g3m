@@ -16,6 +16,7 @@
 #include "Sphere.hpp"
 #include "Vector2F.hpp"
 #include "G3MRenderContext.hpp"
+#include "Ray.hpp"
 
 
 Box::~Box() {
@@ -158,67 +159,84 @@ double Box::projectedArea(const G3MRenderContext* rc) const {
   return width * height;
 }
 
-bool Box::contains(const Vector3D& p) const {
+bool Box::contains(const Vector3D& point) const {
   const static double margin = 1e-3;
-  if (p._x < _lower._x - margin) return false;
-  if (p._x > _upper._x + margin) return false;
+  if (point._x < _lower._x - margin) return false;
+  if (point._x > _upper._x + margin) return false;
   
-  if (p._y < _lower._y - margin) return false;
-  if (p._y > _upper._y + margin) return false;
+  if (point._y < _lower._y - margin) return false;
+  if (point._y > _upper._y + margin) return false;
   
-  if (p._z < _lower._z - margin) return false;
-  if (p._z > _upper._z + margin) return false;
+  if (point._z < _lower._z - margin) return false;
+  if (point._z > _upper._z + margin) return false;
   
+  return true;
+}
+
+bool Box::contains(const MutableVector3D& point) const {
+  const static double margin = 1e-3;
+  if (point._x < _lower._x - margin) return false;
+  if (point._x > _upper._x + margin) return false;
+
+  if (point._y < _lower._y - margin) return false;
+  if (point._y > _upper._y + margin) return false;
+
+  if (point._z < _lower._z - margin) return false;
+  if (point._z > _upper._z + margin) return false;
+
   return true;
 }
 
 Vector3D Box::intersectionWithRay(const Vector3D& origin,
                                   const Vector3D& direction) const {
-  //MIN X
+  // MIN X
   {
-    Plane p( Vector3D(1.0, 0.0, 0.0), _lower._x);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_X, _lower._x);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MAX X
+  // MAX X
   {
-    Plane p( Vector3D(1.0, 0.0, 0.0), _upper._x);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_X, _upper._x);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MIN Y
+  // MIN Y
   {
-    Plane p( Vector3D(0.0, 1.0, 0.0), _lower._y);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_Y, _lower._y);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MAX Y
+  // MAX Y
   {
-    Plane p( Vector3D(0.0, 1.0, 0.0), _upper._y);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_Y, _upper._y);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MIN Z
+  // MIN Z
   {
-    Plane p( Vector3D(0.0, 0.0, 1.0), _lower._z);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_Z, _lower._z);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
-  //MAX Z
+  // MAX Z
   {
-    Plane p( Vector3D(0.0, 0.0, 1.0), _upper._z);
-    Vector3D inter = p.intersectionWithRay(origin, direction);
+    const Plane p( Vector3D::UP_Z, _upper._z);
+    const Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
   return Vector3D::NANV;
 }
 
+const bool Box::touchesRay(const Ray* ray) const {
+  return !( intersectionWithRay(ray->_origin, ray->_direction).isNan() );
+}
 
 Mesh* Box::createMesh(const Color& color) const {
   double v[] = {

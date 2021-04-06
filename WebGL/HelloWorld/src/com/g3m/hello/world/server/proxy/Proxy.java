@@ -2,29 +2,20 @@
 
 package com.g3m.hello.world.server.proxy;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+import javax.servlet.http.*;
 
 
 public class Proxy
-         extends
-            HttpServlet {
+                   extends
+                      HttpServlet {
 
    /**
-    * 
+    *
     */
    private static final long serialVersionUID = -6020365142488111237L;
 
@@ -61,15 +52,15 @@ public class Proxy
       try {
          final URL url = new URL(reqUrl);
 
-         final Enumeration headerNames = request.getHeaderNames();
-         final Map<String, String> headers = new HashMap<String, String>();
+         final Enumeration<String> headerNames = request.getHeaderNames();
+         final Map<String, String> headers     = new HashMap<>();
          while (headerNames.hasMoreElements()) {
-            final String headerName = (String) headerNames.nextElement();
-            String headerValue = request.getHeader(headerName);
+            final String headerName  = headerNames.nextElement();
+            String       headerValue = request.getHeader(headerName);
 
             if (headerName.equalsIgnoreCase("Host")) {
                // headerValue = reqUrl;
-               final int port = url.getPort();
+               final int    port = url.getPort();
                final String host = url.getHost();
                headerValue = ((port == 80) || (port == -1)) ? host : host + ":" + port;
             }
@@ -119,10 +110,10 @@ public class Proxy
 
 
                //send output to client
-               final BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
-               final byte[] buffer = new byte[4096];
-               int length = 0;
-               int totalLength = 0;
+               final BufferedOutputStream out         = new BufferedOutputStream(response.getOutputStream());
+               final byte[]               buffer      = new byte[4096];
+               int                        length      = 0;
+               int                        totalLength = 0;
                while ((length = in.read(buffer)) > 0) {
                   out.write(buffer, 0, length);
                   totalLength += length;

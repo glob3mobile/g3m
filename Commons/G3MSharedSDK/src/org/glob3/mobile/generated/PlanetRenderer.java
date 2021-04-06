@@ -188,7 +188,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
       if (parameters == null)
       {
-        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+        //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
         return;
       }
   
@@ -303,7 +303,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
       if (_layerTilesRenderParameters == null)
       {
-        ILogger.instance().logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+        //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
       }
       _layerTilesRenderParametersDirty = false;
   
@@ -1073,5 +1073,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _tileLODTester.onTileHasChangedMesh(tile);
     _tileVisibilityTester.onTileHasChangedMesh(tile);
   }
+
 
 }

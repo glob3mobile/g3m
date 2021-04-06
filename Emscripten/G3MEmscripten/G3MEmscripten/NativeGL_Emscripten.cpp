@@ -667,3 +667,8 @@ void NativeGL_Emscripten::setActiveTexture(int i) const {
 void NativeGL_Emscripten::viewport(int x, int y, int width, int height) const {
   _gl.call<void>("viewport", x, y, width, height);
 }
+
+int NativeGL_Emscripten::getMaxTextureSize() const {
+  //return _gl.call<int>("getParameter", _gl["MAX_TEXTURE_SIZE"].as<int>() );
+  return _gl.call<int>("getParameter", _gl["MAX_TEXTURE_SIZE"] );
+}

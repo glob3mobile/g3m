@@ -173,7 +173,7 @@ public class MeshRenderer extends DefaultRenderer
     }
   }
 
-  public final void render(G3MRenderContext rc, GLState glState)
+  public void render(G3MRenderContext rc, GLState glState)
   {
     final int meshesCount = _meshes.size();
     if (meshesCount > 0)

@@ -14,6 +14,8 @@ package org.glob3.mobile.generated;
 //
 
 
+
+
 //class Vector3D;
 //class Angle;
 //class MutableMatrix44D;
@@ -21,10 +23,13 @@ package org.glob3.mobile.generated;
 
 public class MutableVector3D
 {
-  private double _x;
-  private double _y;
-  private double _z;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableVector3D operator =(MutableVector3D that);
+
+  public double _x;
+  public double _y;
+  public double _z;
 
 
   public MutableVector3D()
@@ -62,14 +67,14 @@ public class MutableVector3D
     _z = z;
   }
 
-  public final void copyFrom(MutableVector3D that)
+  public final void set(MutableVector3D that)
   {
     _x = that._x;
     _y = that._y;
     _z = that._z;
   }
 
-  public final void copyFrom(Vector3D that)
+  public final void set(Vector3D that)
   {
     _x = that._x;
     _y = that._y;
@@ -304,6 +309,26 @@ public class MutableVector3D
     final double dy = _y - that._y;
     final double dz = _z - that._z;
     return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(MV3D ");
+    isb.addDouble(_x);
+    isb.addString(", ");
+    isb.addDouble(_y);
+    isb.addString(", ");
+    isb.addDouble(_z);
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+  @Override
+  public String toString() {
+    return description();
   }
 
 }

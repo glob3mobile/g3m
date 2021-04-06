@@ -66,10 +66,10 @@ public class Camera
   
       _planet = that._planet;
   
-      _position.copyFrom(that._position);
-      _center.copyFrom(that._center);
-      _up.copyFrom(that._up);
-      _normalizedPosition.copyFrom(that._normalizedPosition);
+      _position.set(that._position);
+      _center.set(that._center);
+      _up.set(that._up);
+      _normalizedPosition.set(that._normalizedPosition);
   
       _dirtyFlags.copyFrom(that._dirtyFlags);
   
@@ -82,7 +82,7 @@ public class Camera
       _modelMatrix.copyValue(that._modelMatrix);
       _modelViewMatrix.copyValue(that._modelViewMatrix);
   
-      _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
+      _cartesianCenterOfView.set(that._cartesianCenterOfView);
   
       _geodeticCenterOfView = that._geodeticCenterOfView;
   
@@ -191,7 +191,7 @@ public class Camera
   }
   public final void getCartesianPositionMutable(MutableVector3D result)
   {
-    result.copyFrom(_position);
+    result.set(_position);
   }
 
   public final Vector3D getNormalizedPosition()
@@ -208,7 +208,7 @@ public class Camera
   }
   public final void getUpMutable(MutableVector3D result)
   {
-    result.copyFrom(_up);
+    result.set(_up);
   }
 
   public final Geodetic3D getGeodeticCenterOfView()
@@ -349,7 +349,7 @@ public class Camera
     if (!v.equalTo(_position))
     {
       _timestamp++;
-      _position.copyFrom(v);
+      _position.set(v);
       if (_geodeticPosition != null)
          _geodeticPosition.dispose();
       _geodeticPosition = null;
@@ -357,7 +357,7 @@ public class Camera
       final double distanceToPlanetCenter = _position.length();
       final double planetRadius = distanceToPlanetCenter - getGeodeticHeight();
       _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
-      _normalizedPosition.copyFrom(_position);
+      _normalizedPosition.set(_position);
       _normalizedPosition.normalize();
     }
   }
@@ -599,9 +599,9 @@ public class Camera
 
   public final void getLookAtParamsInto(MutableVector3D position, MutableVector3D center, MutableVector3D up)
   {
-    position.copyFrom(_position);
-    center.copyFrom(_center);
-    up.copyFrom(_up);
+    position.set(_position);
+    center.set(_center);
+    up.set(_up);
   }
 
   public final void getModelViewMatrixInto(MutableMatrix44D matrix)
@@ -622,7 +622,7 @@ public class Camera
     final Vector3D obj = modelViewMatrix.unproject(pixel3D, 0, 0, viewport.x(), viewport.y());
     if (obj.isNan())
     {
-      ray.copyFrom(obj);
+      ray.set(obj);
     }
     else
     {
@@ -656,9 +656,9 @@ public class Camera
   public final void setCameraCoordinateSystem(CoordinateSystem rs)
   {
     _timestamp++;
-    _center.copyFrom(_position);
+    _center.set(_position);
     _center.addInPlace(rs._y);
-    _up.copyFrom(rs._z);
+    _up.set(rs._z);
     _dirtyFlags.setAllDirty();
   }
 
@@ -801,7 +801,7 @@ public class Camera
     if (!v.equalTo(_center))
     {
       _timestamp++;
-      _center.copyFrom(v);
+      _center.set(v);
       _dirtyFlags.setAllDirty();
     }
   }
@@ -811,7 +811,7 @@ public class Camera
     if (!v.equalTo(_up))
     {
       _timestamp++;
-      _up.copyFrom(v);
+      _up.set(v);
       _dirtyFlags.setAllDirty();
     }
   }
@@ -822,7 +822,7 @@ public class Camera
     if (_dirtyFlags._cartesianCenterOfViewDirty)
     {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
+      _cartesianCenterOfView.set(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
   }

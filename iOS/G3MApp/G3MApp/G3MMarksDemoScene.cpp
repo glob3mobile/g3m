@@ -22,6 +22,16 @@
 #include <G3M/MarksRenderer.hpp>
 #include <G3M/BingMapsLayer.hpp>
 
+#include <G3M/Cylinder.hpp>
+#include <G3M/MeshRenderer.hpp>
+#include <G3M/CompositeRenderer.hpp>
+#include <G3M/Arrow.hpp>
+#include <G3M/TranslateScaleGizmo.hpp>
+#include <G3M/ShapesRenderer.hpp>
+#include <G3M/EllipsoidShape.hpp>
+#include <G3M/Planet.hpp>
+#include <G3M/LayoutUtils.hpp>
+
 #include "G3MDemoModel.hpp"
 
 
@@ -114,6 +124,28 @@ void G3MMarksDemoScene::addMark(Mark* mark) {
   getModel()->getMarksRenderer()->addMark(mark);
 }
 
+class GizmoListener : public TranslateScaleGizmoListener{
+  EllipsoidShape* _shape;
+  const Planet* _planet;
+public:
+  
+  GizmoListener(EllipsoidShape* shape, const Planet* planet):
+  _shape(shape), _planet(planet){}
+  
+  void onChanged(const TranslateScaleGizmo& gizmo) override{
+    printf("Gizmo P: %s S: %0.2f\n", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
+    
+    Geodetic3D geoPos = _planet->toGeodetic3D(gizmo.getCoordinateSystem()._origin);
+    _shape->setPosition(geoPos);
+    _shape->setScale(gizmo.getScale());
+  }
+  
+  void onChangeEnded(const TranslateScaleGizmo& gizmo) override{
+    printf("Change ended on gizmo P: %s S: %0.2f\n", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
+  }
+};
+
+
 void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
@@ -125,23 +157,100 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
-  IDownloader* downloader = context->getDownloader();
+//  IDownloader* downloader = context->getDownloader();
+//
+//  _requestID = downloader->requestBuffer(URL("http://openweathermap.org/data/2.5/box/city?bbox=-80,-180,80,180,4&cluster=yes&appid=e1079e4aa327b6cf16aa5b68d47ed1e2"),
+//                                         DownloadPriority::HIGHEST,
+//                                         TimeInterval::fromHours(1),
+//                                         true,
+//                                         new G3MMarksDemoScene_BufferDownloadListener(this),
+//                                         true);
 
-  _requestID = downloader->requestBuffer(URL("http://openweathermap.org/data/2.5/box/city?bbox=-80,-180,80,180,4&cluster=yes&appid=e1079e4aa327b6cf16aa5b68d47ed1e2"),
-                                         DownloadPriority::HIGHEST,
-                                         TimeInterval::fromHours(1),
-                                         true,
-                                         new G3MMarksDemoScene_BufferDownloadListener(this),
-                                         true);
+//  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
+//                                       Angle::zero(), // heading
+//                                       Angle::fromDegrees(30 - 90) // pitch
+//                                       );
 
-  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
-                                       Angle::zero(), // heading
-                                       Angle::fromDegrees(30 - 90) // pitch
-                                       );
+//  Mark* mark = new Mark("Las Palmas",
+//                        URL("https://icons-for-free.com/iconfiles/png/512/sun+sunny+weather+icon-1320196635525068067.png"),
+//                        Geodetic3D::fromDegrees(28.09973, -15.41343, 0),
+//                        RELATIVE_TO_GROUND,
+//                        0,                              // minDistanceToCamera
+//                        true,                           // labelBottom
+//                        13,                             // labelFontSize
+//                        Color::newFromRGBA(1, 1, 1, 1), // labelFontColor
+//                        Color::newFromRGBA(0, 0, 0, 1), // labelShadowColor
+//                        -10                             // labelGapSize
+//                        );
+//
+//  addMark(mark);
+  
+  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
+
+
+  g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height + 10000));
+
+
+  double size = 1000.0;
+
+  {
+    std::vector<Geodetic3D*> positions = LayoutUtils::splitOverCircle(g3mWidget->getG3MContext()->getPlanet(),
+                                                                      geoPos,
+                                                                      size,
+                                                                      4);
+
+    for (size_t i = 0; i < positions.size(); i++) {
+      Geodetic3D* position = positions[i];
+
+      Mark* mark = new Mark(IStringUtils::instance()->toString( (long long) i ),
+                            *position,
+                            ABSOLUTE,
+                            0 /* minDistanceToCamera */);
+
+      model->getMarksRenderer()->addMark(mark);
+
+      delete position;
+    }
+  }
+
+  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),
+                                                 AltitudeMode::ABSOLUTE,
+                                                 Vector3D(size, size, size),
+                                                 18,
+                                                 1.0,
+                                                 false,
+                                                 false,
+                                                 Color::fromRGBA255(128, 128, 128, 128),
+                                                 new Color(Color::WHITE),
+                                                 true);
+  model->getShapesRenderer()->addShape(ellipsoid);
+
+  const double scale                     = 1.0;
+  const double maxScale                  = 2;
+  const double lineWidthRatio            = 0.01;
+  const double headLengthRatio           = 0.05;
+  const double headWidthRatio            = 2.0;
+  const double scaleArrowLengthSizeRatio = 0.15;
+
+  _gizmo = TranslateScaleGizmo::translateAndScale(context->getPlanet()->getCoordinateSystemAt(geoPos),
+                                                  size,
+                                                  scale,
+                                                  maxScale,
+                                                  lineWidthRatio,
+                                                  headLengthRatio,
+                                                  headWidthRatio,
+                                                  scaleArrowLengthSizeRatio);
+
+  _gizmo->setListener(new GizmoListener(ellipsoid, context->getPlanet()));
+  
+  model->getCompositeRenderer()->addRenderer(_gizmo);
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {
   context->getDownloader()->cancelRequest(_requestID);
+
+  getModel()->getCompositeRenderer()->removeRenderer(_gizmo);
+  _gizmo = NULL;
 
   G3MDemoScene::deactivate(context);
 }

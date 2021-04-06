@@ -45,11 +45,25 @@ BoundingVolume* SGMesh::getBoundingVolume() const {
   return NULL;
 }
 
-size_t SGMesh::getVertexCount() const {
+size_t SGMesh::getVerticesCount() const {
   THROW_EXCEPTION("Can't implement");
 }
 
 const Vector3D SGMesh::getVertex(const size_t index) const {
+  THROW_EXCEPTION("Can't implement");
+}
+
+void SGMesh::getVertex(const size_t index,
+                       MutableVector3D& result) const {
+  THROW_EXCEPTION("Can't implement");
+}
+
+Color SGMesh::getColor(const size_t index) const {
+  THROW_EXCEPTION("Can't implement");
+}
+
+void SGMesh::getColor(const size_t index,
+                      MutableColor& result) const {
   THROW_EXCEPTION("Can't implement");
 }
 

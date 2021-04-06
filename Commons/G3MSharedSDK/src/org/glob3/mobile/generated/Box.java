@@ -24,7 +24,14 @@ public class Box extends BoundingVolume
 {
 
   private Mesh _mesh;
-  private Mesh createMesh(Color color)
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Box(Box that);
+
+
+
+
+  public final Mesh createMesh(Color color)
   {
     double[] v = { _lower._x, _lower._y, _lower._z, _lower._x, _upper._y, _lower._z, _lower._x, _upper._y, _upper._z, _lower._x, _lower._y, _upper._z, _upper._x, _lower._y, _lower._z, _upper._x, _upper._y, _lower._z, _upper._x, _upper._y, _upper._z, _upper._x, _lower._y, _upper._z };
   
@@ -51,10 +58,6 @@ public class Box extends BoundingVolume
   
     return mesh;
   }
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Box(Box that);
-
 
   public final Vector3D _lower ;
   public final Vector3D _upper ;
@@ -223,55 +226,60 @@ public class Box extends BoundingVolume
 
   public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
   {
-    //MIN X
+    // MIN X
     {
-      Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _lower._x);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_X, _lower._x);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX X
+    // MAX X
     {
-      Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _upper._x);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_X, _upper._x);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MIN Y
+    // MIN Y
     {
-      Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _lower._y);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_Y, _lower._y);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX Y
+    // MAX Y
     {
-      Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _upper._y);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_Y, _upper._y);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MIN Z
+    // MIN Z
     {
-      Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _lower._z);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_Z, _lower._z);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
-    //MAX Z
+    // MAX Z
     {
-      Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _upper._z);
-      Vector3D inter = p.intersectionWithRay(origin, direction);
+      final Plane p = new Plane(Vector3D.UP_Z, _upper._z);
+      final Vector3D inter = p.intersectionWithRay(origin, direction);
       if (!inter.isNan() && contains(inter))
          return inter;
     }
   
     return Vector3D.NANV;
+  }
+
+  public final boolean touchesRay(Ray ray)
+  {
+    return !(intersectionWithRay(ray._origin, ray._direction).isNan());
   }
 
   public final void render(G3MRenderContext rc, GLState parentState, Color color)
@@ -358,22 +366,42 @@ public class Box extends BoundingVolume
     return point.clamp(_lower, _upper);
   }
 
-  public final boolean contains(Vector3D p)
+  public final boolean contains(Vector3D point)
   {
     final double margin = 1e-3;
-    if (p._x < _lower._x - margin)
+    if (point._x < _lower._x - margin)
        return false;
-    if (p._x > _upper._x + margin)
-       return false;
-  
-    if (p._y < _lower._y - margin)
-       return false;
-    if (p._y > _upper._y + margin)
+    if (point._x > _upper._x + margin)
        return false;
   
-    if (p._z < _lower._z - margin)
+    if (point._y < _lower._y - margin)
        return false;
-    if (p._z > _upper._z + margin)
+    if (point._y > _upper._y + margin)
+       return false;
+  
+    if (point._z < _lower._z - margin)
+       return false;
+    if (point._z > _upper._z + margin)
+       return false;
+  
+    return true;
+  }
+  public final boolean contains(MutableVector3D point)
+  {
+    final double margin = 1e-3;
+    if (point._x < _lower._x - margin)
+       return false;
+    if (point._x > _upper._x + margin)
+       return false;
+  
+    if (point._y < _lower._y - margin)
+       return false;
+    if (point._y > _upper._y + margin)
+       return false;
+  
+    if (point._z < _lower._z - margin)
+       return false;
+    if (point._z > _upper._z + margin)
        return false;
   
     return true;

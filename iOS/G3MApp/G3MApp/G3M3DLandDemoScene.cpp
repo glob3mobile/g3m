@@ -92,7 +92,6 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
   getModel()->getLayerSet()->addLayer( layer );
 
-#warning Diego at work!
   getModel()->getG3MWidget()->setCameraPosition( Geodetic3D::fromDegrees(-31.952754850831528444,
                                                                          -70.640222465417764397,
                                                                          3821842.2834936883301) );

@@ -40,7 +40,9 @@ void HUDImageRenderer::CanvasImageFactory::create(const G3MRenderContext* rc,
                                                   int height,
                                                   IImageListener* listener,
                                                   bool deleteListener) {
-  ICanvas* canvas = rc->getFactory()->createCanvas(true);
+  const int maxTextureSize = rc->getGL()->getMaxTextureSize();
+
+  ICanvas* canvas = rc->getFactory()->createCanvas(true, maxTextureSize);
   canvas->initialize(width, height);
 
   drawOn(canvas, width, height);

@@ -2,39 +2,21 @@
 
 package com.glob3mobile.pointcloud.octree.berkeleydb;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.glob3mobile.pointcloud.octree.PersistentOctree;
-import com.glob3mobile.utils.Geodetic3D;
-import com.glob3mobile.utils.Sector;
-import com.glob3mobile.utils.Utils;
-import com.sleepycat.je.Cursor;
-import com.sleepycat.je.CursorConfig;
-import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseConfig;
-import com.sleepycat.je.DatabaseEntry;
-import com.sleepycat.je.Environment;
-import com.sleepycat.je.EnvironmentConfig;
-import com.sleepycat.je.LockMode;
-import com.sleepycat.je.OperationStatus;
-import com.sleepycat.je.Transaction;
-import com.sleepycat.je.TransactionConfig;
+import java.io.*;
+import java.util.*;
 
-import es.igosoftware.io.GIOUtils;
-import es.igosoftware.util.GUndeterminateProgress;
+import com.glob3mobile.pointcloud.octree.*;
+import com.glob3mobile.utils.*;
+import com.sleepycat.je.*;
+
+import es.igosoftware.io.*;
+import es.igosoftware.util.*;
 
 
 public class BerkeleyDBOctree
-         implements
-            PersistentOctree {
+                              implements
+                                 PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -68,8 +50,7 @@ public class BerkeleyDBOctree
                                        final String cloudName,
                                        final boolean createIfNotExists,
                                        final long cacheSizeInBytes) {
-      return open(cloudDirectory, cloudName, createIfNotExists, DEFAULT_MAX_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE,
-               cacheSizeInBytes);
+      return open(cloudDirectory, cloudName, createIfNotExists, DEFAULT_MAX_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE, cacheSizeInBytes);
    }
 
 
@@ -80,8 +61,7 @@ public class BerkeleyDBOctree
                                        final int maxPointsPerTitle,
                                        final long cacheSizeInBytes) {
 
-      return new BerkeleyDBOctree(cloudDirectory, cloudName, createIfNotExists, maxBufferSize, maxPointsPerTitle, false,
-               cacheSizeInBytes);
+      return new BerkeleyDBOctree(cloudDirectory, cloudName, createIfNotExists, maxBufferSize, maxPointsPerTitle, false, cacheSizeInBytes);
    }
 
 
@@ -92,7 +72,7 @@ public class BerkeleyDBOctree
    }
 
 
-   private final String           _cloudName;
+   private final String _cloudName;
 
    private final List<Geodetic3D> _buffer;
    private final int              _maxBufferSize;
@@ -107,11 +87,11 @@ public class BerkeleyDBOctree
    private double                 _sumLongitudeInRadians;
    private double                 _sumHeight;
 
-   private final Environment      _env;
-   private final Database         _nodeDB;
-   private final Database         _nodeDataDB;
-   private final boolean          _readOnly;
-   private final File             _cachedStatisticsFile;
+   private final Environment _env;
+   private final Database    _nodeDB;
+   private final Database    _nodeDataDB;
+   private final boolean     _readOnly;
+   private final File        _cachedStatisticsFile;
 
 
    private BerkeleyDBOctree(final File cloudDirectory,
@@ -131,11 +111,11 @@ public class BerkeleyDBOctree
       final String readOnlyMsg = readOnly ? " read-only" : " read-write";
       System.out.println("- opening" + readOnlyMsg + " cloud name \"" + cloudName + "\" (" + envHome.getAbsoluteFile() + ")");
 
-      _readOnly = readOnly;
+      _readOnly  = readOnly;
       _cloudName = cloudName;
 
       _maxBufferSize = maxBufferSize;
-      _buffer = new ArrayList<>(maxBufferSize);
+      _buffer        = new ArrayList<>(maxBufferSize);
       resetBufferBounds();
 
       _maxPointsPerTitle = maxPointsPerTitle;
@@ -158,7 +138,7 @@ public class BerkeleyDBOctree
       dbConfig.setReadOnly(readOnly);
       //      dbConfig.setSortedDuplicates(true);
 
-      _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
+      _nodeDB     = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
       _nodeDataDB = _env.openDatabase(null, NODE_DATA_DATABASE_NAME, dbConfig);
 
       _cachedStatisticsFile = new File(cloudDirectory, "_stats_" + cloudName + ".ser");
@@ -180,17 +160,17 @@ public class BerkeleyDBOctree
 
 
    private void resetBufferBounds() {
-      _minLatitudeInRadians = Double.POSITIVE_INFINITY;
+      _minLatitudeInRadians  = Double.POSITIVE_INFINITY;
       _minLongitudeInRadians = Double.POSITIVE_INFINITY;
-      _minHeight = Double.POSITIVE_INFINITY;
+      _minHeight             = Double.POSITIVE_INFINITY;
 
-      _maxLatitudeInRadians = Double.NEGATIVE_INFINITY;
+      _maxLatitudeInRadians  = Double.NEGATIVE_INFINITY;
       _maxLongitudeInRadians = Double.NEGATIVE_INFINITY;
-      _maxHeight = Double.NEGATIVE_INFINITY;
+      _maxHeight             = Double.NEGATIVE_INFINITY;
 
-      _sumLatitudeInRadians = 0.0;
+      _sumLatitudeInRadians  = 0.0;
       _sumLongitudeInRadians = 0.0;
-      _sumHeight = 0.0;
+      _sumHeight             = 0.0;
    }
 
 
@@ -202,13 +182,13 @@ public class BerkeleyDBOctree
 
       _buffer.add(point);
 
-      final double latitudeInRadians = point._latitude._radians;
+      final double latitudeInRadians  = point._latitude._radians;
       final double longitudeInRadians = point._longitude._radians;
-      final double height = point._height;
+      final double height             = point._height;
 
-      _sumLatitudeInRadians += latitudeInRadians;
+      _sumLatitudeInRadians  += latitudeInRadians;
       _sumLongitudeInRadians += longitudeInRadians;
-      _sumHeight += height;
+      _sumHeight             += height;
 
 
       if (latitudeInRadians < _minLatitudeInRadians) {
@@ -246,8 +226,8 @@ public class BerkeleyDBOctree
          deleteCachedStatistics();
 
          final Sector targetSector = Sector.fromRadians( //
-                  _minLatitudeInRadians, _minLongitudeInRadians, //
-                  _maxLatitudeInRadians, _maxLongitudeInRadians);
+               _minLatitudeInRadians, _minLongitudeInRadians, //
+               _maxLatitudeInRadians, _maxLongitudeInRadians);
 
          final Sector boundsSector = Sector.getBounds(_buffer);
          if (!targetSector.equals(boundsSector)) {
@@ -267,16 +247,15 @@ public class BerkeleyDBOctree
          //            }
          //         }
 
-         final double averageLatitudeInRadians = _sumLatitudeInRadians / bufferSize;
+         final double averageLatitudeInRadians  = _sumLatitudeInRadians / bufferSize;
          final double averageLongitudeInRadians = _sumLongitudeInRadians / bufferSize;
-         final double averageHeight = _sumHeight / bufferSize;
+         final double averageHeight             = _sumHeight / bufferSize;
 
-         final Geodetic3D averagePoint = Geodetic3D.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians,
-                  averageHeight);
+         final Geodetic3D averagePoint = Geodetic3D.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
 
 
          final TransactionConfig txnConfig = new TransactionConfig();
-         final Transaction txn = _env.beginTransaction(null, txnConfig);
+         final Transaction       txn       = _env.beginTransaction(null, txnConfig);
 
          final PointsSet pointsSet = new PointsSet(new ArrayList<>(_buffer), averagePoint);
          BerkeleyDBOctreeNode.insertPoints(txn, this, header, pointsSet);
@@ -310,15 +289,15 @@ public class BerkeleyDBOctree
       config.setReadUncommitted(false);
 
       try (final Cursor cursor = _nodeDB.openCursor(null, config)) {
-         final DatabaseEntry keyEntry = new DatabaseEntry();
+         final DatabaseEntry keyEntry  = new DatabaseEntry();
          final DatabaseEntry dataEntry = new DatabaseEntry();
 
          while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
-            final byte[] key = keyEntry.getData();
+            final byte[] key  = keyEntry.getData();
             final byte[] data = dataEntry.getData();
 
-            final BerkeleyDBOctreeNode tile = BerkeleyDBOctreeNode.fromDB(null, this, key, data, false);
-            final boolean keepGoing = visitor.visit(tile);
+            final BerkeleyDBOctreeNode tile      = BerkeleyDBOctreeNode.fromDB(null, this, key, data, false);
+            final boolean              keepGoing = visitor.visit(tile);
             if (!keepGoing) {
                break;
             }
@@ -328,7 +307,8 @@ public class BerkeleyDBOctree
       visitor.stop();
    }
 
-   private static enum CursorSituation {
+
+   private enum CursorSituation {
       NotFoundSelfNorDescendants,
       FoundDescendants,
       FoundSelf,
@@ -342,24 +322,24 @@ public class BerkeleyDBOctree
                                                      final byte[] id) {
       final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED);
       switch (status) {
-         case SUCCESS: {
-            final byte[] key = keyEntry.getData();
+      case SUCCESS: {
+         final byte[] key = keyEntry.getData();
 
-            if (!Utils.hasSamePrefix(key, id)) {
-               return CursorSituation.NotFoundSelfNorDescendants;
-            }
-            else if (Utils.isGreaterThan(key, id)) {
-               return CursorSituation.FoundDescendants;
-            }
-            else {
-               return CursorSituation.FoundSelf;
-            }
+         if (!Utils.hasSamePrefix(key, id)) {
+            return CursorSituation.NotFoundSelfNorDescendants;
          }
-         case NOTFOUND: {
-            return CursorSituation.FoundNothing;
+         else if (Utils.isGreaterThan(key, id)) {
+            return CursorSituation.FoundDescendants;
          }
-         default:
-            throw new RuntimeException("Status not supported: " + status);
+         else {
+            return CursorSituation.FoundSelf;
+         }
+      }
+      case NOTFOUND: {
+         return CursorSituation.FoundNothing;
+      }
+      default:
+         throw new RuntimeException("Status not supported: " + status);
       }
    }
 
@@ -423,29 +403,29 @@ public class BerkeleyDBOctree
 
       final com.sleepycat.je.Transaction txn = null;
       try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
-         final DatabaseEntry keyEntry = new DatabaseEntry(id);
+         final DatabaseEntry keyEntry  = new DatabaseEntry(id);
          final DatabaseEntry dataEntry = new DatabaseEntry();
 
          final CursorSituation situation = getCursorSituation(cursor, keyEntry, dataEntry, id);
          switch (situation) {
-            case NotFoundSelfNorDescendants: {
-               visitParent(txn, cursor, keyEntry, dataEntry, id, visitor);
-               break;
-            }
-            case FoundDescendants: {
-               visitDescendants(txn, cursor, keyEntry, dataEntry, id, visitor);
-               break;
-            }
-            case FoundSelf: {
-               final BerkeleyDBOctreeNode node = BerkeleyDBOctreeNode.fromDB(txn, this, id, dataEntry.getData(), false);
-               visitor.visit(node);
-               break;
-            }
-            case FoundNothing: {
-               break;
-            }
-            default:
-               throw new RuntimeException("Invalid situation: " + situation);
+         case NotFoundSelfNorDescendants: {
+            visitParent(txn, cursor, keyEntry, dataEntry, id, visitor);
+            break;
+         }
+         case FoundDescendants: {
+            visitDescendants(txn, cursor, keyEntry, dataEntry, id, visitor);
+            break;
+         }
+         case FoundSelf: {
+            final BerkeleyDBOctreeNode node = BerkeleyDBOctreeNode.fromDB(txn, this, id, dataEntry.getData(), false);
+            visitor.visit(node);
+            break;
+         }
+         case FoundNothing: {
+            break;
+         }
+         default:
+            throw new RuntimeException("Invalid situation: " + situation);
          }
       }
 
@@ -471,60 +451,60 @@ public class BerkeleyDBOctree
    BerkeleyDBOctreeNode readNode(final Transaction txn,
                                  final byte[] id,
                                  final boolean loadPoints) {
-      final DatabaseEntry keyEntry = new DatabaseEntry(id);
+      final DatabaseEntry keyEntry  = new DatabaseEntry(id);
       final DatabaseEntry dataEntry = new DatabaseEntry();
 
       final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
       switch (status) {
-         case SUCCESS:
-            return BerkeleyDBOctreeNode.fromDB(txn, this, id, dataEntry.getData(), loadPoints);
-         case NOTFOUND:
-            return null;
-         default:
-            throw new RuntimeException("Status not supported: " + status);
+      case SUCCESS:
+         return BerkeleyDBOctreeNode.fromDB(txn, this, id, dataEntry.getData(), loadPoints);
+      case NOTFOUND:
+         return null;
+      default:
+         throw new RuntimeException("Status not supported: " + status);
       }
    }
 
 
    private static class BerkeleyDBStatistics
-   implements
-   PersistentOctree.Visitor,
-   PersistentOctree.Statistics,
-   Serializable {
+                                             implements
+                                                PersistentOctree.Visitor,
+                                                PersistentOctree.Statistics,
+                                                Serializable {
 
-      private static final long      serialVersionUID = 2L;
+      private static final long serialVersionUID = 2L;
 
       private final String           _cloudName;
       private GUndeterminateProgress _progress;
 
-      private long                   _nodesCount;
-      private long                   _pointsCount;
-      private long                   _sumDepth;
-      private int                    _minDepth;
-      private int                    _maxDepth;
-      private int                    _minPointsCountPerNode;
-      private int                    _maxPointsCountPerNode;
-      private Sector                 _sector;
-      private double                 _minHeight       = Double.POSITIVE_INFINITY;
-      private double                 _maxHeight       = Double.NEGATIVE_INFINITY;
+      private long   _nodesCount;
+      private long   _pointsCount;
+      private long   _sumDepth;
+      private int    _minDepth;
+      private int    _maxDepth;
+      private int    _minPointsCountPerNode;
+      private int    _maxPointsCountPerNode;
+      private Sector _sector;
+      private double _minHeight = Double.POSITIVE_INFINITY;
+      private double _maxHeight = Double.NEGATIVE_INFINITY;
 
 
       private BerkeleyDBStatistics(final String cloudName,
                                    final GUndeterminateProgress progress) {
          _cloudName = cloudName;
-         _progress = progress;
+         _progress  = progress;
       }
 
 
       @Override
       public void start() {
-         _nodesCount = 0;
-         _pointsCount = 0;
+         _nodesCount            = 0;
+         _pointsCount           = 0;
          _minPointsCountPerNode = Integer.MAX_VALUE;
          _maxPointsCountPerNode = Integer.MIN_VALUE;
-         _sumDepth = 0;
-         _minDepth = Integer.MAX_VALUE;
-         _maxDepth = Integer.MIN_VALUE;
+         _sumDepth              = 0;
+         _minDepth              = Integer.MAX_VALUE;
+         _maxDepth              = Integer.MIN_VALUE;
       }
 
 
@@ -588,8 +568,8 @@ public class BerkeleyDBOctree
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("   Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("   Points/Node: Average=" + ((float) getAveragePointsPerNode()) + //
-                  ", Min=" + _minPointsCountPerNode + //
-                  ", Max=" + _maxPointsCountPerNode);
+               ", Min=" + _minPointsCountPerNode + //
+               ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
 

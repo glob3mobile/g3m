@@ -212,9 +212,9 @@ public class FlatPlanet extends Planet
 
   public final void beginSingleDrag(Vector3D origin, Vector3D initialRay)
   {
-    _origin = origin.asMutableVector3D();
-    _initialPoint = Plane.intersectionXYPlaneWithRay(origin, initialRay).asMutableVector3D();
-    _lastFinalPoint = _initialPoint;
+    _origin.set(origin.asMutableVector3D());
+    _initialPoint.set(Plane.intersectionXYPlaneWithRay(origin, initialRay));
+    _lastFinalPoint.set(_initialPoint);
     _validSingleDrag = false;
   }
 
@@ -232,8 +232,8 @@ public class FlatPlanet extends Planet
   
     // save params for possible inertial animations
     _validSingleDrag = true;
-    _lastDirection = _lastFinalPoint.sub(finalPoint);
-    _lastFinalPoint = finalPoint;
+    _lastDirection.set(_lastFinalPoint.sub(finalPoint));
+    _lastFinalPoint.set(finalPoint);
   
     // return rotation matrix
     return MutableMatrix44D.createTranslationMatrix(_initialPoint.sub(finalPoint).asVector3D());
@@ -248,15 +248,15 @@ public class FlatPlanet extends Planet
 
   public final void beginDoubleDrag(Vector3D origin, Vector3D centerRay, Vector3D initialRay0, Vector3D initialRay1)
   {
-    _origin = origin.asMutableVector3D();
-    _centerRay = centerRay.asMutableVector3D();
-    _initialPoint0 = Plane.intersectionXYPlaneWithRay(origin, initialRay0).asMutableVector3D();
-    _initialPoint1 = Plane.intersectionXYPlaneWithRay(origin, initialRay1).asMutableVector3D();
+    _origin.set(origin.asMutableVector3D());
+    _centerRay.set(centerRay.asMutableVector3D());
+    _initialPoint0.set(Plane.intersectionXYPlaneWithRay(origin, initialRay0));
+    _initialPoint1.set(Plane.intersectionXYPlaneWithRay(origin, initialRay1));
     _distanceBetweenInitialPoints = _initialPoint0.sub(_initialPoint1).length();
-    _centerPoint = Plane.intersectionXYPlaneWithRay(origin, centerRay).asMutableVector3D();
+    _centerPoint.set(Plane.intersectionXYPlaneWithRay(origin, centerRay));
   
     // middle point in 3D
-    _initialPoint = _initialPoint0.add(_initialPoint1).times(0.5);
+    _initialPoint.set(_initialPoint0.add(_initialPoint1).times(0.5));
   }
 
   public final MutableMatrix44D doubleDrag(Vector3D finalRay0, Vector3D finalRay1)
@@ -280,7 +280,7 @@ public class FlatPlanet extends Planet
   
     // start to compound matrix
     MutableMatrix44D matrix = MutableMatrix44D.identity();
-    positionCamera = _origin;
+    positionCamera.set(_origin);
     MutableVector3D viewDirection = _centerRay;
     MutableVector3D ray0 = finalRay0.asMutableVector3D();
     MutableVector3D ray1 = finalRay1.asMutableVector3D();
@@ -288,9 +288,9 @@ public class FlatPlanet extends Planet
     // drag from initialPoint to centerPoint and move the camera forward
     {
       MutableVector3D delta = _initialPoint.sub((_centerPoint));
-      delta = delta.add(viewDirection.times(t2));
+      delta.set(delta.add(viewDirection.times(t2)));
       MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(delta.asVector3D());
-      positionCamera = positionCamera.transformedBy(translation, 1.0);
+      positionCamera.set(positionCamera.transformedBy(translation, 1.0));
       matrix.copyValueOfMultiplication(translation, matrix);
     }
   
@@ -305,7 +305,7 @@ public class FlatPlanet extends Planet
     // drag globe from centerPoint to finalPoint
     {
       MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(centerPoint2.sub(finalPoint));
-      positionCamera = positionCamera.transformedBy(translation, 1.0);
+      positionCamera.set(positionCamera.transformedBy(translation, 1.0));
       matrix.copyValueOfMultiplication(translation, matrix);
     }
   
@@ -378,6 +378,18 @@ public class FlatPlanet extends Planet
   public final String getType()
   {
     return "Flat";
+  }
+
+  public final void toCartesianFromDegrees(double latitudeDegrees, double longitudeDegrees, double height, MutableVector3D result)
+  {
+    final double x = longitudeDegrees * _size._x / 360.0;
+    final double y = latitudeDegrees * _size._y / 180.0;
+    result.set(x, y, height);
+  }
+
+  public final void geodeticSurfaceNormalFromDegrees(double latitudeDegrees, double longitudeDegrees, MutableVector3D result)
+  {
+    result.set(0, 0, 1);
   }
 
 }

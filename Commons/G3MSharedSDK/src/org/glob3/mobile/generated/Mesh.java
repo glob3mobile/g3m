@@ -19,6 +19,9 @@ package org.glob3.mobile.generated;
 //class BoundingVolume;
 //class G3MRenderContext;
 //class GLState;
+//class MutableVector3D;
+//class MutableColor;
+//class Color;
 
 
 public abstract class Mesh
@@ -84,9 +87,15 @@ public abstract class Mesh
     }
   }
 
-  public abstract int getVertexCount();
+  public abstract int getVerticesCount();
 
   public abstract Vector3D getVertex(int index);
+
+  public abstract void getVertex(int index, MutableVector3D result);
+
+  public abstract Color getColor(int index);
+
+  public abstract void getColor(int index, MutableColor result);
 
   public abstract BoundingVolume getBoundingVolume();
 

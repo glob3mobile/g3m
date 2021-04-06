@@ -290,6 +290,10 @@ public:
     return (f * f);
   }
 
+
+  const int toUInt16(const unsigned char b1,
+                     const unsigned char b2) const;
+
 };
 
 #endif

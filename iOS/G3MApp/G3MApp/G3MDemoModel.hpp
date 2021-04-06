@@ -22,10 +22,13 @@ class MeshRenderer;
 class ShapesRenderer;
 class PlanetRenderer;
 class GEORenderer;
-class PointCloudsRenderer;
+class OLDPointCloudsRenderer;
+class XPCRenderer;
 class HUDRenderer;
 class NonOverlappingMarksRenderer;
 class VectorStreamingRenderer;
+class CompositeRenderer;
+class MeasureRenderer;
 
 
 class G3MDemoModel {
@@ -39,10 +42,13 @@ private:
   ShapesRenderer*              _shapesRenderer;
   MarksRenderer*               _marksRenderer;
   GEORenderer*                 _geoRenderer;
-  PointCloudsRenderer*         _pointCloudsRenderer;
+  OLDPointCloudsRenderer*      _oldPointCloudsRenderer;
+  XPCRenderer*                 _xpcRenderer;
   HUDRenderer*                 _hudRenderer;
   NonOverlappingMarksRenderer* _nonOverlappingMarksRenderer;
   VectorStreamingRenderer*     _vectorStreamingRenderer;
+  CompositeRenderer*           _compositeRenderer;
+  MeasureRenderer*             _measureRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -57,10 +63,13 @@ public:
                ShapesRenderer*              shapesRenderer,
                MarksRenderer*               marksRenderer,
                GEORenderer*                 geoRenderer,
-               PointCloudsRenderer*         pointCloudsRenderer,
+               OLDPointCloudsRenderer*      oldPointCloudsRenderer,
+               XPCRenderer*                 xpcloudsRenderer,
                HUDRenderer*                 hudRenderer,
                NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
-               VectorStreamingRenderer*     vectorStreamingRenderer);
+               VectorStreamingRenderer*     vectorStreamingRenderer,
+               CompositeRenderer*           compositeRenderer,
+               MeasureRenderer*             measureRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -91,8 +100,12 @@ public:
     return _shapesRenderer;
   }
 
-  PointCloudsRenderer* getPointCloudsRenderer() const {
-    return _pointCloudsRenderer;
+  OLDPointCloudsRenderer* getOLDPointCloudsRenderer() const {
+    return _oldPointCloudsRenderer;
+  }
+
+  XPCRenderer* getXPCRenderer() const {
+    return _xpcRenderer;
   }
 
   HUDRenderer* getHUDRenderer() const {
@@ -106,7 +119,14 @@ public:
   VectorStreamingRenderer* getVectorStreamingRenderer() const {
     return _vectorStreamingRenderer;
   }
+  
+  CompositeRenderer* getCompositeRenderer() const {
+    return _compositeRenderer;
+  }
 
+  MeasureRenderer* getMeasureRenderer() const {
+    return _measureRenderer;
+  }
 
   PlanetRenderer* getPlanetRenderer() const;
 

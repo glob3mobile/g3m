@@ -2,37 +2,21 @@
 
 package com.glob3mobile.pointcloud.octree.berkeleydb;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.List;
 
-import com.glob3mobile.pointcloud.octree.PersistentLOD;
-import com.glob3mobile.utils.Geodetic3D;
-import com.glob3mobile.utils.Sector;
-import com.glob3mobile.utils.Utils;
-import com.sleepycat.je.Cursor;
-import com.sleepycat.je.CursorConfig;
-import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseConfig;
-import com.sleepycat.je.DatabaseEntry;
-import com.sleepycat.je.Environment;
-import com.sleepycat.je.EnvironmentConfig;
-import com.sleepycat.je.LockMode;
-import com.sleepycat.je.OperationStatus;
-import com.sleepycat.je.TransactionConfig;
+import java.io.*;
+import java.util.*;
 
-import es.igosoftware.io.GIOUtils;
-import es.igosoftware.util.GUndeterminateProgress;
+import com.glob3mobile.pointcloud.octree.*;
+import com.glob3mobile.utils.*;
+import com.sleepycat.je.*;
+
+import es.igosoftware.io.*;
+import es.igosoftware.util.*;
 
 
 public class BerkeleyDBLOD
-         implements
-            PersistentLOD {
+                           implements
+                              PersistentLOD {
 
 
    public static PersistentLOD openReadOnly(final File cloudDirectory,
@@ -73,12 +57,12 @@ public class BerkeleyDBLOD
    private static final String NODE_LEVEL_DATA_DATABASE_NAME = "LODNodeLevelData";
 
 
-   private final boolean       _readOnly;
-   private final String        _cloudName;
-   private final Environment   _env;
-   private final Database      _nodeDB;
-   private final Database      _nodeLevelDataDB;
-   private final File          _cachedStatisticsFile;
+   private final boolean     _readOnly;
+   private final String      _cloudName;
+   private final Environment _env;
+   private final Database    _nodeDB;
+   private final Database    _nodeLevelDataDB;
+   private final File        _cachedStatisticsFile;
 
 
    private BerkeleyDBLOD(final File cloudDirectory,
@@ -86,7 +70,7 @@ public class BerkeleyDBLOD
                          final boolean createIfNotExists,
                          final boolean readOnly,
                          final long cacheSizeInBytes) {
-      _readOnly = readOnly;
+      _readOnly  = readOnly;
       _cloudName = cloudName;
 
       final File envHome = new File(cloudDirectory, cloudName);
@@ -116,7 +100,7 @@ public class BerkeleyDBLOD
       dbConfig.setKeyPrefixing(true);
       dbConfig.setReadOnly(readOnly);
       dbConfig.setSortedDuplicates(false);
-      _nodeDB = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
+      _nodeDB          = _env.openDatabase(null, NODE_DATABASE_NAME, dbConfig);
       _nodeLevelDataDB = _env.openDatabase(null, NODE_LEVEL_DATA_DATABASE_NAME, dbConfig);
 
       _cachedStatisticsFile = new File(cloudDirectory, "_stats_" + cloudName + ".ser");
@@ -138,8 +122,8 @@ public class BerkeleyDBLOD
 
 
    static class BerkeleyDBTransaction
-            implements
-               PersistentLOD.Transaction {
+                                      implements
+                                         PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
 
@@ -160,6 +144,7 @@ public class BerkeleyDBLOD
          _txn.abort();
       }
    }
+
 
    private static final TransactionConfig DEFAULT_TRANSACTION_CONFIG = new TransactionConfig();
 
@@ -205,15 +190,15 @@ public class BerkeleyDBLOD
 
       final com.sleepycat.je.Transaction txn = getBerkeleyDBTransaction(transaction);
       try (final Cursor cursor = _nodeDB.openCursor(txn, config)) {
-         final DatabaseEntry keyEntry = new DatabaseEntry();
+         final DatabaseEntry keyEntry  = new DatabaseEntry();
          final DatabaseEntry dataEntry = new DatabaseEntry();
 
          while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
-            final byte[] key = keyEntry.getData();
+            final byte[] key  = keyEntry.getData();
             final byte[] data = dataEntry.getData();
 
-            final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, key, data, false);
-            final boolean keepGoing = visitor.visit(transaction, node);
+            final BerkeleyDBLODNode node      = BerkeleyDBLODNode.fromDB(txn, this, key, data, false);
+            final boolean           keepGoing = visitor.visit(transaction, node);
             if (!keepGoing) {
                break;
             }
@@ -238,29 +223,29 @@ public class BerkeleyDBLOD
 
       final com.sleepycat.je.Transaction txn = getBerkeleyDBTransaction(transaction);
       try (final Cursor cursor = _nodeDB.openCursor(txn, cursorConfig)) {
-         final DatabaseEntry keyEntry = new DatabaseEntry(id);
+         final DatabaseEntry keyEntry  = new DatabaseEntry(id);
          final DatabaseEntry dataEntry = new DatabaseEntry();
 
          final CursorSituation situation = getCursorSituation(cursor, keyEntry, dataEntry, id);
          switch (situation) {
-            case NotFoundSelfNorDescendants: {
-               visitParent(transaction, cursor, keyEntry, dataEntry, id, visitor);
-               break;
-            }
-            case FoundDescendants: {
-               visitDescendants(transaction, cursor, keyEntry, dataEntry, id, visitor);
-               break;
-            }
-            case FoundSelf: {
-               final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), false);
-               visitor.visit(transaction, node);
-               break;
-            }
-            case FoundNothing: {
-               break;
-            }
-            default:
-               throw new RuntimeException("Invalid situation: " + situation);
+         case NotFoundSelfNorDescendants: {
+            visitParent(transaction, cursor, keyEntry, dataEntry, id, visitor);
+            break;
+         }
+         case FoundDescendants: {
+            visitDescendants(transaction, cursor, keyEntry, dataEntry, id, visitor);
+            break;
+         }
+         case FoundSelf: {
+            final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, id, dataEntry.getData(), false);
+            visitor.visit(transaction, node);
+            break;
+         }
+         case FoundNothing: {
+            break;
+         }
+         default:
+            throw new RuntimeException("Invalid situation: " + situation);
          }
       }
 
@@ -277,8 +262,8 @@ public class BerkeleyDBLOD
 
       byte[] key = keyEntry.getData();
 
-      final com.sleepycat.je.Transaction txn = getBerkeleyDBTransaction(transaction);
-      BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
+      final com.sleepycat.je.Transaction txn  = getBerkeleyDBTransaction(transaction);
+      BerkeleyDBLODNode                  node = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
       if (!visitor.visit(transaction, node)) {
          return;
       }
@@ -305,8 +290,8 @@ public class BerkeleyDBLOD
       if (cursor.getPrev(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
          final byte[] key = keyEntry.getData();
          if (Utils.hasSamePrefix(id, key)) {
-            final com.sleepycat.je.Transaction txn = getBerkeleyDBTransaction(transaction);
-            final BerkeleyDBLODNode node = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
+            final com.sleepycat.je.Transaction txn  = getBerkeleyDBTransaction(transaction);
+            final BerkeleyDBLODNode            node = BerkeleyDBLODNode.fromDB(txn, this, key, dataEntry.getData(), false);
             visitor.visit(transaction, node);
          }
       }
@@ -318,7 +303,7 @@ public class BerkeleyDBLOD
    }
 
 
-   private static enum CursorSituation {
+   private enum CursorSituation {
       NotFoundSelfNorDescendants,
       FoundDescendants,
       FoundSelf,
@@ -332,24 +317,24 @@ public class BerkeleyDBLOD
                                                      final byte[] id) {
       final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED);
       switch (status) {
-         case SUCCESS: {
-            final byte[] key = keyEntry.getData();
+      case SUCCESS: {
+         final byte[] key = keyEntry.getData();
 
-            if (!Utils.hasSamePrefix(key, id)) {
-               return CursorSituation.NotFoundSelfNorDescendants;
-            }
-            else if (Utils.isGreaterThan(key, id)) {
-               return CursorSituation.FoundDescendants;
-            }
-            else {
-               return CursorSituation.FoundSelf;
-            }
+         if (!Utils.hasSamePrefix(key, id)) {
+            return CursorSituation.NotFoundSelfNorDescendants;
          }
-         case NOTFOUND: {
-            return CursorSituation.FoundNothing;
+         else if (Utils.isGreaterThan(key, id)) {
+            return CursorSituation.FoundDescendants;
          }
-         default:
-            throw new RuntimeException("Status not supported: " + status);
+         else {
+            return CursorSituation.FoundSelf;
+         }
+      }
+      case NOTFOUND: {
+         return CursorSituation.FoundNothing;
+      }
+      default:
+         throw new RuntimeException("Status not supported: " + status);
       }
 
    }
@@ -457,17 +442,17 @@ public class BerkeleyDBLOD
 
       final byte[] binaryID = Utils.toBinaryID(id);
 
-      final DatabaseEntry keyEntry = new DatabaseEntry(binaryID);
+      final DatabaseEntry keyEntry  = new DatabaseEntry(binaryID);
       final DatabaseEntry dataEntry = new DatabaseEntry();
 
       final OperationStatus status = _nodeDB.get(txn, keyEntry, dataEntry, LockMode.DEFAULT);
       switch (status) {
-         case SUCCESS:
-            return BerkeleyDBLODNode.fromDB(txn, this, binaryID, dataEntry.getData(), loadPoints);
-         case NOTFOUND:
-            return null;
-         default:
-            throw new RuntimeException("Status not supported: " + status);
+      case SUCCESS:
+         return BerkeleyDBLODNode.fromDB(txn, this, binaryID, dataEntry.getData(), loadPoints);
+      case NOTFOUND:
+         return null;
+      default:
+         throw new RuntimeException("Status not supported: " + status);
       }
    }
 
@@ -496,48 +481,48 @@ public class BerkeleyDBLOD
 
 
    private static class BerkeleyLODDBStatistics
-            implements
-               PersistentLOD.Visitor,
-               PersistentLOD.Statistics,
-               Serializable {
+                                                implements
+                                                   PersistentLOD.Visitor,
+                                                   PersistentLOD.Statistics,
+                                                   Serializable {
 
-      private static final long      serialVersionUID = 3L;
+      private static final long serialVersionUID = 3L;
 
       private final String           _cloudName;
       private GUndeterminateProgress _progress;
 
-      private long                   _nodesCount;
-      private long                   _nodeLevelsCount;
-      private long                   _pointsCount;
-      private long                   _sumDepth;
-      private int                    _minDepth;
-      private int                    _maxDepth;
-      private double                 _sumHeight;
-      private int                    _minPointsCountPerNode;
-      private int                    _maxPointsCountPerNode;
-      private Sector                 _sector;
-      private double                 _minHeight       = Double.POSITIVE_INFINITY;
-      private double                 _maxHeight       = Double.NEGATIVE_INFINITY;
+      private long   _nodesCount;
+      private long   _nodeLevelsCount;
+      private long   _pointsCount;
+      private long   _sumDepth;
+      private int    _minDepth;
+      private int    _maxDepth;
+      private double _sumHeight;
+      private int    _minPointsCountPerNode;
+      private int    _maxPointsCountPerNode;
+      private Sector _sector;
+      private double _minHeight = Double.POSITIVE_INFINITY;
+      private double _maxHeight = Double.NEGATIVE_INFINITY;
 
 
       private BerkeleyLODDBStatistics(final String cloudName,
                                       final GUndeterminateProgress progress) {
          _cloudName = cloudName;
-         _progress = progress;
+         _progress  = progress;
       }
 
 
       @Override
       public void start(final PersistentLOD.Transaction transaction) {
-         _nodesCount = 0;
-         _pointsCount = 0;
+         _nodesCount            = 0;
+         _pointsCount           = 0;
          _minPointsCountPerNode = Integer.MAX_VALUE;
          _maxPointsCountPerNode = Integer.MIN_VALUE;
-         _sumDepth = 0;
-         _minDepth = Integer.MAX_VALUE;
-         _maxDepth = Integer.MIN_VALUE;
-         _sumHeight = 0;
-         _nodeLevelsCount = 0;
+         _sumDepth              = 0;
+         _minDepth              = Integer.MAX_VALUE;
+         _maxDepth              = Integer.MIN_VALUE;
+         _sumHeight             = 0;
+         _nodeLevelsCount       = 0;
       }
 
 
@@ -607,13 +592,13 @@ public class BerkeleyDBLOD
          System.out.println("   Points: " + _pointsCount);
          System.out.println("   Sector: " + _sector);
          System.out.println("   Heights: " + _minHeight + "/" + _maxHeight + //
-                            " (delta=" + (_maxHeight - _minHeight) + ")" + //
-                            " average=" + ((float) (_sumHeight / _pointsCount)));
+               " (delta=" + (_maxHeight - _minHeight) + ")" + //
+               " average=" + ((float) (_sumHeight / _pointsCount)));
          System.out.println("   Nodes: " + _nodesCount);
          System.out.println("    Depth: " + _minDepth + "/" + _maxDepth + ", Average=" + ((float) _sumDepth / _nodesCount));
          System.out.println("    Points/Node: Average=" + ((float) _pointsCount / _nodesCount) + //
-                            ", Min=" + _minPointsCountPerNode + //
-                            ", Max=" + _maxPointsCountPerNode);
+               ", Min=" + _minPointsCountPerNode + //
+               ", Max=" + _maxPointsCountPerNode);
          System.out.println("   Levels: " + _nodeLevelsCount);
          System.out.println("    Levels/Node=" + ((float) _nodeLevelsCount / _nodesCount));
          System.out.println("    Points/Level: Average=" + ((float) _pointsCount / _nodeLevelsCount));
@@ -771,8 +756,8 @@ public class BerkeleyDBLOD
          progress = null;
       }
 
-      final BerkeleyLODDBStatistics statistics = new BerkeleyLODDBStatistics(_cloudName, progress);
-      final Transaction transaction = null;
+      final BerkeleyLODDBStatistics statistics  = new BerkeleyLODDBStatistics(_cloudName, progress);
+      final Transaction             transaction = null;
       acceptDepthFirstVisitor(transaction, statistics);
       saveCachedStatistics(statistics);
       return statistics;

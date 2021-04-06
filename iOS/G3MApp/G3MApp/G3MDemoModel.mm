@@ -17,10 +17,13 @@
 #include <G3M/G3MWidget.hpp>
 #include <G3M/PlanetRenderer.hpp>
 #include <G3M/GEOVectorLayer.hpp>
-#include <G3M/PointCloudsRenderer.hpp>
+#include <G3M/OLDPointCloudsRenderer.hpp>
+#include <G3M/XPCRenderer.hpp>
 #include <G3M/HUDRenderer.hpp>
 #include <G3M/NonOverlappingMarksRenderer.hpp>
 #include <G3M/VectorStreamingRenderer.hpp>
+#include <G3M/CompositeRenderer.hpp>
+#include <G3M/MeasureRenderer.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -28,14 +31,15 @@
 #include "G3MVectorialDemoScene.hpp"
 #include "G3MMarksDemoScene.hpp"
 #include "G3M3DSymbologyDemoScene.hpp"
-#include "G3MPointCloudDemoScene.hpp"
+#include "G3MStaticPointCloudDemoScene.hpp"
+#include "G3MXPointCloudDemoScene.hpp"
 #include "G3M3DModelDemoScene.hpp"
 #include "G3MCameraDemoScene.hpp"
 #include "G3MIsosurfaceDemoScene.hpp"
 #include "G3MScenarioDEMDemoScene.hpp"
 #include "G3MTiledVectorDemoScene.hpp"
-#include "G3MStreamingPointCloud1DemoScene.hpp"
-#include "G3MStreamingPointCloud2DemoScene.hpp"
+#include "G3MOLDPointCloud1DemoScene.hpp"
+#include "G3MOLDPointCloud2DemoScene.hpp"
 #include "G3MHUDDemoScene.hpp"
 #include "G3MNonOverlappingMarksDemoScene.hpp"
 #include "G3MCanvas2DDemoScene.hpp"
@@ -55,10 +59,13 @@ G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            ShapesRenderer*              shapesRenderer,
                            MarksRenderer*               marksRenderer,
                            GEORenderer*                 geoRenderer,
-                           PointCloudsRenderer*         pointCloudsRenderer,
+                           OLDPointCloudsRenderer*      oldPointCloudsRenderer,
+                           XPCRenderer*                 xpcRenderer,
                            HUDRenderer*                 hudRenderer,
                            NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
-                           VectorStreamingRenderer*     vectorStreamingRenderer) :
+                           VectorStreamingRenderer*     vectorStreamingRenderer,
+                           CompositeRenderer*           compositeRenderer,
+                           MeasureRenderer*             measureRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
@@ -66,36 +73,40 @@ _meshRenderer(meshRenderer),
 _shapesRenderer(shapesRenderer),
 _marksRenderer(marksRenderer),
 _geoRenderer(geoRenderer),
-_pointCloudsRenderer(pointCloudsRenderer),
+_oldPointCloudsRenderer(oldPointCloudsRenderer),
+_xpcRenderer(xpcRenderer),
 _hudRenderer(hudRenderer),
 _nonOverlappingMarksRenderer(nonOverlappingMarksRenderer),
 _vectorStreamingRenderer(vectorStreamingRenderer),
+_compositeRenderer(compositeRenderer),
+_measureRenderer(measureRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
-  _scenes.push_back( new G3MRasterLayersDemoScene(this) );
-  _scenes.push_back( new G3MScenarioDEMDemoScene(this) );
-  _scenes.push_back( new G3MStreamingPointCloud1DemoScene(this) );
-  _scenes.push_back( new G3MStreamingPointCloud2DemoScene(this) );
-  _scenes.push_back( new G3MVectorialDemoScene(this) );
-  _scenes.push_back( new G3MMarksDemoScene(this) );
-  _scenes.push_back( new G3M3DSymbologyDemoScene(this) );
-  _scenes.push_back( new G3MPointCloudDemoScene(this) );
-  _scenes.push_back( new G3M3DModelDemoScene(this) );
-  _scenes.push_back( new G3MCameraDemoScene(this) );
-  _scenes.push_back( new G3MIsosurfaceDemoScene(this) );
-  _scenes.push_back( new G3MTiledVectorDemoScene(this) );
-  _scenes.push_back( new G3MHUDDemoScene(this) );
-  _scenes.push_back( new G3MNonOverlappingMarksDemoScene(this) );
-  _scenes.push_back( new G3MAugmentedRealityDemoScene(this) );
-  _scenes.push_back( new G3MAnimatedMarksDemoScene(this) );
-  _scenes.push_back( new G3MCanvas2DDemoScene(this) );
-  _scenes.push_back( new G3MVectorStreaming1DemoScene(this) );
-  _scenes.push_back( new G3MVectorStreaming2DemoScene(this) );
-  _scenes.push_back( new G3MStereoDemoScene(this) );
-  _scenes.push_back( new G3M3DLandDemoScene(this) );
-  _scenes.push_back( new G3MExtrusionDemoScene(this) );
-  _scenes.push_back( new G3MSoccerMatchDemoScene(this) );
+  _scenes.push_back(  new G3MXPointCloudDemoScene(this)           );
+  _scenes.push_back(  new G3MRasterLayersDemoScene(this)          );
+  _scenes.push_back(  new G3MScenarioDEMDemoScene(this)           );
+  _scenes.push_back(  new G3MOLDPointCloud1DemoScene(this)  );
+  _scenes.push_back(  new G3MOLDPointCloud2DemoScene(this)  );
+  _scenes.push_back(  new G3MVectorialDemoScene(this)             );
+  _scenes.push_back(  new G3MMarksDemoScene(this)                 );
+  _scenes.push_back(  new G3M3DSymbologyDemoScene(this)           );
+  _scenes.push_back(  new G3MStaticPointCloudDemoScene(this)      );
+  _scenes.push_back(  new G3M3DModelDemoScene(this)               );
+  _scenes.push_back(  new G3MCameraDemoScene(this)                );
+  _scenes.push_back(  new G3MIsosurfaceDemoScene(this)            );
+  _scenes.push_back(  new G3MTiledVectorDemoScene(this)           );
+  _scenes.push_back(  new G3MHUDDemoScene(this)                   );
+  _scenes.push_back(  new G3MNonOverlappingMarksDemoScene(this)   );
+  _scenes.push_back(  new G3MAugmentedRealityDemoScene(this)      );
+  _scenes.push_back(  new G3MAnimatedMarksDemoScene(this)         );
+  _scenes.push_back(  new G3MCanvas2DDemoScene(this)              );
+  _scenes.push_back(  new G3MVectorStreaming1DemoScene(this)      );
+  _scenes.push_back(  new G3MVectorStreaming2DemoScene(this)      );
+  _scenes.push_back(  new G3MStereoDemoScene(this)                );
+  _scenes.push_back(  new G3M3DLandDemoScene(this)                );
+  _scenes.push_back(  new G3MExtrusionDemoScene(this)             );
+  _scenes.push_back(  new G3MSoccerMatchDemoScene(this)           );
 }
 
 void G3MDemoModel::initializeG3MContext(const G3MContext* context) {
@@ -135,11 +146,14 @@ void G3MDemoModel::reset() {
   getMarksRenderer()->setRenderInReverse(false);
   getMeshRenderer()->clearMeshes();
   getShapesRenderer()->removeAllShapes(true);
-  getPointCloudsRenderer()->removeAllPointClouds();
+  getOLDPointCloudsRenderer()->removeAllPointClouds();
+  getXPCRenderer()->removeAllPointClouds();
   getHUDRenderer()->removeAllWidgets();
   getNonOverlappingMarksRenderer()->removeAllMarks();
   getNonOverlappingMarksRenderer()->removeAllListeners();
   getVectorStreamingRenderer()->removeAllVectorSets();
+  getCompositeRenderer()->removeAllRenderers();
+  getMeasureRenderer()->removeAllMeasures();
 
   _layerSet->removeAllLayers(true);
 }

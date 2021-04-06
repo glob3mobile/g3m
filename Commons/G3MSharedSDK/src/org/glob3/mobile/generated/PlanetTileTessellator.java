@@ -95,6 +95,7 @@ public class PlanetTileTessellator extends TileTessellator
   
         if ((elevationData != null) || (grid != null))
         {
+          @SuppressWarnings("null")
           final double rawElevation = (elevationData == null) ? grid.getElevation(i, j) : elevationData.getElevationAt(position);
   
           elevation = (rawElevation != rawElevation)? 0 : rawElevation * verticalExaggeration;
@@ -385,9 +386,6 @@ public class PlanetTileTessellator extends TileTessellator
   
       return DEMGridUtils.createDebugMesh(grid, rc.getPlanet(), prc._verticalExaggeration, Geodetic3D.zero(), -11000, 9000, 15); // pointSize -  maxElevation -  minElevation -  offset
     }
-  
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#warning DIEGO AT WORK!
   
     final Sector tileSector = tile._sector;
     final Sector meshSector = getRenderedSectorForTile(tile);

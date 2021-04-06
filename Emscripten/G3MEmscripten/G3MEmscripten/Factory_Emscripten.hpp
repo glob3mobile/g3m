@@ -40,6 +40,9 @@ public:
 
   ICanvas* createCanvas(bool retina) const;
 
+  ICanvas* createCanvas(bool retina,
+                        const int maxSize) const;
+
   IWebSocket* createWebSocket(const URL& url,
                               IWebSocketListener* listener,
                               bool autodeleteListener,

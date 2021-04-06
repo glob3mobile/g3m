@@ -107,12 +107,26 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
 #endif
 }
 
-size_t LeveledTexturedMesh::getVertexCount() const {
-  return _mesh->getVertexCount();
+size_t LeveledTexturedMesh::getVerticesCount() const {
+  return _mesh->getVerticesCount();
 }
 
 const Vector3D LeveledTexturedMesh::getVertex(const size_t index) const {
   return _mesh->getVertex(index);
+}
+
+void LeveledTexturedMesh::getVertex(const size_t index,
+                                    MutableVector3D& result) const {
+  _mesh->getVertex(index, result);
+}
+
+Color LeveledTexturedMesh::getColor(const size_t index) const {
+  return _mesh->getColor(index);
+}
+
+void LeveledTexturedMesh::getColor(const size_t index,
+                                   MutableColor& result) const {
+  _mesh->getColor(index, result);
 }
 
 BoundingVolume* LeveledTexturedMesh::getBoundingVolume() const {

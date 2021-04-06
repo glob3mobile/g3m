@@ -13,8 +13,10 @@ using namespace emscripten;
 #include <sstream>
 
 
-Canvas_Emscripten::Canvas_Emscripten(bool retina) :
+Canvas_Emscripten::Canvas_Emscripten(bool retina,
+                                     const int maxSize) :
 ICanvas(retina),
+_maxSize(maxSize),
 _domCanvas( val::global("document").call<val>("createElement", val("canvas")) ),
 _domCanvasContext( _domCanvas.call<val>("getContext", val("2d")) ),
 _width(0),
@@ -31,21 +33,36 @@ Canvas_Emscripten::~Canvas_Emscripten() {
 void Canvas_Emscripten::_initialize(int width, int height) {
   val window = val::global("window");
   val valDevicePixelRatio = window["devicePixelRatio"];
-  const float ratio = ( _retina && valDevicePixelRatio.as<bool>() ) ? valDevicePixelRatio.as<float>() : 1;
+  const float rawDevicePixelRatio = ( _retina && valDevicePixelRatio.as<bool>() ) ? valDevicePixelRatio.as<float>() : 1;
 
-  const IMathUtils*   mu = IMathUtils::instance();
+  float widthPixelRatio  = rawDevicePixelRatio;
+  float heightPixelRatio = rawDevicePixelRatio;
 
-  const int w = (int) mu->ceil(width * ratio);
-  const int h = (int) mu->ceil(height * ratio);
+  if (_maxSize > 0) {
+    const float goalWidth  = (width * widthPixelRatio);
+    if (goalWidth > _maxSize) {
+      widthPixelRatio = (float) _maxSize / width;
+    }
 
-  _width = w;
+    const float goalHeight = (height * heightPixelRatio);
+    if (goalHeight > _maxSize) {
+      heightPixelRatio = (float) _maxSize / height;
+    }
+  }
+  
+  const IMathUtils* mu = IMathUtils::instance();
+
+  const int w = (int) mu->ceil(width  * widthPixelRatio);
+  const int h = (int) mu->ceil(height * heightPixelRatio);
+
+  _width  = w;
   _height = h;
 
   _domCanvas.set("width",  w);
   _domCanvas.set("height", h);
 
-  if (ratio != 1) {
-    _domCanvasContext.call<void>("scale", val(ratio), val(ratio));
+  if ((widthPixelRatio != 1) || (widthPixelRatio != 1)) {
+    _domCanvasContext.call<void>("scale", val(widthPixelRatio), val(widthPixelRatio));
   }
 
   tryToSetCurrentFontToContext();

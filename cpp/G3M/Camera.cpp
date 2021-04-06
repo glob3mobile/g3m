@@ -66,10 +66,10 @@ void Camera::copyFrom(const Camera& that,
 
     _planet = that._planet;
 
-    _position.copyFrom(that._position);
-    _center.copyFrom(that._center);
-    _up.copyFrom(that._up);
-    _normalizedPosition.copyFrom(that._normalizedPosition);
+    _position.set(that._position);
+    _center.set(that._center);
+    _up.set(that._up);
+    _normalizedPosition.set(that._normalizedPosition);
 
     _dirtyFlags.copyFrom(that._dirtyFlags);
 
@@ -88,7 +88,7 @@ void Camera::copyFrom(const Camera& that,
     _modelMatrix.copyValue(that._modelMatrix);
     _modelViewMatrix.copyValue(that._modelViewMatrix);
 
-    _cartesianCenterOfView.copyFrom(that._cartesianCenterOfView);
+    _cartesianCenterOfView.set(that._cartesianCenterOfView);
 
 #ifdef C_CODE
     delete _geodeticCenterOfView;
@@ -251,8 +251,9 @@ void Camera::pixel2RayInto(const MutableVector3D& position,
                                                  viewport.x(),
                                                  viewport.y());
   if (obj.isNan()) {
-    ray.copyFrom(obj);
-  } else {
+    ray.set(obj);
+  }
+  else {
     ray.set(obj._x-position.x(), obj._y-position.y(), obj._z-position.z());
   }
 }
@@ -518,9 +519,9 @@ CoordinateSystem Camera::getCameraCoordinateSystem() const {
 
 void Camera::setCameraCoordinateSystem(const CoordinateSystem& rs) {
   _timestamp++;
-  _center.copyFrom(_position);
+  _center.set(_position);
   _center.addInPlace(rs._y);
-  _up.copyFrom(rs._z);
+  _up.set(rs._z);
   _dirtyFlags.setAllDirty();
 }
 
@@ -569,11 +570,11 @@ void Camera::getViewPortInto(MutableVector2I& viewport) const {
 }
 
 void Camera::getCartesianPositionMutable(MutableVector3D& result) const {
-  result.copyFrom(_position);
+  result.set(_position);
 }
 
 void Camera::getUpMutable(MutableVector3D& result) const {
-  result.copyFrom(_up);
+  result.set(_up);
 }
 
 const Vector3D Camera::getXYZCenterOfView() const {
@@ -598,14 +599,14 @@ const Frustum* const Camera::getFrustumInModelCoordinates() const {
 void Camera::setCartesianPosition(const MutableVector3D& v) {
   if (!v.equalTo(_position)) {
     _timestamp++;
-    _position.copyFrom(v);
+    _position.set(v);
     delete _geodeticPosition;
     _geodeticPosition = NULL;
     _dirtyFlags.setAllDirty();
     const double distanceToPlanetCenter = _position.length();
     const double planetRadius = distanceToPlanetCenter - getGeodeticHeight();
     _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
-    _normalizedPosition.copyFrom(_position);
+    _normalizedPosition.set(_position);
     _normalizedPosition.normalize();
   }
 }
@@ -697,9 +698,9 @@ bool Camera::hasValidViewDirection() const {
 void Camera::getLookAtParamsInto(MutableVector3D& position,
                                  MutableVector3D& center,
                                  MutableVector3D& up) const {
-  position.copyFrom(_position);
-  center.copyFrom(_center);
-  up.copyFrom(_up);
+  position.set(_position);
+  center.set(_center);
+  up.set(_up);
 }
 
 void Camera::getModelViewMatrixInto(MutableMatrix44D& matrix) const {

@@ -12,6 +12,7 @@
 #include "AbstractMeshShape.hpp"
 #include "Color.hpp"
 
+
 class CircleShape : public AbstractMeshShape {
 private:
   float  _radius;
@@ -43,9 +44,8 @@ public:
     delete _color;
     
 #ifdef JAVA_CODE
-  super.dispose();
+    super.dispose();
 #endif
-
   }
 
   void setRadius(float radius) {

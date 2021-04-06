@@ -226,7 +226,7 @@ public class CreateOT {
       final String commentPrefix = "#";
 
 
-      final boolean deleteOT         = false; //true;
+      final boolean deleteOT         = false; // true;
       final boolean loadOT           = false; // true;
       final boolean renameDone       = false;
       final boolean visitOT          = false;

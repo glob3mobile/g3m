@@ -10,7 +10,9 @@
 
 #include "Vector3D.hpp"
 #include "BoundingVolume.hpp"
-
+#include "MutableVector3D.hpp"
+#include "Color.hpp"
+#include "MutableColor.hpp"
 
 CompositeMesh::~CompositeMesh() {
   const size_t childrenCount = _children.size();
@@ -26,12 +28,12 @@ CompositeMesh::~CompositeMesh() {
 #endif
 }
 
-size_t CompositeMesh::getVertexCount() const {
+size_t CompositeMesh::getVerticesCount() const {
   size_t result = 0;
   const size_t childrenCount = _children.size();
   for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
-    result += child->getVertexCount();
+    result += child->getVerticesCount();
   }
   return result;
 }
@@ -53,13 +55,30 @@ const Vector3D CompositeMesh::getVertex(const size_t index) const {
   for (size_t i = 0; i < childrenCount; i++) {
     Mesh* child = _children[i];
     const size_t childIndex = index - acumIndex;
-    const size_t childSize = child->getVertexCount();
+    const size_t childSize = child->getVerticesCount();
     if (childIndex < childSize) {
       return child->getVertex(childIndex);
     }
     acumIndex += childSize;
   }
   return Vector3D::NANV;
+}
+
+void CompositeMesh::getVertex(const size_t index,
+                              MutableVector3D& result) const {
+  int acumIndex = 0;
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    const size_t childIndex = index - acumIndex;
+    const size_t childSize = child->getVerticesCount();
+    if (childIndex < childSize) {
+      child->getVertex(childIndex, result);
+      return;
+    }
+    acumIndex += childSize;
+  }
+  result.set(Vector3D::NANV);
 }
 
 BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
@@ -85,6 +104,38 @@ BoundingVolume* CompositeMesh::calculateBoundingVolume() const {
   }
 
   return result;
+}
+
+Color CompositeMesh::getColor(const size_t index) const {
+  int acumIndex = 0;
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    const size_t childIndex = index - acumIndex;
+    const size_t childSize = child->getVerticesCount();
+    if (childIndex < childSize) {
+      return child->getColor(childIndex);
+    }
+    acumIndex += childSize;
+  }
+  return Color::TRANSPARENT;
+}
+
+void CompositeMesh::getColor(const size_t index,
+                             MutableColor& result) const {
+  int acumIndex = 0;
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
+    Mesh* child = _children[i];
+    const size_t childIndex = index - acumIndex;
+    const size_t childSize = child->getVerticesCount();
+    if (childIndex < childSize) {
+      child->getColor(childIndex, result);
+      return;
+    }
+    acumIndex += childSize;
+  }
+  result.set(Color::TRANSPARENT);
 }
 
 BoundingVolume* CompositeMesh::getBoundingVolume() const {

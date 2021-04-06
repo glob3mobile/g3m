@@ -13,6 +13,8 @@
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "G3MRenderContext.hpp"
+#include "Ray.hpp"
+#include "Ellipsoid.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
@@ -67,14 +69,8 @@ double Sphere::projectedArea(const G3MRenderContext* rc) const {
   return rc->getCurrentCamera()->getProjectedSphereArea(*this);
 }
 
-//Vector2I Sphere::projectedExtent(const G3MRenderContext* rc) const {
-//  int TODO_remove_this; // Agustin: no implementes este método que va a desaparecer
-//  return Vector2I::zero();
-//}
-
 Mesh* Sphere::createWireframeMesh(const Color& color,
                                   short resolution) const {
-  const IMathUtils* mu = IMathUtils::instance();
   const double delta = PI / (resolution-1);
 
   // create vertices
@@ -83,10 +79,10 @@ Mesh* Sphere::createWireframeMesh(const Color& color,
     const double longitude = -PI + i*delta;
     for (int j=0; j<resolution; j++) {
       const double latitude = -PI/2 + j*delta;
-      const double h = mu->cos(latitude);
-      const double x = h * mu->cos(longitude);
-      const double y = h * mu->sin(longitude);
-      const double z = mu->sin(latitude);
+      const double h = COS(latitude);
+      const double x = h * COS(longitude);
+      const double y = h * SIN(longitude);
+      const double z = SIN(latitude);
       vertices->add(Vector3D(x,y,z).times(_radius).add(_center));
     }
   }
@@ -248,6 +244,10 @@ bool Sphere::contains(const Vector3D& point) const {
   return _center.squaredDistanceTo(point) <= _radiusSquared;
 }
 
+bool Sphere::contains(const MutableVector3D& point) const {
+  return _center.squaredDistanceTo(point) <= _radiusSquared;
+}
+
 bool Sphere::fullContainedInBox(const Box* that) const {
   const Vector3D upper = that->getUpper();
   const Vector3D lower = that->getLower();
@@ -262,15 +262,7 @@ bool Sphere::fullContainedInBox(const Box* that) const {
 
 
 bool Sphere::fullContainedInSphere(const Sphere* that) const {
-  //  const double d = _center.distanceTo(that->_center);
-  //  return (d + _radius <= that->_radius);
-
   if (_radius <= that->_radius) {
-    //    const double squaredDistance    = _center.squaredDistanceTo(that->_center);
-    //    const double squaredDeltaRadius = IMathUtils::instance()->squared(that->_radius - _radius);
-    //    if (squaredDeltaRadius >= squaredDistance) {
-    //      return true;
-    //    }
     const double distance    = _center.distanceTo(that->_center);
     const double deltaRadius = that->_radius - _radius;
     if (deltaRadius >= distance) {
@@ -287,4 +279,27 @@ Sphere* Sphere::createSphere() const {
 
 Sphere* Sphere::copy() const {
   return new Sphere(*this);
+}
+
+const bool Sphere::touchesRay(const Ray* ray) const {
+  // from Real-Time Collision Detection - Christer Ericson
+  //   page 179
+
+  const Vector3D m = ray->_origin.sub(_center);
+
+  const double c = m.dot(m) - _radiusSquared;
+  // If there is definitely at least one real root, there must be an intersection
+  if (c <= 0) {
+    return true;
+  }
+
+  const double b = m.dot(ray->_direction);
+  // Early exit if ray origin outside sphere and ray pointing away from sphere
+  if (b > 0) {
+    return false;
+  }
+
+  const double discr = (b * b) - c;
+  // A negative discriminant corresponds to ray missing sphere
+  return (discr >= 0.0);
 }

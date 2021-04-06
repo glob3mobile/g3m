@@ -19,6 +19,7 @@
 
 class ShapePendingEffect;
 class GLState;
+class G3MEventContext;
 
 
 class Shape : public SurfaceElevationListener, EffectTarget {
@@ -53,6 +54,8 @@ private:
   double _surfaceElevation;
 
   MutableMatrix44D getLocalTransform() const;
+
+  std::string _token;
 
 protected:
   virtual void cleanTransformMatrix();
@@ -195,8 +198,17 @@ public:
   virtual std::vector<double> intersectionsDistances(const Planet* planet,
                                                      const Vector3D& origin,
                                                      const Vector3D& direction) const = 0;
-  
-  
+
+  virtual bool touched(const G3MEventContext* ec);
+
+  void setToken(const std::string& token) {
+    _token = token;
+  }
+
+  const std::string getToken() const {
+    return _token;
+  }
+
 };
 
 #endif

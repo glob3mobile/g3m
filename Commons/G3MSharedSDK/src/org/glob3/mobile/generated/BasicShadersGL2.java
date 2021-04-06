@@ -3,8 +3,6 @@ package org.glob3.mobile.generated;
 //  BasicShadersGL2.hpp
 //  G3M
 //
-//  Created by Jose Miguel SN on 15/11/13.
-//
 //
 
 
@@ -107,7 +105,7 @@ public class BasicShadersGL2 extends GPUProgramFactory
     }
 
     {
-      GPUProgramSources srcBillboard = new GPUProgramSources("Billboard", emptyString + "attribute vec2 aTextureCoord;\n" + "uniform mat4 uModelview;\n" + "uniform vec4 uBillboardPosition;\n" + "uniform vec2 uBillboardAnchor; //Anchor in UV (texture-like) coordinates\n" + "uniform vec2 uTextureExtent;\n" + "uniform vec2 uViewPortExtent;\n" + "varying vec2 TextureCoordOut;\n" + "void main() {\n" + "gl_Position = uModelview * uBillboardPosition;\n" + "float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;\n" + "float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;\n" + "gl_Position.x += ((aTextureCoord.x - 0.5) - (uBillboardAnchor.x - 0.5)) * fx;\n" + "gl_Position.y -= ((aTextureCoord.y - 0.5) - (uBillboardAnchor.y - 0.5)) * fy;\n" + "TextureCoordOut = aTextureCoord;\n" + "}\n", emptyString + "varying mediump vec2 TextureCoordOut;\n" + "uniform sampler2D Sampler;\n" + "void main() {\n" + "gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + "}\n");
+      GPUProgramSources srcBillboard = new GPUProgramSources("Billboard", emptyString + "attribute vec2 aTextureCoord;\n" + "uniform mat4 uModelview;\n" + "uniform vec4 uBillboardPosition;\n" + "uniform vec2 uBillboardAnchor; //Anchor in UV (texture-like) coordinates\n" + "uniform vec2 uTextureExtent;\n" + "uniform vec2 uViewPortExtent;\n" + "varying vec2 TextureCoordOut;\n" + "void main() {\n" + "gl_Position = uModelview * uBillboardPosition;\n" + "float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;\n" + "float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;\n" + "gl_Position.x += ((aTextureCoord.x - 0.5) - (uBillboardAnchor.x - 0.5)) * fx;\n" + "gl_Position.y -= ((aTextureCoord.y - 0.5) - (uBillboardAnchor.y - 0.5)) * fy;\n" + "TextureCoordOut = aTextureCoord;\n" + "}\n", emptyString + "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" + "precision highp float;\n" + "#else\n" + "precision mediump float;\n" + "#endif\n" + "varying mediump vec2 TextureCoordOut;\n" + "uniform sampler2D Sampler;\n" + "void main() {\n" + "gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" + "}\n");
       this.add(srcBillboard);
     }
 

@@ -271,6 +271,8 @@ public:
 
   void deleteBuffer(const emscripten::val& webGLBuffer) const;
 
+  int getMaxTextureSize() const;
+
 };
 
 #endif

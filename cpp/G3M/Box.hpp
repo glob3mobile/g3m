@@ -23,7 +23,6 @@ class Box: public BoundingVolume {
 private:
 
   mutable Mesh* _mesh;
-  Mesh* createMesh(const Color& color) const;
 
 #ifdef C_CODE
   explicit Box(const Box& that) :
@@ -38,6 +37,10 @@ private:
 
 
 public:
+  
+  
+  Mesh* createMesh(const Color& color) const;
+  
   const Vector3D _lower;
   const Vector3D _upper;
 
@@ -73,6 +76,8 @@ public:
 
   Vector3D intersectionWithRay(const Vector3D& origin,
                                const Vector3D& direction) const;
+  
+  const bool touchesRay(const Ray* ray) const;
 
   void render(const G3MRenderContext* rc,
               const GLState* parentState,
@@ -105,7 +110,8 @@ public:
 
   Vector3D closestPoint(const Vector3D& point) const;
 
-  bool contains(const Vector3D& p) const;
+  bool contains(const Vector3D& point) const;
+  bool contains(const MutableVector3D& point) const;
 
   bool fullContains(const BoundingVolume* that) const {
     return that->fullContainedInBox(this);

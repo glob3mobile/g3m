@@ -11,12 +11,16 @@
 #include "IMathUtils.hpp"
 
 
-std::vector<double> Ellipsoid::intersectionsDistances(double originX,
-                                                      double originY,
-                                                      double originZ,
+std::vector<double> Ellipsoid::intersectionsDistances(double xoriginX,
+                                                      double xoriginY,
+                                                      double xoriginZ,
                                                       double directionX,
                                                       double directionY,
                                                       double directionZ) const {
+  const double mX = xoriginX - _center._x;
+  const double mY = xoriginY - _center._y;
+  const double mZ = xoriginZ - _center._z;
+
   std::vector<double> result;
 
   // By laborious algebraic manipulation....
@@ -24,13 +28,13 @@ std::vector<double> Ellipsoid::intersectionsDistances(double originX,
                     directionY * directionY * _oneOverRadiiSquared._y +
                     directionZ * directionZ * _oneOverRadiiSquared._z);
 
-  const double b = 2.0 * (originX * directionX * _oneOverRadiiSquared._x +
-                          originY * directionY * _oneOverRadiiSquared._y +
-                          originZ * directionZ * _oneOverRadiiSquared._z);
+  const double b = 2.0 * (mX * directionX * _oneOverRadiiSquared._x +
+                          mY * directionY * _oneOverRadiiSquared._y +
+                          mZ * directionZ * _oneOverRadiiSquared._z);
 
-  const double c = (originX * originX * _oneOverRadiiSquared._x +
-                    originY * originY * _oneOverRadiiSquared._y +
-                    originZ * originZ * _oneOverRadiiSquared._z - 1.0);
+  const double c = (mX * mX * _oneOverRadiiSquared._x +
+                    mY * mY * _oneOverRadiiSquared._y +
+                    mZ * mZ * _oneOverRadiiSquared._z - 1.0);
 
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits

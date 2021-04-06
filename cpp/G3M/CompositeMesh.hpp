@@ -26,9 +26,17 @@ private:
 public:
   virtual ~CompositeMesh();
   
-  size_t getVertexCount() const;
+  size_t getVerticesCount() const;
 
   const Vector3D getVertex(const size_t index) const;
+
+  void getVertex(const size_t index,
+                 MutableVector3D& result) const;
+
+  Color getColor(const size_t index) const;
+
+  void getColor(const size_t index,
+                MutableColor& result) const;
 
   BoundingVolume* getBoundingVolume() const;
 

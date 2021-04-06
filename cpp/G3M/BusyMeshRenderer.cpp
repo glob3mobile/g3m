@@ -78,12 +78,10 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
   const int minSize = (viewPortWidth < viewPortHeight) ? viewPortWidth : viewPortHeight;
   const float outerRadius = minSize / 15.0f;
 
-  const IMathUtils* mu = IMathUtils::instance();
-
   for (int step = 0; step <= numStrides; step++) {
     const double angle = (double) step * 2 * PI / numStrides;
-    const double c = mu->cos(angle);
-    const double s = mu->sin(angle);
+    const double c = COS(angle);
+    const double s = SIN(angle);
 
     vertices->add( (innerRadius * c), (innerRadius * s), 0);
     vertices->add( (outerRadius * c), (outerRadius * s), 0);

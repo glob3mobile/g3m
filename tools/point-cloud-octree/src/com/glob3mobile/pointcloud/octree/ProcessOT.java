@@ -3,22 +3,18 @@
 package com.glob3mobile.pointcloud.octree;
 
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 
-import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBLOD;
-import com.glob3mobile.pointcloud.octree.berkeleydb.BerkeleyDBOctree;
-import com.glob3mobile.utils.Geodetic3D;
-import com.glob3mobile.utils.Sector;
+import com.glob3mobile.pointcloud.octree.berkeleydb.*;
+import com.glob3mobile.utils.*;
 
-import es.igosoftware.util.GUndeterminateProgress;
+import es.igosoftware.util.*;
 
 
 public class ProcessOT {
@@ -87,18 +83,18 @@ public class ProcessOT {
       //      final String lodCloudName = sourceCloudName + "_LOD";
 
 
-      final File cloudDirectory = new File("/Users/dgd/Desktop/TomTomDemo/cloud_fixed");
+      final File   cloudDirectory  = new File("/Users/dgd/Desktop/TomTomDemo/cloud_fixed");
       final String sourceCloudName = "TomTom";
-      final String lodCloudName = sourceCloudName + "_LOD";
+      final String lodCloudName    = sourceCloudName + "_LOD";
 
 
       final long cacheSizeInBytes = 32 * 1024 * 1024 * 1024;
 
       //final boolean createSimplifiedCloudName = false;
       final boolean createMapForSourceOT = true;
-      final boolean createLOD = false; // true;
-      final boolean showLODStats = true;
-      final boolean drawSampleLODNode = false;
+      final boolean createLOD            = false; // true;
+      final boolean showLODStats         = true;
+      final boolean drawSampleLODNode    = false;
 
       //final boolean createFragmentCloudName = false;
       //
@@ -169,8 +165,8 @@ public class ProcessOT {
 
       if (createLOD) {
          try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, sourceCloudName, cacheSizeInBytes)) {
-            final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
-            final long pointsCount = statistics.getPointsCount();
+            final PersistentOctree.Statistics statistics  = sourceOctree.getStatistics(true);
+            final long                        pointsCount = statistics.getPointsCount();
             statistics.show();
 
             BerkeleyDBLOD.delete(cloudDirectory, lodCloudName);
@@ -190,8 +186,8 @@ public class ProcessOT {
             final boolean showStatisticsForSector = false;
             if (showStatisticsForSector) {
                final Sector sector = Sector.fromDegrees( //
-                        39.198205348894802569, -77.673339843749985789, //
-                        39.249270846223389242, -77.607421875);
+                     39.198205348894802569, -77.673339843749985789, //
+                     39.249270846223389242, -77.607421875);
 
 
                final PersistentLOD.Visitor visitor = new PersistentLOD.Visitor() {
@@ -206,10 +202,10 @@ public class ProcessOT {
 
                   @Override
                   public void start(final PersistentLOD.Transaction transaction) {
-                     _nodesCounter = 0;
+                     _nodesCounter  = 0;
                      _levelsCounter = 0;
                      _pointsCounter = 0;
-                     _sumDensity = 0;
+                     _sumDensity    = 0;
 
                      _minDensity = Double.POSITIVE_INFINITY;
                      _maxDensity = Double.NEGATIVE_INFINITY;
@@ -234,12 +230,12 @@ public class ProcessOT {
                      _pointsCounter += nodePointsCount;
                      _levelsCounter += node.getLevelsCount();
 
-                     final Sector nodeSector = node.getSector();
+                     final Sector nodeSector     = node.getSector();
                      final double squaredDegrees = nodeSector._deltaLongitude._degrees * nodeSector._deltaLongitude._degrees;
-                     final double nodeDensity = nodePointsCount / squaredDegrees;
+                     final double nodeDensity    = nodePointsCount / squaredDegrees;
                      _sumDensity += nodeDensity;
-                     _minDensity = Math.min(_minDensity, nodeDensity);
-                     _maxDensity = Math.max(_maxDensity, nodeDensity);
+                     _minDensity  = Math.min(_minDensity, nodeDensity);
+                     _maxDensity  = Math.max(_maxDensity, nodeDensity);
 
                      _progress.stepDone();
 
@@ -299,13 +295,13 @@ public class ProcessOT {
 
             final Sector sector = lodDB.getSector(id);
 
-            final long start = System.currentTimeMillis();
-            final PersistentLOD.Node node = lodDB.getNode(id, true);
-            final long elapsed = System.currentTimeMillis() - start;
+            final long               start   = System.currentTimeMillis();
+            final PersistentLOD.Node node    = lodDB.getNode(id, true);
+            final long               elapsed = System.currentTimeMillis() - start;
             System.out.println("== " + elapsed + "ms");
 
             final List<Geodetic3D> accumulatedPoints = new ArrayList<>();
-            long totalPoints = 0;
+            long                   totalPoints       = 0;
             for (final PersistentLOD.NodeLevel level : node.getLevels()) {
                System.out.println(level);
                totalPoints += level.getPointsCount();
@@ -327,11 +323,11 @@ public class ProcessOT {
                                      final List<Geodetic3D> points,
                                      final double minHeight,
                                      final double maxHeight) {
-      final int imageWidth = 1024 / 2;
+      final int imageWidth  = 1024 / 2;
       final int imageHeight = 1024 / 2;
 
       final BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
-      final Graphics2D g = image.createGraphics();
+      final Graphics2D    g     = image.createGraphics();
 
       //g.setColor(Color.WHITE);
       //g.fillRect(0, 0, imageWidth, imageHeight);

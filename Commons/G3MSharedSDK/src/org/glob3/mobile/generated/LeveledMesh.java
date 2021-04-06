@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class LeveledMesh extends Mesh
+public abstract class LeveledMesh extends Mesh
 {
   private Mesh _mesh;
 
@@ -50,14 +50,19 @@ public class LeveledMesh extends Mesh
 
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
-    return _mesh.getVertexCount();
+    return _mesh.getVerticesCount();
   }
 
   public final Vector3D getVertex(int index)
   {
     return _mesh.getVertex(index);
+  }
+
+  public final void getVertex(int index, MutableVector3D result)
+  {
+    _mesh.getVertex(index, result);
   }
 
   public final void rawRender(G3MRenderContext rc, GLState parentState)

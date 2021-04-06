@@ -10,6 +10,7 @@
 		CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */; };
 		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
 		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
+		CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */; };
 		CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
@@ -47,17 +48,17 @@
 		CFB136CE1AA7573D0013EDE1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */; };
 		CFB136D01AA779830013EDE1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CF1AA779830013EDE1 /* CoreMotion.framework */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
-		CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */; };
+		CFBD815219A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */; };
 		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
 		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
 		CFC664CA1BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC664C81BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp */; };
-		CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */; };
+		CFD3BE3D19D3324F00FE2D5A /* G3MOLDPointCloud2DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD3BE3B19D3324F00FE2D5A /* G3MOLDPointCloud2DemoScene.cpp */; };
 		CFD884D321AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD884D121AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp */; };
 		CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */; };
 		CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */; };
 		CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */; };
-		CFE3B3D0183AC7D20078C796 /* G3MPointCloudDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */; };
+		CFE3B3D0183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3CE183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp */; };
 		CFE3B3D2183ACAA90078C796 /* 18STJ7435_2000_4326.bson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */; };
 		CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B3D3183AD04A0078C796 /* G3M3DModelDemoScene.cpp */; };
 		CFE3B3D7183AD2CB0078C796 /* A320.bson in Resources */ = {isa = PBXBuildFile; fileRef = CFE3B3D6183AD2CB0078C796 /* A320.bson */; };
@@ -152,6 +153,8 @@
 		CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		CF162FE11AB739C800673D44 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CF162FE31AB739D700673D44 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		CF2744F825B1A8990056304B /* G3MXPointCloudDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MXPointCloudDemoScene.hpp; sourceTree = "<group>"; };
+		CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MXPointCloudDemoScene.mm; sourceTree = "<group>"; };
 		CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DLandDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3M3DLandDemoScene.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -203,16 +206,16 @@
 		CFB136CF1AA779830013EDE1 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDemoBuilder_iOS.mm; sourceTree = "<group>"; };
 		CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud1DemoScene.cpp; sourceTree = "<group>"; };
-		CFBD815119A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
+		CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MOLDPointCloud1DemoScene.cpp; sourceTree = "<group>"; };
+		CFBD815119A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MOLDPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
 		CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCanvas2DDemoScene.cpp; sourceTree = "<group>"; };
 		CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MCanvas2DDemoScene.hpp; sourceTree = "<group>"; };
 		CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorgrid.jpg; sourceTree = "<group>"; };
 		CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "full-earth-2048x1024.bil"; sourceTree = "<group>"; };
 		CFC664C81BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MVectorStreaming2DemoScene.cpp; sourceTree = "<group>"; };
 		CFC664C91BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MVectorStreaming2DemoScene.hpp; sourceTree = "<group>"; };
-		CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStreamingPointCloud2DemoScene.cpp; sourceTree = "<group>"; };
-		CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStreamingPointCloud2DemoScene.hpp; sourceTree = "<group>"; };
+		CFD3BE3B19D3324F00FE2D5A /* G3MOLDPointCloud2DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MOLDPointCloud2DemoScene.cpp; sourceTree = "<group>"; };
+		CFD3BE3C19D3324F00FE2D5A /* G3MOLDPointCloud2DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MOLDPointCloud2DemoScene.hpp; sourceTree = "<group>"; };
 		CFD884D121AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MSoccerMatchDemoScene.cpp; sourceTree = "<group>"; };
 		CFD884D221AAF98F004379AF /* G3MSoccerMatchDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MSoccerMatchDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MMarksDemoScene.cpp; sourceTree = "<group>"; };
@@ -220,8 +223,8 @@
 		CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DSymbologyDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFE3B3CA183ABAC70078C796 /* G3M3DSymbologyDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3M3DSymbologyDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3CC183ABD8B0078C796 /* uscitieslite.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = uscitieslite.geojson; sourceTree = "<group>"; };
-		CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MPointCloudDemoScene.cpp; sourceTree = "<group>"; };
-		CFE3B3CF183AC7D20078C796 /* G3MPointCloudDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MPointCloudDemoScene.hpp; sourceTree = "<group>"; };
+		CFE3B3CE183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MStaticPointCloudDemoScene.cpp; sourceTree = "<group>"; };
+		CFE3B3CF183AC7D20078C796 /* G3MStaticPointCloudDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStaticPointCloudDemoScene.hpp; sourceTree = "<group>"; };
 		CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */ = {isa = PBXFileReference; lastKnownFileType = file; path = 18STJ7435_2000_4326.bson; sourceTree = "<group>"; };
 		CFE3B3D3183AD04A0078C796 /* G3M3DModelDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3M3DModelDemoScene.cpp; sourceTree = "<group>"; };
 		CFE3B3D4183AD04A0078C796 /* G3M3DModelDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3M3DModelDemoScene.hpp; sourceTree = "<group>"; };
@@ -391,20 +394,20 @@
 				CFE3B3C6183A99070078C796 /* G3MMarksDemoScene.hpp */,
 				CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */,
 				CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */,
-				CFE3B3CE183AC7D20078C796 /* G3MPointCloudDemoScene.cpp */,
-				CFE3B3CF183AC7D20078C796 /* G3MPointCloudDemoScene.hpp */,
 				CF6920B21837F1CA007409D8 /* G3MRasterLayersDemoScene.cpp */,
 				CF6920B31837F1CA007409D8 /* G3MRasterLayersDemoScene.hpp */,
 				CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */,
 				CF37F5ED183D239A0050CAEF /* G3MScenarioDEMDemoScene.hpp */,
 				CFD884D121AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp */,
 				CFD884D221AAF98F004379AF /* G3MSoccerMatchDemoScene.hpp */,
+				CFE3B3CE183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp */,
+				CFE3B3CF183AC7D20078C796 /* G3MStaticPointCloudDemoScene.hpp */,
 				D82CA3EF1C64D837008FAAD2 /* G3MStereoDemoScene.hpp */,
 				D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */,
-				CFBD815019A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp */,
-				CFBD815119A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.hpp */,
-				CFD3BE3B19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp */,
-				CFD3BE3C19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.hpp */,
+				CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */,
+				CFBD815119A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.hpp */,
+				CFD3BE3B19D3324F00FE2D5A /* G3MOLDPointCloud2DemoScene.cpp */,
+				CFD3BE3C19D3324F00FE2D5A /* G3MOLDPointCloud2DemoScene.hpp */,
 				CFF30254192816250049BEF4 /* G3MTiledVectorDemoScene.cpp */,
 				CFF30255192816250049BEF4 /* G3MTiledVectorDemoScene.hpp */,
 				CF6920B51837F26B007409D8 /* G3MVectorialDemoScene.cpp */,
@@ -413,6 +416,8 @@
 				CFECA7761B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.hpp */,
 				CFC664C81BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp */,
 				CFC664C91BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.hpp */,
+				CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */,
+				CF2744F825B1A8990056304B /* G3MXPointCloudDemoScene.hpp */,
 			);
 			name = DemoBuilder;
 			sourceTree = "<group>";
@@ -621,7 +626,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = G3M;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Igo Software SL";
 				TargetAttributes = {
 					E7D1B60416D2436700AF47C1 = {
@@ -749,16 +754,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7D1B61516D2436700AF47C1 /* main.m in Sources */,
+				CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */,
 				CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */,
 				CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */,
-				CFE3B3D0183AC7D20078C796 /* G3MPointCloudDemoScene.cpp in Sources */,
+				CFE3B3D0183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp in Sources */,
 				E7D1B61916D2436700AF47C1 /* G3MAppDelegate.m in Sources */,
 				CFF9D2061A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm in Sources */,
 				E7D1B62816D2436700AF47C1 /* G3MViewController.mm in Sources */,
 				CF6920B71837F26B007409D8 /* G3MVectorialDemoScene.cpp in Sources */,
 				CF483EC51A2E5D5100B70D7E /* G3MHUDDemoScene.cpp in Sources */,
 				CF64DA302180AC0E00387041 /* G3MExtrusionDemoScene.cpp in Sources */,
-				CFD3BE3D19D3324F00FE2D5A /* G3MStreamingPointCloud2DemoScene.cpp in Sources */,
+				CFD3BE3D19D3324F00FE2D5A /* G3MOLDPointCloud2DemoScene.cpp in Sources */,
 				CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */,
 				CFE3B3CB183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp in Sources */,
 				CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */,
@@ -775,7 +781,7 @@
 				CFC664CA1BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp in Sources */,
 				CFECA7771B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp in Sources */,
 				CF8B1A541837DBFA004D3902 /* G3MDemoModel.mm in Sources */,
-				CFBD815219A3D9F600F1A8C4 /* G3MStreamingPointCloud1DemoScene.cpp in Sources */,
+				CFBD815219A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp in Sources */,
 				CFD884D321AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp in Sources */,
 				CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */,
 				D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */,
@@ -821,6 +827,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -848,7 +855,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -877,6 +884,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -896,7 +904,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -924,7 +932,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
@@ -960,7 +968,7 @@
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = C_CODE;
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",

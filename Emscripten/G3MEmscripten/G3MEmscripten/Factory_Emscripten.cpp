@@ -75,7 +75,12 @@ IShortBuffer* Factory_Emscripten::createShortBuffer(size_t size) const {
 }
 
 ICanvas* Factory_Emscripten::createCanvas(bool retina) const {
-  return new Canvas_Emscripten(retina);
+  return new Canvas_Emscripten(retina, -1);
+}
+
+ICanvas* Factory_Emscripten::createCanvas(bool retina,
+                                          const int maxSize) const {
+  return new Canvas_Emscripten(retina, maxSize);
 }
 
 IWebSocket* Factory_Emscripten::createWebSocket(const URL& url,

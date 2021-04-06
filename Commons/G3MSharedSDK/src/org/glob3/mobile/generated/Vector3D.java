@@ -168,6 +168,11 @@ public class Vector3D
     return new Vector3D(_y * other._z - _z * other._y, _z * other._x - _x * other._z, _x * other._y - _y * other._x);
   }
 
+  public final Vector3D cross(double otherX, double otherY, double otherZ)
+  {
+    return new Vector3D(_y * otherZ - _z * otherY, _z * otherX - _x * otherZ, _x * otherY - _y * otherX);
+  }
+
   public final Angle angleBetween(Vector3D other)
   {
     return Angle.fromRadians(Vector3D.angleInRadiansBetween(this, other));
@@ -353,6 +358,13 @@ public class Vector3D
   }
 
   public final double squaredDistanceTo(Vector3D that)
+  {
+    final double dx = _x - that._x;
+    final double dy = _y - that._y;
+    final double dz = _z - that._z;
+    return (dx * dx) + (dy * dy) + (dz * dz);
+  }
+  public final double squaredDistanceTo(MutableVector3D that)
   {
     final double dx = _x - that._x;
     final double dy = _y - that._y;

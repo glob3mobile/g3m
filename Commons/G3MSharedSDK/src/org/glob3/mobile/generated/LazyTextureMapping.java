@@ -63,7 +63,7 @@ public class LazyTextureMapping extends TextureMapping
 
     releaseGLTextureID();
 
-  super.dispose();
+    super.dispose();
   }
 
   public final boolean isValid()

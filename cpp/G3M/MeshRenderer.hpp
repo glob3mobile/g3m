@@ -133,7 +133,7 @@ public:
 
   void onLostContext();
 
-  void render(const G3MRenderContext* rc, GLState* glState);
+  virtual void render(const G3MRenderContext* rc, GLState* glState);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {

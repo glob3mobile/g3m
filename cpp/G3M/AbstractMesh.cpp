@@ -11,6 +11,8 @@
 #include "GLFeature.hpp"
 #include "GLState.hpp"
 #include "Box.hpp"
+#include "MutableVector3D.hpp"
+#include "MutableColor.hpp"
 
 
 AbstractMesh::~AbstractMesh() {
@@ -78,7 +80,7 @@ BoundingVolume* AbstractMesh::computeBoundingVolume() const {
     return NULL;
   }
 
-  const size_t vertexCount = getVertexCount();
+  const size_t vertexCount = getVerticesCount();
 
   if (vertexCount == 0) {
     return NULL;
@@ -121,6 +123,14 @@ BoundingVolume* AbstractMesh::getBoundingVolume() const {
   return _boundingVolume;
 }
 
+void AbstractMesh::getVertex(const size_t index,
+                             MutableVector3D& result) const {
+  const size_t p = index * 3;
+  result.set(_vertices->get(p  ) + _center._x,
+             _vertices->get(p+1) + _center._y,
+             _vertices->get(p+2) + _center._z);
+}
+
 const Vector3D AbstractMesh::getVertex(const size_t index) const {
   const size_t p = index * 3;
   return Vector3D(_vertices->get(p  ) + _center._x,
@@ -128,7 +138,33 @@ const Vector3D AbstractMesh::getVertex(const size_t index) const {
                   _vertices->get(p+2) + _center._z);
 }
 
-size_t AbstractMesh::getVertexCount() const {
+Color AbstractMesh::getColor(const size_t index) const {
+  if (_colors == NULL) {
+    return Color::TRANSPARENT;
+  }
+
+  const size_t p = index * 4;
+  return Color::fromRGBA(_colors->get(p  ),
+                         _colors->get(p+1),
+                         _colors->get(p+2),
+                         _colors->get(p+3));
+}
+
+void AbstractMesh::getColor(const size_t index,
+                            MutableColor& result) const {
+  if (_colors == NULL) {
+    result.set(Color::TRANSPARENT);
+  }
+  else {
+    const size_t p = index * 4;
+    result.set(_colors->get(p  ),
+               _colors->get(p+1),
+               _colors->get(p+2),
+               _colors->get(p+3));
+  }
+}
+
+size_t AbstractMesh::getVerticesCount() const {
   return _vertices->size() / 3;
 }
 

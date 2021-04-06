@@ -8,19 +8,25 @@
 #ifndef G3M_MutableVector3D
 #define G3M_MutableVector3D
 
-class Vector3D;
+#include <string>
+
+#include "Vector3D.hpp"
+
+//class Vector3D;
 class Angle;
 class MutableMatrix44D;
 
 
 class MutableVector3D {
 private:
+
+  MutableVector3D& operator=(const MutableVector3D& that);
+
+public:
   double _x;
   double _y;
   double _z;
 
-
-public:
 
   MutableVector3D() :
   _x(0),
@@ -55,13 +61,17 @@ public:
     _z = z;
   }
 
-  void copyFrom(const MutableVector3D& that) {
+  void set(const MutableVector3D& that) {
     _x = that._x;
     _y = that._y;
     _z = that._z;
   }
 
-  void copyFrom(const Vector3D& that);
+  void set(const Vector3D& that) {
+    _x = that._x;
+    _y = that._y;
+    _z = that._z;
+  }
 
   MutableVector3D normalized() const;
   void normalize();
@@ -184,6 +194,14 @@ public:
     const double dz = _z - that._z;
     return (dx * dx) + (dy * dy) + (dz * dz);
   }
+
+  const std::string description() const;
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
   
 };
 

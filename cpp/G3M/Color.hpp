@@ -65,6 +65,15 @@ public:
                  alpha / 255.0f);
   }
 
+  static Color fromRGBA255(const int red,
+                           const int green,
+                           const int blue) {
+    return Color(red   / 255.0f,
+                 green / 255.0f,
+                 blue  / 255.0f,
+                 1);
+  }
+
   static Color fromRGBA(const float red,
                         const float green,
                         const float blue,
@@ -102,6 +111,7 @@ public:
   static const Color ORANGE;
   static const Color GREEN;
   static const Color BLUE;
+  static const Color NAVY;
 
   static Color transparent() {
     return TRANSPARENT;

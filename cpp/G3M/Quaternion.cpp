@@ -81,8 +81,8 @@ Quaternion Quaternion::slerp(const Quaternion& that,
   const double sinHalfTheta = mu->sqrt(1.0 - (cosHalftheta * cosHalftheta));
   const double halfTheta    = mu->acos(cosHalftheta);
 
-  const double ratioA = mu->sin((1 - t) * halfTheta) / sinHalfTheta;
-  const double ratioB = mu->sin(t * halfTheta) / sinHalfTheta;
+  const double ratioA = SIN((1 - t) * halfTheta) / sinHalfTheta;
+  const double ratioB = SIN(t * halfTheta) / sinHalfTheta;
 
   const double w = (_w * ratioA) + (tempW * ratioB);
   const double x = (_x * ratioA) + (tempX * ratioB);

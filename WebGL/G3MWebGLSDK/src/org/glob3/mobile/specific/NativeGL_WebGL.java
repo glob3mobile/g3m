@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.specific;
 
+
 import java.util.*;
 
 import org.glob3.mobile.generated.*;
@@ -10,12 +11,14 @@ import com.google.gwt.core.client.*;
 
 
 public final class NativeGL_WebGL
-         extends
-            INativeGL {
+                                  extends
+                                     INativeGL {
    /*
-   Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled forces the browser to do expensive emulation
-   work when running on desktop OpenGL platforms, for example on Mac. It is preferable to always draw with vertex
-   attrib 0 array enabled, by using bindAttribLocation to bind some always-used attribute to location 0.
+    * Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled forces
+    * the browser to do expensive emulation work when running on desktop OpenGL
+    * platforms, for example on Mac. It is preferable to always draw with vertex
+    * attrib 0 array enabled, by using bindAttribLocation to bind some always-used
+    * attribute to location 0.
     */
 
    private final JavaScriptObject _gl;
@@ -861,6 +864,13 @@ public final class NativeGL_WebGL
                                int height) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.viewport(x, y, width, height);
+   }-*/;
+
+
+   @Override
+   public native int getMaxTextureSize() /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		return gl.getParameter(gl.MAX_TEXTURE_SIZE);
    }-*/;
 
 

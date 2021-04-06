@@ -378,4 +378,9 @@ public class GL
     _nativeGL.clear(GLBufferType.depthBuffer());
   }
 
+  public final int getMaxTextureSize()
+  {
+    return _nativeGL.getMaxTextureSize();
+  }
+
 }

@@ -2,23 +2,17 @@
 
 package org.glob3.mobile.tools.gdal;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
-import org.glob3.mobile.tools.commandline.core.CommandLine;
-import org.glob3.mobile.tools.commandline.core.CommandLine.StreamGobbler;
-import org.glob3.mobile.tools.utils.FileUtils;
+import java.io.*;
+
+import org.glob3.mobile.tools.commandline.core.*;
+import org.glob3.mobile.tools.commandline.core.CommandLine.*;
+import org.glob3.mobile.tools.utils.*;
 
 
 public class GDAL {
 
-   private static GDAL   _gdal;
+   private static GDAL _gdal;
 
 
    private static String GDAL_HOME = System.getenv("GDAL_HOME");
@@ -76,8 +70,7 @@ public class GDAL {
       try {
          CommandLine.getInstance();
          sb = CommandLine.execute(cmd);
-         if ((sb.getType() == StreamGobbler.streamGobblerType.OUTPUT)
-             && sb.getResult().startsWith(GDAL_HOME + GDALCommands.srsInfo + " is ")) {
+         if ((sb.getType() == StreamGobbler.streamGobblerType.OUTPUT) && sb.getResult().startsWith(GDAL_HOME + GDALCommands.srsInfo + " is ")) {
             return true;
          }
       }
@@ -273,7 +266,7 @@ public class GDAL {
                                final String outputFileName) throws GDALException {
       if (FileUtils.checkFile(inputFile) && FileUtils.checkDir(outputDir)) {
          File outputFile = new File(outputDir, outputFileName + ".json");
-         int i = 1;
+         int  i          = 1;
          while (outputFile.exists()) {
             outputFile = new File(outputDir, outputFileName + "(" + i + ").json");
             i++;
@@ -289,8 +282,8 @@ public class GDAL {
                      out.write("{\"points\": [");
                      //Read File Line By Line
                      boolean firstComma = true;
-                     int k = 0;
-                     String strLine;
+                     int     k          = 0;
+                     String  strLine;
                      while ((strLine = br.readLine()) != null) {
                         // Print the content on the console
                         System.out.println("" + strLine);
@@ -327,6 +320,7 @@ public class GDAL {
       throw new GDALException("Input file or output fil don't exists", null);
    }
 
+
    public class GDALCommands {
       public final static String ogrinfo = "ogrinfo";
       public final static String srsInfo = "gdalsrsinfo";
@@ -335,13 +329,14 @@ public class GDAL {
 
 
    public class GDALVectorFormats {
-      public final static String shp    = ".shp";
+      public final static String shp = ".shp";
       /**
        * Aeronav FAA
        *
-       * This driver reads text files describing aeronav information - obstacles, navaids and routes - as provided by the FAA.
+       * This driver reads text files describing aeronav information - obstacles,
+       * navaids and routes - as provided by the FAA.
        */
-      public final static String faa    = ".faa";
+      public final static String faa = ".faa";
 
       /**
        * GeoRSS : Geographically Encoded Objects for RSS feeds

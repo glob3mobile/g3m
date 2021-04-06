@@ -103,14 +103,29 @@ public class LeveledTexturedMesh extends Mesh
     super.dispose();
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
-    return _mesh.getVertexCount();
+    return _mesh.getVerticesCount();
   }
 
   public final Vector3D getVertex(int index)
   {
     return _mesh.getVertex(index);
+  }
+
+  public final void getVertex(int index, MutableVector3D result)
+  {
+    _mesh.getVertex(index, result);
+  }
+
+  public final Color getColor(int index)
+  {
+    return _mesh.getColor(index);
+  }
+
+  public final void getColor(int index, MutableColor result)
+  {
+    _mesh.getColor(index, result);
   }
 
   public final BoundingVolume getBoundingVolume()

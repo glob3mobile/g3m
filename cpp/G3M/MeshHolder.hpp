@@ -37,11 +37,19 @@ public:
 #endif
   }
 
-  size_t getVertexCount() const {
-    return _mesh->getVertexCount();
+  size_t getVerticesCount() const {
+    return _mesh->getVerticesCount();
   }
 
   const Vector3D getVertex(const size_t index) const;
+
+  void getVertex(const size_t index,
+                 MutableVector3D& result) const;
+
+  Color getColor(const size_t index) const;
+
+  void getColor(const size_t index,
+                MutableColor& result) const;
 
   BoundingVolume* getBoundingVolume() const {
     return _mesh->getBoundingVolume();

@@ -15,6 +15,9 @@ class Vector3D;
 class BoundingVolume;
 class G3MRenderContext;
 class GLState;
+class MutableVector3D;
+class MutableColor;
+class Color;
 
 
 class Mesh {
@@ -54,9 +57,17 @@ public:
 
   void setUserData(MeshUserData* userData);
 
-  virtual size_t getVertexCount() const = 0;
+  virtual size_t getVerticesCount() const = 0;
 
   virtual const Vector3D getVertex(const size_t index) const = 0;
+
+  virtual void getVertex(const size_t index,
+                         MutableVector3D& result) const = 0;
+
+  virtual Color getColor(const size_t index) const = 0;
+
+  virtual void getColor(const size_t index,
+                        MutableColor& result) const = 0;
 
   virtual BoundingVolume* getBoundingVolume() const = 0;
 

@@ -172,8 +172,8 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     cameraContext.setCurrentGesture(CameraEventGesture.DoubleDrag);
   
     // double dragging
-    _initialPixel0 = new MutableVector2F(touchEvent.getTouch(0).getPos());
-    _initialPixel1 = new MutableVector2F(touchEvent.getTouch(1).getPos());
+    _initialPixel0.set(new MutableVector2F(touchEvent.getTouch(0).getPos()));
+    _initialPixel1.set(new MutableVector2F(touchEvent.getTouch(1).getPos()));
   }
   public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -203,9 +203,9 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
         if (!intersection.isNan())
         {
           //        _centralGlobePoint = intersection.asMutableVector3D();
-          _centralGlobePoint.copyFrom(intersection);
+          _centralGlobePoint.set(intersection);
           //        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
-          _centralGlobeNormal.copyFrom(planet.geodeticSurfaceNormal(_centralGlobePoint));
+          _centralGlobeNormal.set(planet.geodeticSurfaceNormal(_centralGlobePoint));
           _fingerSep0 = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
           _lastAngle = _angle0 = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
           cameraContext.setCurrentGesture(CameraEventGesture.Zoom);

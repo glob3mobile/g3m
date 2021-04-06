@@ -37,7 +37,7 @@ public:
            const float         transparency = 1,
            LayerCondition*     condition    = NULL,
            std::vector<const Info*>*  layerInfo = new std::vector<const Info*>()) :
-  MercatorTiledLayer("http://",
+  MercatorTiledLayer("https://",
                      "tile.openstreetmap.org",
                      getSubdomains(),
                      "png",

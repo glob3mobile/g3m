@@ -140,6 +140,14 @@ public:
                     _x * other._y - _y * other._x);
   }
 
+  Vector3D cross(const double otherX,
+                 const double otherY,
+                 const double otherZ) const {
+    return Vector3D(_y * otherZ - _z * otherY,
+                    _z * otherX - _x * otherZ,
+                    _x * otherY - _y * otherX);
+  }
+
   Angle angleBetween(const Vector3D& other) const;
   double angleInRadiansBetween(const Vector3D& other) const;
   Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const;
@@ -185,6 +193,7 @@ public:
                        const Vector3D& max) const;
 
   const double squaredDistanceTo(const Vector3D& that) const;
+  const double squaredDistanceTo(const MutableVector3D& that) const;
 
   const double distanceTo(const Vector3D& that) const;
   

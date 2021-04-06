@@ -51,7 +51,7 @@ public abstract class AbstractMesh extends TransformableMesh
       return null;
     }
   
-    final int vertexCount = getVertexCount();
+    final int vertexCount = getVerticesCount();
   
     if (vertexCount == 0)
     {
@@ -197,7 +197,7 @@ public abstract class AbstractMesh extends TransformableMesh
     return _boundingVolume;
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
     return _vertices.size() / 3;
   }
@@ -206,6 +206,36 @@ public abstract class AbstractMesh extends TransformableMesh
   {
     final int p = index * 3;
     return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
+  }
+
+  public final void getVertex(int index, MutableVector3D result)
+  {
+    final int p = index * 3;
+    result.set(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
+  }
+
+  public final Color getColor(int index)
+  {
+    if (_colors == null)
+    {
+      return Color.TRANSPARENT;
+    }
+  
+    final int p = index * 4;
+    return Color.fromRGBA(_colors.get(p), _colors.get(p+1), _colors.get(p+2), _colors.get(p+3));
+  }
+
+  public final void getColor(int index, MutableColor result)
+  {
+    if (_colors == null)
+    {
+      result.set(Color.TRANSPARENT);
+    }
+    else
+    {
+      final int p = index * 4;
+      result.set(_colors.get(p), _colors.get(p+1), _colors.get(p+2), _colors.get(p+3));
+    }
   }
 
   public boolean isTransparent(G3MRenderContext rc)

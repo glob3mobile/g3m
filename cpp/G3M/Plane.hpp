@@ -26,6 +26,11 @@ private:
 
 public:
 
+//  static Vector3D planeIntersectionWithRay(const Vector3D& planeNormal,
+//                                           const double    planeD,
+//                                           const Vector3D& rayOrigin,
+//                                           const Vector3D& rayDirection);
+
   static Plane fromPoints(const Vector3D& point0,
                           const Vector3D& point1,
                           const Vector3D& point2) {

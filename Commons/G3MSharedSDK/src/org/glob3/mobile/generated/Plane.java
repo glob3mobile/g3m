@@ -24,6 +24,11 @@ public class Plane
   private final float _dF;
 
 
+//  static Vector3D planeIntersectionWithRay(const Vector3D& planeNormal,
+//                                           const double    planeD,
+//                                           const Vector3D& rayOrigin,
+//                                           const Vector3D& rayDirection);
+
   public static Plane fromPoints(Vector3D point0, Vector3D point1, Vector3D point2)
   {
     final Vector3D normal = point1.sub(point0).cross(point2.sub(point0)).normalized();
@@ -116,6 +121,31 @@ public class Plane
     return intersection;
   }
 
+
+  //Vector3D Plane::planeIntersectionWithRay(const Vector3D& planeNormal,
+  //                                         const double    planeD,
+  //                                         const Vector3D& rayOrigin,
+  //                                         const Vector3D& rayDirection) {
+  //  //P = P1 + u (P2 - P1)
+  //
+  //  const double x1 = rayOrigin._x, y1 = rayOrigin._y, z1 = rayOrigin._z;
+  //  const Vector3D P2 = rayOrigin.add(rayDirection);
+  //  const double x2 = P2._x, y2 = P2._y, z2 = P2._z;
+  //  const double A = planeNormal._x, B = planeNormal._y, C = planeNormal._z;
+  //
+  //  const double den = A * (x1 -x2) + B * (y1 - y2) + C * (z1 - z2);
+  //
+  //  if (den == 0) {
+  //    return Vector3D::NANV;
+  //  }
+  //
+  //  const double num = A * x1 + B * y1 + C * z1 + planeD;
+  //  const double t = num / den;
+  //
+  //  const Vector3D intersection = rayOrigin.add(rayDirection.times(t));
+  //  return intersection;
+  //}
+  
   public static Vector3D intersectionXYPlaneWithRay(Vector3D origin, Vector3D direction)
   {
     if (direction._z == 0)

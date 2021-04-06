@@ -28,6 +28,8 @@
 #include "TimeInterval.hpp"
 #include "IImage.hpp"
 #include "EllipsoidalPlanet.hpp"
+#include "IMathUtils.hpp"
+#include "Geodetic3D.hpp"
 
 
 EllipsoidShape::EllipsoidShape(Geodetic3D* position,
@@ -41,7 +43,10 @@ EllipsoidShape::EllipsoidShape(Geodetic3D* position,
                                Color* borderColor,
                                bool withNormals) :
 AbstractMeshShape(position, altitudeMode),
-_ellipsoid(new Ellipsoid(Vector3D::ZERO, radius)),
+_radius(radius),
+_oneOverRadiiSquared(Vector3D(1.0 / (radius._x * radius._x ),
+                              1.0 / (radius._y * radius._y),
+                              1.0 / (radius._z * radius._z))),
 //  _quadric(Quadric::fromEllipsoid(_ellipsoid)),
 _textureURL(URL("", false)),
 _resolution(resolution < 3 ? 3 : resolution),
@@ -58,9 +63,45 @@ _texID(NULL)
 
 }
 
+EllipsoidShape::EllipsoidShape(Geodetic3D* position,
+                               AltitudeMode altitudeMode,
+                               const Planet* planet,
+                               const URL& textureURL,
+                               const Vector3D& radius,
+                               short resolution,
+                               float borderWidth,
+                               bool texturedInside,
+                               bool mercator,
+                               bool withNormals) :
+AbstractMeshShape(position, altitudeMode),
+_radius(radius),
+_oneOverRadiiSquared(Vector3D(1.0 / (radius._x * radius._x ),
+                              1.0 / (radius._y * radius._y),
+                              1.0 / (radius._z * radius._z))),
+_textureURL(textureURL),
+_resolution(resolution < 3 ? 3 : resolution),
+_borderWidth(borderWidth),
+_texturedInside(texturedInside),
+_mercator(mercator),
+_surfaceColor(NULL),
+_borderColor(NULL),
+_textureRequested(false),
+_textureImage(NULL),
+_withNormals(withNormals),
+_texID(NULL)
+{
+
+}
+
+void EllipsoidShape::setSurfaceColor(const Color& surfaceColor) {
+  delete _surfaceColor;
+
+  _surfaceColor = new Color(surfaceColor);
+
+  cleanMesh();
+}
 
 EllipsoidShape::~EllipsoidShape() {
-  delete _ellipsoid;
   delete _surfaceColor;
   delete _borderColor;
 
@@ -259,8 +300,7 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
     }
   }
 
-  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::ZERO,
-                                              _ellipsoid->_radii));
+  const EllipsoidalPlanet ellipsoid(Ellipsoid(Vector3D::ZERO, _radius));
   const Sector sector(Sector::FULL_SPHERE);
 
   FloatBufferBuilderFromGeodetic* vertices = FloatBufferBuilderFromGeodetic::builderWithGivenCenter(&ellipsoid, Vector3D::ZERO);
@@ -315,9 +355,50 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
                                                            const Vector3D& origin,
                                                            const Vector3D& direction) const {
-  //  MutableMatrix44D* M = createTransformMatrix(_planet);
-  //  const Quadric transformedQuadric = _quadric.transformBy(*M);
-  //  delete M;
-  //  return transformedQuadric.intersectionsDistances(origin, direction);
-  return std::vector<double>();
+  const Vector3D m = origin.sub( planet->toCartesian(getPosition()) );
+
+  std::vector<double> result;
+
+  // By laborious algebraic manipulation....
+  const double a = (direction._x * direction._x * _oneOverRadiiSquared._x +
+                    direction._y * direction._y * _oneOverRadiiSquared._y +
+                    direction._z * direction._z * _oneOverRadiiSquared._z);
+
+  const double b = 2.0 * (m._x * direction._x * _oneOverRadiiSquared._x +
+                          m._y * direction._y * _oneOverRadiiSquared._y +
+                          m._z * direction._z * _oneOverRadiiSquared._z);
+
+  const double c = (m._x * m._x * _oneOverRadiiSquared._x +
+                    m._y * m._y * _oneOverRadiiSquared._y +
+                    m._z * m._z * _oneOverRadiiSquared._z - 1.0);
+
+  // Solve the quadratic equation: ax^2 + bx + c = 0.
+  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
+  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
+  const double discriminant = b * b - 4 * a * c;
+  if (discriminant < 0.0) {
+    // no intersections
+  }
+  else if (discriminant == 0.0) {
+    // one intersection at a tangent point
+    result.push_back(-0.5 * b / a);
+  }
+  else {
+    const double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * IMathUtils::instance()->sqrt(discriminant));
+    const double root1 = t / a;
+    const double root2 = c / t;
+
+    // Two intersections - return the smallest first.
+    if (root1 < root2) {
+      result.push_back(root1);
+      result.push_back(root2);
+    }
+    else {
+      result.push_back(root2);
+      result.push_back(root1);
+    }
+  }
+
+  return result;
 }
+

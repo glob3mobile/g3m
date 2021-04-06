@@ -42,7 +42,9 @@ public class HUDImageRenderer extends DefaultRenderer
 
     public final void create(G3MRenderContext rc, int width, int height, IImageListener listener, boolean deleteListener)
     {
-      ICanvas canvas = rc.getFactory().createCanvas(true);
+      final int maxTextureSize = rc.getGL().getMaxTextureSize();
+    
+      ICanvas canvas = rc.getFactory().createCanvas(true, maxTextureSize);
       canvas.initialize(width, height);
     
       drawOn(canvas, width, height);

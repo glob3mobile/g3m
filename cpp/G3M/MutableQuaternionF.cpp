@@ -138,8 +138,8 @@ void MutableQuaternionF::slerp(const MutableQuaternionF& that,
     const double sinHalfTheta = mu->sqrt(1.0 - (cosHalftheta * cosHalftheta));
     const double halfTheta    = mu->acos(cosHalftheta);
 
-    const double ratioA = mu->sin((1 - t) * halfTheta) / sinHalfTheta;
-    const double ratioB = mu->sin(t * halfTheta) / sinHalfTheta;
+    const double ratioA = SIN((1 - t) * halfTheta) / sinHalfTheta;
+    const double ratioB = SIN(t * halfTheta) / sinHalfTheta;
 
     output._w = (float) ((_w * ratioA) + (_temp->_w * ratioB));
     output._x = (float) ((_x * ratioA) + (_temp->_x * ratioB));

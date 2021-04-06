@@ -2,8 +2,6 @@
 //  BasicShadersGL2.hpp
 //  G3M
 //
-//  Created by Jose Miguel SN on 15/11/13.
-//
 //
 
 #ifndef G3M_BasicShadersGL2_h
@@ -732,6 +730,11 @@ public:
 "TextureCoordOut = aTextureCoord;\n" +
 "}\n",
  emptyString +
+"#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+"precision highp float;\n" +
+"#else\n" +
+"precision mediump float;\n" +
+"#endif\n" +
 "varying mediump vec2 TextureCoordOut;\n" +
 "uniform sampler2D Sampler;\n" +
 "void main() {\n" +

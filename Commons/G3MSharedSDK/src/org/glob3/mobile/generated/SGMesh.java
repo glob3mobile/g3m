@@ -60,12 +60,27 @@ public class SGMesh extends TransformableMesh
     super.dispose();
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
     throw new RuntimeException("Can't implement");
   }
 
   public final Vector3D getVertex(int index)
+  {
+    throw new RuntimeException("Can't implement");
+  }
+
+  public final void getVertex(int index, MutableVector3D result)
+  {
+    throw new RuntimeException("Can't implement");
+  }
+
+  public final Color getColor(int index)
+  {
+    throw new RuntimeException("Can't implement");
+  }
+
+  public final void getColor(int index, MutableColor result)
   {
     throw new RuntimeException("Can't implement");
   }

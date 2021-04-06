@@ -22,6 +22,7 @@
 #include "GLState.hpp"
 #include "Planet.hpp"
 #include "Geodetic3D.hpp"
+#include "ShapeFilter.hpp"
 
 
 class TransparentShapeWrapper : public OrderedRenderable {
@@ -233,35 +234,28 @@ std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Planet* 
 
 
 bool ShapesRenderer::onTouchEvent(const G3MEventContext* ec,
-                                  const TouchEvent* touchEvent)
-{
+                                  const TouchEvent* touchEvent) {
   if (_lastCamera != NULL) {
-    if (touchEvent->getTouchCount() ==1 &&
-        touchEvent->getTapCount()==1 &&
-        touchEvent->getType()==Down) {
-      const Vector3D origin = _lastCamera->getCartesianPosition();
-      const Vector2F pixel = touchEvent->getTouch(0)->getPos();
+    if ((touchEvent->getTouchCount() == 1) &&
+        (touchEvent->getTapCount() == 1) &&
+        (touchEvent->getType() == Down)) {
+      const Vector3D origin    = _lastCamera->getCartesianPosition();
+      const Vector2F pixel     = touchEvent->getTouch(0)->getPos();
       const Vector3D direction = _lastCamera->pixel2Ray(pixel);
-      const Planet* planet = ec->getPlanet();
+
       if (!direction.isNan()) {
-        std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
+        const Planet* planet = ec->getPlanet();
+
+        const std::vector<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
 
         if (!shapeDistances.empty()) {
-          //        printf ("Found %d intersections with shapes:\n",
-          //                (int)shapeDistances.size());
-          for (int i=0; i<shapeDistances.size(); i++) {
-//            printf ("   %d: shape %x to distance %f\n",
-//                    i+1,
-//                    (unsigned int)shapeDistances[i]._shape,
-//                    shapeDistances[i]._distance);
-          }
+          const ShapeDistance selectedShape = shapeDistances[0];
+          return selectedShape._shape->touched(ec);
         }
-      } else {
-        ILogger::instance()->logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
       }
-      
     }
   }
+  
   return false;
 }
 
@@ -637,4 +631,30 @@ void ShapesRenderer::disableAll() {
     Shape* shape = _shapes[i];
     shape->setEnable(false);
   }
+}
+
+size_t ShapesRenderer::removeAllShapes(const ShapeFilter& filter,
+                                       bool deleteShapes) {
+  size_t removed = 0;
+  const size_t shapesSize = _shapes.size();
+
+  std::vector<Shape*> surviving;
+  for (size_t i = 0; i < shapesSize; i++) {
+    Shape* shape = _shapes[i];
+    if (filter.test(shape)) {
+      if (deleteShapes) {
+        delete shape;
+      }
+      removed++;
+    }
+    else {
+      surviving.push_back(shape);
+    }
+  }
+
+  if (removed > 0) {
+    _shapes = surviving;
+  }
+
+  return removed;
 }

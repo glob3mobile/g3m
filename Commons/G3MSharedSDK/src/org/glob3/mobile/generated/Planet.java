@@ -48,6 +48,8 @@ public abstract class Planet
 
   public abstract void geodeticSurfaceNormal(Angle latitude, Angle longitude, MutableVector3D result);
 
+  public abstract void geodeticSurfaceNormalFromDegrees(double latitudeDegrees, double longitudeDegrees, MutableVector3D result);
+
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
     return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
@@ -70,6 +72,7 @@ public abstract class Planet
   public abstract void toCartesian(Geodetic2D geodetic, MutableVector3D result);
   public abstract void toCartesian(Geodetic2D geodetic, double height, MutableVector3D result);
 
+  public abstract void toCartesianFromDegrees(double latitudeDegrees, double longitudeDegrees, double height, MutableVector3D result);
 
   public abstract Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid);
 

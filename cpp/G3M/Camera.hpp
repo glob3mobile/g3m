@@ -392,7 +392,7 @@ private:
   void setCenter(const MutableVector3D& v) {
     if (!v.equalTo(_center)) {
       _timestamp++;
-      _center.copyFrom(v);
+      _center.set(v);
       _dirtyFlags.setAllDirty();
     }
   }
@@ -400,7 +400,7 @@ private:
   void setUp(const MutableVector3D& v) {
     if (!v.equalTo(_up)) {
       _timestamp++;
-      _up.copyFrom(v);
+      _up.set(v);
       _dirtyFlags.setAllDirty();
     }
   }
@@ -409,7 +409,7 @@ private:
   MutableVector3D _getCartesianCenterOfView() const {
     if (_dirtyFlags._cartesianCenterOfViewDirty) {
       _dirtyFlags._cartesianCenterOfViewDirty = false;
-      _cartesianCenterOfView.copyFrom(centerOfViewOnPlanet());
+      _cartesianCenterOfView.set(centerOfViewOnPlanet());
     }
     return _cartesianCenterOfView;
   }

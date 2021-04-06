@@ -14,7 +14,8 @@ package org.glob3.mobile.generated;
 //class Sphere;
 //class Frustum;
 //class Vector3D;
-
+//class MutableVector3D;
+//class Ray;
 
 public abstract class BoundingVolume
 {
@@ -34,6 +35,7 @@ public abstract class BoundingVolume
   public abstract boolean touchesFrustum(Frustum that);
 
   public abstract boolean contains(Vector3D point);
+  public abstract boolean contains(MutableVector3D point);
 
   public abstract boolean fullContains(BoundingVolume that);
   public abstract boolean fullContainedInBox(Box that);
@@ -46,5 +48,7 @@ public abstract class BoundingVolume
   public abstract Sphere createSphere();
 
   public abstract BoundingVolume copy();
+
+  public abstract boolean touchesRay(Ray ray);
 
 }

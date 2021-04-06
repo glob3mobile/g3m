@@ -264,36 +264,27 @@ public class ShapesRenderer extends DefaultRenderer
   {
     if (_lastCamera != null)
     {
-      if (touchEvent.getTouchCount() == 1 && touchEvent.getTapCount() == 1 && touchEvent.getType() == TouchEventType.Down)
+      if ((touchEvent.getTouchCount() == 1) && (touchEvent.getTapCount() == 1) && (touchEvent.getType() == TouchEventType.Down))
       {
         final Vector3D origin = _lastCamera.getCartesianPosition();
         final Vector2F pixel = touchEvent.getTouch(0).getPos();
         final Vector3D direction = _lastCamera.pixel2Ray(pixel);
-        final Planet planet = ec.getPlanet();
+  
         if (!direction.isNan())
         {
-          java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
+          final Planet planet = ec.getPlanet();
+  
+          final java.util.ArrayList<ShapeDistance> shapeDistances = intersectionsDistances(planet, origin, direction);
   
           if (!shapeDistances.isEmpty())
           {
-            //        printf ("Found %d intersections with shapes:\n",
-            //                (int)shapeDistances.size());
-            for (int i = 0; i<shapeDistances.size(); i++)
-            {
-  //            printf ("   %d: shape %x to distance %f\n",
-  //                    i+1,
-  //                    (unsigned int)shapeDistances[i]._shape,
-  //                    shapeDistances[i]._distance);
-            }
+            final ShapeDistance selectedShape = shapeDistances.get(0);
+            return selectedShape._shape.touched(ec);
           }
         }
-        else
-        {
-          ILogger.instance().logWarning("ShapesRenderer::onTouchEvent: direction ( - _lastCamera->pixel2Ray(pixel) - ) is NaN");
-        }
-  
       }
     }
+  
     return false;
   }
 
@@ -430,6 +421,38 @@ public class ShapesRenderer extends DefaultRenderer
   public final void loadBSONSceneJS(URL url, String uriPrefix, boolean isTransparent, SceneJSParserParameters parameters, Geodetic3D position, AltitudeMode altitudeMode, ShapeLoadListener listener, boolean deleteListener)
   {
     loadBSONSceneJS(url, DownloadPriority.MEDIUM, TimeInterval.fromDays(30), true, uriPrefix, isTransparent, parameters, position, altitudeMode, listener, deleteListener);
+  }
+
+  public final int removeAllShapes(ShapeFilter filter, boolean deleteShapes)
+  {
+    int removed = 0;
+    final int shapesSize = _shapes.size();
+  
+    java.util.ArrayList<Shape> surviving = new java.util.ArrayList<Shape>();
+    for (int i = 0; i < shapesSize; i++)
+    {
+      Shape shape = _shapes.get(i);
+      if (filter.test(shape))
+      {
+        if (deleteShapes)
+        {
+          if (shape != null)
+             shape.dispose();
+        }
+        removed++;
+      }
+      else
+      {
+        surviving.add(shape);
+      }
+    }
+  
+    if (removed > 0)
+    {
+      _shapes = surviving;
+    }
+  
+    return removed;
   }
 
 }

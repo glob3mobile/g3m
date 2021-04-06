@@ -21,19 +21,20 @@ class Mesh;
 class Sphere : public BoundingVolume {
 private:
   
-  mutable Mesh* _mesh;
+  mutable Mesh* _mesh; //TODO Check Leaking?
+
+public:
+  
   Mesh* createWireframeMesh(const Color& color,
                             short resolution) const;
   
-  
-public:
   static Sphere* enclosingSphere(const std::vector<Vector3D>& points,
                                  const double radiusDelta);
   
   const Vector3D _center;
   const double   _radius;
   const double   _radiusSquared;
-  
+
   
   Sphere(const Vector3D& center,
          double radius):
@@ -95,7 +96,8 @@ public:
                            const double radiusDelta) const;
   
   bool contains(const Vector3D& point) const;
-  
+  bool contains(const MutableVector3D& point) const;
+
   bool fullContains(const BoundingVolume* that) const {
     return that->fullContainedInSphere(this);
   }
@@ -106,7 +108,8 @@ public:
   Sphere* createSphere() const;
   
   Sphere* copy() const;
-  
+
+  const bool touchesRay(const Ray* ray) const;
   
 };
 

@@ -64,12 +64,17 @@ public:
     return (_mesh == NULL) ? NULL : _mesh->getBoundingVolume();
   }
 
-  size_t getVertexCount() const {
-    return _mesh->getVertexCount();
+  size_t getVerticesCount() const {
+    return _mesh->getVerticesCount();
   }
 
   const Vector3D getVertex(const size_t index) const {
     return _mesh->getVertex(index);
+  }
+
+  virtual void getVertex(const size_t index,
+                         MutableVector3D& result) const {
+    _mesh->getVertex(index, result);
   }
 
   bool isTransparent(const G3MRenderContext* rc) const {

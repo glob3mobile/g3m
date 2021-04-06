@@ -9,7 +9,10 @@
 #define RampColorizer_hpp
 
 #include <vector>
+
 #include "Color.hpp"
+
+class MutableColor;
 
 
 class RampColorizer {
@@ -32,6 +35,10 @@ private:
                 const std::vector<float>& steps);
 
 public:
+  static const RampColorizer* colorSpectrum();
+  static const RampColorizer* visibleSpectrum();
+  static const RampColorizer* sunrise();
+  static const RampColorizer* reds();
 
   static const RampColorizer* createRampColorizer(const std::vector<Color>& colors,
                                                   const std::vector<float>& steps);
@@ -41,6 +48,9 @@ public:
   ~RampColorizer();
 
   const Color getColor(const float alpha) const;
+
+  const void getColor(const float alpha,
+                      MutableColor& color) const;
 
 };
 

@@ -9,6 +9,8 @@
 #include "AbstractGeometryMesh.hpp"
 
 #include "Box.hpp"
+#include "MutableVector3D.hpp"
+#include "MutableColor.hpp"
 
 
 AbstractGeometryMesh::~AbstractGeometryMesh() {
@@ -67,7 +69,7 @@ _culledFace(culledFace)
 }
 
 BoundingVolume* AbstractGeometryMesh::computeBoundingVolume() const {
-  const size_t vertexCount = getVertexCount();
+  const size_t vertexCount = getVerticesCount();
 
   if (vertexCount == 0) {
     return NULL;
@@ -116,7 +118,24 @@ const Vector3D AbstractGeometryMesh::getVertex(const size_t index) const {
                   _vertices->get(p+2) + _center._z);
 }
 
-size_t AbstractGeometryMesh::getVertexCount() const {
+void AbstractGeometryMesh::getVertex(const size_t index,
+                                     MutableVector3D& result) const {
+  const size_t p = index * 3;
+  result.set(_vertices->get(p  ) + _center._x,
+             _vertices->get(p+1) + _center._y,
+             _vertices->get(p+2) + _center._z);
+}
+
+Color AbstractGeometryMesh::getColor(const size_t index) const {
+  return Color::TRANSPARENT;
+}
+
+void AbstractGeometryMesh::getColor(const size_t index,
+                                    MutableColor& result) const {
+  result.set(Color::TRANSPARENT);
+}
+
+size_t AbstractGeometryMesh::getVerticesCount() const {
   return _vertices->size() / 3;
 }
 

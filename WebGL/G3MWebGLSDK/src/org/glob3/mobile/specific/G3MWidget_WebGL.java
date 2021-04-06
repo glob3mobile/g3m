@@ -56,6 +56,8 @@ public class G3MWidget_WebGL
    private G3MWidget            _g3mWidget;
    private float                _devicePixelRatio = 1;
 
+   private boolean _running = true;
+
 
    public G3MWidget_WebGL() {
       _canvas = Canvas.createIfSupported();
@@ -231,7 +233,19 @@ public class G3MWidget_WebGL
 
 
    private void renderG3MWidget() {
-      _g3mWidget.render(_physicalWidth, _physicalHeight);
+      if (_running) {
+         _g3mWidget.render(_physicalWidth, _physicalHeight);
+      }
+   }
+
+
+   public void startRunning() {
+      _running = true;
+   }
+
+
+   public void stopRunning() {
+      _running = false;
    }
 
 

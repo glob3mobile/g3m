@@ -59,12 +59,12 @@ void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
   Vector2F pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2F pixel2 = touchEvent.getTouch(2)->getPos();
   Vector2F averagePixel = pixel0.add(pixel1).add(pixel2).div(3.0f);
-  _pivotPixel = MutableVector2F(averagePixel._x, averagePixel._y);
+  _pivotPixel.set(averagePixel._x, averagePixel._y);
   //_lastYValid = _initialPixel.y();
 
   // compute center of view
   //  _pivotPoint = camera->getXYZCenterOfView().asMutableVector3D();
-  _pivotPoint.copyFrom(camera->getXYZCenterOfView());
+  _pivotPoint.set(camera->getXYZCenterOfView());
   if (_pivotPoint.isNan()) {
     ILogger::instance()->logError("CAMERA ERROR: center point does not intersect globe!!\n");
     cameraContext->setCurrentGesture(None);
@@ -127,7 +127,7 @@ void CameraRotationHandler::onUp(const G3MEventContext *eventContext,
                                  const TouchEvent& touchEvent,
                                  CameraContext *cameraContext) {
   cameraContext->setCurrentGesture(None);
-  _pivotPixel = MutableVector2F::zero();
+  _pivotPixel.set(MutableVector2F::zero());
 }
 
 

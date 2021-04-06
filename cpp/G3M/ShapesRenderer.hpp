@@ -25,6 +25,7 @@ class Shape;
 class Geodetic3D;
 class Camera;
 class Planet;
+class ShapeFilter;
 
 
 class ShapeDistance {
@@ -254,7 +255,10 @@ public:
                     listener,
                     deleteListener);
   }
-  
+
+  size_t removeAllShapes(const ShapeFilter& filter,
+                         bool deleteShapes);
+
 };
 
 #endif

@@ -112,6 +112,18 @@ public class ByteBufferIterator
     return builder.create();
   }
 
+  public final IByteBuffer nextBuffer(int size)
+  {
+    if ((_cursor + size) > _bufferSize)
+    {
+      throw new RuntimeException("Iteration overflow");
+    }
+  
+    IByteBuffer result = _buffer.copy(_cursor, size);
+    _cursor += size;
+    return result;
+  }
+
   public final String nextZeroTerminatedString()
   {
     IByteBuffer buffer = nextBufferUpTo((byte) 0);

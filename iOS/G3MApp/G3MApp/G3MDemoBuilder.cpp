@@ -17,12 +17,15 @@
 #include <G3M/ShapesRenderer.hpp>
 #include <G3M/MarksRenderer.hpp>
 #include <G3M/GEORenderer.hpp>
-#include <G3M/PointCloudsRenderer.hpp>
+#include <G3M/OLDPointCloudsRenderer.hpp>
+#include <G3M/XPCRenderer.hpp>
 #include <G3M/HUDRenderer.hpp>
 #include <G3M/NonOverlappingMarksRenderer.hpp>
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/AtmosphereRenderer.hpp>
 #include <G3M/WrapperNearFrustumRenderer.hpp>
+#include <G3M/CompositeRenderer.hpp>
+#include <G3M/MeasureRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -69,6 +72,10 @@ void G3MDemoBuilder::build() {
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
 
+  XPCRenderer* xPointCloudsRenderer = new XPCRenderer();
+  builder->addRenderer(xPointCloudsRenderer);
+
+
   MeshRenderer* meshRenderer = new MeshRenderer();
   builder->addRenderer(meshRenderer);
 
@@ -78,8 +85,8 @@ void G3MDemoBuilder::build() {
   MarksRenderer* marksRenderer = new MarksRenderer(false);
   builder->addRenderer(marksRenderer);
 
-  PointCloudsRenderer* pointCloudsRenderer = new PointCloudsRenderer();
-  builder->addRenderer(pointCloudsRenderer);
+  OLDPointCloudsRenderer* oldPointCloudsRenderer = new OLDPointCloudsRenderer();
+  builder->addRenderer(oldPointCloudsRenderer);
 
   GEORenderer* geoRenderer = new GEORenderer(NULL, /* symbolizer */
                                              meshRenderer,
@@ -96,6 +103,15 @@ void G3MDemoBuilder::build() {
 
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer, meshRenderer);
   builder->addRenderer(vectorStreamingRenderer);
+  
+  CompositeRenderer* compositeRenderer = new CompositeRenderer();
+  builder->addRenderer(compositeRenderer);
+
+  MeasureRenderer* measureRenderer = new MeasureRenderer(shapesRenderer,
+                                                         meshRenderer,
+                                                         marksRenderer,
+                                                         compositeRenderer);
+  builder->addRenderer(measureRenderer);
 
   //Uncomment to see render debug mesh on top of tiles
   //#warning remove setRenderDebug(true);
@@ -108,10 +124,13 @@ void G3MDemoBuilder::build() {
                             shapesRenderer,
                             marksRenderer,
                             geoRenderer,
-                            pointCloudsRenderer,
+                            oldPointCloudsRenderer,
+                            xPointCloudsRenderer,
                             hudRenderer,
                             nonOverlappingMarksRenderer,
-                            vectorStreamingRenderer);
+                            vectorStreamingRenderer,
+                            compositeRenderer,
+                            measureRenderer);
 
   const double zNear = 0.1;
   Renderer* renderer = new MeshRenderer();

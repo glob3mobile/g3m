@@ -74,14 +74,14 @@ public class CompositeMesh extends Mesh
     super.dispose();
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
     int result = 0;
     final int childrenCount = _children.size();
     for (int i = 0; i < childrenCount; i++)
     {
       Mesh child = _children.get(i);
-      result += child.getVertexCount();
+      result += child.getVerticesCount();
     }
     return result;
   }
@@ -94,7 +94,7 @@ public class CompositeMesh extends Mesh
     {
       Mesh child = _children.get(i);
       final int childIndex = index - acumIndex;
-      final int childSize = child.getVertexCount();
+      final int childSize = child.getVerticesCount();
       if (childIndex < childSize)
       {
         return child.getVertex(childIndex);
@@ -102,6 +102,62 @@ public class CompositeMesh extends Mesh
       acumIndex += childSize;
     }
     return Vector3D.NANV;
+  }
+
+  public final void getVertex(int index, MutableVector3D result)
+  {
+    int acumIndex = 0;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      final int childIndex = index - acumIndex;
+      final int childSize = child.getVerticesCount();
+      if (childIndex < childSize)
+      {
+        child.getVertex(childIndex, result);
+        return;
+      }
+      acumIndex += childSize;
+    }
+    result.set(Vector3D.NANV);
+  }
+
+  public final Color getColor(int index)
+  {
+    int acumIndex = 0;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      final int childIndex = index - acumIndex;
+      final int childSize = child.getVerticesCount();
+      if (childIndex < childSize)
+      {
+        return child.getColor(childIndex);
+      }
+      acumIndex += childSize;
+    }
+    return Color.TRANSPARENT;
+  }
+
+  public final void getColor(int index, MutableColor result)
+  {
+    int acumIndex = 0;
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      Mesh child = _children.get(i);
+      final int childIndex = index - acumIndex;
+      final int childSize = child.getVerticesCount();
+      if (childIndex < childSize)
+      {
+        child.getColor(childIndex, result);
+        return;
+      }
+      acumIndex += childSize;
+    }
+    result.set(Color.TRANSPARENT);
   }
 
   public final BoundingVolume getBoundingVolume()

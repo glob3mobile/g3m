@@ -118,8 +118,6 @@ Mesh* PlanetTileTessellator::createTileMesh(const G3MRenderContext* rc,
                                          );
   }
 
-#warning DIEGO AT WORK!
-
   const Sector tileSector = tile->_sector;
   const Sector meshSector = getRenderedSectorForTile(tile);
   const Vector2S meshResolution = calculateResolution(prc, tile, meshSector);
@@ -369,6 +367,9 @@ double PlanetTileTessellator::createSurfaceVertices(const Vector2S& meshResoluti
       double elevation = 0;
 
       if ((elevationData != NULL) || (grid != NULL)) {
+#ifdef JAVA_CODE
+        @SuppressWarnings("null")
+#endif
         const double rawElevation = (elevationData == NULL) ? grid->getElevation(i, j) : elevationData->getElevationAt(position);
 
         elevation = ISNAN(rawElevation)? 0 : rawElevation * verticalExaggeration;

@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class FlatColorMesh extends Mesh
+public abstract class FlatColorMesh extends Mesh
 {
   private Mesh _mesh;
   private final boolean _ownedMesh;
@@ -70,14 +70,19 @@ public class FlatColorMesh extends Mesh
     return (_mesh == null) ? null : _mesh.getBoundingVolume();
   }
 
-  public final int getVertexCount()
+  public final int getVerticesCount()
   {
-    return _mesh.getVertexCount();
+    return _mesh.getVerticesCount();
   }
 
   public final Vector3D getVertex(int index)
   {
     return _mesh.getVertex(index);
+  }
+
+  public void getVertex(int index, MutableVector3D result)
+  {
+    _mesh.getVertex(index, result);
   }
 
   public final boolean isTransparent(G3MRenderContext rc)

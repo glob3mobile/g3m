@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 
 //class ShapePendingEffect;
 //class GLState;
+//class G3MEventContext;
 
 
 public abstract class Shape implements SurfaceElevationListener, EffectTarget
@@ -82,6 +83,8 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     return rotationM.multiply(translationM).multiply(scaleM);
   }
 
+  private String _token;
+
   protected void cleanTransformMatrix()
   {
     if (_transformMatrix != null)
@@ -122,6 +125,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _surfaceElevation = 0;
      _glState = new GLState();
      _surfaceElevationProvider = null;
+     _token = "";
     _localTransform.setValid(false);
     if (position.isNan())
     {
@@ -466,5 +470,19 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   public abstract java.util.ArrayList<Double> intersectionsDistances(Planet planet, Vector3D origin, Vector3D direction);
 
+  public boolean touched(G3MEventContext ec)
+  {
+    return false;
+  }
+
+  public final void setToken(String token)
+  {
+    _token = token;
+  }
+
+  public final String getToken()
+  {
+    return _token;
+  }
 
 }

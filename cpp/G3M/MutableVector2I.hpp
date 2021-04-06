@@ -16,7 +16,9 @@ class MutableVector2I {
 private:
   int _x;
   int _y;
-  
+
+  MutableVector2I& operator=(const MutableVector2I& that);
+
 public:
   MutableVector2I() :
   _x(0),
@@ -39,10 +41,9 @@ public:
     
   }
   
-  MutableVector2I& operator=(const MutableVector2I& that) {
+  void set(const MutableVector2I& that) {
     _x = that._x;
     _y = that._y;
-    return *this;
   }
   
   static MutableVector2I zero() {

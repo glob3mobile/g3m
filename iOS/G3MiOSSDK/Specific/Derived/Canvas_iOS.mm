@@ -50,10 +50,28 @@ void Canvas_iOS::tryToSetCurrentFontToContext() {
 void Canvas_iOS::_initialize(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
-  CGFloat devicePixelRatio = _retina ? IFactory::instance()->getDeviceInfo()->getDevicePixelRatio() : 1;
+  CGFloat rawDevicePixelRatio = _retina ? IFactory::instance()->getDeviceInfo()->getDevicePixelRatio() : 1;
+
+  CGFloat widthPixelRatio  = rawDevicePixelRatio;
+  CGFloat heightPixelRatio = rawDevicePixelRatio;
+  if (_maxSize > 0) {
+    CGFloat goalWidth  = (width * widthPixelRatio);
+    if (goalWidth > _maxSize) {
+      widthPixelRatio = (CGFloat) _maxSize / width;
+    }
+
+    CGFloat goalHeight = (height * heightPixelRatio);
+    if (goalHeight > _maxSize) {
+      heightPixelRatio = (CGFloat) _maxSize / height;
+    }
+  }
+
+  const size_t w = (size_t) ceil(width  * widthPixelRatio );
+  const size_t h = (size_t) ceil(height * heightPixelRatio);
+
   _context = CGBitmapContextCreate(NULL,       // memory created by Quartz
-                                   (size_t) (width  * devicePixelRatio),
-                                   (size_t) (height * devicePixelRatio),
+                                   w,
+                                   h,
                                    8,          // bits per component
                                    0,          // bytes per row
                                    colorSpace,
@@ -65,9 +83,9 @@ void Canvas_iOS::_initialize(int width, int height) {
     return;
   }
 
-  if (devicePixelRatio != 1) {
-    CGContextScaleCTM(_context, devicePixelRatio, devicePixelRatio);
-  }
+//  if ((widthPixelRatio != 1) || (heightPixelRatio != 1)) {
+  CGContextScaleCTM(_context, widthPixelRatio, heightPixelRatio);
+//  }
 
   CGColorSpaceRelease( colorSpace );
 

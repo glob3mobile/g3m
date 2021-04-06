@@ -2,42 +2,21 @@
 
 package org.glob3.mobile.specific;
 
-import java.nio.ShortBuffer;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 
-import org.glob3.mobile.generated.GPUAttribute;
-import org.glob3.mobile.generated.GPUAttributeVec2Float;
-import org.glob3.mobile.generated.GPUAttributeVec3Float;
-import org.glob3.mobile.generated.GPUAttributeVec4Float;
-import org.glob3.mobile.generated.GPUProgram;
-import org.glob3.mobile.generated.GPUUniform;
-import org.glob3.mobile.generated.GPUUniformBool;
-import org.glob3.mobile.generated.GPUUniformFloat;
-import org.glob3.mobile.generated.GPUUniformMatrix4Float;
-import org.glob3.mobile.generated.GPUUniformSampler2D;
-import org.glob3.mobile.generated.GPUUniformVec2Float;
-import org.glob3.mobile.generated.GPUUniformVec3Float;
-import org.glob3.mobile.generated.GPUUniformVec4Float;
-import org.glob3.mobile.generated.IFloatBuffer;
-import org.glob3.mobile.generated.IGLTextureID;
-import org.glob3.mobile.generated.IGLUniformID;
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.INativeGL;
-import org.glob3.mobile.generated.IShortBuffer;
-import org.glob3.mobile.generated.Matrix44D;
-import org.glob3.mobile.generated.ShaderType;
+import java.nio.*;
+import java.nio.charset.*;
+import java.util.*;
 
-import android.graphics.Bitmap;
-import android.opengl.GLES20;
-import android.opengl.GLUtils;
-import android.util.Log;
+import org.glob3.mobile.generated.*;
+
+import android.graphics.*;
+import android.opengl.*;
+import android.util.*;
 
 
 public final class NativeGL2_Android
-         extends
-            INativeGL {
+                                     extends
+                                        INativeGL {
 
    private Thread _openGLThread = null;
 
@@ -51,8 +30,8 @@ public final class NativeGL2_Android
       if (_openGLThread != null) {
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openGLThread) {
-            throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
-                                       + ", CurrentThread=" + currentThread + ")");
+            throw new RuntimeException(
+                  "OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread + ", CurrentThread=" + currentThread + ")");
          }
       }
    }
@@ -105,11 +84,11 @@ public final class NativeGL2_Android
                                 final Matrix44D matrix) {
       checkOpenGLThread();
       GLES20.glUniformMatrix4fv( //
-               ((GLUniformID_Android) location).getID(), //
-               1, //
-               transpose, //
-               matrix.getColumnMajorFloatArray(), //
-               0 //
+            ((GLUniformID_Android) location).getID(), //
+            1, //
+            transpose, //
+            matrix.getColumnMajorFloatArray(), //
+            0 //
       );
 
       //      ILogger.instance().logInfo("UNIFORM MATRIX " + ((GLUniformID_Android) location).getID() + " " + matrix.description() );
@@ -233,8 +212,8 @@ public final class NativeGL2_Android
    @Override
    public ArrayList<IGLTextureID> genTextures(final int count) {
       checkOpenGLThread();
-      final ArrayList<IGLTextureID> result = new ArrayList<>(count);
-      final int[] textureIds = new int[count];
+      final ArrayList<IGLTextureID> result     = new ArrayList<>(count);
+      final int[]                   textureIds = new int[count];
       GLES20.glGenTextures(count, textureIds, 0);
       for (int i = 0; i < count; i++) {
          final int textureId = textureIds[i];
@@ -591,12 +570,12 @@ public final class NativeGL2_Android
    public int createShader(final ShaderType type) {
       checkOpenGLThread();
       switch (type) {
-         case VERTEX_SHADER:
-            return GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
-         case FRAGMENT_SHADER:
-            return GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
-         default:
-            throw new RuntimeException("Invalid ShaderType=" + type);
+      case VERTEX_SHADER:
+         return GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
+      case FRAGMENT_SHADER:
+         return GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
+      default:
+         throw new RuntimeException("Invalid ShaderType=" + type);
       }
    }
 
@@ -743,9 +722,9 @@ public final class NativeGL2_Android
       final int bufferSize = maxLength[0] + 1;
 
       final byte[] nameBuffer = new byte[bufferSize];
-      final int[] length = new int[1];
-      final int[] size = new int[1];
-      final int[] type = new int[1];
+      final int[]  length     = new int[1];
+      final int[]  size       = new int[1];
+      final int[]  type       = new int[1];
 
       GLES20.glGetActiveUniform(program.getProgramID(), i, bufferSize, length, 0, size, 0, type, 0, nameBuffer, 0);
 
@@ -756,22 +735,22 @@ public final class NativeGL2_Android
       // ILogger.instance().logInfo("Uniform Name: %s - %d", name, id);
 
       switch (type[0]) {
-         case GLES20.GL_FLOAT_MAT4:
-            return new GPUUniformMatrix4Float(name, new GLUniformID_Android(id));
-         case GLES20.GL_FLOAT_VEC4:
-            return new GPUUniformVec4Float(name, new GLUniformID_Android(id));
-         case GLES20.GL_FLOAT:
-            return new GPUUniformFloat(name, new GLUniformID_Android(id));
-         case GLES20.GL_FLOAT_VEC2:
-            return new GPUUniformVec2Float(name, new GLUniformID_Android(id));
-         case GLES20.GL_FLOAT_VEC3:
-            return new GPUUniformVec3Float(name, new GLUniformID_Android(id));
-         case GLES20.GL_BOOL:
-            return new GPUUniformBool(name, new GLUniformID_Android(id));
-         case GLES20.GL_SAMPLER_2D:
-            return new GPUUniformSampler2D(name, new GLUniformID_Android(id));
-         default:
-            return null;
+      case GLES20.GL_FLOAT_MAT4:
+         return new GPUUniformMatrix4Float(name, new GLUniformID_Android(id));
+      case GLES20.GL_FLOAT_VEC4:
+         return new GPUUniformVec4Float(name, new GLUniformID_Android(id));
+      case GLES20.GL_FLOAT:
+         return new GPUUniformFloat(name, new GLUniformID_Android(id));
+      case GLES20.GL_FLOAT_VEC2:
+         return new GPUUniformVec2Float(name, new GLUniformID_Android(id));
+      case GLES20.GL_FLOAT_VEC3:
+         return new GPUUniformVec3Float(name, new GLUniformID_Android(id));
+      case GLES20.GL_BOOL:
+         return new GPUUniformBool(name, new GLUniformID_Android(id));
+      case GLES20.GL_SAMPLER_2D:
+         return new GPUUniformSampler2D(name, new GLUniformID_Android(id));
+      default:
+         return null;
       }
    }
 
@@ -787,11 +766,11 @@ public final class NativeGL2_Android
       final int[] maxLength = new int[1];
       GLES20.glGetProgramiv(program.getProgramID(), GLES20.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, maxLength, 0);
 
-      final int bufferSize = maxLength[0];
+      final int    bufferSize = maxLength[0];
       final byte[] nameBuffer = new byte[bufferSize];
-      final int[] length = new int[1];
-      final int[] size = new int[1];
-      final int[] type = new int[1];
+      final int[]  length     = new int[1];
+      final int[]  size       = new int[1];
+      final int[]  type       = new int[1];
 
       GLES20.glGetActiveAttrib(program.getProgramID(), i, bufferSize, length, 0, size, 0, type, 0, nameBuffer, 0);
 
@@ -802,14 +781,14 @@ public final class NativeGL2_Android
       // ILogger.instance().logInfo("Attribute Name: %s - %d", name, id);
 
       switch (type[0]) {
-         case GLES20.GL_FLOAT_VEC3:
-            return new GPUAttributeVec3Float(name, id);
-         case GLES20.GL_FLOAT_VEC4:
-            return new GPUAttributeVec4Float(name, id);
-         case GLES20.GL_FLOAT_VEC2:
-            return new GPUAttributeVec2Float(name, id);
-         default:
-            return null;
+      case GLES20.GL_FLOAT_VEC3:
+         return new GPUAttributeVec3Float(name, id);
+      case GLES20.GL_FLOAT_VEC4:
+         return new GPUAttributeVec4Float(name, id);
+      case GLES20.GL_FLOAT_VEC2:
+         return new GPUAttributeVec2Float(name, id);
+      default:
+         return null;
       }
    }
 
@@ -884,6 +863,14 @@ public final class NativeGL2_Android
                         final int width,
                         final int height) {
       GLES20.glViewport(x, y, width, height);
+   }
+
+
+   @Override
+   public int getMaxTextureSize() {
+      final int[] max = new int[1];
+      GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_SIZE, max, 0);
+      return max[0];
    }
 
 
