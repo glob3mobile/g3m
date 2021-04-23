@@ -19,7 +19,6 @@ public class G3MBuilder_Android
 
    private final G3MWidget_Android _nativeWidget;
 
-
    public G3MBuilder_Android(final Context context) {
       super();
 
@@ -72,5 +71,13 @@ public class G3MBuilder_Android
                saveInBackground);
    }
 
-
+   /**
+    * Sets the _FPSReduction
+    *
+    * @param FPSReduction
+    */
+   public final void setFPSReduction(boolean FPSReduction)
+   {
+      _nativeWidget.setFPSReduction(FPSReduction);
+   }
 }

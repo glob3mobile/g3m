@@ -47,7 +47,7 @@ public final class G3MWidget_Android
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
    private final GestureDetector      _gestureDetector;
    private Thread                     _openGLThread         = null;
-
+   private boolean              _FPSReduction;
 
    public G3MWidget_Android(final android.content.Context context) {
       this(context, null);
@@ -69,11 +69,12 @@ public final class G3MWidget_Android
       }
    }
 
-
    // Needed to create widget from XML layout
    public G3MWidget_Android(final android.content.Context context,
                             final AttributeSet attrs) {
       super(context, attrs);
+
+      _FPSReduction = true;
 
       initSingletons();
 
@@ -370,5 +371,11 @@ public final class G3MWidget_Android
       return getG3MWidget().getG3MContext();
    }
 
+   public void setFPSReduction(boolean FPSReduction) {
+        _FPSReduction = FPSReduction;
+   }
 
+   public boolean getFPSReduction() {
+      return _FPSReduction;
+   }
 }
