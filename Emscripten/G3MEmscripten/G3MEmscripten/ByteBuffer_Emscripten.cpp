@@ -129,3 +129,9 @@ const std::string ByteBuffer_Emscripten::getAsString() const {
 
   return result;
 }
+
+ByteBuffer_Emscripten* ByteBuffer_Emscripten::copy(size_t from, size_t length) const {
+  const emscripten::val slicedBuffer = _buffer.call<emscripten::val>("slice", from, from + length);
+
+  return new ByteBuffer_Emscripten(slicedBuffer);
+}
