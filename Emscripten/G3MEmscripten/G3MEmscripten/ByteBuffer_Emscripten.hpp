@@ -32,6 +32,8 @@ public:
 
   const std::string getAsString() const;
 
+  ByteBuffer_Emscripten* copy(size_t from, size_t length) const;
+
 };
 
 #endif

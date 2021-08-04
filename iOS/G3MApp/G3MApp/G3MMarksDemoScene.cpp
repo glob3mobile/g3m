@@ -197,7 +197,7 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
     std::vector<Geodetic3D*> positions = LayoutUtils::splitOverCircle(g3mWidget->getG3MContext()->getPlanet(),
                                                                       geoPos,
                                                                       size,
-                                                                      4);
+                                                                      60);
 
     for (size_t i = 0; i < positions.size(); i++) {
       Geodetic3D* position = positions[i];
