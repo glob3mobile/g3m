@@ -11,6 +11,7 @@
 		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
 		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
 		CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */; };
+		CF28DDCE26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */; };
 		CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
@@ -155,6 +156,7 @@
 		CF162FE31AB739D700673D44 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CF2744F825B1A8990056304B /* G3MXPointCloudDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MXPointCloudDemoScene.hpp; sourceTree = "<group>"; };
 		CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MXPointCloudDemoScene.mm; sourceTree = "<group>"; };
+		CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Track_A-Sphere-70-2048x2048.jpg"; sourceTree = "<group>"; };
 		CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DLandDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3M3DLandDemoScene.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -542,6 +544,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */,
 				E780A3D316D29FAA000F0395 /* 3DModels */,
 				CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */,
 				CF37F5F0183D26500050CAEF /* 0576.bil */,
@@ -728,6 +731,7 @@
 				E780A3D016D29EA5000F0395 /* play.png in Resources */,
 				E780A3D116D29EA5000F0395 /* satellite-on-96x48.png in Resources */,
 				CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */,
+				CF28DDCE26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg in Resources */,
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
 				CFAE623D21A54EEB005DB4C2 /* MDT_CC_250.bil in Resources */,

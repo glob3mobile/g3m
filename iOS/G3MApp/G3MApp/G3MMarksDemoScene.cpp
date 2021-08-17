@@ -185,13 +185,13 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 //
 //  addMark(mark);
   
-  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 0);
+  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 5000);
 
 
   g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height + 10000));
 
 
-  double size = 1000.0;
+  double size = 1000.0 * 100;
 
   {
     std::vector<Geodetic3D*> positions = LayoutUtils::splitOverCircle(g3mWidget->getG3MContext()->getPlanet(),
@@ -213,16 +213,57 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
     }
   }
 
-  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),
-                                                 AltitudeMode::ABSOLUTE,
-                                                 Vector3D(size, size, size),
-                                                 18,
-                                                 1.0,
-                                                 false,
-                                                 false,
-                                                 Color::fromRGBA255(128, 128, 128, 128),
-                                                 new Color(Color::WHITE),
-                                                 true);
+//                                  EllipsoidShape(Geodetic3D* position,
+//                                                 AltitudeMode altitudeMode,
+//                                                 const Vector3D& radius,
+//                                                 short resolution,
+//                                                 float borderWidth,
+//                                                 bool texturedInside,
+//                                                 bool mercator,
+//                                                 const Color& surfaceColor,
+//                                                 Color* borderColor = NULL,
+//                                                 bool withNormals = true);
+//
+//                                  EllipsoidShape(Geodetic3D* position,
+//                                                 AltitudeMode altitudeMode,
+//                                                 const Planet* planet,
+//                                                 const URL& textureURL,
+//                                                 const Vector3D& radius,
+//                                                 short resolution,
+//                                                 float borderWidth,
+//                                                 bool texturedInside,
+//                                                 bool mercator,
+//                                                 bool withNormals = true);
+
+
+  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),                          // Geodetic3D* position,
+                                                 AltitudeMode::ABSOLUTE,                          // AltitudeMode altitudeMode
+                                                 g3mWidget->getG3MContext()->getPlanet(),         // const Planet* planet,
+                                                 URL("file:///Track_A-Sphere-70-2048x2048.jpg"),  // const URL& textureURL,
+                                                 Vector3D(size, size, size),                      // const Vector3D& radius
+                                                 18,                                              // short resolution
+                                                 0,                                               // float borderWidth
+                                                 true,                                            // bool texturedInside
+                                                 false,                                           // bool mercator
+                                                 // Color::TRANSPARENT,                              // const Color& surfaceColor
+                                                 // NULL,                                            // Color* borderColor = NULL,
+                                                 false                                            // bool withNormals = true
+                                                 );
+
+  ellipsoid->setDepthTest(false);
+  ellipsoid->setCullFace(true);
+  ellipsoid->setCulledFace(GLCullFace::back());
+
+//  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),
+//                                                 AltitudeMode::ABSOLUTE,
+//                                                 Vector3D(size, size, size),
+//                                                 18,
+//                                                 1.0,
+//                                                 false,
+//                                                 false,
+//                                                 Color::fromRGBA255(128, 128, 128, 128),
+//                                                 new Color(Color::WHITE),
+//                                                 true);
   model->getShapesRenderer()->addShape(ellipsoid);
 
   const double scale                     = 1.0;

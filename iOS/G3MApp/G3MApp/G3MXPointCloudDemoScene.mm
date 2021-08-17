@@ -192,7 +192,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   const float pointSize            = 2;
   const bool  dynamicPointSize     = true;
   const float verticalExaggeration = 1;
-  const bool  depthTest            = true;
+  const bool  depthTest            = false;
   const bool  verbose              = true;
 
 
@@ -205,9 +205,9 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   // const std::string cloudName   = "PC_601fa9f0fe459753703dca36_LOD";
   // const double      deltaHeight = -180;
 
-  const std::string cloudName   = "PC_604118901e12e47da85696f4_LOD";
+  const std::string cloudName   = "605dd8884db6b34761d54af1";
   // const double      deltaHeight = -396;
-  const double      deltaHeight = -590;
+  const double      deltaHeight = -192.6893538717;
 
   // const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
   // const double      deltaHeight = -170;
@@ -246,8 +246,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                 TimeInterval::zero(),
                                                 false,
                                                 // new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(), true, 1),
-                                                // new XPCRGBPointColorizer(1),
-                                                new XPCIntensityPointColorizer(1),
+                                                new XPCRGBPointColorizer(1),
+                                                // new XPCIntensityPointColorizer(1),
                                                 // new XPCClassificationPointColorizer(1),
                                                 true, // deletePointColorizer,
                                                 minProjectedArea,

@@ -45,6 +45,10 @@ public class EllipsoidShape extends AbstractMeshShape
   private Color _surfaceColor;
   private Color _borderColor;
 
+  private boolean _depthTest;
+  private boolean _cullFace;
+  private int _culledFace;
+
   private Mesh createBorderMesh(G3MRenderContext rc, FloatBufferBuilderFromGeodetic vertices)
   {
   
@@ -127,8 +131,9 @@ public class EllipsoidShape extends AbstractMeshShape
     }
   
     // create mesh
-    Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
-    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor, null, true, _withNormals? normals.create() : null);
+    final Color surfaceColor = (_surfaceColor == null) ? null : new Color(_surfaceColor);
+  
+    Mesh im = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, (_borderWidth < 1) ? 1 : _borderWidth, 1, surfaceColor, null, _depthTest, _withNormals ? normals.create() : null, false, 0, 0, _cullFace, _culledFace); // int culledFace = GLCullFace::back() -  bool cullFace = false, -  float polygonOffsetUnits = 0, -  float polygonOffsetFactor = 0, -  bool polygonOffsetFill = false, -  IFloatBuffer* normals = NULL, -  bool depthTest = true, -  IFloatBuffer* colors = NULL, -  const Color* flatColor = NULL, -  float pointSize = 1, -  float lineWidth = 1, -  bool ownsIndices, -  IShortBuffer* indices, -  bool ownsVertices, -  IFloatBuffer* vertices, -  const Vector3D& center, -  const int primitive,
   
     final TextureIDReference texID = getTextureID(rc);
     if (texID == null)
@@ -270,6 +275,9 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureImage = null;
      _withNormals = withNormals;
      _texID = null;
+     _depthTest = true;
+     _cullFace = false;
+     _culledFace = GLCullFace.back();
   
   }
 
@@ -293,6 +301,9 @@ public class EllipsoidShape extends AbstractMeshShape
      _textureImage = null;
      _withNormals = withNormals;
      _texID = null;
+     _depthTest = true;
+     _cullFace = false;
+     _culledFace = GLCullFace.back();
   
   }
 
@@ -371,6 +382,33 @@ public class EllipsoidShape extends AbstractMeshShape
     _surfaceColor = surfaceColor;
   
     cleanMesh();
+  }
+
+  public final void setDepthTest(boolean depthTest)
+  {
+    if (_depthTest != depthTest)
+    {
+      _depthTest = depthTest;
+      cleanMesh();
+    }
+  }
+
+  public final void setCullFace(boolean cullFace)
+  {
+    if (_cullFace != cullFace)
+    {
+      _cullFace = cullFace;
+      cleanMesh();
+    }
+  }
+
+  public final void setCulledFace(int culledFace)
+  {
+    if (_culledFace != culledFace)
+    {
+      _culledFace = culledFace;
+      cleanMesh();
+    }
   }
 
 }
