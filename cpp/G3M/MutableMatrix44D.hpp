@@ -207,6 +207,15 @@ public:
                                    const Vector3D& axis,
                                    MutableMatrix44D& result);
 
+  static MutableMatrix44D createRotationMatrix(const Angle& omega,
+                                               const Angle& phi,
+                                               const Angle& kappa);
+
+  static void createRotationMatrix(const Angle& omega,
+                                   const Angle& phi,
+                                   const Angle& kappa,
+                                   MutableMatrix44D& result);
+
   static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                       const Vector3D& axis,
                                                       const Vector3D& point);

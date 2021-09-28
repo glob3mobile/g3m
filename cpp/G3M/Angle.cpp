@@ -17,6 +17,10 @@ const Angle Angle::_TWO_PI        = Angle::fromRadians(PI * 2);  // 360 degrees
 const Angle Angle::_MINUS_HALF_PI = Angle::fromRadians(-PI / 2); // -90 degrees
 
 
+Angle Angle::fromGradians(double gradians) {
+  return fromRadians( gradians / 200.0 * PI );
+}
+
 Angle Angle::fromDegrees(double degrees) {
   return Angle(degrees,
                TO_RADIANS(degrees));

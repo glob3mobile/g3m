@@ -15,6 +15,7 @@
 #include <G3M/Geodetic3D.hpp>
 #include <G3M/SingleBILElevationDataProvider.hpp>
 #include <G3M/PlanetRenderer.hpp>
+#include <G3M/GLConstants.hpp>
 
 #include <G3M/XPCRenderer.hpp>
 #include <G3M/XPCPointCloud.hpp>
@@ -178,7 +179,7 @@ public:
       const Geodetic2D center = tree->getSector()->_center;
       const double height = (tree->getMaxHeight() - metadata->_averagePosition._height) * 10;
       
-      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, height) );
+//      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, height) );
     }
   }
 
@@ -207,7 +208,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
   const std::string cloudName   = "605dd8884db6b34761d54af1";
   // const double      deltaHeight = -396;
-  const double      deltaHeight = -192.6893538717;
+  //  const double      deltaHeight = -192.6893538717;
+  const double      deltaHeight = 0;
 
   // const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
   // const double      deltaHeight = -170;
@@ -239,30 +241,108 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   model->getLayerSet()->addLayer(layer);
 
 
+  if (false) {
 #warning TODO cache
-  XPCPointCloud* pointCould = new XPCPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
-                                                cloudName,
-                                                DownloadPriority::LOWER,
-                                                TimeInterval::zero(),
-                                                false,
-                                                // new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(), true, 1),
-                                                new XPCRGBPointColorizer(1),
-                                                // new XPCIntensityPointColorizer(1),
-                                                // new XPCClassificationPointColorizer(1),
-                                                true, // deletePointColorizer,
-                                                minProjectedArea,
-                                                draftPoints,
-                                                pointSize,
-                                                dynamicPointSize,
-                                                depthTest,
-                                                verticalExaggeration,
-                                                deltaHeight,
-                                                new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
-                                                true,  // deleteMetadataListener,
-                                                new G3MXPointCloudDemoScene_PointSelectionListener(this),
-                                                true,  //  deletePointSelectionListener,
-                                                verbose);
+    XPCPointCloud* pointCould = new XPCPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
+                                                  cloudName,
+                                                  DownloadPriority::LOWER,
+                                                  TimeInterval::zero(),
+                                                  false,
+                                                  // new XPCHeightPointColorizer(RampColorizer::visibleSpectrum(), true, 1),
+                                                  new XPCRGBPointColorizer(1),
+                                                  // new XPCIntensityPointColorizer(1),
+                                                  // new XPCClassificationPointColorizer(1),
+                                                  true, // deletePointColorizer,
+                                                  minProjectedArea,
+                                                  draftPoints,
+                                                  pointSize,
+                                                  dynamicPointSize,
+                                                  depthTest,
+                                                  verticalExaggeration,
+                                                  deltaHeight,
+                                                  new G3MXPointCloudDemoScene_PointCloudMetadataListener(g3mWidget),
+                                                  true,  // deleteMetadataListener,
+                                                  new G3MXPointCloudDemoScene_PointSelectionListener(this),
+                                                  true,  //  deletePointSelectionListener,
+                                                  verbose);
 
-  model->getXPCRenderer()->addPointCloud(pointCould);
+    model->getXPCRenderer()->addPointCloud(pointCould);
+  }
+
+
+  {
+    // Track_A-Sphere-70.jpg
+    // =====================
+    //
+    // time      472906.836
+    //
+    // camera X   610605.568
+    // camera Y  4139976.049
+    // camera z      189.019
+    //
+    // Omega     -100.06027963
+    // Phi        -29.21672519
+    // Kappa      198.66168520
+    //
+    // m11 m21 m31   -8.963265904306E-01  -1.884553278557E-02  -4.429937800704E-01
+    // m12 m22 m32   -4.429156022003E-01  -8.365352766194E-03   8.965242831071E-01
+    // m13 m23 m33   -2.060127701387E-02   9.997874107865E-01  -8.488923798331E-04
+
+
+    const double size = 100.0;
+
+    Geodetic3D geoPos = Geodetic3D::fromDegrees(37.39996584, -1.75035672, 189.019);
+    
+    EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),                          // Geodetic3D* position,
+                                                   AltitudeMode::ABSOLUTE,                          // AltitudeMode altitudeMode
+                                                   g3mWidget->getG3MContext()->getPlanet(),         // const Planet* planet,
+                                                   URL("file:///Track_A-Sphere-70-2048x2048.png"),  // const URL& textureURL,
+                                                   Vector3D(size, size, size),                      // const Vector3D& radius
+                                                   24,                                              // short resolution
+                                                   0,                                               // float borderWidth
+                                                   true,                                            // bool texturedInside
+                                                   false,                                           // bool mercator
+                                                   false                                            // bool withNormals = true
+                                                   );
+    
+    //ellipsoid->setSurfaceColor(Color::fromRGBA(1, 1, 1, 0.5f));
+    ellipsoid->setDepthTest(false);
+    ellipsoid->setCullFace(true);
+    ellipsoid->setCulledFace(GLCullFace::back());
+
+    const double OmegaGradians = -100.06027963;
+    const double PhiGradians   =  -29.21672519;
+    const double KappaGradians =  198.66168520;
+
+//    const Angle omega = Angle::fromGradians( OmegaGradians );
+//    const Angle phi   = Angle::fromGradians( PhiGradians   );
+//    const Angle kappa = Angle::fromGradians( KappaGradians );
+//
+//    const MutableMatrix44D mm = MutableMatrix44D::createRotationMatrix(omega, phi, kappa);
+//    //ellipsoid->setUserTransformMatrix(new MutableMatrix44D(mm));
+//    ellipsoid->setLocalTransform( mm );
+
+
+//    const double headingDegrees = /*360.0 -*/ -1.0 * (Phi / 400.0 * 360.0);
+//    const double headingDegrees = 360.0 - Phi;
+
+//    const double headingDegrees = ( Omega / 400.0 * 360.0); // -> NO
+//    const double headingDegrees = (-Omega / 400.0 * 360.0); // -> NO
+//    const double headingDegrees = (   Phi / 400.0 * 360.0); // -> NO
+//    const double headingDegrees = (  -Phi / 400.0 * 360.0); // -> NO
+//    const double headingDegrees = ( Kappa / 400.0 * 360.0); // -> NO
+//    const double headingDegrees = (-Kappa / 400.0 * 360.0);
+
+//    const double headingDegrees = 0;
+
+//    ellipsoid->setHeading(Angle::fromDegrees( headingDegrees ));
+
+
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height + 1000 /*1400*/));
+
+
+    model->getShapesRenderer()->addShape( ellipsoid );
+  }
+
 
 }

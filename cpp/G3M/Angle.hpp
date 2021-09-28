@@ -50,6 +50,8 @@ public:
 
   static Angle fromRadians(double radians);
 
+  static Angle fromGradians(double gradians);
+
   static Angle min(const Angle& a1,
                    const Angle& a2) {
     return (a1._degrees < a2._degrees) ? a1 : a2;

@@ -42,6 +42,7 @@
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
 		CF9959C021AFF4E90004FC30 /* 870147_ball_heatmap_full.json in Resources */ = {isa = PBXBuildFile; fileRef = CF9959BE21AFF4E90004FC30 /* 870147_ball_heatmap_full.json */; };
 		CFA013DF21AFD81600C38596 /* 869491_ball_heatmap_full.json in Resources */ = {isa = PBXBuildFile; fileRef = CFA013DD21AFD81600C38596 /* 869491_ball_heatmap_full.json */; };
+		CFABB7F826CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png in Resources */ = {isa = PBXBuildFile; fileRef = CFABB7F626CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png */; };
 		CFAE623D21A54EEB005DB4C2 /* MDT_CC_250.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFAE623C21A54EEB005DB4C2 /* MDT_CC_250.bil */; };
 		CFAE772121ADC407007314B6 /* 869491_points.json in Resources */ = {isa = PBXBuildFile; fileRef = CFAE772021ADC407007314B6 /* 869491_points.json */; };
 		CFAE772321ADC55B007314B6 /* 870147_points.json in Resources */ = {isa = PBXBuildFile; fileRef = CFAE772221ADC55A007314B6 /* 870147_points.json */; };
@@ -199,6 +200,7 @@
 		CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoListener.hpp; sourceTree = "<group>"; };
 		CF9959BE21AFF4E90004FC30 /* 870147_ball_heatmap_full.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 870147_ball_heatmap_full.json; sourceTree = "<group>"; };
 		CFA013DD21AFD81600C38596 /* 869491_ball_heatmap_full.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 869491_ball_heatmap_full.json; sourceTree = "<group>"; };
+		CFABB7F626CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Track_A-Sphere-70-2048x2048.png"; sourceTree = "<group>"; };
 		CFAE623C21A54EEB005DB4C2 /* MDT_CC_250.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MDT_CC_250.bil; sourceTree = "<group>"; };
 		CFAE772021ADC407007314B6 /* 869491_points.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 869491_points.json; sourceTree = "<group>"; };
 		CFAE772221ADC55A007314B6 /* 870147_points.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 870147_points.json; sourceTree = "<group>"; };
@@ -544,6 +546,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFABB7F626CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png */,
 				CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */,
 				E780A3D316D29FAA000F0395 /* 3DModels */,
 				CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */,
@@ -745,6 +748,7 @@
 				E780A3DD16D29FAA000F0395 /* A321-House.png in Resources */,
 				CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */,
 				E780A3DE16D29FAA000F0395 /* NWA.png in Resources */,
+				CFABB7F826CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png in Resources */,
 				CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */,
 				CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */,
 			);

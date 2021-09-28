@@ -185,71 +185,84 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
 //
 //  addMark(mark);
   
-  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 5000);
+//  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 5000);
+  Geodetic3D geoPos = Geodetic3D::fromDegrees(37.39996584, -1.75035672, 0);
 
 
-  g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height + 10000));
+//  g3mWidget->setAnimatedCameraPosition(// Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height + 10000),
+//                                       Geodetic3D::fromDegrees(28.245483424027337804,
+//                                                               -15.470656085304499427,
+//                                                               1514.138390999199828),
+//                                       Angle::fromDegrees( -159.135024 ),
+//                                       Angle::fromDegrees( -5.004065 ));
+
+  //  Touched on position (lat=28.178645378267038524d, lon=-15.442239906635627733d, height=0)
+  //  Touched on pixels (V2I 52, 126)
+  //  Camera position=(lat=28.245483424027337804d, lon=-15.470656085304499427d, height=1514.138390999199828) heading=-159.135024 pitch=-5.004065
+  //  Camera zNear=151.413839 zFar=480581.477842
+
+  double size = 100.0;
+
+  g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height /*+ 10000*/));
 
 
-  double size = 1000.0 * 100;
-
-  {
-    std::vector<Geodetic3D*> positions = LayoutUtils::splitOverCircle(g3mWidget->getG3MContext()->getPlanet(),
-                                                                      geoPos,
-                                                                      size,
-                                                                      60);
-
-    for (size_t i = 0; i < positions.size(); i++) {
-      Geodetic3D* position = positions[i];
-
-      Mark* mark = new Mark(IStringUtils::instance()->toString( (long long) i ),
-                            *position,
-                            ABSOLUTE,
-                            0 /* minDistanceToCamera */);
-
-      model->getMarksRenderer()->addMark(mark);
-
-      delete position;
-    }
-  }
-
-//                                  EllipsoidShape(Geodetic3D* position,
-//                                                 AltitudeMode altitudeMode,
-//                                                 const Vector3D& radius,
-//                                                 short resolution,
-//                                                 float borderWidth,
-//                                                 bool texturedInside,
-//                                                 bool mercator,
-//                                                 const Color& surfaceColor,
-//                                                 Color* borderColor = NULL,
-//                                                 bool withNormals = true);
+//  {
+//    std::vector<Geodetic3D*> positions = LayoutUtils::splitOverCircle(g3mWidget->getG3MContext()->getPlanet(),
+//                                                                      geoPos,
+//                                                                      size,
+//                                                                      12);
 //
-//                                  EllipsoidShape(Geodetic3D* position,
-//                                                 AltitudeMode altitudeMode,
-//                                                 const Planet* planet,
-//                                                 const URL& textureURL,
-//                                                 const Vector3D& radius,
-//                                                 short resolution,
-//                                                 float borderWidth,
-//                                                 bool texturedInside,
-//                                                 bool mercator,
-//                                                 bool withNormals = true);
+//    for (size_t i = 0; i < positions.size(); i++) {
+//      Geodetic3D* position = positions[i];
+//
+//      Mark* mark = new Mark(IStringUtils::instance()->toString( (long long) i ),
+//                            *position,
+//                            ABSOLUTE,
+//                            0 /* minDistanceToCamera */);
+//
+//      model->getMarksRenderer()->addMark(mark);
+//
+//      delete position;
+//    }
+//  }
+
+  
+//  EllipsoidShape(Geodetic3D* position,
+//                 AltitudeMode altitudeMode,
+//                 const Vector3D& radius,
+//                 short resolution,
+//                 float borderWidth,
+//                 bool texturedInside,
+//                 bool mercator,
+//                 const Color& surfaceColor,
+//                 Color* borderColor = NULL,
+//                 bool withNormals = true);
+//
+//  EllipsoidShape(Geodetic3D* position,
+//                 AltitudeMode altitudeMode,
+//                 const Planet* planet,
+//                 const URL& textureURL,
+//                 const Vector3D& radius,
+//                 short resolution,
+//                 float borderWidth,
+//                 bool texturedInside,
+//                 bool mercator,
+//                 bool withNormals = true);
 
 
   EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),                          // Geodetic3D* position,
                                                  AltitudeMode::ABSOLUTE,                          // AltitudeMode altitudeMode
                                                  g3mWidget->getG3MContext()->getPlanet(),         // const Planet* planet,
-                                                 URL("file:///Track_A-Sphere-70-2048x2048.jpg"),  // const URL& textureURL,
+                                                 URL("file:///Track_A-Sphere-70-2048x2048.png"),  // const URL& textureURL,
                                                  Vector3D(size, size, size),                      // const Vector3D& radius
-                                                 18,                                              // short resolution
+                                                 24,                                              // short resolution
                                                  0,                                               // float borderWidth
                                                  true,                                            // bool texturedInside
                                                  false,                                           // bool mercator
-                                                 // Color::TRANSPARENT,                              // const Color& surfaceColor
-                                                 // NULL,                                            // Color* borderColor = NULL,
                                                  false                                            // bool withNormals = true
                                                  );
 
+  //ellipsoid->setSurfaceColor(Color::fromRGBA(1, 1, 1, 0.5f));
   ellipsoid->setDepthTest(false);
   ellipsoid->setCullFace(true);
   ellipsoid->setCulledFace(GLCullFace::back());
