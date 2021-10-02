@@ -115,6 +115,11 @@ public:
   void setHeadingPitchRoll(const Angle& heading,
                            const Angle& pitch,
                            const Angle& roll);
+  
+  void setOmegaPhiKappa(const Planet* planet,
+                        const Angle& omega,
+                        const Angle& phi,
+                        const Angle& kappa);
 
   void setScale(double scale) {
     setScale(scale, scale, scale);

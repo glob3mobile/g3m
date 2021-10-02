@@ -313,10 +313,13 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
     const double OmegaGradians = -100.06027963;
     const double PhiGradians   =  -29.21672519;
     const double KappaGradians =  198.66168520;
+    
 
-//    const Angle omega = Angle::fromGradians( OmegaGradians );
-//    const Angle phi   = Angle::fromGradians( PhiGradians   );
-//    const Angle kappa = Angle::fromGradians( KappaGradians );
+    const Angle omega = Angle::fromGradians( OmegaGradians );
+    const Angle phi   = Angle::fromGradians( PhiGradians   );
+    const Angle kappa = Angle::fromGradians( KappaGradians );
+    
+    ellipsoid->setOmegaPhiKappa(context->getPlanet(), omega, phi, kappa);
 //
 //    const MutableMatrix44D mm = MutableMatrix44D::createRotationMatrix(omega, phi, kappa);
 //    //ellipsoid->setUserTransformMatrix(new MutableMatrix44D(mm));
