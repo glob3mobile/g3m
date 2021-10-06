@@ -772,7 +772,12 @@ public class MutableMatrix44D
     final double m21 = (-sin_omega * cos_phi);
     final double m22 = (cos_omega * cos_phi);
   
-    return new MutableMatrix44D(m00, m01, m02, 0, m10, m11, m12, 0, m20, m21, m22, 0, 0, 0, 0, 1);
+    // row or column major?
+    return new MutableMatrix44D(m00, m10, m20, 0, m01, m11, m21, 0, m02, m12, m22, 0, 0, 0, 0, 1);
+  //  return MutableMatrix44D(m00, m01, m02, 0,
+  //                          m10, m11, m12, 0,
+  //                          m20, m21, m22, 0,
+  //                            0,   0,   0, 1);
   }
 
   public static void createRotationMatrix(Angle omega, Angle phi, Angle kappa, MutableMatrix44D result)
@@ -797,11 +802,12 @@ public class MutableMatrix44D
     final double m21 = (-sin_omega * cos_phi);
     final double m22 = (cos_omega * cos_phi);
   
-  //  result.setValue(m00, m10, m20, 0,
-  //                  m01, m11, m21, 0,
-  //                  m02, m12, m22, 0,
+    // row or column major?
+    result.setValue(m00, m10, m20, 0, m01, m11, m21, 0, m02, m12, m22, 0, 0, 0, 0, 1);
+  //  result.setValue(m00, m01, m02, 0,
+  //                  m10, m11, m12, 0,
+  //                  m20, m21, m22, 0,
   //                    0,   0,   0, 1);
-    result.setValue(m00, m01, m02, 0, m10, m11, m12, 0, m20, m21, m22, 0, 0, 0, 0, 1);
   }
 
   public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)

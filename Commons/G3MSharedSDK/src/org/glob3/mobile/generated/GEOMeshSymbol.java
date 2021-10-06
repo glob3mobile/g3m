@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 //class Mesh;
 //class Geodetic2D;
 //class Color;
-//class Ellipsoid;
 //class Planet;
 
 public abstract class GEOMeshSymbol extends GEOSymbol
@@ -81,7 +80,6 @@ public abstract class GEOMeshSymbol extends GEOSymbol
     return result;
   }
 
-
   protected abstract Mesh createMesh(G3MRenderContext rc);
 
 
@@ -101,6 +99,5 @@ public abstract class GEOMeshSymbol extends GEOSymbol
     }
     return true;
   }
-
 
 }
