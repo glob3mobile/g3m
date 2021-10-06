@@ -346,8 +346,8 @@ void Shape::setHeadingPitchRoll(const Angle& heading,
 
 void Shape::setOmegaPhiKappa(const Planet* planet,
                              const Angle& omega,
-                                const Angle& phi,
-                                const Angle& kappa) {
+                             const Angle& phi,
+                             const Angle& kappa) {
   if (omega.isNan()) {
     THROW_EXCEPTION("omega can't be NAN");
   }
@@ -367,13 +367,13 @@ void Shape::setOmegaPhiKappa(const Planet* planet,
   
   cleanTransformMatrix();
   
-  printf("O: %f, P: %f, K: %f\n", omega._degrees, phi._degrees, kappa._degrees);
+//  printf("O: %f, P: %f, K: %f\n", omega._degrees, phi._degrees, kappa._degrees);
   
   // https://www.pcigeomatics.com/geomatica-help/COMMON/concepts/ExteriorOrientation_explainEO.html
-  MutableMatrix44D mLookDown = MutableMatrix44D::createRotationMatrix(Angle::_HALF_PI, Vector3D::UP_X);
-  MutableMatrix44D mOmega = MutableMatrix44D::createRotationMatrix(omega, Vector3D::UP_X);
-  MutableMatrix44D mPhi = MutableMatrix44D::createRotationMatrix(Angle::_MINUS_HALF_PI.sub(phi), Vector3D::UP_Z);
-  MutableMatrix44D mKappa = MutableMatrix44D::createRotationMatrix(kappa.times(-1), Vector3D::UP_Y);
+  const MutableMatrix44D mLookDown = MutableMatrix44D::createRotationMatrix(Angle::_HALF_PI,                Vector3D::UP_X);
+  const MutableMatrix44D mOmega    = MutableMatrix44D::createRotationMatrix(omega,                          Vector3D::UP_X);
+  const MutableMatrix44D mPhi      = MutableMatrix44D::createRotationMatrix(Angle::_MINUS_HALF_PI.sub(phi), Vector3D::UP_Z);
+  const MutableMatrix44D mKappa    = MutableMatrix44D::createRotationMatrix(kappa.times(-1),                Vector3D::UP_Y);
   
   setLocalTransform(mPhi.multiply(mOmega).multiply(mKappa).multiply(mLookDown));
 }

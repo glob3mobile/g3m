@@ -159,7 +159,7 @@ public:
   void setAnimatedScale(double scaleX,
                         double scaleY,
                         double scaleZ);
-
+  
   void setAnimatedScale(const Vector3D& scale);
 
   void setAnimatedScale(const TimeInterval& duration,

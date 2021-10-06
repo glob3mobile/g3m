@@ -50,6 +50,8 @@
 		CFB136CE1AA7573D0013EDE1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */; };
 		CFB136D01AA779830013EDE1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CF1AA779830013EDE1 /* CoreMotion.framework */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
+		CFBB0EB0270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFBB0EAE270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg */; };
+		CFBB0EB2270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png in Resources */ = {isa = PBXBuildFile; fileRef = CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */; };
 		CFBD815219A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */; };
 		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
 		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
@@ -210,6 +212,8 @@
 		CFB136CF1AA779830013EDE1 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDemoBuilder_iOS.mm; sourceTree = "<group>"; };
 		CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CFBB0EAE270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Track_A-Sphere-972-2048x2048.jpg"; sourceTree = "<group>"; };
+		CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Track_A-Sphere-972-2048x2048.png"; sourceTree = "<group>"; };
 		CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MOLDPointCloud1DemoScene.cpp; sourceTree = "<group>"; };
 		CFBD815119A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MOLDPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
 		CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCanvas2DDemoScene.cpp; sourceTree = "<group>"; };
@@ -546,6 +550,8 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */,
+				CFBB0EAE270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg */,
 				CFABB7F626CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png */,
 				CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */,
 				E780A3D316D29FAA000F0395 /* 3DModels */,
@@ -636,7 +642,7 @@
 				ORGANIZATIONNAME = "Igo Software SL";
 				TargetAttributes = {
 					E7D1B60416D2436700AF47C1 = {
-						DevelopmentTeam = WN3393AXJ3;
+						DevelopmentTeam = AAG2G2435H;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -728,6 +734,7 @@
 				CFE3B3E2183ADAB80078C796 /* arcdeTriomphe.bson in Resources */,
 				E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */,
 				E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */,
+				CFBB0EB0270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg in Resources */,
 				CFE3B3D9183AD2D40078C796 /* textures-A320 in Resources */,
 				CF39C40C21AE957300E94FD6 /* Images.xcassets in Resources */,
 				E780A3CF16D29EA5000F0395 /* marker-wikipedia-72x72.png in Resources */,
@@ -741,6 +748,7 @@
 				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
 				CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
+				CFBB0EB2270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png in Resources */,
 				CF5DB6D121935C1600E0613E /* ccmdt.bil in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
 				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
@@ -931,7 +939,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WN3393AXJ3;
+				DEVELOPMENT_TEAM = AAG2G2435H;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";
@@ -970,7 +978,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WN3393AXJ3;
+				DEVELOPMENT_TEAM = AAG2G2435H;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "G3MApp/G3MApp-Prefix.pch";

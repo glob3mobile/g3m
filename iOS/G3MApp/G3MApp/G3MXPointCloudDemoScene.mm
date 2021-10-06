@@ -208,8 +208,8 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
   const std::string cloudName   = "605dd8884db6b34761d54af1";
   // const double      deltaHeight = -396;
-  //  const double      deltaHeight = -192.6893538717;
-  const double      deltaHeight = 0;
+    const double      deltaHeight = -192.6893538717;
+//  const double      deltaHeight = 0;
 
   // const std::string cloudName   = "Leica_FFCC_SMALL_LOD";
   // const double      deltaHeight = -170;
@@ -241,7 +241,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
   model->getLayerSet()->addLayer(layer);
 
 
-  if (false) {
+  if (true) {
 #warning TODO cache
     XPCPointCloud* pointCould = new XPCPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
                                                   cloudName,
@@ -291,18 +291,29 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
     const double size = 100.0;
 
-    Geodetic3D geoPos = Geodetic3D::fromDegrees(37.39996584, -1.75035672, 189.019);
-    
-    EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),                          // Geodetic3D* position,
-                                                   AltitudeMode::ABSOLUTE,                          // AltitudeMode altitudeMode
-                                                   g3mWidget->getG3MContext()->getPlanet(),         // const Planet* planet,
-                                                   URL("file:///Track_A-Sphere-70-2048x2048.png"),  // const URL& textureURL,
-                                                   Vector3D(size, size, size),                      // const Vector3D& radius
-                                                   24,                                              // short resolution
-                                                   0,                                               // float borderWidth
-                                                   true,                                            // bool texturedInside
-                                                   false,                                           // bool mercator
-                                                   false                                            // bool withNormals = true
+//    // Track_A-Sphere-70-2048x2048
+//    const double OmegaGradians = -100.06027963;
+//    const double PhiGradians   =  -29.21672519;
+//    const double KappaGradians =  198.66168520;
+//    const Geodetic3D geoPos = Geodetic3D::fromDegrees(37.39996584, -1.75035672, 189.019 + deltaHeight);
+
+    // Track_A-Sphere-972
+    const double OmegaGradians = -101.44147520;
+    const double PhiGradians   =  -49.94186732;
+    const double KappaGradians = -198.47304174;
+    const Geodetic3D geoPos = Geodetic3D::fromDegrees(37.3662688, -1.7256187, 218.096 + deltaHeight);
+
+
+    EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),                           // Geodetic3D* position,
+                                                   AltitudeMode::ABSOLUTE,                           // AltitudeMode altitudeMode
+                                                   g3mWidget->getG3MContext()->getPlanet(),          // const Planet* planet,
+                                                   URL("file:///Track_A-Sphere-972-2048x2048.png"),  // const URL& textureURL,
+                                                   Vector3D(size, size, size),                       // const Vector3D& radius
+                                                   36,                                               // short resolution
+                                                   0,                                                // float borderWidth
+                                                   true,                                             // bool texturedInside
+                                                   false,                                            // bool mercator
+                                                   false                                             // bool withNormals = true
                                                    );
     
     //ellipsoid->setSurfaceColor(Color::fromRGBA(1, 1, 1, 0.5f));
@@ -310,17 +321,37 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
     ellipsoid->setCullFace(true);
     ellipsoid->setCulledFace(GLCullFace::back());
 
-    const double OmegaGradians = -100.06027963;
-    const double PhiGradians   =  -29.21672519;
-    const double KappaGradians =  198.66168520;
-    
+
+//    Track_A-Sphere-972.jpg;
+//    473329.283;
+//    612845.710;
+//    4136266.739;
+//    218.096;
+//
+//    -101.44147520;
+//    -49.94186732;
+//    -198.47304174;
+//
+//    -7.075486030427e-001;
+//    1.697409443181e-002;
+//    -7.064607947017e-001;
+//    -7.055335591834e-001;
+//    3.957297252408e-002;
+//    7.075707573887e-001;
+//    3.996712647117e-002;
+//    9.990724998537e-001;
+//    -1.602400816927e-002
+
 
     const Angle omega = Angle::fromGradians( OmegaGradians );
     const Angle phi   = Angle::fromGradians( PhiGradians   );
     const Angle kappa = Angle::fromGradians( KappaGradians );
-    
-    ellipsoid->setOmegaPhiKappa(context->getPlanet(), omega, phi, kappa);
-//
+
+    ellipsoid->setOmegaPhiKappa(context->getPlanet(),
+                                omega,
+                                phi,
+                                kappa);
+
 //    const MutableMatrix44D mm = MutableMatrix44D::createRotationMatrix(omega, phi, kappa);
 //    //ellipsoid->setUserTransformMatrix(new MutableMatrix44D(mm));
 //    ellipsoid->setLocalTransform( mm );
@@ -341,7 +372,9 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 //    ellipsoid->setHeading(Angle::fromDegrees( headingDegrees ));
 
 
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height + 1000 /*1400*/));
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height /*+ size*3*/ /*1400*/),
+                                         Angle::_ZERO,
+                                         Angle::fromDegrees(-15));
 
 
     model->getShapesRenderer()->addShape( ellipsoid );
