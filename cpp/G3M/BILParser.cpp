@@ -22,6 +22,7 @@
 ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
                                                    const Vector2I&    extent,
                                                    const IByteBuffer* buffer,
+                                                   const short        noDataValue,
                                                    const double       deltaHeight) {
 
   const int size = extent._x * extent._y;
@@ -45,7 +46,7 @@ ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
 
-    if ((height == -9999) || (height == minValue)) {
+    if ((height == -9999) || (height == minValue) || (height == -32768)) {
       height = ShortBufferElevationData::NO_DATA_VALUE;
     }
     else {
@@ -89,7 +90,7 @@ ShortBufferDEMGrid* BILParser::parseBIL16(const Sector&      sector,
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
 
-    if ((height == -9999) || (height == minValue)) {
+    if ((height == -9999) || (height == minValue) || (height == -32768)) {
       height = noDataValue;
     }
     else {

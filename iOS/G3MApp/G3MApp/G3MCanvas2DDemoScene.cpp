@@ -45,7 +45,7 @@ public:
                                     image->getWidth()  * 15.0f,
                                     image->getHeight() * 15.0f,
                                     true);
-
+    quad->setPitch(Angle::_HALF_PI);
     _shapesRenderer->addShape(quad);
   }
 };

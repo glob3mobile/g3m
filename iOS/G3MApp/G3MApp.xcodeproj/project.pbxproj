@@ -11,6 +11,7 @@
 		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
 		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
 		CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */; };
+		CF28408A2729A3B900BC64BA /* OUTPUT-4326.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */; };
 		CF28DDCE26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */; };
 		CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
@@ -25,6 +26,8 @@
 		CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */; };
 		CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECC1A2E62C400B70D7E /* widget-background.png */; };
 		CF5DB6D121935C1600E0613E /* ccmdt.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF5DB6CF21935C1600E0613E /* ccmdt.bil */; };
+		CF624D9927295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CF624D9727295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG */; };
+		CF624D9B272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG in Resources */ = {isa = PBXBuildFile; fileRef = CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */; };
 		CF64DA302180AC0E00387041 /* G3MExtrusionDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF64DA2E2180AC0E00387041 /* G3MExtrusionDemoScene.cpp */; };
 		CF6607F223DF315A00795C7F /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */; };
@@ -159,6 +162,7 @@
 		CF162FE31AB739D700673D44 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CF2744F825B1A8990056304B /* G3MXPointCloudDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MXPointCloudDemoScene.hpp; sourceTree = "<group>"; };
 		CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MXPointCloudDemoScene.mm; sourceTree = "<group>"; };
+		CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OUTPUT-4326.bil"; sourceTree = "<group>"; };
 		CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Track_A-Sphere-70-2048x2048.jpg"; sourceTree = "<group>"; };
 		CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DLandDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3M3DLandDemoScene.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -178,6 +182,8 @@
 		CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "altimeter-ruler-1536x113.png"; sourceTree = "<group>"; };
 		CF483ECC1A2E62C400B70D7E /* widget-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget-background.png"; sourceTree = "<group>"; };
 		CF5DB6CF21935C1600E0613E /* ccmdt.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ccmdt.bil; sourceTree = "<group>"; };
+		CF624D9727295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = OverviewCamera_19666_20210310_114027335.JPG; sourceTree = "<group>"; };
+		CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OverviewCamera_19666_20210310_114027335.PNG; sourceTree = "<group>"; };
 		CF64DA2E2180AC0E00387041 /* G3MExtrusionDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MExtrusionDemoScene.cpp; sourceTree = "<group>"; };
 		CF64DA2F2180AC0E00387041 /* G3MExtrusionDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MExtrusionDemoScene.hpp; sourceTree = "<group>"; };
 		CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoScene.cpp; sourceTree = "<group>"; };
@@ -550,6 +556,9 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */,
+				CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */,
+				CF624D9727295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG */,
 				CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */,
 				CFBB0EAE270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg */,
 				CFABB7F626CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png */,
@@ -686,6 +695,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF28408A2729A3B900BC64BA /* OUTPUT-4326.bil in Resources */,
 				CFE3B3D2183ACAA90078C796 /* 18STJ7435_2000_4326.bson in Resources */,
 				E7D1B61316D2436700AF47C1 /* InfoPlist.strings in Resources */,
 				E7D1B61B16D2436700AF47C1 /* Default.png in Resources */,
@@ -714,6 +724,7 @@
 				CFE3B3EB183ADB2D0078C796 /* texture0.png in Resources */,
 				CFAE772321ADC55B007314B6 /* 870147_points.json in Resources */,
 				CF37F5F1183D26500050CAEF /* 0576.bil in Resources */,
+				CF624D9927295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG in Resources */,
 				CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */,
 				E7D1B64216D2462B00AF47C1 /* Icon-Small-50.png in Resources */,
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
@@ -757,6 +768,7 @@
 				CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */,
 				E780A3DE16D29FAA000F0395 /* NWA.png in Resources */,
 				CFABB7F826CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png in Resources */,
+				CF624D9B272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG in Resources */,
 				CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */,
 				CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */,
 			);
