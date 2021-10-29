@@ -57,7 +57,7 @@ public class BILParser
     {
       short height = iterator.nextInt16();
   
-      if ((height == -9999) || (height == minValue))
+      if ((height == -9999) || (height == minValue) || (height == ShortBufferElevationData.NO_DATA_VALUE))
       {
         height = ShortBufferElevationData.NO_DATA_VALUE;
       }
@@ -100,7 +100,7 @@ public class BILParser
     {
       short height = iterator.nextInt16();
   
-      if ((height == -9999) || (height == minValue))
+      if ((height == -9999) || (height == minValue) || (height == ShortBufferElevationData.NO_DATA_VALUE))
       {
         height = noDataValue;
       }
