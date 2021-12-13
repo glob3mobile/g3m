@@ -158,7 +158,7 @@ public:
 
   void addShape(Shape* shape);
 
-  void removeShape(Shape* shape);
+  bool removeShape(Shape* shape);
 
   void removeAllShapes(bool deleteShapes=true);
 
