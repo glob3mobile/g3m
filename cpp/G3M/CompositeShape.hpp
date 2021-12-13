@@ -35,6 +35,7 @@ public:
   ~CompositeShape();
 
   void addShape(Shape* shape);
+  void removeAllShapes(bool deleteShapes);
 
   bool isReadyToRender(const G3MRenderContext* rc);
 

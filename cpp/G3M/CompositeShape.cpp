@@ -84,3 +84,14 @@ std::vector<double> CompositeShape::intersectionsDistances(const Planet* planet,
 
   return intersections;
 }
+
+void CompositeShape::removeAllShapes(bool deleteShapes) {
+  if (deleteShapes) {
+    const size_t childrenCount = _children.size();
+    for (size_t i = 0; i < childrenCount; i++) {
+      Shape* child = _children[i];
+      delete child;
+    }
+  }
+  _children.clear();
+}

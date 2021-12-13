@@ -53,6 +53,20 @@ public class CompositeShape extends Shape
   {
     _children.add(shape);
   }
+  public final void removeAllShapes(boolean deleteShapes)
+  {
+    if (deleteShapes)
+    {
+      final int childrenCount = _children.size();
+      for (int i = 0; i < childrenCount; i++)
+      {
+        Shape child = _children.get(i);
+        if (child != null)
+           child.dispose();
+      }
+    }
+    _children.clear();
+  }
 
   public final boolean isReadyToRender(G3MRenderContext rc)
   {
