@@ -13,7 +13,6 @@
 
 #include <vector>
 
-class GPUProgramState;
 
 class CompositeShape : public Shape {
 private:
@@ -42,6 +41,13 @@ public:
   void rawRender(const G3MRenderContext* rc,
                  GLState* parentState,
                  bool renderNotReadyShapes);
+
+  bool isTransparent(const G3MRenderContext* rc);
+
+  std::vector<double> intersectionsDistances(const Planet* planet,
+                                             const Vector3D& origin,
+                                             const Vector3D& direction) const;
+
 };
 
 #endif

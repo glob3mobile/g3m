@@ -150,7 +150,7 @@ public class ShapesRenderer extends DefaultRenderer
     }
   }
 
-  public final void removeShape(Shape shape)
+  public final boolean removeShape(Shape shape)
   {
     int pos = -1;
     final int shapesSize = _shapes.size();
@@ -165,7 +165,10 @@ public class ShapesRenderer extends DefaultRenderer
     if (pos != -1)
     {
       _shapes.remove(pos);
+      return true;
     }
+  
+    return false;
   }
 
   public final void removeAllShapes()
