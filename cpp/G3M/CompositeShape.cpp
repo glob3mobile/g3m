@@ -75,8 +75,7 @@ std::vector<double> CompositeShape::intersectionsDistances(const Planet* planet,
   // sort vector
 #ifdef C_CODE
   std::sort(intersections.begin(),
-            intersections.end(),
-            intersections);
+            intersections.end());
 #endif
 #ifdef JAVA_CODE
   java.util.Collections.sort(intersections);
