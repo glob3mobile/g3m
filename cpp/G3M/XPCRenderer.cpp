@@ -22,6 +22,7 @@
 #include "G3MEventContext.hpp"
 #include "Ray.hpp"
 #include "XPCSelectionResult.hpp"
+#include "Geodetic3D.hpp"
 
 
 XPCRenderer::XPCRenderer() :
@@ -209,6 +210,11 @@ bool XPCRenderer::onTouchEvent(const G3MEventContext* ec,
               selectedPoints = true;
             }
           }
+
+          ILogger::instance()->logInfo("Camera position=%s heading=%f pitch=%f",
+                                       _lastCamera->getGeodeticPosition().description().c_str(),
+                                       _lastCamera->getHeading()._degrees,
+                                       _lastCamera->getPitch()._degrees);
 
           if (selectedPoints) {
             delete _selectionResult;

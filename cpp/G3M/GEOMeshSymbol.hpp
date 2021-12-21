@@ -14,7 +14,6 @@
 class Mesh;
 class Geodetic2D;
 class Color;
-class Ellipsoid;
 class Planet;
 
 class GEOMeshSymbol : public GEOSymbol {
@@ -32,7 +31,6 @@ protected:
                           double deltaHeight,
                           const Planet* planet) const;
 
-
   virtual Mesh* createMesh(const G3MRenderContext* rc) const = 0;
 
 public:
@@ -43,7 +41,6 @@ public:
                  ShapesRenderer*         shapesRenderer,
                  MarksRenderer*          marksRenderer,
                  GEOVectorLayer*         geoVectorLayer) const;
-
 
 };
 

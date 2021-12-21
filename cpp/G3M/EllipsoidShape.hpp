@@ -41,6 +41,10 @@ private:
   Color* _surfaceColor;
   Color* _borderColor;
 
+  bool _depthTest;
+  bool _cullFace;
+  int  _culledFace;
+
   Mesh* createBorderMesh(const G3MRenderContext* rc,
                          FloatBufferBuilderFromGeodetic* vertices);
   Mesh* createSurfaceMesh(const G3MRenderContext* rc,
@@ -94,6 +98,12 @@ public:
                                              const Vector3D& direction) const;
 
   void setSurfaceColor(const Color& surfaceColor);
+
+  void setDepthTest(bool depthTest);
+
+  void setCullFace(bool cullFace);
+
+  void setCulledFace(int culledFace);
 
 };
 

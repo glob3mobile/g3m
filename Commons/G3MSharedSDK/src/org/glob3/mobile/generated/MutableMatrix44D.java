@@ -750,6 +750,66 @@ public class MutableMatrix44D
     result.setValue(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
   }
 
+  public static MutableMatrix44D createRotationMatrix(Angle omega, Angle phi, Angle kappa)
+  {
+    final double cos_omega = Math.cos(omega._radians);
+    final double cos_phi = Math.cos(phi._radians);
+    final double cos_kappa = Math.cos(kappa._radians);
+  
+    final double sin_omega = Math.sin(omega._radians);
+    final double sin_phi = Math.sin(phi._radians);
+    final double sin_kappa = Math.sin(kappa._radians);
+  
+    final double m00 = (cos_phi * cos_kappa);
+    final double m01 = (cos_omega * sin_kappa) + (sin_omega * sin_phi * cos_kappa);
+    final double m02 = (sin_omega * sin_kappa) - (cos_omega * sin_phi * cos_kappa);
+  
+    final double m10 = (-cos_phi * sin_kappa);
+    final double m11 = (cos_omega * cos_kappa) - (sin_omega * sin_phi * sin_kappa);
+    final double m12 = (sin_omega * cos_kappa) + (cos_omega * sin_phi * sin_kappa);
+  
+    final double m20 = sin_phi;
+    final double m21 = (-sin_omega * cos_phi);
+    final double m22 = (cos_omega * cos_phi);
+  
+    // row or column major?
+    return new MutableMatrix44D(m00, m10, m20, 0, m01, m11, m21, 0, m02, m12, m22, 0, 0, 0, 0, 1);
+  //  return MutableMatrix44D(m00, m01, m02, 0,
+  //                          m10, m11, m12, 0,
+  //                          m20, m21, m22, 0,
+  //                            0,   0,   0, 1);
+  }
+
+  public static void createRotationMatrix(Angle omega, Angle phi, Angle kappa, MutableMatrix44D result)
+  {
+    final double cos_omega = Math.cos(omega._radians);
+    final double cos_phi = Math.cos(phi._radians);
+    final double cos_kappa = Math.cos(kappa._radians);
+  
+    final double sin_omega = Math.sin(omega._radians);
+    final double sin_phi = Math.sin(phi._radians);
+    final double sin_kappa = Math.sin(kappa._radians);
+  
+    final double m00 = (cos_phi * cos_kappa);
+    final double m01 = (cos_omega * sin_kappa) + (sin_omega * sin_phi * cos_kappa);
+    final double m02 = (sin_omega * sin_kappa) - (cos_omega * sin_phi * cos_kappa);
+  
+    final double m10 = (-cos_phi * sin_kappa);
+    final double m11 = (cos_omega * cos_kappa) - (sin_omega * sin_phi * sin_kappa);
+    final double m12 = (sin_omega * cos_kappa) + (cos_omega * sin_phi * sin_kappa);
+  
+    final double m20 = sin_phi;
+    final double m21 = (-sin_omega * cos_phi);
+    final double m22 = (cos_omega * cos_phi);
+  
+    // row or column major?
+    result.setValue(m00, m10, m20, 0, m01, m11, m21, 0, m02, m12, m22, 0, 0, 0, 0, 1);
+  //  result.setValue(m00, m01, m02, 0,
+  //                  m10, m11, m12, 0,
+  //                  m20, m21, m22, 0,
+  //                    0,   0,   0, 1);
+  }
+
   public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
   {
     final MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));

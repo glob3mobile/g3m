@@ -45,7 +45,7 @@ ShortBufferElevationData* BILParser::oldParseBIL16(const Sector&      sector,
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
 
-    if ((height == -9999) || (height == minValue)) {
+    if ((height == -9999) || (height == minValue) || (height == ShortBufferElevationData::NO_DATA_VALUE)) {
       height = ShortBufferElevationData::NO_DATA_VALUE;
     }
     else {
@@ -89,7 +89,7 @@ ShortBufferDEMGrid* BILParser::parseBIL16(const Sector&      sector,
   for (int i = 0; i < size; i++) {
     short height = iterator.nextInt16();
 
-    if ((height == -9999) || (height == minValue)) {
+    if ((height == -9999) || (height == minValue) || (height == ShortBufferElevationData::NO_DATA_VALUE)) {
       height = noDataValue;
     }
     else {

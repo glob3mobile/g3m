@@ -58,7 +58,10 @@ _borderColor(borderColor),
 _textureRequested(false),
 _textureImage(NULL),
 _withNormals(withNormals),
-_texID(NULL)
+_texID(NULL),
+_depthTest(true),
+_cullFace(false),
+_culledFace(GLCullFace::back())
 {
 
 }
@@ -88,7 +91,10 @@ _borderColor(NULL),
 _textureRequested(false),
 _textureImage(NULL),
 _withNormals(withNormals),
-_texID(NULL)
+_texID(NULL),
+_depthTest(true),
+_cullFace(false),
+_culledFace(GLCullFace::back())
 {
 
 }
@@ -99,6 +105,27 @@ void EllipsoidShape::setSurfaceColor(const Color& surfaceColor) {
   _surfaceColor = new Color(surfaceColor);
 
   cleanMesh();
+}
+
+void EllipsoidShape::setDepthTest(bool depthTest) {
+  if (_depthTest != depthTest) {
+    _depthTest = depthTest;
+    cleanMesh();
+  }
+}
+
+void EllipsoidShape::setCullFace(bool cullFace) {
+  if (_cullFace != cullFace) {
+    _cullFace = cullFace;
+    cleanMesh();
+  }
+}
+
+void EllipsoidShape::setCulledFace(int culledFace) {
+  if (_culledFace != culledFace) {
+    _culledFace = culledFace;
+    cleanMesh();
+  }
 }
 
 EllipsoidShape::~EllipsoidShape() {
@@ -219,19 +246,26 @@ Mesh* EllipsoidShape::createSurfaceMesh(const G3MRenderContext* rc,
   }
 
   // create mesh
-  Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
-  Mesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
-                             vertices->getCenter(),
-                             vertices->create(),
-                             true,
-                             indices.create(),
-                             true,
-                             (_borderWidth < 1) ? 1 : _borderWidth,
-                             1,
-                             surfaceColor,
-                             NULL,
-                             true,
-                             _withNormals? normals->create() : NULL);
+  const Color* surfaceColor = (_surfaceColor == NULL) ? NULL : new Color(*_surfaceColor);
+
+  Mesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),             // const int primitive,
+                             vertices->getCenter(),                    // const Vector3D& center,
+                             vertices->create(),                       // IFloatBuffer* vertices,
+                             true,                                     // bool ownsVertices,
+                             indices.create(),                         // IShortBuffer* indices,
+                             true,                                     // bool ownsIndices,
+                             (_borderWidth < 1) ? 1 : _borderWidth,    // float lineWidth           = 1,
+                             1,                                        // float pointSize           = 1,
+                             surfaceColor,                             // const Color* flatColor    = NULL,
+                             NULL,                                     // IFloatBuffer* colors      = NULL,
+                             _depthTest,                               // bool depthTest            = true,
+                             _withNormals ? normals->create() : NULL,  // IFloatBuffer* normals     = NULL,
+                             false,                                    // bool polygonOffsetFill    = false,
+                             0,                                        // float polygonOffsetFactor = 0,
+                             0,                                        // float polygonOffsetUnits  = 0,
+                             _cullFace,                                // bool cullFace             = false,
+                             _culledFace                               // int  culledFace           = GLCullFace::back()
+                             );
 
   const TextureIDReference* texID = getTextureID(rc);
   if (texID == NULL) {
@@ -401,4 +435,3 @@ std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
 
   return result;
 }
-

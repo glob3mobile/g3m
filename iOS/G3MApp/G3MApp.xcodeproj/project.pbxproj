@@ -11,6 +11,8 @@
 		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
 		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
 		CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */; };
+		CF28408A2729A3B900BC64BA /* OUTPUT-4326.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */; };
+		CF28DDCE26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */; };
 		CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
@@ -24,6 +26,8 @@
 		CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */; };
 		CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */ = {isa = PBXBuildFile; fileRef = CF483ECC1A2E62C400B70D7E /* widget-background.png */; };
 		CF5DB6D121935C1600E0613E /* ccmdt.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF5DB6CF21935C1600E0613E /* ccmdt.bil */; };
+		CF624D9927295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CF624D9727295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG */; };
+		CF624D9B272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG in Resources */ = {isa = PBXBuildFile; fileRef = CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */; };
 		CF64DA302180AC0E00387041 /* G3MExtrusionDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF64DA2E2180AC0E00387041 /* G3MExtrusionDemoScene.cpp */; };
 		CF6607F223DF315A00795C7F /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7D1B64F16D24DE800AF47C1 /* libG3MiOSSDK.a */; };
 		CF6920B11837EA35007409D8 /* G3MDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */; };
@@ -41,6 +45,7 @@
 		CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8B1A561837DC69004D3902 /* G3MDemoListener.cpp */; };
 		CF9959C021AFF4E90004FC30 /* 870147_ball_heatmap_full.json in Resources */ = {isa = PBXBuildFile; fileRef = CF9959BE21AFF4E90004FC30 /* 870147_ball_heatmap_full.json */; };
 		CFA013DF21AFD81600C38596 /* 869491_ball_heatmap_full.json in Resources */ = {isa = PBXBuildFile; fileRef = CFA013DD21AFD81600C38596 /* 869491_ball_heatmap_full.json */; };
+		CFABB7F826CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png in Resources */ = {isa = PBXBuildFile; fileRef = CFABB7F626CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png */; };
 		CFAE623D21A54EEB005DB4C2 /* MDT_CC_250.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFAE623C21A54EEB005DB4C2 /* MDT_CC_250.bil */; };
 		CFAE772121ADC407007314B6 /* 869491_points.json in Resources */ = {isa = PBXBuildFile; fileRef = CFAE772021ADC407007314B6 /* 869491_points.json */; };
 		CFAE772321ADC55B007314B6 /* 870147_points.json in Resources */ = {isa = PBXBuildFile; fileRef = CFAE772221ADC55A007314B6 /* 870147_points.json */; };
@@ -48,6 +53,8 @@
 		CFB136CE1AA7573D0013EDE1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CD1AA7573D0013EDE1 /* CoreLocation.framework */; };
 		CFB136D01AA779830013EDE1 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB136CF1AA779830013EDE1 /* CoreMotion.framework */; };
 		CFB806E21837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */; };
+		CFBB0EB0270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFBB0EAE270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg */; };
+		CFBB0EB2270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png in Resources */ = {isa = PBXBuildFile; fileRef = CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */; };
 		CFBD815219A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */; };
 		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
 		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
@@ -155,6 +162,8 @@
 		CF162FE31AB739D700673D44 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		CF2744F825B1A8990056304B /* G3MXPointCloudDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MXPointCloudDemoScene.hpp; sourceTree = "<group>"; };
 		CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MXPointCloudDemoScene.mm; sourceTree = "<group>"; };
+		CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OUTPUT-4326.bil"; sourceTree = "<group>"; };
+		CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Track_A-Sphere-70-2048x2048.jpg"; sourceTree = "<group>"; };
 		CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DLandDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3M3DLandDemoScene.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -173,6 +182,8 @@
 		CF483ECA1A2E62B600B70D7E /* altimeter-ruler-1536x113.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "altimeter-ruler-1536x113.png"; sourceTree = "<group>"; };
 		CF483ECC1A2E62C400B70D7E /* widget-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget-background.png"; sourceTree = "<group>"; };
 		CF5DB6CF21935C1600E0613E /* ccmdt.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ccmdt.bil; sourceTree = "<group>"; };
+		CF624D9727295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = OverviewCamera_19666_20210310_114027335.JPG; sourceTree = "<group>"; };
+		CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OverviewCamera_19666_20210310_114027335.PNG; sourceTree = "<group>"; };
 		CF64DA2E2180AC0E00387041 /* G3MExtrusionDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MExtrusionDemoScene.cpp; sourceTree = "<group>"; };
 		CF64DA2F2180AC0E00387041 /* G3MExtrusionDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MExtrusionDemoScene.hpp; sourceTree = "<group>"; };
 		CF6920AF1837EA35007409D8 /* G3MDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MDemoScene.cpp; sourceTree = "<group>"; };
@@ -197,6 +208,7 @@
 		CF8B1A571837DC69004D3902 /* G3MDemoListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MDemoListener.hpp; sourceTree = "<group>"; };
 		CF9959BE21AFF4E90004FC30 /* 870147_ball_heatmap_full.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 870147_ball_heatmap_full.json; sourceTree = "<group>"; };
 		CFA013DD21AFD81600C38596 /* 869491_ball_heatmap_full.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 869491_ball_heatmap_full.json; sourceTree = "<group>"; };
+		CFABB7F626CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Track_A-Sphere-70-2048x2048.png"; sourceTree = "<group>"; };
 		CFAE623C21A54EEB005DB4C2 /* MDT_CC_250.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MDT_CC_250.bil; sourceTree = "<group>"; };
 		CFAE772021ADC407007314B6 /* 869491_points.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 869491_points.json; sourceTree = "<group>"; };
 		CFAE772221ADC55A007314B6 /* 870147_points.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = 870147_points.json; sourceTree = "<group>"; };
@@ -206,6 +218,8 @@
 		CFB136CF1AA779830013EDE1 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		CFB806E01837D4D300DB4B3B /* G3MDemoBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MDemoBuilder_iOS.mm; sourceTree = "<group>"; };
 		CFB806E11837D4D300DB4B3B /* G3MDemoBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CFBB0EAE270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Track_A-Sphere-972-2048x2048.jpg"; sourceTree = "<group>"; };
+		CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Track_A-Sphere-972-2048x2048.png"; sourceTree = "<group>"; };
 		CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MOLDPointCloud1DemoScene.cpp; sourceTree = "<group>"; };
 		CFBD815119A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MOLDPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
 		CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCanvas2DDemoScene.cpp; sourceTree = "<group>"; };
@@ -542,6 +556,13 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */,
+				CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */,
+				CF624D9727295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG */,
+				CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */,
+				CFBB0EAE270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg */,
+				CFABB7F626CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png */,
+				CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */,
 				E780A3D316D29FAA000F0395 /* 3DModels */,
 				CFE3B3D1183ACA580078C796 /* 18STJ7435_2000_4326.bson */,
 				CF37F5F0183D26500050CAEF /* 0576.bil */,
@@ -674,6 +695,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF28408A2729A3B900BC64BA /* OUTPUT-4326.bil in Resources */,
 				CFE3B3D2183ACAA90078C796 /* 18STJ7435_2000_4326.bson in Resources */,
 				E7D1B61316D2436700AF47C1 /* InfoPlist.strings in Resources */,
 				E7D1B61B16D2436700AF47C1 /* Default.png in Resources */,
@@ -702,6 +724,7 @@
 				CFE3B3EB183ADB2D0078C796 /* texture0.png in Resources */,
 				CFAE772321ADC55B007314B6 /* 870147_points.json in Resources */,
 				CF37F5F1183D26500050CAEF /* 0576.bil in Resources */,
+				CF624D9927295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG in Resources */,
 				CF6E184C19D35ADD002B456A /* loudoun_4326_300.bil in Resources */,
 				E7D1B64216D2462B00AF47C1 /* Icon-Small-50.png in Resources */,
 				CF6920C418394DB6007409D8 /* restaurants_monaco.geojson in Resources */,
@@ -722,18 +745,21 @@
 				CFE3B3E2183ADAB80078C796 /* arcdeTriomphe.bson in Resources */,
 				E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */,
 				E780A3CE16D29EA5000F0395 /* marker-wikipedia-48x48.png in Resources */,
+				CFBB0EB0270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg in Resources */,
 				CFE3B3D9183AD2D40078C796 /* textures-A320 in Resources */,
 				CF39C40C21AE957300E94FD6 /* Images.xcassets in Resources */,
 				E780A3CF16D29EA5000F0395 /* marker-wikipedia-72x72.png in Resources */,
 				E780A3D016D29EA5000F0395 /* play.png in Resources */,
 				E780A3D116D29EA5000F0395 /* satellite-on-96x48.png in Resources */,
 				CFF9D20A1A7C5014005429A6 /* anchorWidget.png in Resources */,
+				CF28DDCE26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg in Resources */,
 				E780A3D216D29EA5000F0395 /* stop.png in Resources */,
 				CF6920C718394E44007409D8 /* restaurant-96x96.png in Resources */,
 				CFAE623D21A54EEB005DB4C2 /* MDT_CC_250.bil in Resources */,
 				CFE3B3CD183ABD8B0078C796 /* uscitieslite.geojson in Resources */,
 				CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */,
 				E780A3DB16D29FAA000F0395 /* A320.json in Resources */,
+				CFBB0EB2270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png in Resources */,
 				CF5DB6D121935C1600E0613E /* ccmdt.bil in Resources */,
 				E780A3DC16D29FAA000F0395 /* A320-NWA.png in Resources */,
 				CF6920C318394DB6007409D8 /* buildings_monaco.geojson in Resources */,
@@ -741,6 +767,8 @@
 				E780A3DD16D29FAA000F0395 /* A321-House.png in Resources */,
 				CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */,
 				E780A3DE16D29FAA000F0395 /* NWA.png in Resources */,
+				CFABB7F826CE4D6C004CD586 /* Track_A-Sphere-70-2048x2048.png in Resources */,
+				CF624D9B272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG in Resources */,
 				CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */,
 				CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */,
 			);

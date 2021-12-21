@@ -68,6 +68,11 @@ public class Angle
     return new Angle(((radians) * (180.0 / 3.14159265358979323846264338327950288)), radians);
   }
 
+  public static Angle fromGradians(double gradians)
+  {
+    return fromRadians(gradians / 200.0 * DefineConstants.PI);
+  }
+
   public static Angle min(Angle a1, Angle a2)
   {
     return (a1._degrees < a2._degrees) ? a1 : a2;

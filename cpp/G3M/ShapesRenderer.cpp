@@ -152,7 +152,7 @@ void ShapesRenderer::addShape(Shape* shape) {
   }
 }
 
-void ShapesRenderer::removeShape(Shape* shape) {
+bool ShapesRenderer::removeShape(Shape* shape) {
   int pos = -1;
   const int shapesSize = _shapes.size();
   for (int i = 0; i < shapesSize; i++) {
@@ -168,7 +168,10 @@ void ShapesRenderer::removeShape(Shape* shape) {
 #ifdef JAVA_CODE
     _shapes.remove(pos);
 #endif
+    return true;
   }
+
+  return false;
 }
 
 void ShapesRenderer::removeAllShapes(bool deleteShapes) {

@@ -244,6 +244,8 @@ public class XPCRenderer extends DefaultRenderer
               }
             }
   
+            ILogger.instance().logInfo("Camera position=%s heading=%f pitch=%f", _lastCamera.getGeodeticPosition().description(), _lastCamera.getHeading()._degrees, _lastCamera.getPitch()._degrees);
+  
             if (selectedPoints)
             {
               if (_selectionResult != null)

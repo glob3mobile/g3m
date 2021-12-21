@@ -115,6 +115,11 @@ public:
   void setHeadingPitchRoll(const Angle& heading,
                            const Angle& pitch,
                            const Angle& roll);
+  
+  void setOmegaPhiKappa(const Planet* planet,
+                        const Angle& omega,
+                        const Angle& phi,
+                        const Angle& kappa);
 
   void setScale(double scale) {
     setScale(scale, scale, scale);
@@ -154,7 +159,7 @@ public:
   void setAnimatedScale(double scaleX,
                         double scaleY,
                         double scaleZ);
-
+  
   void setAnimatedScale(const Vector3D& scale);
 
   void setAnimatedScale(const TimeInterval& duration,

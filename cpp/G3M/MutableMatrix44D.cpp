@@ -667,3 +667,72 @@ void MutableMatrix44D::createRawGeodeticRotationMatrix(const Angle& latitude,
   
   result.copyValueOfMultiplication(TEMP2, TEMP1);
 }
+
+MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& omega,
+                                                        const Angle& phi,
+                                                        const Angle& kappa) {
+  const double cos_omega = COS(omega._radians);
+  const double cos_phi   = COS(phi._radians);
+  const double cos_kappa = COS(kappa._radians);
+
+  const double sin_omega = SIN(omega._radians);
+  const double sin_phi   = SIN(phi._radians);
+  const double sin_kappa = SIN(kappa._radians);
+
+  const double m00 =  (cos_phi   * cos_kappa);
+  const double m01 =  (cos_omega * sin_kappa) + (sin_omega * sin_phi * cos_kappa);
+  const double m02 =  (sin_omega * sin_kappa) - (cos_omega * sin_phi * cos_kappa);
+
+  const double m10 = (-cos_phi   * sin_kappa);
+  const double m11 = ( cos_omega * cos_kappa) - (sin_omega * sin_phi * sin_kappa);
+  const double m12 = ( sin_omega * cos_kappa) + (cos_omega * sin_phi * sin_kappa);
+
+  const double m20 =  sin_phi;
+  const double m21 = (-sin_omega * cos_phi);
+  const double m22 = ( cos_omega * cos_phi);
+
+  // row or column major?
+  return MutableMatrix44D(m00, m10, m20, 0,
+                          m01, m11, m21, 0,
+                          m02, m12, m22, 0,
+                            0,   0,   0, 1);
+//  return MutableMatrix44D(m00, m01, m02, 0,
+//                          m10, m11, m12, 0,
+//                          m20, m21, m22, 0,
+//                            0,   0,   0, 1);
+}
+
+void MutableMatrix44D::createRotationMatrix(const Angle& omega,
+                                            const Angle& phi,
+                                            const Angle& kappa,
+                                            MutableMatrix44D& result) {
+  const double cos_omega = COS(omega._radians);
+  const double cos_phi   = COS(phi._radians);
+  const double cos_kappa = COS(kappa._radians);
+
+  const double sin_omega = SIN(omega._radians);
+  const double sin_phi   = SIN(phi._radians);
+  const double sin_kappa = SIN(kappa._radians);
+
+  const double m00 =  (cos_phi   * cos_kappa);
+  const double m01 =  (cos_omega * sin_kappa) + (sin_omega * sin_phi * cos_kappa);
+  const double m02 =  (sin_omega * sin_kappa) - (cos_omega * sin_phi * cos_kappa);
+
+  const double m10 = (-cos_phi   * sin_kappa);
+  const double m11 = ( cos_omega * cos_kappa) - (sin_omega * sin_phi * sin_kappa);
+  const double m12 = ( sin_omega * cos_kappa) + (cos_omega * sin_phi * sin_kappa);
+
+  const double m20 =  sin_phi;
+  const double m21 = (-sin_omega * cos_phi);
+  const double m22 = ( cos_omega * cos_phi);
+
+  // row or column major?
+  result.setValue(m00, m10, m20, 0,
+                  m01, m11, m21, 0,
+                  m02, m12, m22, 0,
+                    0,   0,   0, 1);
+//  result.setValue(m00, m01, m02, 0,
+//                  m10, m11, m12, 0,
+//                  m20, m21, m22, 0,
+//                    0,   0,   0, 1);
+}

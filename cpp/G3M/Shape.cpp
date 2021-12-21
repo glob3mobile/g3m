@@ -19,6 +19,7 @@
 #include "TimeInterval.hpp"
 #include "G3MContext.hpp"
 #include "G3MRenderContext.hpp"
+#include "CoordinateSystem.hpp"
 
 
 class ShapePendingEffect {
@@ -74,11 +75,11 @@ Shape::~Shape() {
 
   delete _position;
 
-  delete _heading;
-  delete _pitch;
-  delete _roll;
+  if (_heading) delete _heading;
+  if (_pitch) delete _pitch;
+  if (_roll) delete _roll;
 
-  delete _transformMatrix;
+  if (_transformMatrix) delete _transformMatrix;
 
   _glState->_release();
 
@@ -341,6 +342,40 @@ void Shape::setHeadingPitchRoll(const Angle& heading,
   _roll = roll;
 #endif
   cleanTransformMatrix();
+}
+
+void Shape::setOmegaPhiKappa(const Planet* planet,
+                             const Angle& omega,
+                             const Angle& phi,
+                             const Angle& kappa) {
+  if (omega.isNan()) {
+    THROW_EXCEPTION("omega can't be NAN");
+  }
+  if (phi.isNan()) {
+    THROW_EXCEPTION("phi can't be NAN");
+  }
+  if (kappa.isNan()) {
+    THROW_EXCEPTION("kappa can't be NAN");
+  }
+  
+  delete _heading;
+  _heading = NULL;
+  delete _pitch;
+  _pitch = NULL;
+  delete _roll;
+  _roll = NULL; //TODO WARNING reset this values for other methods to work properly
+  
+  cleanTransformMatrix();
+  
+//  printf("O: %f, P: %f, K: %f\n", omega._degrees, phi._degrees, kappa._degrees);
+  
+  // https://www.pcigeomatics.com/geomatica-help/COMMON/concepts/ExteriorOrientation_explainEO.html
+  const MutableMatrix44D mLookDown = MutableMatrix44D::createRotationMatrix(Angle::_HALF_PI,                Vector3D::UP_X);
+  const MutableMatrix44D mOmega    = MutableMatrix44D::createRotationMatrix(omega,                          Vector3D::UP_X);
+  const MutableMatrix44D mPhi      = MutableMatrix44D::createRotationMatrix(Angle::_MINUS_HALF_PI.sub(phi), Vector3D::UP_Z);
+  const MutableMatrix44D mKappa    = MutableMatrix44D::createRotationMatrix(kappa.times(-1),                Vector3D::UP_Y);
+  
+  setLocalTransform(mPhi.multiply(mOmega).multiply(mKappa).multiply(mLookDown));
 }
 
 void Shape::setFullPosition(const Geodetic3D& position,
