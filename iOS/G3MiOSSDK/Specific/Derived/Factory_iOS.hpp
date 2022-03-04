@@ -99,11 +99,13 @@ public:
   IWebSocket* createWebSocket(const URL& url,
                               IWebSocketListener* listener,
                               bool autodeleteListener,
-                              bool autodeleteWebSocket) const {
+                              bool autodeleteWebSocket,
+                              bool verboseErrors) const {
     return new WebSocket_iOS(url,
                              listener,
                              autodeleteListener,
-                             autodeleteWebSocket);
+                             autodeleteWebSocket,
+                             verboseErrors);
   }
 
 };

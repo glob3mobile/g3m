@@ -2,19 +2,20 @@
 
 package org.glob3.mobile.specific;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 
-import org.glob3.mobile.generated.IWebSocket;
-import org.glob3.mobile.generated.IWebSocketListener;
+import java.net.*;
+
+import org.glob3.mobile.generated.*;
 import org.glob3.mobile.generated.URL;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
+import org.java_websocket.client.*;
+import org.java_websocket.handshake.*;
+
+import android.util.*;
 
 
 public class WebSocket_Android
-   extends
-      IWebSocket {
+                               extends
+                                  IWebSocket {
 
    //   static {
    //      System.setProperty("java.net.preferIPv6Addresses", "false");
@@ -29,8 +30,9 @@ public class WebSocket_Android
    WebSocket_Android(final URL url,
                      final IWebSocketListener listener,
                      final boolean autodeleteListener,
-                     final boolean autodeleteWebSocket) {
-      super(url, listener, autodeleteListener, autodeleteWebSocket);
+                     final boolean autodeleteWebSocket,
+                     final boolean verboseErrors) {
+      super(url, listener, autodeleteListener, autodeleteWebSocket, verboseErrors);
 
       //      _connection = new WebSocketConnection();
 
@@ -79,7 +81,10 @@ public class WebSocket_Android
             @Override
             public void onError(final Exception e) {
                try {
-                  getListener().onError(WebSocket_Android.this, e.getLocalizedMessage());
+                  if (_verboseErrors) {
+                     Log.e("WSError: ", e == null ? "null" : e.getMessage());
+                  }
+                  getListener().onError(WebSocket_Android.this, e == null ? "null" : e.getLocalizedMessage());
                }
                catch (final Exception e2) {
                   e2.printStackTrace();

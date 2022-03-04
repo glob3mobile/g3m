@@ -82,7 +82,11 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
   // https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png?api_key=mapzen-ZB6FqMg
   // https://tile.nextzen.org/tilezen/terrain/v1/256/normal/{z}/{x}/{y}.png?api_key=your-nextzen-api-key
 
-  URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.nextzen.org/tilezen/terrain/v1/256/normal/{z}/{x}/{y}.png?api_key=bQ8CZljwS5Sdd4IKWwdILg",
+  // https://tile.nextzen.org/tilezen/terrain/v1/{tilesize}/terrarium/{z}/{x}/{y}.png?api_key=your-nextzen-api-key
+  // https://tile.nextzen.org/tilezen/terrain/v1/256/terrarium/0/0/0.png?api_key=bQ8CZljwS5Sdd4IKWwdILg
+
+
+  URLTemplateLayer* layer = URLTemplateLayer::newMercator("https://tile.nextzen.org/tilezen/terrain/v1/256/terrarium/{z}/{x}/{y}.png?api_key=bQ8CZljwS5Sdd4IKWwdILg",
                                                           Sector::FULL_SPHERE,
                                                           false,                     // isTransparent
                                                           2,                         // firstLevel
@@ -92,9 +96,9 @@ void G3M3DLandDemoScene::rawActivate(const G3MContext* context) {
 
   getModel()->getLayerSet()->addLayer( layer );
 
-  getModel()->getG3MWidget()->setCameraPosition( Geodetic3D::fromDegrees(-31.952754850831528444,
-                                                                         -70.640222465417764397,
-                                                                         3821842.2834936883301) );
+//  getModel()->getG3MWidget()->setCameraPosition( Geodetic3D::fromDegrees(-31.952754850831528444,
+//                                                                         -70.640222465417764397,
+//                                                                         3821842.2834936883301) );
 
   //  const double deltaHeight = -700.905;
   //  const short  noDataValue = -32768;

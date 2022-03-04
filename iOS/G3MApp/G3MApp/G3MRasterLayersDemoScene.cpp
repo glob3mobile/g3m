@@ -80,7 +80,44 @@ void G3MRasterLayersDemoScene::createLayerSet(LayerSet* layerSet) {
   layerSet->addLayer(blueMarble);
 
 
-  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
+  //OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
+
+
+//  MercatorTiledLayer* osmLayer = new MercatorTiledLayer("https://",
+//                                                        "tile.openstreetmap.org",
+//                                                        std::vector<std::string>(),      //    getSubdomains(),
+//                                                        "png",
+//                                                        TimeInterval::fromDays(30),      // timeToCache,
+//                                                        true,                            // readExpired,
+//                                                        2,                               // initialLevel,
+//                                                        18,
+//                                                        false,                           // isTransparent
+//                                                        1,                               // transparency,
+//                                                        NULL,                            // condition,
+//                                                        new std::vector<const Info*>()   // layerInfo
+//                                                        );
+
+https://api.maptiler.com/maps/topo/0/0/0.png?key=frA669oJCFswgMJKS3DP
+
+
+//  URLTemplateLayer* arcGISOverlayLayerTest = URLTemplateLayer::newMercator("https://api.maptiler.com/maps/topo/0/0/0.png?key=frA669oJCFswgMJKS3DP",
+//                                                                           Sector::fullSphere(),
+//                                                                           true,
+//                                                                           2,
+//                                                                           18,
+//                                                                           TimeInterval::fromDays(30),
+//                                                                           true,
+//                                                                           1,
+//                                                                           new LevelTileCondition(12, 18));
+
+  URLTemplateLayer* osmLayer = URLTemplateLayer::newMercator("https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=frA669oJCFswgMJKS3DP",
+                                                             Sector::FULL_SPHERE,
+                                                             false,                     // isTransparent
+                                                             2,                         // firstLevel
+                                                             15,                        // maxLevel
+                                                             TimeInterval::fromDays(30) // timeToCache
+                                                             );
+  
   osmLayer->setTitle("Open Street Map");
   osmLayer->setEnable(false);
   layerSet->addLayer(osmLayer);

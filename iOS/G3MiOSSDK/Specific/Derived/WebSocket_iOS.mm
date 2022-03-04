@@ -18,6 +18,7 @@
 {
   IWebSocketListener* _listener;
   WebSocket_iOS*      _websocket;
+  bool                _verboseError;
 }
 @end
 
@@ -26,11 +27,13 @@
 
 - (id) initWithListener: (IWebSocketListener*) listener
            andWebSocket: (WebSocket_iOS*) websocket
+           verboseError: (bool) verboseError
 {
   self = [super init];
   if (self) {
-    _listener  = listener;
-    _websocket = websocket;
+    _listener     = listener;
+    _websocket    = websocket;
+    _verboseError = verboseError;
   }
   return self;
 }
@@ -44,6 +47,9 @@
     }
     else {
       NSString* msg = [NSString stringWithFormat:@"Message type not supported: %@", [message class]];
+      if (_verboseError) {
+        NSLog(@"WSError: \"%@\"", msg);
+      }
       _listener->onError( _websocket, [msg toCppString] );
     }
   }
@@ -59,6 +65,9 @@
 {
   if (_websocket) {
     NSString*     description = [error localizedDescription];
+    if (_verboseError) {
+      NSLog(@"WSError: \"%@\"", description);
+    }
     _listener->onError( _websocket, [description toCppString] );
     if (_websocket->getAutodeleteWebSocket()) {
       delete _websocket;
@@ -86,8 +95,9 @@
 WebSocket_iOS::WebSocket_iOS(const URL& url,
                              IWebSocketListener* listener,
                              bool autodeleteListener,
-                             bool autodeleteWebSocket) :
-IWebSocket(url, listener, autodeleteListener, autodeleteWebSocket)
+                             bool autodeleteWebSocket,
+                             bool verboseErrors) :
+IWebSocket(url, listener, autodeleteListener, autodeleteWebSocket, verboseErrors)
 {
   NSURL* nsURL = [NSURL URLWithString: [NSString stringWithCppString: getURL()._path] ];
 
@@ -97,7 +107,8 @@ IWebSocket(url, listener, autodeleteListener, autodeleteWebSocket)
   if (nsURL) {
     _srWebSocket = [[SRWebSocket alloc] initWithURL: nsURL];
     _delegate = [[WebSocketDelegate alloc] initWithListener: list
-                                               andWebSocket: this];
+                                               andWebSocket: this
+                                               verboseError:_verboseErrors];
     [_srWebSocket setDelegate: _delegate];
 
     [_srWebSocket open];

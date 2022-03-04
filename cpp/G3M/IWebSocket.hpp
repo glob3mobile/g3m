@@ -28,14 +28,18 @@ private:
 
 
 protected:
+  const bool _verboseErrors;
+
   IWebSocket(const URL& url,
              IWebSocketListener* listener,
              bool autodeleteListener,
-             bool autodeleteWebSocket) :
+             bool autodeleteWebSocket,
+             bool verboseErrors) :
   _url(url),
   _listener(listener),
   _autodeleteListener(autodeleteListener),
-  _autodeleteWebSocket(autodeleteWebSocket)
+  _autodeleteWebSocket(autodeleteWebSocket),
+  _verboseErrors(verboseErrors)
   {
 
   }
