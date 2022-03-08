@@ -28,12 +28,15 @@ public abstract class IWebSocket
   private final boolean _autodeleteWebSocket;
 
 
-  protected IWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket)
+  protected final boolean _verboseErrors;
+
+  protected IWebSocket(URL url, IWebSocketListener listener, boolean autodeleteListener, boolean autodeleteWebSocket, boolean verboseErrors)
   {
      _url = url;
      _listener = listener;
      _autodeleteListener = autodeleteListener;
      _autodeleteWebSocket = autodeleteWebSocket;
+     _verboseErrors = verboseErrors;
 
   }
 

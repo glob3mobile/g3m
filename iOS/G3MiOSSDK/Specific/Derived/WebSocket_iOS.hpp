@@ -24,7 +24,8 @@ public:
   WebSocket_iOS(const URL& url,
                 IWebSocketListener* listener,
                 bool autodeleteListener,
-                bool autodeleteWebSocket);
+                bool autodeleteWebSocket,
+                bool verboseErrors);
 
   void send(const std::string& message);
 

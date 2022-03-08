@@ -79,8 +79,9 @@ public final class Factory_WebGL
    public IWebSocket createWebSocket(final URL url,
                                      final IWebSocketListener listener,
                                      final boolean autodeleteListener,
-                                     final boolean autodeleteWebSocket) {
-      return new WebSocket_WebGL(url, listener, autodeleteListener, autodeleteWebSocket);
+                                     final boolean autodeleteWebSocket,
+                                     final boolean verboseErrors) {
+      return new WebSocket_WebGL(url, listener, autodeleteListener, autodeleteWebSocket, verboseErrors);
    }
 
 

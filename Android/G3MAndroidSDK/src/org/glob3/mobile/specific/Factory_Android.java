@@ -89,8 +89,9 @@ public final class Factory_Android
    public IWebSocket createWebSocket(final URL url,
                                      final IWebSocketListener listener,
                                      final boolean autodeleteListener,
-                                     final boolean autodeleteWebSocket) {
-      return new WebSocket_Android(url, listener, autodeleteListener, autodeleteWebSocket);
+                                     final boolean autodeleteWebSocket,
+                                     final boolean verboseErrors) {
+      return new WebSocket_Android(url, listener, autodeleteListener, autodeleteWebSocket, verboseErrors);
    }
 
 

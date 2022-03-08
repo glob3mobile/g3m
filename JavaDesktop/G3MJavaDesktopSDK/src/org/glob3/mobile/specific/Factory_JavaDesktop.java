@@ -79,7 +79,8 @@ public class Factory_JavaDesktop
    public IWebSocket createWebSocket(final URL url,
                                      final IWebSocketListener listener,
                                      final boolean autodeleteListener,
-                                     final boolean autodeleteWebSocket) {
+                                     final boolean autodeleteWebSocket,
+                                     final boolean verboseErrors) {
       throw new RuntimeException("Not yet implemented");
    }
 

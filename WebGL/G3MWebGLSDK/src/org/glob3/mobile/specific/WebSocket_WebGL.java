@@ -2,16 +2,15 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IWebSocket;
-import org.glob3.mobile.generated.IWebSocketListener;
-import org.glob3.mobile.generated.URL;
 
-import com.google.gwt.core.client.JavaScriptObject;
+import org.glob3.mobile.generated.*;
+
+import com.google.gwt.core.client.*;
 
 
 public class WebSocket_WebGL
-   extends
-      IWebSocket {
+                             extends
+                                IWebSocket {
 
    private JavaScriptObject _socket;
 
@@ -19,17 +18,21 @@ public class WebSocket_WebGL
    WebSocket_WebGL(final URL url,
                    final IWebSocketListener listener,
                    final boolean autodeleteListener,
-                   final boolean autodeleteWebSocket) {
-      super(url, listener, autodeleteListener, autodeleteWebSocket);
+                   final boolean autodeleteWebSocket,
+                   final boolean verboseErrors) {
+      super(url, listener, autodeleteListener, autodeleteWebSocket, verboseErrors);
 
-      jsInitialize(this, getURL()._path, getListener(), getAutodeleteWebSocket());
+      jsInitialize(this, getURL()._path, getListener(), getAutodeleteWebSocket(), verboseErrors);
    }
+
+   // @
 
 
    private native void jsInitialize(final WebSocket_WebGL webSocket,
                                     final String path,
                                     final IWebSocketListener listener,
-                                    final boolean autodeleteWebSocket) /*-{
+                                    final boolean autodeleteWebSocket,
+                                    final boolean verboseErrors) /*-{
 		if (!$wnd.WebSocket) {
 			$wnd.WebSocket = $wnd.MozWebSocket;
 		}
@@ -41,9 +44,17 @@ public class WebSocket_WebGL
 				listener.@org.glob3.mobile.generated.IWebSocketListener::onOpen(Lorg/glob3/mobile/generated/IWebSocket;)(webSocket);
 			}
 			socket.onclose = function(event) {
+				if (verboseErrors) {
+					console.log(event);
+				}
 				listener.@org.glob3.mobile.generated.IWebSocketListener::onClose(Lorg/glob3/mobile/generated/IWebSocket;)(webSocket);
 			}
 			socket.onerror = function(event) {
+				// if (this.@org.glob3.mobile.specific.WebSocket_WebGL::_verboseErrors) {
+				// if (this.@org.glob3.mobile.generated.IWebSocket::_verboseErrors) {
+				if (verboseErrors) {
+					console.log(event);
+				}
 				listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, "" + event);
 			}
 			socket.onmessage = function(event) {

@@ -79,7 +79,8 @@ public:
   virtual IWebSocket* createWebSocket(const URL& url,
                                       IWebSocketListener* listener,
                                       bool autodeleteListener,
-                                      bool autodeleteWebSocket) const = 0;
+                                      bool autodeleteWebSocket,
+                                      bool verboseErrors) const = 0;
 
   const IDeviceInfo* getDeviceInfo() const;
 
