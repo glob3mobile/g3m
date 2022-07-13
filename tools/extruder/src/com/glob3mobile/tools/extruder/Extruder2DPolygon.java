@@ -2,21 +2,19 @@
 
 package com.glob3mobile.tools.extruder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Geodetic3D;
+import java.util.*;
 
-import com.glob3mobile.tools.mesh.G3MeshMaterial;
+import org.glob3.mobile.generated.*;
 
-import poly2Tri.Triangulation;
+import com.glob3mobile.tools.mesh.*;
+
+import poly2Tri.*;
 
 
 public class Extruder2DPolygon
-         extends
-            ExtruderPolygon {
+                               extends
+                                  ExtruderPolygon {
 
 
    public static Extruder2DPolygon create(final List<Geodetic2D> coordinates,
@@ -27,13 +25,13 @@ public class Extruder2DPolygon
                                           final boolean depthTest) {
       final PolygonData<Geodetic2D> data = PolygonData.fixPolygon2DData(coordinates, holesCoordinatesArray);
       return (data == null) ? null //
-                            : new Extruder2DPolygon( //
-                                     data._coordinates, //
-                                     data._holesCoordinatesArray, //
-                                     lowerHeight, //
-                                     upperHeight, //
-                                     material, //
-                                     depthTest);
+            : new Extruder2DPolygon( //
+                  data._coordinates, //
+                  data._holesCoordinatesArray, //
+                  lowerHeight, //
+                  upperHeight, //
+                  material, //
+                  depthTest);
    }
 
 
@@ -49,8 +47,8 @@ public class Extruder2DPolygon
                      final G3MeshMaterial material,
                      final boolean depthTest) {
       super(lowerHeight, material, depthTest, lowerHeight);
-      _upperHeight = upperHeight;
-      _coordinates = coordinates;
+      _upperHeight           = upperHeight;
+      _coordinates           = coordinates;
       _holesCoordinatesArray = (holesCoordinatesArray == null) ? Collections.emptyList() : holesCoordinatesArray;
    }
 
@@ -63,7 +61,7 @@ public class Extruder2DPolygon
       Geodetic3D previousCoordinate = new Geodetic3D(coordinates.get(coordinates.size() - 1), upperHeight);
       for (final Geodetic2D coordinate2D : coordinates) {
          final Geodetic3D coordinate3D = new Geodetic3D(coordinate2D, upperHeight);
-         final WallQuad quad = new WallQuad(previousCoordinate, coordinate3D, lowerHeight);
+         final WallQuad   quad         = new WallQuad(previousCoordinate, coordinate3D, lowerHeight);
          wallQuads.add(quad);
 
          previousCoordinate = coordinate3D;
@@ -109,7 +107,7 @@ public class Extruder2DPolygon
    protected Triangulation.Data createRoofTriangulationData() {
       final int numHoles = _holesCoordinatesArray.size();
 
-      final int numContures = 1 + numHoles;
+      final int   numContures           = 1 + numHoles;
       final int[] numVerticesInContures = new int[numContures];
 
       final int coordinatesSize = _coordinates.size();
@@ -117,10 +115,10 @@ public class Extruder2DPolygon
       int totalVertices = coordinatesSize;
 
       for (int i = 0; i < numHoles; i++) {
-         final List<Geodetic2D> holeCoordinates = _holesCoordinatesArray.get(i);
-         final int holeCoordinatesSize = holeCoordinates.size();
-         numVerticesInContures[1 + i] = holeCoordinatesSize;
-         totalVertices += holeCoordinatesSize;
+         final List<Geodetic2D> holeCoordinates     = _holesCoordinatesArray.get(i);
+         final int              holeCoordinatesSize = holeCoordinates.size();
+         numVerticesInContures[1 + i]  = holeCoordinatesSize;
+         totalVertices                += holeCoordinatesSize;
       }
 
       final double[][] roofVertices = new double[totalVertices][3];
@@ -144,7 +142,7 @@ public class Extruder2DPolygon
 
    @Override
    protected Triangulation.Data createRoofSansHolesTriangulationData() {
-      final int numContures = 1;
+      final int   numContures           = 1;
       final int[] numVerticesInContures = new int[numContures];
 
       final int coordinatesSize = _coordinates.size();

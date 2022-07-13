@@ -86,7 +86,8 @@ ICanvas* Factory_Emscripten::createCanvas(bool retina,
 IWebSocket* Factory_Emscripten::createWebSocket(const URL& url,
                                                 IWebSocketListener* listener,
                                                 bool autodeleteListener,
-                                                bool autodeleteWebSocket) const {
+                                                bool autodeleteWebSocket,
+                                                bool verboseErrors) const {
   #warning TODO!!!!!!
   THROW_EXCEPTION("TODO!");
 //  return new WebSocket_Emscripten(url,

@@ -2,6 +2,7 @@
 
 package org.glob3.mobile.specific;
 
+
 import java.util.logging.*;
 
 import org.glob3.mobile.generated.*;
@@ -10,8 +11,8 @@ import com.google.gwt.regexp.shared.*;
 
 
 public final class Logger_WebGL
-         extends
-            ILogger {
+                                extends
+                                   ILogger {
 
    private final Logger _logger;
 
@@ -26,9 +27,9 @@ public final class Logger_WebGL
       _logger = Logger.getLogger("");
 
       final int levelValue = _level.getValue();
-      _logInfo = levelValue <= LogLevel.InfoLevel.getValue();
+      _logInfo    = levelValue <= LogLevel.InfoLevel.getValue();
       _logWarning = levelValue <= LogLevel.WarningLevel.getValue();
-      _logError = levelValue <= LogLevel.ErrorLevel.getValue();
+      _logError   = levelValue <= LogLevel.ErrorLevel.getValue();
    }
 
 
@@ -64,8 +65,8 @@ public final class Logger_WebGL
 
    private static String stringFormat(final String format,
                                       final Object... args) {
-      final StringBuilder sb = new StringBuilder(2048);
-      final SplitResult splits = exp.split(format);
+      final StringBuilder sb     = new StringBuilder(2048);
+      final SplitResult   splits = exp.split(format);
 
       int argsI = 0;
       for (int i = 0; i < splits.length(); i++) {
