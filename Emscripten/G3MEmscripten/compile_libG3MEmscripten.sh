@@ -20,7 +20,6 @@ echo
 SOURCES="$(find . -name '*.cpp')" 
 
 #    -Wall                      \
-#    -g                         \
 
 ### deploy ### 
 #    -O2                                                                              \
@@ -38,15 +37,18 @@ SOURCES="$(find . -name '*.cpp')"
 #    -O0                                                                              \
 #    -Rpass=.*                                                                        \
 
-em++                                                                                 \
-    -I ${G3M_SOURCE_DIRECTORY}                                                       \
-    LIB/libG3M.bc                                                                    \
-    ${SOURCES}                                                                       \
-    -s WASM=1                                                                        \
-    -DC_CODE                                                                         \
-    -O2                                                                              \
-    -std=c++11                                                                       \
-    -r                                                                               \
-    -o LIB/libG3MEmscripten.bc                                                       \
+em++                           \
+    -I ${G3M_SOURCE_DIRECTORY} \
+    LIB/libG3M.bc              \
+    ${SOURCES}                 \
+    -s WASM=1                  \
+    -DC_CODE                   \
+    -O2                        \
+    -std=c++11                 \
+    -r                         \
+    -o LIB/libG3MEmscripten.bc \
+    -g3                        \
+    -gsource-map               \
+    -Wall                      \
     || exit 1
 

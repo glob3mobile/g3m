@@ -18,7 +18,6 @@ echo
 rm -rf LIB
 mkdir LIB
 
-#emcc --show-ports
 
 GM3_SOURCES="$(find ${G3M_SOURCE_DIRECTORY} -name '*.cpp')" 
 
@@ -37,14 +36,17 @@ GM3_SOURCES="$(find ${G3M_SOURCE_DIRECTORY} -name '*.cpp')"
 #    -g4                                                                              \
 #    -O0                                                                              \
 
-em++                                                                                 \
-    -I ${G3M_SOURCE_DIRECTORY}                                                       \
-    ${GM3_SOURCES}                                                                   \
-    -s WASM=1                                                                        \
-    -DC_CODE                                                                         \
-    -O2                                                                              \
-    -std=c++11                                                                       \
-    -r                                                                               \
-    -o LIB/libG3M.bc                                                                 \
+em++                           \
+    -I ${G3M_SOURCE_DIRECTORY} \
+    ${GM3_SOURCES}             \
+    -s WASM=1                  \
+    -DC_CODE                   \
+    -O2                        \
+    -std=c++11                 \
+    -r                         \
+    -o LIB/libG3M.bc           \
+    -g3                        \
+    -gsource-map               \
+    -Wall                      \
     || exit 1
 

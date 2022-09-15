@@ -52,13 +52,16 @@ export EMCC_CORES=8
 
 #    ${G3M_EMSCRIPTEN_SOURCES}                                \
 
+#    -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]'   \
+#    --emrun                                                  \
+
 em++                                                         \
     -I ${G3M_SOURCE_DIRECTORY}                               \
     -I ${G3M_EMSCRIPTEN_SOURCE_DIRECTORY}                    \
     ${G3M_LIBS_DIRECTORY}/libG3MEmscripten.bc                \
     *.cpp                                                    \
     -s ALLOW_TABLE_GROWTH=1 -s RESERVED_FUNCTION_POINTERS=10 \
-    -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]'   \
+    -s EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]'         \
     -s WASM=1                                                \
     -s ALLOW_MEMORY_GROWTH=1                                 \
     -s ASAN_SHADOW_SIZE=536870912                            \
@@ -68,6 +71,7 @@ em++                                                         \
     -O3                                                      \
     -std=c++11                                               \
     -o deploy/G3MEmscriptenDemo.js                           \
+    --source-map-base http://localhost:8080/                 \
     || exit 1
 
 cp -rv html/ deploy/
