@@ -21,20 +21,14 @@ public class Touch
 {
   private final Vector2F _pos;
   private final byte _tapCount;
-  private final double _wheelDelta;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Touch(Touch other);
 
   public Touch(Vector2F pos, byte tapCount)
   {
-     this(pos, tapCount, 0.0);
-  }
-  public Touch(Vector2F pos, byte tapCount, double wheelDelta)
-  {
      _pos = pos;
      _tapCount = tapCount;
-     _wheelDelta = wheelDelta;
     if (_pos == null) {
       throw new RuntimeException("_pos is null");
     }
@@ -42,7 +36,7 @@ public class Touch
 
   public final Touch clone()
   {
-    return new Touch(_pos, _tapCount, _wheelDelta);
+    return new Touch(_pos, _tapCount);
   }
 
   public final Vector2F getPos()
@@ -52,10 +46,6 @@ public class Touch
   public final byte getTapCount()
   {
      return _tapCount;
-  }
-  public final double getMouseWheelDelta()
-  {
-     return _wheelDelta;
   }
 
   public void dispose()
@@ -71,9 +61,6 @@ public class Touch
   
     isb.addString(", tapCount=");
     isb.addInt(_tapCount);
-  
-    isb.addString(", wheelDelta=");
-    isb.addDouble(_wheelDelta);
   
     isb.addString(")");
     final String s = isb.getString();

@@ -140,17 +140,20 @@ public class CameraRotationHandler extends CameraEventHandler
     {
       case Down:
         onDown(eventContext, touchEvent, cameraContext);
-        break;
+        return true;
+  
       case Move:
         onMove(eventContext, touchEvent, cameraContext);
-        break;
+        return true;
+  
       case Up:
         onUp(eventContext, touchEvent, cameraContext);
+        return true;
+  
       default:
-        break;
+        return false;
     }
   
-    return true;
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)

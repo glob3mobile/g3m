@@ -37,8 +37,6 @@ bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
         onUp(eventContext, *touchEvent, cameraContext);
         return true;
 
-      case LongPress:
-      case DownUp:
       default:
         return false;
     }

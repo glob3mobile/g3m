@@ -161,17 +161,17 @@ final class MotionEventProcessor {
 
 
    private TouchEvent processTouchStart(final Event event) {
-      return createTouchEvent(TouchEventType.Down, createTouches(event.getTouches()));
+      return createTouchEvent(TouchEventType.Down, createTouches(event.getTouches()), 0 /* wheelDelta */);
    }
 
 
    private TouchEvent processTouchMove(final Event event) {
-      return createTouchEvent(TouchEventType.Move, createTouches(event.getTouches()));
+      return createTouchEvent(TouchEventType.Move, createTouches(event.getTouches()), 0 /* wheelDelta */);
    }
 
 
    private TouchEvent processTouchEnd(final Event event) {
-      return createTouchEvent(TouchEventType.Up, createTouches(event.getChangedTouches()));
+      return createTouchEvent(TouchEventType.Up, createTouches(event.getChangedTouches()), 0 /* wheelDelta */);
    }
 
 
@@ -211,7 +211,7 @@ final class MotionEventProcessor {
          touches.add(new Touch(currentMousePosition, tapCount));
       }
 
-      return createTouchEvent(TouchEventType.Move, touches);
+      return createTouchEvent(TouchEventType.Move, touches, 0 /* wheelDelta */);
    }
 
 
@@ -231,7 +231,7 @@ final class MotionEventProcessor {
          touches.add(new Touch(currentMousePosition, tapCount));
       }
 
-      return createTouchEvent(TouchEventType.Down, touches);
+      return createTouchEvent(TouchEventType.Down, touches, 0 /* wheelDelta */);
    }
 
 
@@ -256,14 +256,14 @@ final class MotionEventProcessor {
          touchType = isSecondaryButton ? TouchEventType.LongPress : TouchEventType.Up;
       }
 
-      return createTouchEvent(touchType, touches);
+      return createTouchEvent(touchType, touches, 0 /* wheelDelta */);
    }
 
 
    private TouchEvent processDoubleClick(final Event event) {
       final Vector2F currentMousePosition = createPosition(event);
       final Touch    touch                = new Touch(currentMousePosition, (byte) 2);
-      return createTouchEvent(TouchEventType.Down, touch);
+      return createTouchEvent(TouchEventType.Down, touch, 0 /* wheelDelta */);
    }
 
 
@@ -275,7 +275,7 @@ final class MotionEventProcessor {
 
       final Touch touch = new Touch(currentMousePosition, tapCount);
 
-      return createTouchEvent(TouchEventType.LongPress, touch);
+      return createTouchEvent(TouchEventType.LongPress, touch, 0 /* wheelDelta */);
    }
 
 
@@ -284,8 +284,8 @@ final class MotionEventProcessor {
       final int      delta    = jsGetMouseWheelDelta(event);
 
       final ArrayList<Touch> touches = new ArrayList<>(2);
-      touches.add(new Touch(position, (byte) 0, delta));
-      return createTouchEvent(TouchEventType.Down, touches);
+      touches.add(new Touch(position, (byte) 0));
+      return createTouchEvent(TouchEventType.MouseWheel, touches, delta);
    }
 
 
@@ -297,21 +297,23 @@ final class MotionEventProcessor {
 
 
    private static TouchEvent createTouchEvent(final TouchEventType type,
-                                              final java.util.ArrayList<Touch> touchs) {
+                                              final java.util.ArrayList<Touch> touchs,
+                                              final double wheelDelta) {
 
       if ((touchs == null) || touchs.isEmpty()) {
          throw new RuntimeException("Invalid touches for " + type);
       }
 
-      final TouchEvent result = TouchEvent.create(type, touchs);
+      final TouchEvent result = TouchEvent.create(type, touchs, wheelDelta);
       ILogger.instance().logInfo("createTouchEvent(1): " + result.description());
       return result;
    }
 
 
    private static TouchEvent createTouchEvent(final TouchEventType type,
-                                              final Touch touch) {
-      final TouchEvent result = TouchEvent.create(type, touch);
+                                              final Touch touch,
+                                              final double wheelDelta) {
+      final TouchEvent result = TouchEvent.create(type, touch, wheelDelta);
       ILogger.instance().logInfo("createTouchEvent(2): " + result.description());
       return result;
    }

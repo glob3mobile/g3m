@@ -33,17 +33,20 @@ bool CameraRotationHandler::onTouchEvent(const G3MEventContext *eventContext,
   switch (touchEvent->getType()) {
     case Down:
       onDown(eventContext, *touchEvent, cameraContext);
-      break;
+      return true;
+
     case Move:
       onMove(eventContext, *touchEvent, cameraContext);
-      break;
+      return true;
+
     case Up:
       onUp(eventContext, *touchEvent, cameraContext);
+      return true;
+
     default:
-      break;
+      return false;
   }
 
-  return true;
 }
 
 

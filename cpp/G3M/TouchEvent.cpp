@@ -12,8 +12,6 @@
 
 unsigned char TouchEvent::getTapCount() const
 {
-  //  if (_touchs.empty()) return 0;
-  //  return _touchs[0]->getTapCount();
   return _touchs.empty() ? 0 : _touchs[0]->getTapCount();
 }
 
@@ -46,6 +44,10 @@ const std::string TouchEvent::description() const
         eventTypeName = "DownUp";
         break;
 
+      case MouseWheel:
+        eventTypeName = "MouseWheel";
+        break;
+
       default:
         eventTypeName = "<<unkown>>";
         break;
@@ -63,6 +65,11 @@ const std::string TouchEvent::description() const
     isb->addString(touch->description());
   }
   isb->addString(")");
+
+  if (_wheelDelta != 0) {
+    isb->addString(", wheelDelta=");
+    isb->addDouble(_wheelDelta);
+  }
 
   isb->addString(")");
   const std::string s = isb->getString();
@@ -83,9 +90,6 @@ const std::string Touch::description() const
 
   isb->addString(", tapCount=");
   isb->addInt(_tapCount);
-
-  isb->addString(", wheelDelta=");
-  isb->addDouble(_wheelDelta);
 
   isb->addString(")");
   const std::string s = isb->getString();

@@ -114,8 +114,6 @@ public class CameraDoubleDragHandler extends CameraEventHandler
           onUp(eventContext, touchEvent, cameraContext);
           return true;
   
-        case LongPress:
-        case DownUp:
         default:
           return false;
       }

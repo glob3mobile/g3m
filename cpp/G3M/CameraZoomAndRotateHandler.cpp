@@ -31,17 +31,19 @@ bool CameraZoomAndRotateHandler::onTouchEvent(const G3MEventContext *eventContex
   switch (touchEvent->getType()) {
     case Down:
       onDown(eventContext, *touchEvent, cameraContext);
-      break;
+      return true;
+
     case Move:
       onMove(eventContext, *touchEvent, cameraContext);
-      break;
+      return true;
+
     case Up:
       onUp(eventContext, *touchEvent, cameraContext);
-    default:
-      break;
-  }
+      return true;
 
-  return true;
+    default:
+      return false;
+  }
 }
 
 

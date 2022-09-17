@@ -190,17 +190,19 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     {
       case Down:
         onDown(eventContext, touchEvent, cameraContext);
-        break;
+        return true;
+  
       case Move:
         onMove(eventContext, touchEvent, cameraContext);
-        break;
+        return true;
+  
       case Up:
         onUp(eventContext, touchEvent, cameraContext);
-      default:
-        break;
-    }
+        return true;
   
-    return true;
+      default:
+        return false;
+    }
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
