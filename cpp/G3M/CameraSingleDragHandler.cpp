@@ -23,11 +23,16 @@ RenderState CameraSingleDragHandler::getRenderState(const G3MRenderContext* rc) 
 }
 
 CameraSingleDragHandler::CameraSingleDragHandler(bool useInertia) :
-_useInertia(useInertia)
+_useInertia(useInertia),
+_previousEventPosition0(NULL),
+_previousEventPosition1(NULL)
 {
 }
 
 CameraSingleDragHandler::~CameraSingleDragHandler() {
+  delete _previousEventPosition0;
+  delete _previousEventPosition1;
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -106,32 +111,59 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   cameraContext->getNextCamera()->setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0),
                                                   _cameraCenter.transformedBy(matrix, 1.0),
                                                   _cameraUp.transformedBy(matrix, 0.0));
+  delete _previousEventPosition1;
+  _previousEventPosition1 = _previousEventPosition0;
+  _previousEventPosition0 = new Vector2F(pixel);
 }
+
+
+const Vector2F* CameraSingleDragHandler::getPreviousEventPosition(const Vector2F& currentPosition) const {
+
+  if ((_previousEventPosition1 == NULL) && (_previousEventPosition0 == NULL)) {
+    return NULL;
+  }
+  else if (_previousEventPosition1 == NULL) {
+    return _previousEventPosition0;
+  }
+  else if (_previousEventPosition0 == NULL) {
+    return _previousEventPosition1;
+  }
+  else {
+    const double desp0 = _previousEventPosition0->squaredDistanceTo(currentPosition);
+    return (desp0 == 0) ? _previousEventPosition1 : _previousEventPosition0;
+  }
+}
+
 
 void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent,
                                    CameraContext *cameraContext) {
-  const Planet* planet = eventContext->getPlanet();
 
   // test if animation is needed
-  if (_useInertia) {
+  if (_useInertia && (cameraContext->getCurrentGesture() == Drag)) {
     const Touch *touch = touchEvent.getTouch(0);
-    const Vector2F currPixel = touch->getPos();
-    const Vector2F prevPixel = touch->getPrevPos();
-    const double desp        = currPixel.sub(prevPixel).length();
+    const Vector2F currentPosition = touch->getPos();
+    const Vector2F* previousEventPosition = getPreviousEventPosition(currentPosition);
+    if (previousEventPosition != NULL) {
+      const double desp = previousEventPosition->squaredDistanceTo(currentPosition);
 
 #warning method getPixelsInMM is not working fine in iOS devices
-    const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);
-
-    if ((cameraContext->getCurrentGesture() == Drag) &&
-        (desp > delta)) {
-      Effect* effect = planet->createEffectFromLastSingleDrag();
-      if (effect != NULL) {
-        EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();
-        eventContext->getEffectsScheduler()->startEffect(effect, target);
+      const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);
+      if (desp > delta) {
+        const Planet* planet = eventContext->getPlanet();
+        Effect* effect = planet->createEffectFromLastSingleDrag();
+        if (effect != NULL) {
+          EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();
+          eventContext->getEffectsScheduler()->startEffect(effect, target);
+        }
       }
     }
   }
+
+  delete _previousEventPosition0;
+  _previousEventPosition0 = NULL;
+  delete _previousEventPosition1;
+  _previousEventPosition1 = NULL;
 
   cameraContext->setCurrentGesture(None);
 }

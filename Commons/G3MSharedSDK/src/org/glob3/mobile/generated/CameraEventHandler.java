@@ -33,10 +33,4 @@ public abstract class CameraEventHandler
 
   public abstract boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
 
-  public abstract void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
-
-  public abstract void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
-
-  public abstract void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
-
 }

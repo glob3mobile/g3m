@@ -26,6 +26,17 @@ private:
   MutableVector3D _tempCameraCenter;
   MutableVector3D _tempCameraUp;
 
+  void onDown(const G3MEventContext *eventContext,
+              const TouchEvent& touchEvent,
+              CameraContext *cameraContext);
+
+  void onMove(const G3MEventContext *eventContext,
+              const TouchEvent& touchEvent,
+              CameraContext *cameraContext);
+
+  void onUp(const G3MEventContext *eventContext,
+            const TouchEvent& touchEvent,
+            CameraContext *cameraContext);
 
 public:
   CameraRotationHandler():
@@ -48,22 +59,6 @@ public:
   void render(const G3MRenderContext* rc,
               CameraContext *cameraContext);
 
-  void onDown(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-
-  void onMove(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-
-  void onUp(const G3MEventContext *eventContext,
-            const TouchEvent& touchEvent,
-            CameraContext *cameraContext);
-
-
-
 };
-
-
 
 #endif

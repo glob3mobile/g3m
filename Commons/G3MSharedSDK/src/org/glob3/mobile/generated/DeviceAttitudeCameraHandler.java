@@ -119,30 +119,9 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
   
   }
 
-  public boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-     return false;
-  }
-
-
-  public void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
-
-  public void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
-
-  public void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
-
-  public final void setDebugMeshRenderer(MeshRenderer meshRenderer)
-  {
-  }
-
-  public final void onMouseWheel(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
+    return false;
   }
 
 }

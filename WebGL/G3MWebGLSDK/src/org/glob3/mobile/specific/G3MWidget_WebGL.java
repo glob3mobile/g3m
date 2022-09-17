@@ -7,6 +7,7 @@ import org.glob3.mobile.generated.*;
 
 import com.google.gwt.canvas.client.*;
 import com.google.gwt.core.client.*;
+import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
@@ -321,9 +322,9 @@ public class G3MWidget_WebGL
 
    public void startWidget() {
       if (_g3mWidget != null) {
-         _motionEventProcessor = new MotionEventProcessor(this, _canvas.getCanvasElement());
-         jsAddResizeHandler(_canvas.getCanvasElement());
-
+         final CanvasElement canvasElement = _canvas.getCanvasElement();
+         _motionEventProcessor = new MotionEventProcessor(this, canvasElement);
+         jsAddResizeHandler(canvasElement);
          jsStartRenderLoop();
       }
    }

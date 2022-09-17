@@ -44,9 +44,9 @@ public class TouchEvent
 
   public final byte getTapCount()
   {
-    if (_touchs.isEmpty())
-       return 0;
-    return _touchs.get(0).getTapCount();
+    //  if (_touchs.empty()) return 0;
+    //  return _touchs[0]->getTapCount();
+    return _touchs.isEmpty() ? 0 : _touchs.get(0).getTapCount();
   }
 
   public void dispose()
@@ -56,6 +56,67 @@ public class TouchEvent
       if (_touchs.get(i) != null)
          _touchs.get(i).dispose();
     }
+  }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(TouchEvent type=");
+  
+    {
+      String eventTypeName = "";
+      switch (_eventType)
+      {
+        case Down:
+          eventTypeName = "Down";
+          break;
+  
+        case Up:
+          eventTypeName = "Up";
+          break;
+  
+        case Move:
+          eventTypeName = "Move";
+          break;
+  
+        case LongPress:
+          eventTypeName = "LongPress";
+          break;
+  
+        case DownUp:
+          eventTypeName = "DownUp";
+          break;
+  
+        default:
+          eventTypeName = "<<unkown>>";
+          break;
+      }
+  
+      isb.addString(eventTypeName);
+    }
+  
+    isb.addString(", touches=(");
+    for (int i = 0; i < _touchs.size(); i++)
+    {
+      if (i > 0)
+      {
+        isb.addString(", ");
+      }
+      final Touch touch = _touchs.get(i);
+      isb.addString(touch.description());
+    }
+    isb.addString(")");
+  
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  @Override
+  public String toString() {
+    return description();
   }
 
 }

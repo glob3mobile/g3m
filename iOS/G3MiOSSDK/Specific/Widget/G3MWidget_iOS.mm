@@ -134,7 +134,7 @@
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
     Touch *touch = new Touch(Vector2F((float) (tapPoint.x * _devicePixelRatio),
                                       (float) (tapPoint.y * _devicePixelRatio)),
-                             Vector2F::ZERO);
+                             1);
     pointers.push_back(touch);
 
     delete _lastTouchEvent;
@@ -239,14 +239,11 @@
   NSEnumerator *enumerator = [allTouches objectEnumerator];
   UITouch* uiTouch = nil;
   while ((uiTouch = [enumerator nextObject])) {
-    CGPoint current         = [uiTouch locationInView:self];
-    CGPoint previous        = [uiTouch previousLocationInView:self];
-    unsigned char tapCount  = (unsigned char) [uiTouch tapCount];
+    CGPoint current        = [uiTouch locationInView:self];
+    unsigned char tapCount = (unsigned char) [uiTouch tapCount];
 
     Touch* touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
                                       (float) (current.y * _devicePixelRatio)),
-                             Vector2F((float) (previous.x * _devicePixelRatio),
-                                      (float) (previous.y * _devicePixelRatio)),
                              tapCount);
 
     pointers.push_back(touch);
@@ -269,48 +266,52 @@
   NSEnumerator *enumerator = [allTouches objectEnumerator];
   UITouch* uiTouch = nil;
   while ((uiTouch = [enumerator nextObject])) {
-    CGPoint current  = [uiTouch locationInView:self];
-    CGPoint previous = [uiTouch previousLocationInView:self];
+    CGPoint current        = [uiTouch locationInView:self];
+    unsigned char tapCount = (unsigned char) [uiTouch tapCount];
 
     Touch* touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
                                       (float) (current.y * _devicePixelRatio)),
-                             Vector2F((float) (previous.x * _devicePixelRatio),
-                                      (float) (previous.y * _devicePixelRatio)));
+                             tapCount);
 
     pointers.push_back(touch);
   }
 
-  // test if finger orders are the same that in the previous gesture
-  if (_lastTouchEvent == NULL) {
-    _lastTouchEvent = TouchEvent::create(Move, pointers);
+  if (_lastTouchEvent != NULL) {
+    delete _lastTouchEvent;
   }
-  else {
-    if ((pointers.size() == 2) &&
-        (_lastTouchEvent->getTouchCount() == 2)) {
+  _lastTouchEvent = TouchEvent::create(Move, pointers);
 
-      const Vector2F current0 = pointers[0]->getPrevPos();
-      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
-      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
-      delete _lastTouchEvent;
-      const double dist0 = current0.sub(last0).squaredLength();
-      const double dist1 = current0.sub(last1).squaredLength();
-
-      // swap finger order
-      if (dist1 < dist0) {
-        std::vector<const Touch*> swappedPointers = std::vector<const Touch*>();
-        swappedPointers.push_back(pointers[1]);
-        swappedPointers.push_back(pointers[0]);
-        _lastTouchEvent = TouchEvent::create(Move, swappedPointers);
-      }
-      else {
-        _lastTouchEvent = TouchEvent::create(Move, pointers);
-      }
-    }
-    else {
-      delete _lastTouchEvent;
-      _lastTouchEvent = TouchEvent::create(Move, pointers);
-    }
-  }
+//  // test if finger orders are the same that in the previous gesture
+//  if (_lastTouchEvent == NULL) {
+//    _lastTouchEvent = TouchEvent::create(Move, pointers);
+//  }
+//  else {
+//    if ((pointers.size() == 2) &&
+//        (_lastTouchEvent->getTouchCount() == 2)) {
+//
+//      const Vector2F current0 = pointers[0]->getPrevPos();
+//      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
+//      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
+//      delete _lastTouchEvent;
+//      const double dist0 = current0.sub(last0).squaredLength();
+//      const double dist1 = current0.sub(last1).squaredLength();
+//
+//      // swap finger order
+//      if (dist1 < dist0) {
+//        std::vector<const Touch*> swappedPointers = std::vector<const Touch*>();
+//        swappedPointers.push_back(pointers[1]);
+//        swappedPointers.push_back(pointers[0]);
+//        _lastTouchEvent = TouchEvent::create(Move, swappedPointers);
+//      }
+//      else {
+//        _lastTouchEvent = TouchEvent::create(Move, pointers);
+//      }
+//    }
+//    else {
+//      delete _lastTouchEvent;
+//      _lastTouchEvent = TouchEvent::create(Move, pointers);
+//      }
+//  }
 
   [self widget]->onTouchEvent(_lastTouchEvent);
 }
@@ -327,15 +328,14 @@
   NSEnumerator *enumerator = [allTouches objectEnumerator];
   UITouch* uiTouch = nil;
   while ((uiTouch = [enumerator nextObject])) {
-    CGPoint current  = [uiTouch locationInView:self];
-    CGPoint previous = [uiTouch previousLocationInView:self];
+    CGPoint current        = [uiTouch locationInView:self];
+    unsigned char tapCount = (unsigned char) [uiTouch tapCount];
 
     [uiTouch timestamp];
 
     Touch *touch = new Touch(Vector2F((float) (current.x * _devicePixelRatio),
                                       (float) (current.y * _devicePixelRatio)),
-                             Vector2F((float) (previous.x * _devicePixelRatio),
-                                      (float) (previous.y * _devicePixelRatio)));
+                             tapCount);
 
     pointers.push_back(touch);
   }

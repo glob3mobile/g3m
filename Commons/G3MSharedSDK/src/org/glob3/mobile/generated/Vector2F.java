@@ -142,4 +142,9 @@ public class Vector2F
     return s;
   }
 
+  @Override
+  public String toString() {
+    return description();
+  }
+
 }

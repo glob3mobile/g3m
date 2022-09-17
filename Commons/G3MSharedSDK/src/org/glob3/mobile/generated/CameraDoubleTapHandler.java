@@ -19,6 +19,19 @@ package org.glob3.mobile.generated;
 
 public class CameraDoubleTapHandler extends CameraEventHandler
 {
+  private void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+    final Vector2F pixel = touchEvent.getTouch(0).getPos();
+    final Planet planet = eventContext.getPlanet();
+    final Camera camera = cameraContext.getNextCamera();
+    Effect effect = planet.createDoubleTapEffect(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel));
+  
+    if (effect != null)
+    {
+      EffectTarget target = cameraContext.getNextCamera().getEffectTarget();
+      eventContext.getEffectsScheduler().startEffect(effect, target);
+    }
+  }
 
 
   public void dispose()
@@ -54,26 +67,6 @@ public class CameraDoubleTapHandler extends CameraEventHandler
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
 
-  }
-
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-    final Vector2F pixel = touchEvent.getTouch(0).getPos();
-    final Planet planet = eventContext.getPlanet();
-    final Camera camera = cameraContext.getNextCamera();
-    Effect effect = planet.createDoubleTapEffect(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel));
-  
-    if (effect != null)
-    {
-      EffectTarget target = cameraContext.getNextCamera().getEffectTarget();
-      eventContext.getEffectsScheduler().startEffect(effect, target);
-    }
-  }
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
   }
 
 }

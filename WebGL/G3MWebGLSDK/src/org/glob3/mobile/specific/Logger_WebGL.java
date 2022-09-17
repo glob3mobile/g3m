@@ -30,6 +30,9 @@ public final class Logger_WebGL
       _logInfo    = levelValue <= LogLevel.InfoLevel.getValue();
       _logWarning = levelValue <= LogLevel.WarningLevel.getValue();
       _logError   = levelValue <= LogLevel.ErrorLevel.getValue();
+
+
+      logInfo("created Logger_WebGL level=" + level);
    }
 
 

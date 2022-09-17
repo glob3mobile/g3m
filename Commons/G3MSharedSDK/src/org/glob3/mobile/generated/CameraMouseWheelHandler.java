@@ -37,6 +37,10 @@ public class CameraMouseWheelHandler extends CameraEventHandler
     return RenderState.ready();
   }
 
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
+  {
+  }
+
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
@@ -82,19 +86,4 @@ public class CameraMouseWheelHandler extends CameraEventHandler
     return false;
   }
 
-  public final void render(G3MRenderContext rc, CameraContext cameraContext)
-  {
-  }
-
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
-
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
-
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
 }

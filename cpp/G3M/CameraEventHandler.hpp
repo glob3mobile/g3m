@@ -36,18 +36,6 @@ public:
                             const TouchEvent* touchEvent,
                             CameraContext *cameraContext) = 0;
 
-  virtual void onDown(const G3MEventContext *eventContext,
-                      const TouchEvent& touchEvent,
-                      CameraContext *cameraContext) = 0;
-
-  virtual void onMove(const G3MEventContext *eventContext,
-                      const TouchEvent& touchEvent,
-                      CameraContext *cameraContext) = 0;
-
-  virtual void onUp(const G3MEventContext *eventContext,
-                    const TouchEvent& touchEvent,
-                    CameraContext *cameraContext) = 0;
-  
 };
 
 #endif

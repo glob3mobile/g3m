@@ -86,6 +86,85 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     System.out.print("rotating....\n");
   }
 
+  private void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+    Camera camera = cameraContext.getNextCamera();
+    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
+    cameraContext.setCurrentGesture(CameraEventGesture.DoubleDrag);
+  
+    // double dragging
+    _initialPixel0.set(new MutableVector2F(touchEvent.getTouch(0).getPos()));
+    _initialPixel1.set(new MutableVector2F(touchEvent.getTouch(1).getPos()));
+  }
+  private void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+  
+    Vector2F pixel0 = touchEvent.getTouch(0).getPos();
+    Vector2F pixel1 = touchEvent.getTouch(1).getPos();
+    Vector2F difCurrentPixels = pixel1.sub(pixel0);
+    final Planet planet = eventContext.getPlanet();
+  
+    // if it is the first move, let's decide if make zoom or rotate
+    if (cameraContext.getCurrentGesture() == CameraEventGesture.DoubleDrag)
+    {
+      Vector2F difPixel0 = pixel0.sub(_initialPixel0.asVector2F());
+      Vector2F difPixel1 = pixel1.sub(_initialPixel1.asVector2F());
+      if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
+      {
+        //printf ("zoom..\n");
+        cameraContext.setCurrentGesture(CameraEventGesture.Zoom);
+      }
+  
+      // test if starting a zoom action
+      if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
+      {
+  
+        // compute intersection of view direction with the globe
+        Vector3D intersection = planet.closestIntersection(_cameraPosition.asVector3D(), _cameraCenter.sub(_cameraPosition).asVector3D());
+        if (!intersection.isNan())
+        {
+          //        _centralGlobePoint = intersection.asMutableVector3D();
+          _centralGlobePoint.set(intersection);
+          //        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
+          _centralGlobeNormal.set(planet.geodeticSurfaceNormal(_centralGlobePoint));
+          _fingerSep0 = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
+          _lastAngle = _angle0 = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
+          cameraContext.setCurrentGesture(CameraEventGesture.Zoom);
+        }
+        else
+          ILogger.instance().logInfo("Zoom is no possible. View direction does not intersect the globe");
+      }
+  
+      // test if starting a rotate action
+      if ((difPixel0._y<-1 && difPixel1._y<-1) || (difPixel0._y>1 && difPixel1._y>1) || (difPixel0._x<-1 && difPixel1._x<-1) || (difPixel0._x>1 && difPixel1._x>1))
+      {
+        //cameraContext->setCurrentGesture(Rotate);
+      }
+    }
+  
+    // call specific transformation
+    switch (cameraContext.getCurrentGesture())
+    {
+      case Zoom:
+        zoom(cameraContext.getNextCamera(), difCurrentPixels);
+        break;
+  
+      case Rotate:
+        rotate();
+        break;
+  
+      default:
+        break;
+    }
+  
+  }
+  private void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+    cameraContext.setCurrentGesture(CameraEventGesture.None);
+    //_initialPixel0 = _initialPixel1 = Vector2I(-1,-1);
+  
+    //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
+  }
 
   public CameraZoomAndRotateHandler()
   {
@@ -163,86 +242,6 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
     //    }
     //  }
   
-  }
-
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-    Camera camera = cameraContext.getNextCamera();
-    camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
-    cameraContext.setCurrentGesture(CameraEventGesture.DoubleDrag);
-  
-    // double dragging
-    _initialPixel0.set(new MutableVector2F(touchEvent.getTouch(0).getPos()));
-    _initialPixel1.set(new MutableVector2F(touchEvent.getTouch(1).getPos()));
-  }
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  
-    Vector2F pixel0 = touchEvent.getTouch(0).getPos();
-    Vector2F pixel1 = touchEvent.getTouch(1).getPos();
-    Vector2F difCurrentPixels = pixel1.sub(pixel0);
-    final Planet planet = eventContext.getPlanet();
-  
-    // if it is the first move, let's decide if make zoom or rotate
-    if (cameraContext.getCurrentGesture() == CameraEventGesture.DoubleDrag)
-    {
-      Vector2F difPixel0 = pixel0.sub(_initialPixel0.asVector2F());
-      Vector2F difPixel1 = pixel1.sub(_initialPixel1.asVector2F());
-      if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
-      {
-        //printf ("zoom..\n");
-        cameraContext.setCurrentGesture(CameraEventGesture.Zoom);
-      }
-  
-      // test if starting a zoom action
-      if ((difPixel0._y<-1 && difPixel1._y>1) || (difPixel0._y>1 && difPixel1._y<-1) || (difPixel0._x<-1 && difPixel1._x>1) || (difPixel0._x>1 && difPixel1._x<-1))
-      {
-  
-        // compute intersection of view direction with the globe
-        Vector3D intersection = planet.closestIntersection(_cameraPosition.asVector3D(), _cameraCenter.sub(_cameraPosition).asVector3D());
-        if (!intersection.isNan())
-        {
-          //        _centralGlobePoint = intersection.asMutableVector3D();
-          _centralGlobePoint.set(intersection);
-          //        _centralGlobeNormal = planet->geodeticSurfaceNormal(_centralGlobePoint).asMutableVector3D();
-          _centralGlobeNormal.set(planet.geodeticSurfaceNormal(_centralGlobePoint));
-          _fingerSep0 = Math.sqrt((difCurrentPixels._x *difCurrentPixels._x+difCurrentPixels._y *difCurrentPixels._y));
-          _lastAngle = _angle0 = Math.atan2(difCurrentPixels._y, difCurrentPixels._x);
-          cameraContext.setCurrentGesture(CameraEventGesture.Zoom);
-        }
-        else
-          ILogger.instance().logInfo("Zoom is no possible. View direction does not intersect the globe");
-      }
-  
-      // test if starting a rotate action
-      if ((difPixel0._y<-1 && difPixel1._y<-1) || (difPixel0._y>1 && difPixel1._y>1) || (difPixel0._x<-1 && difPixel1._x<-1) || (difPixel0._x>1 && difPixel1._x>1))
-      {
-        //cameraContext->setCurrentGesture(Rotate);
-      }
-    }
-  
-    // call specific transformation
-    switch (cameraContext.getCurrentGesture())
-    {
-      case Zoom:
-        zoom(cameraContext.getNextCamera(), difCurrentPixels);
-        break;
-  
-      case Rotate:
-        rotate();
-        break;
-  
-      default:
-        break;
-    }
-  
-  }
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-    cameraContext.setCurrentGesture(CameraEventGesture.None);
-    //_initialPixel0 = _initialPixel1 = Vector2I(-1,-1);
-  
-    //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
   }
 
 }

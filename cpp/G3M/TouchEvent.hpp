@@ -16,7 +16,6 @@
 class Touch {
 private:
   const Vector2F      _pos;
-  const Vector2F      _prevPos;
   const unsigned char _tapCount;
   const double        _wheelDelta;
 
@@ -24,31 +23,41 @@ private:
 
 public:
   Touch(const Vector2F& pos,
-        const Vector2F& prev,
-        const unsigned char tapCount=(unsigned char)1,
-        const double wheelDelta = 0.0):
+        const unsigned char tapCount,
+        const double wheelDelta=0.0):
   _pos(pos),
-  _prevPos(prev),
   _tapCount(tapCount),
   _wheelDelta(wheelDelta)
   {
-
+#ifdef JAVA_CODE
+    if (_pos == null) {
+      throw new RuntimeException("_pos is null");
+    }
+#endif
   }
 
   const Touch* clone() const {
     return new Touch(_pos,
-                     _prevPos,
                      _tapCount,
                      _wheelDelta);
   }
 
   const Vector2F getPos() const { return _pos; }
-  const Vector2F getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
   const double getMouseWheelDelta() const { return _wheelDelta; }
 
   ~Touch() {
   }
+
+  const std::string description() const;
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
 };
 
 
@@ -106,10 +115,19 @@ public:
   unsigned char getTapCount() const;
 
   ~TouchEvent() {
-    for (unsigned int i = 0; i < _touchs.size(); i++) {
+    for (size_t i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
     }
   }
+
+  const std::string description() const;
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
 
 };
 
