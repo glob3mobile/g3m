@@ -250,7 +250,6 @@
   }
 
   delete _lastTouchEvent;
-
   _lastTouchEvent = TouchEvent::create(Down, pointers);
   [self widget]->onTouchEvent(_lastTouchEvent);
 }
@@ -275,43 +274,38 @@
 
     pointers.push_back(touch);
   }
-
-  if (_lastTouchEvent != NULL) {
-    delete _lastTouchEvent;
+  
+  // test if finger orders are the same that in the previous gesture
+  if (_lastTouchEvent == NULL) {
+    _lastTouchEvent = TouchEvent::create(Move, pointers);
   }
-  _lastTouchEvent = TouchEvent::create(Move, pointers);
-
-//  // test if finger orders are the same that in the previous gesture
-//  if (_lastTouchEvent == NULL) {
-//    _lastTouchEvent = TouchEvent::create(Move, pointers);
-//  }
-//  else {
-//    if ((pointers.size() == 2) &&
-//        (_lastTouchEvent->getTouchCount() == 2)) {
-//
-//      const Vector2F current0 = pointers[0]->getPrevPos();
-//      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
-//      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
-//      delete _lastTouchEvent;
-//      const double dist0 = current0.sub(last0).squaredLength();
-//      const double dist1 = current0.sub(last1).squaredLength();
-//
-//      // swap finger order
-//      if (dist1 < dist0) {
-//        std::vector<const Touch*> swappedPointers = std::vector<const Touch*>();
-//        swappedPointers.push_back(pointers[1]);
-//        swappedPointers.push_back(pointers[0]);
-//        _lastTouchEvent = TouchEvent::create(Move, swappedPointers);
-//      }
-//      else {
-//        _lastTouchEvent = TouchEvent::create(Move, pointers);
-//      }
-//    }
-//    else {
-//      delete _lastTouchEvent;
-//      _lastTouchEvent = TouchEvent::create(Move, pointers);
-//      }
-//  }
+  else {
+    if ((pointers.size() == 2) &&
+        (_lastTouchEvent->getTouchCount() == 2)) {
+      
+      const Vector2F current0 = pointers[0]->getPos();
+      const Vector2F last0 = _lastTouchEvent->getTouch(0)->getPos();
+      const Vector2F last1 = _lastTouchEvent->getTouch(1)->getPos();
+      delete _lastTouchEvent;
+      const double dist0 = current0.sub(last0).squaredLength();
+      const double dist1 = current0.sub(last1).squaredLength();
+      
+      // swap finger order
+      if (dist1 < dist0) {
+        std::vector<const Touch*> swappedPointers = std::vector<const Touch*>();
+        swappedPointers.push_back(pointers[1]);
+        swappedPointers.push_back(pointers[0]);
+        _lastTouchEvent = TouchEvent::create(Move, swappedPointers);
+      }
+      else {
+        _lastTouchEvent = TouchEvent::create(Move, pointers);
+      }
+    }
+    else {
+      delete _lastTouchEvent;
+      _lastTouchEvent = TouchEvent::create(Move, pointers);
+    }
+  }
 
   [self widget]->onTouchEvent(_lastTouchEvent);
 }

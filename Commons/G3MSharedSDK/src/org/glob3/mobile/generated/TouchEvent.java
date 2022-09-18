@@ -11,6 +11,12 @@ public class TouchEvent
      _eventType = type;
      _touchs = touchs;
      _wheelDelta = wheelDelta;
+    ILogger logger = ILogger.instance();
+    if (logger != null)
+    {
+  //    logger->logInfo("New %s ", description().c_str());
+      logger.logInfo(description());
+    }
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

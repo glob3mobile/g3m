@@ -147,7 +147,7 @@ _context(new G3MContext(IFactory::instance(),
 _paused(false),
 _initializationTaskWasRun(false),
 _initializationTaskReady(true),
-_clickOnProcess(false),
+_touchDownUpOnProcess(false),
 _gpuProgramManager(gpuProgramManager),
 _sceneLighting(sceneLighting),
 _rootState(NULL),
@@ -398,41 +398,46 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   // notify the original event
   notifyTouchEvent(ec, touchEvent);
 
+
+  if (touchEvent->getTouchCount() != 1) {
+    _touchDownUpOnProcess = false;
+    return;
+  }
+
+
   // creates DownUp event when a Down is immediately followed by an Up
-  if (touchEvent->getTouchCount() == 1) {
-    const TouchEventType eventType = touchEvent->getType();
-    if (eventType == Down) {
-      _clickOnProcess = true;
-      const Vector2F pos = touchEvent->getTouch(0)->getPos();
-      _touchDownPositionX = pos._x;
-      _touchDownPositionY = pos._y;
-    }
-    else {
-      if (eventType == Up) {
-        if (_clickOnProcess) {
-          const Touch* touch = touchEvent->getTouch(0);
-          const TouchEvent* downUpEvent = TouchEvent::create(DownUp, touch->clone());
-          notifyTouchEvent(ec, downUpEvent);
-          delete downUpEvent;
-        }
-      }
-      if (_clickOnProcess) {
-        if (eventType == Move) {
-          const Vector2F movePosition = touchEvent->getTouch(0)->getPos();
-          const double sd = movePosition.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
-          const float thresholdInPixels = _context->getFactory()->getDeviceInfo()->getPixelsInMM(1);
-          if (sd > (thresholdInPixels * thresholdInPixels)) {
-            _clickOnProcess = false;
-          }
-        }
-        else {
-          _clickOnProcess = false;
-        }
-      }
+  const Touch* touch = touchEvent->getTouch(0);
+  const TouchEventType eventType = touchEvent->getType();
+  if (eventType == Down) {
+    _touchDownUpOnProcess = true;
+    const Vector2F pos = touch->getPos();
+    _touchDownPositionX = pos._x;
+    _touchDownPositionY = pos._y;
+    return;
+  }
+
+
+  if (!_touchDownUpOnProcess) {
+    return;
+  }
+
+
+  if (eventType == Up) {
+    const TouchEvent* downUpEvent = TouchEvent::create(DownUp, touch->clone());
+    notifyTouchEvent(ec, downUpEvent);
+    delete downUpEvent;
+    _touchDownUpOnProcess = false;
+  }
+  else if (eventType == Move) {
+    const Vector2F pos = touch->getPos();
+    const double sd = pos.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
+    const float thresholdInPixels = _context->getFactory()->getDeviceInfo()->getPixelsInMM(1);
+    if (sd > (thresholdInPixels * thresholdInPixels)) {
+      _touchDownUpOnProcess = false;
     }
   }
   else {
-    _clickOnProcess = false;
+    _touchDownUpOnProcess = false;
   }
 
 }

@@ -12,7 +12,6 @@ import com.google.gwt.core.client.*;
 import com.google.gwt.core.client.Scheduler.*;
 import com.google.gwt.dom.client.*;
 import com.google.gwt.dom.client.CanvasElement;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.*;
 
 
@@ -112,23 +111,22 @@ final class MotionEventProcessor {
    private ArrayList<Touch> createTouches(final JsArray<com.google.gwt.dom.client.Touch> jsTouches) {
       final float devicePixelRatio = _widget.getDevicePixelRatio();
 
-      final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<>();
+      // final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<>();
 
       final int              jsTouchesSize = jsTouches.length();
       final ArrayList<Touch> touches       = new ArrayList<>(jsTouchesSize);
       for (int i = 0; i < jsTouchesSize; i++) {
          final com.google.gwt.dom.client.Touch jsTouch = jsTouches.get(i);
 
-         final Vector2F currentTouchPosition = new Vector2F( //
+         final Vector2F position = new Vector2F( //
                jsTouch.getRelativeX(_canvasElement) * devicePixelRatio, //
                jsTouch.getRelativeY(_canvasElement) * devicePixelRatio //
          );
 
-         final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
+         // final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
+         // currentTouchesPositions.put(touchId, currentTouchPosition);
 
-         currentTouchesPositions.put(touchId, currentTouchPosition);
-
-         touches.add(new Touch(currentTouchPosition, (byte) 1));
+         touches.add(new Touch(position, (byte) 1));
       }
 
       return touches;
@@ -137,27 +135,27 @@ final class MotionEventProcessor {
 
    private Vector2F createPosition(final Event event) {
       final float devicePixelRatio = _widget.getDevicePixelRatio();
-      //      return new Vector2F( //
-      //            (event.getClientX() - _canvasElement.getAbsoluteLeft()) * devicePixelRatio, //
-      //            (event.getClientY() - _canvasElement.getAbsoluteTop()) * devicePixelRatio //
-      //      );
       return new Vector2F( //
-            getRelativeX(event, _canvasElement) * devicePixelRatio, //
-            getRelativeY(event, _canvasElement) * devicePixelRatio //
+            (event.getClientX() - _canvasElement.getAbsoluteLeft()) * devicePixelRatio, //
+            (event.getClientY() - _canvasElement.getAbsoluteTop()) * devicePixelRatio //
       );
+      //      return new Vector2F( //
+      //            getRelativeX(event, _canvasElement) * devicePixelRatio, //
+      //            getRelativeY(event, _canvasElement) * devicePixelRatio //
+      //      );
    }
 
 
-   private static int getRelativeX(final Event event,
-                                   final Element target) {
-      return (event.getClientX() - target.getAbsoluteLeft()) + target.getScrollLeft() + target.getOwnerDocument().getScrollLeft();
-   }
-
-
-   private static int getRelativeY(final Event event,
-                                   final Element target) {
-      return (event.getClientY() - target.getAbsoluteTop()) + target.getScrollTop() + target.getOwnerDocument().getScrollTop();
-   }
+   //   private static int getRelativeX(final Event event,
+   //                                   final Element target) {
+   //      return (event.getClientX() - target.getAbsoluteLeft()) + target.getScrollLeft() + target.getOwnerDocument().getScrollLeft();
+   //   }
+   //
+   //
+   //   private static int getRelativeY(final Event event,
+   //                                   final Element target) {
+   //      return (event.getClientY() - target.getAbsoluteTop()) + target.getScrollTop() + target.getOwnerDocument().getScrollTop();
+   //   }
 
 
    private TouchEvent processTouchStart(final Event event) {
@@ -289,7 +287,7 @@ final class MotionEventProcessor {
    }
 
 
-   private native int jsGetMouseWheelDelta(Event event) /*-{
+   private native int jsGetMouseWheelDelta(final Event event) /*-{
 		var e = event;
 		var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
 		return delta;
@@ -305,7 +303,7 @@ final class MotionEventProcessor {
       }
 
       final TouchEvent result = TouchEvent.create(type, touchs, wheelDelta);
-      ILogger.instance().logInfo("createTouchEvent(1): " + result.description());
+      // ILogger.instance().logInfo("createTouchEvent(1): " + result.description());
       return result;
    }
 
@@ -314,7 +312,7 @@ final class MotionEventProcessor {
                                               final Touch touch,
                                               final double wheelDelta) {
       final TouchEvent result = TouchEvent.create(type, touch, wheelDelta);
-      ILogger.instance().logInfo("createTouchEvent(2): " + result.description());
+      // ILogger.instance().logInfo("createTouchEvent(2): " + result.description());
       return result;
    }
 

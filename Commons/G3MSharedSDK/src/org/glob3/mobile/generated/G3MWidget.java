@@ -282,52 +282,54 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     // notify the original event
     notifyTouchEvent(ec, touchEvent);
   
-    // creates DownUp event when a Down is immediately followed by an Up
-    if (touchEvent.getTouchCount() == 1)
+  
+    if (touchEvent.getTouchCount() != 1)
     {
-      final TouchEventType eventType = touchEvent.getType();
-      if (eventType == TouchEventType.Down)
+      _touchDownUpOnProcess = false;
+      return;
+    }
+  
+  
+    // creates DownUp event when a Down is immediately followed by an Up
+    final Touch touch = touchEvent.getTouch(0);
+    final TouchEventType eventType = touchEvent.getType();
+    if (eventType == TouchEventType.Down)
+    {
+      _touchDownUpOnProcess = true;
+      final Vector2F pos = touch.getPos();
+      _touchDownPositionX = pos._x;
+      _touchDownPositionY = pos._y;
+      return;
+    }
+  
+  
+    if (!_touchDownUpOnProcess)
+    {
+      return;
+    }
+  
+  
+    if (eventType == TouchEventType.Up)
+    {
+      final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, touch.clone());
+      notifyTouchEvent(ec, downUpEvent);
+      if (downUpEvent != null)
+         downUpEvent.dispose();
+      _touchDownUpOnProcess = false;
+    }
+    else if (eventType == TouchEventType.Move)
+    {
+      final Vector2F pos = touch.getPos();
+      final double sd = pos.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
+      final float thresholdInPixels = _context.getFactory().getDeviceInfo().getPixelsInMM(1);
+      if (sd > (thresholdInPixels * thresholdInPixels))
       {
-        _clickOnProcess = true;
-        final Vector2F pos = touchEvent.getTouch(0).getPos();
-        _touchDownPositionX = pos._x;
-        _touchDownPositionY = pos._y;
-      }
-      else
-      {
-        if (eventType == TouchEventType.Up)
-        {
-          if (_clickOnProcess)
-          {
-            final Touch touch = touchEvent.getTouch(0);
-            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, touch.clone());
-            notifyTouchEvent(ec, downUpEvent);
-            if (downUpEvent != null)
-               downUpEvent.dispose();
-          }
-        }
-        if (_clickOnProcess)
-        {
-          if (eventType == TouchEventType.Move)
-          {
-            final Vector2F movePosition = touchEvent.getTouch(0).getPos();
-            final double sd = movePosition.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
-            final float thresholdInPixels = _context.getFactory().getDeviceInfo().getPixelsInMM(1);
-            if (sd > (thresholdInPixels * thresholdInPixels))
-            {
-              _clickOnProcess = false;
-            }
-          }
-          else
-          {
-            _clickOnProcess = false;
-          }
-        }
+        _touchDownUpOnProcess = false;
       }
     }
     else
     {
-      _clickOnProcess = false;
+      _touchDownUpOnProcess = false;
     }
   
   }
@@ -827,7 +829,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   private boolean _initializationTaskWasRun;
   private boolean _initializationTaskReady;
 
-  private boolean _clickOnProcess;
+  private boolean _touchDownUpOnProcess;
 
   private GPUProgramManager _gpuProgramManager;
 
@@ -896,7 +898,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
      _paused = false;
      _initializationTaskWasRun = false;
      _initializationTaskReady = true;
-     _clickOnProcess = false;
+     _touchDownUpOnProcess = false;
      _gpuProgramManager = gpuProgramManager;
      _sceneLighting = sceneLighting;
      _rootState = null;

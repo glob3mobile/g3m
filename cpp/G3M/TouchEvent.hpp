@@ -75,12 +75,7 @@ private:
 
   TouchEvent(const TouchEventType& type,
              const std::vector<const Touch*>& touchs,
-             const double wheelDelta) :
-  _eventType(type),
-  _touchs(touchs),
-  _wheelDelta(wheelDelta)
-  {
-  }
+             const double wheelDelta);
 
   TouchEvent(const TouchEvent& other);
 

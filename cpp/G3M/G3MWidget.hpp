@@ -317,7 +317,7 @@ private:
   bool _initializationTaskWasRun;
   bool _initializationTaskReady;
 
-  bool _clickOnProcess;
+  bool _touchDownUpOnProcess;
 
   GPUProgramManager* _gpuProgramManager;
 
