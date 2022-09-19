@@ -95,13 +95,16 @@ public class CameraRenderer implements ProtoRenderer
         CameraEventHandler handler = _handlers.get(i);
         if (handler.onTouchEvent(ec, touchEvent, _cameraContext))
         {
-          ILogger.instance().logInfo("== %s handled event %s", handler.name(), touchEvent.description());
+  //        ILogger::instance()->logInfo("== %s handled event %s",
+  //                                     handler->name().c_str(),
+  //                                     touchEvent->description().c_str());
           return true;
         }
       }
     }
   
-    ILogger.instance().logInfo("== NOT HANDLED event %s", touchEvent.description());
+  //  ILogger::instance()->logInfo("== NOT HANDLED event %s",
+  //                               touchEvent->description().c_str());
   
     // if no handler processed the event, return not-handled
     return false;
