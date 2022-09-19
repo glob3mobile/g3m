@@ -30,15 +30,15 @@ private:
   Vector2F* _previousEventPosition0;
   Vector2F* _previousEventPosition1;
 
-  void onDown(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-  void onMove(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-  void onUp(const G3MEventContext *eventContext,
-            const TouchEvent& touchEvent,
-            CameraContext *cameraContext);
+  bool onDown(const G3MEventContext* eventContext,
+              const TouchEvent* touchEvent,
+              CameraContext* cameraContext);
+  bool onMove(const G3MEventContext* eventContext,
+              const TouchEvent* touchEvent,
+              CameraContext* cameraContext);
+  bool onUp(const G3MEventContext* eventContext,
+            const TouchEvent* touchEvent,
+            CameraContext* cameraContext);
 
   const Vector2F* getPreviousEventPosition(const Vector2F& currentPosition) const;
 
@@ -49,12 +49,12 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  bool onTouchEvent(const G3MEventContext *eventContext,
+  bool onTouchEvent(const G3MEventContext* eventContext,
                     const TouchEvent* touchEvent,
-                    CameraContext *cameraContext);
+                    CameraContext* cameraContext);
 
   void render(const G3MRenderContext* rc,
-              CameraContext *cameraContext) {
+              CameraContext* cameraContext) {
     
   }
 

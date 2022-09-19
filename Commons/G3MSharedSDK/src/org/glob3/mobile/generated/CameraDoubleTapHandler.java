@@ -33,6 +33,11 @@ public class CameraDoubleTapHandler extends CameraEventHandler
     }
   }
 
+  public CameraDoubleTapHandler()
+  {
+     super("DoubleTap");
+
+  }
 
   public void dispose()
   {

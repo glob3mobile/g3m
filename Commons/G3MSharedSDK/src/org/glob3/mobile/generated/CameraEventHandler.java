@@ -14,13 +14,22 @@ package org.glob3.mobile.generated;
 //class TouchEvent;
 
 
+
 public abstract class CameraEventHandler
 {
-  protected CameraEventHandler()
+  private final String _name;
+
+  protected CameraEventHandler(String name)
   {
+     _name = name;
 
   }
 
+
+  public final String name()
+  {
+    return _name;
+  }
 
   public void dispose()
   {

@@ -18,6 +18,11 @@ private:
               CameraContext *cameraContext);
   
 public:
+  CameraDoubleTapHandler() :
+  CameraEventHandler("DoubleTap")
+  {
+
+  }
   
   ~CameraDoubleTapHandler() {
 #ifdef JAVA_CODE

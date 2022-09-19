@@ -23,6 +23,7 @@ RenderState CameraSingleDragHandler::getRenderState(const G3MRenderContext* rc) 
 }
 
 CameraSingleDragHandler::CameraSingleDragHandler(bool useInertia) :
+CameraEventHandler("SingleDrag"),
 _useInertia(useInertia),
 _previousEventPosition0(NULL),
 _previousEventPosition1(NULL)
@@ -38,9 +39,9 @@ CameraSingleDragHandler::~CameraSingleDragHandler() {
 #endif
 }
 
-bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
+bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext* eventContext,
                                            const TouchEvent* touchEvent,
-                                           CameraContext *cameraContext) {
+                                           CameraContext* cameraContext) {
   if (touchEvent->getTouchCount() != 1) {
     return false;
   }
@@ -50,16 +51,13 @@ bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
 
   switch (touchEvent->getType()) {
     case Down:
-      onDown(eventContext, *touchEvent, cameraContext);
-      return true;
+      return onDown(eventContext, touchEvent, cameraContext);
 
     case Move:
-      onMove(eventContext, *touchEvent, cameraContext);
-      return true;
+      return onMove(eventContext, touchEvent, cameraContext);
 
     case Up:
-      onUp(eventContext, *touchEvent, cameraContext);
-      return true;
+      return onUp(eventContext, touchEvent, cameraContext);
 
     default:
       return false;
@@ -67,44 +65,47 @@ bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
 
 }
 
-void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
-                                     const TouchEvent& touchEvent,
-                                     CameraContext *cameraContext) {
-  const Camera *camera = cameraContext->getNextCamera();
+bool CameraSingleDragHandler::onDown(const G3MEventContext* eventContext,
+                                     const TouchEvent* touchEvent,
+                                     CameraContext* cameraContext) {
+  const Camera* camera = cameraContext->getNextCamera();
   camera->getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
   camera->getModelViewMatrixInto(_cameraModelViewMatrix);
   camera->getViewPortInto(_cameraViewPort);
 
   // dragging
-  const Vector2F pixel      = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel      = touchEvent->getTouch(0)->getPos();
   const Vector3D initialRay = camera->pixel2Ray(pixel);
   if (!initialRay.isNan()) {
     cameraContext->setCurrentGesture(Drag);
     eventContext->getPlanet()->beginSingleDrag(camera->getCartesianPosition(), initialRay);
+    return true;
   }
+
+  return false;
 }
 
-void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
-                                     const TouchEvent& touchEvent,
-                                     CameraContext *cameraContext) {
+bool CameraSingleDragHandler::onMove(const G3MEventContext* eventContext,
+                                     const TouchEvent* touchEvent,
+                                     CameraContext* cameraContext) {
 
   if (cameraContext->getCurrentGesture() != Drag) {
-    return;
+    return false;
   }
 
   //check finalRay
-  const Vector2F pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2F pixel = touchEvent->getTouch(0)->getPos();
   Camera::pixel2RayInto(_cameraPosition, pixel,
                         _cameraViewPort, _cameraModelViewMatrix, _finalRay);
   if (_finalRay.isNan()) {
-    return;
+    return false;
   }
 
   // compute transformation matrix
   const Planet* planet = eventContext->getPlanet();
   const MutableMatrix44D matrix = planet->singleDrag(_finalRay.asVector3D());
   if (!matrix.isValid()) {
-    return;
+    return false;
   }
 
   // apply transformation
@@ -114,6 +115,8 @@ void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
   delete _previousEventPosition1;
   _previousEventPosition1 = _previousEventPosition0;
   _previousEventPosition0 = new Vector2F(pixel);
+
+  return true;
 }
 
 
@@ -135,13 +138,13 @@ const Vector2F* CameraSingleDragHandler::getPreviousEventPosition(const Vector2F
 }
 
 
-void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
-                                   const TouchEvent& touchEvent,
-                                   CameraContext *cameraContext) {
+bool CameraSingleDragHandler::onUp(const G3MEventContext* eventContext,
+                                   const TouchEvent* touchEvent,
+                                   CameraContext* cameraContext) {
 
   // test if animation is needed
   if (_useInertia && (cameraContext->getCurrentGesture() == Drag)) {
-    const Touch *touch = touchEvent.getTouch(0);
+    const Touch* touch = touchEvent->getTouch(0);
     const Vector2F currentPosition = touch->getPos();
     const Vector2F* previousEventPosition = getPreviousEventPosition(currentPosition);
     if (previousEventPosition != NULL) {
@@ -166,4 +169,6 @@ void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
   _previousEventPosition1 = NULL;
 
   cameraContext->setCurrentGesture(None);
+
+  return true;
 }

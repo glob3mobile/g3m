@@ -115,8 +115,10 @@ public class CameraRotationHandler extends CameraEventHandler
 
   public CameraRotationHandler()
   {
+     super("Rotation");
      _pivotPoint = new MutableVector3D(0, 0, 0);
      _pivotPixel = new MutableVector2F(0, 0);
+
   }
 
   public void dispose()

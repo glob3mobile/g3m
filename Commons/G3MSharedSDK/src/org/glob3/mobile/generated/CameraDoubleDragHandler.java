@@ -26,7 +26,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   private MutableVector2I _cameraViewPort = new MutableVector2I();
   private MutableMatrix44D _cameraModelViewMatrix = new MutableMatrix44D();
 
-  private void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private boolean onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     final Camera camera = cameraContext.getNextCamera();
     camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
@@ -42,17 +42,20 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     if (initialRay0.isNan() || initialRay1.isNan())
     {
-      return;
+      return false;
     }
   
     cameraContext.setCurrentGesture(CameraEventGesture.DoubleDrag);
     eventContext.getPlanet().beginDoubleDrag(camera.getCartesianPosition(), camera.getViewDirection(), camera.pixel2Ray(pixel0), camera.pixel2Ray(pixel1));
+  
+    return true;
   }
-  private void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private boolean onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     if (cameraContext.getCurrentGesture() != CameraEventGesture.DoubleDrag)
     {
-      return;
+      ILogger.instance().logError("** getCurrentGesture is not DoubleDrag");
+      return false;
     }
   
     // compute transformation matrix
@@ -64,25 +67,31 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     if (initialRay0.isNan() || initialRay1.isNan())
     {
-      return;
+      ILogger.instance().logError("** Invalid rays");
+      return false;
     }
   
     MutableMatrix44D matrix = planet.doubleDrag(initialRay0, initialRay1);
     if (!matrix.isValid())
     {
-      return;
+      ILogger.instance().logError("** Invalid matrix");
+      return false;
     }
   
     // apply transformation
     cameraContext.getNextCamera().setLookAtParams(_cameraPosition.transformedBy(matrix, 1.0), _cameraCenter.transformedBy(matrix, 1.0), _cameraUp.transformedBy(matrix, 0.0));
+  
+    return true;
   }
-  private void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private boolean onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     cameraContext.setCurrentGesture(CameraEventGesture.None);
+    return true;
   }
 
   public CameraDoubleDragHandler()
   {
+     super("DoubleDrag");
   }
 
   public void dispose()
@@ -97,29 +106,29 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-  
-    if (touchEvent.getTouchCount() == 2)
+    // only one finger needed
+    if (touchEvent.getTouchCount() != 2)
     {
-      switch (touchEvent.getType())
-      {
-        case Down:
-          onDown(eventContext, touchEvent, cameraContext);
-          return true;
-  
-        case Move:
-          onMove(eventContext, touchEvent, cameraContext);
-          return true;
-  
-        case Up:
-          onUp(eventContext, touchEvent, cameraContext);
-          return true;
-  
-        default:
-          return false;
-      }
+      return false;
     }
   
-    return false;
+    switch (touchEvent.getType())
+    {
+      case Down:
+        return onDown(eventContext, touchEvent, cameraContext);
+  
+      case Move:
+        return onMove(eventContext, touchEvent, cameraContext);
+  
+      case Up:
+        return onUp(eventContext, touchEvent, cameraContext);
+  
+      case LongPress:
+      case DownUp:
+      case MouseWheel:
+      default:
+        return false;
+    }
   }
 
   public final void render(G3MRenderContext rc, CameraContext cameraContext)

@@ -33,7 +33,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   private Vector2F _previousEventPosition0;
   private Vector2F _previousEventPosition1;
 
-  private void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private boolean onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     final Camera camera = cameraContext.getNextCamera();
     camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
@@ -47,14 +47,17 @@ public class CameraSingleDragHandler extends CameraEventHandler
     {
       cameraContext.setCurrentGesture(CameraEventGesture.Drag);
       eventContext.getPlanet().beginSingleDrag(camera.getCartesianPosition(), initialRay);
+      return true;
     }
+  
+    return false;
   }
-  private void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private boolean onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
     if (cameraContext.getCurrentGesture() != CameraEventGesture.Drag)
     {
-      return;
+      return false;
     }
   
     //check finalRay
@@ -62,7 +65,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
     Camera.pixel2RayInto(_cameraPosition, pixel, _cameraViewPort, _cameraModelViewMatrix, _finalRay);
     if (_finalRay.isNan())
     {
-      return;
+      return false;
     }
   
     // compute transformation matrix
@@ -70,7 +73,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
     final MutableMatrix44D matrix = planet.singleDrag(_finalRay.asVector3D());
     if (!matrix.isValid())
     {
-      return;
+      return false;
     }
   
     // apply transformation
@@ -79,8 +82,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
        _previousEventPosition1.dispose();
     _previousEventPosition1 = _previousEventPosition0;
     _previousEventPosition0 = pixel;
+  
+    return true;
   }
-  private void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private boolean onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
     // test if animation is needed
@@ -117,6 +122,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
     _previousEventPosition1 = null;
   
     cameraContext.setCurrentGesture(CameraEventGesture.None);
+  
+    return true;
   }
 
   private Vector2F getPreviousEventPosition(Vector2F currentPosition)
@@ -143,6 +150,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 
   public CameraSingleDragHandler(boolean useInertia)
   {
+     super("SingleDrag");
      _useInertia = useInertia;
      _previousEventPosition0 = null;
      _previousEventPosition1 = null;
@@ -177,16 +185,13 @@ public class CameraSingleDragHandler extends CameraEventHandler
     switch (touchEvent.getType())
     {
       case Down:
-        onDown(eventContext, touchEvent, cameraContext);
-        return true;
+        return onDown(eventContext, touchEvent, cameraContext);
   
       case Move:
-        onMove(eventContext, touchEvent, cameraContext);
-        return true;
+        return onMove(eventContext, touchEvent, cameraContext);
   
       case Up:
-        onUp(eventContext, touchEvent, cameraContext);
-        return true;
+        return onUp(eventContext, touchEvent, cameraContext);
   
       default:
         return false;

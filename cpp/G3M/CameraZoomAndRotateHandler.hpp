@@ -48,7 +48,9 @@ private:
             CameraContext *cameraContext);
 
 public:
-  CameraZoomAndRotateHandler() {
+  CameraZoomAndRotateHandler() :
+  CameraEventHandler("ZoomAndRotate")
+  {
   }
 
   ~CameraZoomAndRotateHandler() {

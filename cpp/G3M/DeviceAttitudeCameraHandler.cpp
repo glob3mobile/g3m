@@ -24,7 +24,8 @@ RenderState DeviceAttitudeCameraHandler::getRenderState(const G3MRenderContext* 
 }
 
 DeviceAttitudeCameraHandler::DeviceAttitudeCameraHandler(bool updateLocation,
-                                                         ILocationModifier* locationModifier):
+                                                         ILocationModifier* locationModifier) :
+CameraEventHandler("DeviceAttitude"),
 _updateLocation(updateLocation),
 _locationModifier(locationModifier)
 {

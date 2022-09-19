@@ -25,6 +25,7 @@ public class CameraMouseWheelHandler extends CameraEventHandler
   }
   public CameraMouseWheelHandler(double zoomSpeed)
   {
+     super("MouseWheel");
      _zoomSpeed = zoomSpeed;
   }
 

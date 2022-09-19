@@ -17,10 +17,11 @@ private:
 
 public:
   CameraMouseWheelHandler(double zoomSpeed = 0.05) :
+  CameraEventHandler("MouseWheel"),
   _zoomSpeed(zoomSpeed)
   {
   }
-  
+
   ~CameraMouseWheelHandler(){}
   
   RenderState getRenderState(const G3MRenderContext* rc){

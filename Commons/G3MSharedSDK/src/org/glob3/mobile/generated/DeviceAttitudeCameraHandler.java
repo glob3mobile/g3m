@@ -29,6 +29,7 @@ public class DeviceAttitudeCameraHandler extends CameraEventHandler
   }
   public DeviceAttitudeCameraHandler(boolean updateLocation, ILocationModifier locationModifier)
   {
+     super("DeviceAttitude");
      _updateLocation = updateLocation;
      _locationModifier = locationModifier;
   

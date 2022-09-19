@@ -168,6 +168,7 @@ public class CameraZoomAndRotateHandler extends CameraEventHandler
 
   public CameraZoomAndRotateHandler()
   {
+     super("ZoomAndRotate");
   }
 
   public void dispose()

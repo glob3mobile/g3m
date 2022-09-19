@@ -6,17 +6,19 @@ public class TouchEvent
   private final double _wheelDelta;
 
 
+
+  ///#include "ILogger.hpp"
+  
+  
   private TouchEvent(TouchEventType type, java.util.ArrayList<Touch> touchs, double wheelDelta)
   {
      _eventType = type;
      _touchs = touchs;
      _wheelDelta = wheelDelta;
-    ILogger logger = ILogger.instance();
-    if (logger != null)
-    {
-  //    logger->logInfo("New %s ", description().c_str());
-      logger.logInfo(description());
-    }
+  //  ILogger* logger = ILogger::instance();
+  //  if (logger != NULL) {
+  //    logger->logInfo(description());
+  //  }
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

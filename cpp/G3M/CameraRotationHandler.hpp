@@ -39,10 +39,13 @@ private:
             CameraContext *cameraContext);
 
 public:
-  CameraRotationHandler():
+  CameraRotationHandler() :
+  CameraEventHandler("Rotation"),
   _pivotPoint(0, 0, 0),
   _pivotPixel(0, 0)
-  {}
+  {
+
+  }
 
   ~CameraRotationHandler() {
 #ifdef JAVA_CODE
