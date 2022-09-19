@@ -475,7 +475,7 @@ public class EllipsoidalPlanet extends Planet
   
     // init params
     final IMathUtils mu = IMathUtils.instance();
-    MutableVector3D positionCamera = _origin;
+    MutableVector3D positionCamera = new MutableVector3D(_origin);
     final double finalRaysAngle = finalRay0.angleBetween(finalRay1)._degrees;
     final double factor = finalRaysAngle / _angleBetweenInitialRays;
     double dAccum = 0;
@@ -541,7 +541,7 @@ public class EllipsoidalPlanet extends Planet
     // start to compound matrix
     MutableMatrix44D matrix = MutableMatrix44D.identity();
     positionCamera.set(_origin);
-    MutableVector3D viewDirection = _centerRay;
+    MutableVector3D viewDirection = new MutableVector3D(_centerRay);
     MutableVector3D ray0 = finalRay0.asMutableVector3D();
     MutableVector3D ray1 = finalRay1.asMutableVector3D();
   

@@ -363,7 +363,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
 
   // init params
   const IMathUtils* mu = IMathUtils::instance();
-  MutableVector3D positionCamera = _origin;
+  MutableVector3D positionCamera = MutableVector3D(_origin);
   const double finalRaysAngle = finalRay0.angleBetween(finalRay1)._degrees;
   const double factor = finalRaysAngle / _angleBetweenInitialRays;
   double dAccum=0, angle0, angle1;
@@ -417,7 +417,7 @@ MutableMatrix44D SphericalPlanet::doubleDrag(const Vector3D& finalRay0,
   // start to compound matrix
   MutableMatrix44D matrix = MutableMatrix44D::identity();
   positionCamera.set(_origin);
-  MutableVector3D viewDirection = _centerRay;
+  MutableVector3D viewDirection = MutableVector3D(_centerRay);
   MutableVector3D ray0 = finalRay0.asMutableVector3D();
   MutableVector3D ray1 = finalRay1.asMutableVector3D();
 
