@@ -66,7 +66,9 @@ public:
                     CameraContext *cameraContext);
 
   void render(const G3MRenderContext* rc,
-              CameraContext *cameraContext);
+              CameraContext *cameraContext) {
+    
+  }
 
 };
 
