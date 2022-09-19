@@ -13,7 +13,7 @@ public class G3MWebGLDemo
                           implements
                              EntryPoint {
 
-   private static final String _g3mWidgetHolderId = "g3mWidgetHolder";
+   private static final String G3MWIDGETHOLDER_ID = "g3mWidgetHolder";
 
 
    private G3MWidget_WebGL _widget = null;
@@ -36,7 +36,7 @@ public class G3MWebGLDemo
 
       _widget = builder.createWidget();
 
-      final Panel g3mWidgetHolder = RootPanel.get(_g3mWidgetHolderId);
+      final Panel g3mWidgetHolder = RootPanel.get(G3MWIDGETHOLDER_ID);
       g3mWidgetHolder.add(_widget);
    }
 

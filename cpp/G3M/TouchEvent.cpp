@@ -35,7 +35,7 @@ unsigned char TouchEvent::getTapCount() const
 const std::string TouchEvent::description() const
 {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->addString("(TouchEvent type=");
+  isb->addString("(TouchEvent ");
 
   {
     std::string eventTypeName = "";
@@ -72,7 +72,7 @@ const std::string TouchEvent::description() const
     isb->addString(eventTypeName);
   }
 
-  isb->addString(", touches=(");
+  isb->addString(" touches=(");
   for (size_t i = 0; i < _touchs.size(); i++) {
     if (i > 0) {
       isb->addString(", ");

@@ -80,7 +80,7 @@ public class TouchEvent
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("(TouchEvent type=");
+    isb.addString("(TouchEvent ");
   
     {
       String eventTypeName = "";
@@ -118,7 +118,7 @@ public class TouchEvent
       isb.addString(eventTypeName);
     }
   
-    isb.addString(", touches=(");
+    isb.addString(" touches=(");
     for (int i = 0; i < _touchs.size(); i++)
     {
       if (i > 0)
