@@ -81,15 +81,15 @@ private:
 
 public:
 
-  static TouchEvent* create(const TouchEventType& type,
-                            const std::vector<const Touch*>& touchs,
-                            const double wheelDelta=0.0) {
+  static const TouchEvent* create(const TouchEventType& type,
+                                  const std::vector<const Touch*>& touchs,
+                                  const double wheelDelta=0.0) {
     return new TouchEvent(type, touchs, wheelDelta);
   }
 
-  static TouchEvent* create(const TouchEventType& type,
-                            const Touch* touch,
-                            const double wheelDelta=0.0) {
+  static const TouchEvent* create(const TouchEventType& type,
+                                  const Touch* touch,
+                                  const double wheelDelta=0.0) {
     const std::vector<const Touch*> touchs(1, touch);
 
     return create(type, touchs, wheelDelta);

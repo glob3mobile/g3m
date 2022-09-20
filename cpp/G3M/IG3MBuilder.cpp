@@ -71,7 +71,8 @@ _sceneLighting(NULL),
 _shownSector(NULL),
 _infoDisplay(NULL),
 _atmosphere(false),
-_frustumPolicy(NULL)
+_frustumPolicy(NULL),
+_verboseCameraHandlers(false)
 {
 }
 
@@ -831,8 +832,12 @@ std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() 
   return cameraConstraints;
 }
 
+void IG3MBuilder::setVerboseCameraHandlers(const bool verboseCameraHandlers) {
+  _verboseCameraHandlers = verboseCameraHandlers;
+}
+
 CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
-  CameraRenderer* cameraRenderer = new CameraRenderer();
+  CameraRenderer* cameraRenderer = new CameraRenderer(_verboseCameraHandlers);
   const bool useInertia = true;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());

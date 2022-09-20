@@ -32,7 +32,12 @@ public class G3MWebGLDemo
 
       final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
 
+      //      builder.setPlanet(SphericalPlanet.createEarth());
+      //      builder.setPlanet(FlatPlanet.createEarth());
+
       builder.setAtmosphere(true);
+
+      builder.setVerboseCameraHandlers(true);
 
       _widget = builder.createWidget();
 

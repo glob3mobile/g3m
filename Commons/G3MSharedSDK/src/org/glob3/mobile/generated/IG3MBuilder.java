@@ -75,6 +75,7 @@ public abstract class IG3MBuilder
   private InfoDisplay _infoDisplay;
   private boolean _atmosphere;
   private FrustumPolicy _frustumPolicy;
+  private boolean _verboseCameraHandlers;
 
 
   /**
@@ -280,7 +281,7 @@ public abstract class IG3MBuilder
   }
   private CameraRenderer createDefaultCameraRenderer()
   {
-    CameraRenderer cameraRenderer = new CameraRenderer();
+    CameraRenderer cameraRenderer = new CameraRenderer(_verboseCameraHandlers);
     final boolean useInertia = true;
     cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
     cameraRenderer.addHandler(new CameraDoubleDragHandler());
@@ -510,6 +511,7 @@ public abstract class IG3MBuilder
      _infoDisplay = null;
      _atmosphere = false;
      _frustumPolicy = null;
+     _verboseCameraHandlers = false;
   }
 
   public void dispose()
@@ -612,6 +614,11 @@ public abstract class IG3MBuilder
   {
     _atmosphere = atmosphere;
     setBackgroundColor(_atmosphere ? Color.newFromRGBA(0, 0, 0, 1) : null);
+  }
+
+  public final void setVerboseCameraHandlers(boolean verboseCameraHandlers)
+  {
+    _verboseCameraHandlers = verboseCameraHandlers;
   }
 
 

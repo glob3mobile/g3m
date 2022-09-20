@@ -20,6 +20,8 @@ class RenderState;
 
 class CameraRenderer: public ProtoRenderer {
 private:
+  const bool _verboseHandlers;
+
   bool _processTouchEvents;
 
   std::vector<CameraEventHandler*> _handlers;
@@ -30,7 +32,8 @@ private:
   CameraContext *_cameraContext;
 
 public:
-  CameraRenderer() :
+  CameraRenderer(bool verboseHandlers) :
+  _verboseHandlers(verboseHandlers),
   _cameraContext(NULL),
   _processTouchEvents(true),
   _handlersSize(0)

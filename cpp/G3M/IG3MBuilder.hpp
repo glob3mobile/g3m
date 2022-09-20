@@ -73,6 +73,7 @@ private:
   InfoDisplay*                      _infoDisplay;
   bool                              _atmosphere;
   FrustumPolicy*                    _frustumPolicy;
+  bool                              _verboseCameraHandlers;
 
   GL*                               getGL();
   ICameraActivityListener*          getCameraActivityListener();
@@ -127,6 +128,8 @@ public:
   IThreadUtils*                     getThreadUtils();
 
   void setAtmosphere(const bool atmosphere);
+
+  void setVerboseCameraHandlers(const bool verboseCameraHandlers);
 
   void setGL(GL* gl);
 
