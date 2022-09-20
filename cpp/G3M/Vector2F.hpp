@@ -91,6 +91,12 @@ public:
     return description();
   }
 #endif
+
+  bool isEquals(const Vector2F& that) const {
+    return ((this->_x == that._x) &&
+            (this->_y == that._y));
+  }
+
   
 };
 

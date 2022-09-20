@@ -119,6 +119,9 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
     if (_frustumPolicy != null)
        _frustumPolicy.dispose();
+  
+    if (_previousTouchEvent != null)
+       _previousTouchEvent.dispose();
   }
 
   public final void render(int width, int height)
@@ -279,8 +282,20 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
     G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode, getCurrentCamera());
   
+    if (_previousTouchEvent != null)
+    {
+      if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent))
+      {
+        //ILogger::instance()->logInfo("** Discarded duplicated event %s", touchEvent->description().c_str());
+        return;
+      }
+    }
+  
     // notify the original event
     notifyTouchEvent(ec, touchEvent);
+    if (_previousTouchEvent != null)
+       _previousTouchEvent.dispose();
+    _previousTouchEvent = touchEvent.clone();
   
   
     if (touchEvent.getTouchCount() != 1)
@@ -313,6 +328,10 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     {
       final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, touch.clone());
       notifyTouchEvent(ec, downUpEvent);
+      if (_previousTouchEvent != null)
+         _previousTouchEvent.dispose();
+      _previousTouchEvent = downUpEvent.clone();
+  
       if (downUpEvent != null)
          downUpEvent.dispose();
       _touchDownUpOnProcess = false;
@@ -858,6 +877,8 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   private Camera _rightEyeCam;
 
 
+  private TouchEvent _previousTouchEvent;
+
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, NearFrustumRenderer nearFrustumRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode, FrustumPolicy frustumPolicy)
   {
      _frameTasksExecutor = new FrameTasksExecutor();
@@ -913,6 +934,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
      _leftEyeCam = null;
      _rightEyeCam = null;
      _auxCam = null;
+     _previousTouchEvent = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -1232,6 +1254,22 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
     //Restoring central camera
     _currentCamera.copyFrom(_auxCam, true);
+  }
+
+  private boolean isDuplicatedTouchEvent(TouchEvent touchEvent, TouchEvent previousTouchEvent)
+  {
+    if (previousTouchEvent == null)
+    {
+      return false;
+    }
+  
+    if (touchEvent.getType() != TouchEventType.Move)
+    {
+      // only Move events will be removed
+      return false;
+    }
+  
+    return touchEvent.isEquals(previousTouchEvent);
   }
 
 }

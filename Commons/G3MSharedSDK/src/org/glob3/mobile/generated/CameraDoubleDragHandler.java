@@ -54,7 +54,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   {
     if (cameraContext.getCurrentGesture() != CameraEventGesture.DoubleDrag)
     {
-      ILogger.instance().logError("** getCurrentGesture is not DoubleDrag");
+      //ILogger::instance()->logError("** getCurrentGesture is not DoubleDrag");
       return false;
     }
   
@@ -67,14 +67,14 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
     if (initialRay0.isNan() || initialRay1.isNan())
     {
-      ILogger.instance().logError("** Invalid rays");
+      //ILogger::instance()->logError("** Invalid rays");
       return false;
     }
   
     MutableMatrix44D matrix = planet.doubleDrag(initialRay0, initialRay1);
     if (!matrix.isValid())
     {
-      ILogger.instance().logError("** Invalid matrix");
+      //ILogger::instance()->logError("** Invalid matrix");
       return false;
     }
   

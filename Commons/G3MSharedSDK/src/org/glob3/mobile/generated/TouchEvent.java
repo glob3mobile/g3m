@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated;
 public class TouchEvent
 {
-  private final TouchEventType _eventType;
+  private final TouchEventType _type;
   private final java.util.ArrayList<Touch> _touchs;
   private final double _wheelDelta;
 
@@ -12,13 +12,13 @@ public class TouchEvent
   
   private TouchEvent(TouchEventType type, java.util.ArrayList<Touch> touchs, double wheelDelta)
   {
-     _eventType = type;
+     _type = type;
      _touchs = touchs;
      _wheelDelta = wheelDelta;
-  //  ILogger* logger = ILogger::instance();
-  //  if (logger != NULL) {
-  //    logger->logInfo(description());
-  //  }
+    //  ILogger* logger = ILogger::instance();
+    //  if (logger != NULL) {
+    //    logger->logInfo(description());
+    //  }
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -47,7 +47,7 @@ public class TouchEvent
 
   public final TouchEventType getType()
   {
-    return _eventType;
+    return _type;
   }
 
   public final Touch getTouch(int i)
@@ -85,39 +85,39 @@ public class TouchEvent
     isb.addString("(TouchEvent ");
   
     {
-      String eventTypeName = "";
-      switch (_eventType)
+      String typeName = "";
+      switch (_type)
       {
         case Down:
-          eventTypeName = "Down";
+          typeName = "Down";
           break;
   
         case Up:
-          eventTypeName = "Up";
+          typeName = "Up";
           break;
   
         case Move:
-          eventTypeName = "Move";
+          typeName = "Move";
           break;
   
         case LongPress:
-          eventTypeName = "LongPress";
+          typeName = "LongPress";
           break;
   
         case DownUp:
-          eventTypeName = "DownUp";
+          typeName = "DownUp";
           break;
   
         case MouseWheel:
-          eventTypeName = "MouseWheel";
+          typeName = "MouseWheel";
           break;
   
         default:
-          eventTypeName = "<<unkown>>";
+          typeName = "<<unkown>>";
           break;
       }
   
-      isb.addString(eventTypeName);
+      isb.addString(typeName);
     }
   
     isb.addString(" touches=(");
@@ -148,6 +148,54 @@ public class TouchEvent
   @Override
   public String toString() {
     return description();
+  }
+
+  public final TouchEvent clone()
+  {
+    final java.util.ArrayList<Touch> clonedTouchs = new java.util.ArrayList<Touch>();
+  
+    for (int i = 0; i < _touchs.size(); i++)
+    {
+      final Touch touch = _touchs.get(i);
+      clonedTouchs.add(touch.clone());
+    }
+  
+    return new TouchEvent(_type, clonedTouchs, _wheelDelta);
+  }
+
+  public final boolean isEquals(TouchEvent that)
+  {
+    if (that == null)
+    {
+      return false;
+    }
+  
+    if (this.getType() != that.getType())
+    {
+      return false;
+    }
+  
+    if (this.getTapCount() != that.getTapCount())
+    {
+      return false;
+    }
+  
+    if (this.getTouchCount() != that.getTouchCount())
+    {
+      return false;
+    }
+  
+    for (int i = 0; i < _touchs.size(); i++)
+    {
+      final Touch thisTouch = this._touchs.get(i);
+      final Touch thatTouch = that._touchs.get(i);
+      if (!thisTouch.isEquals(thatTouch))
+      {
+        return false;
+      }
+    }
+  
+    return true;
   }
 
 }

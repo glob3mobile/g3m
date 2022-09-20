@@ -14,14 +14,14 @@
 TouchEvent::TouchEvent(const TouchEventType& type,
                        const std::vector<const Touch*>& touchs,
                        const double wheelDelta) :
-_eventType(type),
+_type(type),
 _touchs(touchs),
 _wheelDelta(wheelDelta)
 {
-//  ILogger* logger = ILogger::instance();
-//  if (logger != NULL) {
-//    logger->logInfo(description());
-//  }
+  //  ILogger* logger = ILogger::instance();
+  //  if (logger != NULL) {
+  //    logger->logInfo(description());
+  //  }
 }
 
 
@@ -37,38 +37,38 @@ const std::string TouchEvent::description() const
   isb->addString("(TouchEvent ");
 
   {
-    std::string eventTypeName = "";
-    switch (_eventType) {
+    std::string typeName = "";
+    switch (_type) {
       case Down:
-        eventTypeName = "Down";
+        typeName = "Down";
         break;
 
       case Up:
-        eventTypeName = "Up";
+        typeName = "Up";
         break;
 
       case Move:
-        eventTypeName = "Move";
+        typeName = "Move";
         break;
 
       case LongPress:
-        eventTypeName = "LongPress";
+        typeName = "LongPress";
         break;
 
       case DownUp:
-        eventTypeName = "DownUp";
+        typeName = "DownUp";
         break;
 
       case MouseWheel:
-        eventTypeName = "MouseWheel";
+        typeName = "MouseWheel";
         break;
 
       default:
-        eventTypeName = "<<unkown>>";
+        typeName = "<<unkown>>";
         break;
     }
 
-    isb->addString(eventTypeName);
+    isb->addString(typeName);
   }
 
   isb->addString(" touches=(");
@@ -110,4 +110,51 @@ const std::string Touch::description() const
   const std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+
+const TouchEvent* TouchEvent::clone() const {
+  std::vector<const Touch*> clonedTouchs;
+
+  for (size_t i = 0; i < _touchs.size(); i++) {
+    const Touch* touch = _touchs[i];
+    clonedTouchs.push_back(touch->clone());
+  }
+
+  return new TouchEvent(_type,
+                        clonedTouchs,
+                        _wheelDelta);
+}
+
+bool Touch::isEquals(const Touch* that) const {
+  return ((this->_tapCount == that->_tapCount) &&
+          this->_pos.isEquals(that->_pos));
+}
+
+bool TouchEvent::isEquals(const TouchEvent* that) const {
+  if (that == NULL) {
+    return false;
+  }
+
+  if (this->getType() != that->getType()) {
+    return false;
+  }
+
+  if (this->getTapCount() != that->getTapCount()) {
+    return false;
+  }
+
+  if (this->getTouchCount() != that->getTouchCount()) {
+    return false;
+  }
+
+  for (size_t i = 0; i < _touchs.size(); i++) {
+    const Touch* thisTouch = this->_touchs[i];
+    const Touch* thatTouch = that->_touchs[i];
+    if (!thisTouch->isEquals(thatTouch)) {
+      return false;
+    }
+  }
+
+  return true;
 }

@@ -161,7 +161,8 @@ _touchDownPositionY(0),
 _viewMode(viewMode),
 _leftEyeCam(NULL),
 _rightEyeCam(NULL),
-_auxCam(NULL)
+_auxCam(NULL),
+_previousTouchEvent(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -327,6 +328,8 @@ G3MWidget::~G3MWidget() {
   delete _auxCam;
 
   delete _frustumPolicy;
+
+  delete _previousTouchEvent;
 }
 
 void G3MWidget::removeAllPeriodicalTasks() {
@@ -379,6 +382,20 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 }
 
+bool G3MWidget::isDuplicatedTouchEvent(const TouchEvent* touchEvent,
+                                       const TouchEvent* previousTouchEvent) const {
+  if (previousTouchEvent == NULL) {
+    return false;
+  }
+
+  if (touchEvent->getType() != Move) {
+    // only Move events will be removed
+    return false;
+  }
+
+  return touchEvent->isEquals(previousTouchEvent);
+}
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
   G3MEventContext ec(IFactory::instance(),
@@ -395,8 +412,17 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _viewMode,
                      getCurrentCamera());
 
+  if (_previousTouchEvent != NULL) {
+    if ( isDuplicatedTouchEvent(touchEvent, _previousTouchEvent) ) {
+      //ILogger::instance()->logInfo("** Discarded duplicated event %s", touchEvent->description().c_str());
+      return;
+    }
+  }
+
   // notify the original event
   notifyTouchEvent(ec, touchEvent);
+  delete _previousTouchEvent;
+  _previousTouchEvent = touchEvent->clone();
 
 
   if (touchEvent->getTouchCount() != 1) {
@@ -425,6 +451,9 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   if (eventType == Up) {
     const TouchEvent* downUpEvent = TouchEvent::create(DownUp, touch->clone());
     notifyTouchEvent(ec, downUpEvent);
+    delete _previousTouchEvent;
+    _previousTouchEvent = downUpEvent->clone();
+
     delete downUpEvent;
     _touchDownUpOnProcess = false;
   }

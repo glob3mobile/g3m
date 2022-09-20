@@ -53,6 +53,8 @@ public:
   }
 #endif
 
+  bool isEquals(const Touch* that) const;
+
 };
 
 
@@ -68,7 +70,7 @@ enum TouchEventType {
 
 class TouchEvent {
 private:
-  const TouchEventType            _eventType;
+  const TouchEventType            _type;
   const std::vector<const Touch*> _touchs;
   const double                    _wheelDelta;
 
@@ -96,7 +98,7 @@ public:
   }
 
   TouchEventType getType() const {
-    return _eventType;
+    return _type;
   }
 
   const Touch* getTouch(int i) const {
@@ -127,6 +129,10 @@ public:
     return description();
   }
 #endif
+
+  const TouchEvent* clone() const;
+
+  bool isEquals(const TouchEvent* that) const;
 
 };
 

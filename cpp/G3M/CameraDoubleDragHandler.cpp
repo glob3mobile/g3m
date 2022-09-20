@@ -78,7 +78,7 @@ bool CameraDoubleDragHandler::onMove(const G3MEventContext* eventContext,
                                      const TouchEvent* touchEvent,
                                      CameraContext* cameraContext) {
   if (cameraContext->getCurrentGesture() != DoubleDrag) {
-    ILogger::instance()->logError("** getCurrentGesture is not DoubleDrag");
+    //ILogger::instance()->logError("** getCurrentGesture is not DoubleDrag");
     return false;
   }
 
@@ -92,14 +92,14 @@ bool CameraDoubleDragHandler::onMove(const G3MEventContext* eventContext,
                                                   _cameraViewPort, _cameraModelViewMatrix);
 
   if (initialRay0.isNan() || initialRay1.isNan() ) {
-    ILogger::instance()->logError("** Invalid rays");
+    //ILogger::instance()->logError("** Invalid rays");
     return false;
   }
 
   MutableMatrix44D matrix = planet->doubleDrag(initialRay0,
                                                initialRay1);
   if (!matrix.isValid()) {
-    ILogger::instance()->logError("** Invalid matrix");
+    //ILogger::instance()->logError("** Invalid matrix");
     return false;
   }
 

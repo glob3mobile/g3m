@@ -147,4 +147,10 @@ public class Vector2F
     return description();
   }
 
+  public final boolean isEquals(Vector2F that)
+  {
+    return ((this._x == that._x) && (this._y == that._y));
+  }
+
+
 }

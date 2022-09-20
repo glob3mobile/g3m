@@ -74,4 +74,9 @@ public class Touch
     return description();
   }
 
+  public final boolean isEquals(Touch that)
+  {
+    return ((this._tapCount == that._tapCount) && this._pos.isEquals(that._pos));
+  }
+
 }
