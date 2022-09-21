@@ -24,9 +24,19 @@ private:
   MutableVector2I  _cameraViewPort;
   MutableMatrix44D _cameraModelViewMatrix;
 
+  bool onDown(const G3MEventContext* eventContext,
+              const TouchEvent* touchEvent,
+              CameraContext* cameraContext);
+  bool onMove(const G3MEventContext* eventContext,
+              const TouchEvent* touchEvent,
+              CameraContext* cameraContext);
+  bool onUp(const G3MEventContext* eventContext,
+            const TouchEvent* touchEvent,
+            CameraContext* cameraContext);
 
 public:
-  CameraDoubleDragHandler() {
+  CameraDoubleDragHandler() :
+  CameraEventHandler("DoubleDrag") {
   }
 
   ~CameraDoubleDragHandler() {
@@ -37,23 +47,15 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  bool onTouchEvent(const G3MEventContext *eventContext,
+  bool onTouchEvent(const G3MEventContext* eventContext,
                     const TouchEvent* touchEvent,
-                    CameraContext *cameraContext);
+                    CameraContext* cameraContext);
 
   void render(const G3MRenderContext* rc,
-              CameraContext *cameraContext);
+              CameraContext* cameraContext) {
 
-  void onDown(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-  void onMove(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-  void onUp(const G3MEventContext *eventContext,
-            const TouchEvent& touchEvent,
-            CameraContext *cameraContext);
-  
+  }
+
 };
 
 #endif

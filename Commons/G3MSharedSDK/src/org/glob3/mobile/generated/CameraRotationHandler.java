@@ -30,73 +30,7 @@ public class CameraRotationHandler extends CameraEventHandler
   private MutableVector3D _tempCameraCenter = new MutableVector3D();
   private MutableVector3D _tempCameraUp = new MutableVector3D();
 
-
-  public CameraRotationHandler()
-  {
-     _pivotPoint = new MutableVector3D(0, 0, 0);
-     _pivotPixel = new MutableVector2F(0, 0);
-  }
-
-  public void dispose()
-  {
-    super.dispose();
-  }
-
-  public final RenderState getRenderState(G3MRenderContext rc)
-  {
-    return RenderState.ready();
-  }
-
-  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-    if (touchEvent.getTouchCount() != 3)
-    {
-      return false;
-    }
-  
-    switch (touchEvent.getType())
-    {
-      case Down:
-        onDown(eventContext, touchEvent, cameraContext);
-        break;
-      case Move:
-        onMove(eventContext, touchEvent, cameraContext);
-        break;
-      case Up:
-        onUp(eventContext, touchEvent, cameraContext);
-      default:
-        break;
-    }
-  
-    return true;
-  }
-
-  public final void render(G3MRenderContext rc, CameraContext cameraContext)
-  {
-    //  // TEMP TO DRAW A POINT WHERE USER PRESS
-    //  if (false) {
-    //    if (cameraContext->getCurrentGesture() == Rotate) {
-    //      GL* gl = rc->getGL();
-    //      float vertices[] = { 0,0,0};
-    //      int indices[] = {0};
-    //      gl->enableVerticesPosition();
-    //      gl->disableTexture2D();
-    //      gl->disableTextures();
-    //      gl->vertexPointer(3, 0, vertices);
-    //      gl->color((float) 1, (float) 1, (float) 0, 1);
-    //      gl->pointSize(10);
-    //      gl->pushMatrix();
-    //      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-    //      gl->multMatrixf(T);
-    //      gl->drawPoints(1, indices);
-    //      gl->popMatrix();
-    //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-    //      //printf ("zoom with initial point = (%f, %f)\n", g._latitude._degrees, g._longitude._degrees);
-    //    }
-    //  }
-  }
-
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     final Camera camera = cameraContext.getNextCamera();
     camera.getLookAtParamsInto(_cameraPosition, _cameraCenter, _cameraUp);
@@ -122,7 +56,7 @@ public class CameraRotationHandler extends CameraEventHandler
     //printf ("down 3 fingers\n");
   }
 
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     final IMathUtils mu = IMathUtils.instance();
   
@@ -173,12 +107,60 @@ public class CameraRotationHandler extends CameraEventHandler
   
   }
 
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
     cameraContext.setCurrentGesture(CameraEventGesture.None);
     _pivotPixel.set(MutableVector2F.zero());
   }
 
+  public CameraRotationHandler()
+  {
+     super("Rotation");
+     _pivotPoint = new MutableVector3D(0, 0, 0);
+     _pivotPixel = new MutableVector2F(0, 0);
 
+  }
+
+  public void dispose()
+  {
+    super.dispose();
+  }
+
+  public final RenderState getRenderState(G3MRenderContext rc)
+  {
+    return RenderState.ready();
+  }
+
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  {
+    if (touchEvent.getTouchCount() != 3)
+    {
+      return false;
+    }
+  
+    switch (touchEvent.getType())
+    {
+      case Down:
+        onDown(eventContext, touchEvent, cameraContext);
+        return true;
+  
+      case Move:
+        onMove(eventContext, touchEvent, cameraContext);
+        return true;
+  
+      case Up:
+        onUp(eventContext, touchEvent, cameraContext);
+        return true;
+  
+      default:
+        return false;
+    }
+  
+  }
+
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
+  {
+
+  }
 
 }

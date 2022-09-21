@@ -57,7 +57,7 @@ public:
 
   TaitBryanAngles getTaitBryanAngles(const CoordinateSystem& global) const;
 
-  bool isEqualsTo(const CoordinateSystem& that) const;
+  bool isEquals(const CoordinateSystem& that) const;
   
   CoordinateSystem applyRotation(const MutableMatrix44D& m) const;
   

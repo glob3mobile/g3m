@@ -20,41 +20,50 @@
 bool CameraMouseWheelHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent,
                                            CameraContext *cameraContext){
-  
-  const Touch* touch = touchEvent->getTouch(0);
-  const double wheelDelta = touch->getMouseWheelDelta();
 
-  if (wheelDelta != 0) {
-    Camera& cam = *cameraContext->getNextCamera();
-    Vector2F pixel = touch->getPos();
-    
-    Vector3D rayDir = cam.pixel2Ray(pixel);
-    const Planet& planet = *eventContext->getPlanet();
-    
-    Vector3D pos0 = cam.getCartesianPosition();
-    Vector3D p1 = planet.closestIntersection(pos0, rayDir);
-    
-    const double heightDelta = cam.getGeodeticHeight() * wheelDelta * _zoomSpeed;
-    
-    if (planet.isFlat()) {
-      Vector3D moveDir = p1.sub(pos0).normalized();
-      cam.move(moveDir, heightDelta);
-    }
-    else {
-      cam.move(pos0.normalized().times(-1), heightDelta);
-      
-      Vector3D p2 = planet.closestIntersection(cam.getCartesianPosition(), cam.pixel2Ray(pixel));
-      Angle angleP1P2 = Vector3D::angleBetween(p1, p2);
-      Vector3D rotAxis = p2.cross(p1);
-      
-      if (!rotAxis.isNan() && !angleP1P2.isNan()) {
-        MutableMatrix44D mat = MutableMatrix44D::createGeneralRotationMatrix(angleP1P2, rotAxis, Vector3D::ZERO);
-        cam.applyTransform(mat);
-      }
-    }
+  if (touchEvent->getType() != MouseWheel) {
+    return false;
+  }
 
-    return true;
+  if (touchEvent->getTouchCount() != 1) {
+    return false;
+  }
+
+  const double wheelDelta = touchEvent->getMouseWheelDelta();
+  if (wheelDelta == 0) {
+    return false;
   }
   
-  return false;
+
+  Camera* camera = cameraContext->getNextCamera();
+
+  const Touch* touch = touchEvent->getTouch(0);
+  const Vector2F pixel = touch->getPos();
+
+  const Vector3D rayDir = camera->pixel2Ray(pixel);
+  const Planet& planet = *eventContext->getPlanet();
+
+  const Vector3D pos0 = camera->getCartesianPosition();
+  const Vector3D p1 = planet.closestIntersection(pos0, rayDir);
+
+  const double heightDelta = camera->getGeodeticHeight() * wheelDelta * _zoomSpeed;
+
+  if (planet.isFlat()) {
+    const Vector3D moveDir = p1.sub(pos0).normalized();
+    camera->move(moveDir, heightDelta);
+  }
+  else {
+    camera->move(pos0.normalized().times(-1), heightDelta);
+
+    const Vector3D p2 = planet.closestIntersection(camera->getCartesianPosition(), camera->pixel2Ray(pixel));
+    const Angle angleP1P2 = Vector3D::angleBetween(p1, p2);
+    const Vector3D rotAxis = p2.cross(p1);
+
+    if (!rotAxis.isNan() && !angleP1P2.isNan()) {
+      const MutableMatrix44D mat = MutableMatrix44D::createGeneralRotationMatrix(angleP1P2, rotAxis, Vector3D::ZERO);
+      camera->applyTransform(mat);
+    }
+  }
+
+  return true;
 }

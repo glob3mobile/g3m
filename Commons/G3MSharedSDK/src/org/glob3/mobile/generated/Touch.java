@@ -20,53 +20,63 @@ package org.glob3.mobile.generated;
 public class Touch
 {
   private final Vector2F _pos;
-  private final Vector2F _prevPos;
   private final byte _tapCount;
-  private final double _wheelDelta;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Touch(Touch other);
 
-  public Touch(Vector2F pos, Vector2F prev, byte tapCount)
-  {
-     this(pos, prev, tapCount, 0.0);
-  }
-  public Touch(Vector2F pos, Vector2F prev)
-  {
-     this(pos, prev, (byte)1, 0.0);
-  }
-  public Touch(Vector2F pos, Vector2F prev, byte tapCount, double wheelDelta)
+  public Touch(Vector2F pos, byte tapCount)
   {
      _pos = pos;
-     _prevPos = prev;
      _tapCount = tapCount;
-     _wheelDelta = wheelDelta;
-
+    if (_pos == null) {
+      throw new RuntimeException("_pos is null");
+    }
   }
 
   public final Touch clone()
   {
-    return new Touch(_pos, _prevPos, _tapCount, _wheelDelta);
+    return new Touch(_pos, _tapCount);
   }
 
   public final Vector2F getPos()
   {
      return _pos;
   }
-  public final Vector2F getPrevPos()
-  {
-     return _prevPos;
-  }
   public final byte getTapCount()
   {
      return _tapCount;
-  }
-  public final double getMouseWheelDelta()
-  {
-     return _wheelDelta;
   }
 
   public void dispose()
   {
   }
+
+  public final String description()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("(Touch pos=");
+  
+    isb.addString((_pos == null) ? "null" : _pos.description());
+  
+    isb.addString(", tapCount=");
+    isb.addInt(_tapCount);
+  
+    isb.addString(")");
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+  @Override
+  public String toString() {
+    return description();
+  }
+
+  public final boolean isEquals(Touch that)
+  {
+    return ((this._tapCount == that._tapCount) && this._pos.isEquals(that._pos));
+  }
+
 }

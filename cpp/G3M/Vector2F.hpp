@@ -85,6 +85,19 @@ public:
 
   const std::string description() const;
 
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
+  bool isEquals(const Vector2F& that) const {
+    return ((this->_x == that._x) &&
+            (this->_y == that._y));
+  }
+
+  
 };
 
 #endif

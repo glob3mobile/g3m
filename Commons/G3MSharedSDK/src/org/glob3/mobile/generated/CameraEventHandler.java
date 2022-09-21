@@ -14,13 +14,22 @@ package org.glob3.mobile.generated;
 //class TouchEvent;
 
 
+
 public abstract class CameraEventHandler
 {
-  protected CameraEventHandler()
+  private final String _name;
+
+  protected CameraEventHandler(String name)
   {
+     _name = name;
 
   }
 
+
+  public final String name()
+  {
+    return _name;
+  }
 
   public void dispose()
   {
@@ -32,11 +41,5 @@ public abstract class CameraEventHandler
   public abstract void render(G3MRenderContext rc, CameraContext cameraContext);
 
   public abstract boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
-
-  public abstract void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
-
-  public abstract void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
-
-  public abstract void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
 
 }

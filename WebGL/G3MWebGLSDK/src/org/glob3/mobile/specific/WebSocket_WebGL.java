@@ -25,8 +25,6 @@ public class WebSocket_WebGL
       jsInitialize(this, getURL()._path, getListener(), getAutodeleteWebSocket(), verboseErrors);
    }
 
-   // @
-
 
    private native void jsInitialize(final WebSocket_WebGL webSocket,
                                     final String path,

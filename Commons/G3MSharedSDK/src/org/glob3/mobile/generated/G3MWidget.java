@@ -119,6 +119,9 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
     if (_frustumPolicy != null)
        _frustumPolicy.dispose();
+  
+    if (_previousTouchEvent != null)
+       _previousTouchEvent.dispose();
   }
 
   public final void render(int width, int height)
@@ -279,55 +282,73 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
     G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode, getCurrentCamera());
   
+    if (_previousTouchEvent != null)
+    {
+      if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent))
+      {
+        //ILogger::instance()->logInfo("** Discarded duplicated event %s", touchEvent->description().c_str());
+        return;
+      }
+    }
+  
     // notify the original event
     notifyTouchEvent(ec, touchEvent);
+    if (_previousTouchEvent != null)
+       _previousTouchEvent.dispose();
+    _previousTouchEvent = touchEvent.clone();
+  
+  
+    if (touchEvent.getTouchCount() != 1)
+    {
+      _touchDownUpOnProcess = false;
+      return;
+    }
+  
   
     // creates DownUp event when a Down is immediately followed by an Up
-    if (touchEvent.getTouchCount() == 1)
+    final Touch touch = touchEvent.getTouch(0);
+    final TouchEventType eventType = touchEvent.getType();
+    if (eventType == TouchEventType.Down)
     {
-      final TouchEventType eventType = touchEvent.getType();
-      if (eventType == TouchEventType.Down)
+      _touchDownUpOnProcess = true;
+      final Vector2F pos = touch.getPos();
+      _touchDownPositionX = pos._x;
+      _touchDownPositionY = pos._y;
+      return;
+    }
+  
+  
+    if (!_touchDownUpOnProcess)
+    {
+      return;
+    }
+  
+  
+    if (eventType == TouchEventType.Up)
+    {
+      final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, touch.clone());
+      notifyTouchEvent(ec, downUpEvent);
+      if (_previousTouchEvent != null)
+         _previousTouchEvent.dispose();
+      _previousTouchEvent = downUpEvent.clone();
+  
+      if (downUpEvent != null)
+         downUpEvent.dispose();
+      _touchDownUpOnProcess = false;
+    }
+    else if (eventType == TouchEventType.Move)
+    {
+      final Vector2F pos = touch.getPos();
+      final double sd = pos.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
+      final float thresholdInPixels = _context.getFactory().getDeviceInfo().getPixelsInMM(1);
+      if (sd > (thresholdInPixels * thresholdInPixels))
       {
-        _clickOnProcess = true;
-        final Vector2F pos = touchEvent.getTouch(0).getPos();
-        _touchDownPositionX = pos._x;
-        _touchDownPositionY = pos._y;
-      }
-      else
-      {
-        if (eventType == TouchEventType.Up)
-        {
-          if (_clickOnProcess)
-          {
-            final Touch touch = touchEvent.getTouch(0);
-            final TouchEvent downUpEvent = TouchEvent.create(TouchEventType.DownUp, touch.clone());
-            notifyTouchEvent(ec, downUpEvent);
-            if (downUpEvent != null)
-               downUpEvent.dispose();
-          }
-        }
-        if (_clickOnProcess)
-        {
-          if (eventType == TouchEventType.Move)
-          {
-            final Vector2F movePosition = touchEvent.getTouch(0).getPos();
-            final double sd = movePosition.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
-            final float thresholdInPixels = _context.getFactory().getDeviceInfo().getPixelsInMM(1);
-            if (sd > (thresholdInPixels * thresholdInPixels))
-            {
-              _clickOnProcess = false;
-            }
-          }
-          else
-          {
-            _clickOnProcess = false;
-          }
-        }
+        _touchDownUpOnProcess = false;
       }
     }
     else
     {
-      _clickOnProcess = false;
+      _touchDownUpOnProcess = false;
     }
   
   }
@@ -827,7 +848,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   private boolean _initializationTaskWasRun;
   private boolean _initializationTaskReady;
 
-  private boolean _clickOnProcess;
+  private boolean _touchDownUpOnProcess;
 
   private GPUProgramManager _gpuProgramManager;
 
@@ -855,6 +876,8 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   private Camera _leftEyeCam;
   private Camera _rightEyeCam;
 
+
+  private TouchEvent _previousTouchEvent;
 
   private G3MWidget(GL gl, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, ICameraActivityListener cameraActivityListener, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, ProtoRenderer busyRenderer, ErrorRenderer errorRenderer, Renderer hudRenderer, NearFrustumRenderer nearFrustumRenderer, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GInitializationTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks, GPUProgramManager gpuProgramManager, SceneLighting sceneLighting, InitialCameraPositionProvider initialCameraPositionProvider, InfoDisplay infoDisplay, ViewMode viewMode, FrustumPolicy frustumPolicy)
   {
@@ -896,7 +919,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
      _paused = false;
      _initializationTaskWasRun = false;
      _initializationTaskReady = true;
-     _clickOnProcess = false;
+     _touchDownUpOnProcess = false;
      _gpuProgramManager = gpuProgramManager;
      _sceneLighting = sceneLighting;
      _rootState = null;
@@ -911,6 +934,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
      _leftEyeCam = null;
      _rightEyeCam = null;
      _auxCam = null;
+     _previousTouchEvent = null;
     _effectsScheduler.initialize(_context);
     _cameraRenderer.initialize(_context);
     _mainRenderer.initialize(_context);
@@ -1230,6 +1254,22 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
     //Restoring central camera
     _currentCamera.copyFrom(_auxCam, true);
+  }
+
+  private boolean isDuplicatedTouchEvent(TouchEvent touchEvent, TouchEvent previousTouchEvent)
+  {
+    if (previousTouchEvent == null)
+    {
+      return false;
+    }
+  
+    if (touchEvent.getType() != TouchEventType.Move)
+    {
+      // only Move events will be removed
+      return false;
+    }
+  
+    return touchEvent.isEquals(previousTouchEvent);
   }
 
 }

@@ -2,44 +2,21 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.Camera;
-import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.G3MContext;
-import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GL;
-import org.glob3.mobile.generated.Geodetic3D;
-import org.glob3.mobile.generated.IDeviceAttitude;
-import org.glob3.mobile.generated.IDeviceLocation;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IJSONParser;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.IStringUtils;
-import org.glob3.mobile.generated.ITextUtils;
-import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.generated.TimeInterval;
-import org.glob3.mobile.generated.Touch;
-import org.glob3.mobile.generated.TouchEvent;
-import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2F;
-import org.glob3.mobile.generated.WidgetUserData;
 
-import android.annotation.SuppressLint;
-import android.opengl.GLSurfaceView;
-import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnDoubleTapListener;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.MotionEvent;
+import org.glob3.mobile.generated.*;
+
+import android.annotation.*;
+import android.opengl.*;
+import android.util.*;
+import android.view.*;
+import android.view.GestureDetector.*;
 
 
 public final class G3MWidget_Android
-         extends
-            GLSurfaceView
-         implements
-            OnGestureListener {
+                                     extends
+                                        GLSurfaceView
+                                     implements
+                                        OnGestureListener {
 
    private G3MWidget         _g3mWidget;
    private final ES2Renderer _es2renderer;
@@ -59,12 +36,12 @@ public final class G3MWidget_Android
    }
 
 
-   public final void checkOpenGLThread() {
+   public void checkOpenGLThread() {
       if (_openGLThread != null) {
          final Thread currentThread = Thread.currentThread();
          if (currentThread != _openGLThread) {
-            throw new RuntimeException("OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread
-                                       + ", CurrentThread=" + currentThread + ")");
+            final String message = "OpenGL code executed from a Non-OpenGL thread.  (OpenGLThread=" + _openGLThread + ", CurrentThread=" + currentThread + ")";
+            throw new RuntimeException(message);
          }
       }
    }
@@ -104,65 +81,64 @@ public final class G3MWidget_Android
       final OnDoubleTapListener doubleTapListener;
       if (!isInEditMode()) { // needed to allow visual edition of this widget
          //Double Tap Listener
-         _gestureDetector = new GestureDetector(context, this);
+         _gestureDetector  = new GestureDetector(context, this);
          doubleTapListener = new OnDoubleTapListener() {
-            @Override
-            public boolean onSingleTapConfirmed(final MotionEvent e) {
-               return false;
-            }
+                              @Override
+                              public boolean onSingleTapConfirmed(final MotionEvent e) {
+                                 return false;
+                              }
 
 
-            @Override
-            public boolean onDoubleTapEvent(final MotionEvent event) {
-               final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
+                              @Override
+                              public boolean onDoubleTapEvent(final MotionEvent event) {
+                                 final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
 
-               queueEvent(new Runnable() {
-                  @Override
-                  public void run() {
-                     _g3mWidget.onTouchEvent(te);
-                  }
-               });
+                                 queueEvent(new Runnable() {
+                                                      @Override
+                                                      public void run() {
+                                                         _g3mWidget.onTouchEvent(te);
+                                                      }
+                                                   });
 
-               return true;
-            }
+                                 return true;
+                              }
 
 
-            @Override
-            public boolean onDoubleTap(final MotionEvent event) {
-               final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
+                              @Override
+                              public boolean onDoubleTap(final MotionEvent event) {
+                                 final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
 
-               queueEvent(new Runnable() {
-                  @Override
-                  public void run() {
-                     _g3mWidget.onTouchEvent(te);
-                  }
-               });
+                                 queueEvent(new Runnable() {
+                                                      @Override
+                                                      public void run() {
+                                                         _g3mWidget.onTouchEvent(te);
+                                                      }
+                                                   });
 
-               return true;
-            }
-         };
+                                 return true;
+                              }
+                           };
          _gestureDetector.setOnDoubleTapListener(doubleTapListener);
       }
       else {
-         _gestureDetector = null;
+         _gestureDetector  = null;
          doubleTapListener = null;
       }
    }
 
 
    private void initSingletons() {
-      final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
-      final IFactory factory = new Factory_Android(getContext());
-      final IStringUtils stringUtils = new StringUtils_Android();
-      final IStringBuilder stringBuilder = new StringBuilder_Android(IStringBuilder.DEFAULT_FLOAT_PRECISION);
-      final IMathUtils mathUtils = new MathUtils_Android();
-      final IJSONParser jsonParser = new JSONParser_Android();
-      final ITextUtils textUtils = new TextUtils_Android();
-      final IDeviceAttitude devAttitude = new DeviceAttitude_Android(getContext());
-      final IDeviceLocation devLoc = new DeviceLocation_Android(getContext(), (long) 500.0, 0.0f);
+      final ILogger         logger        = new Logger_Android(LogLevel.ErrorLevel);
+      final IFactory        factory       = new Factory_Android(getContext());
+      final IStringUtils    stringUtils   = new StringUtils_Android();
+      final IStringBuilder  stringBuilder = new StringBuilder_Android(IStringBuilder.DEFAULT_FLOAT_PRECISION);
+      final IMathUtils      mathUtils     = new MathUtils_Android();
+      final IJSONParser     jsonParser    = new JSONParser_Android();
+      final ITextUtils      textUtils     = new TextUtils_Android();
+      final IDeviceAttitude devAttitude   = new DeviceAttitude_Android(getContext());
+      final IDeviceLocation devLoc        = new DeviceLocation_Android(getContext(), (long) 500.0, 0.0f);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude,
-               devLoc);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
    }
 
 
@@ -221,7 +197,8 @@ public final class G3MWidget_Android
    public void onLongPress(final MotionEvent e) {
       final MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
       e.getPointerCoords(0, pc);
-      final Touch t = new Touch(new Vector2F(pc.x, pc.y), Vector2F.zero());
+
+      final Touch      t  = new Touch(new Vector2F(pc.x, pc.y), (byte) 1);
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {

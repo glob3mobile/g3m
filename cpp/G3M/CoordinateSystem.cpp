@@ -234,7 +234,7 @@ CoordinateSystem CoordinateSystem::applyTaitBryanAngles(const Angle& heading,
   return CoordinateSystem(uppp, vppp, wppp, _origin);
 }
 
-bool CoordinateSystem::isEqualsTo(const CoordinateSystem& that) const {
+bool CoordinateSystem::isEquals(const CoordinateSystem& that) const {
   return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
 }
 

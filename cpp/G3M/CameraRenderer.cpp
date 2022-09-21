@@ -53,9 +53,19 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
     for (size_t i = 0; i < _handlersSize; i++) {
       CameraEventHandler* handler = _handlers[i];
       if (handler->onTouchEvent(ec, touchEvent, _cameraContext)) {
+        if (_verboseHandlers) {
+          ILogger::instance()->logInfo("== %s handled event %s",
+                                       handler->name().c_str(),
+                                       touchEvent->description().c_str());
+        }
         return true;
       }
     }
+  }
+
+  if (_verboseHandlers) {
+    ILogger::instance()->logInfo("== NOT HANDLED event %s",
+                                 touchEvent->description().c_str());
   }
 
   // if no handler processed the event, return not-handled

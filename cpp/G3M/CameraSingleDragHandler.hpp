@@ -27,6 +27,21 @@ private:
   MutableMatrix44D _cameraModelViewMatrix;
   MutableVector3D  _finalRay;
 
+  Vector2F* _previousEventPosition0;
+  Vector2F* _previousEventPosition1;
+
+  bool onDown(const G3MEventContext* eventContext,
+              const TouchEvent* touchEvent,
+              CameraContext* cameraContext);
+  bool onMove(const G3MEventContext* eventContext,
+              const TouchEvent* touchEvent,
+              CameraContext* cameraContext);
+  bool onUp(const G3MEventContext* eventContext,
+            const TouchEvent* touchEvent,
+            CameraContext* cameraContext);
+
+  const Vector2F* getPreviousEventPosition(const Vector2F& currentPosition) const;
+
 public:
   CameraSingleDragHandler(bool useInertia);
 
@@ -34,22 +49,15 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  bool onTouchEvent(const G3MEventContext *eventContext,
+  bool onTouchEvent(const G3MEventContext* eventContext,
                     const TouchEvent* touchEvent,
-                    CameraContext *cameraContext);
+                    CameraContext* cameraContext);
 
   void render(const G3MRenderContext* rc,
-              CameraContext *cameraContext);
+              CameraContext* cameraContext) {
+    
+  }
 
-  void onDown(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-  void onMove(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-  void onUp(const G3MEventContext *eventContext,
-            const TouchEvent& touchEvent,
-            CameraContext *cameraContext);
 };
 
 

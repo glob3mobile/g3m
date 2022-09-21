@@ -14,14 +14,25 @@ class CameraContext;
 class G3MEventContext;
 class TouchEvent;
 
+#include <string>
+
 
 class CameraEventHandler {
+private:
+  const std::string _name;
+
 protected:
-  CameraEventHandler() {
+  CameraEventHandler(const std::string& name) :
+  _name(name)
+  {
 
   }
 
 public:
+
+  const std::string name() const {
+    return _name;
+  }
 
   virtual ~CameraEventHandler() {
 
@@ -36,18 +47,6 @@ public:
                             const TouchEvent* touchEvent,
                             CameraContext *cameraContext) = 0;
 
-  virtual void onDown(const G3MEventContext *eventContext,
-                      const TouchEvent& touchEvent,
-                      CameraContext *cameraContext) = 0;
-
-  virtual void onMove(const G3MEventContext *eventContext,
-                      const TouchEvent& touchEvent,
-                      CameraContext *cameraContext) = 0;
-
-  virtual void onUp(const G3MEventContext *eventContext,
-                    const TouchEvent& touchEvent,
-                    CameraContext *cameraContext) = 0;
-  
 };
 
 #endif

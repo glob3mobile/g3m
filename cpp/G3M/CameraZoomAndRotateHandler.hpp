@@ -37,9 +37,20 @@ private:
 
   void rotate();
 
+  void onDown(const G3MEventContext *eventContext,
+              const TouchEvent& touchEvent,
+              CameraContext *cameraContext);
+  void onMove(const G3MEventContext *eventContext,
+              const TouchEvent& touchEvent,
+              CameraContext *cameraContext);
+  void onUp(const G3MEventContext *eventContext,
+            const TouchEvent& touchEvent,
+            CameraContext *cameraContext);
 
 public:
-  CameraZoomAndRotateHandler() {
+  CameraZoomAndRotateHandler() :
+  CameraEventHandler("ZoomAndRotate")
+  {
   }
 
   ~CameraZoomAndRotateHandler() {
@@ -55,19 +66,10 @@ public:
                     CameraContext *cameraContext);
 
   void render(const G3MRenderContext* rc,
-              CameraContext *cameraContext);
-
-  void onDown(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-  void onMove(const G3MEventContext *eventContext,
-              const TouchEvent& touchEvent,
-              CameraContext *cameraContext);
-  void onUp(const G3MEventContext *eventContext,
-            const TouchEvent& touchEvent,
-            CameraContext *cameraContext);
+              CameraContext *cameraContext) {
+    
+  }
 
 };
-
 
 #endif

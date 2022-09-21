@@ -317,7 +317,7 @@ private:
   bool _initializationTaskWasRun;
   bool _initializationTaskReady;
 
-  bool _clickOnProcess;
+  bool _touchDownUpOnProcess;
 
   GPUProgramManager* _gpuProgramManager;
 
@@ -345,6 +345,12 @@ private:
   Camera* _leftEyeCam;
   Camera* _rightEyeCam;
 
+
+#ifdef C_CODE
+  const TouchEvent* _previousTouchEvent;
+#else
+  TouchEvent* _previousTouchEvent;
+#endif
 
   G3MWidget(GL*                                  gl,
             IStorage*                            storage,
@@ -384,6 +390,9 @@ private:
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);
+
+  bool isDuplicatedTouchEvent(const TouchEvent* touchEvent,
+                              const TouchEvent* previousTouchEvent) const;
   
 };
 

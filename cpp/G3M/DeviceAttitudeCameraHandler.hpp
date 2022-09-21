@@ -44,7 +44,8 @@ private:
 
   ILocationModifier* _locationModifier;
 
-  void setPositionOnNextCamera(Camera* nextCamera, Geodetic3D& pos) const;
+  void setPositionOnNextCamera(Camera* nextCamera,
+                               const Geodetic3D& pos) const;
 
 public:
 
@@ -55,30 +56,14 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  void render(const G3MRenderContext* rc, CameraContext *cameraContext);
+  void render(const G3MRenderContext* rc,
+              CameraContext *cameraContext);
 
-  virtual bool onTouchEvent(const G3MEventContext *eventContext,
-                            const TouchEvent* touchEvent,
-                            CameraContext *cameraContext) { return false;}
-
-
-  virtual void onDown(const G3MEventContext *eventContext,
-                      const TouchEvent& touchEvent,
-                      CameraContext *cameraContext) {}
-
-  virtual void onMove(const G3MEventContext *eventContext,
-                      const TouchEvent& touchEvent,
-                      CameraContext *cameraContext) {}
-
-  virtual void onUp(const G3MEventContext *eventContext,
-                    const TouchEvent& touchEvent,
-                    CameraContext *cameraContext) {}
-
-  void setDebugMeshRenderer(MeshRenderer* meshRenderer) {}
-
-  void onMouseWheel(const G3MEventContext *eventContext,
-                    const TouchEvent& touchEvent,
-                    CameraContext *cameraContext) {}
+  bool onTouchEvent(const G3MEventContext *eventContext,
+                    const TouchEvent* touchEvent,
+                    CameraContext *cameraContext) {
+    return false;
+  }
 
 };
 

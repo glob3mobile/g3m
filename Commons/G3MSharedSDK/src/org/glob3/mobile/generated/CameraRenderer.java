@@ -24,6 +24,8 @@ package org.glob3.mobile.generated;
 
 public class CameraRenderer implements ProtoRenderer
 {
+  private final boolean _verboseHandlers;
+
   private boolean _processTouchEvents;
 
   private java.util.ArrayList<CameraEventHandler> _handlers = new java.util.ArrayList<CameraEventHandler>();
@@ -33,8 +35,9 @@ public class CameraRenderer implements ProtoRenderer
 
   private CameraContext _cameraContext;
 
-  public CameraRenderer()
+  public CameraRenderer(boolean verboseHandlers)
   {
+     _verboseHandlers = verboseHandlers;
      _cameraContext = null;
      _processTouchEvents = true;
      _handlersSize = 0;
@@ -95,9 +98,18 @@ public class CameraRenderer implements ProtoRenderer
         CameraEventHandler handler = _handlers.get(i);
         if (handler.onTouchEvent(ec, touchEvent, _cameraContext))
         {
+          if (_verboseHandlers)
+          {
+            ILogger.instance().logInfo("== %s handled event %s", handler.name(), touchEvent.description());
+          }
           return true;
         }
       }
+    }
+  
+    if (_verboseHandlers)
+    {
+      ILogger.instance().logInfo("== NOT HANDLED event %s", touchEvent.description());
     }
   
     // if no handler processed the event, return not-handled

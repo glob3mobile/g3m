@@ -2,36 +2,37 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IStringBuilder;
 
-import com.google.gwt.i18n.client.NumberFormat;
+import org.glob3.mobile.generated.*;
+
+import com.google.gwt.i18n.client.*;
 
 
 public final class StringBuilder_WebGL
-         extends
-            IStringBuilder {
+                                       extends
+                                          IStringBuilder {
 
    private final StringBuilder _builder = new StringBuilder();
    private NumberFormat        _nf;
 
 
    public StringBuilder_WebGL(final int floatPrecision) {
-      createFormatter(floatPrecision);
+      _nf = createNumberFormat(floatPrecision);
    }
 
 
-   private void createFormatter(final int floatPrecision) {
-      _nf = NumberFormat.getFormat(createPattern(floatPrecision));
+   private static NumberFormat createNumberFormat(final int floatPrecision) {
+      return NumberFormat.getFormat(createPattern(floatPrecision));
    }
 
 
    private static String createPattern(final int floatPrecision) {
       final StringBuilder numberPattern = new StringBuilder((floatPrecision <= 0) ? "" : ".");
       for (int i = 0; i < floatPrecision; i++) {
-         numberPattern.append('0');
+         //numberPattern.append('0');
+         numberPattern.append('#');
       }
-      final String pattern = numberPattern.toString();
-      return pattern;
+      return numberPattern.toString();
    }
 
 
@@ -43,21 +44,21 @@ public final class StringBuilder_WebGL
 
    @Override
    public IStringBuilder addDouble(final double d) {
-      _builder.append(_nf.format(d));
+      _builder.append(Double.isNaN(d) ? "NAND" : _nf.format(d));
       return this;
    }
 
 
    @Override
    public IStringBuilder addFloat(final float f) {
-      _builder.append(_nf.format(f));
+      _builder.append(Float.isNaN(f) ? "NANF" : _nf.format(f));
       return this;
    }
 
 
    @Override
    public IStringBuilder addString(final String s) {
-      _builder.append(s);
+      _builder.append((s == null) ? "NULL" : s);
       return this;
    }
 
@@ -97,7 +98,7 @@ public final class StringBuilder_WebGL
 
    @Override
    public IStringBuilder clear(final int floatPrecision) {
-      createFormatter(floatPrecision);
+      _nf = createNumberFormat(floatPrecision);
       _builder.setLength(0);
       return this;
    }

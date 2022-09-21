@@ -41,8 +41,8 @@ final class MotionEventProcessor {
 
    private final G3MWidget_WebGL _widget;
    private final CanvasElement   _canvasElement;
-   private boolean               _mouseDown             = false;
-   private Vector2F              _previousMousePosition = null;
+
+   private boolean _mouseDown = false;
 
 
    MotionEventProcessor(final G3MWidget_WebGL widget,
@@ -108,35 +108,26 @@ final class MotionEventProcessor {
    }
 
 
-   private Map<Integer, Vector2F> _previousTouchesPositions = new HashMap<>();
-
-
    private ArrayList<Touch> createTouches(final JsArray<com.google.gwt.dom.client.Touch> jsTouches) {
-      final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<>();
+      final float devicePixelRatio = _widget.getDevicePixelRatio();
+
+      // final Map<Integer, Vector2F> currentTouchesPositions = new HashMap<>();
 
       final int              jsTouchesSize = jsTouches.length();
       final ArrayList<Touch> touches       = new ArrayList<>(jsTouchesSize);
       for (int i = 0; i < jsTouchesSize; i++) {
          final com.google.gwt.dom.client.Touch jsTouch = jsTouches.get(i);
 
-         final Vector2F currentTouchPosition = new Vector2F( //
-               jsTouch.getRelativeX(_canvasElement) * _widget.getDevicePixelRatio(), //
-               jsTouch.getRelativeY(_canvasElement) * _widget.getDevicePixelRatio() //
+         final Vector2F position = new Vector2F( //
+               jsTouch.getRelativeX(_canvasElement) * devicePixelRatio, //
+               jsTouch.getRelativeY(_canvasElement) * devicePixelRatio //
          );
 
-         final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
+         // final Integer touchId = Integer.valueOf(jsTouch.getIdentifier());
+         // currentTouchesPositions.put(touchId, currentTouchPosition);
 
-         currentTouchesPositions.put(touchId, currentTouchPosition);
-
-         Vector2F previousTouchPosition = _previousTouchesPositions.get(touchId);
-         if (previousTouchPosition == null) {
-            previousTouchPosition = currentTouchPosition;
-         }
-
-         touches.add(new Touch(currentTouchPosition, previousTouchPosition));
+         touches.add(new Touch(position, (byte) 1));
       }
-
-      _previousTouchesPositions = currentTouchesPositions;
 
       return touches;
    }
@@ -146,22 +137,39 @@ final class MotionEventProcessor {
       final float devicePixelRatio = _widget.getDevicePixelRatio();
       return new Vector2F( //
             (event.getClientX() - _canvasElement.getAbsoluteLeft()) * devicePixelRatio, //
-            (event.getClientY() - _canvasElement.getAbsoluteTop()) * devicePixelRatio);
+            (event.getClientY() - _canvasElement.getAbsoluteTop()) * devicePixelRatio //
+      );
+      //      return new Vector2F( //
+      //            getRelativeX(event, _canvasElement) * devicePixelRatio, //
+      //            getRelativeY(event, _canvasElement) * devicePixelRatio //
+      //      );
    }
 
 
+   //   private static int getRelativeX(final Event event,
+   //                                   final Element target) {
+   //      return (event.getClientX() - target.getAbsoluteLeft()) + target.getScrollLeft() + target.getOwnerDocument().getScrollLeft();
+   //   }
+   //
+   //
+   //   private static int getRelativeY(final Event event,
+   //                                   final Element target) {
+   //      return (event.getClientY() - target.getAbsoluteTop()) + target.getScrollTop() + target.getOwnerDocument().getScrollTop();
+   //   }
+
+
    private TouchEvent processTouchStart(final Event event) {
-      return TouchEvent.create(TouchEventType.Down, createTouches(event.getTouches()));
+      return createTouchEvent(TouchEventType.Down, createTouches(event.getTouches()), 0 /* wheelDelta */);
    }
 
 
    private TouchEvent processTouchMove(final Event event) {
-      return TouchEvent.create(TouchEventType.Move, createTouches(event.getTouches()));
+      return createTouchEvent(TouchEventType.Move, createTouches(event.getTouches()), 0 /* wheelDelta */);
    }
 
 
    private TouchEvent processTouchEnd(final Event event) {
-      return TouchEvent.create(TouchEventType.Up, createTouches(event.getChangedTouches()));
+      return createTouchEvent(TouchEventType.Up, createTouches(event.getChangedTouches()), 0 /* wheelDelta */);
    }
 
 
@@ -169,7 +177,6 @@ final class MotionEventProcessor {
     * @param event
     */
    private TouchEvent processTouchCancel(final Event event) {
-      _previousTouchesPositions.clear();
       return null;
    }
 
@@ -192,18 +199,17 @@ final class MotionEventProcessor {
       final Vector2F         currentMousePosition = createPosition(event);
       final ArrayList<Touch> touches              = new ArrayList<>();
 
+      final byte tapCount = (byte) 1;
       if (event.getShiftKey()) {
-         touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
-         touches.add(new Touch(currentMousePosition, _previousMousePosition));
-         touches.add(new Touch(currentMousePosition.add(DELTA), _previousMousePosition.add(DELTA)));
+         touches.add(new Touch(currentMousePosition.sub(DELTA), tapCount));
+         touches.add(new Touch(currentMousePosition, tapCount));
+         touches.add(new Touch(currentMousePosition.add(DELTA), tapCount));
       }
       else {
-         touches.add(new Touch(currentMousePosition, _previousMousePosition));
+         touches.add(new Touch(currentMousePosition, tapCount));
       }
 
-      _previousMousePosition = currentMousePosition;
-
-      return TouchEvent.create(TouchEventType.Move, touches);
+      return createTouchEvent(TouchEventType.Move, touches, 0 /* wheelDelta */);
    }
 
 
@@ -212,18 +218,18 @@ final class MotionEventProcessor {
       final ArrayList<Touch> touches              = new ArrayList<>();
 
       _mouseDown = true;
+
+      final byte tapCount = (byte) 1;
       if (event.getShiftKey()) {
-         touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
-         touches.add(new Touch(currentMousePosition, _previousMousePosition));
-         touches.add(new Touch(currentMousePosition.add(DELTA), _previousMousePosition.add(DELTA)));
+         touches.add(new Touch(currentMousePosition.sub(DELTA), tapCount));
+         touches.add(new Touch(currentMousePosition, tapCount));
+         touches.add(new Touch(currentMousePosition.add(DELTA), tapCount));
       }
       else {
-         touches.add(new Touch(currentMousePosition, _previousMousePosition));
+         touches.add(new Touch(currentMousePosition, tapCount));
       }
 
-      _previousMousePosition = currentMousePosition;
-
-      return TouchEvent.create(TouchEventType.Down, touches);
+      return createTouchEvent(TouchEventType.Down, touches, 0 /* wheelDelta */);
    }
 
 
@@ -231,29 +237,31 @@ final class MotionEventProcessor {
       final Vector2F         currentMousePosition = createPosition(event);
       final ArrayList<Touch> touches              = new ArrayList<>();
       final TouchEventType   touchType;
+
       _mouseDown = false;
+
+      final byte tapCount = (byte) 1;
       if (event.getShiftKey()) {
-         touches.add(new Touch(currentMousePosition.sub(DELTA), _previousMousePosition.sub(DELTA)));
-         touches.add(new Touch(currentMousePosition, _previousMousePosition));
-         touches.add(new Touch(currentMousePosition.add(DELTA), _previousMousePosition.add(DELTA)));
+         touches.add(new Touch(currentMousePosition.sub(DELTA), tapCount));
+         touches.add(new Touch(currentMousePosition, tapCount));
+         touches.add(new Touch(currentMousePosition.add(DELTA), tapCount));
 
          touchType = TouchEventType.Up;
       }
       else {
-         touches.add(new Touch(currentMousePosition, _previousMousePosition));
+         touches.add(new Touch(currentMousePosition, tapCount));
          final boolean isSecondaryButton = event.getCtrlKey() && (event.getButton() == NativeEvent.BUTTON_LEFT);
          touchType = isSecondaryButton ? TouchEventType.LongPress : TouchEventType.Up;
       }
-      _previousMousePosition = currentMousePosition;
 
-      return TouchEvent.create(touchType, touches);
+      return createTouchEvent(touchType, touches, 0 /* wheelDelta */);
    }
 
 
    private TouchEvent processDoubleClick(final Event event) {
       final Vector2F currentMousePosition = createPosition(event);
-      final Touch    touch                = new Touch(currentMousePosition, currentMousePosition, (byte) 2);
-      return TouchEvent.create(TouchEventType.Down, touch);
+      final Touch    touch                = new Touch(currentMousePosition, (byte) 2);
+      return createTouchEvent(TouchEventType.Down, touch, 0 /* wheelDelta */);
    }
 
 
@@ -261,10 +269,11 @@ final class MotionEventProcessor {
       _mouseDown = false;
 
       final Vector2F currentMousePosition = createPosition(event);
-      final Touch    touch                = new Touch(currentMousePosition, _previousMousePosition);
-      _previousMousePosition = currentMousePosition;
+      final byte     tapCount             = (byte) 1;
 
-      return TouchEvent.create(TouchEventType.LongPress, touch);
+      final Touch touch = new Touch(currentMousePosition, tapCount);
+
+      return createTouchEvent(TouchEventType.LongPress, touch, 0 /* wheelDelta */);
    }
 
 
@@ -273,16 +282,39 @@ final class MotionEventProcessor {
       final int      delta    = jsGetMouseWheelDelta(event);
 
       final ArrayList<Touch> touches = new ArrayList<>(2);
-      touches.add(new Touch(position, position, (byte) 0, delta));
-      _previousMousePosition = new Vector2F(position);
-      return TouchEvent.create(TouchEventType.Down, touches);
+      touches.add(new Touch(position, (byte) 0));
+      return createTouchEvent(TouchEventType.MouseWheel, touches, delta);
    }
 
 
-   private native int jsGetMouseWheelDelta(Event event) /*-{
+   private native int jsGetMouseWheelDelta(final Event event) /*-{
 		var e = event;
 		var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
 		return delta;
    }-*/;
+
+
+   private static TouchEvent createTouchEvent(final TouchEventType type,
+                                              final java.util.ArrayList<Touch> touchs,
+                                              final double wheelDelta) {
+
+      if ((touchs == null) || touchs.isEmpty()) {
+         throw new RuntimeException("Invalid touches for " + type);
+      }
+
+      final TouchEvent result = TouchEvent.create(type, touchs, wheelDelta);
+      // ILogger.instance().logInfo("createTouchEvent(1): " + result.description());
+      return result;
+   }
+
+
+   private static TouchEvent createTouchEvent(final TouchEventType type,
+                                              final Touch touch,
+                                              final double wheelDelta) {
+      final TouchEvent result = TouchEvent.create(type, touch, wheelDelta);
+      // ILogger.instance().logInfo("createTouchEvent(2): " + result.description());
+      return result;
+   }
+
 
 }

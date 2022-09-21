@@ -199,7 +199,7 @@ public class CoordinateSystem
     return new TaitBryanAngles(heading, pitch, roll);
   }
 
-  public final boolean isEqualsTo(CoordinateSystem that)
+  public final boolean isEquals(CoordinateSystem that)
   {
     return _x.isEquals(that._x) && _y.isEquals(that._y) && _z.isEquals(that._z);
   }

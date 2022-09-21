@@ -71,7 +71,8 @@ _sceneLighting(NULL),
 _shownSector(NULL),
 _infoDisplay(NULL),
 _atmosphere(false),
-_frustumPolicy(NULL)
+_frustumPolicy(NULL),
+_verboseCameraHandlers(false)
 {
 }
 
@@ -831,18 +832,25 @@ std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() 
   return cameraConstraints;
 }
 
+void IG3MBuilder::setVerboseCameraHandlers(const bool verboseCameraHandlers) {
+  _verboseCameraHandlers = verboseCameraHandlers;
+}
+
 CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
-  CameraRenderer* cameraRenderer = new CameraRenderer();
-  const bool useInertia = true;
+  CameraRenderer* cameraRenderer = new CameraRenderer(_verboseCameraHandlers);
+  IG3MBuilder::addDefaultCameraHandlers(cameraRenderer);
+  return cameraRenderer;
+}
+
+void IG3MBuilder::addDefaultCameraHandlers(CameraRenderer* cameraRenderer,
+                                           const bool useInertia,
+                                           const double mouseWheelZoomSpeed) {
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   cameraRenderer->addHandler(new CameraDoubleDragHandler());
   //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
-  const double zoomSpeed = 0.05;
-  cameraRenderer->addHandler(new CameraMouseWheelHandler(zoomSpeed));
-
-  return cameraRenderer;
+  cameraRenderer->addHandler(new CameraMouseWheelHandler(mouseWheelZoomSpeed));
 }
 
 std::vector<PeriodicalTask*>* IG3MBuilder::createDefaultPeriodicalTasks() {

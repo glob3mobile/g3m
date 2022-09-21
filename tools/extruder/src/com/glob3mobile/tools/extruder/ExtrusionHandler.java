@@ -2,10 +2,10 @@
 
 package com.glob3mobile.tools.extruder;
 
-import java.util.List;
 
-import com.glob3mobile.tools.mesh.G3MeshCollection;
-import com.glob3mobile.tools.mesh.G3MeshMaterial;
+import java.util.*;
+
+import com.glob3mobile.tools.mesh.*;
 
 
 public interface ExtrusionHandler<T1, T2> {

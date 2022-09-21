@@ -28,7 +28,7 @@ class WidgetUserData;
 @private
   BOOL _displayLinkSupported;
 
-  TouchEvent* _lastTouchEvent;
+  const TouchEvent* _lastTouchEvent;
 
   void* _widgetVP;
 }

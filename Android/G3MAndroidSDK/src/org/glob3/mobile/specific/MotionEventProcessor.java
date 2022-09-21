@@ -16,98 +16,80 @@ public final class MotionEventProcessor {
    //Stores pointer positions, id and event type
    private static class EventProcessed {
       // LAST EVENT PROCESSED
-      private ArrayList<Integer> _pointersID = new ArrayList<>();
-      private ArrayList<Touch>   _touchs     = new ArrayList<>();
-      private TouchEventType     _type       = TouchEventType.Down;
+      // private ArrayList<Integer> _pointersID = new ArrayList<>();
+      private final ArrayList<Touch> _touchs;
+      private TouchEventType         _type;
 
 
-      @SuppressWarnings("unchecked")
+      private EventProcessed(final ArrayList<Touch> touchs,
+                             final TouchEventType type) {
+         _touchs = touchs;
+         _type   = type;
+      }
+
+
+      private EventProcessed() {
+         _touchs = new ArrayList<>();
+         _type   = TouchEventType.Down;
+      }
+
+
       @Override
       protected EventProcessed clone() {
-         final EventProcessed e = new EventProcessed();
-         e._pointersID = (ArrayList<Integer>) _pointersID.clone();
-         e._touchs     = (ArrayList<Touch>) _touchs.clone();
-         e._type       = _type;
-         return e;
+         return new EventProcessed(new ArrayList<>(_touchs), _type);
       }
 
 
       public void clear() {
-         _pointersID.clear();
+         // _pointersID.clear();
          _touchs.clear();
       }
 
    }
 
 
-   private EventProcessed       _prevLastEvent = new EventProcessed();
-   private final EventProcessed _lastEvent     = new EventProcessed();
+   private final EventProcessed _lastEvent = new EventProcessed();
 
 
    public TouchEvent processEvent(final MotionEvent event) {
 
       // SAVING LAST EVENT TO CREATE A NEW ONE
-      final EventProcessed auxEvent = _lastEvent.clone();
       _lastEvent.clear();
 
       for (int i = 0; i < event.getPointerCount(); i++) {
+         //         final int pointerID = event.getPointerId(i);
 
-         final int           pointerID = event.getPointerId(i);
-         final PointerCoords pc        = new PointerCoords();
+         final PointerCoords pc = new PointerCoords();
          event.getPointerCoords(i, pc);
-         // TOUCH EVENT
          final Vector2F pos = new Vector2F(pc.x, pc.y);
 
-         Vector2F prevPos = null;
-         if (event.getAction() != MotionEvent.ACTION_UP) {
-            if (auxEvent._pointersID.contains(pointerID)) {
-               final Touch lastT = auxEvent._touchs.get(auxEvent._pointersID.indexOf(pointerID));
-               prevPos = new Vector2F(lastT.getPos()._x, lastT.getPos()._y);
-            }
-            else {
-               prevPos = Vector2F.zero();
-            }
-         }
-         else {
-
-            if (_prevLastEvent._pointersID.contains(pointerID)) {
-               final Touch lastT = _prevLastEvent._touchs.get(_prevLastEvent._pointersID.indexOf(pointerID));
-               prevPos = new Vector2F(lastT.getPos()._x, lastT.getPos()._y);
-            }
-            else {
-               prevPos = Vector2F.zero();
-            }
-
-         }
-
-
-         final Touch t = new Touch(pos, prevPos);
+         final Touch t = new Touch(pos, (byte) 1);
          _lastEvent._touchs.add(t);
-         _lastEvent._pointersID.add(pointerID);
+         //         _lastEvent._pointersID.add(pointerID);
       }
 
-      // If a move event has not change the position of pointers
-      // or if the first two fingers movement just moves one
-      // we dismiss it
-      if (event.getAction() == MotionEvent.ACTION_MOVE) {
-
-         // Log.d("", "TE MOVE");
-         double dist = 0;
-         for (final Touch element : _lastEvent._touchs) {
-            final double d = element.getPos().sub(element.getPrevPos()).squaredLength();
-
-            if ((d == 0) && (auxEvent._type == TouchEventType.Down)) {
-               return null;
-            }
-
-            dist += d;
-            // Log.d("", "TE MOVE DIST " + d);
-         }
-
-         if (dist == 0) {
-            return null;
-         }
-      }
+      //      // If a move event has not change the position of pointers
+      //      // or if the first two fingers movement just moves one
+      //      // we dismiss it
+      //      if (event.getAction() == MotionEvent.ACTION_MOVE) {
+      //
+      //         // Log.d("", "TE MOVE");
+      //         double dist = 0;
+      //         for (final Touch element : _lastEvent._touchs) {
+      //            final double d = element.getPos().sub(element.getPrevPos()).squaredLength();
+      //
+      //            if ((d == 0) && (auxEvent._type == TouchEventType.Down)) {
+      //               return null;
+      //            }
+      //
+      //            dist += d;
+      //            // Log.d("", "TE MOVE DIST " + d);
+      //         }
+      //
+      //         if (dist == 0) {
+      //            return null;
+      //         }
+      //      }
 
       _lastEvent._type = TouchEventType.Down;
 
@@ -138,16 +120,12 @@ public final class MotionEventProcessor {
          break;
       }
 
-      @SuppressWarnings("unchecked")
-      final TouchEvent te = TouchEvent.create(_lastEvent._type, (ArrayList<Touch>) _lastEvent._touchs.clone());
+      final TouchEvent te = TouchEvent.create(_lastEvent._type, new ArrayList<>(_lastEvent._touchs));
 
       //		Log.d("", "TE " + type.toString());
       //		for (int i = 0; i < touchs.size(); i++)
       //			Log.d("", "TE P " + touchs.get(i).getPos().x() + " "
       //					+ touchs.get(i).getPrevPos().x());
-
-      //Saving the last event to use its position in Event Up as previous Position
-      _prevLastEvent = auxEvent.clone();
 
       return te;
    }
@@ -160,7 +138,7 @@ public final class MotionEventProcessor {
       final Vector2F pos      = new Vector2F(pc.x, pc.y);
       final byte     tapCount = (byte) 2;
 
-      return TouchEvent.create(TouchEventType.Down, new Touch(pos, pos, tapCount));
+      return TouchEvent.create(TouchEventType.Down, new Touch(pos, tapCount));
    }
 
 }

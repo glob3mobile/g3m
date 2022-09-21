@@ -147,7 +147,7 @@ _context(new G3MContext(IFactory::instance(),
 _paused(false),
 _initializationTaskWasRun(false),
 _initializationTaskReady(true),
-_clickOnProcess(false),
+_touchDownUpOnProcess(false),
 _gpuProgramManager(gpuProgramManager),
 _sceneLighting(sceneLighting),
 _rootState(NULL),
@@ -161,7 +161,8 @@ _touchDownPositionY(0),
 _viewMode(viewMode),
 _leftEyeCam(NULL),
 _rightEyeCam(NULL),
-_auxCam(NULL)
+_auxCam(NULL),
+_previousTouchEvent(NULL)
 {
   _effectsScheduler->initialize(_context);
   _cameraRenderer->initialize(_context);
@@ -327,6 +328,8 @@ G3MWidget::~G3MWidget() {
   delete _auxCam;
 
   delete _frustumPolicy;
+
+  delete _previousTouchEvent;
 }
 
 void G3MWidget::removeAllPeriodicalTasks() {
@@ -379,6 +382,20 @@ void G3MWidget::notifyTouchEvent(const G3MEventContext &ec,
   }
 }
 
+bool G3MWidget::isDuplicatedTouchEvent(const TouchEvent* touchEvent,
+                                       const TouchEvent* previousTouchEvent) const {
+  if (previousTouchEvent == NULL) {
+    return false;
+  }
+
+  if (touchEvent->getType() != Move) {
+    // only Move events will be removed
+    return false;
+  }
+
+  return touchEvent->isEquals(previousTouchEvent);
+}
+
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
   G3MEventContext ec(IFactory::instance(),
@@ -395,44 +412,61 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _viewMode,
                      getCurrentCamera());
 
+  if (_previousTouchEvent != NULL) {
+    if ( isDuplicatedTouchEvent(touchEvent, _previousTouchEvent) ) {
+      //ILogger::instance()->logInfo("** Discarded duplicated event %s", touchEvent->description().c_str());
+      return;
+    }
+  }
+
   // notify the original event
   notifyTouchEvent(ec, touchEvent);
+  delete _previousTouchEvent;
+  _previousTouchEvent = touchEvent->clone();
+
+
+  if (touchEvent->getTouchCount() != 1) {
+    _touchDownUpOnProcess = false;
+    return;
+  }
+
 
   // creates DownUp event when a Down is immediately followed by an Up
-  if (touchEvent->getTouchCount() == 1) {
-    const TouchEventType eventType = touchEvent->getType();
-    if (eventType == Down) {
-      _clickOnProcess = true;
-      const Vector2F pos = touchEvent->getTouch(0)->getPos();
-      _touchDownPositionX = pos._x;
-      _touchDownPositionY = pos._y;
-    }
-    else {
-      if (eventType == Up) {
-        if (_clickOnProcess) {
-          const Touch* touch = touchEvent->getTouch(0);
-          const TouchEvent* downUpEvent = TouchEvent::create(DownUp, touch->clone());
-          notifyTouchEvent(ec, downUpEvent);
-          delete downUpEvent;
-        }
-      }
-      if (_clickOnProcess) {
-        if (eventType == Move) {
-          const Vector2F movePosition = touchEvent->getTouch(0)->getPos();
-          const double sd = movePosition.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
-          const float thresholdInPixels = _context->getFactory()->getDeviceInfo()->getPixelsInMM(1);
-          if (sd > (thresholdInPixels * thresholdInPixels)) {
-            _clickOnProcess = false;
-          }
-        }
-        else {
-          _clickOnProcess = false;
-        }
-      }
+  const Touch* touch = touchEvent->getTouch(0);
+  const TouchEventType eventType = touchEvent->getType();
+  if (eventType == Down) {
+    _touchDownUpOnProcess = true;
+    const Vector2F pos = touch->getPos();
+    _touchDownPositionX = pos._x;
+    _touchDownPositionY = pos._y;
+    return;
+  }
+
+
+  if (!_touchDownUpOnProcess) {
+    return;
+  }
+
+
+  if (eventType == Up) {
+    const TouchEvent* downUpEvent = TouchEvent::create(DownUp, touch->clone());
+    notifyTouchEvent(ec, downUpEvent);
+    delete _previousTouchEvent;
+    _previousTouchEvent = downUpEvent->clone();
+
+    delete downUpEvent;
+    _touchDownUpOnProcess = false;
+  }
+  else if (eventType == Move) {
+    const Vector2F pos = touch->getPos();
+    const double sd = pos.squaredDistanceTo(_touchDownPositionX, _touchDownPositionY);
+    const float thresholdInPixels = _context->getFactory()->getDeviceInfo()->getPixelsInMM(1);
+    if (sd > (thresholdInPixels * thresholdInPixels)) {
+      _touchDownUpOnProcess = false;
     }
   }
   else {
-    _clickOnProcess = false;
+    _touchDownUpOnProcess = false;
   }
 
 }

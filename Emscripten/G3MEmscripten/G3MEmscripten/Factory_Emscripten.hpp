@@ -46,7 +46,9 @@ public:
   IWebSocket* createWebSocket(const URL& url,
                               IWebSocketListener* listener,
                               bool autodeleteListener,
-                              bool autodeleteWebSocket) const;
+                              bool autodeleteWebSocket,
+                              bool verboseErrors) const;
+
 
 };
 

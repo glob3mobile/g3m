@@ -98,7 +98,7 @@ void G3MDemoBuilder::build() {
   HUDRenderer* hudRenderer = new HUDRenderer();
   builder->setHUDRenderer(hudRenderer);
 
-  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(100);
+  NonOverlappingMarksRenderer* nonOverlappingMarksRenderer = new NonOverlappingMarksRenderer(25);
   builder->addRenderer(nonOverlappingMarksRenderer);
 
   VectorStreamingRenderer* vectorStreamingRenderer = new VectorStreamingRenderer(marksRenderer, meshRenderer);

@@ -25,6 +25,7 @@ public class CameraMouseWheelHandler extends CameraEventHandler
   }
   public CameraMouseWheelHandler(double zoomSpeed)
   {
+     super("MouseWheel");
      _zoomSpeed = zoomSpeed;
   }
 
@@ -37,64 +38,64 @@ public class CameraMouseWheelHandler extends CameraEventHandler
     return RenderState.ready();
   }
 
-  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  
-    final Touch touch = touchEvent.getTouch(0);
-    final double wheelDelta = touch.getMouseWheelDelta();
-  
-    if (wheelDelta != 0)
-    {
-      Camera cam = cameraContext.getNextCamera();
-      Vector2F pixel = touch.getPos();
-  
-      Vector3D rayDir = cam.pixel2Ray(pixel);
-      final Planet planet = eventContext.getPlanet();
-  
-      Vector3D pos0 = cam.getCartesianPosition();
-      Vector3D p1 = planet.closestIntersection(pos0, rayDir);
-  
-      final double heightDelta = cam.getGeodeticHeight() * wheelDelta * _zoomSpeed;
-  
-      if (planet.isFlat())
-      {
-        Vector3D moveDir = p1.sub(pos0).normalized();
-        cam.move(moveDir, heightDelta);
-      }
-      else
-      {
-        cam.move(pos0.normalized().times(-1), heightDelta);
-  
-        Vector3D p2 = planet.closestIntersection(cam.getCartesianPosition(), cam.pixel2Ray(pixel));
-        Angle angleP1P2 = Vector3D.angleBetween(p1, p2);
-        Vector3D rotAxis = p2.cross(p1);
-  
-        if (!rotAxis.isNan() && !angleP1P2.isNan())
-        {
-          MutableMatrix44D mat = MutableMatrix44D.createGeneralRotationMatrix(angleP1P2, rotAxis, Vector3D.ZERO);
-          cam.applyTransform(mat);
-        }
-      }
-  
-      return true;
-    }
-  
-    return false;
-  }
-
   public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
   }
 
-  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
+  
+    if (touchEvent.getType() != TouchEventType.MouseWheel)
+    {
+      return false;
+    }
+  
+    if (touchEvent.getTouchCount() != 1)
+    {
+      return false;
+    }
+  
+    final double wheelDelta = touchEvent.getMouseWheelDelta();
+    if (wheelDelta == 0)
+    {
+      return false;
+    }
+  
+  
+    Camera camera = cameraContext.getNextCamera();
+  
+    final Touch touch = touchEvent.getTouch(0);
+    final Vector2F pixel = touch.getPos();
+  
+    final Vector3D rayDir = camera.pixel2Ray(pixel);
+    final Planet planet = eventContext.getPlanet();
+  
+    final Vector3D pos0 = camera.getCartesianPosition();
+    final Vector3D p1 = planet.closestIntersection(pos0, rayDir);
+  
+    final double heightDelta = camera.getGeodeticHeight() * wheelDelta * _zoomSpeed;
+  
+    if (planet.isFlat())
+    {
+      final Vector3D moveDir = p1.sub(pos0).normalized();
+      camera.move(moveDir, heightDelta);
+    }
+    else
+    {
+      camera.move(pos0.normalized().times(-1), heightDelta);
+  
+      final Vector3D p2 = planet.closestIntersection(camera.getCartesianPosition(), camera.pixel2Ray(pixel));
+      final Angle angleP1P2 = Vector3D.angleBetween(p1, p2);
+      final Vector3D rotAxis = p2.cross(p1);
+  
+      if (!rotAxis.isNan() && !angleP1P2.isNan())
+      {
+        final MutableMatrix44D mat = MutableMatrix44D.createGeneralRotationMatrix(angleP1P2, rotAxis, Vector3D.ZERO);
+        camera.applyTransform(mat);
+      }
+    }
+  
+    return true;
   }
 
-  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
-
-  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
-  {
-  }
 }

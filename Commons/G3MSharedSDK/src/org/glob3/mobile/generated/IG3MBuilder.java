@@ -75,6 +75,7 @@ public abstract class IG3MBuilder
   private InfoDisplay _infoDisplay;
   private boolean _atmosphere;
   private FrustumPolicy _frustumPolicy;
+  private boolean _verboseCameraHandlers;
 
 
   /**
@@ -280,16 +281,8 @@ public abstract class IG3MBuilder
   }
   private CameraRenderer createDefaultCameraRenderer()
   {
-    CameraRenderer cameraRenderer = new CameraRenderer();
-    final boolean useInertia = true;
-    cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    cameraRenderer.addHandler(new CameraDoubleDragHandler());
-    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
-    cameraRenderer.addHandler(new CameraRotationHandler());
-    cameraRenderer.addHandler(new CameraDoubleTapHandler());
-    final double zoomSpeed = 0.05;
-    cameraRenderer.addHandler(new CameraMouseWheelHandler(zoomSpeed));
-  
+    CameraRenderer cameraRenderer = new CameraRenderer(_verboseCameraHandlers);
+    IG3MBuilder.addDefaultCameraHandlers(cameraRenderer);
     return cameraRenderer;
   }
   private java.util.ArrayList<Renderer> createDefaultRenderers()
@@ -510,6 +503,7 @@ public abstract class IG3MBuilder
      _infoDisplay = null;
      _atmosphere = false;
      _frustumPolicy = null;
+     _verboseCameraHandlers = false;
   }
 
   public void dispose()
@@ -608,10 +602,33 @@ public abstract class IG3MBuilder
     return _threadUtils;
   }
 
+  public static void addDefaultCameraHandlers(CameraRenderer cameraRenderer, boolean useInertia)
+  {
+     addDefaultCameraHandlers(cameraRenderer, useInertia, 0.05);
+  }
+  public static void addDefaultCameraHandlers(CameraRenderer cameraRenderer)
+  {
+     addDefaultCameraHandlers(cameraRenderer, true, 0.05);
+  }
+  public static void addDefaultCameraHandlers(CameraRenderer cameraRenderer, boolean useInertia, double mouseWheelZoomSpeed)
+  {
+    cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
+    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
+    cameraRenderer.addHandler(new CameraRotationHandler());
+    cameraRenderer.addHandler(new CameraDoubleTapHandler());
+    cameraRenderer.addHandler(new CameraMouseWheelHandler(mouseWheelZoomSpeed));
+  }
+
   public final void setAtmosphere(boolean atmosphere)
   {
     _atmosphere = atmosphere;
     setBackgroundColor(_atmosphere ? Color.newFromRGBA(0, 0, 0, 1) : null);
+  }
+
+  public final void setVerboseCameraHandlers(boolean verboseCameraHandlers)
+  {
+    _verboseCameraHandlers = verboseCameraHandlers;
   }
 
 

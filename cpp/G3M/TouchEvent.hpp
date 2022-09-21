@@ -16,39 +16,45 @@
 class Touch {
 private:
   const Vector2F      _pos;
-  const Vector2F      _prevPos;
   const unsigned char _tapCount;
-  const double        _wheelDelta;
 
   Touch(const Touch& other);
 
 public:
   Touch(const Vector2F& pos,
-        const Vector2F& prev,
-        const unsigned char tapCount=(unsigned char)1,
-        const double wheelDelta = 0.0):
+        const unsigned char tapCount):
   _pos(pos),
-  _prevPos(prev),
-  _tapCount(tapCount),
-  _wheelDelta(wheelDelta)
+  _tapCount(tapCount)
   {
-
+#ifdef JAVA_CODE
+    if (_pos == null) {
+      throw new RuntimeException("_pos is null");
+    }
+#endif
   }
 
   const Touch* clone() const {
     return new Touch(_pos,
-                     _prevPos,
-                     _tapCount,
-                     _wheelDelta);
+                     _tapCount);
   }
 
   const Vector2F getPos() const { return _pos; }
-  const Vector2F getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
-  const double getMouseWheelDelta() const { return _wheelDelta; }
 
   ~Touch() {
   }
+
+  const std::string description() const;
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
+  bool isEquals(const Touch* that) const;
+
 };
 
 
@@ -57,42 +63,42 @@ enum TouchEventType {
   Up,
   Move,
   LongPress,
-  DownUp
+  DownUp,
+  MouseWheel
 };
 
 
 class TouchEvent {
 private:
-  const TouchEventType            _eventType;
+  const TouchEventType            _type;
   const std::vector<const Touch*> _touchs;
+  const double                    _wheelDelta;
 
 
   TouchEvent(const TouchEventType& type,
-             const std::vector<const Touch*>& touchs
-             ) :
-  _eventType(type),
-  _touchs(touchs)
-  {
-  }
+             const std::vector<const Touch*>& touchs,
+             const double wheelDelta);
 
   TouchEvent(const TouchEvent& other);
 
 public:
 
-  static TouchEvent* create(const TouchEventType& type,
-                            const std::vector<const Touch*>& touchs) {
-    return new TouchEvent(type, touchs);
+  static const TouchEvent* create(const TouchEventType& type,
+                                  const std::vector<const Touch*>& touchs,
+                                  const double wheelDelta=0.0) {
+    return new TouchEvent(type, touchs, wheelDelta);
   }
 
-  static TouchEvent* create(const TouchEventType& type,
-                            const Touch* touch) {
+  static const TouchEvent* create(const TouchEventType& type,
+                                  const Touch* touch,
+                                  const double wheelDelta=0.0) {
     const std::vector<const Touch*> touchs(1, touch);
 
-    return create(type, touchs);
+    return create(type, touchs, wheelDelta);
   }
 
   TouchEventType getType() const {
-    return _eventType;
+    return _type;
   }
 
   const Touch* getTouch(int i) const {
@@ -103,13 +109,30 @@ public:
     return _touchs.size();
   }
 
+  const double getMouseWheelDelta() const {
+    return _wheelDelta;
+  }
+
   unsigned char getTapCount() const;
 
   ~TouchEvent() {
-    for (unsigned int i = 0; i < _touchs.size(); i++) {
+    for (size_t i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
     }
   }
+
+  const std::string description() const;
+
+#ifdef JAVA_CODE
+  @Override
+  public String toString() {
+    return description();
+  }
+#endif
+
+  const TouchEvent* clone() const;
+
+  bool isEquals(const TouchEvent* that) const;
 
 };
 
