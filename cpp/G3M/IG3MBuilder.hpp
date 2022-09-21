@@ -127,6 +127,10 @@ public:
   IDownloader*                      getDownloader();
   IThreadUtils*                     getThreadUtils();
 
+  static void addDefaultCameraHandlers(CameraRenderer* cameraRenderer,
+                                       const bool useInertia = true,
+                                       const double mouseWheelZoomSpeed = 0.05);
+
   void setAtmosphere(const bool atmosphere);
 
   void setVerboseCameraHandlers(const bool verboseCameraHandlers);

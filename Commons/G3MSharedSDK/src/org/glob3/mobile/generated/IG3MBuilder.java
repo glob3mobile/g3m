@@ -282,15 +282,7 @@ public abstract class IG3MBuilder
   private CameraRenderer createDefaultCameraRenderer()
   {
     CameraRenderer cameraRenderer = new CameraRenderer(_verboseCameraHandlers);
-    final boolean useInertia = true;
-    cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-    cameraRenderer.addHandler(new CameraDoubleDragHandler());
-    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
-    cameraRenderer.addHandler(new CameraRotationHandler());
-    cameraRenderer.addHandler(new CameraDoubleTapHandler());
-    final double zoomSpeed = 0.05;
-    cameraRenderer.addHandler(new CameraMouseWheelHandler(zoomSpeed));
-  
+    IG3MBuilder.addDefaultCameraHandlers(cameraRenderer);
     return cameraRenderer;
   }
   private java.util.ArrayList<Renderer> createDefaultRenderers()
@@ -608,6 +600,24 @@ public abstract class IG3MBuilder
     }
   
     return _threadUtils;
+  }
+
+  public static void addDefaultCameraHandlers(CameraRenderer cameraRenderer, boolean useInertia)
+  {
+     addDefaultCameraHandlers(cameraRenderer, useInertia, 0.05);
+  }
+  public static void addDefaultCameraHandlers(CameraRenderer cameraRenderer)
+  {
+     addDefaultCameraHandlers(cameraRenderer, true, 0.05);
+  }
+  public static void addDefaultCameraHandlers(CameraRenderer cameraRenderer, boolean useInertia, double mouseWheelZoomSpeed)
+  {
+    cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+    cameraRenderer.addHandler(new CameraDoubleDragHandler());
+    //cameraRenderer->addHandler(new CameraZoomAndRotateHandler());
+    cameraRenderer.addHandler(new CameraRotationHandler());
+    cameraRenderer.addHandler(new CameraDoubleTapHandler());
+    cameraRenderer.addHandler(new CameraMouseWheelHandler(mouseWheelZoomSpeed));
   }
 
   public final void setAtmosphere(boolean atmosphere)
