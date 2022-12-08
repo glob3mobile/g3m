@@ -353,7 +353,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                              "",                                            // const std::string&        style,
                                              true,                                          // const bool                isTransparent,
                                              2,                                             // const int                 firstLevel   = 2,
-                                             18,                                            // const int                 maxLevel     = 17,
+                                             19,                                            // const int                 maxLevel     = 17,
                                              new SectorTileCondition(s3)                    // const LayerCondition*     condition    = NULL,
                                              // const LayerCondition*     condition    = NULL,
                                              // const TimeInterval&       timeToCache  = TimeInterval::fromDays(30),
@@ -367,7 +367,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 
 
-  if (true) {
+  if (false) {
 #warning TODO cache
     XPCPointCloud* pointCould = new XPCPointCloud(URL("http://192.168.1.69:8080/INROAD_visor/xpc/"),
                                                   cloudName,
@@ -393,6 +393,73 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                                   verbose);
 
     model->getXPCRenderer()->addPointCloud(pointCould);
+  }
+
+  {
+    // Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg;
+    //
+    // time:
+    //     127927.986;
+    //
+    // camera position (x,y,z):
+    //     250922.968;4432817.579;392.575;
+    //
+    // Omega / Phi / Kappa
+    //    -24.74762636;-73.73090914;277.82929184;
+    //
+    // Rotation matrix:
+    //    -1.36853159813E-001; 3.76949742662E-001; -9.16067739939E-001;
+    //    -9.88324777859E-001; 1.05649465610E-002;  1.51995116287E-001;
+    //     6.69727266888E-002; 9.26173457518E-001;  3.71102924360E-001
+
+
+
+//    final String           projection = "EPSG:25830";
+
+    QuadShape* quad = new QuadShape(new Geodetic3D(Angle::fromDegrees(40.0088347),
+                                                   Angle::fromDegrees(-5.9181247),
+                                                   0*392.575 + 5),
+                                    AltitudeMode::ABSOLUTE,
+                                    URL("file:///Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg"), /* textureURL  */
+                                    15.0f,                                                      /* width       */
+                                    15.0f,                                                      /* height      */
+                                    false                                                        /* withNormals */);
+
+    quad->setDepthTest(false);
+    quad->setCullFace(true);
+    quad->setCulledFace(GLCullFace::back());
+
+
+//    // Omega / Phi / Kappa
+//    const double OmegaGradians = -24.74762636;
+//    const double PhiGradians   = -73.73090914;
+//    const double KappaGradians = 277.82929184;
+//
+//    const Angle omega = Angle::fromGradians( OmegaGradians * 1 );
+//    const Angle phi   = Angle::fromGradians( PhiGradians   * 0 );
+//    const Angle kappa = Angle::fromGradians( KappaGradians * 0 );
+//
+//    quad->setOmegaPhiKappa(context->getPlanet(),
+//                           omega,
+//                           phi,
+//                           kappa);
+
+//    <heading>97.8836</heading>
+//    <tilt>68.1648</tilt>
+//    <roll>3.8401</roll>
+
+    quad->setHeadingPitchRoll(Angle::fromDegrees( 97.8836 ),
+                              Angle::fromDegrees( 68.1648 ),
+                              Angle::fromDegrees(  3.8401 ));
+
+    model->getShapesRenderer()->addShape( quad );
+
+//    gotoPo();
+//    _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, 1000) );
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.0088347, -5.9181247, 19.599674182039432679 + 50),
+                                         Angle::fromDegrees(0   /*  10.657284 */),  /* heading */
+                                         Angle::fromDegrees(-90 /* -17.247392 */)   /* pitch   */);
+
   }
 
 
@@ -510,9 +577,9 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 //                                         Angle::fromDegrees(-23.165191) /* pitch   */);
 
     // Camera position=(lat=36.911921721862562151d, lon=-2.4121189086925118872d, height=19.599674182039432679) heading=10.657284 pitch=-17.247392
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.911921721862562151, -2.4121189086925118872, 19.599674182039432679),
-                                         Angle::fromDegrees(0 /*10.657284*/),  /* heading */
-                                         Angle::fromDegrees(-17.247392)  /* pitch   */);
+//    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(36.911921721862562151, -2.4121189086925118872, 19.599674182039432679),
+//                                         Angle::fromDegrees(0 /*10.657284*/),  /* heading */
+//                                         Angle::fromDegrees(-17.247392)  /* pitch   */);
 
     model->getShapesRenderer()->addShape( ellipsoid );
   }

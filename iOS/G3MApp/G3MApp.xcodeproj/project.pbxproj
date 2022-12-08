@@ -18,6 +18,7 @@
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
 		CF37F5F5183D355E0050CAEF /* MainStoryboard-iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */; };
 		CF39C40C21AE957300E94FD6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF39C40B21AE957300E94FD6 /* Images.xcassets */; };
+		CF3B19B9293515D40055B5C4 /* Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg in Resources */ = {isa = PBXBuildFile; fileRef = CF3B19B7293515D40055B5C4 /* Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg */; };
 		CF3F8FDF183526AE00589B4C /* G3MDemoBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */; };
 		CF3F8FE7183576AF00589B4C /* MainStoryboard-iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */; };
 		CF3F8FEA1835867D00589B4C /* G3MSelectDemoSceneViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF3F8FE91835867D00589B4C /* G3MSelectDemoSceneViewController.mm */; };
@@ -171,6 +172,7 @@
 		CF37F5F0183D26500050CAEF /* 0576.bil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0576.bil; sourceTree = "<group>"; };
 		CF37F5F4183D355E0050CAEF /* MainStoryboard-iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPhone.storyboard"; sourceTree = "<group>"; };
 		CF39C40B21AE957300E94FD6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		CF3B19B7293515D40055B5C4 /* Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg"; sourceTree = "<group>"; };
 		CF3F8FDD183526AE00589B4C /* G3MDemoBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MDemoBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3MDemoBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF3F8FE6183576AF00589B4C /* MainStoryboard-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "MainStoryboard-iPad.storyboard"; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF3B19B7293515D40055B5C4 /* Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg */,
 				CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */,
 				CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */,
 				CF624D9727295C4C00F5762A /* OverviewCamera_19666_20210310_114027335.JPG */,
@@ -698,6 +701,7 @@
 				CF28408A2729A3B900BC64BA /* OUTPUT-4326.bil in Resources */,
 				CFE3B3D2183ACAA90078C796 /* 18STJ7435_2000_4326.bson in Resources */,
 				E7D1B61316D2436700AF47C1 /* InfoPlist.strings in Resources */,
+				CF3B19B9293515D40055B5C4 /* Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg in Resources */,
 				E7D1B61B16D2436700AF47C1 /* Default.png in Resources */,
 				E7D1B61D16D2436700AF47C1 /* Default@2x.png in Resources */,
 				E7D1B61F16D2436700AF47C1 /* Default-568h@2x.png in Resources */,
