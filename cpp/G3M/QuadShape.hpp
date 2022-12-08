@@ -11,12 +11,10 @@
 
 #include "AbstractMeshShape.hpp"
 
-class IImage;
-class IGLTextureID;
-class Color;
+#include "URL.hpp"
+
 class TextureIDReference;
 
-#include "URL.hpp"
 
 class QuadShape : public AbstractMeshShape {
 private:
@@ -25,6 +23,10 @@ private:
   const float  _height;
   const Color* _color;
 
+  bool _depthTest;
+  bool _cullFace;
+  int  _culledFace;
+
   bool _textureRequested;
 #ifdef C_CODE
   const IImage* _textureImage;
@@ -32,80 +34,50 @@ private:
 #ifdef JAVA_CODE
   private IImage _textureImage;
 #endif
-
+  
   const TextureIDReference* getTextureID(const G3MRenderContext* rc);
-
+  
   const bool _withNormals;
-
+  
 protected:
   Mesh* createMesh(const G3MRenderContext* rc);
-
+  
 public:
   QuadShape(Geodetic3D* position,
             AltitudeMode altitudeMode,
             const URL& textureURL,
             float width,
             float height,
-            bool withNormals) :
-  AbstractMeshShape(position, altitudeMode),
-  _textureURL(textureURL),
-  _width(width),
-  _height(height),
-  _textureRequested(false),
-  _textureImage(NULL),
-  _color(NULL),
-  _withNormals(withNormals)
-  {
-
-  }
-
+            bool withNormals);
+  
   QuadShape(Geodetic3D* position,
             AltitudeMode altitudeMode,
             const IImage* textureImage,
             float width,
             float height,
-            bool withNormals) :
-  AbstractMeshShape(position, altitudeMode),
-  _textureURL(URL("", false)),
-  _width(width),
-  _height(height),
-  _textureRequested(true),
-  _textureImage(textureImage),
-  _color(NULL),
-  _withNormals(withNormals)
-  {
-
-  }
-
+            bool withNormals);
 
   QuadShape(Geodetic3D* position,
             AltitudeMode altitudeMode,
             float width,
             float height,
             Color* color,
-            bool withNormals) :
-  AbstractMeshShape(position, altitudeMode),
-  _textureURL(URL("", false)),
-  _width(width),
-  _height(height),
-  _textureRequested(false),
-  _textureImage(NULL),
-  _color(color),
-  _withNormals(withNormals)
-  {
-
-  }
+            bool withNormals);
+  
   virtual ~QuadShape();
+
+  void setDepthTest(bool depthTest);
+
+  void setCullFace(bool cullFace);
+
+  void setCulledFace(int culledFace);
 
   void imageDownloaded(IImage* image);
   
   std::vector<double> intersectionsDistances(const Planet* planet,
                                              const Vector3D& origin,
-                                             const Vector3D& direction) const {
-    std::vector<double> intersections;
-    return intersections;
-  }
-
+                                             const Vector3D& direction) const;
+  
 };
 
 #endif

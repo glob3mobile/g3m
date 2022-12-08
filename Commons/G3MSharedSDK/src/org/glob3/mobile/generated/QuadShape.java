@@ -17,9 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class IImage;
-//class IGLTextureID;
-//class Color;
+
 //class TextureIDReference;
 
 
@@ -29,6 +27,10 @@ public class QuadShape extends AbstractMeshShape
   private final float _width;
   private final float _height;
   private final Color _color;
+
+  private boolean _depthTest;
+  private boolean _cullFace;
+  private int _culledFace;
 
   private boolean _textureRequested;
   private IImage _textureImage;
@@ -90,14 +92,14 @@ public class QuadShape extends AbstractMeshShape
       normals.add(0.0, 0.0, 1.0);
       normals.add(0.0, 0.0, 1.0);
   
-      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, true, normals.create());
+      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, _depthTest, normals.create(), false, 0, 0, _cullFace, _culledFace); // int culledFace -  bool cullFace -  float polygonOffsetUnits -  float polygonOffsetFactor -  bool polygonOffsetFill -  const IFloatBuffer* normals -  bool depthTest -  const IFloatBuffer* colors -  const Color* flatColor -  float pointSize -  float lineWidth -  const IFloatBuffer* vertices -  const Vector3D& center -  bool owner -  const int primitive
   
       if (normals != null)
          normals.dispose();
     }
     else
     {
-      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color);
+      im = new DirectMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), 1, 1, color, null, _depthTest, null, false, 0, 0, _cullFace, _culledFace); // int culledFace -  bool cullFace -  float polygonOffsetUnits -  float polygonOffsetFactor -  bool polygonOffsetFill -  const IFloatBuffer* normals -  bool depthTest -  const IFloatBuffer* colors -  const Color* flatColor -  float pointSize -  float lineWidth -  const IFloatBuffer* vertices -  const Vector3D& center -  bool owner -  const int primitive
     }
   
     if (vertices != null)
@@ -130,7 +132,10 @@ public class QuadShape extends AbstractMeshShape
      _textureImage = null;
      _color = null;
      _withNormals = withNormals;
-
+     _depthTest = true;
+     _cullFace = false;
+     _culledFace = GLCullFace.back();
+  
   }
 
   public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, IImage textureImage, float width, float height, boolean withNormals)
@@ -143,9 +148,11 @@ public class QuadShape extends AbstractMeshShape
      _textureImage = textureImage;
      _color = null;
      _withNormals = withNormals;
-
+     _depthTest = true;
+     _cullFace = false;
+     _culledFace = GLCullFace.back();
+  
   }
-
 
   public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, float width, float height, Color color, boolean withNormals)
   {
@@ -157,15 +164,45 @@ public class QuadShape extends AbstractMeshShape
      _textureImage = null;
      _color = color;
      _withNormals = withNormals;
-
+     _depthTest = true;
+     _cullFace = false;
+     _culledFace = GLCullFace.back();
+  
   }
+
   public void dispose()
   {
     if (_color != null)
        _color.dispose();
   
     super.dispose();
-  
+  }
+
+  public final void setDepthTest(boolean depthTest)
+  {
+    if (_depthTest != depthTest)
+    {
+      _depthTest = depthTest;
+      cleanMesh();
+    }
+  }
+
+  public final void setCullFace(boolean cullFace)
+  {
+    if (_cullFace != cullFace)
+    {
+      _cullFace = cullFace;
+      cleanMesh();
+    }
+  }
+
+  public final void setCulledFace(int culledFace)
+  {
+    if (_culledFace != culledFace)
+    {
+      _culledFace = culledFace;
+      cleanMesh();
+    }
   }
 
   public final void imageDownloaded(IImage image)
