@@ -27,7 +27,7 @@ CanvasOwnerImageListenerWrapper::~CanvasOwnerImageListenerWrapper() {
   
   delete _canvas;
   
-#if JAVA_CODE
+#ifdef JAVA_CODE
   super.dispose();
 #endif
 }

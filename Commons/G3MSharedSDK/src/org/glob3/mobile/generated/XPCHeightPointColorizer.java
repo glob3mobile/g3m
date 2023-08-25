@@ -47,10 +47,7 @@ public class XPCHeightPointColorizer extends XPCFixedAlphaPointColorizer
          _ramp.dispose();
     }
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
     super.dispose();
-//#endif
   }
 
   public final IIntBuffer initialize(XPCMetadata metadata)

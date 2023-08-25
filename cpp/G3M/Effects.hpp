@@ -22,7 +22,7 @@ public:
 #ifdef C_CODE
   virtual ~EffectTarget() { }
 #else
-  // useless, it's here only to make the C++ => Java translator creates an interface intead of an empty class
+  // useless, it's here only to make the C++ => Java translator creates an interface instead of an empty class
   virtual void unusedMethod() const = 0;
 #endif
 
