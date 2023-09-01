@@ -176,6 +176,7 @@ final class MotionEventProcessor {
    /**
     * @param event
     */
+   @SuppressWarnings("static-method")
    private TouchEvent processTouchCancel(final Event event) {
       return null;
    }

@@ -2,12 +2,13 @@
 
 package org.glob3.mobile.specific;
 
+
 import org.glob3.mobile.generated.*;
 
 
 public class JSONParser_WebGL
-         extends
-            IJSONParser {
+                              extends
+                                 IJSONParser {
 
 
    @Override
@@ -42,7 +43,7 @@ public class JSONParser_WebGL
       final com.google.gwt.json.client.JSONNumber jsonNumber = value.isNumber();
       if (jsonNumber != null) {
          final double doubleValue = jsonNumber.doubleValue();
-         final int intValue = (int) doubleValue;
+         final int    intValue    = (int) doubleValue;
          if (doubleValue == intValue) {
             return new JSONInteger(intValue);
          }
@@ -64,7 +65,7 @@ public class JSONParser_WebGL
 
       final com.google.gwt.json.client.JSONArray jsonArray = value.isArray();
       if (jsonArray != null) {
-         final int size = jsonArray.size();
+         final int       size  = jsonArray.size();
          final JSONArray array = new JSONArray(size);
          for (int i = 0; i < size; i++) {
             final com.google.gwt.json.client.JSONValue element = jsonArray.get(i);

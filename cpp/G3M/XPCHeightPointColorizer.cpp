@@ -31,7 +31,7 @@ XPCHeightPointColorizer::~XPCHeightPointColorizer() {
     delete _ramp;
   }
 
-#if JAVA_CODE
+#ifdef JAVA_CODE
   super.dispose();
 #endif
 }

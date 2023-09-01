@@ -44,10 +44,7 @@ public class CanvasOwnerImageListenerWrapper extends IImageListener
     if (_canvas != null)
        _canvas.dispose();
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if JAVA_CODE
     super.dispose();
-//#endif
   }
 
   public final void imageCreated(IImage image)

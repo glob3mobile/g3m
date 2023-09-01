@@ -423,7 +423,7 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
                                     URL("file:///Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg"), /* textureURL  */
                                     15.0f,                                                      /* width       */
                                     15.0f,                                                      /* height      */
-                                    false                                                        /* withNormals */);
+                                    false                                                       /* withNormals */);
 
     quad->setDepthTest(false);
     quad->setCullFace(true);
@@ -444,10 +444,6 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 //                           phi,
 //                           kappa);
 
-//    <heading>97.8836</heading>
-//    <tilt>68.1648</tilt>
-//    <roll>3.8401</roll>
-
     quad->setHeadingPitchRoll(Angle::fromDegrees( 97.8836 ),
                               Angle::fromDegrees( 68.1648 ),
                               Angle::fromDegrees(  3.8401 ));
@@ -456,9 +452,14 @@ void G3MXPointCloudDemoScene::rawActivate(const G3MContext *context) {
 
 //    gotoPo();
 //    _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, 1000) );
-    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.0088347, -5.9181247, 19.599674182039432679 + 50),
-                                         Angle::fromDegrees(0   /*  10.657284 */),  /* heading */
-                                         Angle::fromDegrees(-90 /* -17.247392 */)   /* pitch   */);
+//    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.0088347, -5.9181247, 19.599674182039432679 + 50),
+//                                         Angle::fromDegrees(0   /*  10.657284 */),  /* heading */
+//                                         Angle::fromDegrees(-90 /* -17.247392 */)   /* pitch   */);
+
+    g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.008834737041852, -5.918124819299180, 2),
+                                         Angle::fromDegrees(97.8836 - 90), /* heading */
+                                         Angle::fromDegrees(68.1648 - 90)  /* pitch   */);
+
 
   }
 

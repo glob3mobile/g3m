@@ -534,7 +534,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     else
     {
       _toVisit.clear();
-      // hand made for to avoid garbage (like an interator)
+      // hand made for to avoid garbage (like an iterator)
       for (int i = 0; i < firstLevelTilesCount; i++) {
         _toVisit.add( _firstLevelTiles.get(i) );
       }
@@ -551,7 +551,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
         }
   
         _toVisit.clear();
-        // hand made for to avoid garbage (like an interator)
+        // hand made for to avoid garbage (like an iterator)
         final int toVisitInNextIterationSize = _toVisitInNextIteration.size();
         for (int i = 0; i < toVisitInNextIterationSize; i++) {
           _toVisit.add( _toVisitInNextIteration.get(i) );

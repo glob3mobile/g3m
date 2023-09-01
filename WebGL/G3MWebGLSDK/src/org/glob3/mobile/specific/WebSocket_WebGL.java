@@ -41,20 +41,21 @@ public class WebSocket_WebGL
 			socket.onopen = function(event) {
 				listener.@org.glob3.mobile.generated.IWebSocketListener::onOpen(Lorg/glob3/mobile/generated/IWebSocket;)(webSocket);
 			}
+
 			socket.onclose = function(event) {
 				if (verboseErrors) {
 					console.log(event);
 				}
 				listener.@org.glob3.mobile.generated.IWebSocketListener::onClose(Lorg/glob3/mobile/generated/IWebSocket;)(webSocket);
 			}
+
 			socket.onerror = function(event) {
-				// if (this.@org.glob3.mobile.specific.WebSocket_WebGL::_verboseErrors) {
-				// if (this.@org.glob3.mobile.generated.IWebSocket::_verboseErrors) {
 				if (verboseErrors) {
 					console.log(event);
 				}
-				listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, "" + event);
+				listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, JSON.stringify(event));
 			}
+
 			socket.onmessage = function(event) {
 				if (typeof event.data === "string") {
 					listener.@org.glob3.mobile.generated.IWebSocketListener::onMessage(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, event.data);
