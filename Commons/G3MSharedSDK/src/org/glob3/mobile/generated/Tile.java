@@ -605,7 +605,7 @@ public class Tile
     final int row2 = 2 * _row;
     final int column2 = 2 * _column;
   
-    java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
+    java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>(4);
   
     final Sector renderedSector = _planetRenderer.getRenderedSector();
   
@@ -632,8 +632,6 @@ public class Tile
     {
       subTiles.add(createSubTile(s3, nextLevel, row2 + 1, column2 + 1, setParent));
     }
-  
-    subTiles.trimToSize();
   
     return subTiles;
   }

@@ -504,7 +504,11 @@ std::vector<Tile*>* Tile::createSubTiles(bool setParent) {
   const int row2    = 2 * _row;
   const int column2 = 2 * _column;
 
+#ifdef C_CODE
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
+#else
+  std::vector<Tile*>* subTiles = new std::vector<Tile*>(4);
+#endif
 
   const Sector* renderedSector = _planetRenderer->getRenderedSector();
 
@@ -547,10 +551,6 @@ std::vector<Tile*>* Tile::createSubTiles(bool setParent) {
                                        column2 + 1,
                                        setParent) );
   }
-
-#ifdef JAVA_CODE
-  subTiles.trimToSize();
-#endif
 
   return subTiles;
 }
