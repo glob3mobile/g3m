@@ -1,24 +1,17 @@
 
-
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.*;
 
-
-public class JSONParser_Android
-         extends
-            IJSONParser {
+public class JSONParser_Android extends IJSONParser {
 
    @Override
-   public JSONBaseObject parse(final IByteBuffer buffer,
-                               final boolean nullAsObject) {
+   public JSONBaseObject parse(final IByteBuffer buffer, final boolean nullAsObject) {
       return parse(buffer.getAsString(), nullAsObject);
    }
 
-
    @Override
-   public JSONBaseObject parse(final String jsonString,
-                               final boolean nullAsObject) {
+   public JSONBaseObject parse(final String jsonString, final boolean nullAsObject) {
       if (jsonString == null) {
          ILogger.instance().logError("Can't parse a null string");
          return null;
@@ -34,9 +27,7 @@ public class JSONParser_Android
       }
    }
 
-
-   private static JSONBaseObject convert(final Object jsonObject,
-                                         final boolean nullAsObject) {
+   private static JSONBaseObject convert(final Object jsonObject, final boolean nullAsObject) {
       // JSONObject, JSONArray, String, Boolean, Integer, Long, Double or NULL.
 
       if (jsonObject == null) {
@@ -56,22 +47,22 @@ public class JSONParser_Android
       }
       else if (jsonObject instanceof Long) {
          final long longValue = ((Long) jsonObject).longValue();
-         final int intValue = (int) longValue;
+         final int  intValue  = (int) longValue;
          return (longValue == intValue) //
-                                        ? new JSONInteger(intValue) //
-                                        : new JSONLong(longValue);
+               ? new JSONInteger(intValue) //
+               : new JSONLong(longValue);
       }
       else if (jsonObject instanceof Double) {
          final double doubleValue = ((Double) jsonObject).doubleValue();
-         final float floatValue = (float) doubleValue;
+         final float  floatValue  = (float) doubleValue;
          return (doubleValue == floatValue) //
-                                            ? new JSONFloat(floatValue) //
-                                            : new JSONDouble(doubleValue);
+               ? new JSONFloat(floatValue) //
+               : new JSONDouble(doubleValue);
       }
       else if (jsonObject instanceof org.json.JSONArray) {
-         final org.json.JSONArray jsonArray = (org.json.JSONArray) jsonObject;
-         final int length = jsonArray.length();
-         final org.glob3.mobile.generated.JSONArray result = new org.glob3.mobile.generated.JSONArray(length);
+         final org.json.JSONArray                   jsonArray = (org.json.JSONArray) jsonObject;
+         final int                                  length    = jsonArray.length();
+         final org.glob3.mobile.generated.JSONArray result    = new org.glob3.mobile.generated.JSONArray(length);
          for (int i = 0; i < length; i++) {
             try {
                if (jsonArray.isNull(i)) {
@@ -88,9 +79,9 @@ public class JSONParser_Android
          return result;
       }
       else if (jsonObject instanceof org.json.JSONObject) {
-         final org.json.JSONObject jsonObj = (org.json.JSONObject) jsonObject;
-         final org.json.JSONArray attributes = jsonObj.names();
-         final org.glob3.mobile.generated.JSONObject result = new org.glob3.mobile.generated.JSONObject();
+         final org.json.JSONObject                   jsonObj    = (org.json.JSONObject) jsonObject;
+         final org.json.JSONArray                    attributes = jsonObj.names();
+         final org.glob3.mobile.generated.JSONObject result     = new org.glob3.mobile.generated.JSONObject();
          if (attributes != null) {
             final int length = attributes.length();
             for (int i = 0; i < length; i++) {
@@ -119,6 +110,5 @@ public class JSONParser_Android
          return null;
       }
    }
-
 
 }

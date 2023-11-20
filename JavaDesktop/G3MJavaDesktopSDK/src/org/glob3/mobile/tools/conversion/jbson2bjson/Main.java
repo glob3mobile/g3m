@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.tools.conversion.jbson2bjson;
 
 import java.io.File;
@@ -7,9 +6,7 @@ import java.io.IOException;
 
 import org.glob3.mobile.generated.ILogger;
 
-
 public class Main {
-
 
    public static void main(final String[] args) throws IOException {
       System.out.println("Batch JBSON2BJSON Parser Desktop 0.1");
@@ -21,7 +18,7 @@ public class Main {
       }
 
       // Inicializando
-      final File firstFile = new File(args[0]);
+      final File firstFile  = new File(args[0]);
       final File secondFile = new File(args[1]);
       try {
          JBson2BJson.instance();
@@ -31,6 +28,5 @@ public class Main {
          ILogger.instance().logError(e.getMessage());
       }
    }
-
 
 }

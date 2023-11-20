@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.tools.conversion;
 
 import java.io.File;
@@ -22,7 +21,6 @@ import org.glob3.mobile.specific.Logger_JavaDesktop;
 import org.glob3.mobile.specific.MathUtils_JavaDesktop;
 import org.glob3.mobile.specific.StringBuilder_JavaDesktop;
 
-
 public class JSONtoBSON {
 
    public static void main(final String[] args) {
@@ -30,7 +28,6 @@ public class JSONtoBSON {
       IMathUtils.setInstance(new MathUtils_JavaDesktop());
       IFactory.setInstance(new Factory_JavaDesktop());
       ILogger.setInstance(new Logger_JavaDesktop(LogLevel.ErrorLevel));
-
 
       //      final String pathFileJson = "/Users/mdelacalle/Desktop/A380/A380.json";
 
@@ -49,7 +46,6 @@ public class JSONtoBSON {
 
    }
 
-
    private static JSONBaseObject readJsonFile(final File fJson) {
       JSONBaseObject jbase = null;
       if (fJson.exists()) {
@@ -57,14 +53,14 @@ public class JSONtoBSON {
             // create FileInputStream object
 
             /*
-             * Create byte array large enough to hold the content of the file.
-             * Use File.length to determine size of the file in bytes.
+             * Create byte array large enough to hold the content of the file. Use
+             * File.length to determine size of the file in bytes.
              */
             final byte fileContent[] = new byte[(int) fJson.length()];
 
             /*
-             * To read content of the file in byte array, use
-             * int read(byte[] byteArray) method of java FileInputStream class.
+             * To read content of the file in byte array, use int read(byte[] byteArray)
+             * method of java FileInputStream class.
              */
             finJson.read(fileContent);
 
@@ -85,9 +81,7 @@ public class JSONtoBSON {
       return jbase;
    }
 
-
-   private static void writeBsonFile(final JSONBaseObject jbase,
-                                     final File fBson) {
+   private static void writeBsonFile(final JSONBaseObject jbase, final File fBson) {
       if (!fBson.exists() && (jbase != null)) {
          try (final FileOutputStream fout = new FileOutputStream(fBson)) {
             final ByteBuffer_JavaDesktop bb = (ByteBuffer_JavaDesktop) BSONGenerator.generate(jbase);

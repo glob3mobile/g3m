@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.nio.ByteBuffer;
@@ -10,29 +9,24 @@ import org.glob3.mobile.generated.IFloatBuffer;
 
 import android.opengl.GLES20;
 
-
-public final class FloatBuffer_Android
-         extends
-            IFloatBuffer {
+public final class FloatBuffer_Android extends IFloatBuffer {
 
    private final FloatBuffer _buffer;
    private int               _timestamp;
 
-   private static int        _boundVertexBuffer     = -1;
-   private boolean           _vertexBufferCreated   = false;
+   private static int _boundVertexBuffer   = -1;
+   private boolean    _vertexBufferCreated = false;
    //   private boolean           _disposed              = false;
-   private int               _vertexBuffer          = -1;
-   private int               _vertexBufferTimeStamp = -1;
+   private int _vertexBuffer          = -1;
+   private int _vertexBufferTimeStamp = -1;
 
    //ID
-   private static long       _nextID                = 0;
-   private final long        _id                    = _nextID++;
-
+   private static long _nextID = 0;
+   private final long  _id     = _nextID++;
 
    FloatBuffer_Android(final int size) {
       _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
    }
-
 
    FloatBuffer_Android(final float f0,
                        final float f1,
@@ -69,13 +63,11 @@ public final class FloatBuffer_Android
       _buffer.put(15, f15);
    }
 
-
    //     FloatBuffer_Android(final float[] array) {
    //      _buffer = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
    //      _buffer.put(array);
    //      _buffer.rewind();
    //   }
-
 
    FloatBuffer_Android(final float[] array,
                        final int length) {
@@ -84,65 +76,53 @@ public final class FloatBuffer_Android
       _buffer.rewind();
    }
 
-
    @Override
    public int size() {
       return _buffer.capacity();
    }
-
 
    @Override
    public int timestamp() {
       return _timestamp;
    }
 
-
    @Override
    public float get(final int i) {
       return _buffer.get(i);
    }
 
-
    @Override
-   public void put(final int i,
-                   final float value) {
+   public void put(final int i, final float value) {
       if (_buffer.get(i) != value) {
          _buffer.put(i, value);
          _timestamp++;
       }
    }
 
-
    @Override
-   public void rawPut(final int i,
-                      final float value) {
+   public void rawPut(final int i, final float value) {
       _buffer.put(i, value);
    }
 
-
    @Override
-   public void rawAdd(final int i,
-                      final float value) {
+   public void rawAdd(final int i, final float value) {
       _buffer.put(i, _buffer.get(i) + value);
    }
-
 
    public FloatBuffer getBuffer() {
       return _buffer;
    }
-
 
    @Override
    public String description() {
       return "FloatBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
    }
 
-
    void bindAsVBOToGPU() {
       if (!_vertexBufferCreated) {
          final java.nio.IntBuffer ib = java.nio.IntBuffer.allocate(1);
          GLES20.glGenBuffers(1, ib); //COULD RETURN GL_INVALID_VALUE EVEN WITH NO ERROR
-         _vertexBuffer = ib.get(0);
+         _vertexBuffer        = ib.get(0);
          _vertexBufferCreated = true;
       }
 
@@ -154,8 +134,8 @@ public final class FloatBuffer_Android
       if (_vertexBufferTimeStamp != _timestamp) {
          _vertexBufferTimeStamp = _timestamp;
 
-         final FloatBuffer buffer = getBuffer();
-         final int vboSize = 4 * size();
+         final FloatBuffer buffer  = getBuffer();
+         final int         vboSize = 4 * size();
 
          //	      glBufferData(GL_ARRAY_BUFFER, vboSize, vertices, GL_STATIC_DRAW);
          GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vboSize, buffer, GLES20.GL_STATIC_DRAW);
@@ -165,7 +145,6 @@ public final class FloatBuffer_Android
       //	      ILogger::instance()->logError("Problem using VBO");
       //	    }
    }
-
 
    @Override
    public void dispose() {
@@ -184,18 +163,13 @@ public final class FloatBuffer_Android
       }
    }
 
-
    @Override
    public long getID() {
       return _id;
    }
 
-
    @Override
-   public void rawPut(final int i,
-                      final IFloatBuffer srcBuffer,
-                      final int srcFromIndex,
-                      final int count) {
+   public void rawPut(final int i, final IFloatBuffer srcBuffer, final int srcFromIndex, final int count) {
       if ((i < 0) || ((i + count) > size())) {
          throw new RuntimeException("buffer put error");
       }
@@ -206,12 +180,10 @@ public final class FloatBuffer_Android
       }
    }
 
-
    static void onGPUProgramHasChanged() {
       //APPARENTLY CHANGING PROGRAM FORCES TO REBIND THE BUFFERS
       _boundVertexBuffer = -1;
    }
-
 
    //   @Override
    //   protected void finalize() throws Throwable {

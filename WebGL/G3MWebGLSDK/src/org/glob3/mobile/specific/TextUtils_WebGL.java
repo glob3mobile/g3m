@@ -1,15 +1,9 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import org.glob3.mobile.generated.*;
 
-
-public class TextUtils_WebGL
-                             extends
-                                ITextUtils {
-
+public class TextUtils_WebGL extends ITextUtils {
 
    private static String toJSColor(final Color color) {
       if (color == null) {
@@ -24,13 +18,8 @@ public class TextUtils_WebGL
       return "rgba(" + r + "," + g + "," + b + "," + a + ")";
    }
 
-
    @Override
-   public native void createLabelImage(final String label,
-                                       final float fontSize,
-                                       final Color color,
-                                       final Color shadowColor,
-                                       final IImageListener listener,
+   public native void createLabelImage(final String label, final float fontSize, final Color color, final Color shadowColor, final IImageListener listener,
                                        final boolean autodelete) /*-{
 		var canvas = $doc.createElement("canvas");
 		var context = canvas.getContext("2d");
@@ -71,17 +60,9 @@ public class TextUtils_WebGL
 
    }-*/;
 
-
    @Override
-   public void labelImage(final IImage image,
-                          final String label,
-                          final LabelPosition labelPosition,
-                          final int separation,
-                          final float fontSize,
-                          final Color color,
-                          final Color shadowColor,
-                          final IImageListener listener,
-                          final boolean autodelete) {
+   public void labelImage(final IImage image, final String label, final LabelPosition labelPosition, final int separation, final float fontSize,
+                          final Color color, final Color shadowColor, final IImageListener listener, final boolean autodelete) {
 
       final boolean labelBottom;
       if (labelPosition == LabelPosition.Bottom) {
@@ -105,15 +86,8 @@ public class TextUtils_WebGL
       }
    }
 
-
-   private native void nativeLabelImage(final IImage image,
-                                        final String label,
-                                        final boolean labelBottom,
-                                        final int separation,
-                                        final float fontSize,
-                                        final Color color,
-                                        final Color shadowColor,
-                                        final IImageListener listener) /*-{
+   private native void nativeLabelImage(final IImage image, final String label, final boolean labelBottom, final int separation, final float fontSize,
+                                        final Color color, final Color shadowColor, final IImageListener listener) /*-{
 		//debugger;
 
 		var canvas = $doc.createElement("canvas");

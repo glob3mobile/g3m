@@ -1,7 +1,5 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import java.util.*;
 
@@ -10,10 +8,7 @@ import org.glob3.mobile.generated.*;
 import android.content.*;
 import android.util.*;
 
-
-public final class Downloader_Android
-                                      extends
-                                         IDownloader {
+public final class Downloader_Android extends IDownloader {
 
    final static String TAG = "Downloader_Android";
 
@@ -36,7 +31,6 @@ public final class Downloader_Android
 
    private G3MContext _context;
 
-
    Downloader_Android(final int maxConcurrentOperationCount,
                       final TimeInterval connectTimeout,
                       final TimeInterval readTimeout,
@@ -48,7 +42,6 @@ public final class Downloader_Android
       _connectTimeout = connectTimeout;
       _readTimeout    = readTimeout;
    }
-
 
    @Override
    public void start() {
@@ -73,7 +66,6 @@ public final class Downloader_Android
       }
    }
 
-
    @Override
    public void stop() {
       synchronized (_startStopMutex) {
@@ -82,7 +74,6 @@ public final class Downloader_Android
                worker.stopWorkerThread();
             }
             _started = false;
-
 
             // boolean allWorkersStopped;
             // do {
@@ -101,22 +92,15 @@ public final class Downloader_Android
             // }
             // while (!allWorkersStopped);
 
-
             _workers.clear();
             Log.i(TAG, "Downloader stopped");
          }
       }
    }
 
-
    @Override
-   public long requestBuffer(final URL url,
-                             final long priority,
-                             final TimeInterval timeToCache,
-                             final boolean readExpired,
-                             final IBufferDownloadListener listener,
-                             final boolean deleteListener,
-                             final String tag) {
+   public long requestBuffer(final URL url, final long priority, final TimeInterval timeToCache, final boolean readExpired,
+                             final IBufferDownloadListener listener, final boolean deleteListener, final String tag) {
       final long requestID;
 
       synchronized (this) {
@@ -128,8 +112,7 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag,
-                     _connectTimeout, _readTimeout);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag, _connectTimeout, _readTimeout);
                _queuedHandlers.put(path, handler);
             }
             else {
@@ -146,15 +129,9 @@ public final class Downloader_Android
       return requestID;
    }
 
-
    @Override
-   public long requestImage(final URL url,
-                            final long priority,
-                            final TimeInterval timeToCache,
-                            final boolean readExpired,
-                            final IImageDownloadListener listener,
-                            final boolean deleteListener,
-                            final String tag) {
+   public long requestImage(final URL url, final long priority, final TimeInterval timeToCache, final boolean readExpired,
+                            final IImageDownloadListener listener, final boolean deleteListener, final String tag) {
       final long requestID;
 
       synchronized (this) {
@@ -166,8 +143,7 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(path);
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag,
-                     _connectTimeout, _readTimeout);
+               handler = new Downloader_Android_Handler(url, listener, deleteListener, priority, requestID, tag, _connectTimeout, _readTimeout);
                _queuedHandlers.put(path, handler);
             }
             else {
@@ -183,7 +159,6 @@ public final class Downloader_Android
 
       return requestID;
    }
-
 
    @Override
    public boolean cancelRequest(final long requestID) {
@@ -229,19 +204,16 @@ public final class Downloader_Android
       return found;
    }
 
-
    @Override
    public void cancelRequestsTagged(final String tag) {
       if (tag.isEmpty()) {
          return;
       }
 
-
       synchronized (this) {
          _cancelsCounter++;
 
-         for (final Iterator<Map.Entry<String, Downloader_Android_Handler>> iterator = _queuedHandlers.entrySet()
-               .iterator(); iterator.hasNext();) {
+         for (final Iterator<Map.Entry<String, Downloader_Android_Handler>> iterator = _queuedHandlers.entrySet().iterator(); iterator.hasNext();) {
             final Map.Entry<String, Downloader_Android_Handler> entry = iterator.next();
 
             final Downloader_Android_Handler handler = entry.getValue();
@@ -258,21 +230,17 @@ public final class Downloader_Android
       }
    }
 
-
    public synchronized void removeDownloadingHandlerForUrl(final String url) {
       _downloadingHandlers.remove(url);
    }
 
-
    @Override
-   public synchronized void initialize(final G3MContext context,
-                                       final FrameTasksExecutor frameTasksExecutor) {
+   public synchronized void initialize(final G3MContext context, final FrameTasksExecutor frameTasksExecutor) {
       _context = context;
       for (final Downloader_Android_WorkerThread worker : _workers) {
          worker.initialize(_context);
       }
    }
-
 
    Downloader_Android_Handler getHandlerToRun() {
       Downloader_Android_Handler selectedHandler = null;
@@ -311,7 +279,6 @@ public final class Downloader_Android
       return selectedHandler;
    }
 
-
    @Override
    public String statistics() {
       final StringBuilder_Android sb = new StringBuilder_Android(IStringBuilder.DEFAULT_FLOAT_PRECISION);
@@ -328,7 +295,6 @@ public final class Downloader_Android
       return sb.getString();
    }
 
-
    // public TimeInterval getConnectTimeout() {
    // return _connectTimeout;
    // }
@@ -338,28 +304,23 @@ public final class Downloader_Android
    // return _readTimeout;
    // }
 
-
    @Override
    public void onResume(final G3MContext context) {
       start();
    }
-
 
    @Override
    public void onPause(final G3MContext context) {
       stop();
    }
 
-
    public Context getAppContext() {
       return _appContext;
    }
-
 
    @Override
    public void onDestroy(final G3MContext context) {
       stop();
    }
-
 
 }

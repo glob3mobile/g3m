@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.tools.httpurlconnection;
 
 import java.io.BufferedReader;
@@ -18,22 +17,18 @@ import java.util.Map;
 
 import org.apache.commons.fileupload.util.Streams;
 
-
 public class ConnectionManager {
 
    public static final String methodPost = "POST";
    public static final String methodGet  = "GET";
 
+   final static String crlf       = "\r\n";
+   final static String twoHyphens = "--";
 
-   final static String        crlf       = "\r\n";
-   final static String        twoHyphens = "--";
-
-
-   public static File downloadFile(final String requestUrl,
-                                   final File outputDir) throws IOException {
+   public static File downloadFile(final String requestUrl, final File outputDir) throws IOException {
       File outputFile = null;
 
-      final URL url = new URL(requestUrl);
+      final URL               url      = new URL(requestUrl);
       final HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
       httpConn.setConnectTimeout(60000);
       httpConn.setReadTimeout(65000);
@@ -41,10 +36,9 @@ public class ConnectionManager {
 
       final int responseCode = httpConn.getResponseCode();
 
-
       // always check HTTP response code first
       if (responseCode == HttpURLConnection.HTTP_OK) {
-         String fileName = "";
+         String       fileName    = "";
          final String disposition = httpConn.getHeaderField("Content-Disposition");
          if (disposition != null) {
             // extracts file name from header field
@@ -78,17 +72,13 @@ public class ConnectionManager {
       return outputFile;
    }
 
-
-   public static String httpConnectionMultipart(final String requestUrl,
-                                                final File fileToUpload,
-                                                final Map<String, String> requestProperty,
-                                                final Map<String, String> urlParameters) throws MalformedURLException,
-                                                                                        IOException, ProtocolException {
+   public static String httpConnectionMultipart(final String requestUrl, final File fileToUpload, final Map<String, String> requestProperty,
+                                                final Map<String, String> urlParameters) throws MalformedURLException, IOException, ProtocolException {
 
       // Just generate some unique random value.
-      final String boundary = Long.toHexString(System.currentTimeMillis());
+      final String      boundary          = Long.toHexString(System.currentTimeMillis());
       HttpURLConnection httpUrlConnection = null;
-      final URL url = new URL(requestUrl);
+      final URL         url               = new URL(requestUrl);
       httpUrlConnection = (HttpURLConnection) url.openConnection();
       httpUrlConnection.setInstanceFollowRedirects(false);
       httpUrlConnection.setUseCaches(false);
@@ -101,10 +91,8 @@ public class ConnectionManager {
       }
       httpUrlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
-
       DataOutputStream request = new DataOutputStream(httpUrlConnection.getOutputStream());
       request.writeBytes(twoHyphens + boundary + crlf);
-
 
       if (!urlParameters.isEmpty()) {
          for (final String key : urlParameters.keySet()) {
@@ -119,8 +107,7 @@ public class ConnectionManager {
          }
       }
 
-      request.writeBytes("Content-Disposition: form-data; name=\"" + "fileuploader" + "\";filename=\"" + fileToUpload.getName()
-                         + "\"" + crlf);
+      request.writeBytes("Content-Disposition: form-data; name=\"" + "fileuploader" + "\";filename=\"" + fileToUpload.getName() + "\"" + crlf);
 
       String contentType = URLConnection.guessContentTypeFromName(fileToUpload.getName());
       contentType = ((contentType != null) ? contentType : "");
@@ -130,7 +117,6 @@ public class ConnectionManager {
 
       request.writeBytes(crlf);
       request.flush();
-
 
       try (final FileInputStream in = new FileInputStream(fileToUpload)) {
 
@@ -145,7 +131,6 @@ public class ConnectionManager {
 
          request.close();
          request = null;
-
 
          final StringBuilder sb = new StringBuilder();
          try (final BufferedReader reader = new BufferedReader(new InputStreamReader(httpUrlConnection.getInputStream()))) {
@@ -162,14 +147,9 @@ public class ConnectionManager {
       }
    }
 
-
-   public static String httpConnection(final String requestUrl,
-                                       final String method,
-                                       final Map<String, String> requestProperty,
-                                       final Map<String, String> urlParameters) throws MalformedURLException, IOException,
-                                                                               ProtocolException {
+   public static String httpConnection(final String requestUrl, final String method, final Map<String, String> requestProperty,
+                                       final Map<String, String> urlParameters) throws MalformedURLException, IOException, ProtocolException {
       HttpURLConnection connection = null;
-
 
       if (method.equalsIgnoreCase(methodPost)) {
          final URL url = new URL(requestUrl);
@@ -222,7 +202,6 @@ public class ConnectionManager {
             connection.setRequestProperty(key, requestProperty.get(key));
          }
       }
-
 
       final StringBuilder sb = new StringBuilder();
       try (final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {

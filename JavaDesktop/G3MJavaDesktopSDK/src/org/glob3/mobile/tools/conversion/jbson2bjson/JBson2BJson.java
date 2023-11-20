@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.tools.conversion.jbson2bjson;
 
 import java.io.*;
@@ -7,12 +6,9 @@ import java.io.*;
 import org.glob3.mobile.generated.*;
 import org.glob3.mobile.specific.*;
 
-
 public class JBson2BJson {
 
-
    private static JBson2BJson _jsonParser = null;
-
 
    public static synchronized JBson2BJson instance() {
       if (_jsonParser == null) {
@@ -22,11 +18,9 @@ public class JBson2BJson {
       return _jsonParser;
    }
 
-
    private JBson2BJson() {
       initialize();
    }
-
 
    private static void initialize() {
       IStringBuilder.setInstance(new StringBuilder_JavaDesktop(IStringBuilder.DEFAULT_FLOAT_PRECISION));
@@ -41,17 +35,14 @@ public class JBson2BJson {
       }
    }
 
-
-   public static void transform(final File firstFile,
-                                final File secondFile,
-                                final boolean overwrite) throws JBson2BJsonException, IOException {
+   public static void transform(final File firstFile, final File secondFile, final boolean overwrite) throws JBson2BJsonException, IOException {
       if ((firstFile.getName().toLowerCase().endsWith(".json") || firstFile.getName().toLowerCase().endsWith(".geojson"))
-          && secondFile.getName().toLowerCase().endsWith(".bson")) {
+            && secondFile.getName().toLowerCase().endsWith(".bson")) {
          JBson2BJson.instance();
          JBson2BJson.json2bson(firstFile, secondFile, overwrite);
       }
       else if ((secondFile.getName().toLowerCase().endsWith(".json") || secondFile.getName().toLowerCase().endsWith(".geojson"))
-               && firstFile.getName().toLowerCase().endsWith(".bson")) {
+            && firstFile.getName().toLowerCase().endsWith(".bson")) {
          JBson2BJson.instance();
          JBson2BJson.bson2json(firstFile, secondFile, overwrite);
       }
@@ -60,10 +51,7 @@ public class JBson2BJson {
       }
    }
 
-
-   static public void json2bson(final File fJson,
-                                final File fBson,
-                                final boolean overwrite) throws JBson2BJsonException, IOException {
+   static public void json2bson(final File fJson, final File fBson, final boolean overwrite) throws JBson2BJsonException, IOException {
       if (Utils.checkFileIsJson(fJson)) {
          if (overwrite && fBson.exists()) {
             if (!fBson.delete()) {
@@ -94,10 +82,7 @@ public class JBson2BJson {
       }
    }
 
-
-   static public void jsons2bson(final File fBson,
-                                 final boolean overwrite,
-                                 final File... fsJson) throws JBson2BJsonException, IOException {
+   static public void jsons2bson(final File fBson, final boolean overwrite, final File... fsJson) throws JBson2BJsonException, IOException {
       if (overwrite && fBson.exists()) {
          if (!fBson.delete()) {
             throw new JBson2BJsonException("Output bson file exist and can't to delete it for overwrite", null);
@@ -137,10 +122,7 @@ public class JBson2BJson {
       }
    }
 
-
-   public static void bson2json(final File fBson,
-                                final File fJson,
-                                final boolean overwrite) throws JBson2BJsonException, IOException {
+   public static void bson2json(final File fBson, final File fJson, final boolean overwrite) throws JBson2BJsonException, IOException {
       if (overwrite && fJson.exists()) {
          if (!fJson.delete()) {
             throw new JBson2BJsonException("Output JSON file exist and can't to delete it for overwrite", null);
@@ -170,21 +152,20 @@ public class JBson2BJson {
       }
    }
 
-
    static private JSONBaseObject readBsonFile(final File fBson) throws IOException {
       JSONBaseObject jbase = null;
       if (fBson.exists()) {
          // create FileInputStream object
          try (final FileInputStream finBson = new FileInputStream(fBson)) {
             /*
-             * Create byte array large enough to hold the content of the file.
-             * Use File.length to determine size of the file in bytes.
+             * Create byte array large enough to hold the content of the file. Use
+             * File.length to determine size of the file in bytes.
              */
             final byte fileContent[] = new byte[(int) fBson.length()];
 
             /*
-             * To read content of the file in byte array, use
-             * int read(byte[] byteArray) method of java FileInputStream class.
+             * To read content of the file in byte array, use int read(byte[] byteArray)
+             * method of java FileInputStream class.
              */
             finBson.read(fileContent);
             final ByteBuffer_JavaDesktop bb = new ByteBuffer_JavaDesktop(fileContent);
@@ -194,9 +175,7 @@ public class JBson2BJson {
       return jbase;
    }
 
-
-   static private void writeJsonFile(final JSONBaseObject jbase,
-                                     final File fJson) throws IOException {
+   static private void writeJsonFile(final JSONBaseObject jbase, final File fJson) throws IOException {
       if (fJson.exists() && (jbase != null)) {
          try (final FileOutputStream fout = new FileOutputStream(fJson)) {
             final int floatPrecision = IStringBuilder.DEFAULT_FLOAT_PRECISION;
@@ -206,9 +185,7 @@ public class JBson2BJson {
       }
    }
 
-
-   static private void writeBsonFile(final JSONBaseObject jbase,
-                                     final File fBson) throws IOException {
+   static private void writeBsonFile(final JSONBaseObject jbase, final File fBson) throws IOException {
       if (fBson.exists() && (jbase != null)) {
          try (final FileOutputStream fout = new FileOutputStream(fBson)) {
             final ByteBuffer_JavaDesktop bb = (ByteBuffer_JavaDesktop) BSONGenerator.generate(jbase);
@@ -219,21 +196,20 @@ public class JBson2BJson {
       }
    }
 
-
    static private JSONBaseObject readJsonFile(final File fJson) throws IOException {
       JSONBaseObject jbase = null;
       if (fJson.exists()) {
          // create FileInputStream object
          try (final FileInputStream finJson = new FileInputStream(fJson)) {
             /*
-             * Create byte array large enough to hold the content of the file.
-             * Use File.length to determine size of the file in bytes.
+             * Create byte array large enough to hold the content of the file. Use
+             * File.length to determine size of the file in bytes.
              */
             final byte fileContent[] = new byte[(int) fJson.length()];
 
             /*
-             * To read content of the file in byte array, use
-             * int read(byte[] byteArray) method of java FileInputStream class.
+             * To read content of the file in byte array, use int read(byte[] byteArray)
+             * method of java FileInputStream class.
              */
             finJson.read(fileContent);
 
@@ -246,15 +222,12 @@ public class JBson2BJson {
       return jbase;
    }
 
-
    private static class Utils {
 
       public static boolean checkFileIsJson(final File fJson) {
-         return fJson.exists() && fJson.isFile()
-                && (fJson.getName().toLowerCase().endsWith(".json") || fJson.getName().toLowerCase().endsWith(".geojson"));
+         return fJson.exists() && fJson.isFile() && (fJson.getName().toLowerCase().endsWith(".json") || fJson.getName().toLowerCase().endsWith(".geojson"));
 
       }
-
 
       public static boolean checkFileIsBson(final File fBson) {
          return fBson.exists() && fBson.isFile() && fBson.getName().toLowerCase().endsWith(".bson");

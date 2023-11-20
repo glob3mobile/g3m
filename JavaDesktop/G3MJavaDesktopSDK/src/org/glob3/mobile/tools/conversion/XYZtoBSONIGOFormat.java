@@ -1,11 +1,9 @@
 
-
 package org.glob3.mobile.tools.conversion;
 
 public class XYZtoBSONIGOFormat {
 
    //   private static int i;
-
 
    //   //THIS CLASS CONVERTS XYZ IN 4326 COORDINATES TO A JSON ARRAY AND AFTER THAT TO BSON
    //   public static void main(final String[] args) {
@@ -74,7 +72,6 @@ public class XYZtoBSONIGOFormat {
    //
    //   }
 
-
    //   private static void writeBsonFile(final JSONBaseObject jbase,
    //                                     final File fBson) {
    //      if (!fBson.exists() && (jbase != null)) {
@@ -94,7 +91,6 @@ public class XYZtoBSONIGOFormat {
    //         }
    //      }
    //   }
-
 
    //   private static JSONBaseObject readJsonFile(final File fJson) {
    //      JSONBaseObject jbase = null;
@@ -129,6 +125,5 @@ public class XYZtoBSONIGOFormat {
    //
    //      return jbase;
    //   }
-
 
 }

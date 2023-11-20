@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.io.BufferedInputStream;
@@ -27,17 +26,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-
 public final class Downloader_Android_Handler {
 
    private static final int DEFAULT_BUFFER_SIZE = 32 * 1024;
 
    private static final BitmapFactory.Options _bitmapFactoryOptions;
    static {
-      _bitmapFactoryOptions = new BitmapFactory.Options();
+      _bitmapFactoryOptions               = new BitmapFactory.Options();
       _bitmapFactoryOptions.inTempStorage = new byte[128 * 1024];
    }
-
 
    private final static String TAG = "Downloader_Android_Handler";
 
@@ -48,10 +45,8 @@ public final class Downloader_Android_Handler {
 
    private boolean _hasImageListeners;
 
-
    private final TimeInterval _connectTimeout;
    private final TimeInterval _readTimeout;
-
 
    Downloader_Android_Handler(final URL url,
                               final IBufferDownloadListener listener,
@@ -61,10 +56,10 @@ public final class Downloader_Android_Handler {
                               final String tag,
                               final TimeInterval connectTimeout,
                               final TimeInterval readTimeout) {
-      _connectTimeout = connectTimeout;
-      _readTimeout = readTimeout;
-      _priority = priority;
-      _g3mURL = url;
+      _connectTimeout    = connectTimeout;
+      _readTimeout       = readTimeout;
+      _priority          = priority;
+      _g3mURL            = url;
       _hasImageListeners = false;
       try {
          _javaURL = new java.net.URL(url._path);
@@ -85,7 +80,6 @@ public final class Downloader_Android_Handler {
 
    }
 
-
    Downloader_Android_Handler(final URL url,
                               final IImageDownloadListener listener,
                               final boolean deleteListener,
@@ -94,10 +88,10 @@ public final class Downloader_Android_Handler {
                               final String tag,
                               final TimeInterval connectTimeout,
                               final TimeInterval readTimeout) {
-      _connectTimeout = connectTimeout;
-      _readTimeout = readTimeout;
-      _priority = priority;
-      _g3mURL = url;
+      _connectTimeout    = connectTimeout;
+      _readTimeout       = readTimeout;
+      _priority          = priority;
+      _g3mURL            = url;
       _hasImageListeners = true;
       try {
          _javaURL = new java.net.URL(url._path);
@@ -118,14 +112,8 @@ public final class Downloader_Android_Handler {
 
    }
 
-
-   void addListener(final IBufferDownloadListener listener,
-                    final boolean deleteListener,
-                    final long priority,
-                    final long requestID,
-                    final String tag) {
-      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, deleteListener,
-               requestID, tag);
+   void addListener(final IBufferDownloadListener listener, final boolean deleteListener, final long priority, final long requestID, final String tag) {
+      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(listener, null, deleteListener, requestID, tag);
 
       synchronized (this) {
          _listeners.add(entry);
@@ -136,14 +124,8 @@ public final class Downloader_Android_Handler {
       }
    }
 
-
-   void addListener(final IImageDownloadListener listener,
-                    final boolean deleteListener,
-                    final long priority,
-                    final long requestID,
-                    final String tag) {
-      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, deleteListener,
-               requestID, tag);
+   void addListener(final IImageDownloadListener listener, final boolean deleteListener, final long priority, final long requestID, final String tag) {
+      final Downloader_Android_ListenerEntry entry = new Downloader_Android_ListenerEntry(null, listener, deleteListener, requestID, tag);
 
       synchronized (this) {
          _hasImageListeners = true;
@@ -156,11 +138,9 @@ public final class Downloader_Android_Handler {
       }
    }
 
-
    synchronized long getPriority() {
       return _priority;
    }
-
 
    boolean cancelListenerForRequestId(final long requestID) {
       synchronized (this) {
@@ -175,7 +155,6 @@ public final class Downloader_Android_Handler {
       return false;
    }
 
-
    void cancelListenersTagged(final String tag) {
       synchronized (this) {
          for (final Iterator<Downloader_Android_ListenerEntry> iterator = _listeners.iterator(); iterator.hasNext();) {
@@ -187,7 +166,6 @@ public final class Downloader_Android_Handler {
          }
       }
    }
-
 
    boolean removeListenerForRequestId(final long requestID) {
       synchronized (this) {
@@ -202,7 +180,6 @@ public final class Downloader_Android_Handler {
 
       return false;
    }
-
 
    boolean removeListenersTagged(final String tag) {
       boolean anyRemoved = false;
@@ -221,32 +198,29 @@ public final class Downloader_Android_Handler {
       return anyRemoved;
    }
 
-
    synchronized boolean hasListener() {
       return !_listeners.isEmpty();
    }
 
-
-   void runWithDownloader(final Downloader_Android downloader,
-                          final G3MContext context) {
+   void runWithDownloader(final Downloader_Android downloader, final G3MContext context) {
       //      Log.i(TAG, "runWithDownloader url=" + _url._path);
 
       if (_javaURL == null) {
          return;
       }
 
-      int statusCode = 0;
-      byte[] data = null;
+      int               statusCode = 0;
+      byte[]            data       = null;
       HttpURLConnection connection = null;
 
       try {
          if (_g3mURL.isFileProtocol()) {
             final String filePath = _g3mURL._path.replaceFirst(URL.FILE_PROTOCOL, "");
 
-            final File file = new File(filePath);
-            final InputStream fileIS = file.exists() //
-                                                     ? new FileInputStream(file) //
-                                                     : downloader.getAppContext().getAssets().open(filePath);
+            final File        file   = new File(filePath);
+            final InputStream fileIS = file.exists()                      //
+                  ? new FileInputStream(file)                             //
+                  : downloader.getAppContext().getAssets().open(filePath);
 
             data = getData(fileIS, -1);
             if (data != null) {
@@ -285,9 +259,7 @@ public final class Downloader_Android_Handler {
       context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, image), true);
    }
 
-
-   private static IImage decodeImage(final byte[] data,
-                                     final URL url) {
+   private static IImage decodeImage(final byte[] data, final URL url) {
       // final long start = System.currentTimeMillis();
       final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, _bitmapFactoryOptions);
       // ILogger.instance().logInfo("DOWNLOADER - onDownload: Bitmap parsed in " + (System.currentTimeMillis() - start) + "ms");
@@ -300,18 +272,16 @@ public final class Downloader_Android_Handler {
       return new Image_Android(bitmap, data);
    }
 
-
-   private byte[] getData(final InputStream is,
-                          final int contentLength) {
+   private byte[] getData(final InputStream is, final int contentLength) {
       byte[] data = null;
 
       try {
          final BufferedInputStream bis = new BufferedInputStream(is, DEFAULT_BUFFER_SIZE);
 
-         final int size = (contentLength > 0) ? contentLength : DEFAULT_BUFFER_SIZE;
-         final ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
-         final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-         int length;
+         final int                   size   = (contentLength > 0) ? contentLength : DEFAULT_BUFFER_SIZE;
+         final ByteArrayOutputStream baos   = new ByteArrayOutputStream(size);
+         final byte[]                buffer = new byte[DEFAULT_BUFFER_SIZE];
+         int                         length;
          while ((length = bis.read(buffer)) > 0) {
             baos.write(buffer, 0, length);
          }
@@ -329,17 +299,13 @@ public final class Downloader_Android_Handler {
       return data;
    }
 
-   private class ProcessResponseGTask
-            extends
-               GTask {
+   private class ProcessResponseGTask extends GTask {
 
       private final int    _statusCode;
       private final byte[] _data;
       private IImage       _image;
 
-
       // private final Downloader_Android_Handler _handler;
-
 
       public ProcessResponseGTask(final int statusCode,
                                   final byte[] data,
@@ -347,11 +313,10 @@ public final class Downloader_Android_Handler {
       //final Downloader_Android_Handler handler
       ) {
          _statusCode = statusCode;
-         _data = data;
-         _image = image;
+         _data       = data;
+         _image      = image;
          //_handler = handler;
       }
-
 
       @Override
       public void run(final G3MContext context) {
@@ -373,7 +338,7 @@ public final class Downloader_Android_Handler {
          }
          else {
             final ILogger logger = ILogger.instance();
-            final String msg = "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _g3mURL._path;
+            final String  msg    = "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _g3mURL._path;
             if (logger != null) {
                logger.logError(TAG + " " + msg);
             }
@@ -393,12 +358,10 @@ public final class Downloader_Android_Handler {
          }
       }
 
-
       @Override
       public void dispose() {
          super.dispose();
       }
    }
-
 
 }

@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.util.*;
@@ -8,22 +7,16 @@ import org.glob3.mobile.generated.*;
 
 import android.util.*;
 
-
-public final class Logger_Android
-         extends
-            ILogger {
+public final class Logger_Android extends ILogger {
 
    private final Locale _locale = new Locale("myLocale");
-
 
    Logger_Android(final LogLevel level) {
       super(level);
    }
 
-
    @Override
-   public void logInfo(final String x,
-                       final Object... params) {
+   public void logInfo(final String x, final Object... params) {
 
       if (_level == LogLevel.SilenceLevel) {
          return;
@@ -38,10 +31,8 @@ public final class Logger_Android
       }
    }
 
-
    @Override
-   public void logWarning(final String x,
-                          final Object... params) {
+   public void logWarning(final String x, final Object... params) {
       if (_level == LogLevel.SilenceLevel) {
          return;
       }
@@ -58,10 +49,8 @@ public final class Logger_Android
       }
    }
 
-
    @Override
-   public void logError(final String x,
-                        final Object... params) {
+   public void logError(final String x, final Object... params) {
       if (_level != LogLevel.ErrorLevel) {
          return;
       }

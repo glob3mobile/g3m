@@ -1,26 +1,19 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import java.util.*;
 
 import org.glob3.mobile.generated.*;
 
-
-public class TileVisitorCache_JavaDesktop
-                                          implements
-                                             ITileVisitor {
+public class TileVisitorCache_JavaDesktop implements ITileVisitor {
 
    @Override
    public void dispose() {
 
    }
 
-
    @Override
-   public void visitTile(final ArrayList<Layer> layers,
-                         final Tile tile) {
+   public void visitTile(final ArrayList<Layer> layers, final Tile tile) {
       //      for (int i = 0; i < layers.size(); i++) {
       //         final Layer layer = layers.get(i);
       //         //TODO: OJO WITH THIS NULL

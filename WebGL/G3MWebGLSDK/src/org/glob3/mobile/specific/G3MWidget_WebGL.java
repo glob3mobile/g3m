@@ -1,26 +1,18 @@
 
-
 package org.glob3.mobile.specific;
 
-
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.canvas.client.*;
 import com.google.gwt.core.client.*;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
-
-public class G3MWidget_WebGL
-                             extends
-                                Composite {
-
+public class G3MWidget_WebGL extends Composite {
 
    static {
       initSingletons();
    }
-
 
    public static void initSingletons() {
       final ILogger         logger         = new Logger_WebGL(LogLevel.InfoLevel);
@@ -34,17 +26,16 @@ public class G3MWidget_WebGL
       final IDeviceLocation deviceLocation = new DeviceLocation_WebGL();
 
       G3MWidget.initSingletons( //
-            logger, //
-            factory, //
-            stringUtils, //
-            stringBuilder, //
-            mathUtils, //
-            jsonParser, //
-            textUtils, //
-            deviceAttitude, //
-            deviceLocation);
+                               logger, //
+                               factory, //
+                               stringUtils, //
+                               stringBuilder, //
+                               mathUtils, //
+                               jsonParser, //
+                               textUtils, //
+                               deviceAttitude, //
+                               deviceLocation);
    }
-
 
    private final Canvas         _canvas;
    private JavaScriptObject     _webGLContext;
@@ -58,7 +49,6 @@ public class G3MWidget_WebGL
    private float                _devicePixelRatio = 1;
 
    private boolean _running = true;
-
 
    public G3MWidget_WebGL() {
       _canvas = Canvas.createIfSupported();
@@ -88,7 +78,6 @@ public class G3MWidget_WebGL
       //      onSizeChanged(1, 1);
    }
 
-
    private native void exportJSFunctions() /*-{
 		var that = this;
 		if (!$wnd.G3M) {
@@ -112,18 +101,13 @@ public class G3MWidget_WebGL
 		});
    }-*/;
 
-
    public void moveCameraTo(final Geodetic3D position) {
       _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
    }
 
-
-   public static Geodetic3D newGeodetic3D(final double latitude,
-                                          final double longitude,
-                                          final double height) {
+   public static Geodetic3D newGeodetic3D(final double latitude, final double longitude, final double height) {
       return new Geodetic3D(Angle.fromDegrees(latitude), Angle.fromDegrees(longitude), height);
    }
-
 
    public final native JavaScriptObject getCameraData() /*-{
 		var widget = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_g3mWidget;
@@ -148,14 +132,12 @@ public class G3MWidget_WebGL
 		return result;
    }-*/;
 
-
    public native String takeScreenshotAsBase64() /*-{
 		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
 		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
 		var dataURL = canvas.toDataURL("image/jpeg");
 		return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
    }-*/;
-
 
    public native JavaScriptObject takeScreenshotAsImage() /*-{
 		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
@@ -167,7 +149,6 @@ public class G3MWidget_WebGL
 		return image;
    }-*/;
 
-
    private static VerticalPanel createUnsupportedMessage(final String message) {
       final VerticalPanel panel = new VerticalPanel();
 
@@ -177,11 +158,9 @@ public class G3MWidget_WebGL
       return panel;
    }
 
-
    public boolean isWebGLSupported() {
       return ((_canvas != null) && (_webGLContext != null));
    }
-
 
    @Override
    public void onBrowserEvent(final Event event) {
@@ -192,7 +171,6 @@ public class G3MWidget_WebGL
       }
       super.onBrowserEvent(event);
    }
-
 
    private native void jsAddResizeHandler(JavaScriptObject jsCanvas) /*-{
 		var that = this;
@@ -206,19 +184,15 @@ public class G3MWidget_WebGL
 		$wnd.g3mWidgetResizeChecker = setInterval($wnd.g3mWidgetResize, 200);
    }-*/;
 
-
    private static native float jsGetDevicePixelRatio() /*-{
 		return $wnd.devicePixelRatio || 1;
    }-*/;
-
 
    public float getDevicePixelRatio() {
       return _devicePixelRatio;
    }
 
-
-   private void onSizeChanged(final int width,
-                              final int height) {
+   private void onSizeChanged(final int width, final int height) {
       if ((_width != width) || (_height != height)) {
          _width  = width;
          _height = height;
@@ -232,23 +206,19 @@ public class G3MWidget_WebGL
       }
    }
 
-
    private void renderG3MWidget() {
       if (_running) {
          _g3mWidget.render(_physicalWidth, _physicalHeight);
       }
    }
 
-
    public void startRunning() {
       _running = true;
    }
 
-
    public void stopRunning() {
       _running = false;
    }
-
 
    private native void jsDefineG3MBrowserObjects() /*-{
 		var that = this;
@@ -282,7 +252,6 @@ public class G3MWidget_WebGL
 			that.@org.glob3.mobile.specific.G3MWidget_WebGL::renderG3MWidget()();
 		};
    }-*/;
-
 
    private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas) /*-{
 		var context = null;
@@ -319,7 +288,6 @@ public class G3MWidget_WebGL
 		return context;
    }-*/;
 
-
    public void startWidget() {
       if (_g3mWidget != null) {
          final CanvasElement canvasElement = _canvas.getCanvasElement();
@@ -329,88 +297,70 @@ public class G3MWidget_WebGL
       }
    }
 
-
    private native void jsStartRenderLoop() /*-{
 		$wnd.g3mTick();
    }-*/;
-
 
    public JavaScriptObject getWebGLContext() {
       return _webGLContext;
    }
 
-
    public void setG3MWidget(final G3MWidget widget) {
       _g3mWidget = widget;
    }
-
 
    public G3MWidget getG3MWidget() {
       return _g3mWidget;
    }
 
-
    public Camera getNextCamera() {
       return getG3MWidget().getNextCamera();
    }
-
 
    public WidgetUserData getUserData() {
       return getG3MWidget().getUserData();
    }
 
-
-   public void setAnimatedCameraPosition(final Geodetic3D position,
-                                         final TimeInterval interval) {
+   public void setAnimatedCameraPosition(final Geodetic3D position, final TimeInterval interval) {
       getG3MWidget().setAnimatedCameraPosition(interval, position);
    }
-
 
    public void setAnimatedCameraPosition(final Geodetic3D position) {
       getG3MWidget().setAnimatedCameraPosition(position);
    }
 
-
    public void setCameraPosition(final Geodetic3D position) {
       getG3MWidget().setCameraPosition(position);
    }
-
 
    public CameraRenderer getCameraRenderer() {
       return getG3MWidget().getCameraRenderer();
    }
 
-
    public void setCameraHeading(final Angle angle) {
       getG3MWidget().setCameraHeading(angle);
    }
-
 
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);
    }
 
-
    public void cancelCameraAnimation() {
       getG3MWidget().cancelCameraAnimation();
    }
-
 
    public G3MContext getG3MContext() {
       return getG3MWidget().getG3MContext();
    }
 
-
    public GL getGL() {
       return _gl;
    }
-
 
    void onTouchEvent(final TouchEvent event) {
       if (_g3mWidget != null) {
          _g3mWidget.onTouchEvent(event);
       }
    }
-
 
 }

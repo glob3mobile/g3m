@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IBufferDownloadListener;
@@ -11,11 +10,9 @@ import org.glob3.mobile.generated.URL;
 
 import android.util.Log;
 
-
 public final class Downloader_Android_ListenerEntry {
 
-   private final static String           TAG = "Downloader_Android_ListenerEntry";
-
+   private final static String TAG = "Downloader_Android_ListenerEntry";
 
    private final IBufferDownloadListener _bufferListener;
    private final IImageDownloadListener  _imageListener;
@@ -24,20 +21,18 @@ public final class Downloader_Android_ListenerEntry {
    final String                          _tag;
    private boolean                       _canceled;
 
-
    Downloader_Android_ListenerEntry(final IBufferDownloadListener bufferListener,
                                     final IImageDownloadListener imageListener,
                                     final boolean deleteListener,
                                     final long requestID,
                                     final String tag) {
       _bufferListener = bufferListener;
-      _imageListener = imageListener;
+      _imageListener  = imageListener;
       _deleteListener = deleteListener;
-      _requestID = requestID;
-      _tag = tag;
-      _canceled = false;
+      _requestID      = requestID;
+      _tag            = tag;
+      _canceled       = false;
    }
-
 
    void cancel() {
       if (_canceled) {
@@ -51,11 +46,9 @@ public final class Downloader_Android_ListenerEntry {
       _canceled = true;
    }
 
-
    public boolean isCanceled() {
       return _canceled;
    }
-
 
    void onCancel(final URL url) {
       if (_bufferListener != null) {
@@ -73,7 +66,6 @@ public final class Downloader_Android_ListenerEntry {
       }
    }
 
-
    void onError(final URL url) {
       if (_bufferListener != null) {
          _bufferListener.onError(url);
@@ -90,10 +82,7 @@ public final class Downloader_Android_ListenerEntry {
       }
    }
 
-
-   void onDownload(final URL url,
-                   final byte[] data,
-                   final IImage image) {
+   void onDownload(final URL url, final byte[] data, final IImage image) {
       if (_bufferListener != null) {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
          _bufferListener.onDownload(url, buffer, false);
@@ -116,10 +105,7 @@ public final class Downloader_Android_ListenerEntry {
       }
    }
 
-
-   void onCanceledDownload(final URL url,
-                           final byte[] data,
-                           final IImage image) {
+   void onCanceledDownload(final URL url, final byte[] data, final IImage image) {
       if (_bufferListener != null) {
          final IByteBuffer buffer = new ByteBuffer_Android(data);
          _bufferListener.onCanceledDownload(url, buffer, false);
@@ -135,6 +121,5 @@ public final class Downloader_Android_ListenerEntry {
          }
       }
    }
-
 
 }

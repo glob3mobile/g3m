@@ -1,19 +1,13 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import org.glob3.mobile.generated.*;
 
 import com.google.gwt.core.client.*;
 
-
-public class WebSocket_WebGL
-                             extends
-                                IWebSocket {
+public class WebSocket_WebGL extends IWebSocket {
 
    private JavaScriptObject _socket;
-
 
    WebSocket_WebGL(final URL url,
                    final IWebSocketListener listener,
@@ -25,11 +19,7 @@ public class WebSocket_WebGL
       jsInitialize(this, getURL()._path, getListener(), getAutodeleteWebSocket(), verboseErrors);
    }
 
-
-   private native void jsInitialize(final WebSocket_WebGL webSocket,
-                                    final String path,
-                                    final IWebSocketListener listener,
-                                    final boolean autodeleteWebSocket,
+   private native void jsInitialize(final WebSocket_WebGL webSocket, final String path, final IWebSocketListener listener, final boolean autodeleteWebSocket,
                                     final boolean verboseErrors) /*-{
 		if (!$wnd.WebSocket) {
 			$wnd.WebSocket = $wnd.MozWebSocket;
@@ -73,17 +63,14 @@ public class WebSocket_WebGL
 		}
    }-*/;
 
-
    @Override
    public native void send(final String message) /*-{
 		this.@org.glob3.mobile.specific.WebSocket_WebGL::_socket.send(message);
    }-*/;
 
-
    @Override
    public native void close() /*-{
 		this.@org.glob3.mobile.specific.WebSocket_WebGL::_socket.close();
    }-*/;
-
 
 }
