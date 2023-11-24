@@ -2,9 +2,7 @@
 package org.glob3.mobile.specific;
 
 import java.util.logging.*;
-
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.regexp.shared.*;
 
 public final class Logger_WebGL extends ILogger {

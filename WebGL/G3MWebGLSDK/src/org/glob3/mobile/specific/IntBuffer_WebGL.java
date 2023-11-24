@@ -1,9 +1,8 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IIntBuffer;
-
-import com.google.gwt.core.client.JavaScriptObject;
+import org.glob3.mobile.generated.*;
+import com.google.gwt.core.client.*;
 
 public final class IntBuffer_WebGL extends IIntBuffer {
 
@@ -36,13 +35,11 @@ public final class IntBuffer_WebGL extends IIntBuffer {
    }
 
    private native JavaScriptObject jsCreateWebGLBuffer() /*-{
-		return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_gl
-				.createBuffer();
+    return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_gl.createBuffer();
    }-*/;
 
    private native JavaScriptObject jsDeleteWebGLBuffer() /*-{
-		return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_gl
-				.deleteBuffer(this.@org.glob3.mobile.specific.IntBuffer_WebGL::_webGLBuffer);
+    return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_gl.deleteBuffer(this.@org.glob3.mobile.specific.IntBuffer_WebGL::_webGLBuffer);
    }-*/;
 
    public IntBuffer_WebGL(final JavaScriptObject data) {
@@ -75,25 +72,25 @@ public final class IntBuffer_WebGL extends IIntBuffer {
 
    private native void jsPut(int i, int value) /*-{
 
-		if (value < 0 || value > 65535) {
-			alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
-		}
+    if (value < 0 || value > 65535) {
+      alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
+    }
 
-		var thisInstance = this;
-		if (thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] != value) {
-			thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] = value;
-			thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::incTimestamp()();
-		}
+    var thisInstance = this;
+    if (thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] != value) {
+      thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] = value;
+      thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::incTimestamp()();
+    }
    }-*/;
 
    @Override
    public native void rawPut(final int i, final int value) /*-{
 
-		if (value < 0 || value > 65535) {
-			alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
-		}
+    if (value < 0 || value > 65535) {
+      alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
+    }
 
-		this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] = value;
+    this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] = value;
    }-*/;
 
    public JavaScriptObject getBuffer() {
@@ -105,19 +102,19 @@ public final class IntBuffer_WebGL extends IIntBuffer {
    }
 
    private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
-		return new Uint16Array(data);
+    return new Uint16Array(data);
    }-*/;
 
    private native JavaScriptObject jsCreateBuffer(final int size) /*-{
-		return new Uint16Array(size);
+    return new Uint16Array(size);
    }-*/;
 
    private native int jsSize() /*-{
-		return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer.length;
+    return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer.length;
    }-*/;
 
    private native int jsGet(int i) /*-{
-		return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i];
+    return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i];
    }-*/;
 
    @Override

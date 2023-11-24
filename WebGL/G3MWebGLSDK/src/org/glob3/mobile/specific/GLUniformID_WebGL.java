@@ -1,9 +1,8 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IGLUniformID;
-
-import com.google.gwt.core.client.JavaScriptObject;
+import org.glob3.mobile.generated.*;
+import com.google.gwt.core.client.*;
 
 public final class GLUniformID_WebGL implements IGLUniformID {
 

@@ -2,7 +2,6 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.core.client.*;
 
 public class DeviceLocation_WebGL extends IDeviceLocation {
@@ -27,19 +26,19 @@ public class DeviceLocation_WebGL extends IDeviceLocation {
    }
 
    private native boolean onPositionChanged(JavaScriptObject location)/*-{
-		this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_lat = location.coords.latitude;
-		this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_lon = location.coords.longitude;
+    this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_lat = location.coords.latitude;
+    this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_lon = location.coords.longitude;
 
-		if (location.coords.altitude == null) {
-			console.log("Device altitude is undefined, assuming 0");
-			this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = 0;
-		} else {
-			this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = location.coords.altitude;
-		}
+    if (location.coords.altitude == null) {
+      console.log("Device altitude is undefined, assuming 0");
+      this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = 0;
+    } else {
+      this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_altitude = location.coords.altitude;
+    }
    }-*/;
 
    private native boolean onError(JavaScriptObject error)/*-{
-		console.log(error);
+    console.log(error);
    }-*/;
 
    private native boolean startTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
@@ -55,11 +54,10 @@ public class DeviceLocation_WebGL extends IDeviceLocation {
 	}-*/;
 
    private native void stopTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
-		if ("geolocation" in navigator) {
-			navigator.geolocation
-					.clearWatch(devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId);
-			devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId = -1;
-		}
+    if ("geolocation" in navigator) {
+      navigator.geolocation.clearWatch(devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId);
+      devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId = -1;
+    }
    }-*/;
 
    @Override

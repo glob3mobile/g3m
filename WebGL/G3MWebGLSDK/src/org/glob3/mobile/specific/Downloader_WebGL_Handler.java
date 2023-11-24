@@ -1,11 +1,8 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.URL;
-
-import com.google.gwt.core.client.JavaScriptObject;
+import org.glob3.mobile.generated.*;
+import com.google.gwt.core.client.*;
 
 public interface Downloader_WebGL_Handler {
 
@@ -17,7 +14,8 @@ public interface Downloader_WebGL_Handler {
 
    boolean isImageRequest();
 
-   void addListener(final IBufferDownloadListener listener, final boolean deleteListener, final long priority, final long requestID, final String tag);
+   void addListener(final IBufferDownloadListener listener, final boolean deleteListener, final long priority, final long requestID,
+                    final String tag);
 
    void addListener(final IImageDownloadListener listener, final boolean deleteListener, final long priority, final long requestID, final String tag);
 
