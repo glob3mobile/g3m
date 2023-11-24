@@ -1,47 +1,50 @@
 import java.io.*;
 import java.util.*;
-
 import org.apache.commons.lang3.*;
-
 
 public class Main {
 
-   private static final String _classSource = "//\n" + //
-         "//  BasicShadersGL2.hpp\n" + //
-         "//  G3M\n" + //
-         "//\n" + //
-         "//\n" + //
-         "\n" + //
-         "#ifndef G3M_BasicShadersGL2_h\n" + //
-         "#define G3M_BasicShadersGL2_h\n" + //
-         "\n" + //
-         "#include \"GPUProgramFactory.hpp\"\n" + //
-         "\n" + //
-         "class BasicShadersGL2: public GPUProgramFactory {\n" + //
-         "\n" + //
-         "public:\n" + //
-         "  BasicShadersGL2() {\n" + //
-         "#ifdef C_CODE\n" + //
-         "    const std::string emptyString = \"\";\n" + //
-         "#endif\n" + //
-         "#ifdef JAVA_CODE\n" + //
-         "    final String emptyString = \"\";\n" + //
-         "#endif\n" + //
-         "\n" + //
-         "ADDING_SHADERS" + "  }\n" + //
-         "\n" + //
-         "};\n" + //
-         "#endif\n";
+   private static final String CLASS_SOURCE = """
+         //
+         //  BasicShadersGL2.hpp
+         //  G3M
+         //
+         //
 
-   //   private static final String ADD_PROGRAM_SOURCE = "    GPUProgramSources srcShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n" + //
-   //                                                    "    this->add(srcShader_Name);\n\n";
+         #ifndef G3M_BasicShadersGL2_h
+         #define G3M_BasicShadersGL2_h
 
-   private static final String ADD_PROGRAM_SOURCE = "    {\n" + //
-         "      GPUProgramSources srcShader_Name(\"Shader_Name\",\n Shader_Vertex,\n Shader_Fragment);\n" + //
-         "      this->add(srcShader_Name);\n" + //
-         "    }\n" + //
-         "\n";
+         #include "GPUProgramFactory.hpp"
 
+         class BasicShadersGL2: public GPUProgramFactory {
+
+         public:
+            BasicShadersGL2() {
+         #ifdef C_CODE
+               const std::string emptyString = "";
+         #endif
+         #ifdef JAVA_CODE
+               final String emptyString = "";
+         #endif
+
+         ADDING_SHADERS  }
+
+         };
+
+         #endif
+         """;
+
+   private static final String ADD_PROGRAM_SOURCE = """
+         // Shader_Name
+               {
+                  GPUProgramSources srcShader_Name(
+                     "Shader_Name",
+                     Shader_Vertex,
+                     Shader_Fragment);
+                  this->add(srcShader_Name);
+               }
+
+         """;
 
    private static class Shader {
       public String _name;
@@ -49,27 +52,20 @@ public class Main {
       public String _fragment;
    }
 
-
-   static String readFile(final String fileName) throws IOException {
+   private static String readFile(final String fileName) throws IOException {
       try (final BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-         final StringBuilder sb   = new StringBuilder();
-         String              line = br.readLine();
+         final StringBuilder sb = new StringBuilder();
 
-         while (line != null) {
+         String line;
+         while ((line = br.readLine()) != null) {
             sb.append(line);
-            sb.append("\n");
-            line = br.readLine();
+            sb.append('\n');
          }
          return sb.toString();
       }
-      //      catch (final IOException e) {
-      //         return null;
-      //      }
    }
 
-
-   static String processSourceString(final String source) {
-
+   private static String processSourceString(final String source) {
       final String[] lines = source.split(System.getProperty("line.separator"));
 
       String result = "emptyString +\n";
@@ -77,7 +73,7 @@ public class Main {
       for (int i = 0; i < lines.length; i++) {
          String line = lines[i];
 
-         line = line.trim();
+         //         line = line.trim();
          line = line.replaceAll("(\\r|\\n)", "");
          if (line.length() < 1) {
             continue;
@@ -88,7 +84,7 @@ public class Main {
          }
 
          //final boolean firstLine = (result == "");
-         result += "\"" + StringEscapeUtils.escapeJava(line) + "\\n\"";
+         result += "            \"" + StringEscapeUtils.escapeJava(line) + "\\n\"";
 
          if (i < (lines.length - 1)) {
             result += " +\n";
@@ -97,17 +93,9 @@ public class Main {
       }
 
       return result;
-
-      // return StringEscapeUtils.escapeJava(source);
    }
 
-
-   static String processNameString(final String source) {
-      return StringEscapeUtils.escapeJava(source);
-   }
-
-
-   static ArrayList<Shader> getShadersInFolder(final File shadersDir) throws IOException {
+   private static List<Shader> getShadersInFolder(final File shadersDir) throws IOException {
 
       final File folder = shadersDir;
 
@@ -118,11 +106,9 @@ public class Main {
             getShadersInFolder(fileEntry);
          }
          else {
-
             String name = fileEntry.getName();
 
             if (name.endsWith(".vsh")) {
-
                final File vertexFile = fileEntry;
                name = (String) name.subSequence(0, name.length() - 4);
                final File fragmentFile = new File(folder, name + ".fsh");
@@ -146,59 +132,44 @@ public class Main {
       }
 
       return shaders;
-
    }
 
-
-   private static void process(final File shadersDir,
-                               final File filePath) {
+   private static void process(final File shadersDir, final File filePath) throws IOException {
       System.out.println("Shaders Directory = " + shadersDir);
 
-      try {
-         final ArrayList<Shader> shaders = getShadersInFolder(shadersDir);
+      final List<Shader> shaders = getShadersInFolder(shadersDir);
 
-         String addingShadersString = "";
-         for (final Main.Shader shader : shaders) {
-            String source = ADD_PROGRAM_SOURCE.replaceAll("Shader_Name", shader._name);
-            source = source.replace("Shader_Vertex", processSourceString(shader._vertex));
-            source = source.replace("Shader_Fragment", processSourceString(shader._fragment));
-
-            //System.out.println(source);
-
-            addingShadersString += source;
-
-         }
-
-         final String outPath = filePath.getAbsolutePath();
-         try (final PrintWriter out = new PrintWriter(outPath)) {
-            out.print(_classSource.replace("ADDING_SHADERS", addingShadersString));
-         }
-
-
-      }
-      catch (final Exception e) {
-         e.printStackTrace();
-         return;
+      final StringBuilder addingShadersString = new StringBuilder();
+      for (final Main.Shader shader : shaders) {
+         final String source = getSource(shader);
+         addingShadersString.append(source);
       }
 
-
+      final String outPath = filePath.getAbsolutePath();
+      try (final PrintWriter out = new PrintWriter(outPath)) {
+         out.print(CLASS_SOURCE.replace("ADDING_SHADERS", addingShadersString));
+      }
    }
 
+   private static String getSource(final Main.Shader shader) {
+      final String vertexShaderSource   = processSourceString(shader._vertex);
+      final String fragmentShaderSource = processSourceString(shader._fragment);
 
-   public static void main(final String[] args) {
-      //      String pwd     = "";
+      final String source = ADD_PROGRAM_SOURCE //
+            .replace("Shader_Name", shader._name) //
+            .replace("Shader_Vertex", vertexShaderSource) //
+            .replace("Shader_Fragment", fragmentShaderSource);
+      return source;
+   }
 
+   public static void main(final String[] args) throws IOException {
       final File pwd    = new File(System.getProperty("user.dir"));
       final File g3mDir = pwd.getParentFile().getParentFile();
-
 
       final File shadersDir = new File(g3mDir, "iOS/G3MiOSSDK/Resources/Shaders/");
       final File filePath   = new File(g3mDir, "cpp/G3M/BasicShadersGL2.hpp");
 
-
       process(shadersDir, filePath);
-
-
    }
 
 }

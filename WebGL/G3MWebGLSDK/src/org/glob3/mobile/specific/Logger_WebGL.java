@@ -1,7 +1,5 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import java.util.logging.*;
 
@@ -9,17 +7,13 @@ import org.glob3.mobile.generated.*;
 
 import com.google.gwt.regexp.shared.*;
 
-
-public final class Logger_WebGL
-                                extends
-                                   ILogger {
+public final class Logger_WebGL extends ILogger {
 
    private final Logger _logger;
 
    private final boolean _logInfo;
    private final boolean _logWarning;
    private final boolean _logError;
-
 
    public Logger_WebGL(final LogLevel level) {
       super(level);
@@ -31,43 +25,33 @@ public final class Logger_WebGL
       _logWarning = levelValue <= LogLevel.WarningLevel.getValue();
       _logError   = levelValue <= LogLevel.ErrorLevel.getValue();
 
-
       logInfo("created Logger_WebGL level=" + level);
    }
 
-
    @Override
-   public void logInfo(final String message,
-                       final Object... args) {
+   public void logInfo(final String message, final Object... args) {
       if (_logInfo) {
          _logger.log(Level.INFO, stringFormat(message, args));
       }
    }
 
-
    @Override
-   public void logWarning(final String message,
-                          final Object... args) {
+   public void logWarning(final String message, final Object... args) {
       if (_logWarning) {
          _logger.log(Level.WARNING, stringFormat(message, args));
       }
    }
 
-
    @Override
-   public void logError(final String message,
-                        final Object... args) {
+   public void logError(final String message, final Object... args) {
       if (_logError) {
          _logger.log(Level.SEVERE, stringFormat(message, args));
       }
    }
 
-
    private static final RegExp exp = RegExp.compile("%[sdfib]+");
 
-
-   private static String stringFormat(final String format,
-                                      final Object... args) {
+   private static String stringFormat(final String format, final Object... args) {
       final StringBuilder sb     = new StringBuilder(2048);
       final SplitResult   splits = exp.split(format);
 
@@ -81,6 +65,5 @@ public final class Logger_WebGL
       }
       return sb.toString();
    }
-
 
 }

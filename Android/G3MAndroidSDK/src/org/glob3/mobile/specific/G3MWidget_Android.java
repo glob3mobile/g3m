@@ -1,7 +1,5 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import org.glob3.mobile.generated.*;
 
@@ -11,12 +9,7 @@ import android.util.*;
 import android.view.*;
 import android.view.GestureDetector.*;
 
-
-public final class G3MWidget_Android
-                                     extends
-                                        GLSurfaceView
-                                     implements
-                                        OnGestureListener {
+public final class G3MWidget_Android extends GLSurfaceView implements OnGestureListener {
 
    private G3MWidget         _g3mWidget;
    private final ES2Renderer _es2renderer;
@@ -25,16 +18,13 @@ public final class G3MWidget_Android
    private final GestureDetector      _gestureDetector;
    private Thread                     _openGLThread         = null;
 
-
    public G3MWidget_Android(final android.content.Context context) {
       this(context, null);
    }
 
-
    private void setOpenGLThread(final Thread openGLThread) {
       _openGLThread = openGLThread;
    }
-
 
    public void checkOpenGLThread() {
       if (_openGLThread != null) {
@@ -45,7 +35,6 @@ public final class G3MWidget_Android
          }
       }
    }
-
 
    // Needed to create widget from XML layout
    public G3MWidget_Android(final android.content.Context context,
@@ -88,7 +77,6 @@ public final class G3MWidget_Android
                                  return false;
                               }
 
-
                               @Override
                               public boolean onDoubleTapEvent(final MotionEvent event) {
                                  final TouchEvent te = MotionEventProcessor.processDoubleTapEvent(event);
@@ -102,7 +90,6 @@ public final class G3MWidget_Android
 
                                  return true;
                               }
-
 
                               @Override
                               public boolean onDoubleTap(final MotionEvent event) {
@@ -126,7 +113,6 @@ public final class G3MWidget_Android
       }
    }
 
-
    private void initSingletons() {
       final ILogger         logger        = new Logger_Android(LogLevel.ErrorLevel);
       final IFactory        factory       = new Factory_Android(getContext());
@@ -141,12 +127,8 @@ public final class G3MWidget_Android
       G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser, textUtils, devAttitude, devLoc);
    }
 
-
    @Override
-   protected void onSizeChanged(final int w,
-                                final int h,
-                                final int oldw,
-                                final int oldh) {
+   protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
       super.onSizeChanged(w, h, oldw, oldh);
 
       //      if (_es2renderer == null) {
@@ -154,7 +136,6 @@ public final class G3MWidget_Android
       //         setRenderer(_es2renderer);
       //      }
    }
-
 
    @SuppressLint("ClickableViewAccessibility")
    @Override
@@ -177,21 +158,15 @@ public final class G3MWidget_Android
       return true;
    }
 
-
    @Override
    public boolean onDown(final MotionEvent arg0) {
       return false;
    }
 
-
    @Override
-   public boolean onFling(final MotionEvent e1,
-                          final MotionEvent e2,
-                          final float velocityX,
-                          final float velocityY) {
+   public boolean onFling(final MotionEvent e1, final MotionEvent e2, final float velocityX, final float velocityY) {
       return false;
    }
-
 
    @Override
    public void onLongPress(final MotionEvent e) {
@@ -209,27 +184,20 @@ public final class G3MWidget_Android
       });
    }
 
-
    @Override
-   public boolean onScroll(final MotionEvent e1,
-                           final MotionEvent e2,
-                           final float distanceX,
-                           final float distanceY) {
+   public boolean onScroll(final MotionEvent e1, final MotionEvent e2, final float distanceX, final float distanceY) {
       return false;
    }
-
 
    @Override
    public void onShowPress(final MotionEvent e) {
 
    }
 
-
    @Override
    public boolean onSingleTapUp(final MotionEvent e) {
       return false;
    }
-
 
    public G3MWidget getG3MWidget() {
       if (_g3mWidget == null) {
@@ -240,7 +208,6 @@ public final class G3MWidget_Android
       return _g3mWidget;
    }
 
-
    @Override
    public void onPause() {
       if (_es2renderer != null) {
@@ -248,7 +215,6 @@ public final class G3MWidget_Android
          super.onPause();
       }
    }
-
 
    @Override
    public void onResume() {
@@ -258,11 +224,9 @@ public final class G3MWidget_Android
       }
    }
 
-
    public void onDestroy() {
       getG3MWidget().onDestroy();
    }
-
 
    //   public void closeStorage() {
    //      if (IDownloader.instance() != null) {
@@ -274,78 +238,60 @@ public final class G3MWidget_Android
    //      }
    //   }
 
-
    public Camera getNextCamera() {
       return getG3MWidget().getNextCamera();
    }
-
 
    public WidgetUserData getUserData() {
       return getG3MWidget().getUserData();
    }
 
-
-   public void setAnimatedCameraPosition(final Geodetic3D position,
-                                         final TimeInterval interval) {
+   public void setAnimatedCameraPosition(final Geodetic3D position, final TimeInterval interval) {
       getG3MWidget().setAnimatedCameraPosition(interval, position);
    }
-
 
    public void setAnimatedCameraPosition(final Geodetic3D position) {
       getG3MWidget().setAnimatedCameraPosition(position);
    }
 
-
    public void setCameraPosition(final Geodetic3D position) {
       getG3MWidget().setCameraPosition(position);
    }
-
 
    public CameraRenderer getCameraRenderer() {
       return getG3MWidget().getCameraRenderer();
    }
 
-
    public void cancelCameraAnimation() {
       getG3MWidget().cancelCameraAnimation();
    }
-
 
    public void setCameraHeading(final Angle heading) {
       getG3MWidget().setCameraHeading(heading);
    }
 
-
    public void setCameraPitch(final Angle pitch) {
       getG3MWidget().setCameraPitch(pitch);
    }
-
 
    public void setCameraRoll(final Angle roll) {
       getG3MWidget().setCameraRoll(roll);
    }
 
-
-   public void setCameraHeadingPitchRoll(final Angle heading,
-                                         final Angle pitch,
-                                         final Angle roll) {
+   public void setCameraHeadingPitchRoll(final Angle heading, final Angle pitch, final Angle roll) {
       getG3MWidget().setCameraHeadingPitchRoll(heading, pitch, roll);
    }
-
 
    public void setWidget(final G3MWidget widget) {
       _g3mWidget = widget;
    }
 
-
    public GL getGL() {
       return _es2renderer.getGL();
    }
 
-
    public G3MContext getG3MContext() {
       return getG3MWidget().getG3MContext();
    }
-
 
 }

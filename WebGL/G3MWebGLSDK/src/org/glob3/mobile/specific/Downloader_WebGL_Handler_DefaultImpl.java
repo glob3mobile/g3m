@@ -1,7 +1,5 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import java.util.*;
 
@@ -9,11 +7,7 @@ import org.glob3.mobile.generated.*;
 
 import com.google.gwt.core.client.*;
 
-
-public class Downloader_WebGL_Handler_DefaultImpl
-                                                  implements
-                                                     Downloader_WebGL_Handler {
-
+public class Downloader_WebGL_Handler_DefaultImpl implements Downloader_WebGL_Handler {
 
    private long                _priority;
    private URL                 _url;
@@ -22,17 +16,11 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    private Downloader_WebGL _downloader;
 
-
    public Downloader_WebGL_Handler_DefaultImpl() {
    }
 
-
    @Override
-   final public void init(final URL url,
-                          final IBufferDownloadListener bufferListener,
-                          final boolean deleteListener,
-                          final long priority,
-                          final long requestID,
+   final public void init(final URL url, final IBufferDownloadListener bufferListener, final boolean deleteListener, final long priority, final long requestID,
                           final String tag) {
       _priority  = priority;
       _url       = url;
@@ -41,13 +29,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
       _isImageRequest = false;
    }
 
-
    @Override
-   final public void init(final URL url,
-                          final IImageDownloadListener imageListener,
-                          final boolean deleteListener,
-                          final long priority,
-                          final long requestID,
+   final public void init(final URL url, final IImageDownloadListener imageListener, final boolean deleteListener, final long priority, final long requestID,
                           final String tag) {
       _priority  = priority;
       _url       = url;
@@ -56,18 +39,13 @@ public class Downloader_WebGL_Handler_DefaultImpl
       _isImageRequest = true;
    }
 
-
    @Override
    final public boolean isImageRequest() {
       return _isImageRequest;
    }
 
-
    @Override
-   final public void addListener(final IBufferDownloadListener listener,
-                                 final boolean deleteListener,
-                                 final long priority,
-                                 final long requestID,
+   final public void addListener(final IBufferDownloadListener listener, final boolean deleteListener, final long priority, final long requestID,
                                  final String tag) {
       _listeners.add(new ListenerEntry(listener, null, deleteListener, requestID, tag));
       if (priority > _priority) {
@@ -75,12 +53,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
    }
 
-
    @Override
-   final public void addListener(final IImageDownloadListener listener,
-                                 final boolean deleteListener,
-                                 final long priority,
-                                 final long requestID,
+   final public void addListener(final IImageDownloadListener listener, final boolean deleteListener, final long priority, final long requestID,
                                  final String tag) {
       _listeners.add(new ListenerEntry(null, listener, deleteListener, requestID, tag));
       if (priority > _priority) {
@@ -88,12 +62,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
    }
 
-
    @Override
    final public long getPriority() {
       return _priority;
    }
-
 
    @Override
    final public boolean cancelListenerForRequestId(final long requestID) {
@@ -107,7 +79,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
       return false;
    }
 
-
    @Override
    public void cancelListenersTagged(final String tag) {
       for (final ListenerEntry listener : _listeners) {
@@ -116,7 +87,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
          }
       }
    }
-
 
    @Override
    final public boolean removeListenerForRequestId(final long requestID) {
@@ -131,7 +101,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
       return false;
    }
-
 
    @Override
    final public boolean removeListenersTagged(final String tag) {
@@ -149,12 +118,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
       return anyRemoved;
    }
 
-
    @Override
    final public boolean hasListener() {
       return !_listeners.isEmpty();
    }
-
 
    @Override
    final public void runWithDownloader(final Downloader_WebGL downloader) {
@@ -163,16 +130,13 @@ public class Downloader_WebGL_Handler_DefaultImpl
       jsRequest(_url._path);
    }
 
-
    @Override
    final public void removeFromDownloaderDownloadingHandlers() {
       _downloader.removeDownloadingHandlerForUrl(_url);
    }
 
-
    @Override
-   final public void processResponse(final int statusCode,
-                                     final JavaScriptObject data) {
+   final public void processResponse(final int statusCode, final JavaScriptObject data) {
       final boolean dataIsValid = (data != null) && (statusCode == 200);
 
       if (dataIsValid) {
@@ -196,7 +160,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
          }
       }
    }
-
 
    @Override
    public native void jsRequest(String url) /*-{
@@ -240,9 +203,7 @@ public class Downloader_WebGL_Handler_DefaultImpl
 		xhr.send();
    }-*/;
 
-
-   private native void jsCreateImageFromBlob(final int xhrStatus,
-                                             final JavaScriptObject blob) /*-{
+   private native void jsCreateImageFromBlob(final int xhrStatus, final JavaScriptObject blob) /*-{
 		var that = this;
 
 		var auxImg = new Image();
@@ -264,7 +225,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
 		auxImg.src = imgURL;
    }-*/;
 
-
    private static void logError(final String msg) {
       final ILogger logger = ILogger.instance();
       if (logger == null) {
@@ -275,6 +235,4 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
    }
 
-
 }
-

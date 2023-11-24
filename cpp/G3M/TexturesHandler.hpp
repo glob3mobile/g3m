@@ -61,7 +61,7 @@ public:
 
   }
 
-  bool equalsTo(const TextureSpec& that) const {
+  bool isEquals(const TextureSpec& that) const {
     return (
             (_id             == that._id            ) &&
             (_width          == that._width         ) &&
@@ -127,7 +127,7 @@ public:
     if (getClass() != obj.getClass())
       return false;
     TextureSpec other = (TextureSpec) obj;
-    return equalsTo(other);
+    return isEquals(other);
   }
 #endif
 };

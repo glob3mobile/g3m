@@ -35,7 +35,7 @@ public class TextureHolder
 
   public final boolean hasSpec(TextureSpec textureSpec)
   {
-    return _textureSpec.equalsTo(textureSpec);
+    return _textureSpec.isEquals(textureSpec);
   }
 
   public final String description()

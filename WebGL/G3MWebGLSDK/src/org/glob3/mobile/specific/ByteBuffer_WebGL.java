@@ -1,30 +1,21 @@
 
-
 package org.glob3.mobile.specific;
 
-
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.core.client.*;
 
-
-public final class ByteBuffer_WebGL
-                                    extends
-                                       IByteBuffer {
+public final class ByteBuffer_WebGL extends IByteBuffer {
 
    private JavaScriptObject _buffer;
    private int              _timestamp = 0;
-
 
    public ByteBuffer_WebGL(final JavaScriptObject data) {
       _buffer = jsCreateBuffer(data);
    }
 
-
    public ByteBuffer_WebGL(final int size) {
       _buffer = jsCreateBuffer(size);
    }
-
 
    @Override
    public void dispose() {
@@ -32,28 +23,23 @@ public final class ByteBuffer_WebGL
       super.dispose();
    }
 
-
    @Override
    public native int size() /*-{
 		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.length;
    }-*/;
-
 
    @Override
    public int timestamp() {
       return _timestamp;
    }
 
-
    @Override
    public native byte get(final int i) /*-{
 		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer[i];
    }-*/;
 
-
    @Override
-   public native void put(final int i,
-                          final byte value) /*-{
+   public native void put(final int i, final byte value) /*-{
 		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer;
 		if (buffer[i] != value) {
 			buffer[i] = value;
@@ -61,19 +47,15 @@ public final class ByteBuffer_WebGL
 		}
    }-*/;
 
-
    @Override
-   public native void rawPut(final int i,
-                             final byte value) /*-{
+   public native void rawPut(final int i, final byte value) /*-{
 		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer[i] = value;
    }-*/;
-
 
    @Override
    public String description() {
       return "ByteBuffer_WebGL (size=" + size() + ")";
    }
-
 
    @Override
    public native String getAsString() /*-{
@@ -83,26 +65,21 @@ public final class ByteBuffer_WebGL
 		return result;
    }-*/;
 
-
    public JavaScriptObject getBuffer() {
       return _buffer;
    }
-
 
    private void incTimestamp() {
       _timestamp++;
    }
 
-
    private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
 		return new Int8Array(data);
    }-*/;
 
-
    private native JavaScriptObject jsCreateBuffer(final int size) /*-{
 		return new Int8Array(size);
    }-*/;
-
 
    private native String utf8ArrayToStr(final JavaScriptObject array) /*-{
 		var out, i, len, c;
@@ -144,19 +121,14 @@ public final class ByteBuffer_WebGL
 		return out;
    }-*/;
 
-
    @Override
-   public ByteBuffer_WebGL copy(final int from,
-                                final int length) {
+   public ByteBuffer_WebGL copy(final int from, final int length) {
       return new ByteBuffer_WebGL(jsBufferSlice(from, length));
    }
 
-
-   native private JavaScriptObject jsBufferSlice(final int from,
-                                                 final int length) /*-{
+   native private JavaScriptObject jsBufferSlice(final int from, final int length) /*-{
 		var buffer = this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.buffer;
 		return buffer.slice(from, from + length);
    }-*/;
-
 
 }

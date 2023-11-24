@@ -1,7 +1,5 @@
 
-
 package org.glob3.mobile.tools.gdal;
-
 
 import java.io.*;
 
@@ -9,26 +7,21 @@ import org.glob3.mobile.tools.commandline.core.*;
 import org.glob3.mobile.tools.commandline.core.CommandLine.*;
 import org.glob3.mobile.tools.utils.*;
 
-
 public class GDAL {
 
    private static GDAL _gdal;
 
-
    private static String GDAL_HOME = System.getenv("GDAL_HOME");
-
 
    public static synchronized GDAL instance() {
       return _gdal;
    }
-
 
    /**
     * @return the gdalHome
     * @throws GDALException
     */
    public static void initialize(final String gdalHome) throws GDALException {
-
 
       //      if ((gdalHome == null) || (gdalHome.trim().length() == 0)) {
       //         throw new GDALException("This GDAL_HOME isn't valid", null);
@@ -44,7 +37,6 @@ public class GDAL {
 
       instance();
    }
-
 
    private static boolean checkGdal() throws GDALException {
 
@@ -89,11 +81,9 @@ public class GDAL {
       return false;
    }
 
-
    public static boolean isInitialized() {
       return _gdal != null;
    }
-
 
    public static boolean validateSRS(final File file) throws GDALException {
       if ((file != null) && file.exists() && file.isFile()) {
@@ -130,7 +120,6 @@ public class GDAL {
       return false;
    }
 
-
    public static boolean ogrInfo(final File file) throws GDALException {
       if ((file != null) && file.exists() && file.isFile()) {
 
@@ -138,7 +127,6 @@ public class GDAL {
          cmd[0] = GDAL_HOME + GDALCommands.ogrinfo;
          cmd[1] = "-ro";
          cmd[2] = file.getAbsolutePath();
-
 
          StreamGobbler sb = null;
          try {
@@ -163,7 +151,6 @@ public class GDAL {
       }
       return false;
    }
-
 
    //   public File vector2GeoJSON(final File inputFile,
    //                              final File outputDir,
@@ -203,11 +190,7 @@ public class GDAL {
    //      return null;
    //   }
 
-
-   public static File vector2GeoJSON(final File inputFile,
-                                     final File outputDir,
-                                     final String outputFileName,
-                                     final boolean overwrite,
+   public static File vector2GeoJSON(final File inputFile, final File outputDir, final String outputFileName, final boolean overwrite,
                                      final String... options) throws GDALException {
       if (FileUtils.checkFile(inputFile) && FileUtils.checkDir(outputDir)) {
          File outputFile = new File(outputDir, outputFileName + ".geojson");
@@ -223,7 +206,6 @@ public class GDAL {
                i++;
             }
          }
-
 
          final String[] cmd = new String[7 + options.length];
          cmd[0] = GDAL_HOME + GDALCommands.ogr2ogr;
@@ -260,10 +242,7 @@ public class GDAL {
       return null;
    }
 
-
-   public static File xyz2JSON(final File inputFile,
-                               final File outputDir,
-                               final String outputFileName) throws GDALException {
+   public static File xyz2JSON(final File inputFile, final File outputDir, final String outputFileName) throws GDALException {
       if (FileUtils.checkFile(inputFile) && FileUtils.checkDir(outputDir)) {
          File outputFile = new File(outputDir, outputFileName + ".json");
          int  i          = 1;
@@ -320,13 +299,11 @@ public class GDAL {
       throw new GDALException("Input file or output fil don't exists", null);
    }
 
-
    public class GDALCommands {
       public final static String ogrinfo = "ogrinfo";
       public final static String srsInfo = "gdalsrsinfo";
       public final static String ogr2ogr = "ogr2ogr";
    }
-
 
    public class GDALVectorFormats {
       public final static String shp = ".shp";
@@ -345,8 +322,6 @@ public class GDAL {
        */
       public final static String georss = ".xml";
 
-
    }
-
 
 }

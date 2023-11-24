@@ -1,34 +1,23 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import org.glob3.mobile.generated.*;
 
-
-public class JSONParser_WebGL
-                              extends
-                                 IJSONParser {
-
+public class JSONParser_WebGL extends IJSONParser {
 
    @Override
-   public JSONBaseObject parse(final IByteBuffer buffer,
-                               final boolean nullAsObject) {
+   public JSONBaseObject parse(final IByteBuffer buffer, final boolean nullAsObject) {
       return parse(buffer.getAsString(), nullAsObject);
    }
 
-
    @Override
-   public JSONBaseObject parse(final String string,
-                               final boolean nullAsObject) {
+   public JSONBaseObject parse(final String string, final boolean nullAsObject) {
       final com.google.gwt.json.client.JSONValue value = com.google.gwt.json.client.JSONParser.parseStrict(string);
 
       return convert(value, nullAsObject);
    }
 
-
-   private static JSONBaseObject convert(final com.google.gwt.json.client.JSONValue value,
-                                         final boolean nullAsObject) {
+   private static JSONBaseObject convert(final com.google.gwt.json.client.JSONValue value, final boolean nullAsObject) {
 
       final com.google.gwt.json.client.JSONNull jsonNull = value.isNull();
       if (jsonNull != null) {
@@ -87,6 +76,5 @@ public class JSONParser_WebGL
 
       return null;
    }
-
 
 }

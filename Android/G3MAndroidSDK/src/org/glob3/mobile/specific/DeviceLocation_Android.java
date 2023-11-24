@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.Geodetic3D;
@@ -13,22 +12,15 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 
+public class DeviceLocation_Android extends IDeviceLocation {
 
-public class DeviceLocation_Android
-   extends
-      IDeviceLocation {
-
-   private class DeviceLocation_AndroidListener
-      implements
-         LocationListener {
+   private class DeviceLocation_AndroidListener implements LocationListener {
       public Location _lastLocation = null;
-
 
       @Override
       public void onLocationChanged(final Location location) {
          _lastLocation = location;
       }
-
 
       @Override
       public void onProviderDisabled(final String provider) {
@@ -36,17 +28,13 @@ public class DeviceLocation_Android
          ILogger.instance().logInfo("Location Provider " + provider + " has been disabled.");
       }
 
-
       @Override
       public void onProviderEnabled(final String provider) {
          ILogger.instance().logInfo("Location Provider " + provider + " has been enabled.");
       }
 
-
       @Override
-      public void onStatusChanged(final String provider,
-                                  final int status,
-                                  final Bundle extras) {
+      public void onStatusChanged(final String provider, final int status, final Bundle extras) {
          ILogger.instance().logInfo("Location Provider " + provider + " set status " + status);
       }
 
@@ -55,23 +43,21 @@ public class DeviceLocation_Android
    private final DeviceLocation_AndroidListener _netListener = new DeviceLocation_AndroidListener();
    private final DeviceLocation_AndroidListener _gpsListener = new DeviceLocation_AndroidListener();
 
-   private LocationManager                      _locationManager;
-   private final Context                        _ctx;
+   private LocationManager _locationManager;
+   private final Context   _ctx;
 
-   private final long                           _minTime;                                           //Seconds between updates (ms.)
-   private final float                          _minDistance;                                       //Min meters between updates
+   private final long  _minTime;     //Seconds between updates (ms.)
+   private final float _minDistance; //Min meters between updates
 
-   private boolean                              _isTracking  = false;
-
+   private boolean _isTracking = false;
 
    DeviceLocation_Android(final Context ctx,
                           final long minTime,
                           final float minDistance) {
-      _ctx = ctx;
-      _minTime = minTime;
+      _ctx         = ctx;
+      _minTime     = minTime;
       _minDistance = minDistance;
    }
-
 
    @Override
    public boolean startTrackingLocation() {
@@ -81,14 +67,12 @@ public class DeviceLocation_Android
       final boolean netActive = _locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
       if (gpsActive) {
-         _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, _minTime, _minDistance, _gpsListener,
-                  Looper.getMainLooper());
+         _locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, _minTime, _minDistance, _gpsListener, Looper.getMainLooper());
          _isTracking = true;
       }
 
       if (netActive) {
-         _locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, _minTime, _minDistance, _netListener,
-                  Looper.getMainLooper());
+         _locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, _minTime, _minDistance, _netListener, Looper.getMainLooper());
          _isTracking = true;
       }
 
@@ -99,7 +83,6 @@ public class DeviceLocation_Android
       return _isTracking;
    }
 
-
    @Override
    public void stopTrackingLocation() {
       if (_isTracking) {
@@ -109,12 +92,10 @@ public class DeviceLocation_Android
       }
    }
 
-
    @Override
    public boolean isTrackingLocation() {
       return _isTracking;// && (_gpsListener._lastLocation != null || _netListener._lastLocation != null);
    }
-
 
    @Override
    public Geodetic3D getLocation() {
@@ -129,6 +110,5 @@ public class DeviceLocation_Android
       }
       return Geodetic3D.nan();
    }
-
 
 }

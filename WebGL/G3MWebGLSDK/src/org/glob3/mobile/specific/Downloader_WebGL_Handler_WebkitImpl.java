@@ -1,23 +1,16 @@
 
-
 package org.glob3.mobile.specific;
 
-
-public final class Downloader_WebGL_Handler_WebkitImpl
-         extends
-            Downloader_WebGL_Handler_DefaultImpl {
+public final class Downloader_WebGL_Handler_WebkitImpl extends Downloader_WebGL_Handler_DefaultImpl {
 
    private static final boolean _isChrome = jsIsChrome();
-
 
    public Downloader_WebGL_Handler_WebkitImpl() {
    }
 
-
    private native static boolean jsIsChrome() /*-{
 		return $wnd.navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
    }-*/;
-
 
    @Override
    public native void jsRequest(final String url) /*-{
@@ -54,4 +47,3 @@ public final class Downloader_WebGL_Handler_WebkitImpl
    }-*/;
 
 }
-

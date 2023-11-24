@@ -1,9 +1,7 @@
 
-
 package org.glob3.mobile.tools.gdal;
 
 import java.io.File;
-
 
 public class ShpUtils {
    /**
@@ -11,18 +9,21 @@ public class ShpUtils {
     * 
     * .shp — shape format; the feature geometry itself
     * 
-    * .shx — shape index format; a positional index of the feature geometry to allow seeking forwards and backwards quickly
+    * .shx — shape index format; a positional index of the feature geometry to
+    * allow seeking forwards and backwards quickly
     * 
-    * .dbf — attribute format; columnar attributes for each shape, in dBase IV format
+    * .dbf — attribute format; columnar attributes for each shape, in dBase IV
+    * format
     * 
     * Optional files :
     * 
-    * .prj — projection format; the coordinate system and projection information, a plain text file describing the projection
-    * using well-known text format
+    * .prj — projection format; the coordinate system and projection information, a
+    * plain text file describing the projection using well-known text format
     * 
     * .sbn and .sbx — a spatial index of the features
     * 
-    * .fbn and .fbx — a spatial index of the features for shapefiles that are read-only
+    * .fbn and .fbx — a spatial index of the features for shapefiles that are
+    * read-only
     * 
     * .ain and .aih — an attribute index of the active fields in a table
     * 
@@ -30,19 +31,21 @@ public class ShpUtils {
     * 
     * .mxs — a geocoding index for read-write shapefiles (ODB format)
     * 
-    * .atx — an attribute index for the .dbf file in the form of shapefile.columnname.atx (ArcGIS 8 and later)
+    * .atx — an attribute index for the .dbf file in the form of
+    * shapefile.columnname.atx (ArcGIS 8 and later)
     * 
-    * .shp.xml — geospatial metadata in XML format, such as ISO 19115 or other XML schema
+    * .shp.xml — geospatial metadata in XML format, such as ISO 19115 or other XML
+    * schema
     * 
-    * .cpg — used to specify the code page (only for .dbf) for identifying the character encoding to be used
+    * .cpg — used to specify the code page (only for .dbf) for identifying the
+    * character encoding to be used
     * 
     * @param parentFile
     * @param fileNameWithoutExtension
     * @return
     * @throws GDALException
     */
-   public static boolean checkShpDir(final File parentFile,
-                                     final String fileNameWithoutExtension) throws GDALException {
+   public static boolean checkShpDir(final File parentFile, final String fileNameWithoutExtension) throws GDALException {
       final File shpFile = new File(parentFile.getAbsoluteFile() + "/" + fileNameWithoutExtension + ".shp");
       if (shpFile.exists()) {
          if (new File(parentFile.getAbsoluteFile() + "/" + fileNameWithoutExtension + ".shx").exists()) {

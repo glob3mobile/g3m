@@ -60,7 +60,7 @@ public class TextureSpec
 
   }
 
-  public final boolean equalsTo(TextureSpec that)
+  public final boolean isEquals(TextureSpec that)
   {
     return ((_id.equals(that._id)) && (_width == that._width) && (_height == that._height) && (_generateMipmap == that._generateMipmap) && (_wrapS == that._wrapS) && (_wrapT == that._wrapT));
   }
@@ -131,6 +131,6 @@ public class TextureSpec
     if (getClass() != obj.getClass())
       return false;
     TextureSpec other = (TextureSpec) obj;
-    return equalsTo(other);
+    return isEquals(other);
   }
 }

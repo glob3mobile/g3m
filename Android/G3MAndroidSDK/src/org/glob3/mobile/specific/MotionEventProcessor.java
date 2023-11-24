@@ -1,7 +1,5 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import java.util.*;
 
@@ -9,7 +7,6 @@ import org.glob3.mobile.generated.*;
 
 import android.view.*;
 import android.view.MotionEvent.*;
-
 
 public final class MotionEventProcessor {
 
@@ -20,25 +17,21 @@ public final class MotionEventProcessor {
       private final ArrayList<Touch> _touchs;
       private TouchEventType         _type;
 
-
       private EventProcessed(final ArrayList<Touch> touchs,
                              final TouchEventType type) {
          _touchs = touchs;
          _type   = type;
       }
 
-
       private EventProcessed() {
          _touchs = new ArrayList<>();
          _type   = TouchEventType.Down;
       }
 
-
       @Override
       protected EventProcessed clone() {
          return new EventProcessed(new ArrayList<>(_touchs), _type);
       }
-
 
       public void clear() {
          // _pointersID.clear();
@@ -47,9 +40,7 @@ public final class MotionEventProcessor {
 
    }
 
-
    private final EventProcessed _lastEvent = new EventProcessed();
-
 
    public TouchEvent processEvent(final MotionEvent event) {
 
@@ -129,7 +120,6 @@ public final class MotionEventProcessor {
 
       return te;
    }
-
 
    static public TouchEvent processDoubleTapEvent(final MotionEvent event) {
       final PointerCoords pc = new PointerCoords();

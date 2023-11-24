@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.G3MContext;
@@ -13,47 +12,35 @@ import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-
-public final class IndexedDBStorage_WebGL
-   extends
-      IStorage {
+public final class IndexedDBStorage_WebGL extends IStorage {
 
    private JavaScriptObject _db;
-
 
    public IndexedDBStorage_WebGL() {
       jsCreateOrOpenDB();
    }
 
-
    @Override
-   public IByteBufferResult readBuffer(final URL url,
-                                       final boolean readExpired) {
+   public IByteBufferResult readBuffer(final URL url, final boolean readExpired) {
       return null;
    }
 
-
    @Override
-   public IImageResult readImage(final URL url,
-                                 final boolean readExpired) {
+   public IImageResult readImage(final URL url, final boolean readExpired) {
       return null;
    }
-
 
    @Override
    public void onResume(final G3MContext context) {
    }
 
-
    @Override
    public void onPause(final G3MContext context) {
    }
 
-
    @Override
    public void onDestroy(final G3MContext context) {
    }
-
 
    private native void jsCreateOrOpenDB() /*-{
 		//		debugger;
@@ -103,32 +90,21 @@ public final class IndexedDBStorage_WebGL
 		//		};
    }-*/;
 
-
    @Override
    public boolean isAvailable() {
       return false;
    }
 
-
    @Override
-   public void saveBuffer(final URL url,
-                          final IByteBuffer buffer,
-                          final TimeInterval timeToExpires,
-                          final boolean saveInBackground) {
+   public void saveBuffer(final URL url, final IByteBuffer buffer, final TimeInterval timeToExpires, final boolean saveInBackground) {
    }
 
-
    @Override
-   public void saveImage(final URL url,
-                         final IImage image,
-                         final TimeInterval timeToExpires,
-                         final boolean saveInBackground) {
+   public void saveImage(final URL url, final IImage image, final TimeInterval timeToExpires, final boolean saveInBackground) {
    }
-
 
    @Override
    public void merge(final String databasePath) {
    }
-
 
 }

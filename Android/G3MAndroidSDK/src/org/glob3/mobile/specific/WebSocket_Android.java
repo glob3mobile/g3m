@@ -1,7 +1,5 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import java.net.*;
 
@@ -12,20 +10,15 @@ import org.java_websocket.handshake.*;
 
 import android.util.*;
 
-
-public class WebSocket_Android
-                               extends
-                                  IWebSocket {
+public class WebSocket_Android extends IWebSocket {
 
    //   static {
    //      System.setProperty("java.net.preferIPv6Addresses", "false");
    //      System.setProperty("java.net.preferIPv4Stack", "true");
    //   }
 
-
    //   private WebSocketConnection _connection;
    private WebSocketClient _webSocketClient;
-
 
    WebSocket_Android(final URL url,
                      final IWebSocketListener listener,
@@ -35,7 +28,6 @@ public class WebSocket_Android
       super(url, listener, autodeleteListener, autodeleteWebSocket, verboseErrors);
 
       //      _connection = new WebSocketConnection();
-
 
       try {
          final URI uri = new URI(url._path);
@@ -50,7 +42,6 @@ public class WebSocket_Android
                }
             }
 
-
             @Override
             public void onMessage(final String message) {
                try {
@@ -61,11 +52,8 @@ public class WebSocket_Android
                }
             }
 
-
             @Override
-            public void onClose(final int code,
-                                final String reason,
-                                final boolean remote) {
+            public void onClose(final int code, final String reason, final boolean remote) {
                try {
                   getListener().onClose(WebSocket_Android.this);
                }
@@ -76,7 +64,6 @@ public class WebSocket_Android
                   dispose();
                }
             }
-
 
             @Override
             public void onError(final Exception e) {
@@ -156,13 +143,11 @@ public class WebSocket_Android
 
    }
 
-
    @Override
    public void send(final String message) {
       //      _connection.sendTextMessage(message);
       _webSocketClient.send(message);
    }
-
 
    @Override
    public void close() {
@@ -172,12 +157,10 @@ public class WebSocket_Android
       //      _connection = null;
    }
 
-
    @Override
    public String toString() {
       //      return "WebSocket_Android [connection=" + _connection + "]";
       return "WebSocket_Android [webSocketClient=" + _webSocketClient + "]";
    }
-
 
 }

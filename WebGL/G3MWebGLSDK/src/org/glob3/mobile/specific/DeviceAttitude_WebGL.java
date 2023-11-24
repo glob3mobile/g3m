@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.Angle;
@@ -9,19 +8,15 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.InterfaceOrientation;
 import org.glob3.mobile.generated.MutableMatrix44D;
 
-
-public class DeviceAttitude_WebGL
-   extends
-      IDeviceAttitude {
+public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
    private InterfaceOrientation _currentIO = null;
 
-   private double               _beta      = Double.NaN;
-   private double               _gamma     = Double.NaN;
-   private double               _alpha     = Double.NaN;
+   private double _beta  = Double.NaN;
+   private double _gamma = Double.NaN;
+   private double _alpha = Double.NaN;
 
-   private boolean              _isTracking;
-
+   private boolean _isTracking;
 
    //Implementation of DeviceAttitude_WebGL may be inconsistent with device natural screen orientation
    //Further development needed
@@ -29,7 +24,6 @@ public class DeviceAttitude_WebGL
       trackInterfaceOrientation(this);
       initInterfaceOrientation(this);
    }
-
 
    private static native void trackGyroscope(DeviceAttitude_WebGL devAtt) /*-{
 		try {
@@ -64,14 +58,12 @@ public class DeviceAttitude_WebGL
 
    }-*/;
 
-
    private static native void stopTrackingGyroscope() /*-{
 		try {
 			$wnd.addEventListener('deviceorientation', null, false);
 		} catch (err) {
 		}
    }-*/;
-
 
    private void storeInterfaceOrientation(final String orientation) {
       if (orientation.equalsIgnoreCase("portrait-primary")) {
@@ -90,7 +82,6 @@ public class DeviceAttitude_WebGL
       // ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
    }
 
-
    private native void initInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
 		try {
 			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
@@ -102,7 +93,6 @@ public class DeviceAttitude_WebGL
 			console.error("Unable to track Interface Orientation. " + err);
 		}
    }-*/;
-
 
    private native void trackInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
 
@@ -123,13 +113,11 @@ public class DeviceAttitude_WebGL
 
    }-*/;
 
-
    @Override
    public void startTrackingDeviceOrientation() {
       trackGyroscope(this);
       _isTracking = true;
    }
-
 
    @Override
    public void stopTrackingDeviceOrientation() {
@@ -139,27 +127,22 @@ public class DeviceAttitude_WebGL
       _isTracking = false;
    }
 
-
    @Override
    public boolean isTracking() {
       return _isTracking;
    }
 
-
    private Angle getHeading() {
       return Angle.fromDegrees(_alpha);
    }
-
 
    private Angle getPitch() {
       return Angle.fromDegrees(_gamma);
    }
 
-
    private Angle getRoll() {
       return Angle.fromDegrees(-_beta);
    }
-
 
    @Override
    public void copyValueOfRotationMatrix(final MutableMatrix44D rotationMatrix) {
@@ -172,7 +155,6 @@ public class DeviceAttitude_WebGL
          rotationMatrix.copyValue(cs.getRotationMatrix());
       }
    }
-
 
    @Override
    public InterfaceOrientation getCurrentInterfaceOrientation() {

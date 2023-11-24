@@ -1,21 +1,16 @@
 
-
 package org.glob3.mobile.tools.gdal;
 
-public class GDALException
-         extends
-            Exception {
+public class GDALException extends Exception {
    /**
     * 
     */
    private static final long serialVersionUID = 1L;
 
-
    public GDALException(final String message,
                         final Throwable cause) {
       super(message, cause);
    }
-
 
    @Override
    public String getMessage() {
