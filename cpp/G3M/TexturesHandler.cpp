@@ -67,7 +67,7 @@ public:
   }
 
   bool hasSpec(const TextureSpec& textureSpec) {
-    return _textureSpec.equalsTo(textureSpec);
+    return _textureSpec.isEquals(textureSpec);
   }
 
   const std::string description() const {
