@@ -1,12 +1,8 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.MutableColor255;
-import org.glob3.mobile.generated.Vector2I;
-
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayNumber;
+import org.glob3.mobile.generated.*;
+import com.google.gwt.core.client.*;
 
 public final class Image_WebGL extends IImage {
 
@@ -26,14 +22,14 @@ public final class Image_WebGL extends IImage {
 
    @Override
    public native int getWidth() /*-{
-		var jsImage = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
-		return jsImage ? jsImage.width : 0;
+    var jsImage = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+    return jsImage ? jsImage.width : 0;
    }-*/;
 
    @Override
    public native int getHeight() /*-{
-		var jsImage = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
-		return jsImage ? jsImage.height : 0;
+    var jsImage = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+    return jsImage ? jsImage.height : 0;
    }-*/;
 
    @Override
@@ -57,11 +53,11 @@ public final class Image_WebGL extends IImage {
    }
 
    private static native JavaScriptObject createCanvas() /*-{
-		return $doc.createElement("canvas");
+    return $doc.createElement("canvas");
    }-*/;
 
    private static native JavaScriptObject getContext2D(final JavaScriptObject canvas) /*-{
-		return canvas.getContext("2d");
+    return canvas.getContext("2d");
    }-*/;
 
    @Override
@@ -79,16 +75,16 @@ public final class Image_WebGL extends IImage {
    }
 
    private native JsArrayNumber createImageData(final JavaScriptObject domCanvas, JavaScriptObject domCanvasContext)/*-{
-		var w = this.@org.glob3.mobile.specific.Image_WebGL::getWidth();
-		var h = this.@org.glob3.mobile.specific.Image_WebGL::getHeight();
-		domCanvas.width = w;
-		domCanvas.height = h;
+    var w = this.@org.glob3.mobile.specific.Image_WebGL::getWidth();
+    var h = this.@org.glob3.mobile.specific.Image_WebGL::getHeight();
+    domCanvas.width = w;
+    domCanvas.height = h;
 
-		var imageJS = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
-		domCanvasContext.drawImage(imageJS, 0, 0, w, h);
+    var imageJS = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
+    domCanvasContext.drawImage(imageJS, 0, 0, w, h);
 
-		var imgData = domCanvasContext.getImageData(0, 0, w, h);
-		return imgData;
+    var imgData = domCanvasContext.getImageData(0, 0, w, h);
+    return imgData;
    }-*/;
 
 }

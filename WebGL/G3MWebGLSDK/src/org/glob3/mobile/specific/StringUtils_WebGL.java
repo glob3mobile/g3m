@@ -1,11 +1,9 @@
 
 package org.glob3.mobile.specific;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Locale;
-
-import org.glob3.mobile.generated.IStringUtils;
+import java.io.*;
+import java.util.*;
+import org.glob3.mobile.generated.*;
 
 public final class StringUtils_WebGL extends IStringUtils {
 

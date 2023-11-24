@@ -2,7 +2,6 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.i18n.client.*;
 
 public final class StringBuilder_WebGL extends IStringBuilder {

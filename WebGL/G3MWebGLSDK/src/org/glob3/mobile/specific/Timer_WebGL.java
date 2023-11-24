@@ -1,8 +1,7 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.ITimer;
-import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.*;
 
 public final class Timer_WebGL extends ITimer {
 

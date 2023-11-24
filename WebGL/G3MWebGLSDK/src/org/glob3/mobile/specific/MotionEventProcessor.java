@@ -2,10 +2,8 @@
 package org.glob3.mobile.specific;
 
 import java.util.*;
-
 import org.glob3.mobile.generated.*;
 import org.glob3.mobile.generated.Touch;
-
 import com.google.gwt.core.client.*;
 import com.google.gwt.core.client.Scheduler.*;
 import com.google.gwt.dom.client.*;
@@ -262,9 +260,9 @@ final class MotionEventProcessor {
    }
 
    private native int jsGetMouseWheelDelta(final Event event) /*-{
-		var e = event;
-		var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
-		return delta;
+    var e = event;
+    var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
+    return delta;
    }-*/;
 
    private static TouchEvent createTouchEvent(final TouchEventType type, final java.util.ArrayList<Touch> touchs, final double wheelDelta) {

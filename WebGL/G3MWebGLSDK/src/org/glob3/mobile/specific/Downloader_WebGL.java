@@ -2,9 +2,7 @@
 package org.glob3.mobile.specific;
 
 import java.util.*;
-
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.Timer;
 

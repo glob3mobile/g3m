@@ -2,7 +2,6 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.user.client.*;
 
 public final class ThreadUtils_WebGL extends IThreadUtils {

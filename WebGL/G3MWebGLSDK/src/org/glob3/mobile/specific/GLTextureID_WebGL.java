@@ -1,9 +1,8 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IGLTextureID;
-
-import com.google.gwt.core.client.JavaScriptObject;
+import org.glob3.mobile.generated.*;
+import com.google.gwt.core.client.*;
 
 public final class GLTextureID_WebGL implements IGLTextureID {
 
