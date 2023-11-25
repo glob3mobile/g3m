@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
+=======
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.9.0//EN" "http://www.gwtproject.org/doctype/2.9.0/gwt-module.dtd">
+>>>>>>> 21fb7132da06d42276eb750438f93f21035828fe
 <module>
-   <inherits name="com.google.gwt.user.User" />
+	<inherits name="com.google.gwt.user.User" />
 
-   <inherits name="com.google.gwt.logging.Logging" />
-   <set-property name="gwt.logging.logLevel" value="ALL" />
-   <set-property name="gwt.logging.enabled" value="TRUE" />
-   <!-- <set-property name="gwt.logging.popupHandler" value="DISABLED" /> -->
-   <set-property name="gwt.logging.consoleHandler" value="ENABLED" />
-
-
-   <source path="" />
+	<inherits name="com.google.gwt.logging.Logging" />
+	<set-property name="gwt.logging.logLevel" value="ALL" />
+	<set-property name="gwt.logging.enabled" value="TRUE" />
+	<!-- <set-property name="gwt.logging.popupHandler" value="DISABLED" /> -->
+	<set-property name="gwt.logging.consoleHandler"
+		value="ENABLED" />
 
 
-   <!-- Deferred Binding -->
+	<source path="" />
 
-   <!-- Downloader -->
-   <!-- Fall through to this rule if the browser isn't Webkit (safari,chrome) -->
-   <replace-with
-      class="org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl">
-      <when-type-is class="org.glob3.mobile.specific.Downloader_WebGL_Handler" />
-   </replace-with>
-   <!-- Webkit needs a different implementation -->
-   <replace-with
-      class="org.glob3.mobile.specific.Downloader_WebGL_Handler_WebkitImpl">
-      <when-type-is class="org.glob3.mobile.specific.Downloader_WebGL_Handler" />
-      <when-property-is name="user.agent" value="safari" />
-   </replace-with>
+
+	<!-- Deferred Binding -->
+
+	<!-- Downloader -->
+	<!-- Fall through to this rule if the browser isn't Webkit (safari,chrome) -->
+	<replace-with
+		class="org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl">
+		<when-type-is
+			class="org.glob3.mobile.specific.Downloader_WebGL_Handler" />
+	</replace-with>
+	<!-- Webkit needs a different implementation -->
+	<replace-with
+		class="org.glob3.mobile.specific.Downloader_WebGL_Handler_WebkitImpl">
+		<when-type-is
+			class="org.glob3.mobile.specific.Downloader_WebGL_Handler" />
+		<when-property-is name="user.agent" value="safari" />
+	</replace-with>
 </module>

@@ -1,18 +1,12 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.util.*;
-
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.Timer;
 
-
-public final class Downloader_WebGL
-         extends
-            IDownloader {
+public final class Downloader_WebGL extends IDownloader {
 
    private final int                                _maxConcurrentOperationCount;
    private final Map<URL, Downloader_WebGL_Handler> _downloadingHandlers;
@@ -26,19 +20,18 @@ public final class Downloader_WebGL
    private long _requestsCounter;
    private long _cancelsCounter;
 
-
    public Downloader_WebGL(final int maxConcurrentOperationCount,
                            final int delayMillis,
                            final String proxy,
                            final boolean verboseErrors) {
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
-      _requestIDCounter = 1;
-      _requestsCounter = 0;
-      _cancelsCounter = 0;
-      _downloadingHandlers = new HashMap<>();
-      _queuedHandlers = new HashMap<>();
-      _delayMillis = delayMillis;
-      _verboseErrors = verboseErrors;
+      _requestIDCounter            = 1;
+      _requestsCounter             = 0;
+      _cancelsCounter              = 0;
+      _downloadingHandlers         = new HashMap<>();
+      _queuedHandlers              = new HashMap<>();
+      _delayMillis                 = delayMillis;
+      _verboseErrors               = verboseErrors;
 
       if (proxy == null) {
          _proxy = null;
@@ -68,39 +61,30 @@ public final class Downloader_WebGL
       };
    }
 
-
    @Override
    public void start() {
       sendRequest();
    }
-
 
    @Override
    public void stop() {
       _timer.cancel();
    }
 
-
    private void sendRequest() {
       _timer.schedule(_delayMillis);
    }
 
-
    @Override
-   public long requestBuffer(final URL url,
-                             final long priority,
-                             final TimeInterval timeToCache,
-                             final boolean readExpired,
-                             final IBufferDownloadListener listener,
-                             final boolean deleteListener,
-                             final String tag) {
-      final long requestID;
-      Downloader_WebGL_Handler handler = null;
-      final URL proxyUrl = getProxiedURL(url);
+   public long requestBuffer(final URL url, final long priority, final TimeInterval timeToCache, final boolean readExpired,
+                             final IBufferDownloadListener listener, final boolean deleteListener, final String tag) {
+      final long               requestID;
+      Downloader_WebGL_Handler handler  = null;
+      final URL                proxyUrl = getProxiedURL(url);
 
       _requestsCounter++;
       requestID = _requestIDCounter++;
-      handler = _downloadingHandlers.get(proxyUrl);
+      handler   = _downloadingHandlers.get(proxyUrl);
 
       if ((handler != null) && !handler.isImageRequest()) {
          // the URL is being downloaded, just add the new listener
@@ -123,7 +107,6 @@ public final class Downloader_WebGL
       return requestID;
    }
 
-
    private URL getProxiedURL(final URL url) {
       if (_proxy == null) {
          return url;
@@ -139,22 +122,16 @@ public final class Downloader_WebGL
       return new URL(_proxy + urlPath);
    }
 
-
    @Override
-   public long requestImage(final URL url,
-                            final long priority,
-                            final TimeInterval timeToCache,
-                            final boolean readExpired,
-                            final IImageDownloadListener listener,
-                            final boolean deleteListener,
-                            final String tag) {
-      final long requestID;
-      Downloader_WebGL_Handler handler = null;
-      final URL proxyUrl = getProxiedURL(url);
+   public long requestImage(final URL url, final long priority, final TimeInterval timeToCache, final boolean readExpired,
+                            final IImageDownloadListener listener, final boolean deleteListener, final String tag) {
+      final long               requestID;
+      Downloader_WebGL_Handler handler  = null;
+      final URL                proxyUrl = getProxiedURL(url);
 
       _requestsCounter++;
       requestID = _requestIDCounter++;
-      handler = _downloadingHandlers.get(proxyUrl);
+      handler   = _downloadingHandlers.get(proxyUrl);
 
       if ((handler != null) && handler.isImageRequest()) {
          // the URL is being downloaded, just add the new listener
@@ -177,7 +154,6 @@ public final class Downloader_WebGL
       return requestID;
    }
 
-
    @Override
    public boolean cancelRequest(final long requestID) {
       if (requestID < 0) {
@@ -189,8 +165,8 @@ public final class Downloader_WebGL
       {
          final Iterator<Map.Entry<URL, Downloader_WebGL_Handler>> iter = _queuedHandlers.entrySet().iterator();
          while (iter.hasNext()) {
-            final Map.Entry<URL, Downloader_WebGL_Handler> e = iter.next();
-            final Downloader_WebGL_Handler handler = e.getValue();
+            final Map.Entry<URL, Downloader_WebGL_Handler> e       = iter.next();
+            final Downloader_WebGL_Handler                 handler = e.getValue();
 
             if (handler.removeListenerForRequestId(requestID)) {
                if (!handler.hasListener()) {
@@ -211,7 +187,6 @@ public final class Downloader_WebGL
       return false;
    }
 
-
    @Override
    public void cancelRequestsTagged(final String tag) {
       if ((tag == null) || tag.isEmpty()) {
@@ -221,8 +196,8 @@ public final class Downloader_WebGL
       _cancelsCounter++;
 
       for (final Iterator<Map.Entry<URL, Downloader_WebGL_Handler>> iterator = _queuedHandlers.entrySet().iterator(); iterator.hasNext();) {
-         final Map.Entry<URL, Downloader_WebGL_Handler> entry = iterator.next();
-         final Downloader_WebGL_Handler handler = entry.getValue();
+         final Map.Entry<URL, Downloader_WebGL_Handler> entry   = iterator.next();
+         final Downloader_WebGL_Handler                 handler = entry.getValue();
 
          if (handler.removeListenersTagged(tag)) {
             if (!handler.hasListener()) {
@@ -235,7 +210,6 @@ public final class Downloader_WebGL
          handler.cancelListenersTagged(tag);
       }
    }
-
 
    @Override
    public String statistics() {
@@ -253,11 +227,9 @@ public final class Downloader_WebGL
       return sb.getString();
    }
 
-
    public void removeDownloadingHandlerForUrl(final URL url) {
       _downloadingHandlers.remove(url);
    }
-
 
    public Downloader_WebGL_Handler getHandlerToRun() {
       if (_queuedHandlers.isEmpty()) {
@@ -265,19 +237,19 @@ public final class Downloader_WebGL
       }
 
       Downloader_WebGL_Handler selectedHandler = null;
-      URL selectedURL = null;
+      URL                      selectedURL     = null;
 
       {
          long selectedPriority = Long.MIN_VALUE;
          for (final Map.Entry<URL, Downloader_WebGL_Handler> entry : _queuedHandlers.entrySet()) {
-            final Downloader_WebGL_Handler candidateHandler = entry.getValue();
-            final long candidatePriority = candidateHandler.getPriority();
+            final Downloader_WebGL_Handler candidateHandler  = entry.getValue();
+            final long                     candidatePriority = candidateHandler.getPriority();
 
             if (candidatePriority > selectedPriority) {
                final URL url = entry.getKey();
                selectedPriority = candidatePriority;
-               selectedHandler = candidateHandler;
-               selectedURL = url;
+               selectedHandler  = candidateHandler;
+               selectedURL      = url;
             }
          }
       }
@@ -291,32 +263,25 @@ public final class Downloader_WebGL
       return selectedHandler;
    }
 
-
    static private String defineDefaultProxy() {
       return GWT.getHostPageBaseURL() + "proxy?url=";
    }
-
 
    @Override
    public void onResume(final G3MContext context) {
    }
 
-
    @Override
    public void onPause(final G3MContext context) {
    }
-
 
    @Override
    public void onDestroy(final G3MContext context) {
    }
 
-
    @Override
-   public void initialize(final G3MContext context,
-                          final FrameTasksExecutor frameTasksExecutor) {
+   public void initialize(final G3MContext context, final FrameTasksExecutor frameTasksExecutor) {
 
    }
-
 
 }

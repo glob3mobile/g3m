@@ -1,18 +1,10 @@
-
-
 package org.glob3.mobile.specific;
 
-
 import static android.graphics.Paint.*;
-
 import org.glob3.mobile.generated.*;
-
 import android.graphics.*;
 
-
-public final class Canvas_Android
-                                  extends
-                                     ICanvas {
+public final class Canvas_Android extends ICanvas {
 
    private static final int PAINT_FLAGS = ANTI_ALIAS_FLAG | LINEAR_TEXT_FLAG | FILTER_BITMAP_FLAG;
 
@@ -27,7 +19,6 @@ public final class Canvas_Android
 
    private final RectF _rectF = new RectF(); // RectF instance for reuse (and avoid garbage)
    private final Rect  _rect  = new Rect();  // Rect instance for reuse (and avoid garbage)
-
 
    Canvas_Android(final boolean retina,
                   final int maxSize) {
@@ -44,10 +35,8 @@ public final class Canvas_Android
       _strokePaint.setStyle(Paint.Style.STROKE);
    }
 
-
    @Override
-   protected void _initialize(final int width,
-                              final int height) {
+   protected void _initialize(final int width, final int height) {
       final float rawDevicePixelRatio = _retina ? IFactory.instance().getDeviceInfo().getDevicePixelRatio() : 1;
 
       float widthPixelRatio  = rawDevicePixelRatio;
@@ -75,7 +64,6 @@ public final class Canvas_Android
       //}
    }
 
-
    @Override
    protected void _setFont(final GFont font) {
       final Typeface typeface = createTypeface(font);
@@ -87,7 +75,6 @@ public final class Canvas_Android
       _strokePaint.setTypeface(typeface);
       _strokePaint.setTextSize(fontSize);
    }
-
 
    private static Typeface createTypeface(final GFont font) {
       final Typeface fontFamily;
@@ -115,7 +102,6 @@ public final class Canvas_Android
       return Typeface.create(fontFamily, style);
    }
 
-
    @Override
    public void dispose() {
       if (_bitmap != null) {
@@ -126,10 +112,8 @@ public final class Canvas_Android
       super.dispose();
    }
 
-
    @Override
-   protected void _createImage(final IImageListener listener,
-                               final boolean autodelete) {
+   protected void _createImage(final IImageListener listener, final boolean autodelete) {
       final Bitmap bitmap = Bitmap.createBitmap(_bitmap);
       final IImage result = new Image_Android(bitmap, null);
       listener.imageCreated(result);
@@ -137,7 +121,6 @@ public final class Canvas_Android
          listener.dispose();
       }
    }
-
 
    @Override
    protected Vector2F _textExtent(final String text) {
@@ -148,48 +131,38 @@ public final class Canvas_Android
       return new Vector2F(width, height);
    }
 
-
    private static int floatTo255(final float value) {
       return Math.round(value * 255);
    }
 
-
    private static int toAndroidColor(final org.glob3.mobile.generated.Color g3mColor) {
       return android.graphics.Color.argb( //
-            floatTo255(g3mColor._alpha), //
-            floatTo255(g3mColor._red), //
-            floatTo255(g3mColor._green), //
-            floatTo255(g3mColor._blue));
+                                         floatTo255(g3mColor._alpha), //
+                                         floatTo255(g3mColor._red), //
+                                         floatTo255(g3mColor._green), //
+                                         floatTo255(g3mColor._blue));
    }
-
 
    @Override
    protected void _setFillColor(final org.glob3.mobile.generated.Color color) {
       _fillPaint.setColor(toAndroidColor(color));
    }
 
-
    @Override
    protected void _setLineColor(final org.glob3.mobile.generated.Color color) {
       _strokePaint.setColor(toAndroidColor(color));
    }
-
 
    @Override
    protected void _setLineWidth(final float width) {
       _strokePaint.setStrokeWidth(width);
    }
 
-
    @Override
-   protected void _setShadow(final org.glob3.mobile.generated.Color color,
-                             final float blur,
-                             final float offsetX,
-                             final float offsetY) {
+   protected void _setShadow(final org.glob3.mobile.generated.Color color, final float blur, final float offsetX, final float offsetY) {
       _fillPaint.setShadowLayer(blur, offsetX, offsetY, toAndroidColor(color));
       _strokePaint.setShadowLayer(blur, offsetX, offsetY, toAndroidColor(color));
    }
-
 
    @Override
    protected void _removeShadow() {
@@ -197,12 +170,8 @@ public final class Canvas_Android
       _strokePaint.clearShadowLayer();
    }
 
-
    @Override
-   protected void _clearRect(final float left,
-                             final float top,
-                             final float width,
-                             final float height) {
+   protected void _clearRect(final float left, final float top, final float width, final float height) {
 
       final Paint clearPaint = new Paint();
       clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
@@ -210,158 +179,98 @@ public final class Canvas_Android
       // _canvas.drawColor(android.graphics.Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
    }
 
-
    @Override
-   protected void _fillRectangle(final float left,
-                                 final float top,
-                                 final float width,
-                                 final float height) {
+   protected void _fillRectangle(final float left, final float top, final float width, final float height) {
       _canvas.drawRect(left, top, left + width, top + height, _fillPaint);
    }
 
-
    @Override
-   protected void _strokeRectangle(final float left,
-                                   final float top,
-                                   final float width,
-                                   final float height) {
+   protected void _strokeRectangle(final float left, final float top, final float width, final float height) {
       _canvas.drawRect(left, top, left + width, top + height, _strokePaint);
    }
 
-
    @Override
-   protected void _fillAndStrokeRectangle(final float left,
-                                          final float top,
-                                          final float width,
-                                          final float height) {
+   protected void _fillAndStrokeRectangle(final float left, final float top, final float width, final float height) {
       _fillRectangle(left, top, width, height);
       _strokeRectangle(left, top, width, height);
    }
 
-
    @Override
-   protected void _fillEllipse(final float left,
-                               final float top,
-                               final float width,
-                               final float height) {
+   protected void _fillEllipse(final float left, final float top, final float width, final float height) {
       _rectF.set(left, top, left + width, top + height);
       _canvas.drawOval(_rectF, _fillPaint);
    }
 
-
    @Override
-   protected void _strokeEllipse(final float left,
-                                 final float top,
-                                 final float width,
-                                 final float height) {
+   protected void _strokeEllipse(final float left, final float top, final float width, final float height) {
       _rectF.set(left, top, left + width, top + height);
       _canvas.drawOval(_rectF, _strokePaint);
    }
 
-
    @Override
-   protected void _fillAndStrokeEllipse(final float left,
-                                        final float top,
-                                        final float width,
-                                        final float height) {
+   protected void _fillAndStrokeEllipse(final float left, final float top, final float width, final float height) {
       _fillEllipse(left, top, width, height);
       _strokeEllipse(left, top, width, height);
    }
 
-
    @Override
-   protected void _fillRoundedRectangle(final float left,
-                                        final float top,
-                                        final float width,
-                                        final float height,
-                                        final float radius) {
+   protected void _fillRoundedRectangle(final float left, final float top, final float width, final float height, final float radius) {
       _rectF.set(left, top, left + width, top + height);
       _canvas.drawRoundRect(_rectF, radius, radius, _fillPaint);
    }
 
-
    @Override
-   protected void _strokeRoundedRectangle(final float left,
-                                          final float top,
-                                          final float width,
-                                          final float height,
-                                          final float radius) {
+   protected void _strokeRoundedRectangle(final float left, final float top, final float width, final float height, final float radius) {
       _rectF.set(left, top, left + width, top + height);
       _canvas.drawRoundRect(_rectF, radius, radius, _strokePaint);
    }
 
-
    @Override
-   protected void _fillAndStrokeRoundedRectangle(final float left,
-                                                 final float top,
-                                                 final float width,
-                                                 final float height,
-                                                 final float radius) {
+   protected void _fillAndStrokeRoundedRectangle(final float left, final float top, final float width, final float height, final float radius) {
       _rectF.set(left, top, left + width, top + height);
       _canvas.drawRoundRect(_rectF, radius, radius, _fillPaint);
       _canvas.drawRoundRect(_rectF, radius, radius, _strokePaint);
    }
 
-
    @Override
-   protected void _fillText(final String text,
-                            final float left,
-                            final float top) {
+   protected void _fillText(final String text, final float left, final float top) {
       final Rect textBounds = _rect;
       _fillPaint.getTextBounds(text, 0, text.length(), textBounds);
       _canvas.drawText(text, left, top - textBounds.top, _fillPaint);
    }
 
-
    @Override
-   protected void _drawImage(final IImage image,
-                             final float destLeft,
-                             final float destTop) {
+   protected void _drawImage(final IImage image, final float destLeft, final float destTop) {
       _drawImage(image, destLeft, destTop, image.getWidth(), image.getHeight());
    }
 
-
    @Override
-   protected void _drawImage(final IImage image,
-                             final float destLeft,
-                             final float destTop,
-                             final float transparency) {
+   protected void _drawImage(final IImage image, final float destLeft, final float destTop, final float transparency) {
       _drawImage(image, destLeft, destTop, image.getWidth(), image.getHeight(), transparency);
    }
 
-
    @Override
-   protected void _drawImage(final IImage image,
-                             final float left,
-                             final float top,
-                             final float width,
-                             final float height) {
+   protected void _drawImage(final IImage image, final float left, final float top, final float width, final float height) {
       final Bitmap bitmap = ((Image_Android) image).getBitmap();
 
       final RectF dst = _rectF;
       dst.set(left, //
-            top, //
-            left + width, // Right
-            top + height); // Bottom
+              top, //
+              left + width, // Right
+              top + height); // Bottom
 
       _canvas.drawBitmap(bitmap, null, dst, null);
    }
 
-
    @Override
-   protected void _drawImage(final IImage image,
-                             final float left,
-                             final float top,
-                             final float width,
-                             final float height,
-                             final float transparency) {
+   protected void _drawImage(final IImage image, final float left, final float top, final float width, final float height, final float transparency) {
       final Bitmap bitmap = ((Image_Android) image).getBitmap();
 
       final RectF dst = _rectF;
       dst.set(left, //
-            top, //
-            left + width, // Right
-            top + height); // Bottom
+              top, //
+              left + width, // Right
+              top + height); // Bottom
 
       final Paint paint = new Paint(PAINT_FLAGS);
 
@@ -369,34 +278,25 @@ public final class Canvas_Android
       _canvas.drawBitmap(bitmap, null, dst, paint);
    }
 
-
    @Override
-   protected void _drawImage(final IImage image,
-                             final float srcLeft,
-                             final float srcTop,
-                             final float srcWidth,
-                             final float srcHeight,
-                             final float destLeft,
-                             final float destTop,
-                             final float destWidth,
-                             final float destHeight) {
+   protected void _drawImage(final IImage image, final float srcLeft, final float srcTop, final float srcWidth, final float srcHeight, final float destLeft,
+                             final float destTop, final float destWidth, final float destHeight) {
       final Bitmap bitmap = ((Image_Android) image).getBitmap();
 
       final RectF dst = _rectF;
       dst.set(destLeft, //
-            destTop, //
-            destLeft + destWidth, // Right
-            destTop + destHeight); // Bottom
+              destTop, //
+              destLeft + destWidth, // Right
+              destTop + destHeight); // Bottom
 
       final Rect src = _rect;
       src.set(Math.round(srcLeft), //
-            Math.round(srcTop), //
-            Math.round(srcLeft + srcWidth), // Right
-            Math.round(srcTop + srcHeight)); // Bottom
+              Math.round(srcTop), //
+              Math.round(srcLeft + srcWidth), // Right
+              Math.round(srcTop + srcHeight)); // Bottom
 
       _canvas.drawBitmap(bitmap, src, dst, null);
    }
-
 
    @Override
    protected void _setLineCap(final StrokeCap cap) {
@@ -413,7 +313,6 @@ public final class Canvas_Android
       }
    }
 
-
    @Override
    protected void _setLineJoin(final StrokeJoin join) {
       switch (join) {
@@ -429,17 +328,13 @@ public final class Canvas_Android
       }
    }
 
-
    @Override
    protected void _setLineMiterLimit(final float limit) {
       _strokePaint.setStrokeMiter(limit);
    }
 
-
    @Override
-   protected void _setLineDash(final float[] lengths,
-                               final int count,
-                               final float phase) {
+   protected void _setLineDash(final float[] lengths, final int count, final float phase) {
       if ((count == 0) || (lengths.length == 0)) {
          _strokePaint.setPathEffect(null);
       }
@@ -447,7 +342,6 @@ public final class Canvas_Android
          _strokePaint.setPathEffect(new DashPathEffect(lengths, phase));
       }
    }
-
 
    @Override
    protected void _beginPath() {
@@ -460,24 +354,20 @@ public final class Canvas_Android
       }
    }
 
-
    @Override
    protected void _closePath() {
       _path.close();
    }
-
 
    @Override
    protected void _stroke() {
       _canvas.drawPath(_path, _strokePaint);
    }
 
-
    @Override
    protected void _fill() {
       _canvas.drawPath(_path, _fillPaint);
    }
-
 
    @Override
    protected void _fillAndStroke() {
@@ -485,46 +375,33 @@ public final class Canvas_Android
       _canvas.drawPath(_path, _strokePaint);
    }
 
-
    @Override
-   protected void _moveTo(final float x,
-                          final float y) {
+   protected void _moveTo(final float x, final float y) {
       _path.moveTo(x, y);
    }
 
-
    @Override
-   protected void _lineTo(final float x,
-                          final float y) {
+   protected void _lineTo(final float x, final float y) {
       _path.lineTo(x, y);
    }
 
-
    @Override
-   protected void _drawImage(final IImage image,
-                             final float srcLeft,
-                             final float srcTop,
-                             final float srcWidth,
-                             final float srcHeight,
-                             final float destLeft,
-                             final float destTop,
-                             final float destWidth,
-                             final float destHeight,
-                             final float transparency) {
+   protected void _drawImage(final IImage image, final float srcLeft, final float srcTop, final float srcWidth, final float srcHeight, final float destLeft,
+                             final float destTop, final float destWidth, final float destHeight, final float transparency) {
 
       final Bitmap bitmap = ((Image_Android) image).getBitmap();
 
       final RectF dst = _rectF;
       dst.set(destLeft, //
-            destTop, //
-            destLeft + destWidth, // Right
-            destTop + destHeight); // Bottom
+              destTop, //
+              destLeft + destWidth, // Right
+              destTop + destHeight); // Bottom
 
       final Rect src = _rect;
       src.set(Math.round(srcLeft), //
-            Math.round(srcTop), //
-            Math.round(srcLeft + srcWidth), // Right
-            Math.round(srcTop + srcHeight)); // Bottom
+              Math.round(srcTop), //
+              Math.round(srcLeft + srcWidth), // Right
+              Math.round(srcTop + srcHeight)); // Bottom
 
       final Paint paint = new Paint(PAINT_FLAGS);
 
@@ -532,6 +409,5 @@ public final class Canvas_Android
 
       _canvas.drawBitmap(bitmap, src, dst, paint);
    }
-
 
 }

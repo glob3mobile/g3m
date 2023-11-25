@@ -1,19 +1,11 @@
 
-
 package org.glob3.mobile.specific;
 
-
 import java.util.*;
-
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.core.client.*;
 
-
-public class Downloader_WebGL_Handler_DefaultImpl
-                                                  implements
-                                                     Downloader_WebGL_Handler {
-
+public class Downloader_WebGL_Handler_DefaultImpl implements Downloader_WebGL_Handler {
 
    private long                _priority;
    private URL                 _url;
@@ -22,18 +14,12 @@ public class Downloader_WebGL_Handler_DefaultImpl
 
    private Downloader_WebGL _downloader;
 
-
    public Downloader_WebGL_Handler_DefaultImpl() {
    }
 
-
    @Override
-   final public void init(final URL url,
-                          final IBufferDownloadListener bufferListener,
-                          final boolean deleteListener,
-                          final long priority,
-                          final long requestID,
-                          final String tag) {
+   final public void init(final URL url, final IBufferDownloadListener bufferListener, final boolean deleteListener, final long priority,
+                          final long requestID, final String tag) {
       _priority  = priority;
       _url       = url;
       _listeners = new ArrayList<>();
@@ -41,14 +27,9 @@ public class Downloader_WebGL_Handler_DefaultImpl
       _isImageRequest = false;
    }
 
-
    @Override
-   final public void init(final URL url,
-                          final IImageDownloadListener imageListener,
-                          final boolean deleteListener,
-                          final long priority,
-                          final long requestID,
-                          final String tag) {
+   final public void init(final URL url, final IImageDownloadListener imageListener, final boolean deleteListener, final long priority,
+                          final long requestID, final String tag) {
       _priority  = priority;
       _url       = url;
       _listeners = new ArrayList<>();
@@ -56,18 +37,13 @@ public class Downloader_WebGL_Handler_DefaultImpl
       _isImageRequest = true;
    }
 
-
    @Override
    final public boolean isImageRequest() {
       return _isImageRequest;
    }
 
-
    @Override
-   final public void addListener(final IBufferDownloadListener listener,
-                                 final boolean deleteListener,
-                                 final long priority,
-                                 final long requestID,
+   final public void addListener(final IBufferDownloadListener listener, final boolean deleteListener, final long priority, final long requestID,
                                  final String tag) {
       _listeners.add(new ListenerEntry(listener, null, deleteListener, requestID, tag));
       if (priority > _priority) {
@@ -75,12 +51,8 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
    }
 
-
    @Override
-   final public void addListener(final IImageDownloadListener listener,
-                                 final boolean deleteListener,
-                                 final long priority,
-                                 final long requestID,
+   final public void addListener(final IImageDownloadListener listener, final boolean deleteListener, final long priority, final long requestID,
                                  final String tag) {
       _listeners.add(new ListenerEntry(null, listener, deleteListener, requestID, tag));
       if (priority > _priority) {
@@ -88,12 +60,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
    }
 
-
    @Override
    final public long getPriority() {
       return _priority;
    }
-
 
    @Override
    final public boolean cancelListenerForRequestId(final long requestID) {
@@ -107,7 +77,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
       return false;
    }
 
-
    @Override
    public void cancelListenersTagged(final String tag) {
       for (final ListenerEntry listener : _listeners) {
@@ -116,7 +85,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
          }
       }
    }
-
 
    @Override
    final public boolean removeListenerForRequestId(final long requestID) {
@@ -131,7 +99,6 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
       return false;
    }
-
 
    @Override
    final public boolean removeListenersTagged(final String tag) {
@@ -149,12 +116,10 @@ public class Downloader_WebGL_Handler_DefaultImpl
       return anyRemoved;
    }
 
-
    @Override
    final public boolean hasListener() {
       return !_listeners.isEmpty();
    }
-
 
    @Override
    final public void runWithDownloader(final Downloader_WebGL downloader) {
@@ -163,16 +128,13 @@ public class Downloader_WebGL_Handler_DefaultImpl
       jsRequest(_url._path);
    }
 
-
    @Override
    final public void removeFromDownloaderDownloadingHandlers() {
       _downloader.removeDownloadingHandlerForUrl(_url);
    }
 
-
    @Override
-   final public void processResponse(final int statusCode,
-                                     final JavaScriptObject data) {
+   final public void processResponse(final int statusCode, final JavaScriptObject data) {
       final boolean dataIsValid = (data != null) && (statusCode == 200);
 
       if (dataIsValid) {
@@ -197,73 +159,68 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
    }
 
-
    @Override
    public native void jsRequest(String url) /*-{
-		var that = this;
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", url, true);
-		xhr.responseType = (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) ? "blob"
-				: "arraybuffer";
+    var that = this;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) ? "blob" : "arraybuffer";
 
-		var handled = false;
-		xhr.onload = function() {
-			if (handled) {
-				return;
-			}
+    var handled = false;
+    xhr.onload = function() {
+      if (handled) {
+        return;
+      }
 
-			if (xhr.readyState == 4) {
-				handled = true;
+      if (xhr.readyState == 4) {
+        handled = true;
 
-				// inform downloader to remove myself, to avoid adding new Listener
-				that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
-				if (xhr.status === 200) {
-					if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) {
-						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
-					} else {
-						that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
-					}
-				} else {
-					that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
-				}
-			}
-		};
+        // inform downloader to remove myself, to avoid adding new Listener
+        that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
+        if (xhr.status === 200) {
+          if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) {
+            that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
+          } else {
+            that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
+          }
+        } else {
+          that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
+        }
+      }
+    };
 
-		xhr.onerror = function() {
-			if (handled) {
-				return;
-			}
-			handled = true;
-			that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
-		};
+    xhr.onerror = function() {
+      if (handled) {
+        return;
+      }
+      handled = true;
+      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
+    };
 
-		xhr.send();
+    xhr.send();
    }-*/;
 
+   private native void jsCreateImageFromBlob(final int xhrStatus, final JavaScriptObject blob) /*-{
+    var that = this;
 
-   private native void jsCreateImageFromBlob(final int xhrStatus,
-                                             final JavaScriptObject blob) /*-{
-		var that = this;
+    var auxImg = new Image();
+    var imgURL = $wnd.g3mURL.createObjectURL(blob);
 
-		var auxImg = new Image();
-		var imgURL = $wnd.g3mURL.createObjectURL(blob);
+    auxImg.onload = function() {
+      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, auxImg);
+      $wnd.g3mURL.revokeObjectURL(imgURL);
+    };
+    auxImg.onerror = function() {
+      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, null);
+      $wnd.g3mURL.revokeObjectURL(imgURL);
+    };
+    auxImg.onabort = function() {
+      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, null);
+      $wnd.g3mURL.revokeObjectURL(imgURL);
+    };
 
-		auxImg.onload = function() {
-			that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, auxImg);
-			$wnd.g3mURL.revokeObjectURL(imgURL);
-		};
-		auxImg.onerror = function() {
-			that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, null);
-			$wnd.g3mURL.revokeObjectURL(imgURL);
-		};
-		auxImg.onabort = function() {
-			that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhrStatus, null);
-			$wnd.g3mURL.revokeObjectURL(imgURL);
-		};
-
-		auxImg.src = imgURL;
+    auxImg.src = imgURL;
    }-*/;
-
 
    private static void logError(final String msg) {
       final ILogger logger = ILogger.instance();
@@ -275,6 +232,4 @@ public class Downloader_WebGL_Handler_DefaultImpl
       }
    }
 
-
 }
-

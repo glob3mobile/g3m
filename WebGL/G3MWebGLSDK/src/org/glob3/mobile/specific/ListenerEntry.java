@@ -1,11 +1,8 @@
 
-
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.core.client.*;
-
 
 public final class ListenerEntry {
 
@@ -19,35 +16,30 @@ public final class ListenerEntry {
 
    private final String _tag;
 
-
    public ListenerEntry(final IBufferDownloadListener bufferListener,
                         final IImageDownloadListener imageListener,
                         final boolean deleteListener,
                         final long requestID,
                         final String tag) {
       _bufferListener = bufferListener;
-      _imageListener = imageListener;
+      _imageListener  = imageListener;
       _deleteListener = deleteListener;
-      _requestID = requestID;
-      _tag = tag;
-      _canceled = false;
+      _requestID      = requestID;
+      _tag            = tag;
+      _canceled       = false;
    }
-
 
    public long getRequestId() {
       return _requestID;
    }
 
-
    public IBufferDownloadListener getBufferListener() {
       return _bufferListener;
    }
 
-
    public IImageDownloadListener getImageListener() {
       return _imageListener;
    }
-
 
    public void cancel() {
       if (_canceled) {
@@ -56,11 +48,9 @@ public final class ListenerEntry {
       _canceled = true;
    }
 
-
    public boolean isCanceled() {
       return _canceled;
    }
-
 
    void onCancel(final URL url) {
       if (_bufferListener != null) {
@@ -77,7 +67,6 @@ public final class ListenerEntry {
       }
    }
 
-
    void onError(final URL url) {
       if (_bufferListener != null) {
          _bufferListener.onError(url);
@@ -93,9 +82,7 @@ public final class ListenerEntry {
       }
    }
 
-
-   void onDownload(final URL url,
-                   final JavaScriptObject data) {
+   void onDownload(final URL url, final JavaScriptObject data) {
       if (_bufferListener != null) {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
@@ -123,9 +110,7 @@ public final class ListenerEntry {
       }
    }
 
-
-   void onCanceledDownload(final URL url,
-                           final JavaScriptObject data) {
+   void onCanceledDownload(final URL url, final JavaScriptObject data) {
       if (_bufferListener != null) {
          final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
@@ -144,22 +129,20 @@ public final class ListenerEntry {
       }
    }
 
-
-   static public void log(final LogLevel level,
-                          final String msg) {
+   static public void log(final LogLevel level, final String msg) {
       if (ILogger.instance() != null) {
          switch (level) {
-            case InfoLevel:
-               ILogger.instance().logInfo(TAG + msg);
-               break;
-            case WarningLevel:
-               ILogger.instance().logWarning(TAG + msg);
-               break;
-            case ErrorLevel:
-               ILogger.instance().logError(TAG + msg);
-               break;
-            default:
-               break;
+         case InfoLevel:
+            ILogger.instance().logInfo(TAG + msg);
+            break;
+         case WarningLevel:
+            ILogger.instance().logWarning(TAG + msg);
+            break;
+         case ErrorLevel:
+            ILogger.instance().logError(TAG + msg);
+            break;
+         default:
+            break;
          }
       }
       else {
@@ -167,7 +150,6 @@ public final class ListenerEntry {
       }
 
    }
-
 
    public String getTag() {
       return _tag;

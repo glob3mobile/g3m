@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.util.*;
@@ -8,36 +7,28 @@ import org.glob3.mobile.generated.*;
 
 import com.google.gson.*;
 
-
-public class JSONParser_JavaDesktop
-         extends
-            IJSONParser {
+public class JSONParser_JavaDesktop extends IJSONParser {
 
    @Override
-   public JSONBaseObject parse(final IByteBuffer buffer,
-                               final boolean nullAsObject) {
+   public JSONBaseObject parse(final IByteBuffer buffer, final boolean nullAsObject) {
       return parse(buffer.getAsString(), nullAsObject);
    }
 
-
    @Override
-   public JSONBaseObject parse(final String string,
-                               final boolean nullAsObject) {
-      final JsonParser parser = new JsonParser();
+   public JSONBaseObject parse(final String string, final boolean nullAsObject) {
+      final JsonParser  parser  = new JsonParser();
       final JsonElement element = parser.parse(string);
 
       return convert(element, nullAsObject);
    }
 
-
-   private JSONBaseObject convert(final JsonElement element,
-                                  final boolean nullAsObject) {
+   private JSONBaseObject convert(final JsonElement element, final boolean nullAsObject) {
       if (element.isJsonNull()) {
          return nullAsObject ? new JSONNull() : null;
       }
       else if (element.isJsonObject()) {
          final JsonObject jsonObject = (JsonObject) element;
-         final JSONObject result = new JSONObject();
+         final JSONObject result     = new JSONObject();
          for (final Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
             result.put(entry.getKey(), convert(entry.getValue(), nullAsObject));
          }
@@ -50,7 +41,7 @@ public class JSONParser_JavaDesktop
          }
          else if (jsonPrimitive.isNumber()) {
             final double doubleValue = jsonPrimitive.getAsDouble();
-            final long longValue = (long) doubleValue;
+            final long   longValue   = (long) doubleValue;
             if (doubleValue == longValue) {
                final int intValue = (int) longValue;
                return (intValue == longValue) ? new JSONInteger(intValue) : new JSONLong(longValue);
@@ -67,7 +58,7 @@ public class JSONParser_JavaDesktop
       }
       else if (element.isJsonArray()) {
          final JsonArray jsonArray = (JsonArray) element;
-         final JSONArray result = new JSONArray(jsonArray.size());
+         final JSONArray result    = new JSONArray(jsonArray.size());
          for (final JsonElement child : jsonArray) {
             result.add(convert(child, nullAsObject));
          }
@@ -78,6 +69,5 @@ public class JSONParser_JavaDesktop
       }
 
    }
-
 
 }

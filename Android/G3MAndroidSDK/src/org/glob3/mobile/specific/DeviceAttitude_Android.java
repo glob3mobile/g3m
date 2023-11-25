@@ -1,7 +1,5 @@
 
-
 package org.glob3.mobile.specific;
-
 
 import org.glob3.mobile.generated.IDeviceAttitude;
 import org.glob3.mobile.generated.ILogger;
@@ -19,29 +17,22 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
 
-
 // based on https://bitbucket.org/apacha/sensor-fusion-demo/
 
-public class DeviceAttitude_Android
-   extends
-      IDeviceAttitude
-   implements
-      SensorEventListener {
+public class DeviceAttitude_Android extends IDeviceAttitude implements SensorEventListener {
 
-
-   private static final float       NS2S                          = 1.0f / 1000000000.0f;
-   private static final double      EPSILON                       = 0.1;
-   private static final float       OUTLIER_THRESHOLD             = 0.85f;
-   private static final float       OUTLIER_PANIC_THRESHOLD       = 0.75f;
-   private static final float       INDIRECT_INTERPOLATION_WEIGHT = 0.01f;
+   private static final float  NS2S                          = 1.0f / 1000000000.0f;
+   private static final double EPSILON                       = 0.1;
+   private static final float  OUTLIER_THRESHOLD             = 0.85f;
+   private static final float  OUTLIER_PANIC_THRESHOLD       = 0.75f;
+   private static final float  INDIRECT_INTERPOLATION_WEIGHT = 0.01f;
    //private static final float      DIRECT_INTERPOLATION_WEIGHT   = 0.005f;
-   private static final int         PANIC_THRESHOLD               = 60;
+   private static final int PANIC_THRESHOLD = 60;
 
-
-   private final SensorManager      _sensorManager;
-   private final Display            _defaultDisplay;
-   private boolean                  _tracking                     = false;
-   private final float[]            _rotationMatrix               = new float[16];
+   private final SensorManager _sensorManager;
+   private final Display       _defaultDisplay;
+   private boolean             _tracking       = false;
+   private final float[]       _rotationMatrix = new float[16];
 
    private final float[]            _tmpQuaternion                = new float[4];
    private final MutableQuaternionF _quaternionRotationVector     = new MutableQuaternionF();
@@ -55,12 +46,10 @@ public class DeviceAttitude_Android
    private final MutableQuaternionF _currentOrientationQuaternion = new MutableQuaternionF();
    private final float[]            _tmpArray                     = new float[4];
 
-
    public DeviceAttitude_Android(final Context context) {
-      _sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+      _sensorManager  = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
       _defaultDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
    }
-
 
    @Override
    public void startTrackingDeviceOrientation() {
@@ -83,7 +72,6 @@ public class DeviceAttitude_Android
       }
    }
 
-
    @Override
    public void stopTrackingDeviceOrientation() {
       if (_tracking) {
@@ -92,66 +80,58 @@ public class DeviceAttitude_Android
       }
    }
 
-
    @Override
    public boolean isTracking() {
       return _tracking;
    }
 
-
    @Override
    public void copyValueOfRotationMatrix(final MutableMatrix44D rotationMatrix) {
       if (_tracking) {
          rotationMatrix.setValue( //
-                  _rotationMatrix[0], _rotationMatrix[4], _rotationMatrix[8], _rotationMatrix[12], //
-                  _rotationMatrix[1], _rotationMatrix[5], _rotationMatrix[9], _rotationMatrix[13], //
-                  _rotationMatrix[2], _rotationMatrix[6], _rotationMatrix[10], _rotationMatrix[14], //
-                  _rotationMatrix[3], _rotationMatrix[7], _rotationMatrix[11], _rotationMatrix[15]);
+                                 _rotationMatrix[0], _rotationMatrix[4], _rotationMatrix[8], _rotationMatrix[12], //
+                                 _rotationMatrix[1], _rotationMatrix[5], _rotationMatrix[9], _rotationMatrix[13], //
+                                 _rotationMatrix[2], _rotationMatrix[6], _rotationMatrix[10], _rotationMatrix[14], //
+                                 _rotationMatrix[3], _rotationMatrix[7], _rotationMatrix[11], _rotationMatrix[15]);
       }
       else {
          rotationMatrix.setValid(false);
       }
    }
 
-
    @Override
    public InterfaceOrientation getCurrentInterfaceOrientation() {
       switch (_defaultDisplay.getRotation()) {
-         case Surface.ROTATION_0:
-            return InterfaceOrientation.PORTRAIT;
-         case Surface.ROTATION_90:
-            return InterfaceOrientation.LANDSCAPE_RIGHT;
-         case Surface.ROTATION_180:
-            return InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
-         case Surface.ROTATION_270:
-            return InterfaceOrientation.LANDSCAPE_LEFT;
-         default:
-            return null;
+      case Surface.ROTATION_0:
+         return InterfaceOrientation.PORTRAIT;
+      case Surface.ROTATION_90:
+         return InterfaceOrientation.LANDSCAPE_RIGHT;
+      case Surface.ROTATION_180:
+         return InterfaceOrientation.PORTRAIT_UPSIDEDOWN;
+      case Surface.ROTATION_270:
+         return InterfaceOrientation.LANDSCAPE_LEFT;
+      default:
+         return null;
       }
    }
 
-
    @Override
-   public void onAccuracyChanged(final Sensor sensor,
-                                 final int accuracy) {
+   public void onAccuracyChanged(final Sensor sensor, final int accuracy) {
       ILogger.instance().logInfo("Sensor \"" + sensor.getName() + "\" changed accuracy to: " + accuracy);
    }
-
 
    @Override
    public void onSensorChanged(final SensorEvent event) {
       switch (event.sensor.getType()) {
-         case Sensor.TYPE_ROTATION_VECTOR:
-            processRotationVector(event);
-            break;
-         case Sensor.TYPE_GYROSCOPE:
-            processGyroscope(event);
-            break;
+      case Sensor.TYPE_ROTATION_VECTOR:
+         processRotationVector(event);
+         break;
+      case Sensor.TYPE_GYROSCOPE:
+         processGyroscope(event);
+         break;
       }
 
-
    }
-
 
    private void processRotationVector(final SensorEvent event) {
       SensorManager.getQuaternionFromVector(_tmpQuaternion, event.values);
@@ -161,7 +141,6 @@ public class DeviceAttitude_Android
          _positionInitialised = true;
       }
    }
-
 
    private void processGyroscope(final SensorEvent event) {
       // Process Gyroscope and perform fusion
@@ -189,7 +168,7 @@ public class DeviceAttitude_Android
          // in order to get a delta rotation from this sample over the timestep
          // We will convert this axis-angle representation of the delta rotation
          // into a quaternion before turning it into the rotation matrix.
-         final double thetaOverTwo = (gyroscopeRotationVelocity * dT) / 2.0f;
+         final double thetaOverTwo    = (gyroscopeRotationVelocity * dT) / 2.0f;
          final double sinThetaOverTwo = Math.sin(thetaOverTwo);
          final double cosThetaOverTwo = Math.cos(thetaOverTwo);
          _deltaQuaternion.setX((float) (sinThetaOverTwo * axisX));
@@ -219,8 +198,7 @@ public class DeviceAttitude_Android
 
             // Interpolate with a fixed weight between the two absolute quaternions obtained from gyro and rotation vector sensors
             // The weight should be quite low, so the rotation vector corrects the gyro only slowly, and the output keeps responsive.
-            _quaternionGyroscope.slerp(_quaternionRotationVector, _interpolatedQuaternion,
-                     (float) (INDIRECT_INTERPOLATION_WEIGHT * gyroscopeRotationVelocity));
+            _quaternionGyroscope.slerp(_quaternionRotationVector, _interpolatedQuaternion, (float) (INDIRECT_INTERPOLATION_WEIGHT * gyroscopeRotationVelocity));
             // _quaternionGyroscope.slerp(_quaternionRotationVector, _interpolatedQuaternion, DIRECT_INTERPOLATION_WEIGHT);
 
             // Use the interpolated value between gyro and rotationVector
@@ -233,8 +211,7 @@ public class DeviceAttitude_Android
          }
 
          if (_panicCounter > PANIC_THRESHOLD) {
-            Log.d("Rotation Vector",
-                     "Panic counter is bigger than threshold; this indicates a Gyroscope failure. Panic reset is imminent.");
+            Log.d("Rotation Vector", "Panic counter is bigger than threshold; this indicates a Gyroscope failure. Panic reset is imminent.");
 
             if (gyroscopeRotationVelocity < 3) {
                Log.d("Rotation Vector", "Performing Panic-reset. Resetting orientation to rotation-vector value.");
@@ -248,15 +225,13 @@ public class DeviceAttitude_Android
             }
             else {
                Log.d("Rotation Vector",
-                        String.format(
-                                 "Panic reset delayed due to ongoing motion (user is still shaking the device). Gyroscope Velocity: %.2f > 3",
-                                 gyroscopeRotationVelocity));
+                     String.format("Panic reset delayed due to ongoing motion (user is still shaking the device). Gyroscope Velocity: %.2f > 3",
+                                   gyroscopeRotationVelocity));
             }
          }
       }
       _timestamp = event.timestamp;
    }
-
 
    private void setOrientationQuaternionAndMatrix(final MutableQuaternionF quaternion) {
       _correctedQuaternion.copyFrom(quaternion);
@@ -275,6 +250,5 @@ public class DeviceAttitude_Android
       _tmpArray[3] = _correctedQuaternion.getW();
       SensorManager.getRotationMatrixFromVector(_rotationMatrix, _tmpArray);
    }
-
 
 }

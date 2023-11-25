@@ -85,7 +85,7 @@ public class MainActivity
       layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
-      final CameraRenderer cr = new CameraRenderer();
+      final CameraRenderer cr = new CameraRenderer(false);
       cr.addHandler(new DeviceAttitudeCameraHandler(true));
       builder.setCameraRenderer(cr);
 

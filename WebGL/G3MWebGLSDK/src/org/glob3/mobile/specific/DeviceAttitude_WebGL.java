@@ -1,27 +1,17 @@
 
-
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.CoordinateSystem;
-import org.glob3.mobile.generated.IDeviceAttitude;
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.InterfaceOrientation;
-import org.glob3.mobile.generated.MutableMatrix44D;
+import org.glob3.mobile.generated.*;
 
-
-public class DeviceAttitude_WebGL
-   extends
-      IDeviceAttitude {
+public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
    private InterfaceOrientation _currentIO = null;
 
-   private double               _beta      = Double.NaN;
-   private double               _gamma     = Double.NaN;
-   private double               _alpha     = Double.NaN;
+   private double _beta  = Double.NaN;
+   private double _gamma = Double.NaN;
+   private double _alpha = Double.NaN;
 
-   private boolean              _isTracking;
-
+   private boolean _isTracking;
 
    //Implementation of DeviceAttitude_WebGL may be inconsistent with device natural screen orientation
    //Further development needed
@@ -30,48 +20,39 @@ public class DeviceAttitude_WebGL
       initInterfaceOrientation(this);
    }
 
-
    private static native void trackGyroscope(DeviceAttitude_WebGL devAtt) /*-{
-		try {
-			$wnd
-					.addEventListener(
-							'deviceorientation',
-							function(event) {
-								devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_beta = event.beta;
-								devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_gamma = event.gamma;
-								devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha = event.alpha;
+    try {
+      $wnd.addEventListener('deviceorientation', function(event) {
+        devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_beta = event.beta;
+        devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_gamma = event.gamma;
+        devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha = event.alpha;
 
-								console
-										.log("TG EVENT B:"
-												+ devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_beta
-												+ " G:"
-												+ devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_gamma
-												+ " A:"
-												+ devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha);
+        console
+            .log("TG EVENT B:" + devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_beta + " G:"
+                + devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_gamma + " A:"
+                + devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha);
 
-								// Chrome - Safari points alpha to the first position instead
-								// of true north.
-								//								try{
-								//									if ((navigator.userAgent.indexOf("Chrome") != -1 ) || (navigator.userAgent.indexOf("Safari") != -1 )){
-								//										devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha = event.webkitCompassHeading;
-								//									}
-								//								} catch(err){
-								//								}
+        // Chrome - Safari points alpha to the first position instead
+        // of true north.
+        //								try{
+        //									if ((navigator.userAgent.indexOf("Chrome") != -1 ) || (navigator.userAgent.indexOf("Safari") != -1 )){
+        //										devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha = event.webkitCompassHeading;
+        //									}
+        //								} catch(err){
+        //								}
 
-							}, false);
-		} catch (err) {
-		}
+      }, false);
+    } catch (err) {
+    }
 
    }-*/;
-
 
    private static native void stopTrackingGyroscope() /*-{
-		try {
-			$wnd.addEventListener('deviceorientation', null, false);
-		} catch (err) {
-		}
+    try {
+      $wnd.addEventListener('deviceorientation', null, false);
+    } catch (err) {
+    }
    }-*/;
-
 
    private void storeInterfaceOrientation(final String orientation) {
       if (orientation.equalsIgnoreCase("portrait-primary")) {
@@ -90,46 +71,42 @@ public class DeviceAttitude_WebGL
       // ILogger.instance().logInfo("SIO " + orientation + " -> " + _currentIO.toString());
    }
 
-
    private native void initInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
-		try {
-			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
-				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-				devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
-			}
-		} catch (err) {
-			console.error("Unable to track Interface Orientation. " + err);
-		}
+    try {
+      if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
+        devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
+      } else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+        devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.mozOrientation);
+      }
+    } catch (err) {
+      console.error("Unable to track Interface Orientation. " + err);
+    }
    }-*/;
-
 
    private native void trackInterfaceOrientation(DeviceAttitude_WebGL devAtt) /*-{
 
-		try {
-			if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
-				$wnd.screen.orientation.onchange = function() {
-					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-				};
-			} else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
-				$wnd.screen.onmozorientationchange = function(event) {
-					event.preventDefault();
-					devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
-				}
-			}
-		} catch (err) {
-			console.error("Unable to track Interface Orientation. " + err);
-		}
+    try {
+      if ($wnd.screen.orientation !== undefined) { //CHROME, SAFARI
+        $wnd.screen.orientation.onchange = function() {
+          devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
+        };
+      } else if ($wnd.screen.mozOrientation !== undefined) { //MOZILLA
+        $wnd.screen.onmozorientationchange = function(event) {
+          event.preventDefault();
+          devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::storeInterfaceOrientation(Ljava/lang/String;)($wnd.screen.orientation.type);
+        }
+      }
+    } catch (err) {
+      console.error("Unable to track Interface Orientation. " + err);
+    }
 
    }-*/;
-
 
    @Override
    public void startTrackingDeviceOrientation() {
       trackGyroscope(this);
       _isTracking = true;
    }
-
 
    @Override
    public void stopTrackingDeviceOrientation() {
@@ -139,27 +116,22 @@ public class DeviceAttitude_WebGL
       _isTracking = false;
    }
 
-
    @Override
    public boolean isTracking() {
       return _isTracking;
    }
 
-
    private Angle getHeading() {
       return Angle.fromDegrees(_alpha);
    }
-
 
    private Angle getPitch() {
       return Angle.fromDegrees(_gamma);
    }
 
-
    private Angle getRoll() {
       return Angle.fromDegrees(-_beta);
    }
-
 
    @Override
    public void copyValueOfRotationMatrix(final MutableMatrix44D rotationMatrix) {
@@ -172,7 +144,6 @@ public class DeviceAttitude_WebGL
          rotationMatrix.copyValue(cs.getRotationMatrix());
       }
    }
-
 
    @Override
    public InterfaceOrientation getCurrentInterfaceOrientation() {

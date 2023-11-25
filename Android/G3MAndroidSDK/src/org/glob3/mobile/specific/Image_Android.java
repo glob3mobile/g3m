@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import android.graphics.Bitmap;
@@ -8,13 +7,9 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.MutableColor255;
 import org.glob3.mobile.generated.Vector2I;
 
-
-public final class Image_Android
-   extends
-      IImage {
+public final class Image_Android extends IImage {
 
    //   private static final boolean DEBUG = false;
-
 
    //   private static String createCallStackString() {
    //      final Exception e = new Exception();
@@ -30,24 +25,20 @@ public final class Image_Android
    //      .replace("java.lang.Exception\n", "");
    //   }
 
-
    private static class BitmapHolder {
       private Bitmap _bitmap;
       private int    _referencesCount;
-
 
       //      @SuppressWarnings("unused")
       //      private final String       _createdAt;
       //      private final List<String> _retainedAt = new ArrayList<String>();
       //      private final List<String> _releasedAt = new ArrayList<String>();
 
-
       private BitmapHolder(final Bitmap bitmap) {
-         _bitmap = bitmap;
+         _bitmap          = bitmap;
          _referencesCount = 1;
          //         _createdAt = DEBUG ? createCallStackString() : null;
       }
-
 
       private void _retain() {
          synchronized (this) {
@@ -57,7 +48,6 @@ public final class Image_Android
             //            }
          }
       }
-
 
       private void _release() {
          synchronized (this) {
@@ -71,7 +61,6 @@ public final class Image_Android
             //            }
          }
       }
-
 
       //      @Override
       //      protected void finalize() throws Throwable {
@@ -103,19 +92,15 @@ public final class Image_Android
       //         super.finalize();
       //      }
 
-
    }
-
 
    final private BitmapHolder _bitmapHolder;
    private byte[]             _source;
-
 
    //   @SuppressWarnings("unused")
    //   private boolean            _bitmapHolderReleased = false;
    //   @SuppressWarnings("unused")
    //   private final String       _createdAt;
-
 
    public Image_Android(final Bitmap bitmap,
                         final byte[] source) {
@@ -126,9 +111,8 @@ public final class Image_Android
       }
 
       _bitmapHolder = new BitmapHolder(bitmap);
-      _source = source;
+      _source       = source;
    }
-
 
    private Image_Android(final BitmapHolder bitmapHolder,
                          final byte[] source) {
@@ -140,26 +124,22 @@ public final class Image_Android
       bitmapHolder._retain();
 
       _bitmapHolder = bitmapHolder;
-      _source = source;
+      _source       = source;
    }
-
 
    public Bitmap getBitmap() {
       return _bitmapHolder._bitmap;
    }
-
 
    @Override
    public int getWidth() {
       return (_bitmapHolder._bitmap == null) ? 0 : _bitmapHolder._bitmap.getWidth();
    }
 
-
    @Override
    public int getHeight() {
       return (_bitmapHolder._bitmap == null) ? 0 : _bitmapHolder._bitmap.getHeight();
    }
-
 
    @Override
    public boolean isPremultiplied() {
@@ -170,34 +150,28 @@ public final class Image_Android
       return (bmp.getConfig() != Bitmap.Config.RGB_565) && bmp.hasAlpha();
    }
 
-
    @Override
    public Vector2I getExtent() {
       return new Vector2I(getWidth(), getHeight());
    }
-
 
    @Override
    public String description() {
       return "Image_Android " + getWidth() + " x " + getHeight() + ", _image=(" + _bitmapHolder._bitmap.describeContents() + ")";
    }
 
-
    public byte[] getSourceBuffer() {
       return _source;
    }
-
 
    public void releaseSourceBuffer() {
       _source = null;
    }
 
-
    @Override
    public Image_Android shallowCopy() {
       return new Image_Android(_bitmapHolder, _source);
    }
-
 
    @Override
    public void dispose() {
@@ -209,18 +183,14 @@ public final class Image_Android
       super.dispose();
    }
 
-
    @Override
-   public void getPixel(final int x,
-                        final int y,
-                        final MutableColor255 pixel) {
+   public void getPixel(final int x, final int y, final MutableColor255 pixel) {
       final int androidPixel = _bitmapHolder._bitmap.getPixel(x, y);
-      pixel._red = (byte) android.graphics.Color.red(androidPixel);
+      pixel._red   = (byte) android.graphics.Color.red(androidPixel);
       pixel._green = (byte) android.graphics.Color.green(androidPixel);
-      pixel._blue = (byte) android.graphics.Color.blue(androidPixel);
+      pixel._blue  = (byte) android.graphics.Color.blue(androidPixel);
       pixel._alpha = (byte) android.graphics.Color.alpha(androidPixel);
    }
-
 
    //   @Override
    //   protected void finalize() throws Throwable {
@@ -238,6 +208,5 @@ public final class Image_Android
    //      }
    //      super.finalize();
    //   }
-
 
 }

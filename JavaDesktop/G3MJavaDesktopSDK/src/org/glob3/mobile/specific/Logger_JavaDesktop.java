@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.util.Arrays;
@@ -11,22 +10,16 @@ import java.util.logging.Logger;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
 
-
-public class Logger_JavaDesktop
-         extends
-            ILogger {
+public class Logger_JavaDesktop extends ILogger {
 
    private final Locale _locale = new Locale("myLocale");
-
 
    public Logger_JavaDesktop(final LogLevel level) {
       super(level);
    }
 
-
    @Override
-   public void logInfo(final String x,
-                       final Object... legacyParamArray) {
+   public void logInfo(final String x, final Object... legacyParamArray) {
 
       if (_level == LogLevel.SilenceLevel) {
          return;
@@ -38,14 +31,12 @@ public class Logger_JavaDesktop
       }
       catch (final IllegalFormatException e) {
          Logger.getLogger(getClass().getName()).log(Level.INFO, "Info: " + x + " " + Arrays.toString(legacyParamArray),
-                  x + " " + Arrays.toString(legacyParamArray));
+                                                    x + " " + Arrays.toString(legacyParamArray));
       }
    }
 
-
    @Override
-   public void logWarning(final String x,
-                          final Object... legacyParamArray) {
+   public void logWarning(final String x, final Object... legacyParamArray) {
       if (_level == LogLevel.SilenceLevel) {
          return;
       }
@@ -62,10 +53,8 @@ public class Logger_JavaDesktop
       }
    }
 
-
    @Override
-   public void logError(final String x,
-                        final Object... legacyParamArray) {
+   public void logError(final String x, final Object... legacyParamArray) {
       if (_level != LogLevel.ErrorLevel) {
          return;
       }

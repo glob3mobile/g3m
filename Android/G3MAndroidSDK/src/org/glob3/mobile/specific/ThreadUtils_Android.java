@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
@@ -13,11 +12,7 @@ import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IThreadUtils;
 
-
-public final class ThreadUtils_Android
-         extends
-            IThreadUtils {
-
+public final class ThreadUtils_Android extends IThreadUtils {
 
    private final G3MWidget_Android  _widgetAndroid;
    private final ThreadPoolExecutor _backgroundExecutor;
@@ -26,11 +21,9 @@ public final class ThreadUtils_Android
    private final List<Runnable> _backgroundQueue     = new ArrayList<>();
    private final List<Runnable> _rendererThreadQueue = new ArrayList<>();
 
-
    public ThreadUtils_Android(final G3MWidget_Android widgetAndroid) {
       this(widgetAndroid, Math.max(1, Runtime.getRuntime().availableProcessors() / 2));
    }
-
 
    public ThreadUtils_Android(final G3MWidget_Android widgetAndroid,
                               final int numBackgroundThreads) {
@@ -43,10 +36,8 @@ public final class ThreadUtils_Android
       _backgroundExecutor = new ThreadPoolExecutor(numBackgroundThreads, numBackgroundThreads, 1, TimeUnit.DAYS, workQueue);
    }
 
-
    @Override
-   public synchronized void invokeInRendererThread(final GTask task,
-                                                   final boolean autoDelete) {
+   public synchronized void invokeInRendererThread(final GTask task, final boolean autoDelete) {
       if (task == null) {
          throw new IllegalArgumentException("task can't be null");
       }
@@ -69,10 +60,8 @@ public final class ThreadUtils_Android
       }
    }
 
-
    @Override
-   public synchronized void invokeInBackground(final GTask task,
-                                               final boolean autoDelete) {
+   public synchronized void invokeInBackground(final GTask task, final boolean autoDelete) {
       final Runnable runnable = new Runnable() {
          @Override
          public void run() {
@@ -91,7 +80,6 @@ public final class ThreadUtils_Android
       }
    }
 
-
    @Override
    public synchronized void onResume(final G3MContext context) {
       if (_paused) {
@@ -100,18 +88,15 @@ public final class ThreadUtils_Android
       }
    }
 
-
    private void tryToDrainQueues() {
       if (isRunning()) {
          drainQueues();
       }
    }
 
-
    private boolean isRunning() {
       return !_paused && isInitialized();
    }
-
 
    private void drainQueues() {
       for (final Runnable runnable : _backgroundQueue) {
@@ -125,23 +110,19 @@ public final class ThreadUtils_Android
       _rendererThreadQueue.clear();
    }
 
-
    @Override
    public synchronized void onPause(final G3MContext context) {
       _paused = true;
    }
-
 
    @Override
    public void onDestroy(final G3MContext context) {
       onPause(context);
    }
 
-
    @Override
    protected void justInitialized() {
       tryToDrainQueues();
    }
-
 
 }

@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.io.UnsupportedEncodingException;
@@ -8,14 +7,10 @@ import java.util.Locale;
 
 import org.glob3.mobile.generated.IStringUtils;
 
-
-public final class StringUtils_JavaDesktop
-         extends
-            IStringUtils {
+public final class StringUtils_JavaDesktop extends IStringUtils {
 
    @Override
-   public String createString(final byte[] data,
-                              final int length) {
+   public String createString(final byte[] data, final int length) {
       try {
          return new String(data, "UTF8");
       }
@@ -24,11 +19,10 @@ public final class StringUtils_JavaDesktop
       }
    }
 
-
    @Override
    public ArrayList<String> splitLines(final String String) {
-      final String lines[] = String.split("\\r?\\n");
-      final ArrayList<String> l = new ArrayList<>();
+      final String            lines[] = String.split("\\r?\\n");
+      final ArrayList<String> l       = new ArrayList<>();
       for (final java.lang.String line : lines) {
          l.add(line);
       }
@@ -36,28 +30,20 @@ public final class StringUtils_JavaDesktop
       return l;
    }
 
-
    @Override
-   public boolean beginsWith(final String String,
-                             final String prefix) {
+   public boolean beginsWith(final String String, final String prefix) {
       return String.startsWith(prefix);
    }
 
-
    @Override
-   public int indexOf(final String String,
-                      final String search) {
+   public int indexOf(final String String, final String search) {
       return String.indexOf(search);
    }
 
-
    @Override
-   public String substring(final String String,
-                           final int beginIndex,
-                           final int endIndex) {
+   public String substring(final String String, final int beginIndex, final int endIndex) {
       return String.substring(beginIndex, endIndex);
    }
-
 
    @Override
    public String rtrim(final String String) {
@@ -68,7 +54,6 @@ public final class StringUtils_JavaDesktop
       return String.substring(0, index + 1);
    }
 
-
    @Override
    public String ltrim(final String String) {
       int index = 0;
@@ -78,35 +63,28 @@ public final class StringUtils_JavaDesktop
       return String.substring(index, String.length());
    }
 
-
    @Override
-   public boolean endsWith(final String string,
-                           final String suffix) {
+   public boolean endsWith(final String string, final String suffix) {
       return string.endsWith(suffix);
    }
-
 
    @Override
    public String toUpperCase(final String string) {
       return string.toUpperCase(Locale.ENGLISH);
    }
 
-
    @Override
    public String toLowerCase(final String string) {
       return string.toLowerCase(Locale.ENGLISH);
    }
-
 
    @Override
    public long parseHexInt(final String str) {
       return Long.parseLong(str, 16);
    }
 
-
    @Override
-   public int indexOfFirstNonBlank(final String string,
-                                   final int fromIndex) {
+   public int indexOfFirstNonBlank(final String string, final int fromIndex) {
       final int stringLen = string.length();
       for (int i = fromIndex; i < stringLen; i++) {
          if (!Character.isWhitespace(string.charAt(i))) {
@@ -116,11 +94,8 @@ public final class StringUtils_JavaDesktop
       return -1;
    }
 
-
    @Override
-   public int indexOfFirstNonChar(final String string,
-                                  final String chars,
-                                  final int fromIndex) {
+   public int indexOfFirstNonChar(final String string, final String chars, final int fromIndex) {
       final int stringLen = string.length();
       for (int i = fromIndex; i < stringLen; i++) {
          if (chars.indexOf(string.charAt(i)) > 0) {
@@ -130,62 +105,46 @@ public final class StringUtils_JavaDesktop
       return -1;
    }
 
-
    @Override
-   public int indexOf(final String string,
-                      final String search,
-                      final int fromIndex) {
+   public int indexOf(final String string, final String search, final int fromIndex) {
       return string.indexOf(search, fromIndex);
    }
 
-
    @Override
-   public int indexOf(final String string,
-                      final String search,
-                      final int fromIndex,
-                      final int endIndex) {
+   public int indexOf(final String string, final String search, final int fromIndex, final int endIndex) {
       final int pos = string.indexOf(search, fromIndex);
       return ((pos < 0) || (pos > endIndex)) ? -1 : pos;
    }
-
 
    @Override
    public String toString(final int value) {
       return Integer.toString(value);
    }
 
-
    @Override
    public String toString(final double value) {
       return Double.toString(value);
    }
-
 
    @Override
    public String toString(final long value) {
       return Long.toString(value);
    }
 
-
    @Override
    public double parseDouble(final String str) {
       return Double.parseDouble(str);
    }
-
 
    @Override
    public String toString(final float value) {
       return Float.toString(value);
    }
 
-
    @Override
-   public String replaceAll(final String originalString,
-                            final String searchString,
-                            final String replaceString) {
+   public String replaceAll(final String originalString, final String searchString, final String replaceString) {
       return originalString.replace(searchString, replaceString);
    }
-
 
    @Override
    public String capitalize(final String string) {
@@ -195,6 +154,5 @@ public final class StringUtils_JavaDesktop
 
       return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
    }
-
 
 }

@@ -1,26 +1,18 @@
 
-
 package org.glob3.mobile.specific;
 
-
 import org.glob3.mobile.generated.*;
-
 import com.google.gwt.canvas.client.*;
 import com.google.gwt.core.client.*;
 import com.google.gwt.dom.client.CanvasElement;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
-
-public class G3MWidget_WebGL
-                             extends
-                                Composite {
-
+public class G3MWidget_WebGL extends Composite {
 
    static {
       initSingletons();
    }
-
 
    public static void initSingletons() {
       final ILogger         logger         = new Logger_WebGL(LogLevel.InfoLevel);
@@ -34,17 +26,16 @@ public class G3MWidget_WebGL
       final IDeviceLocation deviceLocation = new DeviceLocation_WebGL();
 
       G3MWidget.initSingletons( //
-            logger, //
-            factory, //
-            stringUtils, //
-            stringBuilder, //
-            mathUtils, //
-            jsonParser, //
-            textUtils, //
-            deviceAttitude, //
-            deviceLocation);
+                               logger, //
+                               factory, //
+                               stringUtils, //
+                               stringBuilder, //
+                               mathUtils, //
+                               jsonParser, //
+                               textUtils, //
+                               deviceAttitude, //
+                               deviceLocation);
    }
-
 
    private final Canvas         _canvas;
    private JavaScriptObject     _webGLContext;
@@ -58,7 +49,6 @@ public class G3MWidget_WebGL
    private float                _devicePixelRatio = 1;
 
    private boolean _running = true;
-
 
    public G3MWidget_WebGL() {
       _canvas = Canvas.createIfSupported();
@@ -88,85 +78,76 @@ public class G3MWidget_WebGL
       //      onSizeChanged(1, 1);
    }
 
-
    private native void exportJSFunctions() /*-{
-		var that = this;
-		if (!$wnd.G3M) {
-			$wnd.G3M = {};
-		}
+    var that = this;
+    if (!$wnd.G3M) {
+      $wnd.G3M = {};
+    }
 
-		$wnd.G3M.takeScreenshotAsImage = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
-		});
-		$wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
-		});
-		$wnd.G3M.getCameraData = $entry(function() {
-			return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
-		});
-		$wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
-			return @org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
-		});
-		$wnd.G3M.moveCameraTo = $entry(function(position) {
-			that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
-		});
+    $wnd.G3M.takeScreenshotAsImage = $entry(function() {
+      return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsImage()();
+    });
+    $wnd.G3M.takeScreenshotAsBase64 = $entry(function() {
+      return that.@org.glob3.mobile.specific.G3MWidget_WebGL::takeScreenshotAsBase64()();
+    });
+    $wnd.G3M.getCameraData = $entry(function() {
+      return that.@org.glob3.mobile.specific.G3MWidget_WebGL::getCameraData()();
+    });
+    $wnd.G3M.newGeodetic3D = $entry(function(latitude, longitude, height) {
+      return @org.glob3.mobile.specific.G3MWidget_WebGL::newGeodetic3D(DDD)(latitude, longitude, height);
+    });
+    $wnd.G3M.moveCameraTo = $entry(function(position) {
+      that.@org.glob3.mobile.specific.G3MWidget_WebGL::moveCameraTo(Lorg/glob3/mobile/generated/Geodetic3D;)(position);
+    });
    }-*/;
-
 
    public void moveCameraTo(final Geodetic3D position) {
       _g3mWidget.setAnimatedCameraPosition(TimeInterval.fromSeconds(5), position);
    }
 
-
-   public static Geodetic3D newGeodetic3D(final double latitude,
-                                          final double longitude,
-                                          final double height) {
+   public static Geodetic3D newGeodetic3D(final double latitude, final double longitude, final double height) {
       return new Geodetic3D(Angle.fromDegrees(latitude), Angle.fromDegrees(longitude), height);
    }
 
-
    public final native JavaScriptObject getCameraData() /*-{
-		var widget = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_g3mWidget;
-		var camera = widget.@org.glob3.mobile.generated.G3MWidget::getCurrentCamera()();
+    var widget = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_g3mWidget;
+    var camera = widget.@org.glob3.mobile.generated.G3MWidget::getCurrentCamera()();
 
-		var position = camera.@org.glob3.mobile.generated.Camera::getGeodeticPosition()();
-		var latitude = position.@org.glob3.mobile.generated.Geodetic3D::_latitude;
-		var longitude = position.@org.glob3.mobile.generated.Geodetic3D::_longitude;
-		var height = position.@org.glob3.mobile.generated.Geodetic3D::_height;
+    var position = camera.@org.glob3.mobile.generated.Camera::getGeodeticPosition()();
+    var latitude = position.@org.glob3.mobile.generated.Geodetic3D::_latitude;
+    var longitude = position.@org.glob3.mobile.generated.Geodetic3D::_longitude;
+    var height = position.@org.glob3.mobile.generated.Geodetic3D::_height;
 
-		var heading = camera.@org.glob3.mobile.generated.Camera::getHeading()();
-		var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
+    var heading = camera.@org.glob3.mobile.generated.Camera::getHeading()();
+    var pitch = camera.@org.glob3.mobile.generated.Camera::getPitch()();
 
-		var result = new Object();
-		result.latitude = latitude.@org.glob3.mobile.generated.Angle::_degrees;
-		result.longitude = longitude.@org.glob3.mobile.generated.Angle::_degrees;
-		result.height = height;
+    var result = new Object();
+    result.latitude = latitude.@org.glob3.mobile.generated.Angle::_degrees;
+    result.longitude = longitude.@org.glob3.mobile.generated.Angle::_degrees;
+    result.height = height;
 
-		result.heading = heading.@org.glob3.mobile.generated.Angle::_degrees;
-		result.pitch = pitch.@org.glob3.mobile.generated.Angle::_degrees;
+    result.heading = heading.@org.glob3.mobile.generated.Angle::_degrees;
+    result.pitch = pitch.@org.glob3.mobile.generated.Angle::_degrees;
 
-		return result;
+    return result;
    }-*/;
-
 
    public native String takeScreenshotAsBase64() /*-{
-		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
-		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
-		var dataURL = canvas.toDataURL("image/jpeg");
-		return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
+    var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
+    var dataURL = canvas.toDataURL("image/jpeg");
+    return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
    }-*/;
-
 
    public native JavaScriptObject takeScreenshotAsImage() /*-{
-		var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
-		var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
-		var image = new Image();
-		image.width = canvas.width;
-		image.height = canvas.height;
-		image.src = canvas.toDataURL("image/jpeg");
-		return image;
+    var javaCanvas = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_canvas;
+    var canvas = javaCanvas.@com.google.gwt.canvas.client.Canvas::getCanvasElement()();
+    var image = new Image();
+    image.width = canvas.width;
+    image.height = canvas.height;
+    image.src = canvas.toDataURL("image/jpeg");
+    return image;
    }-*/;
-
 
    private static VerticalPanel createUnsupportedMessage(final String message) {
       final VerticalPanel panel = new VerticalPanel();
@@ -177,11 +158,9 @@ public class G3MWidget_WebGL
       return panel;
    }
 
-
    public boolean isWebGLSupported() {
       return ((_canvas != null) && (_webGLContext != null));
    }
-
 
    @Override
    public void onBrowserEvent(final Event event) {
@@ -193,32 +172,26 @@ public class G3MWidget_WebGL
       super.onBrowserEvent(event);
    }
 
-
    private native void jsAddResizeHandler(JavaScriptObject jsCanvas) /*-{
-		var that = this;
-		$wnd.g3mWidgetResize = function() {
-			if ((jsCanvas.clientWidth != jsCanvas.parentNode.clientWidth)
-					|| (jsCanvas.clientHeight != jsCanvas.parentNode.clientHeight)) {
-				that.@org.glob3.mobile.specific.G3MWidget_WebGL::onSizeChanged(II)(jsCanvas.parentNode.clientWidth, jsCanvas.parentNode.clientHeight);
-			}
-		};
+    var that = this;
+    $wnd.g3mWidgetResize = function() {
+      if ((jsCanvas.clientWidth != jsCanvas.parentNode.clientWidth) || (jsCanvas.clientHeight != jsCanvas.parentNode.clientHeight)) {
+        that.@org.glob3.mobile.specific.G3MWidget_WebGL::onSizeChanged(II)(jsCanvas.parentNode.clientWidth, jsCanvas.parentNode.clientHeight);
+      }
+    };
 
-		$wnd.g3mWidgetResizeChecker = setInterval($wnd.g3mWidgetResize, 200);
+    $wnd.g3mWidgetResizeChecker = setInterval($wnd.g3mWidgetResize, 200);
    }-*/;
-
 
    private static native float jsGetDevicePixelRatio() /*-{
-		return $wnd.devicePixelRatio || 1;
+    return $wnd.devicePixelRatio || 1;
    }-*/;
-
 
    public float getDevicePixelRatio() {
       return _devicePixelRatio;
    }
 
-
-   private void onSizeChanged(final int width,
-                              final int height) {
+   private void onSizeChanged(final int width, final int height) {
       if ((_width != width) || (_height != height)) {
          _width  = width;
          _height = height;
@@ -232,93 +205,94 @@ public class G3MWidget_WebGL
       }
    }
 
-
    private void renderG3MWidget() {
       if (_running) {
          _g3mWidget.render(_physicalWidth, _physicalHeight);
       }
    }
 
-
    public void startRunning() {
       _running = true;
    }
-
 
    public void stopRunning() {
       _running = false;
    }
 
-
    private native void jsDefineG3MBrowserObjects() /*-{
-		var that = this;
+    var that = this;
 
-		// URL Object
-		$wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
+    // URL Object
+    $wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
 
-		// Animation
-		// Provides requestAnimationFrame in a cross browser way.
-		$wnd.requestAnimFrame = (function() {
-			return $wnd.requestAnimationFrame
-					|| $wnd.webkitRequestAnimationFrame
-					|| $wnd.mozRequestAnimationFrame
-					|| $wnd.oRequestAnimationFrame
-					|| $wnd.msRequestAnimationFrame
-					|| function(callback, element) {
-						return $wnd.setTimeout(callback, 1000 / 60);
-					};
-		})();
+    // Animation
+    // Provides requestAnimationFrame in a cross browser way.
+    $wnd.requestAnimFrame = (function() {
+      return $wnd.requestAnimationFrame || $wnd.webkitRequestAnimationFrame || $wnd.mozRequestAnimationFrame || $wnd.oRequestAnimationFrame
+          || $wnd.msRequestAnimationFrame || function(callback, element) {
+            return $wnd.setTimeout(callback, 1000 / 60);
+          };
+    })();
 
-		// Provides cancelAnimationFrame in a cross browser way.
-		$wnd.cancelAnimFrame = (function() {
-			return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame
-					|| $wnd.mozCancelAnimationFrame
-					|| $wnd.oCancelAnimationFrame
-					|| $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
-		})();
+    // Provides cancelAnimationFrame in a cross browser way.
+    $wnd.cancelAnimFrame = (function() {
+      return $wnd.cancelAnimationFrame || $wnd.webkitCancelAnimationFrame || $wnd.mozCancelAnimationFrame || $wnd.oCancelAnimationFrame
+          || $wnd.msCancelAnimationFrame || $wnd.clearTimeout;
+    })();
 
-		$wnd.g3mTick = function() {
-			$wnd.requestAnimFrame($wnd.g3mTick);
-			that.@org.glob3.mobile.specific.G3MWidget_WebGL::renderG3MWidget()();
-		};
+    $wnd.g3mTick = function() {
+      $wnd.requestAnimFrame($wnd.g3mTick);
+      that.@org.glob3.mobile.specific.G3MWidget_WebGL::renderG3MWidget()();
+    };
    }-*/;
-
 
    private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas) /*-{
-		var context = null;
 
-		if (jsCanvas != null) {
-			var contextNames = [ "webgl", "experimental-webgl", "webkit-3d",
-					"moz-webgl" ];
-			for ( var cn in contextNames) {
-				try {
-					context = jsCanvas.getContext(contextNames[cn], {
-						preserveDrawingBuffer : true,
-						alpha : false,
-						preferLowPowerToHighPerformance : true,
-						antialias : false
-					});
-				} catch (e) {
-				}
-				if (context) {
-					jsCanvas.addEventListener("webglcontextlost", function(
-							event) {
-						event.preventDefault();
-						$wnd.alert("webglcontextlost");
-					}, false);
-					break;
-				}
-			}
-			if (context == null) {
-				alert("No WebGL context available");
-			}
-		} else {
-			alert("No canvas available");
-		}
+    if (jsCanvas == null) {
+      alert("No canvas available.");
+      return null;
+    }
 
-		return context;
+    var contextNames = [ "webgl", "experimental-webgl", "webkit-3d", "moz-webgl" ];
+    for ( var cn in contextNames) {
+      var context = null;
+      try {
+        context = jsCanvas.getContext(contextNames[cn], {
+            preserveDrawingBuffer : true,
+            alpha : false,
+            powerPreference : "low-power",
+            antialias : false
+        });
+      } catch (e) {
+        console.log(e);
+      }
+
+      if (context) {
+        jsCanvas.addEventListener("webglcontextlost", function(event) {
+          event.preventDefault();
+          console.log("WebGL context lost: ", event);
+          if (event.statusMessage) {
+            $wnd.alert("WebGL context lost: " + event.statusMessage + ".\n\nPlease try reloading the page.");
+          } else {
+            $wnd.alert("WebGL context lost.\n\nPlease try reloading the page.");
+          }
+        }, false);
+
+        //// simulate webglcontextlost
+        //$wnd.setTimeout(function() {
+        //  context.getExtension("WEBGL_lose_context").loseContext();
+        //}, 10000);
+
+        var contextAttributes = context.getContextAttributes();
+        console.log("WebGL Context Attributes: ", contextAttributes);
+
+        return context;
+      }
+    }
+
+    alert("WebGL context not available.");
+    return null;
    }-*/;
-
 
    public void startWidget() {
       if (_g3mWidget != null) {
@@ -329,88 +303,70 @@ public class G3MWidget_WebGL
       }
    }
 
-
    private native void jsStartRenderLoop() /*-{
-		$wnd.g3mTick();
+    $wnd.g3mTick();
    }-*/;
-
 
    public JavaScriptObject getWebGLContext() {
       return _webGLContext;
    }
 
-
    public void setG3MWidget(final G3MWidget widget) {
       _g3mWidget = widget;
    }
-
 
    public G3MWidget getG3MWidget() {
       return _g3mWidget;
    }
 
-
    public Camera getNextCamera() {
       return getG3MWidget().getNextCamera();
    }
-
 
    public WidgetUserData getUserData() {
       return getG3MWidget().getUserData();
    }
 
-
-   public void setAnimatedCameraPosition(final Geodetic3D position,
-                                         final TimeInterval interval) {
+   public void setAnimatedCameraPosition(final Geodetic3D position, final TimeInterval interval) {
       getG3MWidget().setAnimatedCameraPosition(interval, position);
    }
-
 
    public void setAnimatedCameraPosition(final Geodetic3D position) {
       getG3MWidget().setAnimatedCameraPosition(position);
    }
 
-
    public void setCameraPosition(final Geodetic3D position) {
       getG3MWidget().setCameraPosition(position);
    }
-
 
    public CameraRenderer getCameraRenderer() {
       return getG3MWidget().getCameraRenderer();
    }
 
-
    public void setCameraHeading(final Angle angle) {
       getG3MWidget().setCameraHeading(angle);
    }
-
 
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);
    }
 
-
    public void cancelCameraAnimation() {
       getG3MWidget().cancelCameraAnimation();
    }
-
 
    public G3MContext getG3MContext() {
       return getG3MWidget().getG3MContext();
    }
 
-
    public GL getGL() {
       return _gl;
    }
-
 
    void onTouchEvent(final TouchEvent event) {
       if (_g3mWidget != null) {
          _g3mWidget.onTouchEvent(event);
       }
    }
-
 
 }

@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.tools.commandline.core;
 
 import java.io.File;
@@ -9,12 +8,10 @@ import org.glob3.mobile.tools.commandline.core.CommandLine.StreamGobbler;
 import org.glob3.mobile.tools.gdal.GDALException;
 import org.glob3.mobile.tools.utils.FileUtils;
 
-
 public class DecompressManager {
 
    private static final String TAR_COMMAND = "tar";
    public final static String  ZIP_EXT     = ".zip";
-
 
    public static boolean checkIfExistCommand(final String command) throws CommandLineException {
 
@@ -47,7 +44,6 @@ public class DecompressManager {
 
       return false;
    }
-
 
    //tar -x -f /Users/vidalete/Downloads/fuentes2.zip -C /Users/vidalete/Downloads/fuentes2
    public static File unzipFile(final File zipFile) throws CommandLineException, GDALException {

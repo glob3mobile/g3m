@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.specific;
 
 import java.io.ByteArrayOutputStream;
@@ -24,33 +23,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+public final class SQLiteStorage_Android extends IStorage {
 
-public final class SQLiteStorage_Android
-   extends
-      IStorage {
-
-   private static final String[]         COLUMNS   = new String[] { "contents", "expiration" };
-   private static final String           SELECTION = "name = ?";
+   private static final String[] COLUMNS   = new String[] { "contents", "expiration" };
+   private static final String   SELECTION = "name = ?";
 
    private final String                  _databaseName;
    private final android.content.Context _androidContext;
 
-   private final MySQLiteOpenHelper      _dbHelper;
-   private SQLiteDatabase                _writeDB;
-   private SQLiteDatabase                _readDB;
+   private final MySQLiteOpenHelper _dbHelper;
+   private SQLiteDatabase           _writeDB;
+   private SQLiteDatabase           _readDB;
 
-   private final BitmapFactory.Options   _bitmapFactoryOptions;
+   private final BitmapFactory.Options _bitmapFactoryOptions;
 
-
-   private class MySQLiteOpenHelper
-      extends
-         SQLiteOpenHelper {
+   private class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
       public MySQLiteOpenHelper(final android.content.Context context,
                                 final String name) {
          super(context, name, null, 1);
       }
-
 
       private void createTables(final SQLiteDatabase db) {
          db.execSQL("DROP TABLE IF EXISTS buffer;");
@@ -63,21 +55,16 @@ public final class SQLiteStorage_Android
          db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image2(name);");
       }
 
-
       @Override
       public void onCreate(final SQLiteDatabase db) {
          createTables(db);
       }
 
-
       @Override
-      public void onUpgrade(final SQLiteDatabase db,
-                            final int oldVersion,
-                            final int newVersion) {
+      public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
          createTables(db);
       }
    }
-
 
    private String getPath() {
       File f = _androidContext.getExternalCacheDir();
@@ -94,51 +81,42 @@ public final class SQLiteStorage_Android
       return path;
    }
 
-
    public SQLiteStorage_Android(final String path,
                                 final android.content.Context context) {
-      _databaseName = path;
+      _databaseName   = path;
       _androidContext = context;
 
       _dbHelper = new MySQLiteOpenHelper(context, getPath());
-      _writeDB = _dbHelper.getWritableDatabase();
-      _readDB = _dbHelper.getReadableDatabase();
+      _writeDB  = _dbHelper.getWritableDatabase();
+      _readDB   = _dbHelper.getReadableDatabase();
 
-      _bitmapFactoryOptions = new BitmapFactory.Options();
+      _bitmapFactoryOptions               = new BitmapFactory.Options();
       _bitmapFactoryOptions.inTempStorage = new byte[128 * 1024];
    }
 
-
    @Override
-   public void saveBuffer(final URL url,
-                          final IByteBuffer buffer,
-                          final TimeInterval timeToExpires,
-                          final boolean saveInBackground) {
+   public void saveBuffer(final URL url, final IByteBuffer buffer, final TimeInterval timeToExpires, final boolean saveInBackground) {
       final String table = "buffer2";
 
       final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer();
-      final String name = url._path;
+      final String name     = url._path;
 
       if (saveInBackground) {
          _context.getThreadUtils().invokeInBackground( //
-                  new GTask() {
-                     @Override
-                     public void run(final G3MContext context) {
-                        rawSave(table, name, contents, timeToExpires);
-                     }
-                  }, //
-                  true);
+                                                      new GTask() {
+                                                         @Override
+                                                         public void run(final G3MContext context) {
+                                                            rawSave(table, name, contents, timeToExpires);
+                                                         }
+                                                      }, //
+                                                      true);
       }
       else {
          rawSave(table, name, contents, timeToExpires);
       }
    }
 
-
-   private synchronized void rawSave(final String table,
-                                     final String name,
-                                     final byte[] contents,
-                                     final TimeInterval timeToExpires) {
+   private synchronized void rawSave(final String table, final String name, final byte[] contents, final TimeInterval timeToExpires) {
       final ContentValues values = new ContentValues(3);
       values.put("name", name);
       values.put("contents", contents);
@@ -156,26 +134,24 @@ public final class SQLiteStorage_Android
       }
    }
 
-
    @Override
-   public IByteBufferResult readBuffer(final URL url,
-                                       final boolean readExpired) {
-      ByteBuffer_Android buffer = null;
-      boolean expired = false;
-      final String name = url._path;
+   public IByteBufferResult readBuffer(final URL url, final boolean readExpired) {
+      ByteBuffer_Android buffer  = null;
+      boolean            expired = false;
+      final String       name    = url._path;
 
       final Cursor cursor = _readDB.query( //
-               "buffer2", //
-               COLUMNS, //
-               SELECTION, //
-               new String[] { name }, //
-               null, //
-               null, //
-               null);
+                                          "buffer2", //
+                                          COLUMNS, //
+                                          SELECTION, //
+                                          new String[] { name }, //
+                                          null, //
+                                          null, //
+                                          null);
       if (cursor.moveToFirst()) {
-         final byte[] data = cursor.getBlob(0);
-         final String expirationS = cursor.getString(1);
-         final long expirationInterval = Long.parseLong(expirationS);
+         final byte[] data               = cursor.getBlob(0);
+         final String expirationS        = cursor.getString(1);
+         final long   expirationInterval = Long.parseLong(expirationS);
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
@@ -187,14 +163,10 @@ public final class SQLiteStorage_Android
       return new IByteBufferResult(buffer, expired);
    }
 
-
    @Override
-   public void saveImage(final URL url,
-                         final IImage image,
-                         final TimeInterval timeToExpires,
-                         final boolean saveInBackground) {
+   public void saveImage(final URL url, final IImage image, final TimeInterval timeToExpires, final boolean saveInBackground) {
       final Image_Android image_android = (Image_Android) image;
-      final Bitmap bitmap = image_android.getBitmap();
+      final Bitmap        bitmap        = image_android.getBitmap();
 
       byte[] contents = image_android.getSourceBuffer();
       if (contents == null) {
@@ -207,44 +179,42 @@ public final class SQLiteStorage_Android
       }
 
       final String table = "image2";
-      final String name = url._path;
+      final String name  = url._path;
 
       final byte[] contentsF = contents;
       if (saveInBackground) {
          _context.getThreadUtils().invokeInBackground( //
-                  new GTask() {
-                     @Override
-                     public void run(final G3MContext context) {
-                        rawSave(table, name, contentsF, timeToExpires);
-                     }
-                  }, //
-                  true);
+                                                      new GTask() {
+                                                         @Override
+                                                         public void run(final G3MContext context) {
+                                                            rawSave(table, name, contentsF, timeToExpires);
+                                                         }
+                                                      }, //
+                                                      true);
       }
       else {
          rawSave(table, name, contents, timeToExpires);
       }
    }
 
-
    @Override
-   public IImageResult readImage(final URL url,
-                                 final boolean readExpired) {
-      IImage image = null;
-      boolean expired = false;
-      final String name = url._path;
+   public IImageResult readImage(final URL url, final boolean readExpired) {
+      IImage       image   = null;
+      boolean      expired = false;
+      final String name    = url._path;
 
       final Cursor cursor = _readDB.query( //
-               "image2", //
-               COLUMNS, //
-               SELECTION, //
-               new String[] { name }, //
-               null, //
-               null, //
-               null);
+                                          "image2", //
+                                          COLUMNS, //
+                                          SELECTION, //
+                                          new String[] { name }, //
+                                          null, //
+                                          null, //
+                                          null);
       if (cursor.moveToFirst()) {
-         final byte[] data = cursor.getBlob(0);
-         final String expirationS = cursor.getString(1);
-         final long expirationInterval = Long.parseLong(expirationS);
+         final byte[] data               = cursor.getBlob(0);
+         final String expirationS        = cursor.getString(1);
+         final long   expirationInterval = Long.parseLong(expirationS);
 
          expired = (expirationInterval <= System.currentTimeMillis());
          if (!expired || readExpired) {
@@ -263,7 +233,6 @@ public final class SQLiteStorage_Android
       return new IImageResult(image, expired);
    }
 
-
    public synchronized void close() {
       if (_readDB != null) {
          _readDB.close();
@@ -275,7 +244,6 @@ public final class SQLiteStorage_Android
       }
    }
 
-
    @Override
    public synchronized void onResume(final G3MContext context) {
       if (_writeDB == null) {
@@ -286,24 +254,20 @@ public final class SQLiteStorage_Android
       }
    }
 
-
    @Override
    public synchronized void onPause(final G3MContext context) {
       close();
    }
-
 
    @Override
    public synchronized void onDestroy(final G3MContext context) {
       close();
    }
 
-
    @Override
    public synchronized boolean isAvailable() {
       return (_readDB != null) && (_writeDB != null);
    }
-
 
    @Override
    public void merge(final String databasePath) {
@@ -315,30 +279,29 @@ public final class SQLiteStorage_Android
 
          if (auxReadDB != null) {
             final Cursor cursor = auxReadDB.query( //
-                     "image2", //
-                     new String[] { "name", "contents", "expiration" }, //
-                     "", //
-                     new String[] {}, //
-                     null, //
-                     null, //
-                     null);
+                                                  "image2", //
+                                                  new String[] { "name", "contents", "expiration" }, //
+                                                  "", //
+                                                  new String[] {}, //
+                                                  null, //
+                                                  null, //
+                                                  null);
 
             if (cursor.moveToFirst()) {
                do {
-                  final String name = cursor.getString(0);
-                  final byte[] data = cursor.getBlob(1);
-                  final String expirationS = cursor.getString(2);
-                  long expirationInterval = Long.parseLong(expirationS);
-
+                  final String name               = cursor.getString(0);
+                  final byte[] data               = cursor.getBlob(1);
+                  final String expirationS        = cursor.getString(2);
+                  long         expirationInterval = Long.parseLong(expirationS);
 
                   final Cursor auxCursor = _readDB.query( //
-                           "image2", //
-                           COLUMNS, //
-                           SELECTION, //
-                           new String[] { name }, //
-                           null, //
-                           null, //
-                           null);
+                                                         "image2", //
+                                                         COLUMNS, //
+                                                         SELECTION, //
+                                                         new String[] { name }, //
+                                                         null, //
+                                                         null, //
+                                                         null);
                   if (auxCursor.moveToFirst()) {
                      expirationInterval = Math.max(expirationInterval, Long.parseLong(auxCursor.getString(1)));
                   }
@@ -348,13 +311,11 @@ public final class SQLiteStorage_Android
                }
                while (cursor.moveToNext());
 
-
             }
             cursor.close();
             auxReadDB.close();
          }
       }
    }
-
 
 }

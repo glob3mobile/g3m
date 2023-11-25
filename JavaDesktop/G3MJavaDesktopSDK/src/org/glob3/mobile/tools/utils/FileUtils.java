@@ -1,5 +1,4 @@
 
-
 package org.glob3.mobile.tools.utils;
 
 import java.io.File;
@@ -7,7 +6,6 @@ import java.io.IOException;
 
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.tools.gdal.GDALException;
-
 
 public class FileUtils {
 
@@ -22,16 +20,13 @@ public class FileUtils {
       throw new GDALException("Filename is Wrong (null or empty", null);
    }
 
-
    public static boolean checkFile(final File file) {
       return ((file != null) && file.exists() && file.isFile());
    }
 
-
    public static boolean checkDir(final File dir) {
       return ((dir != null) && dir.exists() && dir.isDirectory());
    }
-
 
    public static boolean deleteDirectory(final File decompressDir) {
       try {
@@ -40,8 +35,7 @@ public class FileUtils {
          return true;
       }
       catch (final IOException e) {
-         ILogger.instance().logError("Temp decompress dir hasn't been delete successfuly: " + decompressDir.getAbsolutePath(),
-                  e.getMessage());
+         ILogger.instance().logError("Temp decompress dir hasn't been delete successfuly: " + decompressDir.getAbsolutePath(), e.getMessage());
          return false;
       }
    }
