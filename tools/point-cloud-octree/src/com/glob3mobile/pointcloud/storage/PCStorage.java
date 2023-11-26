@@ -1,9 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.storage;
-
-
-
 
 //public interface PCStorage
 //extends

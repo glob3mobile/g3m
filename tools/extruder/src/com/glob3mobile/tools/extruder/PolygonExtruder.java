@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.tools.extruder;
-
 
 import java.io.*;
 import java.nio.*;
@@ -14,12 +12,10 @@ import org.glob3.mobile.generated.*;
 import com.glob3mobile.json.*;
 import com.glob3mobile.tools.mesh.*;
 
-
 public class PolygonExtruder {
    //   static {
    //      initSingletons();
    //   }
-
 
    public enum ErrorType {
       RETURN_NULL,
@@ -27,13 +23,11 @@ public class PolygonExtruder {
       TRIANGULATION_EXCEPTION
    }
 
-
    public static class Statistics {
       private long                       _triangulatedCounter;
       private long                       _allTrianglesCounter;
       private long                       _errorsCounter;
       private final Map<ErrorType, Long> _errorsCounterByType = new HashMap<>();
-
 
       public Statistics() {
          for (final ErrorType e : ErrorType.values()) {
@@ -41,19 +35,16 @@ public class PolygonExtruder {
          }
       }
 
-
       public void countTriangulation(final int trianglesCount) {
          _triangulatedCounter++;
          _allTrianglesCounter += trianglesCount;
       }
-
 
       public void countTriangulationError(final ErrorType errorType) {
          _errorsCounter++;
 
          _errorsCounterByType.put(errorType, _errorsCounterByType.get(errorType) + 1L);
       }
-
 
       public void printStatistics() {
          logInfo("=========================================================================");
@@ -78,24 +69,18 @@ public class PolygonExtruder {
       }
    }
 
-
    private static int _polygonsCounter = 0;
-
 
    private static void logInfo(final String str) {
       System.out.println("- " + str);
    }
 
-
-   private static String readFile(final String path,
-                                  final Charset encoding) throws IOException {
+   private static String readFile(final String path, final Charset encoding) throws IOException {
       final byte[] encoded = Files.readAllBytes(Paths.get(path));
       return encoding.decode(ByteBuffer.wrap(encoded)).toString();
    }
 
-
-   private static void getPolygonsFromFeatureCollection(final GEOFeatureCollection geoFeatureCollection,
-                                                        final List<ExtruderPolygon> polygons,
+   private static void getPolygonsFromFeatureCollection(final GEOFeatureCollection geoFeatureCollection, final List<ExtruderPolygon> polygons,
                                                         final ExtrusionHandler<GEOFeature, Void> handler) {
       final int size = geoFeatureCollection.size();
       for (int i = 0; i < size; i++) {
@@ -103,41 +88,29 @@ public class PolygonExtruder {
       }
    }
 
-
-   private static void getPolygonsFromFeature(final GEOFeature geoFeature,
-                                              final List<ExtruderPolygon> polygons,
+   private static void getPolygonsFromFeature(final GEOFeature geoFeature, final List<ExtruderPolygon> polygons,
                                               final ExtrusionHandler<GEOFeature, Void> handler) {
       //if (handler.extrudes(geoFeature, null)) {
       processGEOGeometry(geoFeature, geoFeature.getGeometry(), polygons, handler);
       //}
    }
 
-
-   private static void processGEO2DPolygonGeometry(final GEOFeature geoFeature,
-                                                   final GEO2DPolygonGeometry polygon,
-                                                   final List<ExtruderPolygon> polygons,
+   private static void processGEO2DPolygonGeometry(final GEOFeature geoFeature, final GEO2DPolygonGeometry polygon, final List<ExtruderPolygon> polygons,
                                                    final ExtrusionHandler<GEOFeature, Void> handler) {
       processGEO2DPolygonData(geoFeature, polygon.getPolygonData(), polygons, handler);
    }
 
-
-   private static void processGEO3DPolygonGeometry(final GEOFeature geoFeature,
-                                                   final GEO3DPolygonGeometry polygon,
-                                                   final List<ExtruderPolygon> polygons,
+   private static void processGEO3DPolygonGeometry(final GEOFeature geoFeature, final GEO3DPolygonGeometry polygon, final List<ExtruderPolygon> polygons,
                                                    final ExtrusionHandler<GEOFeature, Void> handler) {
       processGEO3DPolygonData(geoFeature, polygon.getPolygonData(), polygons, handler);
    }
 
-
-   private static void processGEO2DMultiPolygonGeometry(final GEOFeature geoFeature,
-                                                        final GEO2DMultiPolygonGeometry multiPolygon,
-                                                        final List<ExtruderPolygon> polygons,
-                                                        final ExtrusionHandler<GEOFeature, Void> handler) {
+   private static void processGEO2DMultiPolygonGeometry(final GEOFeature geoFeature, final GEO2DMultiPolygonGeometry multiPolygon,
+                                                        final List<ExtruderPolygon> polygons, final ExtrusionHandler<GEOFeature, Void> handler) {
       for (final GEO2DPolygonData data : multiPolygon.getPolygonsData()) {
          processGEO2DPolygonData(geoFeature, data, polygons, handler);
       }
    }
-
 
    private static List<Geodetic2D> removeLastDuplicated2DCoordinate(final List<Geodetic2D> coordinates) {
       final Geodetic2D firstCoordinate = coordinates.get(0);
@@ -149,7 +122,6 @@ public class PolygonExtruder {
       return result;
    }
 
-
    private static List<Geodetic3D> removeLastDuplicated3DCoordinate(final List<Geodetic3D> coordinates) {
       final Geodetic3D firstCoordinate = coordinates.get(0);
       final int        lastIndex       = coordinates.size() - 1;
@@ -159,7 +131,6 @@ public class PolygonExtruder {
       Collections.reverse(result);
       return result;
    }
-
 
    private static List<List<Geodetic2D>> removeLastDuplicated2DCoordinates(final List<? extends List<Geodetic2D>> holesCoordinatesArray) {
       if (holesCoordinatesArray == null) {
@@ -173,7 +144,6 @@ public class PolygonExtruder {
       return result;
    }
 
-
    private static List<List<Geodetic3D>> removeLastDuplicated3DCoordinates(final List<? extends List<Geodetic3D>> holesCoordinatesArray) {
       if (holesCoordinatesArray == null) {
          return Collections.emptyList();
@@ -186,11 +156,8 @@ public class PolygonExtruder {
       return result;
    }
 
-
-   private static void processGEO2DPolygonData(final GEOFeature geoFeature,
-                                               final List<Geodetic2D> coordinates,
-                                               final List<List<Geodetic2D>> holesCoordinatesArray,
-                                               final List<ExtruderPolygon> polygons,
+   private static void processGEO2DPolygonData(final GEOFeature geoFeature, final List<Geodetic2D> coordinates,
+                                               final List<List<Geodetic2D>> holesCoordinatesArray, final List<ExtruderPolygon> polygons,
                                                final ExtrusionHandler<GEOFeature, Void> handler) {
       final Heigths        heights   = handler.getHeightsFor(geoFeature, null);
       final G3MeshMaterial material  = handler.getMaterialFor(geoFeature, null);
@@ -201,11 +168,8 @@ public class PolygonExtruder {
             depthTest));
    }
 
-
-   private static void processGEO3DPolygonData(final GEOFeature geoFeature,
-                                               final List<Geodetic3D> coordinates,
-                                               final List<List<Geodetic3D>> holesCoordinatesArray,
-                                               final List<ExtruderPolygon> polygons,
+   private static void processGEO3DPolygonData(final GEOFeature geoFeature, final List<Geodetic3D> coordinates,
+                                               final List<List<Geodetic3D>> holesCoordinatesArray, final List<ExtruderPolygon> polygons,
                                                final ExtrusionHandler<GEOFeature, Void> handler) {
       final Heigths        heights   = handler.getHeightsFor(geoFeature, null);
       final G3MeshMaterial material  = handler.getMaterialFor(geoFeature, null);
@@ -215,16 +179,12 @@ public class PolygonExtruder {
       polygons.add(new Extruder3DPolygon(fixedPolygon._coordinates, fixedPolygon._holesCoordinatesArray, heights._lowerHeight, material, depthTest));
    }
 
-
-   private static void processGEO2DPolygonData(final GEOFeature geoFeature,
-                                               final GEO2DPolygonData data,
-                                               final List<ExtruderPolygon> polygons,
+   private static void processGEO2DPolygonData(final GEOFeature geoFeature, final GEO2DPolygonData data, final List<ExtruderPolygon> polygons,
                                                final ExtrusionHandler<GEOFeature, Void> handler) {
       final List<Geodetic2D>       coordinates      = cleanup2DCoordinates(data.getCoordinates());
       final List<List<Geodetic2D>> holesCoordinates = cleanup2DCoordinatesArray(data.getHolesCoordinatesArray());
       processGEO2DPolygonData(geoFeature, coordinates, holesCoordinates, polygons, handler);
    }
-
 
    public static List<Geodetic2D> cleanup2DCoordinates(final List<Geodetic2D> coordinates) {
       if ((coordinates == null) || coordinates.isEmpty()) {
@@ -233,11 +193,9 @@ public class PolygonExtruder {
       return sort2DCoordinates(removeDuplicates2DCoordinates(removeLastDuplicated2DCoordinate(coordinates)));
    }
 
-
    public static List<List<Geodetic2D>> cleanup2DCoordinatesArray(final List<? extends List<Geodetic2D>> coordinatesArray) {
       return sort2DCoordinatesArray(removeDuplicates2DCoordinatesArray(removeLastDuplicated2DCoordinates(coordinatesArray)));
    }
-
 
    public static List<Geodetic3D> cleanup3DCoordinates(final List<Geodetic3D> coordinates) {
       if ((coordinates == null) || coordinates.isEmpty()) {
@@ -246,21 +204,16 @@ public class PolygonExtruder {
       return sort3DCoordinates(removeDuplicates3DCoordinates(removeLastDuplicated3DCoordinate(coordinates)));
    }
 
-
    public static List<List<Geodetic3D>> cleanup3DCoordinatesArray(final List<? extends List<Geodetic3D>> coordinatesArray) {
       return sort3DCoordinatesArray(removeDuplicates3DCoordinatesArray(removeLastDuplicated3DCoordinates(coordinatesArray)));
    }
 
-
-   private static void processGEO3DPolygonData(final GEOFeature geoFeature,
-                                               final GEO3DPolygonData data,
-                                               final List<ExtruderPolygon> polygons,
+   private static void processGEO3DPolygonData(final GEOFeature geoFeature, final GEO3DPolygonData data, final List<ExtruderPolygon> polygons,
                                                final ExtrusionHandler<GEOFeature, Void> handler) {
       final List<Geodetic3D>       coordinates      = cleanup3DCoordinates(data.getCoordinates());
       final List<List<Geodetic3D>> holesCoordinates = cleanup3DCoordinatesArray(data.getHolesCoordinatesArray());
       processGEO3DPolygonData(geoFeature, coordinates, holesCoordinates, polygons, handler);
    }
-
 
    private static List<List<Geodetic2D>> sort2DCoordinatesArray(final List<? extends List<Geodetic2D>> coordinatesArray) {
       if (coordinatesArray == null) {
@@ -274,7 +227,6 @@ public class PolygonExtruder {
       return result;
    }
 
-
    private static List<List<Geodetic3D>> sort3DCoordinatesArray(final List<? extends List<Geodetic3D>> coordinatesArray) {
       if (coordinatesArray == null) {
          return null;
@@ -287,20 +239,17 @@ public class PolygonExtruder {
       return result;
    }
 
-
    private static List<Geodetic2D> sort2DCoordinates(final List<Geodetic2D> coordinates) {
       final List<Geodetic2D> result = new ArrayList<>(coordinates);
       //      sortClockwise(get2DCenter(coordinates), coordinates);
       return result;
    }
 
-
    private static List<Geodetic3D> sort3DCoordinates(final List<Geodetic3D> coordinates) {
       final List<Geodetic3D> result = new ArrayList<>(coordinates);
       //      sortClockwise(get3DCenter(coordinates), coordinates);
       return result;
    }
-
 
    //   private static Geodetic2D get2DCenter(final List<Geodetic2D> coordinates) {
    //      double totalLatRad = 0;
@@ -334,7 +283,6 @@ public class PolygonExtruder {
    //               totalHeight / coordinatesSize);
    //   }
 
-
    //   private static void sortClockwise(final Geodetic3D center,
    //                                     final List<Geodetic3D> coordinates) {
    //      //      final Vector3D centerV = toVector3D(center);
@@ -365,7 +313,6 @@ public class PolygonExtruder {
    //      //      }
    //   }
 
-
    //   private static Vector3D toVector3D(final Geodetic2D geodetic) {
    //      return new Vector3D(geodetic._longitude._degrees, geodetic._latitude._degrees, 0);
    //   }
@@ -374,7 +321,6 @@ public class PolygonExtruder {
    //   private static Vector3D toVector3D(final Geodetic3D geodetic) {
    //      return new Vector3D(geodetic._longitude._degrees, geodetic._latitude._degrees, geodetic._height);
    //   }
-
 
    //   private static void sortClockwise(final Geodetic2D center,
    //                                     final List<Geodetic2D> coordinates) {
@@ -406,7 +352,6 @@ public class PolygonExtruder {
    //      //      }
    //   }
 
-
    //   private static double getSignedAngle(final Vector3D normal,
    //                                        final Vector3D v1,
    //                                        final Vector3D v2) {
@@ -417,10 +362,7 @@ public class PolygonExtruder {
    //      return tempCross.dot(normal) < 0 ? -angle : angle;
    //   }
 
-
-   private static void processGEOGeometry(final GEOFeature geoFeature,
-                                          final GEOGeometry geoGeometry,
-                                          final List<ExtruderPolygon> polygons,
+   private static void processGEOGeometry(final GEOFeature geoFeature, final GEOGeometry geoGeometry, final List<ExtruderPolygon> polygons,
                                           final ExtrusionHandler<GEOFeature, Void> handler) {
       if (geoGeometry instanceof GEO2DPolygonGeometry) {
          processGEO2DPolygonGeometry(geoFeature, (GEO2DPolygonGeometry) geoGeometry, polygons, handler);
@@ -436,9 +378,7 @@ public class PolygonExtruder {
       }
    }
 
-
-   private static List<Building> getBuildings(final List<ExtruderPolygon> polygons,
-                                              final boolean verbose) {
+   private static List<Building> getBuildings(final List<ExtruderPolygon> polygons, final boolean verbose) {
       final Statistics     statistics = new Statistics();
       final List<Building> buildings  = getBuildings(polygons, statistics);
       if (verbose) {
@@ -447,10 +387,7 @@ public class PolygonExtruder {
       return buildings;
    }
 
-
-   private static List<ExtruderPolygon> getPolygons(final GEOObject geoObject,
-                                                    final ExtrusionHandler<GEOFeature, Void> handler,
-                                                    final boolean verbose) {
+   private static List<ExtruderPolygon> getPolygons(final GEOObject geoObject, final ExtrusionHandler<GEOFeature, Void> handler, final boolean verbose) {
       final List<ExtruderPolygon> polygons = new LinkedList<>();
       getPolygons(geoObject, polygons, handler);
       if (verbose) {
@@ -459,9 +396,7 @@ public class PolygonExtruder {
       return polygons;
    }
 
-
-   private static List<Building> getBuildings(final Collection<ExtruderPolygon> extruderPolygons,
-                                              final Statistics statistics) {
+   private static List<Building> getBuildings(final Collection<ExtruderPolygon> extruderPolygons, final Statistics statistics) {
       final List<Building> result = new ArrayList<>(extruderPolygons.size());
       for (final ExtruderPolygon extruderPolygon : extruderPolygons) {
          _polygonsCounter++;
@@ -473,10 +408,7 @@ public class PolygonExtruder {
       return result;
    }
 
-
-   private static void writeMeshCollectionJSON(final String fileName,
-                                               final G3MeshCollection meshes,
-                                               final int floatPrecision) throws IOException {
+   private static void writeMeshCollectionJSON(final String fileName, final G3MeshCollection meshes, final int floatPrecision) throws IOException {
       logInfo("Saving meshes...");
       final long now = System.currentTimeMillis();
 
@@ -491,13 +423,8 @@ public class PolygonExtruder {
       logInfo("done! (" + elapsed + "ms)");
    }
 
-
-   private static G3MeshCollection getMeshCollection(final boolean createNormals,
-                                                     final Planet planet,
-                                                     final float verticalExaggeration,
-                                                     final double deltaHeight,
-                                                     final int floatPrecision,
-                                                     final List<Building> buildings) {
+   private static G3MeshCollection getMeshCollection(final boolean createNormals, final Planet planet, final float verticalExaggeration,
+                                                     final double deltaHeight, final int floatPrecision, final List<Building> buildings) {
       logInfo("Starting meshing...");
       final long now = System.currentTimeMillis();
 
@@ -510,13 +437,8 @@ public class PolygonExtruder {
       return result;
    }
 
-
-   private static List<G3Mesh> getMeshes(final boolean createNormals,
-                                         final Planet planet,
-                                         final float verticalExaggeration,
-                                         final double deltaHeight,
-                                         final int floatPrecision,
-                                         final List<Building> buildings) {
+   private static List<G3Mesh> getMeshes(final boolean createNormals, final Planet planet, final float verticalExaggeration, final double deltaHeight,
+                                         final int floatPrecision, final List<Building> buildings) {
       final List<G3Mesh> result = new ArrayList<>(buildings.size());
       for (final Building building : buildings) {
          final G3Mesh mesh = building.createMesh(createNormals, planet, verticalExaggeration, deltaHeight, floatPrecision);
@@ -527,10 +449,7 @@ public class PolygonExtruder {
       return result;
    }
 
-
-   private static void getPolygons(final GEOObject geoObject,
-                                   final List<ExtruderPolygon> polygons,
-                                   final ExtrusionHandler<GEOFeature, Void> handler) {
+   private static void getPolygons(final GEOObject geoObject, final List<ExtruderPolygon> polygons, final ExtrusionHandler<GEOFeature, Void> handler) {
       if (geoObject instanceof GEOFeatureCollection) {
          getPolygonsFromFeatureCollection((GEOFeatureCollection) geoObject, polygons, handler);
       }
@@ -541,7 +460,6 @@ public class PolygonExtruder {
          throw new RuntimeException("GEOObject subclass " + geoObject.getClass() + " not supported");
       }
    }
-
 
    private static List<Geodetic2D> removeDuplicates2DCoordinates(final List<Geodetic2D> coordinates) {
       if ((coordinates == null) || coordinates.isEmpty()) {
@@ -567,7 +485,6 @@ public class PolygonExtruder {
       return result;
    }
 
-
    private static List<Geodetic3D> removeDuplicates3DCoordinates(final List<Geodetic3D> coordinates) {
       if ((coordinates == null) || coordinates.isEmpty()) {
          return Collections.emptyList();
@@ -592,36 +509,25 @@ public class PolygonExtruder {
       return result;
    }
 
-
-   private static boolean equals(final Geodetic2D one,
-                                 final Geodetic2D two) {
+   private static boolean equals(final Geodetic2D one, final Geodetic2D two) {
       return equals( //
-            one._latitude, one._longitude, //
-            two._latitude, two._longitude);
+                    one._latitude, one._longitude, //
+                    two._latitude, two._longitude);
    }
 
-
-   private static boolean equals(final Geodetic3D one,
-                                 final Geodetic3D two) {
+   private static boolean equals(final Geodetic3D one, final Geodetic3D two) {
       return equals( //
-            one._latitude, one._longitude, //
-            two._latitude, two._longitude);
+                    one._latitude, one._longitude, //
+                    two._latitude, two._longitude);
    }
 
-
-   private static boolean equals(final Angle latitude1,
-                                 final Angle longitude1,
-                                 final Angle latitude2,
-                                 final Angle longitude2) {
+   private static boolean equals(final Angle latitude1, final Angle longitude1, final Angle latitude2, final Angle longitude2) {
       return equals(latitude1, latitude2) && equals(longitude1, longitude2);
    }
 
-
-   private static boolean equals(final Angle angle1,
-                                 final Angle angle2) {
+   private static boolean equals(final Angle angle1, final Angle angle2) {
       return (angle1._radians == angle2._radians);
    }
-
 
    private static List<List<Geodetic2D>> removeDuplicates2DCoordinatesArray(final List<List<Geodetic2D>> coordinatesArray) {
       if ((coordinatesArray == null) || coordinatesArray.isEmpty()) {
@@ -635,7 +541,6 @@ public class PolygonExtruder {
       return result;
    }
 
-
    private static List<List<Geodetic3D>> removeDuplicates3DCoordinatesArray(final List<List<Geodetic3D>> coordinatesArray) {
       if ((coordinatesArray == null) || coordinatesArray.isEmpty()) {
          return Collections.emptyList();
@@ -648,16 +553,12 @@ public class PolygonExtruder {
       return result;
    }
 
-
-   private static GEOObject getGEOObject(final String inputFileName,
-                                         final boolean verbose) throws IOException {
+   private static GEOObject getGEOObject(final String inputFileName, final boolean verbose) throws IOException {
       final String json = PolygonExtruder.readFile(inputFileName, Charset.forName("UTF-8"));
       return GEOJSONParser.parseJSON(json, verbose);
    }
 
-
-   public static List<Building> getBuildings(final String inputFileName,
-                                             final ExtrusionHandler<GEOFeature, Void> handler,
+   public static List<Building> getBuildings(final String inputFileName, final ExtrusionHandler<GEOFeature, Void> handler,
                                              final boolean verbose) throws IOException {
       if (verbose) {
          logInfo("Building...");
@@ -677,9 +578,7 @@ public class PolygonExtruder {
       return buildings;
    }
 
-
-   public static List<ExtruderPolygon> getPolygons(final String inputFileName,
-                                                   final ExtrusionHandler<GEOFeature, Void> handler,
+   public static List<ExtruderPolygon> getPolygons(final String inputFileName, final ExtrusionHandler<GEOFeature, Void> handler,
                                                    final boolean verbose) throws IOException {
       final GEOObject geoObject = getGEOObject(inputFileName, verbose);
 
@@ -689,21 +588,13 @@ public class PolygonExtruder {
       return polygons;
    }
 
-
-   public static void process(final String inputFileName,
-                              final String outputFileName,
-                              final ExtrusionHandler<GEOFeature, Void> handler,
-                              final boolean createNormals,
-                              final Planet planet,
-                              final float verticalExaggeration,
-                              final double deltaHeight,
-                              final int floatPrecision,
-                              final boolean verbose) throws IOException {
+   public static void process(final String inputFileName, final String outputFileName, final ExtrusionHandler<GEOFeature, Void> handler,
+                              final boolean createNormals, final Planet planet, final float verticalExaggeration, final double deltaHeight,
+                              final int floatPrecision, final boolean verbose) throws IOException {
       final List<Building>   buildings      = getBuildings(inputFileName, handler, verbose);
       final G3MeshCollection meshCollection = getMeshCollection(createNormals, planet, verticalExaggeration, deltaHeight, floatPrecision, buildings);
       handler.onMeshCollection(meshCollection);
       writeMeshCollectionJSON(outputFileName, meshCollection, floatPrecision);
    }
-
 
 }

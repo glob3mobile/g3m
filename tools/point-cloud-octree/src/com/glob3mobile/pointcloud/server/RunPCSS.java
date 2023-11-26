@@ -1,19 +1,14 @@
 
-
 package com.glob3mobile.pointcloud.server;
-
 
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.*;
 
-
 public class RunPCSS {
-
 
    public static void main(final String[] args) throws Exception {
       System.out.println("PCSS 0.1");
       System.out.println("--------\n");
-
 
       final int    port   = 8082;
       final Server server = new Server(port);
@@ -23,11 +18,9 @@ public class RunPCSS {
 
       handler.addServletWithMapping(PCSSServlet.class, "/*");
 
-
       server.start();
       server.join();
 
    }
-
 
 }

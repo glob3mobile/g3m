@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.tools.mesh;
 
 import java.text.DecimalFormat;
@@ -11,38 +10,31 @@ import java.util.Map;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.URL;
 
-
 public class G3MeshMaterial {
    private static final G3MeshMaterial DEFAULT_MATERIAL = new G3MeshMaterial(Color.fromRGBA(1, 1, 0, 1));
-
 
    public static G3MeshMaterial defaultMaterial() {
       return DEFAULT_MATERIAL;
    }
 
-
    public final Color _color;
    public final URL   _textureURL;
-
 
    public G3MeshMaterial(final Color color) {
       this(color, null);
    }
 
-
    public G3MeshMaterial(final URL textureURL) {
       this(null, textureURL);
    }
 
-
    public G3MeshMaterial(final Color color,
                          final URL textureURL) {
-      _color = color;
+      _color      = color;
       _textureURL = textureURL;
 
       validate();
    }
-
 
    private void validate() {
       if ((_color == null) && ((_textureURL == null) || _textureURL.isNull())) {
@@ -50,11 +42,9 @@ public class G3MeshMaterial {
       }
    }
 
-
    public String getID() {
       return getID(_color) + getID(_textureURL);
    }
-
 
    private static String getID(final URL textureURL) {
       if (textureURL == null) {
@@ -62,7 +52,6 @@ public class G3MeshMaterial {
       }
       return textureURL._path;
    }
-
 
    private static String getID(final Color color) {
       if (color == null) {
@@ -73,14 +62,11 @@ public class G3MeshMaterial {
       return toString(color._red) + "_" + toString(color._green) + "_" + toString(color._blue) + alpha;
    }
 
-
    private static final DecimalFormat df = new DecimalFormat("#.##");
-
 
    private static String toString(final float f) {
       return df.format(f);
    }
-
 
    public boolean isEquals(final G3MeshMaterial that) {
       if (this == that) {
@@ -111,7 +97,6 @@ public class G3MeshMaterial {
       return true;
    }
 
-
    public Map<String, Object> toJSON() {
       final Map<String, Object> result = new LinkedHashMap<>();
 
@@ -126,7 +111,6 @@ public class G3MeshMaterial {
       return result;
    }
 
-
    private static List<Float> toJSON(final Color color) {
       final List<Float> result = new ArrayList<>();
       result.add(color._red);
@@ -135,6 +119,5 @@ public class G3MeshMaterial {
       result.add(color._alpha);
       return result;
    }
-
 
 }

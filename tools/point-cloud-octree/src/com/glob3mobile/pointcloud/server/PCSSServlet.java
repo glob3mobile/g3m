@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.server;
-
 
 import java.io.*;
 import java.nio.*;
@@ -18,12 +16,8 @@ import es.igosoftware.euclid.bounding.*;
 import es.igosoftware.euclid.vector.*;
 import es.igosoftware.util.*;
 
-
-public class PCSSServlet
-                         extends
-                            HttpServlet {
+public class PCSSServlet extends HttpServlet {
    private static final long serialVersionUID = 1L;
-
 
    private static class NodeAverageCacheKey {
       private final Planet _planet;
@@ -31,7 +25,6 @@ public class PCSSServlet
       private final String _nodeID;
       private final float  _verticalExaggeration;
       private final double _deltaHeight;
-
 
       private NodeAverageCacheKey(final Planet planet,
                                   final String cloudName,
@@ -44,7 +37,6 @@ public class PCSSServlet
          _verticalExaggeration = verticalExaggeration;
          _deltaHeight          = deltaHeight;
       }
-
 
       @Override
       public int hashCode() {
@@ -59,7 +51,6 @@ public class PCSSServlet
          result = (prime * result) + Float.floatToIntBits(_verticalExaggeration);
          return result;
       }
-
 
       @Override
       public boolean equals(final Object obj) {
@@ -106,9 +97,7 @@ public class PCSSServlet
          return true;
       }
 
-
    }
-
 
    private final LRUCache<NodeAverageCacheKey, GVector3F, RuntimeException> _nodeAverageCache;
    {
@@ -150,11 +139,9 @@ public class PCSSServlet
       _nodeAverageCache = new LRUCache<>(1024, factory);
    }
 
-
    private enum ResponseFormat {
       JSON,
       BINARY;
-
 
       private static ResponseFormat get(final String name) {
          for (final ResponseFormat candidate : ResponseFormat.values()) {
@@ -166,10 +153,8 @@ public class PCSSServlet
       }
    }
 
-
    private final Map<String, PersistentLOD> _openedDBs = new HashMap<>();
    private File                             _cloudDirectory;
-
 
    @Override
    public void init(final ServletConfig config) throws ServletException {
@@ -180,7 +165,6 @@ public class PCSSServlet
 
       log("initialization of " + getClass() + " at " + _cloudDirectory);
    }
-
 
    private PersistentLOD getDB(final String cloudName) {
       synchronized (_openedDBs) {
@@ -201,7 +185,6 @@ public class PCSSServlet
       }
    }
 
-
    @Override
    public void destroy() {
       super.destroy();
@@ -220,12 +203,9 @@ public class PCSSServlet
       }
    }
 
-
-   private static void error(final HttpServletResponse response,
-                             final String msg) throws IOException {
+   private static void error(final HttpServletResponse response, final String msg) throws IOException {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
    }
-
 
    private static class NodeMetadata {
       private final String           _id;
@@ -233,7 +213,6 @@ public class PCSSServlet
       private final GVector3F        _average;
       private final GAxisAlignedBox  _bounds;
       private final List<Geodetic3D> _firstPoints;
-
 
       public NodeMetadata(final String id,
                           final int[] levelsPointsCount,
@@ -249,9 +228,7 @@ public class PCSSServlet
 
    }
 
-
-   private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db,
-                                                      final RenderParameters params) {
+   private static List<NodeMetadata> getNodesMetadata(final PersistentLOD db, final RenderParameters params) {
       final List<NodeMetadata> result = new ArrayList<>(10000);
 
       db.acceptDepthFirstVisitor(null, new PersistentLOD.Visitor() {
@@ -259,10 +236,8 @@ public class PCSSServlet
          public void start(final PersistentLOD.Transaction transaction) {
          }
 
-
          @Override
-         public boolean visit(final PersistentLOD.Transaction transaction,
-                              final PersistentLOD.Node node) {
+         public boolean visit(final PersistentLOD.Transaction transaction, final PersistentLOD.Node node) {
 
             double sumX        = 0;
             double sumY        = 0;
@@ -280,7 +255,7 @@ public class PCSSServlet
                final List<Geodetic3D> points = level.getPoints(transaction);
                for (final Geodetic3D point : points) {
                   final GVector3D cartesian = params._planet.toCartesian(point._latitude, point._longitude, point._height + params._deltaHeight,
-                        params._verticalExaggeration);
+                                                                         params._verticalExaggeration);
 
                   final double x = cartesian._x;
                   final double y = cartesian._y;
@@ -314,7 +289,6 @@ public class PCSSServlet
                firstPoints.addAll(levels.get(i).getPoints(transaction));
             }
 
-
             final NodeMetadata nodeMetadata = new NodeMetadata( //
                   node.getID(), //
                   node.getLevelsPointsCount(), //
@@ -327,22 +301,16 @@ public class PCSSServlet
             return true;
          }
 
-
          @Override
          public void stop(final PersistentLOD.Transaction transaction) {
          }
-
 
       });
 
       return result;
    }
 
-
-   private static void sendJSONMetadata(final HttpServletResponse response,
-                                        final MetadataEntry metadata,
-                                        final RenderParameters params) throws IOException {
-
+   private static void sendJSONMetadata(final HttpServletResponse response, final MetadataEntry metadata, final RenderParameters params) throws IOException {
 
       final PersistentLOD.Statistics statistics = metadata._statistics;
       final List<NodeMetadata>       nodes      = metadata._nodes;
@@ -396,7 +364,6 @@ public class PCSSServlet
       writer.println('}');
    }
 
-
    private static class MetadataEntry {
       private final Planet                   _planet;
       private final PersistentLOD.Statistics _statistics;
@@ -405,7 +372,6 @@ public class PCSSServlet
       private final double                   _deltaHeight;
 
       private byte[] _buffer = null;
-
 
       private MetadataEntry(final Planet planet,
                             final PersistentLOD.Statistics statistics,
@@ -419,14 +385,12 @@ public class PCSSServlet
          _deltaHeight          = deltaHeight;
       }
 
-
       private synchronized byte[] getBuffer() throws IOException {
          if (_buffer == null) {
             _buffer = createBuffer();
          }
          return _buffer;
       }
-
 
       private byte[] createBuffer() throws IOException {
          final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -443,12 +407,9 @@ public class PCSSServlet
       }
    }
 
-
    private static Map<String, MetadataEntry> _metadataCache = new HashMap<>();
 
-
-   private static MetadataEntry getMetadataEntry(final PersistentLOD db,
-                                                 final RenderParameters params) {
+   private static MetadataEntry getMetadataEntry(final PersistentLOD db, final RenderParameters params) {
       synchronized (_metadataCache) {
          final String  key   = db.getCloudName() + "/" + params._planet + "/" + params._verticalExaggeration + "/" + params._deltaHeight;
          MetadataEntry entry = _metadataCache.get(key);
@@ -465,10 +426,7 @@ public class PCSSServlet
       }
    }
 
-
-   private static void sendBinaryMetadata(final HttpServletResponse response,
-                                          final MetadataEntry metadata) throws IOException {
-
+   private static void sendBinaryMetadata(final HttpServletResponse response, final MetadataEntry metadata) throws IOException {
 
       response.setStatus(HttpServletResponse.SC_OK);
       response.setContentType("application/octet-stream");
@@ -477,13 +435,11 @@ public class PCSSServlet
       os.write(metadata.getBuffer());
    }
 
-
    private enum Area {
       BYTE,
       SHORT,
       INT;
    }
-
 
    private static byte toByte(final int value) {
       final byte result = (byte) value;
@@ -493,11 +449,7 @@ public class PCSSServlet
       return result;
    }
 
-
-   private static byte[] getNodeArray(final Planet planet,
-                                      final NodeMetadata node,
-                                      final float verticalExaggeration,
-                                      final double deltaHeight) {
+   private static byte[] getNodeArray(final Planet planet, final NodeMetadata node, final float verticalExaggeration, final double deltaHeight) {
       final byte[] id = Utils.toBinaryID(node._id);
 
       final byte idLength = toByte(id.length);
@@ -506,7 +458,6 @@ public class PCSSServlet
       final List<Byte>    byteLevels        = new ArrayList<>(levelsPointsCount.length);
       final List<Short>   shortLevels       = new ArrayList<>(levelsPointsCount.length);
       final List<Integer> intLevels         = new ArrayList<>(levelsPointsCount.length);
-
 
       Area currentArea = Area.BYTE;
       for (final int levelPointCount : levelsPointsCount) {
@@ -551,7 +502,6 @@ public class PCSSServlet
                   ByteBufferUtils.sizeOf(planet, node._firstPoints, node._average) + //
                   (node._firstPoints.size() * 4);
 
-
       final ByteBuffer buffer = ByteBuffer.allocate(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
       buffer.put(idLength);
       buffer.put(id);
@@ -582,13 +532,11 @@ public class PCSSServlet
       return buffer.array();
    }
 
-
    private static byte[] toLittleEndian(final int value) {
       final ByteBuffer buffer = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
       buffer.putInt(value);
       return buffer.array();
    }
-
 
    private static byte[] getHeaderArray(final PersistentLOD.Statistics statistics) {
       final long   pointsCount   = statistics.getPointsCount();
@@ -615,10 +563,7 @@ public class PCSSServlet
       return buffer.array();
    }
 
-
-   private static void sendMetadata(final PersistentLOD db,
-                                    final RenderParameters params,
-                                    final HttpServletResponse response) throws IOException {
+   private static void sendMetadata(final PersistentLOD db, final RenderParameters params, final HttpServletResponse response) throws IOException {
       switch (params._format) {
       case JSON: {
          response.addHeader("Access-Control-Allow-Origin", "*");
@@ -637,11 +582,7 @@ public class PCSSServlet
       }
    }
 
-
-   private void sendNodeLevelPoints(final PersistentLOD db,
-                                    final RenderParameters params,
-                                    final String nodeID,
-                                    final int level,
+   private void sendNodeLevelPoints(final PersistentLOD db, final RenderParameters params, final String nodeID, final int level,
                                     final HttpServletResponse response) throws IOException {
       final PersistentLOD.NodeLevel nodeLevel = db.getNodeLevel(nodeID, level, false);
       if (nodeLevel == null) {
@@ -667,11 +608,7 @@ public class PCSSServlet
       }
    }
 
-
-   private void sendBinaryNodeLevelPoints(final HttpServletResponse response,
-                                          final PersistentLOD db,
-                                          final RenderParameters params,
-                                          final String nodeID,
+   private void sendBinaryNodeLevelPoints(final HttpServletResponse response, final PersistentLOD db, final RenderParameters params, final String nodeID,
                                           final PersistentLOD.NodeLevel nodeLevel) throws IOException {
       final GVector3F average = getNodeAverage(db, params, nodeID);
 
@@ -693,11 +630,7 @@ public class PCSSServlet
       os.write(buffer.array());
    }
 
-
-   private void sendJSONNodeLevelPoints(final HttpServletResponse response,
-                                        final PersistentLOD db,
-                                        final RenderParameters params,
-                                        final String nodeID,
+   private void sendJSONNodeLevelPoints(final HttpServletResponse response, final PersistentLOD db, final RenderParameters params, final String nodeID,
                                         final PersistentLOD.NodeLevel nodeLevel) throws IOException {
       final GVector3F average = getNodeAverage(db, params, nodeID);
 
@@ -721,14 +654,10 @@ public class PCSSServlet
       writer.print(']');
    }
 
-
-   private GVector3F getNodeAverage(final PersistentLOD db,
-                                    final RenderParameters params,
-                                    final String nodeID) {
+   private GVector3F getNodeAverage(final PersistentLOD db, final RenderParameters params, final String nodeID) {
       final NodeAverageCacheKey key = new NodeAverageCacheKey(params._planet, db.getCloudName(), nodeID, params._verticalExaggeration, params._deltaHeight);
       return _nodeAverageCache.get(key);
    }
-
 
    private static class RenderParameters {
 
@@ -736,7 +665,6 @@ public class PCSSServlet
       private final ResponseFormat _format;
       private final float          _verticalExaggeration;
       private final double         _deltaHeight;
-
 
       public RenderParameters(final Planet planet,
                               final ResponseFormat format,
@@ -750,12 +678,8 @@ public class PCSSServlet
 
    }
 
-
-   private class InvalidFormat
-                               extends
-                                  Exception {
+   private class InvalidFormat extends Exception {
       private static final long serialVersionUID = 1L;
-
 
       protected InvalidFormat(final String message) {
          super(message);
@@ -763,7 +687,6 @@ public class PCSSServlet
       }
 
    }
-
 
    private RenderParameters getRenderParameters(final HttpServletRequest request) throws InvalidFormat {
       final String planetName = request.getParameter("planet");
@@ -793,10 +716,8 @@ public class PCSSServlet
       return new RenderParameters(planet, format, verticalExaggeration, deltaHeight);
    }
 
-
    @Override
-   protected void doGet(final HttpServletRequest request,
-                        final HttpServletResponse response) throws IOException {
+   protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 
       final String[] path = XStringTokenizer.getAllTokens(request.getPathInfo(), "/");
 
@@ -817,7 +738,6 @@ public class PCSSServlet
          error(response, "Can't open DB \"" + cloudName + "\"");
          return;
       }
-
 
       if (path.length == 1) {
          try {
@@ -851,9 +771,7 @@ public class PCSSServlet
       }
    }
 
-
-   private static float getFloat(final String str,
-                                 final float defaultValue) {
+   private static float getFloat(final String str, final float defaultValue) {
       if (str == null) {
          return defaultValue;
       }
@@ -866,9 +784,7 @@ public class PCSSServlet
       }
    }
 
-
-   private static double getDouble(final String str,
-                                   final double defaultValue) {
+   private static double getDouble(final String str, final double defaultValue) {
       if (str == null) {
          return defaultValue;
       }
@@ -880,7 +796,6 @@ public class PCSSServlet
          return defaultValue;
       }
    }
-
 
    private static Planet getPlanet(final String type) {
       if ("ellipsoidal".equalsIgnoreCase(type)) {
@@ -896,6 +811,5 @@ public class PCSSServlet
          return null;
       }
    }
-
 
 }

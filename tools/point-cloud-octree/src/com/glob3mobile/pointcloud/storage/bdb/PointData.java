@@ -1,8 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.storage.bdb;
-
-
 
 //class PointData {
 //   final Geodetic3D             _position;
@@ -23,4 +20,3 @@ package com.glob3mobile.pointcloud.storage.bdb;
 //
 //
 //}
-

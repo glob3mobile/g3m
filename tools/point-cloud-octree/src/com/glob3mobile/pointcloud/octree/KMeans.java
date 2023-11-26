@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.octree;
-
 
 import java.util.*;
 
@@ -11,28 +9,21 @@ import es.igosoftware.euclid.bounding.*;
 import es.igosoftware.euclid.vector.*;
 import es.igosoftware.util.*;
 
-
 public class KMeans {
-
 
    public static class Cluster {
 
       public final Geodetic3D _centroid;
-
 
       private Cluster(final Geodetic3D centroid) {
          _centroid = centroid;
       }
    }
 
-
    private KMeans() {
    }
 
-
-   public static List<Geodetic3D> cluster(final List<Geodetic3D> positions,
-                                          final int k,
-                                          final float verticalExaggeration) {
+   public static List<Geodetic3D> cluster(final List<Geodetic3D> positions, final int k, final float verticalExaggeration) {
       final int positionsSize = positions.size();
       if (k > positionsSize) {
          throw new RuntimeException("Invalid K");
@@ -54,8 +45,7 @@ public class KMeans {
          distances[i] = cartesianPoints.get(i).squaredDistance(lower);
       }
 
-      final IComparatorInt comparator = (index1,
-                                         index2) -> {
+      final IComparatorInt comparator = (index1, index2) -> {
          final double distance1 = distances[index1];
          final double distance2 = distances[index2];
          return Double.compare(distance1, distance2);
@@ -80,6 +70,5 @@ public class KMeans {
       }
       return result;
    }
-
 
 }

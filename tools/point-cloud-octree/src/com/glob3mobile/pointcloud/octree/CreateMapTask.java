@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.pointcloud.octree;
 
 import java.awt.Desktop;
@@ -18,10 +17,7 @@ import com.glob3mobile.utils.Utils;
 import es.igosoftware.euclid.colors.GColorF;
 import es.igosoftware.util.GProgress;
 
-
-class CreateMapTask
-         implements
-            PersistentOctree.Visitor {
+class CreateMapTask implements PersistentOctree.Visitor {
 
    private final GProgress _progress;
    private final Sector    _mapSector;
@@ -32,20 +28,17 @@ class CreateMapTask
    private final int       _minPointsPerNode;
    private final int       _maxPointsPerNode;
 
-
    CreateMapTask(final String sourceCloudName,
                  final Statistics statistics,
                  final int imageWidth) {
-      _progress = new GProgress(statistics.getPointsCount(), true) {
-         @Override
-         public void informProgress(final long stepsDone,
-                                    final double percent,
-                                    final long elapsed,
-                                    final long estimatedMsToFinish) {
-            System.out.println("- drawing map \"" + sourceCloudName + "\" " + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
-         }
-      };
-      _mapSector = statistics.getSector();
+      _progress         = new GProgress(statistics.getPointsCount(), true) {
+                           @Override
+                           public void informProgress(final long stepsDone, final double percent, final long elapsed, final long estimatedMsToFinish) {
+                              System.out
+                                    .println("- drawing map \"" + sourceCloudName + "\" " + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+                           }
+                        };
+      _mapSector        = statistics.getSector();
       _minPointsPerNode = statistics.getMinPointsPerNode();
       _maxPointsPerNode = statistics.getMaxPointsPerNode();
 
@@ -54,13 +47,11 @@ class CreateMapTask
       _imageHeight = Math.round(imageWidth * ratio);
    }
 
-
    @Override
    public void start() {
       _image = new BufferedImage(_imageWidth, _imageHeight, BufferedImage.TYPE_4BYTE_ABGR);
-      _g = _image.createGraphics();
+      _g     = _image.createGraphics();
    }
-
 
    @Override
    public boolean visit(final Node node) {
@@ -68,16 +59,15 @@ class CreateMapTask
 
       final int pointsCount = node.getPointsCount();
 
-      final int deltaPoints = _maxPointsPerNode - _minPointsPerNode;
-      final float alpha = (float) (pointsCount - _minPointsPerNode) / deltaPoints;
-      final GColorF color = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
+      final int     deltaPoints = _maxPointsPerNode - _minPointsPerNode;
+      final float   alpha       = (float) (pointsCount - _minPointsPerNode) / deltaPoints;
+      final GColorF color       = GColorF.BLACK.mixedWidth(GColorF.WHITE, alpha);
 
-
-      final int xFrom = Math.round((float) (_mapSector.getUCoordinate(nodeSector._lower._longitude) * _imageWidth));
-      final int yFrom = Math.round((float) (_mapSector.getVCoordinate(nodeSector._upper._latitude) * _imageHeight));
-      final int xTo = Math.round((float) (_mapSector.getUCoordinate(nodeSector._upper._longitude) * _imageWidth));
-      final int yTo = Math.round((float) (_mapSector.getVCoordinate(nodeSector._lower._latitude) * _imageHeight));
-      final int width = xTo - xFrom;
+      final int xFrom  = Math.round((float) (_mapSector.getUCoordinate(nodeSector._lower._longitude) * _imageWidth));
+      final int yFrom  = Math.round((float) (_mapSector.getVCoordinate(nodeSector._upper._latitude) * _imageHeight));
+      final int xTo    = Math.round((float) (_mapSector.getUCoordinate(nodeSector._upper._longitude) * _imageWidth));
+      final int yTo    = Math.round((float) (_mapSector.getVCoordinate(nodeSector._lower._latitude) * _imageHeight));
+      final int width  = xTo - xFrom;
       final int height = yTo - yFrom;
       _g.setColor(Utils.toAWTColor(color));
       _g.fillRect(xFrom, yFrom, width, height);
@@ -92,7 +82,6 @@ class CreateMapTask
       final boolean keepVisiting = true;
       return keepVisiting;
    }
-
 
    @Override
    public void stop() {

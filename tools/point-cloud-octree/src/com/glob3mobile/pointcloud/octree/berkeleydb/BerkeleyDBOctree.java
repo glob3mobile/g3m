@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.octree.berkeleydb;
-
 
 import java.io.*;
 import java.util.*;
@@ -13,10 +11,7 @@ import com.sleepycat.je.*;
 import es.igosoftware.io.*;
 import es.igosoftware.util.*;
 
-
-public class BerkeleyDBOctree
-                              implements
-                                 PersistentOctree {
+public class BerkeleyDBOctree implements PersistentOctree {
 
    // private static final ILogger LOGGER              = GLogger.instance();
    // private static final Charset UTF8                = Charset.forName("UTF-8");
@@ -26,9 +21,7 @@ public class BerkeleyDBOctree
    private static final String NODE_DATABASE_NAME           = "Node";
    private static final String NODE_DATA_DATABASE_NAME      = "NodeData";
 
-
-   public static void delete(final File cloudDirectory,
-                             final String cloudName) {
+   public static void delete(final File cloudDirectory, final String cloudName) {
       final File envHome = new File(cloudDirectory, cloudName);
       if (!envHome.exists()) {
          return;
@@ -45,32 +38,19 @@ public class BerkeleyDBOctree
       }
    }
 
-
-   public static PersistentOctree open(final File cloudDirectory,
-                                       final String cloudName,
-                                       final boolean createIfNotExists,
-                                       final long cacheSizeInBytes) {
+   public static PersistentOctree open(final File cloudDirectory, final String cloudName, final boolean createIfNotExists, final long cacheSizeInBytes) {
       return open(cloudDirectory, cloudName, createIfNotExists, DEFAULT_MAX_BUFFER_SIZE, DEFAULT_MAX_POINTS_PER_TITLE, cacheSizeInBytes);
    }
 
-
-   public static PersistentOctree open(final File cloudDirectory,
-                                       final String cloudName,
-                                       final boolean createIfNotExists,
-                                       final int maxBufferSize,
-                                       final int maxPointsPerTitle,
-                                       final long cacheSizeInBytes) {
+   public static PersistentOctree open(final File cloudDirectory, final String cloudName, final boolean createIfNotExists, final int maxBufferSize,
+                                       final int maxPointsPerTitle, final long cacheSizeInBytes) {
 
       return new BerkeleyDBOctree(cloudDirectory, cloudName, createIfNotExists, maxBufferSize, maxPointsPerTitle, false, cacheSizeInBytes);
    }
 
-
-   public static PersistentOctree openReadOnly(final File cloudDirectory,
-                                               final String cloudName,
-                                               final long cacheSizeInBytes) {
+   public static PersistentOctree openReadOnly(final File cloudDirectory, final String cloudName, final long cacheSizeInBytes) {
       return new BerkeleyDBOctree(cloudDirectory, cloudName, false, 0, 0, true, cacheSizeInBytes);
    }
-
 
    private final String _cloudName;
 
@@ -92,7 +72,6 @@ public class BerkeleyDBOctree
    private final Database    _nodeDataDB;
    private final boolean     _readOnly;
    private final File        _cachedStatisticsFile;
-
 
    private BerkeleyDBOctree(final File cloudDirectory,
                             final String cloudName,
@@ -120,7 +99,6 @@ public class BerkeleyDBOctree
 
       _maxPointsPerTitle = maxPointsPerTitle;
 
-
       final EnvironmentConfig envConfig = new EnvironmentConfig();
       envConfig.setAllowCreate(createIfNotExists);
       envConfig.setTransactional(true);
@@ -144,11 +122,9 @@ public class BerkeleyDBOctree
       _cachedStatisticsFile = new File(cloudDirectory, "_stats_" + cloudName + ".ser");
    }
 
-
    int getMaxPointsPerTile() {
       return _maxPointsPerTitle;
    }
-
 
    @Override
    synchronized public void close() {
@@ -157,7 +133,6 @@ public class BerkeleyDBOctree
       _nodeDB.close();
       _env.close();
    }
-
 
    private void resetBufferBounds() {
       _minLatitudeInRadians  = Double.POSITIVE_INFINITY;
@@ -172,7 +147,6 @@ public class BerkeleyDBOctree
       _sumLongitudeInRadians = 0.0;
       _sumHeight             = 0.0;
    }
-
 
    @Override
    synchronized public void addPoint(final Geodetic3D point) {
@@ -189,7 +163,6 @@ public class BerkeleyDBOctree
       _sumLatitudeInRadians  += latitudeInRadians;
       _sumLongitudeInRadians += longitudeInRadians;
       _sumHeight             += height;
-
 
       if (latitudeInRadians < _minLatitudeInRadians) {
          _minLatitudeInRadians = latitudeInRadians;
@@ -212,12 +185,10 @@ public class BerkeleyDBOctree
          _maxHeight = height;
       }
 
-
       if (_buffer.size() == _maxBufferSize) {
          flush();
       }
    }
-
 
    @Override
    synchronized public void flush() {
@@ -226,14 +197,13 @@ public class BerkeleyDBOctree
          deleteCachedStatistics();
 
          final Sector targetSector = Sector.fromRadians( //
-               _minLatitudeInRadians, _minLongitudeInRadians, //
-               _maxLatitudeInRadians, _maxLongitudeInRadians);
+                                                        _minLatitudeInRadians, _minLongitudeInRadians, //
+                                                        _maxLatitudeInRadians, _maxLongitudeInRadians);
 
          final Sector boundsSector = Sector.getBounds(_buffer);
          if (!targetSector.equals(boundsSector)) {
             throw new RuntimeException("LOGIC ERROR");
          }
-
 
          final TileHeader header = TileHeader.deepestEnclosingTileHeader(targetSector);
          //final TileHeader header = TileHeader.ROOT_TILE_HEADER;
@@ -253,7 +223,6 @@ public class BerkeleyDBOctree
 
          final Geodetic3D averagePoint = Geodetic3D.fromRadians(averageLatitudeInRadians, averageLongitudeInRadians, averageHeight);
 
-
          final TransactionConfig txnConfig = new TransactionConfig();
          final Transaction       txn       = _env.beginTransaction(null, txnConfig);
 
@@ -267,7 +236,6 @@ public class BerkeleyDBOctree
       }
    }
 
-
    @Override
    synchronized public void optimize() {
       // LOGGER.logInfo("Optimizing...");
@@ -279,7 +247,6 @@ public class BerkeleyDBOctree
       // final long elapsed = System.currentTimeMillis() - start;
       //LOGGER.logInfo("Optimized in " + elapsed + "ms");
    }
-
 
    @Override
    public void acceptDepthFirstVisitor(final PersistentOctree.Visitor visitor) {
@@ -307,7 +274,6 @@ public class BerkeleyDBOctree
       visitor.stop();
    }
 
-
    private enum CursorSituation {
       NotFoundSelfNorDescendants,
       FoundDescendants,
@@ -315,11 +281,7 @@ public class BerkeleyDBOctree
       FoundNothing;
    }
 
-
-   private static CursorSituation getCursorSituation(final Cursor cursor,
-                                                     final DatabaseEntry keyEntry,
-                                                     final DatabaseEntry dataEntry,
-                                                     final byte[] id) {
+   private static CursorSituation getCursorSituation(final Cursor cursor, final DatabaseEntry keyEntry, final DatabaseEntry dataEntry, final byte[] id) {
       final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED);
       switch (status) {
       case SUCCESS: {
@@ -343,13 +305,8 @@ public class BerkeleyDBOctree
       }
    }
 
-
-   private void visitParent(final com.sleepycat.je.Transaction txn,
-                            final Cursor cursor,
-                            final DatabaseEntry keyEntry,
-                            final DatabaseEntry dataEntry,
-                            final byte[] id,
-                            final PersistentOctree.Visitor visitor) {
+   private void visitParent(final com.sleepycat.je.Transaction txn, final Cursor cursor, final DatabaseEntry keyEntry, final DatabaseEntry dataEntry,
+                            final byte[] id, final PersistentOctree.Visitor visitor) {
       if (cursor.getPrev(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
          final byte[] key = keyEntry.getData();
          if (Utils.hasSamePrefix(id, key)) {
@@ -359,13 +316,8 @@ public class BerkeleyDBOctree
       }
    }
 
-
-   private void visitDescendants(final com.sleepycat.je.Transaction txn,
-                                 final Cursor cursor,
-                                 final DatabaseEntry keyEntry,
-                                 final DatabaseEntry dataEntry,
-                                 final byte[] id,
-                                 final PersistentOctree.Visitor visitor) {
+   private void visitDescendants(final com.sleepycat.je.Transaction txn, final Cursor cursor, final DatabaseEntry keyEntry, final DatabaseEntry dataEntry,
+                                 final byte[] id, final PersistentOctree.Visitor visitor) {
 
       byte[] key = keyEntry.getData();
 
@@ -386,10 +338,8 @@ public class BerkeleyDBOctree
       }
    }
 
-
    @Override
-   public void acceptDepthFirstVisitor(final Sector sector,
-                                       final PersistentOctree.Visitor visitor) {
+   public void acceptDepthFirstVisitor(final Sector sector, final PersistentOctree.Visitor visitor) {
       visitor.start();
 
       final TileHeader header = TileHeader.deepestEnclosingTileHeader(sector);
@@ -397,7 +347,6 @@ public class BerkeleyDBOctree
       //System.out.println("==> " + Utils.toIDString(header._id) + "   " + header._sector);
 
       final byte[] id = header._id;
-
 
       final CursorConfig cursorConfig = new CursorConfig();
 
@@ -432,25 +381,19 @@ public class BerkeleyDBOctree
       visitor.stop();
    }
 
-
    Database getNodeDataDB() {
       return _nodeDataDB;
    }
-
 
    Database getNodeDB() {
       return _nodeDB;
    }
 
-
    Environment getEnvironment() {
       return _env;
    }
 
-
-   BerkeleyDBOctreeNode readNode(final Transaction txn,
-                                 final byte[] id,
-                                 final boolean loadPoints) {
+   BerkeleyDBOctreeNode readNode(final Transaction txn, final byte[] id, final boolean loadPoints) {
       final DatabaseEntry keyEntry  = new DatabaseEntry(id);
       final DatabaseEntry dataEntry = new DatabaseEntry();
 
@@ -465,12 +408,7 @@ public class BerkeleyDBOctree
       }
    }
 
-
-   private static class BerkeleyDBStatistics
-                                             implements
-                                                PersistentOctree.Visitor,
-                                                PersistentOctree.Statistics,
-                                                Serializable {
+   private static class BerkeleyDBStatistics implements PersistentOctree.Visitor, PersistentOctree.Statistics, Serializable {
 
       private static final long serialVersionUID = 2L;
 
@@ -488,13 +426,11 @@ public class BerkeleyDBOctree
       private double _minHeight = Double.POSITIVE_INFINITY;
       private double _maxHeight = Double.NEGATIVE_INFINITY;
 
-
       private BerkeleyDBStatistics(final String cloudName,
                                    final GUndeterminateProgress progress) {
          _cloudName = cloudName;
          _progress  = progress;
       }
-
 
       @Override
       public void start() {
@@ -506,7 +442,6 @@ public class BerkeleyDBOctree
          _minDepth              = Integer.MAX_VALUE;
          _maxDepth              = Integer.MIN_VALUE;
       }
-
 
       @Override
       public boolean visit(final PersistentOctree.Node node) {
@@ -548,7 +483,6 @@ public class BerkeleyDBOctree
          return true;
       }
 
-
       @Override
       public void stop() {
          if (_progress != null) {
@@ -556,7 +490,6 @@ public class BerkeleyDBOctree
             _progress = null;
          }
       }
-
 
       @Override
       public void show() {
@@ -572,48 +505,40 @@ public class BerkeleyDBOctree
                ", Max=" + _maxPointsCountPerNode);
          System.out.println("======================================================================");
 
-
          // final StatsConfig config = new StatsConfig();
          // final EnvironmentStats stats = _env.getStats(config);
          // System.out.println(stats);
       }
-
 
       @Override
       public long getPointsCount() {
          return _pointsCount;
       }
 
-
       @Override
       public Sector getSector() {
          return _sector;
       }
-
 
       @Override
       public double getMinHeight() {
          return _minHeight;
       }
 
-
       @Override
       public double getMaxHeight() {
          return _maxHeight;
       }
-
 
       @Override
       public int getMinPointsPerNode() {
          return _minPointsCountPerNode;
       }
 
-
       @Override
       public int getMaxPointsPerNode() {
          return _maxPointsCountPerNode;
       }
-
 
       @Override
       public double getAveragePointsPerNode() {
@@ -622,13 +547,11 @@ public class BerkeleyDBOctree
 
    }
 
-
    private void deleteCachedStatistics() {
       if (_cachedStatisticsFile.exists()) {
          _cachedStatisticsFile.delete();
       }
    }
-
 
    private BerkeleyDBStatistics getCachedStatistics() {
       if (!_cachedStatisticsFile.exists()) {
@@ -647,7 +570,6 @@ public class BerkeleyDBOctree
 
    }
 
-
    private void saveCachedStatistics(final BerkeleyDBStatistics statistics) {
       if (_cachedStatisticsFile.exists()) {
          _cachedStatisticsFile.delete();
@@ -662,7 +584,6 @@ public class BerkeleyDBOctree
       }
    }
 
-
    @Override
    public PersistentOctree.Statistics getStatistics(final boolean showProgress) {
 
@@ -675,8 +596,7 @@ public class BerkeleyDBOctree
       if (showProgress) {
          progress = new GUndeterminateProgress(10, true) {
             @Override
-            public void informProgress(final long stepsDone,
-                                       final long elapsed) {
+            public void informProgress(final long stepsDone, final long elapsed) {
                System.out.println("- gathering statistics for \"" + _cloudName + "\"" + progressString(stepsDone, elapsed));
             }
          };
@@ -691,11 +611,9 @@ public class BerkeleyDBOctree
       return statistics;
    }
 
-
    @Override
    public String getCloudName() {
       return _cloudName;
    }
-
 
 }

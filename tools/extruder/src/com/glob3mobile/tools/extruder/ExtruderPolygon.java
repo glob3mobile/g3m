@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.tools.extruder;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import poly2Tri.Triangulation;
 import poly2Tri.Triangulation.Data;
 import poly2Tri.TriangulationException;
 
-
 public abstract class ExtruderPolygon {
 
    private final double         _lowerHeight;
@@ -24,17 +22,15 @@ public abstract class ExtruderPolygon {
    private Geodetic2D           _average;
    private final double         _minHeight;
 
-
    protected ExtruderPolygon(final double lowerHeight,
                              final G3MeshMaterial material,
                              final boolean depthTest,
                              final double minHeight) {
       _lowerHeight = lowerHeight;
-      _material = material;
-      _depthTest = depthTest;
-      _minHeight = minHeight;
+      _material    = material;
+      _depthTest   = depthTest;
+      _minHeight   = minHeight;
    }
-
 
    public Geodetic2D getAverage() {
       if (_average == null) {
@@ -43,20 +39,15 @@ public abstract class ExtruderPolygon {
       return _average;
    }
 
-
    //   public double getMinHeight() {
    //      return _minHeight;
    //   }
 
-
    public abstract Wall createExteriorWall(final double lowerHeight);
-
 
    public abstract List<Wall> createInteriorWalls(final double lowerHeight);
 
-
-   public Building createBuilding(final PolygonExtruder.Statistics statistics,
-                                  final long id) {
+   public Building createBuilding(final PolygonExtruder.Statistics statistics, final long id) {
 
       final Triangulation.Data data = createRoofTriangulationData();
 
@@ -69,14 +60,15 @@ public abstract class ExtruderPolygon {
          else {
             statistics.countTriangulation(roofTriangles.size());
 
-            final Data doofSansHolesTriangulationData = createRoofSansHolesTriangulationData();
-            final List<Triangle> roofSansHolesTriangles = Triangulation.triangulate(doofSansHolesTriangulationData);
-            final double roofArea = calculateRoofArea(roofSansHolesTriangles, toVector3DList(doofSansHolesTriangulationData._vertices));
+            final Data           doofSansHolesTriangulationData = createRoofSansHolesTriangulationData();
+            final List<Triangle> roofSansHolesTriangles         = Triangulation.triangulate(doofSansHolesTriangulationData);
+            final double         roofArea                       = calculateRoofArea(roofSansHolesTriangles,
+                                                                                    toVector3DList(doofSansHolesTriangulationData._vertices));
 
-            final Wall exteriorWall = createExteriorWall(_lowerHeight);
+            final Wall       exteriorWall  = createExteriorWall(_lowerHeight);
             final List<Wall> interiorWalls = createInteriorWalls(_lowerHeight);
-            return new Building(this, getAverage(), roofArea, _minHeight, toVector3DList(data._vertices), roofTriangles, exteriorWall, interiorWalls,
-                     _material, _depthTest);
+            return new Building(this, getAverage(), roofArea, _minHeight, toVector3DList(data._vertices), roofTriangles, exteriorWall, interiorWalls, _material,
+                  _depthTest);
          }
       }
       catch (final NullPointerException e) {
@@ -90,9 +82,7 @@ public abstract class ExtruderPolygon {
       return null;
    }
 
-
-   private static double calculateRoofArea(final List<Triangle> triangles,
-                                           final List<Vector3D> vertices) {
+   private static double calculateRoofArea(final List<Triangle> triangles, final List<Vector3D> vertices) {
       double area = 0;
       for (final Triangle triangle : triangles) {
          final Vector3D v0 = vertices.get(triangle._vertex0);
@@ -103,13 +93,9 @@ public abstract class ExtruderPolygon {
       return area;
    }
 
-
-   private static double triangleArea(final Vector3D v0,
-                                      final Vector3D v1,
-                                      final Vector3D v2) {
+   private static double triangleArea(final Vector3D v0, final Vector3D v1, final Vector3D v2) {
       return (v1.sub(v0).cross(v2.sub(v0))).length() / 2;
    }
-
 
    private static List<Vector3D> toVector3DList(final double[][] vertices) {
       final List<Vector3D> result = new ArrayList<>(vertices.length);
@@ -122,20 +108,14 @@ public abstract class ExtruderPolygon {
       return result;
    }
 
-
    protected abstract Triangulation.Data createRoofTriangulationData();
-
 
    protected abstract Triangulation.Data createRoofSansHolesTriangulationData();
 
-
    protected abstract Geodetic2D calculateAverage();
-
 
    public abstract List<Geodetic2D> getOuterRing();
 
-
    public abstract List<? extends List<Geodetic2D>> getHolesRings();
-
 
 }

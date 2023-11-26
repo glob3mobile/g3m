@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.storage.bdb;
-
 
 //
 //public class BDBPCStorageNode

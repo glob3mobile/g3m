@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.pointcloud;
 
 //public class Classification {

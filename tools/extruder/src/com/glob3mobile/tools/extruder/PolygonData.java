@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.tools.extruder;
-
 
 import java.util.*;
 
@@ -9,7 +7,6 @@ import org.glob3.mobile.generated.*;
 import org.glob3.mobile.specific.*;
 
 import com.seisw.util.geom.*;
-
 
 public class PolygonData<T> {
    static {
@@ -20,9 +17,7 @@ public class PolygonData<T> {
       ILogger.setInstance(new Logger_JavaDesktop(LogLevel.InfoLevel));
    }
 
-
-   public static PolygonData<Geodetic2D> fixPolygon2DData(final List<Geodetic2D> rawCoordinates,
-                                                          final List<List<Geodetic2D>> rawHolesCoordinatesArray) {
+   public static PolygonData<Geodetic2D> fixPolygon2DData(final List<Geodetic2D> rawCoordinates, final List<List<Geodetic2D>> rawHolesCoordinatesArray) {
       final List<Geodetic2D>       coordinates           = PolygonExtruder.cleanup2DCoordinates(rawCoordinates);
       final List<List<Geodetic2D>> holesCoordinatesArray = PolygonExtruder.cleanup2DCoordinatesArray(rawHolesCoordinatesArray);
 
@@ -38,9 +33,7 @@ public class PolygonData<T> {
       return toFixedPolygon2DData(fixedPoly);
    }
 
-
-   public static PolygonData<Geodetic3D> fixPolygon3DData(final List<Geodetic3D> rawCoordinates,
-                                                          final List<List<Geodetic3D>> rawHolesCoordinatesArray) {
+   public static PolygonData<Geodetic3D> fixPolygon3DData(final List<Geodetic3D> rawCoordinates, final List<List<Geodetic3D>> rawHolesCoordinatesArray) {
       final List<Geodetic3D>       coordinates           = PolygonExtruder.cleanup3DCoordinates(rawCoordinates);
       final List<List<Geodetic3D>> holesCoordinatesArray = PolygonExtruder.cleanup3DCoordinatesArray(rawHolesCoordinatesArray);
 
@@ -56,9 +49,7 @@ public class PolygonData<T> {
       return toFixedPolygon3DData(fixedPoly, coordinates, holesCoordinatesArray);
    }
 
-
-   private static Poly polygon2DToPoly(final List<Geodetic2D> coordinates,
-                                       final List<List<Geodetic2D>> holesCoordinatesArray) {
+   private static Poly polygon2DToPoly(final List<Geodetic2D> coordinates, final List<List<Geodetic2D>> holesCoordinatesArray) {
       final Poly outer = createPoly(coordinates);
 
       if ((holesCoordinatesArray == null) || holesCoordinatesArray.isEmpty()) {
@@ -90,7 +81,6 @@ public class PolygonData<T> {
       //      return complex;
    }
 
-
    //   private static <T> List<T> reversed(final List<T> list) {
    //      final int size = list.size();
    //      final List<T> result = new ArrayList<>(size);
@@ -100,7 +90,6 @@ public class PolygonData<T> {
    //      return result;
    //   }
    //
-
 
    private static Poly createPoly(final List<Geodetic2D> coordinates) {
       final PolySimple poly1 = new PolySimple();
@@ -114,9 +103,7 @@ public class PolygonData<T> {
       return Clip.union(poly1, poly2);
    }
 
-
-   private static Poly polygon3DToPoly(final List<Geodetic3D> coordinates,
-                                       final List<List<Geodetic3D>> holesCoordinatesArray) {
+   private static Poly polygon3DToPoly(final List<Geodetic3D> coordinates, final List<List<Geodetic3D>> holesCoordinatesArray) {
       final PolySimple outer = new PolySimple();
       for (final Geodetic3D coordinate : coordinates) {
          final double x = coordinate._longitude._radians;
@@ -144,7 +131,6 @@ public class PolygonData<T> {
       return complex;
    }
 
-
    private static PolygonData<Geodetic2D> toFixedPolygon2DData(final Poly poly) {
       final List<Geodetic2D> fixedCoordinates = toGeodetic2DList(poly);
 
@@ -158,9 +144,7 @@ public class PolygonData<T> {
       return new PolygonData<>(fixedCoordinates, fixedHolesCoordinatesArray);
    }
 
-
-   private static PolygonData<Geodetic3D> toFixedPolygon3DData(final Poly poly,
-                                                               final List<Geodetic3D> coordinates,
+   private static PolygonData<Geodetic3D> toFixedPolygon3DData(final Poly poly, final List<Geodetic3D> coordinates,
                                                                final List<List<Geodetic3D>> holesCoordinatesArray) {
       final List<Geodetic3D> fixedCoordinates = toGeodetic3DList(poly, coordinates, holesCoordinatesArray);
 
@@ -173,7 +157,6 @@ public class PolygonData<T> {
 
       return new PolygonData<>(fixedCoordinates, fixedHolesCoordinatesArray);
    }
-
 
    private static List<Geodetic2D> toGeodetic2DList(final Poly poly) {
       final List<Geodetic2D> result = new ArrayList<>();
@@ -193,10 +176,7 @@ public class PolygonData<T> {
       return result;
    }
 
-
-   private static List<Geodetic3D> toGeodetic3DList(final Poly poly,
-                                                    final List<Geodetic3D> coordinates,
-                                                    final List<List<Geodetic3D>> holesCoordinatesArray) {
+   private static List<Geodetic3D> toGeodetic3DList(final Poly poly, final List<Geodetic3D> coordinates, final List<List<Geodetic3D>> holesCoordinatesArray) {
       final List<Geodetic3D> result    = new ArrayList<>();
       final int              numPoints = poly.getNumPoints();
       for (int i = 0; i < numPoints; i++) {
@@ -207,10 +187,7 @@ public class PolygonData<T> {
       return result;
    }
 
-
-   private static Geodetic3D getGeodetic3D(final Angle latitude,
-                                           final Angle longitude,
-                                           final List<Geodetic3D> firstCandidates,
+   private static Geodetic3D getGeodetic3D(final Angle latitude, final Angle longitude, final List<Geodetic3D> firstCandidates,
                                            final List<List<Geodetic3D>> candidatesArray) {
       Geodetic3D closest         = firstCandidates.get(0);
       double     closestDistance = sqDistance(closest, latitude, longitude);
@@ -236,19 +213,14 @@ public class PolygonData<T> {
       return closest;
    }
 
-
-   private static double sqDistance(final Geodetic3D closest,
-                                    final Angle latitude,
-                                    final Angle longitude) {
+   private static double sqDistance(final Geodetic3D closest, final Angle latitude, final Angle longitude) {
       final double deltaLat = (latitude._radians - closest._latitude._radians) * 2;
       final double deltaLon = longitude._radians - closest._longitude._radians;
       return (deltaLat * deltaLat) + (deltaLon * deltaLon);
    }
 
-
    public final List<T>       _coordinates;
    public final List<List<T>> _holesCoordinatesArray;
-
 
    private PolygonData(final List<T> coordinates,
                        final List<List<T>> holesCoordinatesArray) {
@@ -256,6 +228,5 @@ public class PolygonData<T> {
       _holesCoordinatesArray = holesCoordinatesArray;
 
    }
-
 
 }

@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.octree;
-
 
 import java.io.*;
 import java.util.*;
@@ -12,10 +10,7 @@ import com.glob3mobile.utils.*;
 
 import es.igosoftware.util.*;
 
-
-class LODSortingTask
-                     implements
-                        PersistentOctree.Visitor {
+class LODSortingTask implements PersistentOctree.Visitor {
 
    private final GProgress _progress;
    private final String    _lodCloudName;
@@ -27,7 +22,6 @@ class LODSortingTask
    private long       _processedPointsCount;
    private final File _cloudDirectory;
 
-
    LODSortingTask(final File cloudDirectory,
                   final String lodCloudName,
                   final String sourceCloudName,
@@ -38,16 +32,12 @@ class LODSortingTask
       _pointsCount      = pointsCount;
       _progress         = new GProgress(pointsCount, true) {
                            @Override
-                           public void informProgress(final long stepsDone,
-                                                      final double percent,
-                                                      final long elapsed,
-                                                      final long estimatedMsToFinish) {
+                           public void informProgress(final long stepsDone, final double percent, final long elapsed, final long estimatedMsToFinish) {
                               System.out.println("- importing \"" + sourceCloudName + "\" " + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
                            }
                         };
       _maxPointsPerLeaf = maxPointsPerLeaf;
    }
-
 
    @Override
    public boolean visit(final PersistentOctree.Node node) {
@@ -75,9 +65,7 @@ class LODSortingTask
       return keepWorking;
    }
 
-
-   private static List<Geodetic3D> extractPoints(final Sector sector,
-                                                 final List<Geodetic3D> points) {
+   private static List<Geodetic3D> extractPoints(final Sector sector, final List<Geodetic3D> points) {
 
       final List<Geodetic3D> extracted = new ArrayList<>();
 
@@ -99,13 +87,8 @@ class LODSortingTask
       return extracted;
    }
 
-
-   private void splitPoints(final PersistentLOD.Transaction transaction,
-                            final PersistentLOD lodDB,
-                            final byte[] nodeID,
-                            final Sector nodeSector,
-                            final List<Geodetic3D> points,
-                            final int maxPointsPerLeaf) {
+   private void splitPoints(final PersistentLOD.Transaction transaction, final PersistentLOD lodDB, final byte[] nodeID, final Sector nodeSector,
+                            final List<Geodetic3D> points, final int maxPointsPerLeaf) {
 
       final TileHeader header = new TileHeader(nodeID, nodeSector);
       for (final TileHeader child : header.createChildren()) {
@@ -125,11 +108,7 @@ class LODSortingTask
       }
    }
 
-
-   private void process(final PersistentLOD.Transaction transaction,
-                        final PersistentLOD lodDB,
-                        final String nodeID,
-                        final List<Geodetic3D> points) {
+   private void process(final PersistentLOD.Transaction transaction, final PersistentLOD lodDB, final String nodeID, final List<Geodetic3D> points) {
       final int pointsSize = points.size();
 
       final List<Integer>       sortedIndices = new ArrayList<>(pointsSize);
@@ -148,7 +127,6 @@ class LODSortingTask
       //               " lodLevels=" + lodIndices.size() + //
       //               ", points=" + pointsSize + //
       //               ", lodIndices=" + lodIndices);
-
 
       final int lodLevels = lodIndices.size();
       _sumLevelsCount += lodLevels;
@@ -186,7 +164,6 @@ class LODSortingTask
 
       lodDB.put(transaction, nodeID, levelsPoints);
    }
-
 
    //   private void createDebugImage(final Node node,
    //                                 final List<Geodetic3D> points,
@@ -280,41 +257,32 @@ class LODSortingTask
    //
    //   }
 
-
    //   private static String parentID(final String id) {
    //      return id.isEmpty() ? null : id.substring(0, id.length() - 1);
    //   }
 
-
-   private static void sortPoints(final List<Geodetic3D> points,
-                                  final List<Integer> sortedIndices,
-                                  final List<Integer> lodIndices) {
+   private static void sortPoints(final List<Geodetic3D> points, final List<Integer> sortedIndices, final List<Integer> lodIndices) {
 
       final KDTree tree = new KDTree(points, 2);
 
       final KDTreeVisitor visitor = new KDTreeVisitor() {
          private int _lastDepth = 0;
 
-
          @Override
          public void startVisiting(final KDTree tree1) {
          }
-
 
          @Override
          public void visitInnerNode(final KDInnerNode innerNode) {
             pushVertexIndex(innerNode.getVertexIndexes(), innerNode.getDepth());
          }
 
-
          @Override
          public void visitLeafNode(final KDLeafNode leafNode) {
             pushVertexIndex(leafNode.getVertexIndexes(), leafNode.getDepth());
          }
 
-
-         private void pushVertexIndex(final int[] vertexIndexes,
-                                      final int depth) {
+         private void pushVertexIndex(final int[] vertexIndexes, final int depth) {
             if (_lastDepth != depth) {
                _lastDepth = depth;
 
@@ -329,7 +297,6 @@ class LODSortingTask
             }
          }
 
-
          @Override
          public void endVisiting(final KDTree tree1) {
          }
@@ -342,7 +309,6 @@ class LODSortingTask
       }
    }
 
-
    @Override
    public void start() {
       final int cacheSizeInBytes = 1024 * 1024 * 1024;
@@ -351,7 +317,6 @@ class LODSortingTask
       _processedPointsCount = 0;
       _sumLevelsCount       = 0;
    }
-
 
    @Override
    public void stop() {

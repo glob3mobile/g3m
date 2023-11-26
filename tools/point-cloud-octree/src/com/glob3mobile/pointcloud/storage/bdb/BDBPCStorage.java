@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.storage.bdb;
-
 
 //
 //public class BDBPCStorage
@@ -379,4 +377,3 @@ package com.glob3mobile.pointcloud.storage.bdb;
 //
 //
 //}
-
