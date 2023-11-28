@@ -128,7 +128,7 @@ public:
 
   void setInfo(const std::vector<const Info*>& info) const;
   
-  const std::vector<const Info*>& getInfo() const;
+  const std::vector<const Info*> getInfo() const;
   
   void addInfo(const std::vector<const Info*>& info);
   

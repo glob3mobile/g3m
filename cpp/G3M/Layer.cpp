@@ -182,8 +182,8 @@ void Layer::setInfo(const std::vector<const Info*>& info) const {
   _layerInfo->clear();
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),
-               info.begin(),
-               info.end());
+                     info.begin(),
+                     info.end());
 #endif
 #ifdef JAVA_CODE
   _layerInfo.addAll(info);
@@ -194,8 +194,8 @@ void Layer::setInfo(const std::vector<const Info*>& info) const {
 void Layer::addInfo(const std::vector<const Info*>& info) {
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),
-               info.begin(),
-               info.end());
+                     info.begin(),
+                     info.end());
 #endif
 #ifdef JAVA_CODE
   _layerInfo.addAll(info);
@@ -203,16 +203,10 @@ void Layer::addInfo(const std::vector<const Info*>& info) {
 }
 
 void Layer::addInfo(const Info* info) {
-#ifdef C_CODE
-  _layerInfo->insert(_layerInfo->end(), info);
-#endif
-#ifdef JAVA_CODE
-  _layerInfo.add(info);
-#endif
+  _layerInfo->push_back(info);
 }
 
-
-const std::vector<const Info*>& Layer::getInfo() const {
+const std::vector<const Info*> Layer::getInfo() const {
   return *_layerInfo;
 }
 
