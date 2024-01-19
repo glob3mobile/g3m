@@ -1,17 +1,12 @@
 
 package org.glob3.mobile.tools.utils;
 
+import java.awt.*;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import org.glob3.mobile.generated.Geodetic2D;
-import org.glob3.mobile.generated.Sector;
+import java.awt.image.*;
+import java.io.*;
+import javax.imageio.*;
+import org.glob3.mobile.generated.*;
 
 public class GEOBitmap {
    private final Sector _sector;
@@ -21,16 +16,19 @@ public class GEOBitmap {
    private final BufferedImage _image;
    private final Graphics2D    _g;
 
-   public GEOBitmap(final Sector sector,
-                    final int width,
-                    final int height,
-                    final Color backgroundColor) {
+   public GEOBitmap(final Sector sector, final int width, final int height, final Color backgroundColor, final boolean hd) {
       _sector = sector;
       _width  = width;
       _height = height;
 
       _image = new BufferedImage(_width, _height, BufferedImage.TYPE_4BYTE_ABGR);
-      _g     = _image.createGraphics();
+
+      _g = _image.createGraphics();
+      if (hd) {
+         _g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+         _g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+         _g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      }
       _g.setBackground(backgroundColor);
       _g.clearRect(0, 0, width, height);
    }
@@ -73,10 +71,22 @@ public class GEOBitmap {
       _g.drawRect(xFrom, yFrom, width, height);
    }
 
-   public void save(final File file) throws IOException {
+   public void savePNG(final File file) throws IOException {
       _g.dispose();
 
       ImageIO.write(_image, "png", file);
+   }
+
+   public synchronized void drawImage(final Sector sector, final BufferedImage image) {
+      final int xFrom = Math.round((float) (_sector.getUCoordinate(sector._lower._longitude) * _width));
+      final int yFrom = Math.round((float) (_sector.getVCoordinate(sector._upper._latitude) * _height));
+      final int xTo   = Math.round((float) (_sector.getUCoordinate(sector._upper._longitude) * _width));
+      final int yTo   = Math.round((float) (_sector.getVCoordinate(sector._lower._latitude) * _height));
+
+      final int width  = xTo - xFrom;
+      final int height = yTo - yFrom;
+
+      _g.drawImage(image, xFrom, yFrom, width, height, null);
    }
 
    //   public void drawPolygon(final List<Geodetic2D> outerRing,

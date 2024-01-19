@@ -3,10 +3,8 @@ package com.glob3mobile.tools.extruder.examples;
 
 import java.io.*;
 import java.util.*;
-
 import org.glob3.mobile.generated.*;
 import org.glob3.mobile.tools.utils.*;
-
 import com.glob3mobile.tools.extruder.*;
 import com.glob3mobile.tools.mesh.*;
 
@@ -34,7 +32,7 @@ public class CaceresExtrusion {
 
       private void save(final String fileName) throws IOException {
          if (_bitmap != null) {
-            _bitmap.save(new File(fileName));
+            _bitmap.savePNG(new File(fileName));
          }
       }
 

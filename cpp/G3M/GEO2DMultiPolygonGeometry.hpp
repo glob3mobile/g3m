@@ -13,7 +13,7 @@
 
 #include <vector>
 class GEO2DPolygonData;
-
+class GEOSymbol;
 
 class GEO2DMultiPolygonGeometry : public GEO2DGeometry {
 private:

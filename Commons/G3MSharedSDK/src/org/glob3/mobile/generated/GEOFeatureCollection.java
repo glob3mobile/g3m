@@ -19,10 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class GEOFeature;
-//class GPUProgramState;
-//class GLGlobalState;
-//class GPUProgramState;
-//class GEOSymbolizer;
+
 
 public class GEOFeatureCollection extends GEOObject
 {

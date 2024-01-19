@@ -64,9 +64,9 @@ public:
   const float getTransparency() const {
     return _transparency;
   }
-  
+
   void setTransparency(float transparency);
-  
+
   virtual void setEnable(bool enable) {
     if (enable != _enable) {
       _enable = enable;
@@ -122,16 +122,16 @@ public:
   const std::string getTitle() const;
 
   void setTitle(const std::string& title);
-  
+
   virtual TileImageProvider* createTileImageProvider(const G3MRenderContext* rc,
                                                      const LayerTilesRenderParameters* layerTilesRenderParameters) const = 0;
 
   void setInfo(const std::vector<const Info*>& info) const;
-  
+
   const std::vector<const Info*> getInfo() const;
-  
+
   void addInfo(const std::vector<const Info*>& info);
-  
+
   void addInfo(const Info* info);
 
   virtual const std::vector<URL*> getDownloadURLs(const Tile* tile) const = 0;

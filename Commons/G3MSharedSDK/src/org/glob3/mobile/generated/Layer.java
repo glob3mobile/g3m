@@ -320,7 +320,6 @@ public abstract class Layer
     }
     _layerInfo.clear();
     _layerInfo.addAll(info);
-  
   }
 
   public final java.util.ArrayList<Info> getInfo()

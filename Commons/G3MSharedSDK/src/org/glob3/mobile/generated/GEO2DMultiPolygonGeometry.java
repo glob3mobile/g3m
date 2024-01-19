@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class GEO2DPolygonData;
-
+//class GEOSymbol;
 
 public class GEO2DMultiPolygonGeometry extends GEO2DGeometry
 {

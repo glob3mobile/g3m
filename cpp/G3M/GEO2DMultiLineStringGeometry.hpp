@@ -12,6 +12,7 @@
 #include "GEO2DGeometry.hpp"
 class Geodetic2D;
 class GEO2DCoordinatesArrayData;
+class GEOSymbol;
 
 class GEO2DMultiLineStringGeometry : public GEO2DGeometry {
 private:

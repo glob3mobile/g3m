@@ -10,9 +10,9 @@
 #define __G3M__GEO2DPointGeometry__
 
 #include "GEO2DGeometry.hpp"
-
 #include "Geodetic2D.hpp"
 
+class GEOSymbol;
 
 class GEO2DPointGeometry : public GEO2DGeometry {
 private:
