@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 //class Geodetic2D;
 //class GEO2DCoordinatesArrayData;
+//class GEOSymbol;
 
 public class GEO2DMultiLineStringGeometry extends GEO2DGeometry
 {

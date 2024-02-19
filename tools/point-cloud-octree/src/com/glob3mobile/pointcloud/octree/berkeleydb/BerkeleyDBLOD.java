@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.octree.berkeleydb;
-
 
 import java.io.*;
 import java.util.*;
@@ -13,29 +11,17 @@ import com.sleepycat.je.*;
 import es.igosoftware.io.*;
 import es.igosoftware.util.*;
 
+public class BerkeleyDBLOD implements PersistentLOD {
 
-public class BerkeleyDBLOD
-                           implements
-                              PersistentLOD {
-
-
-   public static PersistentLOD openReadOnly(final File cloudDirectory,
-                                            final String cloudName,
-                                            final long cacheSizeInBytes) {
+   public static PersistentLOD openReadOnly(final File cloudDirectory, final String cloudName, final long cacheSizeInBytes) {
       return new BerkeleyDBLOD(cloudDirectory, cloudName, false, true, cacheSizeInBytes);
    }
 
-
-   public static PersistentLOD open(final File cloudDirectory,
-                                    final String cloudName,
-                                    final boolean createIfNotExists,
-                                    final long cacheSizeInBytes) {
+   public static PersistentLOD open(final File cloudDirectory, final String cloudName, final boolean createIfNotExists, final long cacheSizeInBytes) {
       return new BerkeleyDBLOD(cloudDirectory, cloudName, createIfNotExists, false, cacheSizeInBytes);
    }
 
-
-   public static void delete(final File cloudDirectory,
-                             final String cloudName) {
+   public static void delete(final File cloudDirectory, final String cloudName) {
       final File envHome = new File(cloudDirectory, cloudName);
       if (!envHome.exists()) {
          return;
@@ -52,10 +38,8 @@ public class BerkeleyDBLOD
       }
    }
 
-
    private static final String NODE_DATABASE_NAME            = "LODNode";
    private static final String NODE_LEVEL_DATA_DATABASE_NAME = "LODNodeLevelData";
-
 
    private final boolean     _readOnly;
    private final String      _cloudName;
@@ -63,7 +47,6 @@ public class BerkeleyDBLOD
    private final Database    _nodeDB;
    private final Database    _nodeLevelDataDB;
    private final File        _cachedStatisticsFile;
-
 
    private BerkeleyDBLOD(final File cloudDirectory,
                          final String cloudName,
@@ -82,7 +65,6 @@ public class BerkeleyDBLOD
 
       final String readOnlyMsg = readOnly ? " read-only" : " read-write";
       System.out.println("- opening" + readOnlyMsg + " cloud name \"" + cloudName + "\" (" + envHome.getAbsoluteFile() + ")");
-
 
       final EnvironmentConfig envConfig = new EnvironmentConfig();
       envConfig.setAllowCreate(createIfNotExists);
@@ -106,7 +88,6 @@ public class BerkeleyDBLOD
       _cachedStatisticsFile = new File(cloudDirectory, "_stats_" + cloudName + ".ser");
    }
 
-
    @Override
    public void close() {
       _nodeLevelDataDB.close();
@@ -114,30 +95,23 @@ public class BerkeleyDBLOD
       _env.close();
    }
 
-
    @Override
    public String getCloudName() {
       return _cloudName;
    }
 
-
-   static class BerkeleyDBTransaction
-                                      implements
-                                         PersistentLOD.Transaction {
+   static class BerkeleyDBTransaction implements PersistentLOD.Transaction {
 
       final com.sleepycat.je.Transaction _txn;
-
 
       private BerkeleyDBTransaction(final com.sleepycat.je.Transaction txn) {
          _txn = txn;
       }
 
-
       @Override
       public void commit() {
          _txn.commit();
       }
-
 
       @Override
       public void rollback() {
@@ -145,30 +119,23 @@ public class BerkeleyDBLOD
       }
    }
 
-
    private static final TransactionConfig DEFAULT_TRANSACTION_CONFIG = new TransactionConfig();
-
 
    @Override
    public PersistentLOD.Transaction createTransaction() {
       return new BerkeleyDBTransaction(_env.beginTransaction(null, DEFAULT_TRANSACTION_CONFIG));
    }
 
-
    Database getNodeDB() {
       return _nodeDB;
    }
-
 
    Database getNodeLevelData() {
       return _nodeLevelDataDB;
    }
 
-
    @Override
-   public void put(final PersistentLOD.Transaction transaction,
-                   final String id,
-                   final List<List<Geodetic3D>> levelsPoints) {
+   public void put(final PersistentLOD.Transaction transaction, final String id, final List<List<Geodetic3D>> levelsPoints) {
       if (_readOnly) {
          throw new RuntimeException("Can't add points to readonly OT");
       }
@@ -179,10 +146,8 @@ public class BerkeleyDBLOD
       node.save(getBerkeleyDBTransaction(transaction));
    }
 
-
    @Override
-   public void acceptDepthFirstVisitor(final PersistentLOD.Transaction transaction,
-                                       final PersistentLOD.Visitor visitor) {
+   public void acceptDepthFirstVisitor(final PersistentLOD.Transaction transaction, final PersistentLOD.Visitor visitor) {
       visitor.start(transaction);
 
       final CursorConfig config = new CursorConfig();
@@ -208,11 +173,8 @@ public class BerkeleyDBLOD
       visitor.stop(transaction);
    }
 
-
    @Override
-   public void acceptVisitor(final PersistentLOD.Transaction transaction,
-                             final PersistentLOD.Visitor visitor,
-                             final Sector sector) {
+   public void acceptVisitor(final PersistentLOD.Transaction transaction, final PersistentLOD.Visitor visitor, final Sector sector) {
       visitor.start(transaction);
 
       final TileHeader header = TileHeader.deepestEnclosingTileHeader(sector);
@@ -252,13 +214,8 @@ public class BerkeleyDBLOD
       visitor.stop(transaction);
    }
 
-
-   private void visitDescendants(final PersistentLOD.Transaction transaction,
-                                 final Cursor cursor,
-                                 final DatabaseEntry keyEntry,
-                                 final DatabaseEntry dataEntry,
-                                 final byte[] id,
-                                 final PersistentLOD.Visitor visitor) {
+   private void visitDescendants(final PersistentLOD.Transaction transaction, final Cursor cursor, final DatabaseEntry keyEntry, final DatabaseEntry dataEntry,
+                                 final byte[] id, final PersistentLOD.Visitor visitor) {
 
       byte[] key = keyEntry.getData();
 
@@ -280,13 +237,8 @@ public class BerkeleyDBLOD
       }
    }
 
-
-   private void visitParent(final PersistentLOD.Transaction transaction,
-                            final Cursor cursor,
-                            final DatabaseEntry keyEntry,
-                            final DatabaseEntry dataEntry,
-                            final byte[] id,
-                            final PersistentLOD.Visitor visitor) {
+   private void visitParent(final PersistentLOD.Transaction transaction, final Cursor cursor, final DatabaseEntry keyEntry, final DatabaseEntry dataEntry,
+                            final byte[] id, final PersistentLOD.Visitor visitor) {
       if (cursor.getPrev(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
          final byte[] key = keyEntry.getData();
          if (Utils.hasSamePrefix(id, key)) {
@@ -297,11 +249,9 @@ public class BerkeleyDBLOD
       }
    }
 
-
    private static com.sleepycat.je.Transaction getBerkeleyDBTransaction(final PersistentLOD.Transaction transaction) {
       return (transaction == null) ? null : ((BerkeleyDBTransaction) transaction)._txn;
    }
-
 
    private enum CursorSituation {
       NotFoundSelfNorDescendants,
@@ -310,11 +260,7 @@ public class BerkeleyDBLOD
       FoundNothing;
    }
 
-
-   private static CursorSituation getCursorSituation(final Cursor cursor,
-                                                     final DatabaseEntry keyEntry,
-                                                     final DatabaseEntry dataEntry,
-                                                     final byte[] id) {
+   private static CursorSituation getCursorSituation(final Cursor cursor, final DatabaseEntry keyEntry, final DatabaseEntry dataEntry, final byte[] id) {
       final OperationStatus status = cursor.getSearchKeyRange(keyEntry, dataEntry, LockMode.READ_UNCOMMITTED);
       switch (status) {
       case SUCCESS: {
@@ -338,7 +284,6 @@ public class BerkeleyDBLOD
       }
 
    }
-
 
    //   private PersistentLOD.NodeLayout getNodeLayout(final byte[] id,
    //                                                  final int maxLevelDelta) {
@@ -372,13 +317,11 @@ public class BerkeleyDBLOD
    //      }
    //   }
 
-
    //   @Override
    //   public PersistentLOD.NodeLayout getNodeLayout(final String id) {
    //      final int maxLevelDelta = 3;
    //      return getNodeLayout(Utils.toBinaryID(id), maxLevelDelta);
    //   }
-
 
    //   @Override
    //   public PersistentLOD.NodeLayout getNodeLayout(final Sector sector) {
@@ -387,7 +330,6 @@ public class BerkeleyDBLOD
    //      final TileHeader header = TileHeader.deepestEnclosingTileHeader(sector);
    //      return getNodeLayout(header._id, maxLevelDelta);
    //   }
-
 
    //   static private PersistentLOD.NodeLayout getNodeLayoutFromParent(final Cursor cursor,
    //                                                                   final DatabaseEntry keyEntry,
@@ -404,7 +346,6 @@ public class BerkeleyDBLOD
    //
    //      return new PersistentLOD.NodeLayout(Utils.toIDString(id), nodesID);
    //   }
-
 
    //   static private PersistentLOD.NodeLayout getNodeLayoutFromDescendants(final Cursor cursor,
    //                                                                        final DatabaseEntry keyEntry,
@@ -434,10 +375,8 @@ public class BerkeleyDBLOD
    //      return new PersistentLOD.NodeLayout(Utils.toIDString(id), nodesID);
    //   }
 
-
    @Override
-   public PersistentLOD.Node getNode(final String id,
-                                     final boolean loadPoints) {
+   public PersistentLOD.Node getNode(final String id, final boolean loadPoints) {
       final com.sleepycat.je.Transaction txn = null;
 
       final byte[] binaryID = Utils.toBinaryID(id);
@@ -456,11 +395,8 @@ public class BerkeleyDBLOD
       }
    }
 
-
    @Override
-   public PersistentLOD.NodeLevel getNodeLevel(final String nodeID,
-                                               final int level,
-                                               final boolean loadPoints) {
+   public PersistentLOD.NodeLevel getNodeLevel(final String nodeID, final int level, final boolean loadPoints) {
       if (level >= 0) {
          final PersistentLOD.Node node = getNode(nodeID, false);
          if (node != null) {
@@ -473,18 +409,12 @@ public class BerkeleyDBLOD
       return null;
    }
 
-
    @Override
    public Sector getSector(final String id) {
       return TileHeader.sectorFor(Utils.toBinaryID(id));
    }
 
-
-   private static class BerkeleyLODDBStatistics
-                                                implements
-                                                   PersistentLOD.Visitor,
-                                                   PersistentLOD.Statistics,
-                                                   Serializable {
+   private static class BerkeleyLODDBStatistics implements PersistentLOD.Visitor, PersistentLOD.Statistics, Serializable {
 
       private static final long serialVersionUID = 3L;
 
@@ -504,13 +434,11 @@ public class BerkeleyDBLOD
       private double _minHeight = Double.POSITIVE_INFINITY;
       private double _maxHeight = Double.NEGATIVE_INFINITY;
 
-
       private BerkeleyLODDBStatistics(final String cloudName,
                                       final GUndeterminateProgress progress) {
          _cloudName = cloudName;
          _progress  = progress;
       }
-
 
       @Override
       public void start(final PersistentLOD.Transaction transaction) {
@@ -525,10 +453,8 @@ public class BerkeleyDBLOD
          _nodeLevelsCount       = 0;
       }
 
-
       @Override
-      public boolean visit(final PersistentLOD.Transaction transaction,
-                           final PersistentLOD.Node node) {
+      public boolean visit(final PersistentLOD.Transaction transaction, final PersistentLOD.Node node) {
          final Sector nodeSector = node.getSector();
          _sector = (_sector == null) ? nodeSector : _sector.mergedWith(nodeSector);
 
@@ -558,7 +484,6 @@ public class BerkeleyDBLOD
             _maxDepth = depth;
          }
 
-
          for (final PersistentLOD.NodeLevel level : node.getLevels()) {
             for (final Geodetic3D point : level.getPoints(transaction)) {
                final double height = point._height;
@@ -575,7 +500,6 @@ public class BerkeleyDBLOD
          return true;
       }
 
-
       @Override
       public void stop(final PersistentLOD.Transaction transaction) {
          if (_progress != null) {
@@ -583,7 +507,6 @@ public class BerkeleyDBLOD
             _progress = null;
          }
       }
-
 
       @Override
       public void show() {
@@ -604,100 +527,83 @@ public class BerkeleyDBLOD
          System.out.println("    Points/Level: Average=" + ((float) _pointsCount / _nodeLevelsCount));
          System.out.println("======================================================================");
 
-
          // final StatsConfig config = new StatsConfig();
          // final EnvironmentStats stats = _env.getStats(config);
          // System.out.println(stats);
       }
-
 
       @Override
       public long getPointsCount() {
          return _pointsCount;
       }
 
-
       @Override
       public Sector getSector() {
          return _sector;
       }
-
 
       @Override
       public double getMinHeight() {
          return _minHeight;
       }
 
-
       @Override
       public double getMaxHeight() {
          return _maxHeight;
       }
-
 
       @Override
       public double getAverageHeight() {
          return _sumHeight / _pointsCount;
       }
 
-
       @Override
       public int getMinPointsPerNode() {
          return _minPointsCountPerNode;
       }
-
 
       @Override
       public int getMaxPointsPerNode() {
          return _maxPointsCountPerNode;
       }
 
-
       @Override
       public String getPointCloudName() {
          return _cloudName;
       }
-
 
       @Override
       public int getMinDepth() {
          return _minDepth;
       }
 
-
       @Override
       public int getMaxDepth() {
          return _maxDepth;
       }
-
 
       @Override
       public double getAverageDepth() {
          return (double) _sumDepth / _nodesCount;
       }
 
-
       @Override
       public long getLevelsCount() {
          return _nodeLevelsCount;
       }
-
 
       @Override
       public long getNodesCount() {
          return _nodesCount;
       }
 
-
    }
-
 
    private void deleteCachedStatistics() {
       if (_cachedStatisticsFile.exists()) {
          _cachedStatisticsFile.delete();
       }
    }
-
 
    private BerkeleyLODDBStatistics getCachedStatistics() {
       if (!_cachedStatisticsFile.exists()) {
@@ -718,7 +624,6 @@ public class BerkeleyDBLOD
 
    }
 
-
    private void saveCachedStatistics(final BerkeleyLODDBStatistics statistics) {
       if (_cachedStatisticsFile.exists()) {
          _cachedStatisticsFile.delete();
@@ -733,7 +638,6 @@ public class BerkeleyDBLOD
       }
    }
 
-
    @Override
    public PersistentLOD.Statistics getStatistics(final boolean showProgress) {
 
@@ -746,8 +650,7 @@ public class BerkeleyDBLOD
       if (showProgress) {
          progress = new GUndeterminateProgress(10, true) {
             @Override
-            public void informProgress(final long stepsDone,
-                                       final long elapsed) {
+            public void informProgress(final long stepsDone, final long elapsed) {
                System.out.println("- gathering statistics for \"" + _cloudName + "\"" + progressString(stepsDone, elapsed));
             }
          };
@@ -762,6 +665,5 @@ public class BerkeleyDBLOD
       saveCachedStatistics(statistics);
       return statistics;
    }
-
 
 }

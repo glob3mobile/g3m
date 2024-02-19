@@ -11,13 +11,8 @@
 
 #include "GEOObject.hpp"
 
-
 class GEOGeometry;
-class JSONBaseObject;
-class JSONObject;
-class GPUProgramState;
-class GLGlobalState;
-class GEOSymbolizer;
+
 
 class GEOFeature : public GEOObject {
 private:

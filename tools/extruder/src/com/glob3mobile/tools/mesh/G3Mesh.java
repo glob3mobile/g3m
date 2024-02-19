@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.tools.mesh;
 
 import java.util.ArrayList;
@@ -13,9 +12,7 @@ import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.Vector3D;
 import org.glob3.mobile.generated.Vector3F;
 
-
 public class G3Mesh {
-
 
    public static enum Primitive {
       TRIANGLES("Triangles"),
@@ -28,12 +25,10 @@ public class G3Mesh {
 
       private final String _name;
 
-
       private Primitive(final String name) {
          _name = name;
       }
    }
-
 
    public static enum VerticesFormat {
       CARTESIAN("Cartesian"),
@@ -41,66 +36,50 @@ public class G3Mesh {
 
       private final String _name;
 
-
       private VerticesFormat(final String name) {
          _name = name;
       }
    }
 
-
-   public static G3Mesh createTrianglesMesh(final VerticesFormat verticesFormat,
-                                            final Vector3D center,
-                                            final List<Vector3F> vertices,
-                                            final List<Vector3F> normals,
-                                            final List<Color> colors,
-                                            final List<Vector2F> texCoords,
-                                            final List<Short> indices,
-                                            final G3MeshMaterial material,
-                                            final boolean depthTest) {
+   public static G3Mesh createTrianglesMesh(final VerticesFormat verticesFormat, final Vector3D center, final List<Vector3F> vertices,
+                                            final List<Vector3F> normals, final List<Color> colors, final List<Vector2F> texCoords, final List<Short> indices,
+                                            final G3MeshMaterial material, final boolean depthTest) {
       return new G3Mesh( //
-               Primitive.TRIANGLES, //
-               1, // pointSize
-               1, // lineWidth
-               verticesFormat, //
-               center, //
-               vertices, //
-               normals, //
-               colors, //
-               texCoords, //
-               indices, //
-               material, //
-               depthTest //
+            Primitive.TRIANGLES, //
+            1, // pointSize
+            1, // lineWidth
+            verticesFormat, //
+            center, //
+            vertices, //
+            normals, //
+            colors, //
+            texCoords, //
+            indices, //
+            material, //
+            depthTest //
       );
 
    }
 
-
-   public static G3Mesh createTriangleStripMesh(final VerticesFormat verticesFormat,
-                                                final Vector3D center,
-                                                final List<Vector3F> vertices,
-                                                final List<Vector3F> normals,
-                                                final List<Color> colors,
-                                                final List<Vector2F> texCoords,
-                                                final List<Short> indices,
-                                                final G3MeshMaterial material,
-                                                final boolean depthTest) {
+   public static G3Mesh createTriangleStripMesh(final VerticesFormat verticesFormat, final Vector3D center, final List<Vector3F> vertices,
+                                                final List<Vector3F> normals, final List<Color> colors, final List<Vector2F> texCoords,
+                                                final List<Short> indices, final G3MeshMaterial material, final boolean depthTest) {
       return new G3Mesh( //
-               Primitive.TRIANGLE_STRIP, //
-               1, // pointSize
-               1, // lineWidth
-               verticesFormat, //
-               center, //
-               vertices, //
-               normals, //
-               colors, //
-               texCoords, //
-               indices, //
-               material, //
-               depthTest //
+            Primitive.TRIANGLE_STRIP, //
+            1, // pointSize
+            1, // lineWidth
+            verticesFormat, //
+            center, //
+            vertices, //
+            normals, //
+            colors, //
+            texCoords, //
+            indices, //
+            material, //
+            depthTest //
       );
 
    }
-
 
    public static List<G3Mesh> consolidate(final List<G3Mesh> oldMeshes) {
       if ((oldMeshes == null) || oldMeshes.isEmpty()) {
@@ -115,12 +94,11 @@ public class G3Mesh {
 
       final List<G3Mesh> newMeshes = new ArrayList<>();
 
-      final List<Vector3D> newVertices = new ArrayList<>();
-      final List<Vector3F> newNormals = new ArrayList<>();
-      final List<Color> newColors = new ArrayList<>();
+      final List<Vector3D> newVertices  = new ArrayList<>();
+      final List<Vector3F> newNormals   = new ArrayList<>();
+      final List<Color>    newColors    = new ArrayList<>();
       final List<Vector2F> newTexCoords = new ArrayList<>();
-      final List<Short> newIndices = new ArrayList<>();
-
+      final List<Short>    newIndices   = new ArrayList<>();
 
       for (final G3Mesh oldMesh : oldMeshes) {
          if (!oldMesh.isHomomorphic(first)) {
@@ -133,13 +111,13 @@ public class G3Mesh {
          }
          final int indicesOffset = newVertices.size();
 
-         final Vector3D oldCenter = oldMesh._center;
+         final Vector3D       oldCenter   = oldMesh._center;
          final List<Vector3F> oldVertices = oldMesh._vertices;
          for (int i = 0; i < oldVertices.size(); i++) {
             final Vector3F oldVertex = oldVertices.get(i);
-            final double x = oldCenter._x + oldVertex._x;
-            final double y = oldCenter._y + oldVertex._y;
-            final double z = oldCenter._z + oldVertex._z;
+            final double   x         = oldCenter._x + oldVertex._x;
+            final double   y         = oldCenter._y + oldVertex._y;
+            final double   z         = oldCenter._z + oldVertex._z;
             newVertices.add(new Vector3D(x, y, z));
          }
 
@@ -163,32 +141,26 @@ public class G3Mesh {
       return newMeshes;
    }
 
-
-   private static void createMesh(final G3Mesh first,
-                                  final List<G3Mesh> newMeshes,
-                                  final List<Vector3D> newVertices,
-                                  final List<Vector3F> newNormals,
-                                  final List<Color> newColors,
-                                  final List<Vector2F> newTexCoords,
-                                  final List<Short> newIndices) {
+   private static void createMesh(final G3Mesh first, final List<G3Mesh> newMeshes, final List<Vector3D> newVertices, final List<Vector3F> newNormals,
+                                  final List<Color> newColors, final List<Vector2F> newTexCoords, final List<Short> newIndices) {
       if (newVertices.isEmpty()) {
          return;
       }
 
       final Vector3D newCenter = calculateCenter(newVertices);
-      final G3Mesh newMesh = new G3Mesh( //
-               first._primitive, //
-               first._pointSize, //
-               first._lineWidth, //
-               first._verticesFormat, //
-               newCenter, //
-               substractCenter(newCenter, newVertices), //
-               newNormals.isEmpty() ? null : new ArrayList<>(newNormals), //
-               newColors.isEmpty() ? null : new ArrayList<>(newColors), //
-               newTexCoords.isEmpty() ? null : new ArrayList<>(newTexCoords), //
-               new ArrayList<>(newIndices), //
-               first._material, //
-               first._depthTest);
+      final G3Mesh   newMesh   = new G3Mesh(                                 //
+            first._primitive,                                                //
+            first._pointSize,                                                //
+            first._lineWidth,                                                //
+            first._verticesFormat,                                           //
+            newCenter,                                                       //
+            substractCenter(newCenter, newVertices),                         //
+            newNormals.isEmpty() ? null : new ArrayList<>(newNormals),       //
+            newColors.isEmpty() ? null : new ArrayList<>(newColors),         //
+            newTexCoords.isEmpty() ? null : new ArrayList<>(newTexCoords),   //
+            new ArrayList<>(newIndices),                                     //
+            first._material,                                                 //
+            first._depthTest);
       newMeshes.add(newMesh);
 
       newVertices.clear();
@@ -197,7 +169,6 @@ public class G3Mesh {
       newTexCoords.clear();
       newIndices.clear();
    }
-
 
    private static Vector3D calculateCenter(final List<Vector3D> vertices) {
       double sumX = 0;
@@ -211,9 +182,7 @@ public class G3Mesh {
       return new Vector3D(sumX, sumY, sumZ).div(vertices.size());
    }
 
-
-   private static boolean fits(final G3Mesh mesh,
-                               final int indicesOffset) {
+   private static boolean fits(final G3Mesh mesh, final int indicesOffset) {
       for (final short index : mesh._indices) {
          final int newIndex = indicesOffset + index;
          if (newIndex > Short.MAX_VALUE) {
@@ -223,20 +192,17 @@ public class G3Mesh {
       return true;
    }
 
-
-   private static List<Vector3F> substractCenter(final Vector3D center,
-                                                 final List<Vector3D> verticesD) {
+   private static List<Vector3F> substractCenter(final Vector3D center, final List<Vector3D> verticesD) {
       final List<Vector3F> result = new ArrayList<>(verticesD.size());
       for (final Vector3D vertexD : verticesD) {
          final Vector3F vertexF = new Vector3F( //
-                  (float) (vertexD._x - (float) center._x), //
-                  (float) (vertexD._y - (float) center._y), //
-                  (float) (vertexD._z - (float) center._z));
+               (float) (vertexD._x - (float) center._x), //
+               (float) (vertexD._y - (float) center._y), //
+               (float) (vertexD._z - (float) center._z));
          result.add(vertexF);
       }
       return result;
    }
-
 
    private static short toShort(final int index) {
       if ((index >= 0) && (index <= Short.MAX_VALUE)) {
@@ -244,7 +210,6 @@ public class G3Mesh {
       }
       throw new RuntimeException("Invalid range for index #" + index);
    }
-
 
    private final G3Mesh.Primitive      _primitive;
    private final float                 _pointSize;
@@ -259,7 +224,6 @@ public class G3Mesh {
    private final G3MeshMaterial        _material;
    private final boolean               _depthTest;
 
-
    private G3Mesh(final Primitive primitive,
                   final float pointSize,
                   final float lineWidth,
@@ -272,21 +236,20 @@ public class G3Mesh {
                   final List<Short> indices,
                   final G3MeshMaterial material,
                   final boolean depthTest) {
-      _primitive = primitive;
-      _pointSize = pointSize;
-      _lineWidth = lineWidth;
+      _primitive      = primitive;
+      _pointSize      = pointSize;
+      _lineWidth      = lineWidth;
       _verticesFormat = verticesFormat;
-      _center = center;
-      _vertices = vertices;
-      _normals = normals;
-      _colors = colors;
-      _texCoords = texCoords;
-      _indices = indices;
-      _material = material;
-      _depthTest = depthTest;
+      _center         = center;
+      _vertices       = vertices;
+      _normals        = normals;
+      _colors         = colors;
+      _texCoords      = texCoords;
+      _indices        = indices;
+      _material       = material;
+      _depthTest      = depthTest;
       validate();
    }
-
 
    private void validate() {
       final int verticesSize = _vertices.size();
@@ -341,11 +304,9 @@ public class G3Mesh {
       }
    }
 
-
    public G3MeshMaterial getMaterial() {
       return _material;
    }
-
 
    private static List<Float> toColorJSON(final List<Color> colors) {
       final List<Float> result = new ArrayList<>();
@@ -358,7 +319,6 @@ public class G3Mesh {
       return result;
    }
 
-
    private static List<Double> toJSON(final Vector3D point) {
       final List<Double> result = new ArrayList<>();
       result.add(point._x);
@@ -366,7 +326,6 @@ public class G3Mesh {
       result.add(point._z);
       return result;
    }
-
 
    private static List<Float> toVector3FJSON(final List<Vector3F> vertices) {
       final List<Float> result = new ArrayList<>();
@@ -378,7 +337,6 @@ public class G3Mesh {
       return result;
    }
 
-
    private static List<Float> toVector2FJSON(final List<Vector2F> texCoords) {
       final List<Float> result = new ArrayList<>();
       for (final Vector2F vertex : texCoords) {
@@ -388,7 +346,6 @@ public class G3Mesh {
       return result;
    }
 
-
    private static List<Short> toShortJSON(final List<Short> indices) {
       final List<Short> result = new ArrayList<>();
       for (final short index : indices) {
@@ -396,7 +353,6 @@ public class G3Mesh {
       }
       return result;
    }
-
 
    public Map<String, Object> toJSON() {
       final Map<String, Object> result = new LinkedHashMap<>();
@@ -438,7 +394,6 @@ public class G3Mesh {
 
       return result;
    }
-
 
    public boolean isHomomorphic(final G3Mesh that) {
       if (this == that) {
@@ -497,6 +452,5 @@ public class G3Mesh {
 
       return true;
    }
-
 
 }

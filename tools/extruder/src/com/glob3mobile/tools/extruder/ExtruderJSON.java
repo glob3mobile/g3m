@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.tools.extruder;
 
 import java.util.ArrayList;
@@ -17,13 +16,10 @@ import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 import poly2Tri.Triangle;
 
-
 public class ExtruderJSON {
-
 
    private ExtruderJSON() {
    }
-
 
    public static List<Double> verticesToJSON(final List<Vector3D> vertices) {
       final List<Double> result = new ArrayList<>(vertices.size() * 3);
@@ -35,9 +31,7 @@ public class ExtruderJSON {
       return result;
    }
 
-
-   public static List<Vector3D> jsonToVertices(final Map<String, Object> properties,
-                                               final String name) {
+   public static List<Vector3D> jsonToVertices(final Map<String, Object> properties, final String name) {
       @SuppressWarnings("unchecked")
       final List<Double> json = (List<Double>) properties.get(name);
 
@@ -51,7 +45,6 @@ public class ExtruderJSON {
       return result;
    }
 
-
    public static List<Integer> trianglesToJSON(final List<Triangle> triangles) {
       final List<Integer> result = new ArrayList<>(triangles.size() * 3);
       for (final Triangle triangle : triangles) {
@@ -62,11 +55,9 @@ public class ExtruderJSON {
       return result;
    }
 
-
-   public static List<Triangle> jsonToTriangles(final Map<String, Object> properties,
-                                                final String name) {
+   public static List<Triangle> jsonToTriangles(final Map<String, Object> properties, final String name) {
       @SuppressWarnings("unchecked")
-      final List<Integer> json = (List<Integer>) properties.get(name);
+      final List<Integer>  json   = (List<Integer>) properties.get(name);
       final List<Triangle> result = new ArrayList<>(json.size() / 3);
       for (int i = 0; i < json.size(); i += 3) {
          final int vertex0 = json.get(i + 0);
@@ -76,7 +67,6 @@ public class ExtruderJSON {
       }
       return result;
    }
-
 
    public static List<Map<String, Object>> wallToJSON(final Wall wall) {
       final List<WallQuad> quads = wall._quads;
@@ -88,14 +78,11 @@ public class ExtruderJSON {
       return result;
    }
 
-
-   public static Wall jsonToWall(final Map<String, Object> properties,
-                                 final String name) {
+   public static Wall jsonToWall(final Map<String, Object> properties, final String name) {
       @SuppressWarnings("unchecked")
       final List<Map<String, Object>> json = (List<Map<String, Object>>) properties.get(name);
       return jsonToWall(json);
    }
-
 
    private static Wall jsonToWall(final List<Map<String, Object>> json) {
       final List<WallQuad> quads = new ArrayList<>(json.size());
@@ -105,15 +92,13 @@ public class ExtruderJSON {
       return new Wall(quads);
    }
 
-
    @SuppressWarnings("unchecked")
    private static WallQuad jsonToWallQuaD(final Map<String, Object> json) {
-      final Geodetic3D topCorner0 = jsonToGeodetic3D((List<Double>) json.get("top_corner_0"));
-      final Geodetic3D topCorner1 = jsonToGeodetic3D((List<Double>) json.get("top_corner_1"));
-      final double lowerHeight = (Double) json.get("lower_height");
+      final Geodetic3D topCorner0  = jsonToGeodetic3D((List<Double>) json.get("top_corner_0"));
+      final Geodetic3D topCorner1  = jsonToGeodetic3D((List<Double>) json.get("top_corner_1"));
+      final double     lowerHeight = (Double) json.get("lower_height");
       return new WallQuad(topCorner0, topCorner1, lowerHeight);
    }
-
 
    private static Map<String, Object> wallQuadToJSON(final WallQuad quad) {
       final Map<String, Object> result = new LinkedHashMap<>(3);
@@ -126,19 +111,16 @@ public class ExtruderJSON {
       return result;
    }
 
-
    private static List<Double> geodetic3DToJSON(final Geodetic3D position) {
       return Arrays.asList( //
-               position._latitude._degrees, //
-               position._longitude._degrees, //
-               position._height);
+                           position._latitude._degrees, //
+                           position._longitude._degrees, //
+                           position._height);
    }
-
 
    private static Geodetic3D jsonToGeodetic3D(final List<Double> json) {
       return Geodetic3D.fromDegrees(json.get(0), json.get(1), json.get(2));
    }
-
 
    public static List<List<Map<String, Object>>> wallsToJSON(final List<Wall> walls) {
       final List<List<Map<String, Object>>> result = new ArrayList<>(walls.size());
@@ -148,9 +130,7 @@ public class ExtruderJSON {
       return result;
    }
 
-
-   public static List<Wall> jsonToWalls(final Map<String, Object> properties,
-                                        final String name) {
+   public static List<Wall> jsonToWalls(final Map<String, Object> properties, final String name) {
       @SuppressWarnings("unchecked")
       final List<List<Map<String, Object>>> json = (List<List<Map<String, Object>>>) properties.get(name);
 
@@ -160,7 +140,6 @@ public class ExtruderJSON {
       }
       return result;
    }
-
 
    public static Map<String, Object> materialToJSON(final G3MeshMaterial material) {
       final Map<String, Object> result = new LinkedHashMap<>(2);
@@ -173,30 +152,24 @@ public class ExtruderJSON {
       return result;
    }
 
-
    @SuppressWarnings("unchecked")
-   public static G3MeshMaterial jsonToMaterial(final Map<String, Object> properties,
-                                               final String name) {
-      final Map<String, Object> json = (Map<String, Object>) properties.get(name);
-      final Color color = jsonToColor((List<Float>) json.get("color"));
-      final URL textureURL = jsonToURL((String) json.get("texture_url"));
+   public static G3MeshMaterial jsonToMaterial(final Map<String, Object> properties, final String name) {
+      final Map<String, Object> json       = (Map<String, Object>) properties.get(name);
+      final Color               color      = jsonToColor((List<Float>) json.get("color"));
+      final URL                 textureURL = jsonToURL((String) json.get("texture_url"));
       return new G3MeshMaterial(color, textureURL);
    }
-
 
    private static URL jsonToURL(final String path) {
       return (path == null) ? null : new URL(path);
    }
 
-
    private static List<Float> colorToJSON(final Color color) {
       return Arrays.asList(color._red, color._green, color._blue, color._alpha);
    }
 
-
    private static Color jsonToColor(final List<Float> list) {
       return Color.fromRGBA(list.get(0), list.get(1), list.get(2), list.get(3));
    }
-
 
 }

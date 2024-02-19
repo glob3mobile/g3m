@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.pointcloud.octree;
 
 import java.io.File;
@@ -11,10 +10,7 @@ import com.glob3mobile.utils.Geodetic3D;
 import es.igosoftware.util.GProgress;
 import es.igosoftware.util.GStringUtils;
 
-
-public class SimplifyOctreeTask
-         implements
-            PersistentOctree.Visitor {
+public class SimplifyOctreeTask implements PersistentOctree.Visitor {
 
    private final String     _sourceCloudName;
    private final File       _cloudDirectory;
@@ -26,7 +22,6 @@ public class SimplifyOctreeTask
    private GProgress        _progress;
    private final int        _maxPointsPerTitle;
 
-
    public SimplifyOctreeTask(final String sourceCloudName,
                              final File cloudDirectory,
                              final String simplifiedCloudName,
@@ -34,35 +29,28 @@ public class SimplifyOctreeTask
                              final long sourcePointsCount,
                              final float resultSizeFactor,
                              final int maxPointsPerTitle) {
-      _sourceCloudName = sourceCloudName;
-      _cloudDirectory = cloudDirectory;
+      _sourceCloudName     = sourceCloudName;
+      _cloudDirectory      = cloudDirectory;
       _simplifiedCloudName = simplifiedCloudName;
-      _cacheSizeInBytes = cacheSizeInBytes;
-      _sourcePointsCount = sourcePointsCount;
-      _resultSizeFactor = resultSizeFactor;
-      _maxPointsPerTitle = maxPointsPerTitle;
+      _cacheSizeInBytes    = cacheSizeInBytes;
+      _sourcePointsCount   = sourcePointsCount;
+      _resultSizeFactor    = resultSizeFactor;
+      _maxPointsPerTitle   = maxPointsPerTitle;
    }
-
 
    @Override
    public void start() {
       BerkeleyDBOctree.delete(_cloudDirectory, _simplifiedCloudName);
 
-      _targetOctree = BerkeleyDBOctree.open(_cloudDirectory, _simplifiedCloudName, true, _maxPointsPerTitle, _maxPointsPerTitle,
-               _cacheSizeInBytes);
+      _targetOctree = BerkeleyDBOctree.open(_cloudDirectory, _simplifiedCloudName, true, _maxPointsPerTitle, _maxPointsPerTitle, _cacheSizeInBytes);
 
       _progress = new GProgress(_sourcePointsCount, true) {
          @Override
-         public void informProgress(final long stepsDone,
-                                    final double percent,
-                                    final long elapsed,
-                                    final long estimatedMsToFinish) {
-            System.out.println("- Simplifying \"" + _sourceCloudName + "\" "
-                               + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
+         public void informProgress(final long stepsDone, final double percent, final long elapsed, final long estimatedMsToFinish) {
+            System.out.println("- Simplifying \"" + _sourceCloudName + "\" " + progressString(stepsDone, percent, elapsed, estimatedMsToFinish));
          }
       };
    }
-
 
    @Override
    public void stop() {
@@ -80,10 +68,9 @@ public class SimplifyOctreeTask
 
          System.out.println();
          System.out.println("Source points=" + _sourcePointsCount + ", Simplified Points=" + simplifiedPointsCount + " ("
-                            + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
+               + GStringUtils.formatPercent(simplifiedPointsCount, _sourcePointsCount) + ")");
       }
    }
-
 
    @Override
    public boolean visit(final PersistentOctree.Node sourceNode) {
@@ -121,12 +108,11 @@ public class SimplifyOctreeTask
       //         _targetOctree.addPoint(point);
       //      }
 
-
       final long sourcePointsSize = sourceNode.getPointsCount();
 
-      final List<Geodetic3D> points = sourceNode.getPoints();
-      final int targetPointsCount = Math.round(sourcePointsSize * _resultSizeFactor);
-      final List<Geodetic3D> simplifiedPoints = KMeans.cluster(points, targetPointsCount, 1);
+      final List<Geodetic3D> points            = sourceNode.getPoints();
+      final int              targetPointsCount = Math.round(sourcePointsSize * _resultSizeFactor);
+      final List<Geodetic3D> simplifiedPoints  = KMeans.cluster(points, targetPointsCount, 1);
 
       for (final Geodetic3D point : simplifiedPoints) {
          _targetOctree.addPoint(point);
@@ -134,11 +120,9 @@ public class SimplifyOctreeTask
 
       _progress.stepsDone(sourcePointsSize);
 
-
       final boolean keepWorking = true;
       return keepWorking;
    }
-
 
    //   private static void sortPoints(final List<Geodetic3D> points,
    //                                  final List<Integer> sortedVertices,
@@ -196,7 +180,6 @@ public class SimplifyOctreeTask
    //      }
    //   }
 
-
    //   private static void generateImage(final String id,
    //                                     //final int level,
    //                                     final Sector sector,
@@ -241,7 +224,6 @@ public class SimplifyOctreeTask
    //      }
    //   }
 
-
    public static void main(final String[] args) {
       System.out.println("SimplifyOctreeTask 0.1");
       System.out.println("----------------------\n");
@@ -252,35 +234,32 @@ public class SimplifyOctreeTask
       //      final String completeSourceCloudName = "Wallonia-Belgium";
       //      final String simplifiedCloudName = completeSourceCloudName + "_simplified2";
 
-      final File cloudDirectory = new File(System.getProperty("user.dir"));
+      final File   cloudDirectory          = new File(System.getProperty("user.dir"));
       final String completeSourceCloudName = "Wallonia";
-      final String simplifiedCloudName = completeSourceCloudName + "_simplified";
+      final String simplifiedCloudName     = completeSourceCloudName + "_simplified";
 
-
-      try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName,
-               cacheSizeInBytes)) {
+      try (final PersistentOctree sourceOctree = BerkeleyDBOctree.openReadOnly(cloudDirectory, completeSourceCloudName, cacheSizeInBytes)) {
          final PersistentOctree.Statistics statistics = sourceOctree.getStatistics(true);
          statistics.show();
 
          final long sourcePointsCount = statistics.getPointsCount();
 
-         final int maxPointsPerTitle = 256 * 1024;
-         final float resultSizeFactor = 1.0f / 8;
+         final int   maxPointsPerTitle = 256 * 1024;
+         final float resultSizeFactor  = 1.0f / 8;
 
          final SimplifyOctreeTask visitor = new SimplifyOctreeTask( //
-                  completeSourceCloudName, //
-                  cloudDirectory, //
-                  simplifiedCloudName, //
-                  cacheSizeInBytes, //
-                  sourcePointsCount, //
-                  resultSizeFactor, //
-                  maxPointsPerTitle);
+               completeSourceCloudName, //
+               cloudDirectory, //
+               simplifiedCloudName, //
+               cacheSizeInBytes, //
+               sourcePointsCount, //
+               resultSizeFactor, //
+               maxPointsPerTitle);
          sourceOctree.acceptDepthFirstVisitor(visitor);
       }
 
       System.out.println();
 
    }
-
 
 }

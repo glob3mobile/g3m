@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.tools.extruder;
 
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import com.glob3mobile.tools.mesh.G3MeshMaterial;
 
 import poly2Tri.Triangle;
 
-
 public class Building {
 
    private final ExtruderPolygon _extruderPolygon;
@@ -33,7 +31,6 @@ public class Building {
    public final G3MeshMaterial   _material;
    private final boolean         _depthTest;
 
-
    Building(final ExtruderPolygon extruderPolygon,
             final Geodetic2D position,
             final double roofArea,
@@ -45,17 +42,16 @@ public class Building {
             final G3MeshMaterial material,
             final boolean depthTest) {
       _extruderPolygon = extruderPolygon;
-      _position = position;
-      _roofArea = roofArea;
-      _minHeight = minHeight;
-      _roofVertices = roofVertices;
-      _roofTriangles = consolidate(roofTriangles, roofVertices);
-      _exteriorWall = exteriorWall;
-      _interiorWalls = interiorWalls;
-      _material = material;
-      _depthTest = depthTest;
+      _position        = position;
+      _roofArea        = roofArea;
+      _minHeight       = minHeight;
+      _roofVertices    = roofVertices;
+      _roofTriangles   = consolidate(roofTriangles, roofVertices);
+      _exteriorWall    = exteriorWall;
+      _interiorWalls   = interiorWalls;
+      _material        = material;
+      _depthTest       = depthTest;
    }
-
 
    private double calculateSize(final double minHeight) {
       if ((_roofArea != 0) && !Double.isNaN(_roofArea)) {
@@ -129,9 +125,7 @@ public class Building {
       //      return (area * height) * 100_000_000;
    }
 
-
-   private static double max(final double v,
-                             final double... d) {
+   private static double max(final double v, final double... d) {
       double max = v;
       for (final double e : d) {
          if (e > max) {
@@ -140,7 +134,6 @@ public class Building {
       }
       return max;
    }
-
 
    //   private static double min(final double v,
    //                             final double... d) {
@@ -153,26 +146,21 @@ public class Building {
    //      return min;
    //   }
 
-
    //   private double triangleArea(final Vector3D v0,
    //                               final Vector3D v1,
    //                               final Vector3D v2) {
    //      return (v1.sub(v0).cross(v2.sub(v0))).length() / 2;
    //   }
 
-
    public ExtruderPolygon getExtruderPolygon() {
       return _extruderPolygon;
    }
-
 
    public Geodetic2D getPosition() {
       return _position;
    }
 
-
-   private static List<Triangle> consolidate(final List<Triangle> triangles,
-                                             final List<Vector3D> roofVertices) {
+   private static List<Triangle> consolidate(final List<Triangle> triangles, final List<Vector3D> roofVertices) {
       final List<Triangle> result = new ArrayList<>(triangles.size());
 
       for (final Triangle triangle : triangles) {
@@ -187,15 +175,13 @@ public class Building {
       return result;
    }
 
-
-   private static boolean pointsToSky(final Triangle triangle,
-                                      final List<Vector3D> vertices) {
+   private static boolean pointsToSky(final Triangle triangle, final List<Vector3D> vertices) {
       final Vector3D vertex0 = vertices.get(triangle._vertex0);
       final Vector3D vertex1 = vertices.get(triangle._vertex1);
       final Vector3D vertex2 = vertices.get(triangle._vertex2);
 
-      final Vector3D v10 = vertex1.sub(vertex0);
-      final Vector3D v20 = vertex2.sub(vertex0);
+      final Vector3D v10    = vertex1.sub(vertex0);
+      final Vector3D v20    = vertex2.sub(vertex0);
       final Vector3D normal = v10.cross(v20).normalized();
       if (normal.isEquals(Vector3D.DOWN_Z)) {
          return false;
@@ -204,44 +190,31 @@ public class Building {
          return true;
       }
 
-      final Angle angleToUp = normal.angleBetween(Vector3D.UP_Z);
-      final Angle angleToDown = normal.angleBetween(Vector3D.DOWN_Z);
+      final Angle   angleToUp    = normal.angleBetween(Vector3D.UP_Z);
+      final Angle   angleToDown  = normal.angleBetween(Vector3D.DOWN_Z);
       final boolean pointsToSkye = !angleToDown.lowerThan(angleToUp);
       return pointsToSkye;
    }
 
-
-   public G3Mesh createMesh(final boolean createNormals,
-                            final Planet planet,
-                            final float verticalExaggeration,
-                            final double deltaHeight,
+   public G3Mesh createMesh(final boolean createNormals, final Planet planet, final float verticalExaggeration, final double deltaHeight,
                             final int floatPrecision) {
       return createMesh( //
-               _roofVertices, //
-               _roofTriangles, //
-               _exteriorWall, //
-               _interiorWalls, //
-               _material, //
-               createNormals, //
-               _depthTest, //
-               planet, //
-               verticalExaggeration, //
-               deltaHeight, //
-               floatPrecision);
+                        _roofVertices, //
+                        _roofTriangles, //
+                        _exteriorWall, //
+                        _interiorWalls, //
+                        _material, //
+                        createNormals, //
+                        _depthTest, //
+                        planet, //
+                        verticalExaggeration, //
+                        deltaHeight, //
+                        floatPrecision);
    }
 
-
-   public static G3Mesh createMesh(final List<Vector3D> roofVertices,
-                                   final List<Triangle> roofTriangles,
-                                   final Wall exteriorWall,
-                                   final List<Wall> interiorWalls,
-                                   final G3MeshMaterial material,
-                                   final boolean createNormals,
-                                   final boolean depthTest,
-                                   final Planet planet,
-                                   final float verticalExaggeration,
-                                   final double deltaHeight,
-                                   final int floatPrecision) {
+   public static G3Mesh createMesh(final List<Vector3D> roofVertices, final List<Triangle> roofTriangles, final Wall exteriorWall,
+                                   final List<Wall> interiorWalls, final G3MeshMaterial material, final boolean createNormals, final boolean depthTest,
+                                   final Planet planet, final float verticalExaggeration, final double deltaHeight, final int floatPrecision) {
 
       final double wallsLowerHeight = getWallsLowerHeight(exteriorWall, interiorWalls);
 
@@ -269,33 +242,29 @@ public class Building {
 
       final List<Vector3F> normals = createNormals ? createNormals(planet, vertices, indices, roofVertices) : null;
 
-      final G3Mesh.VerticesFormat verticesFormat = (planet == null) ? G3Mesh.VerticesFormat.GEODETIC
-                                                                    : G3Mesh.VerticesFormat.CARTESIAN;
+      final G3Mesh.VerticesFormat verticesFormat = (planet == null) ? G3Mesh.VerticesFormat.GEODETIC : G3Mesh.VerticesFormat.CARTESIAN;
 
       return G3Mesh.createTrianglesMesh( //
-               verticesFormat, //
-               center, //
-               vertices, //
-               normals, //
-               null, // colors
-               null, // texCoords
-               indices, //
-               material, //
-               depthTest //
+                                        verticesFormat, //
+                                        center, //
+                                        vertices, //
+                                        normals, //
+                                        null, // colors
+                                        null, // texCoords
+                                        indices, //
+                                        material, //
+                                        depthTest //
       );
 
    }
 
-
-   private static double getWallsLowerHeight(final Wall exteriorWall,
-                                             final List<Wall> interiorWalls) {
+   private static double getWallsLowerHeight(final Wall exteriorWall, final List<Wall> interiorWalls) {
       double result = getWallLowerHeight(exteriorWall);
       for (final Wall wall : interiorWalls) {
          result = Math.min(result, getWallLowerHeight(wall));
       }
       return result;
    }
-
 
    private static double getWallLowerHeight(final Wall wall) {
       double result = Double.POSITIVE_INFINITY;
@@ -305,13 +274,8 @@ public class Building {
       return result;
    }
 
-
-   private static Vector3D getCenter(final List<Vector3D> roofVertices,
-                                     final Planet planet,
-                                     final float verticalExaggeration,
-                                     final double deltaHeight,
-                                     final int floatPrecision,
-                                     final double lowerHeight) {
+   private static Vector3D getCenter(final List<Vector3D> roofVertices, final Planet planet, final float verticalExaggeration, final double deltaHeight,
+                                     final int floatPrecision, final double lowerHeight) {
       double minX = Double.POSITIVE_INFINITY;
       double minY = Double.POSITIVE_INFINITY;
       double minZ = lowerHeight;
@@ -343,60 +307,44 @@ public class Building {
          }
       }
 
-      final double x = (maxX + minX) / 2;
-      final double y = (maxY + minY) / 2;
-      final double z = (maxZ + minZ) / 2;
+      final double   x      = (maxX + minX) / 2;
+      final double   y      = (maxY + minY) / 2;
+      final double   z      = (maxZ + minZ) / 2;
       final Vector3D center = createCenter(planet, verticalExaggeration, deltaHeight, x, y, z);
 
       final double factor = Math.pow(10, floatPrecision);
       return new Vector3D(round(center._x, factor), round(center._y, factor), round(center._z, factor));
    }
 
-
-   private static Vector3D createCenter(final Planet planet,
-                                        final float verticalExaggeration,
-                                        final double deltaHeight,
-                                        final double x,
-                                        final double y,
+   private static Vector3D createCenter(final Planet planet, final float verticalExaggeration, final double deltaHeight, final double x, final double y,
                                         final double z) {
-      return (planet == null) ? new Vector3D(x, y,
-               z) : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), (z * verticalExaggeration) + deltaHeight);
+      return (planet == null) ? new Vector3D(x, y, z)
+            : planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), (z * verticalExaggeration) + deltaHeight);
    }
 
-
-   private static double round(final double value,
-                               final double factor) {
+   private static double round(final double value, final double factor) {
       final long i = Math.round(value * factor);
       return i / factor;
    }
 
-
-   private static void addVertex(final Planet planet,
-                                 final float verticalExaggeration,
-                                 final double deltaHeight,
-                                 final List<Vector3F> vertices,
-                                 final Vector3D center,
-                                 final double x,
-                                 final double y,
-                                 final double z) {
+   private static void addVertex(final Planet planet, final float verticalExaggeration, final double deltaHeight, final List<Vector3F> vertices,
+                                 final Vector3D center, final double x, final double y, final double z) {
       final Vector3F vertex;
       if (planet == null) {
          vertex = new Vector3F( //
-                  (float) (x - (float) center._x), //
-                  (float) (y - (float) center._y), //
-                  (float) ((z + deltaHeight) - (float) center._z));
+               (float) (x - (float) center._x), //
+               (float) (y - (float) center._y), //
+               (float) ((z + deltaHeight) - (float) center._z));
       }
       else {
-         final Vector3D projected = planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), (z * verticalExaggeration)
-                                                                                                   + deltaHeight);
+         final Vector3D projected = planet.toCartesian(Angle.fromDegrees(y), Angle.fromDegrees(x), (z * verticalExaggeration) + deltaHeight);
          vertex = new Vector3F( //
-                  (float) (projected._x - (float) center._x), //
-                  (float) (projected._y - (float) center._y), //
-                  (float) (projected._z - (float) center._z));
+               (float) (projected._x - (float) center._x), //
+               (float) (projected._y - (float) center._y), //
+               (float) (projected._z - (float) center._z));
       }
       vertices.add(vertex);
    }
-
 
    private static short toShort(final int index) {
       if ((index >= 0) && (index <= Short.MAX_VALUE)) {
@@ -405,24 +353,20 @@ public class Building {
       throw new RuntimeException("Invalid range for index #" + index);
    }
 
-
-   private static void processWall(final Planet planet,
-                                   final float verticalExaggeration,
-                                   final double deltaHeight,
-                                   final List<Vector3F> vertices,
-                                   final List<Short> indices,
-                                   final Vector3D center,
-                                   final Wall wall) {
+   private static void processWall(final Planet planet, final float verticalExaggeration, final double deltaHeight, final List<Vector3F> vertices,
+                                   final List<Short> indices, final Vector3D center, final Wall wall) {
       for (final WallQuad quad : wall._quads) {
-         final Geodetic3D topCorner0 = quad._topCorner0;
-         final Geodetic3D topCorner1 = quad._topCorner1;
-         final double lowerHeight = quad._lowerHeight;
+         final Geodetic3D topCorner0  = quad._topCorner0;
+         final Geodetic3D topCorner1  = quad._topCorner1;
+         final double     lowerHeight = quad._lowerHeight;
 
          final int firstVertexIndex = vertices.size();
-         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees, topCorner0._height);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees,
+                   topCorner0._height);
          addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner0._longitude._degrees, topCorner0._latitude._degrees, lowerHeight);
          addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, lowerHeight);
-         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees, topCorner1._height);
+         addVertex(planet, verticalExaggeration, deltaHeight, vertices, center, topCorner1._longitude._degrees, topCorner1._latitude._degrees,
+                   topCorner1._height);
 
          indices.add(toShort(firstVertexIndex + 0));
          indices.add(toShort(firstVertexIndex + 1));
@@ -434,13 +378,10 @@ public class Building {
       }
    }
 
-
-   private static List<Vector3F> createNormals(final Planet planet,
-                                               final List<Vector3F> vertices,
-                                               final List<Short> indices,
+   private static List<Vector3F> createNormals(final Planet planet, final List<Vector3F> vertices, final List<Short> indices,
                                                final List<Vector3D> roofVertices) {
-      final int verticesSize = vertices.size();
-      final List<List<Vector3F>> allNormals = new ArrayList<>(verticesSize);
+      final int                  verticesSize = vertices.size();
+      final List<List<Vector3F>> allNormals   = new ArrayList<>(verticesSize);
       for (int i = 0; i < verticesSize; i++) {
          final List<Vector3F> vertexNormal = new ArrayList<>();
          allNormals.add(vertexNormal);
@@ -456,8 +397,8 @@ public class Building {
          final Vector3F vertex1 = vertices.get(index1);
          final Vector3F vertex2 = vertices.get(index2);
 
-         final Vector3F v10 = vertex1.sub(vertex0);
-         final Vector3F v20 = vertex2.sub(vertex0);
+         final Vector3F v10    = vertex1.sub(vertex0);
+         final Vector3F v20    = vertex2.sub(vertex0);
          final Vector3F normal = v10.cross(v20).normalized();
 
          addNormal(allNormals, index0, normal);
@@ -468,8 +409,8 @@ public class Building {
       final List<Vector3F> result = new ArrayList<>(allNormals.size());
       for (int i = 0; i < allNormals.size(); i++) {
          final List<Vector3F> currentNormals = allNormals.get(i);
-         final Vector3D originalVertex = i < roofVertices.size() ? roofVertices.get(i) : null;
-         final Vector3F smoothedNormal = smoothNormals(planet, originalVertex, currentNormals);
+         final Vector3D       originalVertex = i < roofVertices.size() ? roofVertices.get(i) : null;
+         final Vector3F       smoothedNormal = smoothNormals(planet, originalVertex, currentNormals);
          if (smoothedNormal.isNan()) {
             throw new RuntimeException();
          }
@@ -479,10 +420,7 @@ public class Building {
       return result;
    }
 
-
-   private static Vector3F smoothNormals(final Planet planet,
-                                         final Vector3D originalVertex,
-                                         final List<Vector3F> normals) {
+   private static Vector3F smoothNormals(final Planet planet, final Vector3D originalVertex, final List<Vector3F> normals) {
       if ((normals == null) || normals.isEmpty()) {
          return normalAt(planet, originalVertex);
       }
@@ -496,9 +434,7 @@ public class Building {
       return acum.div(normals.size()).normalized();
    }
 
-
-   private static Vector3F normalAt(final Planet planet,
-                                    final Vector3D originalVertex) {
+   private static Vector3F normalAt(final Planet planet, final Vector3D originalVertex) {
       if ((planet == null) || (originalVertex == null)) {
          return new Vector3F(0, 0, 1);
       }
@@ -506,19 +442,15 @@ public class Building {
       return new Vector3F((float) normal._x, (float) normal._y, (float) normal._z);
    }
 
-
-   private static void addNormal(final List<List<Vector3F>> normals,
-                                 final int index,
-                                 final Vector3F normal) {
+   private static void addNormal(final List<List<Vector3F>> normals, final int index, final Vector3F normal) {
       if ((normal != null) && !normal.isZero() && !normal.isNan()) {
          normals.get(index).add(normal);
       }
    }
 
-
    public Map<String, Object> createFeatureProperties(final float priority) {
-      final int capacity = Float.isNaN(priority) ? 9 : 10;
-      final Map<String, Object> result = new LinkedHashMap<>(capacity);
+      final int                 capacity = Float.isNaN(priority) ? 9 : 10;
+      final Map<String, Object> result   = new LinkedHashMap<>(capacity);
 
       result.put("roof_vertices", ExtruderJSON.verticesToJSON(_roofVertices));
       result.put("roof_triangles", ExtruderJSON.trianglesToJSON(_roofTriangles));
@@ -542,7 +474,6 @@ public class Building {
       return result;
    }
 
-
    private double calculateMaxHeight() {
       double max = _roofVertices.get(0)._z;
       for (int i = 1; i < _roofVertices.size(); i++) {
@@ -554,15 +485,12 @@ public class Building {
       return max;
    }
 
-
    public List<Geodetic2D> getOuterRing() {
       return _extruderPolygon.getOuterRing();
    }
 
-
    public List<? extends List<Geodetic2D>> getHolesRings() {
       return _extruderPolygon.getHolesRings();
    }
-
 
 }

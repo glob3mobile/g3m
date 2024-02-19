@@ -9,9 +9,11 @@
 #define GEO3DPointGeometry_hpp
 
 #include "GEO3DGeometry.hpp"
-
 #include "Geodetic3D.hpp"
 
+#include <vector>
+
+class GEOSymbol;
 
 class GEO3DPointGeometry : public GEO3DGeometry {
 private:

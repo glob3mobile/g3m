@@ -268,6 +268,7 @@ public abstract class IMathUtils
 
   public final Geodetic2D greatCircleIntermediatePoint(Angle fromLat, Angle fromLon, Angle toLat, Angle toLon, double alpha)
   {
+    // http://fraserchapman.blogspot.com/2008/09/intermediate-points-on-great-circle.html
   
     final double fromLatRad = fromLat._radians;
     final double toLatRad = toLat._radians;

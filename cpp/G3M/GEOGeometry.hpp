@@ -12,6 +12,7 @@
 #include "GEOObject.hpp"
 
 #include <vector>
+
 class GEOSymbol;
 class GEOFeature;
 

@@ -10,10 +10,11 @@
 #define __G3M__GEO2DPolygonGeometry__
 
 #include "GEO2DGeometry.hpp"
-class Geodetic2D;
 #include <vector>
 
+class Geodetic2D;
 class GEO2DPolygonData;
+class GEOSymbol;
 
 class GEO2DPolygonGeometry : public GEO2DGeometry {
 private:

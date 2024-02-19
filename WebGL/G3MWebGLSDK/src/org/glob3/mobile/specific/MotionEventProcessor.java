@@ -32,8 +32,7 @@ final class MotionEventProcessor {
 
    private boolean _mouseDown = false;
 
-   MotionEventProcessor(final G3MWidget_WebGL widget,
-                        final CanvasElement canvasElement) {
+   MotionEventProcessor(final G3MWidget_WebGL widget, final CanvasElement canvasElement) {
       _widget        = widget;
       _canvasElement = canvasElement;
    }
@@ -155,7 +154,6 @@ final class MotionEventProcessor {
    /**
     * @param event
     */
-   @SuppressWarnings("static-method")
    private TouchEvent processTouchCancel(final Event event) {
       return null;
    }
@@ -271,15 +269,14 @@ final class MotionEventProcessor {
          throw new RuntimeException("Invalid touches for " + type);
       }
 
-      final TouchEvent result = TouchEvent.create(type, touchs, wheelDelta);
       // ILogger.instance().logInfo("createTouchEvent(1): " + result.description());
-      return result;
+      return TouchEvent.create(type, touchs, wheelDelta);
    }
 
    private static TouchEvent createTouchEvent(final TouchEventType type, final Touch touch, final double wheelDelta) {
-      final TouchEvent result = TouchEvent.create(type, touch, wheelDelta);
+
       // ILogger.instance().logInfo("createTouchEvent(2): " + result.description());
-      return result;
+      return TouchEvent.create(type, touch, wheelDelta);
    }
 
 }

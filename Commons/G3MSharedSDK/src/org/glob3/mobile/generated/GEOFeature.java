@@ -17,13 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
-
 //class GEOGeometry;
-//class JSONBaseObject;
-//class JSONObject;
-//class GPUProgramState;
-//class GLGlobalState;
-//class GEOSymbolizer;
+
 
 public class GEOFeature extends GEOObject
 {

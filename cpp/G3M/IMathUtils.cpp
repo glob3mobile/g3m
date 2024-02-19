@@ -18,6 +18,7 @@ Geodetic2D IMathUtils::greatCircleIntermediatePoint(const Angle& fromLat,
                                                     const Angle& toLat,
                                                     const Angle& toLon,
                                                     const double alpha) const {
+  // http://fraserchapman.blogspot.com/2008/09/intermediate-points-on-great-circle.html
 
   const double fromLatRad = fromLat._radians;
   const double toLatRad   = toLat._radians;

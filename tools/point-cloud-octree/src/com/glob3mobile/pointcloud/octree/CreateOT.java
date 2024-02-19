@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.octree;
-
 
 import java.io.*;
 import java.util.zip.*;
@@ -13,14 +11,11 @@ import es.igosoftware.euclid.projection.*;
 import es.igosoftware.euclid.vector.*;
 import es.igosoftware.util.*;
 
-
 public class CreateOT {
 
-
    private static String[] getFilesToLoad(final File sourceTXTDirectory) {
-      final String[] filesNames = sourceTXTDirectory.list((dir,
-                                                           name) -> name.endsWith(".txt") || name.endsWith(".txt.gz") || name.endsWith(".csv")
-                                                                 || name.endsWith(".csv.gz"));
+      final String[] filesNames = sourceTXTDirectory
+            .list((dir, name) -> name.endsWith(".txt") || name.endsWith(".txt.gz") || name.endsWith(".csv") || name.endsWith(".csv.gz"));
 
       final String[] result = new String[filesNames.length];
       for (int i = 0; i < filesNames.length; i++) {
@@ -30,21 +25,14 @@ public class CreateOT {
       return result;
    }
 
-
-   private static void loadOT(final PersistentOctree octree,
-                              final GProjection projection,
-                              final String delimiter,
-                              final String commentPrefix,
-                              final String fileName,
-                              final String extraMsg) throws IOException {
+   private static void loadOT(final PersistentOctree octree, final GProjection projection, final String delimiter, final String commentPrefix,
+                              final String fileName, final String extraMsg) throws IOException {
       final GUndeterminateProgress progress = new GUndeterminateProgress(10, true) {
          @Override
-         public void informProgress(final long stepsDone,
-                                    final long elapsed) {
+         public void informProgress(final long stepsDone, final long elapsed) {
             System.out.println("- loading \"" + fileName + "\" " + extraMsg + progressString(stepsDone, elapsed));
          }
       };
-
 
       final GProjection targetProjection = GProjection.EPSG_4326;
 
@@ -74,7 +62,6 @@ public class CreateOT {
       octree.getStatistics(false).show();
    }
 
-
    private static BufferedReader open(final String fileName) throws IOException {
       if (fileName.toLowerCase().endsWith(".gz")) {
          return new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(fileName))));
@@ -82,14 +69,8 @@ public class CreateOT {
       return new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
    }
 
-
-   private static void loadOT(final File cloudDirectory,
-                              final String cloudName,
-                              final boolean renameDone,
-                              final GProjection projection,
-                              final String delimiter,
-                              final String commentPrefix,
-                              final String... filesNames) throws IOException {
+   private static void loadOT(final File cloudDirectory, final String cloudName, final boolean renameDone, final GProjection projection, final String delimiter,
+                              final String commentPrefix, final String... filesNames) throws IOException {
 
       //      final int bufferSize = 512 * 1024;
       //      final int maxPointsPerTitle = 512 * 1024;
@@ -101,7 +82,7 @@ public class CreateOT {
          final boolean createIfNotExists = true;
          final int     cacheSizeInBytes  = 1024 * 1024 * 1024;
          try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists, maxPointsPerTitle, bufferSize,
-               cacheSizeInBytes)) {
+                                                                    cacheSizeInBytes)) {
 
             final int filesNamesLength = filesNames.length;
             for (int i = 0; i < filesNamesLength; i++) {
@@ -119,9 +100,7 @@ public class CreateOT {
       }
    }
 
-
-   private static void visitOT(final File cloudDirectory,
-                               final String cloudName) {
+   private static void visitOT(final File cloudDirectory, final String cloudName) {
       final boolean createIfNotExists = false;
       final int     cacheSizeInBytes  = 1024 * 1024 * 1024;
 
@@ -131,14 +110,12 @@ public class CreateOT {
             private long _started;
             private long _totalPoints;
 
-
             @Override
             public void start() {
                _counter     = 0;
                _started     = System.currentTimeMillis();
                _totalPoints = 0;
             }
-
 
             @Override
             public boolean visit(final PersistentOctree.Node node) {
@@ -160,7 +137,6 @@ public class CreateOT {
                return true;
             }
 
-
             @Override
             public void stop() {
                final long elapsed = System.currentTimeMillis() - _started;
@@ -171,16 +147,13 @@ public class CreateOT {
       }
    }
 
-
-   private static void showStatisticsOT(final File cloudDirectory,
-                                        final String cloudName) {
+   private static void showStatisticsOT(final File cloudDirectory, final String cloudName) {
       final boolean createIfNotExists = false;
       final int     cacheSizeInBytes  = 1024 * 1024 * 1024;
       try (final PersistentOctree octree = BerkeleyDBOctree.open(cloudDirectory, cloudName, createIfNotExists, cacheSizeInBytes)) {
          octree.getStatistics(false).show();
       }
    }
-
 
    public static void main(final String[] args) throws IOException {
       System.out.println("CreateOT 0.1");
@@ -195,13 +168,11 @@ public class CreateOT {
       //
       //      final String cloudName = "Loudoun-VA";
 
-
       //      final File sourceTXTDirectory = new File("/Volumes/My Passport/_belgium_lidar_/txt");
       //      final GProjection sourceProjection = GProjection.EPSG_31370;
       //
       //      final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
       //      final String cloudName = "Wallonia-Belgium";
-
 
       //      final GProjection sourceProjection = GProjection.EPSG_31370;
 
@@ -215,7 +186,6 @@ public class CreateOT {
 
       //      final String delimiter = ",";
 
-
       final GProjection sourceProjection = GProjection.EPSG_28992;
 
       final File   sourceTXTDirectory = new File("/Users/dgd/Desktop/TomTomDemo/csv");
@@ -225,13 +195,11 @@ public class CreateOT {
       final String delimiter     = "\t";
       final String commentPrefix = "#";
 
-
       final boolean deleteOT         = false; // true;
       final boolean loadOT           = false; // true;
       final boolean renameDone       = false;
       final boolean visitOT          = false;
       final boolean showStatisticsOT = true;
-
 
       if (deleteOT) {
          BerkeleyDBOctree.delete(cloudDirectory, cloudName);
@@ -254,6 +222,5 @@ public class CreateOT {
       }
 
    }
-
 
 }

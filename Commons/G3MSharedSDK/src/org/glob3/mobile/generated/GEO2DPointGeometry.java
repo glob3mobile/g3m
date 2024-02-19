@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-
+//class GEOSymbol;
 
 public class GEO2DPointGeometry extends GEO2DGeometry
 {

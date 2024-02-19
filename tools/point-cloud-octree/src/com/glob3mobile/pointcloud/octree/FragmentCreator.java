@@ -1,5 +1,4 @@
 
-
 package com.glob3mobile.pointcloud.octree;
 
 import java.io.File;
@@ -11,15 +10,12 @@ import com.glob3mobile.utils.Sector;
 import es.igosoftware.euclid.vector.GVector2D;
 import es.igosoftware.util.GUndeterminateProgress;
 
-
-public class FragmentCreator
-implements
-PersistentOctree.Visitor {
-   private final File             _cloudDirectory;
-   private final String           _fragmentCloudName;
-   private final Sector           _sector;
-   private final long             _cacheSizeInBytes;
-   private final int              _maxPointsPerTitle;
+public class FragmentCreator implements PersistentOctree.Visitor {
+   private final File   _cloudDirectory;
+   private final String _fragmentCloudName;
+   private final Sector _sector;
+   private final long   _cacheSizeInBytes;
+   private final int    _maxPointsPerTitle;
 
    private long                   _totalPointsCount;
    private long                   _nodesCount;
@@ -30,57 +26,49 @@ PersistentOctree.Visitor {
    private double                 _totalLongitudeDensity;
    private PersistentOctree       _fragmentOctree;
 
-
    public FragmentCreator(final File cloudDirectory,
                           final String fragmentCloudName,
                           final Sector sector,
                           final long cacheSizeInBytes,
                           final int maxPointsPerTitle) {
-      _cloudDirectory = cloudDirectory;
+      _cloudDirectory    = cloudDirectory;
       _fragmentCloudName = fragmentCloudName;
-      _sector = sector;
-      _cacheSizeInBytes = cacheSizeInBytes;
+      _sector            = sector;
+      _cacheSizeInBytes  = cacheSizeInBytes;
       _maxPointsPerTitle = maxPointsPerTitle;
    }
-
 
    @Override
    public void start() {
       _totalPointsCount = 0;
-      _nodesCount = 0;
-      _fullNodes = 0;
-      _edgesNodes = 0;
+      _nodesCount       = 0;
+      _fullNodes        = 0;
+      _edgesNodes       = 0;
 
-      _totalLatitudeDensity = 0;
+      _totalLatitudeDensity  = 0;
       _totalLongitudeDensity = 0;
 
       BerkeleyDBOctree.delete(_cloudDirectory, _fragmentCloudName);
 
-      _fragmentOctree = BerkeleyDBOctree.open(_cloudDirectory, _fragmentCloudName, true, _maxPointsPerTitle, _maxPointsPerTitle,
-               _cacheSizeInBytes);
+      _fragmentOctree = BerkeleyDBOctree.open(_cloudDirectory, _fragmentCloudName, true, _maxPointsPerTitle, _maxPointsPerTitle, _cacheSizeInBytes);
 
       _progress = new GUndeterminateProgress(10, true) {
          @Override
-         public void informProgress(final long stepsDone,
-                                    final long elapsed) {
+         public void informProgress(final long stepsDone, final long elapsed) {
             System.out.println("- creating \"" + _fragmentCloudName + "\"" + progressString(stepsDone, elapsed));
          }
       };
    }
 
-
-   private static GVector2D getDensity(final Sector nodeSector,
-                                       final int pointsCount) {
+   private static GVector2D getDensity(final Sector nodeSector, final int pointsCount) {
       return new GVector2D( //
-               nodeSector._deltaLongitude._radians / pointsCount, //
-               nodeSector._deltaLatitude._radians / pointsCount);
+            nodeSector._deltaLongitude._radians / pointsCount, //
+            nodeSector._deltaLatitude._radians / pointsCount);
    }
-
 
    private static GVector2D getDensity(final PersistentOctree.Node node) {
       return getDensity(node.getSector(), node.getPointsCount());
    }
-
 
    @Override
    public boolean visit(final PersistentOctree.Node node) {
@@ -95,7 +83,7 @@ PersistentOctree.Visitor {
          _totalPointsCount += node.getPointsCount();
 
          final GVector2D density = getDensity(node);
-         _totalLatitudeDensity += density._y;
+         _totalLatitudeDensity  += density._y;
          _totalLongitudeDensity += density._x;
 
          for (final Geodetic3D point : node.getPoints()) {
@@ -106,7 +94,7 @@ PersistentOctree.Visitor {
          _edgesNodes++;
 
          final GVector2D density = getDensity(node);
-         _totalLatitudeDensity += density._y;
+         _totalLatitudeDensity  += density._y;
          _totalLongitudeDensity += density._x;
 
          for (final Geodetic3D point : node.getPoints()) {
@@ -124,23 +112,20 @@ PersistentOctree.Visitor {
       return keepVisiting;
    }
 
-
    @Override
    public void stop() {
       _fragmentOctree.close();
       _fragmentOctree = null;
 
-
       _progress.finish();
       _progress = null;
 
-
       System.out.println("== Total points: " + _totalPointsCount + //
-                         ", nodes: " + _nodesCount + //
-                         ", full: " + _fullNodes + //
-               ", edges: " + _edgesNodes);
+            ", nodes: " + _nodesCount + //
+            ", full: " + _fullNodes + //
+            ", edges: " + _edgesNodes);
 
-      final double averageLatitudeDensity = _totalLatitudeDensity / (_fullNodes + _edgesNodes);
+      final double averageLatitudeDensity  = _totalLatitudeDensity / (_fullNodes + _edgesNodes);
       final double averageLongitudeDensity = _totalLongitudeDensity / (_fullNodes + _edgesNodes);
 
       System.out.println("== Avr Density=" + averageLatitudeDensity + " / " + averageLongitudeDensity);

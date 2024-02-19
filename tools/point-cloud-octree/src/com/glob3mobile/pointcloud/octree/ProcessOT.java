@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.pointcloud.octree;
-
 
 import java.awt.*;
 import java.awt.image.*;
@@ -15,7 +13,6 @@ import com.glob3mobile.pointcloud.octree.berkeleydb.*;
 import com.glob3mobile.utils.*;
 
 import es.igosoftware.util.*;
-
 
 public class ProcessOT {
 
@@ -47,7 +44,6 @@ public class ProcessOT {
    //return from.mixedWidth(ramp[toI], colorAlpha);
    //   }
 
-
    public static void main(final String[] args) {
       System.out.println("ProcessOT 0.1");
       System.out.println("-------------\n");
@@ -64,12 +60,10 @@ public class ProcessOT {
       //final String sourceCloudName = fragmentCloudName;
       //final String lodCloudName = sourceCloudName + "_LOD";
 
-
       //final File cloudDirectory = new File("/Volumes/My Passport/_belgium_lidar_/db");
       //
       //final String sourceCloudName = "Wallonia-Belgium_simplified2";
       //final String lodCloudName = sourceCloudName + "_LOD";
-
 
       //final File cloudDirectory = new File("/Volumes/My Passport/_minnesota_lidar_/db");
       //
@@ -82,11 +76,9 @@ public class ProcessOT {
       //      final String sourceCloudName = "Wallonia";
       //      final String lodCloudName = sourceCloudName + "_LOD";
 
-
       final File   cloudDirectory  = new File("/Users/dgd/Desktop/TomTomDemo/cloud_fixed");
       final String sourceCloudName = "TomTom";
       final String lodCloudName    = sourceCloudName + "_LOD";
-
 
       final long cacheSizeInBytes = 32 * 1024 * 1024 * 1024;
 
@@ -182,13 +174,11 @@ public class ProcessOT {
             final PersistentLOD.Statistics statistics = lodDB.getStatistics(true);
             statistics.show();
 
-
             final boolean showStatisticsForSector = false;
             if (showStatisticsForSector) {
                final Sector sector = Sector.fromDegrees( //
-                     39.198205348894802569, -77.673339843749985789, //
-                     39.249270846223389242, -77.607421875);
-
+                                                        39.198205348894802569, -77.673339843749985789, //
+                                                        39.249270846223389242, -77.607421875);
 
                final PersistentLOD.Visitor visitor = new PersistentLOD.Visitor() {
                   private GUndeterminateProgress _progress;
@@ -198,7 +188,6 @@ public class ProcessOT {
                   private double                 _sumDensity;
                   private double                 _minDensity;
                   private double                 _maxDensity;
-
 
                   @Override
                   public void start(final PersistentLOD.Transaction transaction) {
@@ -212,17 +201,14 @@ public class ProcessOT {
 
                      _progress = new GUndeterminateProgress(10, true) {
                         @Override
-                        public void informProgress(final long stepsDone,
-                                                   final long elapsed) {
+                        public void informProgress(final long stepsDone, final long elapsed) {
                            System.out.println("- gathering statistics for \"" + lodDB.getCloudName() + "\"" + progressString(stepsDone, elapsed));
                         }
                      };
                   }
 
-
                   @Override
-                  public boolean visit(final PersistentLOD.Transaction transaction,
-                                       final PersistentLOD.Node node) {
+                  public boolean visit(final PersistentLOD.Transaction transaction, final PersistentLOD.Node node) {
 
                      final int nodePointsCount = node.getPointsCount();
 
@@ -246,7 +232,6 @@ public class ProcessOT {
                      return keepWorking;
                   }
 
-
                   @Override
                   public void stop(final PersistentLOD.Transaction transaction) {
                      _progress.finish();
@@ -259,12 +244,11 @@ public class ProcessOT {
                      System.out.println("     Points/Node: " + ((float) _pointsCounter / _nodesCounter));
                      System.out.println("     Points/Level: " + ((float) _pointsCounter / _levelsCounter));
                      System.out.println("   Density/Node: Average=" + (_sumDensity / _nodesCounter) + //
-                     ", Min=" + _minDensity + //
-                     ", Max=" + _maxDensity);
+                           ", Min=" + _minDensity + //
+                           ", Max=" + _maxDensity);
                      System.out.println("======================================================================");
                   }
                };
-
 
                final PersistentLOD.Transaction transaction = null;
                lodDB.acceptVisitor(transaction, visitor, sector);
@@ -281,7 +265,6 @@ public class ProcessOT {
 
             final double minHeight = statistics.getMinHeight();
             final double maxHeight = statistics.getMaxHeight();
-
 
             //      final String id = "032010023321230000"; // FoundSelf -> OK
             final String id = "0320100233212030"; // FoundSelf -> OK
@@ -316,12 +299,7 @@ public class ProcessOT {
 
    }
 
-
-   private static void generateImage(final String id,
-                                     final int level,
-                                     final Sector sector,
-                                     final List<Geodetic3D> points,
-                                     final double minHeight,
+   private static void generateImage(final String id, final int level, final Sector sector, final List<Geodetic3D> points, final double minHeight,
                                      final double maxHeight) {
       final int imageWidth  = 1024 / 2;
       final int imageHeight = 1024 / 2;
@@ -331,7 +309,6 @@ public class ProcessOT {
 
       //g.setColor(Color.WHITE);
       //g.fillRect(0, 0, imageWidth, imageHeight);
-
 
       g.setColor(Color.WHITE);
 

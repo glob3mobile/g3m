@@ -1,16 +1,11 @@
 
-
 package com.glob3mobile.pointcloud.quadtree;
 
 import java.util.LinkedList;
 
-
 public abstract class QuadNode {
 
-
-   static QuadNode create(final QuadNode parent,
-                          final int[] indexes,
-                          final int maxPointsPerLeaf) {
+   static QuadNode create(final QuadNode parent, final int[] indexes, final int maxPointsPerLeaf) {
 
       final int indexesSize = indexes.length;
 
@@ -78,7 +73,6 @@ public abstract class QuadNode {
       //      return new QuadInnerNode(parent, positions, splitAxis, mediansVertexIndexes, childrenVerticesIndexes, arity);
    }
 
-
    //   private static GVector3D getAverage3D(final List<GVector3D> positions,
    //                                         final int[] indexes) {
    //      double sumX = 0;
@@ -96,7 +90,6 @@ public abstract class QuadNode {
    //      return new GVector3D(sumX / size, sumY / size, sumZ / size);
    //   }
 
-
    //   private static GVector2D getAverage2D(final List<GVector3D> positions,
    //                                         final int[] indexes) {
    //      double sumX = 0;
@@ -111,7 +104,6 @@ public abstract class QuadNode {
    //      final int size = positions.size();
    //      return new GVector2D(sumX / size, sumY / size);
    //   }
-
 
    //   private static int getPivotIndex(final PositionsSet positionsSet,
    //                                    final int[] indexes) {
@@ -131,26 +123,20 @@ public abstract class QuadNode {
    //      return nearestIndex;
    //   }
 
-
    private final QuadNode _parent;
 
-
    //   private final PositionsSet _positionsSet;
-
 
    protected QuadNode(final QuadNode parent) {
       _parent = parent;
       // _positionsSet = positionsSet;
    }
 
-
    public final int getDepth() {
       return (_parent == null) ? 0 : _parent.getDepth() + 1;
    }
 
-
    public abstract int[] getVertexIndexes();
-
 
    void breadthFirstAcceptVisitor(final QuadTreeVisitor visitor) throws QuadTreeVisitor.AbortVisiting {
       final LinkedList<QuadNode> queue = new LinkedList<>();
@@ -162,8 +148,6 @@ public abstract class QuadNode {
       }
    }
 
-
-   abstract void breadthFirstAcceptVisitor(QuadTreeVisitor visitor,
-                                           LinkedList<QuadNode> queue) throws QuadTreeVisitor.AbortVisiting;
+   abstract void breadthFirstAcceptVisitor(QuadTreeVisitor visitor, LinkedList<QuadNode> queue) throws QuadTreeVisitor.AbortVisiting;
 
 }

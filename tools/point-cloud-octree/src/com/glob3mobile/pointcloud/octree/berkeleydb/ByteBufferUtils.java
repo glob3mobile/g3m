@@ -1,16 +1,11 @@
 
-
 package com.glob3mobile.pointcloud.octree.berkeleydb;
-
 
 import java.nio.*;
 import java.util.*;
-
 import com.glob3mobile.utils.*;
-
 import es.igosoftware.euclid.bounding.*;
 import es.igosoftware.euclid.vector.*;
-
 
 public class ByteBufferUtils {
 
@@ -18,39 +13,31 @@ public class ByteBufferUtils {
 
    }
 
-
-   public static int sizeOf(final double any) {
+   public static int sizeOf(@SuppressWarnings("unused") final double any) {
       return 8;
    }
 
-
-   public static int sizeOf(final int any) {
+   public static int sizeOf(@SuppressWarnings("unused") final int any) {
       return sizeOfInt();
    }
-
 
    public static int sizeOfInt() {
       return 4;
    }
 
-
-   public static int sizeOf(final byte any) {
+   public static int sizeOf(@SuppressWarnings("unused") final byte any) {
       return 1;
    }
 
-
-   public static int sizeOf(final Sector any) {
+   public static int sizeOf(@SuppressWarnings("unused") final Sector any) {
       return 4 * 8; // 4 doubles
    }
 
-
-   public static int sizeOf(final GVector3F any) {
+   public static int sizeOf(@SuppressWarnings("unused") final GVector3F any) {
       return 3 * 4;
    }
 
-
-   public static int sizeOf(final Format format,
-                            final Geodetic3D any) {
+   public static int sizeOf(final Format format, @SuppressWarnings("unused") final Geodetic3D any) {
       switch (format) {
       case LatLonHeight:
          return 3 * 8; // 3 doubles
@@ -60,10 +47,7 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static int sizeOf(final Format format,
-                            final Geodetic3D any,
-                            final Geodetic3D averagePoint) {
+   public static int sizeOf(final Format format, @SuppressWarnings("unused") final Geodetic3D any, @SuppressWarnings("unused") final Geodetic3D averagePoint) {
       switch (format) {
       case LatLonHeight:
          return 3 * 4; // 3 floats
@@ -73,24 +57,18 @@ public class ByteBufferUtils {
       }
    }
 
-
    public static int sizeOf(final byte[] any) {
       return any.length;
    }
 
-
-   public static void put(final ByteBuffer buffer,
-                          final Sector sector) {
+   public static void put(final ByteBuffer buffer, final Sector sector) {
       buffer.putDouble(sector._lower._latitude._radians);
       buffer.putDouble(sector._lower._longitude._radians);
       buffer.putDouble(sector._upper._latitude._radians);
       buffer.putDouble(sector._upper._longitude._radians);
    }
 
-
-   public static void put(final ByteBuffer buffer,
-                          final Format format,
-                          final Geodetic3D point) {
+   public static void put(final ByteBuffer buffer, final Format format, final Geodetic3D point) {
       switch (format) {
       case LatLonHeight:
          buffer.putDouble(point._latitude._radians);
@@ -103,11 +81,7 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static void put(final ByteBuffer buffer,
-                          final Format format,
-                          final Geodetic3D point,
-                          final Geodetic3D averagePoint) {
+   public static void put(final ByteBuffer buffer, final Format format, final Geodetic3D point, final Geodetic3D averagePoint) {
       switch (format) {
       case LatLonHeight:
          buffer.putFloat((float) (point._latitude._radians - averagePoint._latitude._radians));
@@ -120,19 +94,13 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static int sizeOf(final Format format,
-                            final List<Geodetic3D> points) {
+   public static int sizeOf(final Format format, final List<Geodetic3D> points) {
       return points.size() * sizeOf(format, points.get(0));
    }
 
-
-   public static int sizeOf(final Format format,
-                            final List<Geodetic3D> points,
-                            final Geodetic3D averagePoint) {
+   public static int sizeOf(final Format format, final List<Geodetic3D> points, final Geodetic3D averagePoint) {
       return points.size() * sizeOf(format, points.get(0), averagePoint);
    }
-
 
    public static Sector getSector(final ByteBuffer buffer) {
       final double lowerLatitude  = buffer.getDouble();
@@ -141,10 +109,9 @@ public class ByteBufferUtils {
       final double upperLongitude = buffer.getDouble();
 
       return Sector.fromRadians(//
-            lowerLatitude, lowerLongitude, //
-            upperLatitude, upperLongitude);
+                                lowerLatitude, lowerLongitude, //
+                                upperLatitude, upperLongitude);
    }
-
 
    public static Geodetic3D getGeodetic3D(final ByteBuffer buffer) {
       final double latitude  = buffer.getDouble();
@@ -154,9 +121,7 @@ public class ByteBufferUtils {
       return Geodetic3D.fromRadians(latitude, longitude, height);
    }
 
-
-   public static Geodetic3D getGeodetic3D(final Format format,
-                                          final ByteBuffer buffer) {
+   public static Geodetic3D getGeodetic3D(final Format format, final ByteBuffer buffer) {
       switch (format) {
       case LatLonHeight:
          final double latitude = buffer.getDouble();
@@ -170,10 +135,7 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static Geodetic3D getGeodetic3D(final Format format,
-                                          final ByteBuffer buffer,
-                                          final Geodetic3D averagePoint) {
+   public static Geodetic3D getGeodetic3D(final Format format, final ByteBuffer buffer, final Geodetic3D averagePoint) {
       switch (format) {
       case LatLonHeight:
          final double latitude = buffer.getFloat() + averagePoint._latitude._radians;
@@ -187,10 +149,7 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static List<Geodetic3D> getPoints(final ByteBuffer buffer,
-                                            final Format format,
-                                            final int pointsCount) {
+   public static List<Geodetic3D> getPoints(final ByteBuffer buffer, final Format format, final int pointsCount) {
       switch (format) {
       case LatLonHeight:
          final List<Geodetic3D> points = new ArrayList<>(pointsCount);
@@ -205,10 +164,7 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static void put(final ByteBuffer buffer,
-                          final Format format,
-                          final List<Geodetic3D> points) {
+   public static void put(final ByteBuffer buffer, final Format format, final List<Geodetic3D> points) {
       switch (format) {
       case LatLonHeight:
          for (final Geodetic3D point : points) {
@@ -221,11 +177,7 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static List<Geodetic3D> getPoints(final ByteBuffer buffer,
-                                            final Format format,
-                                            final int pointsCount,
-                                            final Geodetic3D averagePoint) {
+   public static List<Geodetic3D> getPoints(final ByteBuffer buffer, final Format format, final int pointsCount, final Geodetic3D averagePoint) {
       switch (format) {
       case LatLonHeight:
          final List<Geodetic3D> points = new ArrayList<>(pointsCount);
@@ -240,11 +192,7 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static void put(final ByteBuffer buffer,
-                          final Format format,
-                          final List<Geodetic3D> points,
-                          final Geodetic3D averagePoint) {
+   public static void put(final ByteBuffer buffer, final Format format, final List<Geodetic3D> points, final Geodetic3D averagePoint) {
       switch (format) {
       case LatLonHeight:
          for (final Geodetic3D point : points) {
@@ -257,7 +205,6 @@ public class ByteBufferUtils {
       }
    }
 
-
    //   public static void put(final ByteBuffer buffer,
    //                          final GVector3D value) {
    //      buffer.putDouble(value.x());
@@ -265,38 +212,25 @@ public class ByteBufferUtils {
    //      buffer.putDouble(value.z());
    //   }
 
-
-   public static void put(final ByteBuffer buffer,
-                          final GVector3F value) {
+   public static void put(final ByteBuffer buffer, final GVector3F value) {
       buffer.putFloat(value._x);
       buffer.putFloat(value._y);
       buffer.putFloat(value._z);
    }
 
-
-   public static void put(final ByteBuffer buffer,
-                          final GAxisAlignedBox box,
-                          final GVector3F average) {
+   public static void put(final ByteBuffer buffer, final GAxisAlignedBox box, final GVector3F average) {
       put(buffer, box._lower, average);
       put(buffer, box._upper, average);
    }
 
-
-   private static void put(final ByteBuffer buffer,
-                           final IVector3 value,
-                           final GVector3F average) {
+   private static void put(final ByteBuffer buffer, final IVector3 value, final GVector3F average) {
       buffer.putFloat((float) (value.x() - average._x));
       buffer.putFloat((float) (value.y() - average._y));
       buffer.putFloat((float) (value.z() - average._z));
    }
 
-
-   public static void put(final ByteBuffer buffer,
-                          final Planet planet,
-                          final List<Geodetic3D> points,
-                          final GVector3F average,
-                          final float verticalExaggeration,
-                          final double deltaHeight) {
+   public static void put(final ByteBuffer buffer, final Planet planet, final List<Geodetic3D> points, final GVector3F average,
+                          final float verticalExaggeration, final double deltaHeight) {
       buffer.putInt(points.size());
       for (final Geodetic3D point : points) {
          final GVector3D cartesian = planet.toCartesian(point._latitude, point._longitude, point._height + deltaHeight, verticalExaggeration);
@@ -304,16 +238,12 @@ public class ByteBufferUtils {
       }
    }
 
-
-   public static int sizeOf(final GAxisAlignedBox any,
-                            final GVector3F average) {
+   public static int sizeOf(@SuppressWarnings("unused") final GAxisAlignedBox any, @SuppressWarnings("unused") final GVector3F average) {
       return 4 * 6;
    }
 
-
-   public static int sizeOf(final Planet planet,
-                            final List<Geodetic3D> points,
-                            final GVector3F average) {
+   public static int sizeOf(@SuppressWarnings("unused") final Planet planet, final List<Geodetic3D> points,
+                            @SuppressWarnings("unused") final GVector3F average) {
       return 4 /* points size */ + (points.size() * 3 * 4);
    }
 }

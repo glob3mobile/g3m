@@ -33,10 +33,9 @@ void Layer::setTransparency(float transparency) {
   }
 }
 
-
 Layer::~Layer() {
   delete _condition;
-  
+
   const size_t numInfos = _layerInfo->size();
   for (size_t i = 0; i < numInfos; i++) {
     const Info* inf = _layerInfo->at(i);
@@ -111,31 +110,31 @@ bool Layer::isEquals(const Layer* that) const {
   if (this == that) {
     return true;
   }
-  
+
   if (that == NULL) {
     return false;
   }
-  
+
   if (getLayerType() != that->getLayerType()) {
     return false;
   }
-  
+
   if (_condition != that->_condition) {
     return false;
   }
-  
+
   const size_t thisListenersSize = _listeners.size();
   const size_t thatListenersSize = that->_listeners.size();
   if (thisListenersSize != thatListenersSize) {
     return false;
   }
-  
+
   for (size_t i = 0; i < thisListenersSize; i++) {
     if (_listeners[i] != that->_listeners[i]) {
       return false;
     }
   }
-  
+
   if (_enable != that->_enable) {
     return false;
   }
@@ -155,7 +154,7 @@ bool Layer::isEquals(const Layer* that) const {
       return false;
     }
   }
-  
+
   return rawIsEquals(that);
 }
 
@@ -182,20 +181,19 @@ void Layer::setInfo(const std::vector<const Info*>& info) const {
   _layerInfo->clear();
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),
-               info.begin(),
-               info.end());
+                     info.begin(),
+                     info.end());
 #endif
 #ifdef JAVA_CODE
   _layerInfo.addAll(info);
 #endif
-
 }
 
 void Layer::addInfo(const std::vector<const Info*>& info) {
 #ifdef C_CODE
   _layerInfo->insert(_layerInfo->end(),
-               info.begin(),
-               info.end());
+                     info.begin(),
+                     info.end());
 #endif
 #ifdef JAVA_CODE
   _layerInfo.addAll(info);
@@ -203,16 +201,10 @@ void Layer::addInfo(const std::vector<const Info*>& info) {
 }
 
 void Layer::addInfo(const Info* info) {
-#ifdef C_CODE
-  _layerInfo->insert(_layerInfo->end(), info);
-#endif
-#ifdef JAVA_CODE
-  _layerInfo.add(info);
-#endif
+  _layerInfo->push_back(info);
 }
 
-
-const std::vector<const Info*>& Layer::getInfo() const {
+const std::vector<const Info*> Layer::getInfo() const {
   return *_layerInfo;
 }
 
@@ -227,6 +219,6 @@ const std::vector<const LayerTilesRenderParameters*> Layer::createParametersVect
       result.push_back( parameters->copy() );
     }
   }
-  
+
   return result;
 }

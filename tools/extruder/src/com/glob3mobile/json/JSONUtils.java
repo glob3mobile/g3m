@@ -1,20 +1,15 @@
 
-
 package com.glob3mobile.json;
 
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Map;
-
+import java.text.*;
+import java.util.*;
 
 public class JSONUtils {
    private JSONUtils() {
    }
 
-
    @SuppressWarnings("unchecked")
-   public static String toJSON(final Object value,
-                               final int floatPrecision) {
+   public static String toJSON(final Object value, final int floatPrecision) {
       if (value == null) {
          return "null";
       }
@@ -41,9 +36,7 @@ public class JSONUtils {
       }
    }
 
-
-   public static String toJSON(final Number value,
-                               final int floatPrecision) {
+   public static String toJSON(final Number value, final int floatPrecision) {
       if (value instanceof Double) {
          return toJSON(value.doubleValue(), floatPrecision);
       }
@@ -55,27 +48,21 @@ public class JSONUtils {
       }
    }
 
-
    private static final DecimalFormat DF = new DecimalFormat("0");
 
-
-   public static String toJSON(final float value,
-                               final int floatPrecision) {
+   public static String toJSON(final float value, final int floatPrecision) {
       synchronized (DF) {
          DF.setMaximumFractionDigits(floatPrecision);
          return DF.format(value);
       }
    }
 
-
-   public static String toJSON(final double value,
-                               final int floatPrecision) {
+   public static String toJSON(final double value, final int floatPrecision) {
       synchronized (DF) {
          DF.setMaximumFractionDigits(floatPrecision);
          return DF.format(value);
       }
    }
-
 
    public static String toJSON(final Boolean value) {
       if (value == null) {
@@ -84,11 +71,9 @@ public class JSONUtils {
       return value.booleanValue() ? "true" : "false";
    }
 
-
    public static String toJSON(final boolean value) {
       return value ? "true" : "false";
    }
-
 
    private static String quote(final String value) {
       if (value == null) {
@@ -98,64 +83,61 @@ public class JSONUtils {
          return "\"\"";
       }
 
-      char c = 0;
-      int i;
-      final int len = value.length();
-      final StringBuilder sb = new StringBuilder(len + 4);
-      String t;
+      char                c   = 0;
+      int                 i;
+      final int           len = value.length();
+      final StringBuilder sb  = new StringBuilder(len + 4);
+      String              t;
 
       sb.append('"');
       for (i = 0; i < len; i += 1) {
          c = value.charAt(i);
          switch (c) {
-            case '\\':
-            case '"':
-               sb.append('\\');
+         case '\\':
+         case '"':
+            sb.append('\\');
+            sb.append(c);
+            break;
+         case '/':
+            //                if (b == '<') {
+            sb.append('\\');
+            //                }
+            sb.append(c);
+            break;
+         case '\b':
+            sb.append("\\b");
+            break;
+         case '\t':
+            sb.append("\\t");
+            break;
+         case '\n':
+            sb.append("\\n");
+            break;
+         case '\f':
+            sb.append("\\f");
+            break;
+         case '\r':
+            sb.append("\\r");
+            break;
+         default:
+            if (c < ' ') {
+               t = "000" + Integer.toHexString(c);
+               sb.append("\\u" + t.substring(t.length() - 4));
+            }
+            else {
                sb.append(c);
-               break;
-            case '/':
-               //                if (b == '<') {
-               sb.append('\\');
-               //                }
-               sb.append(c);
-               break;
-            case '\b':
-               sb.append("\\b");
-               break;
-            case '\t':
-               sb.append("\\t");
-               break;
-            case '\n':
-               sb.append("\\n");
-               break;
-            case '\f':
-               sb.append("\\f");
-               break;
-            case '\r':
-               sb.append("\\r");
-               break;
-            default:
-               if (c < ' ') {
-                  t = "000" + Integer.toHexString(c);
-                  sb.append("\\u" + t.substring(t.length() - 4));
-               }
-               else {
-                  sb.append(c);
-               }
+            }
          }
       }
       sb.append('"');
       return sb.toString();
    }
 
-
    public static String toJSON(final String value) {
       return quote(value);
    }
 
-
-   public static String toJSON(final Map<String, ?> value,
-                               final int floatPrecision) {
+   public static String toJSON(final Map<String, ?> value, final int floatPrecision) {
       if (value == null) {
          return "null";
       }
@@ -179,9 +161,7 @@ public class JSONUtils {
       return sb.toString();
    }
 
-
-   public static String toJSON(final List<?> value,
-                               final int floatPrecision) {
+   public static String toJSON(final List<?> value, final int floatPrecision) {
       if (value == null) {
          return "null";
       }
@@ -199,9 +179,7 @@ public class JSONUtils {
       return sb.toString();
    }
 
-
-   public static String toJSON(final Object[] value,
-                               final int floatPrecision) {
+   public static String toJSON(final Object[] value, final int floatPrecision) {
       if (value == null) {
          return "null";
       }
@@ -220,10 +198,7 @@ public class JSONUtils {
       return sb.toString();
    }
 
-
-   public static String toJSON(final String name,
-                               final Object value,
-                               final int floatPrecision) {
+   public static String toJSON(final String name, final Object value, final int floatPrecision) {
       return "{" + toJSON(name) + ":" + toJSON(value, floatPrecision) + "}";
    }
 

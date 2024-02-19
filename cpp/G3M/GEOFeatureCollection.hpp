@@ -14,10 +14,7 @@
 #include <vector>
 
 class GEOFeature;
-class GPUProgramState;
-class GLGlobalState;
-class GPUProgramState;
-class GEOSymbolizer;
+
 
 class GEOFeatureCollection : public GEOObject {
 private:

@@ -1,7 +1,5 @@
 
-
 package com.glob3mobile.tools.extruder;
-
 
 import java.util.*;
 
@@ -11,18 +9,10 @@ import com.glob3mobile.tools.mesh.*;
 
 import poly2Tri.*;
 
+public class Extruder2DPolygon extends ExtruderPolygon {
 
-public class Extruder2DPolygon
-                               extends
-                                  ExtruderPolygon {
-
-
-   public static Extruder2DPolygon create(final List<Geodetic2D> coordinates,
-                                          final List<List<Geodetic2D>> holesCoordinatesArray,
-                                          final double lowerHeight,
-                                          final double upperHeight,
-                                          final G3MeshMaterial material,
-                                          final boolean depthTest) {
+   public static Extruder2DPolygon create(final List<Geodetic2D> coordinates, final List<List<Geodetic2D>> holesCoordinatesArray, final double lowerHeight,
+                                          final double upperHeight, final G3MeshMaterial material, final boolean depthTest) {
       final PolygonData<Geodetic2D> data = PolygonData.fixPolygon2DData(coordinates, holesCoordinatesArray);
       return (data == null) ? null //
             : new Extruder2DPolygon( //
@@ -34,11 +24,9 @@ public class Extruder2DPolygon
                   depthTest);
    }
 
-
    private final double                 _upperHeight;
    private final List<Geodetic2D>       _coordinates;
    private final List<List<Geodetic2D>> _holesCoordinatesArray;
-
 
    Extruder2DPolygon(final List<Geodetic2D> coordinates,
                      final List<List<Geodetic2D>> holesCoordinatesArray,
@@ -52,10 +40,7 @@ public class Extruder2DPolygon
       _holesCoordinatesArray = (holesCoordinatesArray == null) ? Collections.emptyList() : holesCoordinatesArray;
    }
 
-
-   private static Wall createExteriorWall(final List<Geodetic2D> coordinates,
-                                          final double lowerHeight,
-                                          final double upperHeight) {
+   private static Wall createExteriorWall(final List<Geodetic2D> coordinates, final double lowerHeight, final double upperHeight) {
       final List<WallQuad> wallQuads = new ArrayList<>(coordinates.size());
 
       Geodetic3D previousCoordinate = new Geodetic3D(coordinates.get(coordinates.size() - 1), upperHeight);
@@ -70,19 +55,13 @@ public class Extruder2DPolygon
       return new Wall(wallQuads);
    }
 
-
-   private static Wall createInteriorWall(final List<Geodetic2D> coordinates,
-                                          final double lowerHeight,
-                                          final double upperHeight) {
+   private static Wall createInteriorWall(final List<Geodetic2D> coordinates, final double lowerHeight, final double upperHeight) {
       final ArrayList<Geodetic2D> reversed = new ArrayList<>(coordinates);
       Collections.reverse(reversed);
       return createExteriorWall(reversed, lowerHeight, upperHeight);
    }
 
-
-   private static List<Wall> createInteriorWalls(final List<List<Geodetic2D>> holesCoordinatesArray,
-                                                 final double lowerHeight,
-                                                 final double upperHeight) {
+   private static List<Wall> createInteriorWalls(final List<List<Geodetic2D>> holesCoordinatesArray, final double lowerHeight, final double upperHeight) {
       final List<Wall> result = new ArrayList<>(holesCoordinatesArray.size());
       for (final List<Geodetic2D> holeCoordinates : holesCoordinatesArray) {
          result.add(createInteriorWall(holeCoordinates, lowerHeight, upperHeight));
@@ -90,18 +69,15 @@ public class Extruder2DPolygon
       return result;
    }
 
-
    @Override
    public Wall createExteriorWall(final double lowerHeight) {
       return createExteriorWall(_coordinates, lowerHeight, _upperHeight);
    }
 
-
    @Override
    public List<Wall> createInteriorWalls(final double lowerHeight) {
       return createInteriorWalls(_holesCoordinatesArray, lowerHeight, _upperHeight);
    }
-
 
    @Override
    protected Triangulation.Data createRoofTriangulationData() {
@@ -139,7 +115,6 @@ public class Extruder2DPolygon
       return new Triangulation.Data(numContures, numVerticesInContures, roofVertices);
    }
 
-
    @Override
    protected Triangulation.Data createRoofSansHolesTriangulationData() {
       final int   numContures           = 1;
@@ -159,17 +134,12 @@ public class Extruder2DPolygon
       return new Triangulation.Data(numContures, numVerticesInContures, roofVertices);
    }
 
-
-   private static int addVextex(final double[][] roofVertices,
-                                final int verticesCursor,
-                                final Geodetic2D coordinate,
-                                final double height) {
+   private static int addVextex(final double[][] roofVertices, final int verticesCursor, final Geodetic2D coordinate, final double height) {
       roofVertices[verticesCursor][0] = coordinate._longitude._degrees;
       roofVertices[verticesCursor][1] = coordinate._latitude._degrees;
       roofVertices[verticesCursor][2] = height;
       return verticesCursor + 1;
    }
-
 
    //   @Override
    //   protected Geodetic2D createPosition() {
@@ -199,7 +169,6 @@ public class Extruder2DPolygon
    //      return centroid;
    //   }
 
-
    @Override
    protected Geodetic2D calculateAverage() {
       double totalLatRad = 0;
@@ -211,17 +180,14 @@ public class Extruder2DPolygon
       return Geodetic2D.fromRadians(totalLatRad / _coordinates.size(), totalLonRad / _coordinates.size());
    }
 
-
    @Override
    public List<Geodetic2D> getOuterRing() {
       return _coordinates;
    }
 
-
    @Override
    public List<List<Geodetic2D>> getHolesRings() {
       return _holesCoordinatesArray;
    }
-
 
 }

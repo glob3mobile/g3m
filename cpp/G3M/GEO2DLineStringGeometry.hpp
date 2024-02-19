@@ -13,6 +13,8 @@
 class Geodetic2D;
 #include "GEO2DCoordinatesData.hpp"
 
+class GEOSymbol;
+
 class GEO2DLineStringGeometry : public GEO2DGeometry {
 private:
   const GEO2DCoordinatesData* _coordinatesData;

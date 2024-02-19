@@ -62,12 +62,7 @@ void DefaultRenderer::addInfo(const std::vector<const Info*>& info) {
 }
 
 void DefaultRenderer::addInfo(const Info* info) {
-#ifdef C_CODE
-  _info.insert(_info.end(), info);
-#endif
-#ifdef JAVA_CODE
-  _info.add(info);
-#endif
+  _info.push_back(info);
   notifyChangedInfo(_info);
 }
 
