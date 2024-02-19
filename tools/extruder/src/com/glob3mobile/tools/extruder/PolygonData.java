@@ -2,22 +2,17 @@
 package com.glob3mobile.tools.extruder;
 
 import java.util.*;
-
 import org.glob3.mobile.generated.*;
 import org.glob3.mobile.specific.*;
-
 import com.seisw.util.geom.*;
 
 public class PolygonData<T> {
    static {
-      IFactory.setInstance(new Factory_JavaDesktop());
-      IMathUtils.setInstance(new MathUtils_JavaDesktop());
-      IJSONParser.setInstance(new JSONParser_JavaDesktop());
-      IStringBuilder.setInstance(new StringBuilder_JavaDesktop(IStringBuilder.DEFAULT_FLOAT_PRECISION));
-      ILogger.setInstance(new Logger_JavaDesktop(LogLevel.InfoLevel));
+      G3M_JavaDesktop.initialize();
    }
 
-   public static PolygonData<Geodetic2D> fixPolygon2DData(final List<Geodetic2D> rawCoordinates, final List<List<Geodetic2D>> rawHolesCoordinatesArray) {
+   public static PolygonData<Geodetic2D> fixPolygon2DData(final List<Geodetic2D> rawCoordinates,
+                                                          final List<List<Geodetic2D>> rawHolesCoordinatesArray) {
       final List<Geodetic2D>       coordinates           = PolygonExtruder.cleanup2DCoordinates(rawCoordinates);
       final List<List<Geodetic2D>> holesCoordinatesArray = PolygonExtruder.cleanup2DCoordinatesArray(rawHolesCoordinatesArray);
 
@@ -33,7 +28,8 @@ public class PolygonData<T> {
       return toFixedPolygon2DData(fixedPoly);
    }
 
-   public static PolygonData<Geodetic3D> fixPolygon3DData(final List<Geodetic3D> rawCoordinates, final List<List<Geodetic3D>> rawHolesCoordinatesArray) {
+   public static PolygonData<Geodetic3D> fixPolygon3DData(final List<Geodetic3D> rawCoordinates,
+                                                          final List<List<Geodetic3D>> rawHolesCoordinatesArray) {
       final List<Geodetic3D>       coordinates           = PolygonExtruder.cleanup3DCoordinates(rawCoordinates);
       final List<List<Geodetic3D>> holesCoordinatesArray = PolygonExtruder.cleanup3DCoordinatesArray(rawHolesCoordinatesArray);
 
@@ -176,7 +172,8 @@ public class PolygonData<T> {
       return result;
    }
 
-   private static List<Geodetic3D> toGeodetic3DList(final Poly poly, final List<Geodetic3D> coordinates, final List<List<Geodetic3D>> holesCoordinatesArray) {
+   private static List<Geodetic3D> toGeodetic3DList(final Poly poly, final List<Geodetic3D> coordinates,
+                                                    final List<List<Geodetic3D>> holesCoordinatesArray) {
       final List<Geodetic3D> result    = new ArrayList<>();
       final int              numPoints = poly.getNumPoints();
       for (int i = 0; i < numPoints; i++) {
@@ -222,8 +219,7 @@ public class PolygonData<T> {
    public final List<T>       _coordinates;
    public final List<List<T>> _holesCoordinatesArray;
 
-   private PolygonData(final List<T> coordinates,
-                       final List<List<T>> holesCoordinatesArray) {
+   private PolygonData(final List<T> coordinates, final List<List<T>> holesCoordinatesArray) {
       _coordinates           = coordinates;
       _holesCoordinatesArray = holesCoordinatesArray;
 
