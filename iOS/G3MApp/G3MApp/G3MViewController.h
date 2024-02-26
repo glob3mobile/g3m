@@ -8,13 +8,12 @@
 #import <UIKit/UIKit.h>
 
 #import <string>
-#import "GAITrackedViewController.h"
 
 @class G3MWidget_iOS;
 class G3MDemoModel;
 class G3MDemoScene;
 
-@interface G3MViewController : GAITrackedViewController <UIAlertViewDelegate> {
+@interface G3MViewController : UIViewController {
   G3MDemoModel* _demoModel;
 }
 
