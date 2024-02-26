@@ -10,7 +10,6 @@
 
 #include "G3MDemoScene.hpp"
 
-class Mark;
 class TranslateScaleGizmo;
 
 

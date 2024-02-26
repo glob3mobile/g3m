@@ -7,17 +7,17 @@
 
 #include "G3MTranslateScaleGizmoDemoScene.hpp"
 
+#include <G3M/TranslateScaleGizmo.hpp>
+#include <G3M/EllipsoidShape.hpp>
+#include <G3M/Planet.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/Color.hpp>
 #include <G3M/G3MWidget.hpp>
+#include <G3M/BingMapsLayer.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/G3MContext.hpp>
 #include <G3M/GLConstants.hpp>
-#include <G3M/Geodetic3D.hpp>
-#include <G3M/BingMapsLayer.hpp>
-#include <G3M/Color.hpp>
-#include <G3M/TranslateScaleGizmo.hpp>
 #include <G3M/ShapesRenderer.hpp>
-#include <G3M/EllipsoidShape.hpp>
-#include <G3M/Planet.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -55,15 +55,15 @@ void G3MTranslateScaleGizmoDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
-  Geodetic3D geoPos = Geodetic3D::fromDegrees(37.39996584, -1.75035672, 0);
+  const Geodetic3D ellipsoidPosition = Geodetic3D::fromDegrees(37.39996584, -1.75035672, 0);
 
-  double size = 100.0;
+  const double size = 100.0;
 
   g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(37.397230737816194335, -1.7473434604041810925, 540),
                                        Angle::fromDegrees(40.586649),
                                        Angle::fromDegrees(-53.421991));
 
-  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),                          // Geodetic3D* position,
+  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(ellipsoidPosition),               // Geodetic3D* position,
                                                  AltitudeMode::ABSOLUTE,                          // AltitudeMode altitudeMode
                                                  g3mWidget->getG3MContext()->getPlanet(),         // const Planet* planet,
                                                  URL("file:///Track_A-Sphere-70-2048x2048.png"),  // const URL& textureURL,
@@ -88,7 +88,7 @@ void G3MTranslateScaleGizmoDemoScene::rawActivate(const G3MContext* context) {
   const double headWidthRatio            = 2.0;
   const double scaleArrowLengthSizeRatio = 0.15;
 
-  _gizmo = TranslateScaleGizmo::translateAndScale(context->getPlanet()->getCoordinateSystemAt(geoPos),
+  _gizmo = TranslateScaleGizmo::translateAndScale(context->getPlanet()->getCoordinateSystemAt(ellipsoidPosition),
                                                   size,
                                                   scale,
                                                   maxScale,
@@ -98,7 +98,7 @@ void G3MTranslateScaleGizmoDemoScene::rawActivate(const G3MContext* context) {
                                                   scaleArrowLengthSizeRatio);
 
   _gizmo->setListener(new GizmoListener(ellipsoid, context->getPlanet()));
-  
+
   model->getCompositeRenderer()->addRenderer(_gizmo);
 }
 
