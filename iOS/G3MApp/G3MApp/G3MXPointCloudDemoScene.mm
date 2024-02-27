@@ -229,7 +229,7 @@ public:
       const XPCTree* tree = metadata->getTree(0);
 
       const Geodetic2D center = tree->getSector()->_center;
-      const double height = (tree->getMaxHeight() - metadata->_averagePosition._height) * 10;
+//      const double height = (tree->getMaxHeight() - metadata->_averagePosition._height) * 10;
       
 //      _g3mWidget->setAnimatedCameraPosition( Geodetic3D(center._latitude, center._longitude, height) );
     }
