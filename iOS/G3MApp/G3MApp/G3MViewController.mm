@@ -19,8 +19,6 @@
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
 
-#import "GAI.h"
-#import "GAIDictionaryBuilder.h"
 
 
 @implementation G3MViewController
@@ -64,13 +62,6 @@ public:
 
 -(void) onChangedScene:(const G3MDemoScene*) scene
 {
-  id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-  [tracker send:[[GAIDictionaryBuilder createEventWithCategory: @"DemoScene"
-                                                        action: [NSString stringWithCppString: scene->getName()]
-                                                         label: nil
-                                                         value: nil] build]];
-
   [self.demoSelector setTitle: [NSString stringWithCppString: scene->getName()]
                      forState: UIControlStateNormal];
 
@@ -82,13 +73,6 @@ public:
 -(void) onChangedOption:(const std::string&) option
                 inScene:(const G3MDemoScene*) scene
 {
-  id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-
-  [tracker send:[[GAIDictionaryBuilder createEventWithCategory: @"DemoSceneOption"
-                                                        action: [NSString stringWithCppString: scene->getName()]
-                                                         label: [NSString stringWithCppString: option]
-                                                         value: nil] build]];
-
   [self.optionSelector setTitle: [NSString stringWithCppString: option]
                        forState: UIControlStateNormal];
 }
@@ -119,7 +103,7 @@ public:
   // Stop the glob3 render
   [self.g3mWidget stopAnimation];
 
-	[super viewDidDisappear:animated];
+  [super viewDidDisappear:animated];
 }
 
 - (void)viewDidUnload
@@ -149,7 +133,6 @@ public:
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  self.screenName = @"Main Screen";
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue

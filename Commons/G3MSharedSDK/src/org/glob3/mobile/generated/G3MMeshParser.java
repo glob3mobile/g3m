@@ -245,7 +245,7 @@ public class G3MMeshParser
   
     final String materialID = jsonMesh.getAsString("material", "<missing>");
     G3MMeshMaterial material = materials.get(materialID);
-    if (material == null)
+    if (material == null && !(materialID.equals("<missing>")))
     {
       ILogger.instance().logError("Can't find material \"%s\"", materialID);
     }

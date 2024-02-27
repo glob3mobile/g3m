@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FDE1AB7396D00673D44 /* libGoogleAnalyticsServices.a */; };
 		CF162FE21AB739C800673D44 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE11AB739C800673D44 /* SystemConfiguration.framework */; };
 		CF162FE41AB739D700673D44 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CF162FE31AB739D700673D44 /* libz.dylib */; };
 		CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */; };
@@ -57,6 +56,8 @@
 		CFBB0EB0270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFBB0EAE270AEEA00096E9CE /* Track_A-Sphere-972-2048x2048.jpg */; };
 		CFBB0EB2270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png in Resources */ = {isa = PBXBuildFile; fileRef = CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */; };
 		CFBD815219A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */; };
+		CFBF9E852B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF9E822B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp */; };
+		CFBF9E872B8CD46500A22D85 /* mark-icon-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */; };
 		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
 		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
@@ -224,6 +225,9 @@
 		CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Track_A-Sphere-972-2048x2048.png"; sourceTree = "<group>"; };
 		CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MOLDPointCloud1DemoScene.cpp; sourceTree = "<group>"; };
 		CFBD815119A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MOLDPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
+		CFBF9E822B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MTranslateScaleGizmoDemoScene.cpp; sourceTree = "<group>"; };
+		CFBF9E842B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MTranslateScaleGizmoDemoScene.hpp; sourceTree = "<group>"; };
+		CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark-icon-1.png"; sourceTree = "<group>"; };
 		CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCanvas2DDemoScene.cpp; sourceTree = "<group>"; };
 		CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MCanvas2DDemoScene.hpp; sourceTree = "<group>"; };
 		CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorgrid.jpg; sourceTree = "<group>"; };
@@ -337,7 +341,6 @@
 				CFB136D01AA779830013EDE1 /* CoreMotion.framework in Frameworks */,
 				CFB136CE1AA7573D0013EDE1 /* CoreLocation.framework in Frameworks */,
 				E7D1B60B16D2436700AF47C1 /* Foundation.framework in Frameworks */,
-				CF162FDF1AB7396D00673D44 /* libGoogleAnalyticsServices.a in Frameworks */,
 				CFF64D4518329FB7006ABFF6 /* Security.framework in Frameworks */,
 				CF6607F223DF315A00795C7F /* libG3MiOSSDK.a in Frameworks */,
 				CFF64D4718329FC8006ABFF6 /* CFNetwork.framework in Frameworks */,
@@ -374,6 +377,8 @@
 		CF6920AD1837E7EE007409D8 /* DemoBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				CFBF9E822B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp */,
+				CFBF9E842B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.hpp */,
 				CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */,
 				CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */,
 				CFE3B3D3183AD04A0078C796 /* G3M3DModelDemoScene.cpp */,
@@ -558,6 +563,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */,
 				CF3B19B7293515D40055B5C4 /* Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg */,
 				CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */,
 				CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */,
@@ -649,8 +655,9 @@
 		E7D1B5FD16D2436700AF47C1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = G3M;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = "Igo Software SL";
 				TargetAttributes = {
 					E7D1B60416D2436700AF47C1 = {
@@ -725,6 +732,7 @@
 				E7D1B64016D2462B00AF47C1 /* Icon-72.png in Resources */,
 				E7D1B64116D2462B00AF47C1 /* Icon-72@2x.png in Resources */,
 				CF6920C518394DB6007409D8 /* roads_monaco.geojson in Resources */,
+				CFBF9E872B8CD46500A22D85 /* mark-icon-1.png in Resources */,
 				CFE3B3EB183ADB2D0078C796 /* texture0.png in Resources */,
 				CFAE772321ADC55B007314B6 /* 870147_points.json in Resources */,
 				CF37F5F1183D26500050CAEF /* 0576.bil in Resources */,
@@ -787,6 +795,7 @@
 			files = (
 				E7D1B61516D2436700AF47C1 /* main.m in Sources */,
 				CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */,
+				CFBF9E852B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp in Sources */,
 				CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */,
 				CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */,
 				CFE3B3D0183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp in Sources */,
@@ -870,6 +879,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -926,6 +936,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -965,14 +976,8 @@
 				);
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lstdc++",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.com.glob3mobile.G3MApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1001,14 +1006,8 @@
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = C_CODE;
 				INFOPLIST_FILE = "G3MApp/G3MApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/G3MApp/GoogleAnalytics",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lstdc++",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.com.glob3mobile.G3MApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

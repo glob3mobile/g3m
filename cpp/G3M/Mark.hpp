@@ -156,10 +156,10 @@ private:
 #endif
   float          _textureWidth;
   float          _textureHeight;
-  float          _textureWidthProportion;
-  float          _textureHeightProportion;
+  float          _textureWidthScale;
+  float          _textureHeightScale;
   bool           _textureSizeSetExternally;
-  bool           _textureProportionSetExternally;
+  bool           _textureScaleSetExternally;
   std::string    _imageID;
   
   bool  _hasTCTransformations;
@@ -360,9 +360,9 @@ public:
 
   void setPosition(const Geodetic3D& position);
   
-  void setOnScreenSizeOnPixels(int width, int height);
-  void setOnScreenSizeOnProportionToImage(float width, float height);
-  
+  void setScreenSize(int width, int height);
+  void setScreenSizeScale(float scaleWidth, float scaleHeight);
+
   void setTextureCoordinatesTransformation(const Vector2F& translation,
                                            const Vector2F& scaling);
   
@@ -372,6 +372,10 @@ public:
                                            const float scalingY);
 
   void setMarkAnchor(float anchorU, float anchorV);
+
+  Vector2F getMarkAnchor() const;
+  float getMarkAnchorU() const;
+  float getMarkAnchorV() const;
 
   void setToken(const std::string& token) {
     _token = token;

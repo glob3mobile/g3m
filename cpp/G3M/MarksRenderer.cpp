@@ -153,8 +153,8 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
 
-        const RectangleF markPixelBounds(markPixel._x - (markWidth  / 2),
-                                         markPixel._y - (markHeight / 2),
+        const RectangleF markPixelBounds(markPixel._x - (markWidth  * mark->getMarkAnchorU()),
+                                         markPixel._y - (markHeight * mark->getMarkAnchorV()),
                                          markWidth,
                                          markHeight);
 

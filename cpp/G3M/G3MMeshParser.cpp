@@ -187,7 +187,7 @@ Mesh* G3MMeshParser::parseMesh(std::map<std::string, G3MMeshMaterial*>& material
 
   const std::string materialID = jsonMesh->getAsString("material", "<missing>");
   G3MMeshMaterial* material = materials[materialID];
-  if (material == NULL) {
+  if (material == NULL && !(materialID == "<missing>")) {
     ILogger::instance()->logError("Can't find material \"%s\"", materialID.c_str());
   }
 

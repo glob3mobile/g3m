@@ -44,10 +44,10 @@ bool GPUVariable::hasAttribute(int code, int a) {
 }
 
 int GPUVariable::getUniformCode(int u) {
-  return 0x00000001  << u;
+  return 0x00000001 << u;
 }
 int GPUVariable::getAttributeCode(int a) {
-  return 0x00000001  << a;
+  return 0x00000001 << a;
 }
 
 int GPUVariable::getUniformCode(GPUUniformKey u) {
@@ -77,127 +77,100 @@ int GPUVariable::getAttributeCode(GPUAttributeKey a) {
 }
 
 GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
-
-  if (name.compare("uFlatColor") == 0) {
+  if (name == "uFlatColor") {
     return FLAT_COLOR;
   }
-
-  if (name.compare("uModelview") == 0) {
+  else if (name == "uModelview") {
     return MODELVIEW;
   }
-
-  if (name.compare("uTextureExtent") == 0) {
+  else if (name == "uTextureExtent") {
     return TEXTURE_EXTENT;
   }
-
-  if (name.compare("uViewPortExtent") == 0) {
+  else if (name == "uViewPortExtent") {
     return VIEWPORT_EXTENT;
   }
-
-  if (name.compare("uTranslationTexCoord") == 0) {
+  else if (name == "uTranslationTexCoord") {
     return TRANSLATION_TEXTURE_COORDS;
   }
-
-  if (name.compare("uScaleTexCoord") == 0) {
+  else if (name == "uScaleTexCoord") {
     return SCALE_TEXTURE_COORDS;
   }
-
-  if (name.compare("uPointSize") == 0) {
+  else if (name == "uPointSize") {
     return POINT_SIZE;
   }
-
-  if (name.compare("uAmbientLightColor") == 0) {
+  else if (name == "uAmbientLightColor") {
     return AMBIENT_LIGHT_COLOR;
   }
-
-  if (name.compare("uDiffuseLightDirection") == 0) {
+  else if (name == "uDiffuseLightDirection") {
     return DIFFUSE_LIGHT_DIRECTION;
   }
-
-  if (name.compare("uDiffuseLightColor") == 0) {
+  else if (name == "uDiffuseLightColor") {
     return DIFFUSE_LIGHT_COLOR;
   }
-
-  if (name.compare("uProjection") == 0) {
+  else if (name == "uProjection") {
     return PROJECTION;
   }
-
-  if (name.compare("uCameraModel") == 0) {
+  else if (name == "uCameraModel") {
     return CAMERA_MODEL;
   }
-
-  if (name.compare("uModel") == 0) {
+  else if (name == "uModel") {
     return MODEL;
   }
-
-  if (name.compare("uBillboardPosition") == 0) {
+  else if (name == "uBillboardPosition") {
     return BILLBOARD_POSITION;
   }
-
-  if (name.compare("uRotationCenterTexCoord") == 0) {
+  else if (name == "uRotationCenterTexCoord") {
     return ROTATION_CENTER_TEXTURE_COORDS;
   }
-
-  if (name.compare("uRotationAngleTexCoord") == 0) {
+  else if (name == "uRotationAngleTexCoord") {
     return ROTATION_ANGLE_TEXTURE_COORDS;
   }
-
-  if (name.compare("Sampler") == 0) {
+  else if (name == "Sampler") {
     return SAMPLER;
   }
-
-  if (name.compare("Sampler2") == 0) {
+  else if (name == "Sampler2") {
     return SAMPLER2;
   }
-
-  if (name.compare("Sampler3") == 0) {
+  else if (name == "Sampler3") {
     return SAMPLER3;
   }
-  
-  if (name.compare("uTranslation2D") == 0) {
+  else if (name == "uTranslation2D") {
     return TRANSLATION_2D;
   }
-  
-  if (name.compare("uBillboardAnchor") == 0) {
+  else if (name == "uBillboardAnchor") {
     return BILLBOARD_ANCHOR;
   }
-  
-  if (name.compare("uCameraPosition") == 0) {
+  else if (name == "uCameraPosition") {
     return CAMERA_POSITION;
   }
-
-  return UNRECOGNIZED_UNIFORM;
+  else {
+    return UNRECOGNIZED_UNIFORM;
+  }
 }
 
 GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
-
-  if (name.compare("aPosition") == 0) {
+  if (name == "aPosition") {
     return POSITION;
   }
-
-  if (name.compare("aColor") == 0) {
+  else if (name == "aColor") {
     return COLOR;
   }
-
-  if (name.compare("aTextureCoord") == 0) {
+  else if (name == "aTextureCoord") {
     return TEXTURE_COORDS;
   }
-
-  if (name.compare("aTextureCoord2") == 0) {
+  else if (name == "aTextureCoord2") {
     return TEXTURE_COORDS_2;
   }
-
-  if (name.compare("aTextureCoord3") == 0) {
+  else if (name == "aTextureCoord3") {
     return TEXTURE_COORDS_3;
   }
-
-  if (name.compare("aNormal") == 0) {
+  else if (name == "aNormal") {
     return NORMAL;
   }
-  
-  if (name.compare("aPosition2D") == 0) {
+  else if (name == "aPosition2D") {
     return POSITION_2D;
   }
-
-  return UNRECOGNIZED_ATTRIBUTE;
+  else {
+    return UNRECOGNIZED_ATTRIBUTE;
+  }
 }

@@ -21,7 +21,7 @@ public class MarkZoomOutAndRemoveEffect extends EffectWithDuration
      _renderer = renderer;
      _deleteMarkOnDisappears = deleteMarkOnDisappears;
      _finalSize = finalSize;
-    _mark.setOnScreenSizeOnProportionToImage(1, 1);
+    _mark.setScreenSizeScale(1, 1);
   }
 
   public void dispose()
@@ -45,7 +45,7 @@ public class MarkZoomOutAndRemoveEffect extends EffectWithDuration
     {
       final double alpha = getAlpha(when);
       final float s = 1.0f - (float)(((1.0 - _finalSize) * alpha) + _finalSize);
-      _mark.setOnScreenSizeOnProportionToImage(s, s);
+      _mark.setScreenSizeScale(s, s);
     }
   }
 
