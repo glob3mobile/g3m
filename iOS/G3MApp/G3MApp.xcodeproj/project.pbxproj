@@ -57,6 +57,7 @@
 		CFBB0EB2270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png in Resources */ = {isa = PBXBuildFile; fileRef = CFBB0EB1270AF1400096E9CE /* Track_A-Sphere-972-2048x2048.png */; };
 		CFBD815219A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */; };
 		CFBF9E852B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF9E822B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp */; };
+		CFBF9E872B8CD46500A22D85 /* mark-icon-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */; };
 		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
 		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
@@ -226,6 +227,7 @@
 		CFBD815119A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MOLDPointCloud1DemoScene.hpp; sourceTree = "<group>"; };
 		CFBF9E822B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MTranslateScaleGizmoDemoScene.cpp; sourceTree = "<group>"; };
 		CFBF9E842B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MTranslateScaleGizmoDemoScene.hpp; sourceTree = "<group>"; };
+		CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark-icon-1.png"; sourceTree = "<group>"; };
 		CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCanvas2DDemoScene.cpp; sourceTree = "<group>"; };
 		CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MCanvas2DDemoScene.hpp; sourceTree = "<group>"; };
 		CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorgrid.jpg; sourceTree = "<group>"; };
@@ -561,6 +563,7 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */,
 				CF3B19B7293515D40055B5C4 /* Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg */,
 				CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */,
 				CF624D9A272963C300F5762A /* OverviewCamera_19666_20210310_114027335.PNG */,
@@ -729,6 +732,7 @@
 				E7D1B64016D2462B00AF47C1 /* Icon-72.png in Resources */,
 				E7D1B64116D2462B00AF47C1 /* Icon-72@2x.png in Resources */,
 				CF6920C518394DB6007409D8 /* roads_monaco.geojson in Resources */,
+				CFBF9E872B8CD46500A22D85 /* mark-icon-1.png in Resources */,
 				CFE3B3EB183ADB2D0078C796 /* texture0.png in Resources */,
 				CFAE772321ADC55B007314B6 /* 870147_points.json in Resources */,
 				CF37F5F1183D26500050CAEF /* 0576.bil in Resources */,

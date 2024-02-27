@@ -307,7 +307,7 @@ public class MarksRenderer extends DefaultRenderer
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
-          final RectangleF markPixelBounds = new RectangleF(markPixel._x - (markWidth / 2), markPixel._y - (markHeight / 2), markWidth, markHeight);
+          final RectangleF markPixelBounds = new RectangleF(markPixel._x - (markWidth * mark.getMarkAnchorU()), markPixel._y - (markHeight * mark.getMarkAnchorV()), markWidth, markHeight);
   
           if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
           {

@@ -91,10 +91,10 @@ public class Mark implements SurfaceElevationListener
   private IImage _textureImage;
   private float _textureWidth;
   private float _textureHeight;
-  private float _textureWidthProportion;
-  private float _textureHeightProportion;
+  private float _textureWidthScale;
+  private float _textureHeightScale;
   private boolean _textureSizeSetExternally;
-  private boolean _textureProportionSetExternally;
+  private boolean _textureScaleSetExternally;
   private String _imageID;
 
   private boolean _hasTCTransformations;
@@ -265,9 +265,9 @@ public class Mark implements SurfaceElevationListener
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
-     _textureHeightProportion = 1.0F;
-     _textureWidthProportion = 1.0F;
-     _textureProportionSetExternally = false;
+     _textureHeightScale = 1.0F;
+     _textureWidthScale = 1.0F;
+     _textureScaleSetExternally = false;
      _initialized = false;
      _zoomInAppears = true;
      _effectsScheduler = null;
@@ -352,9 +352,9 @@ public class Mark implements SurfaceElevationListener
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
-     _textureHeightProportion = 1.0F;
-     _textureWidthProportion = 1.0F;
-     _textureProportionSetExternally = false;
+     _textureHeightScale = 1.0F;
+     _textureWidthScale = 1.0F;
+     _textureScaleSetExternally = false;
      _initialized = false;
      _zoomInAppears = true;
      _effectsScheduler = null;
@@ -427,9 +427,9 @@ public class Mark implements SurfaceElevationListener
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
-     _textureHeightProportion = 1.0F;
-     _textureWidthProportion = 1.0F;
-     _textureProportionSetExternally = false;
+     _textureHeightScale = 1.0F;
+     _textureWidthScale = 1.0F;
+     _textureScaleSetExternally = false;
      _initialized = false;
      _zoomInAppears = true;
      _effectsScheduler = null;
@@ -501,9 +501,9 @@ public class Mark implements SurfaceElevationListener
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
-     _textureProportionSetExternally = false;
-     _textureHeightProportion = 1.0F;
-     _textureWidthProportion = 1.0F;
+     _textureScaleSetExternally = false;
+     _textureHeightScale = 1.0F;
+     _textureWidthScale = 1.0F;
      _initialized = false;
      _zoomInAppears = true;
      _effectsScheduler = null;
@@ -575,9 +575,9 @@ public class Mark implements SurfaceElevationListener
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
-     _textureProportionSetExternally = false;
-     _textureHeightProportion = 1.0F;
-     _textureWidthProportion = 1.0F;
+     _textureScaleSetExternally = false;
+     _textureHeightScale = 1.0F;
+     _textureWidthScale = 1.0F;
      _initialized = false;
      _zoomInAppears = true;
      _effectsScheduler = null;
@@ -752,10 +752,10 @@ public class Mark implements SurfaceElevationListener
       _textureWidth = _textureImage.getWidth();
       _textureHeight = _textureImage.getHeight();
   
-      if (_textureProportionSetExternally)
+      if (_textureScaleSetExternally)
       {
-        _textureWidth *= _textureWidthProportion;
-        _textureHeight *= _textureHeightProportion;
+        _textureWidth *= _textureWidthScale;
+        _textureHeight *= _textureHeightScale;
       }
     }
   
@@ -782,10 +782,10 @@ public class Mark implements SurfaceElevationListener
       _textureWidth = _textureImage.getWidth();
       _textureHeight = _textureImage.getHeight();
   
-      if (_textureProportionSetExternally)
+      if (_textureScaleSetExternally)
       {
-        _textureWidth *= _textureWidthProportion;
-        _textureHeight *= _textureHeightProportion;
+        _textureWidth *= _textureWidthScale;
+        _textureHeight *= _textureHeightScale;
       }
     }
   }
@@ -1025,9 +1025,8 @@ public class Mark implements SurfaceElevationListener
     clearGLState();
   }
 
-  public final void setOnScreenSizeOnPixels(int width, int height)
+  public final void setScreenSize(int width, int height)
   {
-  
     _textureWidth = width;
     _textureHeight = height;
     _textureSizeSetExternally = true;
@@ -1041,18 +1040,18 @@ public class Mark implements SurfaceElevationListener
       }
     }
   }
-  public final void setOnScreenSizeOnProportionToImage(float width, float height)
+  public final void setScreenSizeScale(float scaleWidth, float scaleHeight)
   {
-    _textureWidthProportion = width;
-    _textureHeightProportion = height;
-    _textureProportionSetExternally = true;
+    _textureWidthScale = scaleWidth;
+    _textureHeightScale = scaleHeight;
+    _textureScaleSetExternally = true;
   
     if (_glState != null)
     {
       BillboardGLFeature b = (BillboardGLFeature) _glState.getGLFeature(GLFeatureID.GLF_BILLBOARD);
       if (b != null)
       {
-        b.changeSize(IMathUtils.instance().round(_textureWidth * _textureWidthProportion), IMathUtils.instance().round(_textureHeight * _textureHeightProportion));
+        b.changeSize(IMathUtils.instance().round(_textureWidth * _textureWidthScale), IMathUtils.instance().round(_textureHeight * _textureHeightScale));
       }
     }
   }
@@ -1097,6 +1096,19 @@ public class Mark implements SurfaceElevationListener
     }
     _anchorU = anchorU;
     _anchorV = anchorV;
+  }
+
+  public final Vector2F getMarkAnchor()
+  {
+    return new Vector2F(_anchorU, _anchorV);
+  }
+  public final float getMarkAnchorU()
+  {
+    return _anchorU;
+  }
+  public final float getMarkAnchorV()
+  {
+    return _anchorV;
   }
 
   public final void setToken(String token)

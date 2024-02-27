@@ -49,7 +49,7 @@ class RescaleMarkTask: public PeriodicalTask {
       
       _size += _delta;
       
-      _mark->setOnScreenSizeOnPixels(_size, _size);
+      _mark->setScreenSize(_size, _size);
     }
     
   };
@@ -83,7 +83,7 @@ void G3MAnimatedMarksDemoScene::rawActivate(const G3MContext* context) {
                               true,
                               NULL,
                               false);
-    animMark->setOnScreenSizeOnProportionToImage(0.05, 0.1);
+    animMark->setScreenSizeScale(0.05, 0.1);
     g3mWidget->addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
     marksRenderer->addMark(animMark);
   }
@@ -98,7 +98,7 @@ void G3MAnimatedMarksDemoScene::rawActivate(const G3MContext* context) {
                                NULL,
                                false);
 
-    animMark2->setOnScreenSizeOnPixels(100,100);
+    animMark2->setScreenSize(100,100);
     animMark2->setMarkAnchor(0.5, 1.0);
     marksRenderer->addMark(animMark2);
     g3mWidget->addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark2, 4, 2, 7, TimeInterval::fromMilliseconds(100)));

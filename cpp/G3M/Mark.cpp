@@ -93,23 +93,23 @@ public:
   _mark(mark),
   _initialSize(initialSize)
   {
-    _mark->setOnScreenSizeOnProportionToImage(_initialSize, _initialSize);
+    _mark->setScreenSizeScale(_initialSize, _initialSize);
   }
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     const double alpha = getAlpha(when);
     const float  s     = (float) (((1.0 - _initialSize) * alpha) + _initialSize);
-    _mark->setOnScreenSizeOnProportionToImage(s, s);
+    _mark->setScreenSizeScale(s, s);
   }
 
   void stop(const G3MRenderContext* rc,
             const TimeInterval& when) {
-    _mark->setOnScreenSizeOnProportionToImage(1, 1);
+    _mark->setScreenSizeScale(1, 1);
   }
 
   void cancel(const TimeInterval& when) {
-    _mark->setOnScreenSizeOnProportionToImage(1, 1);
+    _mark->setScreenSizeScale(1, 1);
   }
 
 };
@@ -133,7 +133,7 @@ public:
   _deleteMarkOnDisappears(deleteMarkOnDisappears),
   _finalSize(finalSize)
   {
-    _mark->setOnScreenSizeOnProportionToImage(1, 1);
+    _mark->setScreenSizeScale(1, 1);
   }
 
   ~MarkZoomOutAndRemoveEffect() {
@@ -154,7 +154,7 @@ public:
     if (_mark != NULL) {
       const double alpha = getAlpha(when);
       const float  s     = 1.0f - (float) (((1.0 - _finalSize) * alpha) + _finalSize);
-      _mark->setOnScreenSizeOnProportionToImage(s, s);
+      _mark->setScreenSizeScale(s, s);
     }
   }
 
@@ -336,9 +336,9 @@ _textureGLF(NULL),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
-_textureHeightProportion(1.0),
-_textureWidthProportion(1.0),
-_textureProportionSetExternally(false),
+_textureHeightScale(1.0),
+_textureWidthScale(1.0),
+_textureScaleSetExternally(false),
 _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
@@ -398,9 +398,9 @@ _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
-_textureHeightProportion(1.0),
-_textureWidthProportion(1.0),
-_textureProportionSetExternally(false),
+_textureHeightScale(1.0),
+_textureWidthScale(1.0),
+_textureScaleSetExternally(false),
 _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
@@ -457,9 +457,9 @@ _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
-_textureHeightProportion(1.0),
-_textureWidthProportion(1.0),
-_textureProportionSetExternally(false),
+_textureHeightScale(1.0),
+_textureWidthScale(1.0),
+_textureScaleSetExternally(false),
 _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
@@ -516,9 +516,9 @@ _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
-_textureProportionSetExternally(false),
-_textureHeightProportion(1.0),
-_textureWidthProportion(1.0),
+_textureScaleSetExternally(false),
+_textureHeightScale(1.0),
+_textureWidthScale(1.0),
 _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
@@ -574,9 +574,9 @@ _hasTCTransformations(false),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
-_textureProportionSetExternally(false),
-_textureHeightProportion(1.0),
-_textureWidthProportion(1.0),
+_textureScaleSetExternally(false),
+_textureHeightScale(1.0),
+_textureWidthScale(1.0),
 _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
@@ -676,9 +676,9 @@ void Mark::onTextureDownload(const IImage* image) {
     _textureWidth = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
 
-    if (_textureProportionSetExternally) {
-      _textureWidth  *= _textureWidthProportion;
-      _textureHeight *= _textureHeightProportion;
+    if (_textureScaleSetExternally) {
+      _textureWidth  *= _textureWidthScale;
+      _textureHeight *= _textureHeightScale;
     }
   }
 
@@ -999,9 +999,8 @@ void Mark::setPosition(const Geodetic3D& position) {
   clearGLState();
 }
 
-void Mark::setOnScreenSizeOnPixels(int width, int height) {
-
-  _textureWidth = width;
+void Mark::setScreenSize(int width, int height) {
+  _textureWidth  = width;
   _textureHeight = height;
   _textureSizeSetExternally = true;
 
@@ -1014,16 +1013,16 @@ void Mark::setOnScreenSizeOnPixels(int width, int height) {
   }
 }
 
-void Mark::setOnScreenSizeOnProportionToImage(float width, float height) {
-  _textureWidthProportion = width;
-  _textureHeightProportion = height;
-  _textureProportionSetExternally = true;
+void Mark::setScreenSizeScale(float scaleWidth, float scaleHeight) {
+  _textureWidthScale  = scaleWidth;
+  _textureHeightScale = scaleHeight;
+  _textureScaleSetExternally = true;
 
   if (_glState != NULL) {
     BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
     if (b != NULL) {
-      b->changeSize(IMathUtils::instance()->round(_textureWidth  * _textureWidthProportion),
-                    IMathUtils::instance()->round(_textureHeight * _textureHeightProportion));
+      b->changeSize(IMathUtils::instance()->round(_textureWidth  * _textureWidthScale),
+                    IMathUtils::instance()->round(_textureHeight * _textureHeightScale));
     }
   }
 }
@@ -1070,6 +1069,18 @@ void Mark::setMarkAnchor(float anchorU, float anchorV) {
   _anchorV = anchorV;
 }
 
+Vector2F Mark::getMarkAnchor() const {
+  return Vector2F(_anchorU, _anchorV);
+}
+
+float Mark::getMarkAnchorU() const {
+  return _anchorU;
+}
+
+float Mark::getMarkAnchorV() const {
+  return _anchorV;
+}
+
 void Mark::onImageCreationError(const std::string& error) {
   _textureSolved = true;
 
@@ -1106,9 +1117,9 @@ void Mark::onImageCreated(const IImage* image,
     _textureWidth  = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
 
-    if (_textureProportionSetExternally) {
-      _textureWidth  *= _textureWidthProportion;
-      _textureHeight *= _textureHeightProportion;
+    if (_textureScaleSetExternally) {
+      _textureWidth  *= _textureWidthScale;
+      _textureHeight *= _textureHeightScale;
     }
   }
 }

@@ -8,143 +8,23 @@
 #include "G3MMarksDemoScene.hpp"
 
 #include <G3M/G3MWidget.hpp>
-#include <G3M/LayerSet.hpp>
-#include <G3M/IDownloader.hpp>
-#include <G3M/DownloadPriority.hpp>
-#include <G3M/IBufferDownloadListener.hpp>
-#include <G3M/IJSONParser.hpp>
-#include <G3M/JSONObject.hpp>
-#include <G3M/JSONArray.hpp>
-#include <G3M/JSONNumber.hpp>
-#include <G3M/Mark.hpp>
-#include <G3M/Geodetic3D.hpp>
-#include <G3M/IStringUtils.hpp>
-#include <G3M/MarksRenderer.hpp>
+#include <G3M/Color.hpp>
 #include <G3M/BingMapsLayer.hpp>
-
-#include <G3M/Cylinder.hpp>
-#include <G3M/MeshRenderer.hpp>
-#include <G3M/CompositeRenderer.hpp>
-#include <G3M/Arrow.hpp>
-#include <G3M/TranslateScaleGizmo.hpp>
-#include <G3M/ShapesRenderer.hpp>
-#include <G3M/EllipsoidShape.hpp>
-#include <G3M/Planet.hpp>
-#include <G3M/LayoutUtils.hpp>
+#include <G3M/LayerSet.hpp>
+#include <G3M/Geodetic3D.hpp>
+#include <G3M/Mark.hpp>
+#include <G3M/MarksRenderer.hpp>
+#include <G3M/MarkTouchListener.hpp>
 
 #include "G3MDemoModel.hpp"
 
+class G3MMarksDemoScene_MarkTouchListener : public MarkTouchListener {
+  bool touchedMark(Mark* mark) {
+    ILogger::instance()->logInfo("Mark touched!");
 
-class G3MMarksDemoScene_BufferDownloadListener : public IBufferDownloadListener {
-private:
-  G3MMarksDemoScene* _scene;
-public:
-  G3MMarksDemoScene_BufferDownloadListener(G3MMarksDemoScene* scene) :
-  _scene(scene)
-  {
-  }
-
-  void onDownload(const URL& url,
-                  IByteBuffer* buffer,
-                  bool expired) {
-
-    const JSONBaseObject* jsonBaseObject = IJSONParser::instance()->parse(buffer);
-    if (jsonBaseObject == NULL) {
-      ILogger::instance()->logError("Can't parse (1) \"%s\"", url._path.c_str());
-    }
-    else {
-      const JSONObject* jsonObject = jsonBaseObject->asObject();
-      if (jsonObject == NULL) {
-        ILogger::instance()->logError("Can't parse (2) \"%s\"", url._path.c_str());
-      }
-      else {
-        const IStringUtils* su = IStringUtils::instance();
-
-        const JSONArray* list = jsonObject->getAsArray("list");
-        for (int i = 0; i < list->size(); i++) {
-
-          const JSONObject* city = list->getAsObject(i);
-          const JSONObject* coords = city->getAsObject("coord");
-          const Geodetic3D position = Geodetic3D::fromDegrees(coords->getAsNumber("lat")->value(),
-                                                              coords->getAsNumber("lon")->value(),
-                                                              0);
-          const JSONArray* weather = city->getAsArray("weather");
-          const JSONObject* weatherObject = weather->getAsObject(0);
-
-          std::string icon;
-          if (weatherObject->getAsString("icon", "DOUBLE") == "DOUBLE") {
-            icon = su->toString( (int) weatherObject->getAsNumber("icon")->value() ) + "d.png";
-            if (icon.length() < 7) {
-              icon = "0" + icon;
-            }
-          }
-          else {
-            icon = weatherObject->getAsString("icon", "DOUBLE") + ".png";
-          }
-
-          Mark* mark = new Mark(city->getAsString("name", ""),
-                                URL("http://openweathermap.org/img/w/" + icon),
-                                position,
-                                RELATIVE_TO_GROUND,
-                                0,                              // minDistanceToCamera
-                                true,                           // labelBottom
-                                13,                             // labelFontSize
-                                Color::newFromRGBA(1, 1, 1, 1), // labelFontColor
-                                Color::newFromRGBA(0, 0, 0, 1), // labelShadowColor
-                                -10                             // labelGapSize
-                                );
-
-          _scene->addMark(mark);
-        }
-      }
-
-      delete jsonBaseObject;
-    }
-
-    delete buffer;
-  }
-
-  void onError(const URL& url) {
-    ILogger::instance()->logError("Error downloading \"%s\"", url._path.c_str());
-  }
-
-  void onCancel(const URL& url) {
-    // do nothing
-  }
-
-  void onCanceledDownload(const URL& url,
-                          IByteBuffer* buffer,
-                          bool expired) {
-    // do nothing
-  }
-
-};
-
-void G3MMarksDemoScene::addMark(Mark* mark) {
-  getModel()->getMarksRenderer()->addMark(mark);
-}
-
-class GizmoListener : public TranslateScaleGizmoListener{
-  EllipsoidShape* _shape;
-  const Planet* _planet;
-public:
-  
-  GizmoListener(EllipsoidShape* shape, const Planet* planet):
-  _shape(shape), _planet(planet){}
-  
-  void onChanged(const TranslateScaleGizmo& gizmo) override{
-    printf("Gizmo P: %s S: %0.2f\n", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
-    
-    Geodetic3D geoPos = _planet->toGeodetic3D(gizmo.getCoordinateSystem()._origin);
-    _shape->setPosition(geoPos);
-    _shape->setScale(gizmo.getScale());
-  }
-  
-  void onChangeEnded(const TranslateScaleGizmo& gizmo) override{
-    printf("Change ended on gizmo P: %s S: %0.2f\n", gizmo.getCoordinateSystem()._origin.description().c_str(), gizmo.getScale());
+    return true;
   }
 };
-
 
 void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
@@ -157,159 +37,33 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
                                            TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
-//  IDownloader* downloader = context->getDownloader();
-//
-//  _requestID = downloader->requestBuffer(URL("http://openweathermap.org/data/2.5/box/city?bbox=-80,-180,80,180,4&cluster=yes&appid=e1079e4aa327b6cf16aa5b68d47ed1e2"),
-//                                         DownloadPriority::HIGHEST,
-//                                         TimeInterval::fromHours(1),
-//                                         true,
-//                                         new G3MMarksDemoScene_BufferDownloadListener(this),
-//                                         true);
+  Mark* mark = new Mark(URL("file:///mark-icon-1.png"),                                            // iconURL
+                        Geodetic3D::fromDegrees(21.580896830714426216, -71.930032768589384773, 0), // position
+                        ABSOLUTE,                                                                  // altitudeMode
+                        4500000,                                                                   // minDistanceToCamera=4.5e+06
+                        NULL,                                                                      // userData=NULL,
+                        true,                                                                      // autoDeleteUserData=true,
+                        new G3MMarksDemoScene_MarkTouchListener(),                                 // MarkTouchListener* listener=NULL,
+                        true                                                                       // autoDeleteListener=false
+                        );
 
-//  g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(23.2, 5.5, 3643920),
-//                                       Angle::zero(), // heading
-//                                       Angle::fromDegrees(30 - 90) // pitch
-//                                       );
+//  mark->setMarkAnchor(1, 0.5);
+  mark->setMarkAnchor(0.5, 1);
+//  mark->setMarkAnchor(1, 1);
 
-//  Mark* mark = new Mark("Las Palmas",
-//                        URL("https://icons-for-free.com/iconfiles/png/512/sun+sunny+weather+icon-1320196635525068067.png"),
-//                        Geodetic3D::fromDegrees(28.09973, -15.41343, 0),
-//                        RELATIVE_TO_GROUND,
-//                        0,                              // minDistanceToCamera
-//                        true,                           // labelBottom
-//                        13,                             // labelFontSize
-//                        Color::newFromRGBA(1, 1, 1, 1), // labelFontColor
-//                        Color::newFromRGBA(0, 0, 0, 1), // labelShadowColor
-//                        -10                             // labelGapSize
-//                        );
-//
-//  addMark(mark);
-  
-//  Geodetic3D geoPos = Geodetic3D::fromDegrees(28.09973, -15.41343, 5000);
-  Geodetic3D geoPos = Geodetic3D::fromDegrees(37.39996584, -1.75035672, 0);
+//  mark->setOnScreenSizeOnProportionToImage(2, 0.5);
+//  mark->setOnScreenSizeOnProportionToImage(0.5, 2);
+
+  model->getMarksRenderer()->addMark(mark);
+
+  g3mWidget->setAnimatedCameraPosition(TimeInterval::fromSeconds(5),
+                                       Geodetic3D::fromDegrees(21.580896830714426216, -71.930032768589384773, 160000));
 
 
-//  g3mWidget->setAnimatedCameraPosition(// Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height + 10000),
-//                                       Geodetic3D::fromDegrees(28.245483424027337804,
-//                                                               -15.470656085304499427,
-//                                                               1514.138390999199828),
-//                                       Angle::fromDegrees( -159.135024 ),
-//                                       Angle::fromDegrees( -5.004065 ));
-
-  //  Touched on position (lat=28.178645378267038524d, lon=-15.442239906635627733d, height=0)
-  //  Touched on pixels (V2I 52, 126)
-  //  Camera position=(lat=28.245483424027337804d, lon=-15.470656085304499427d, height=1514.138390999199828) heading=-159.135024 pitch=-5.004065
-  //  Camera zNear=151.413839 zFar=480581.477842
-
-  double size = 100.0;
-
-  g3mWidget->setAnimatedCameraPosition(Geodetic3D(geoPos._latitude, geoPos._longitude, geoPos._height /*+ 10000*/));
-
-
-//  {
-//    std::vector<Geodetic3D*> positions = LayoutUtils::splitOverCircle(g3mWidget->getG3MContext()->getPlanet(),
-//                                                                      geoPos,
-//                                                                      size,
-//                                                                      12);
-//
-//    for (size_t i = 0; i < positions.size(); i++) {
-//      Geodetic3D* position = positions[i];
-//
-//      Mark* mark = new Mark(IStringUtils::instance()->toString( (long long) i ),
-//                            *position,
-//                            ABSOLUTE,
-//                            0 /* minDistanceToCamera */);
-//
-//      model->getMarksRenderer()->addMark(mark);
-//
-//      delete position;
-//    }
-//  }
-
-  
-//  EllipsoidShape(Geodetic3D* position,
-//                 AltitudeMode altitudeMode,
-//                 const Vector3D& radius,
-//                 short resolution,
-//                 float borderWidth,
-//                 bool texturedInside,
-//                 bool mercator,
-//                 const Color& surfaceColor,
-//                 Color* borderColor = NULL,
-//                 bool withNormals = true);
-//
-//  EllipsoidShape(Geodetic3D* position,
-//                 AltitudeMode altitudeMode,
-//                 const Planet* planet,
-//                 const URL& textureURL,
-//                 const Vector3D& radius,
-//                 short resolution,
-//                 float borderWidth,
-//                 bool texturedInside,
-//                 bool mercator,
-//                 bool withNormals = true);
-
-
-  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),                          // Geodetic3D* position,
-                                                 AltitudeMode::ABSOLUTE,                          // AltitudeMode altitudeMode
-                                                 g3mWidget->getG3MContext()->getPlanet(),         // const Planet* planet,
-                                                 URL("file:///Track_A-Sphere-70-2048x2048.png"),  // const URL& textureURL,
-                                                 Vector3D(size, size, size),                      // const Vector3D& radius
-                                                 24,                                              // short resolution
-                                                 0,                                               // float borderWidth
-                                                 true,                                            // bool texturedInside
-                                                 false,                                           // bool mercator
-                                                 false                                            // bool withNormals = true
-                                                 );
-
-  //ellipsoid->setSurfaceColor(Color::fromRGBA(1, 1, 1, 0.5f));
-  ellipsoid->setDepthTest(false);
-  ellipsoid->setCullFace(true);
-  ellipsoid->setCulledFace(GLCullFace::back());
-
-//  EllipsoidShape* ellipsoid = new EllipsoidShape(new Geodetic3D(geoPos),
-//                                                 AltitudeMode::ABSOLUTE,
-//                                                 Vector3D(size, size, size),
-//                                                 18,
-//                                                 1.0,
-//                                                 false,
-//                                                 false,
-//                                                 Color::fromRGBA255(128, 128, 128, 128),
-//                                                 new Color(Color::WHITE),
-//                                                 true);
-  model->getShapesRenderer()->addShape(ellipsoid);
-
-  const double scale                     = 1.0;
-  const double maxScale                  = 2;
-  const double lineWidthRatio            = 0.01;
-  const double headLengthRatio           = 0.05;
-  const double headWidthRatio            = 2.0;
-  const double scaleArrowLengthSizeRatio = 0.15;
-
-  _gizmo = TranslateScaleGizmo::translateAndScale(context->getPlanet()->getCoordinateSystemAt(geoPos),
-                                                  size,
-                                                  scale,
-                                                  maxScale,
-                                                  lineWidthRatio,
-                                                  headLengthRatio,
-                                                  headWidthRatio,
-                                                  scaleArrowLengthSizeRatio);
-
-  _gizmo->setListener(new GizmoListener(ellipsoid, context->getPlanet()));
-  
-  model->getCompositeRenderer()->addRenderer(_gizmo);
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {
-  context->getDownloader()->cancelRequest(_requestID);
-
-  getModel()->getCompositeRenderer()->removeRenderer(_gizmo);
-  _gizmo = NULL;
+  getModel()->getMarksRenderer()->removeAllMarks();
 
   G3MDemoScene::deactivate(context);
-}
-
-void G3MMarksDemoScene::rawSelectOption(const std::string& option,
-                                          int optionIndex) {
-  
 }
