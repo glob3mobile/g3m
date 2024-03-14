@@ -22,7 +22,9 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
-  private Color _backgroundColor;
+  private final Color _backgroundColor ;
+  private final Color _meshOuterColor ;
+  private final Color _meshInnerColor ;
 
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
   private MutableMatrix44D _modelviewMatrix = new MutableMatrix44D();
@@ -105,8 +107,8 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
       //    colors.add(Color::red().wheelStep(numStrides, step));
       //    colors.add(Color::red().wheelStep(numStrides, step));
   
-      colors.add(1, 1, 1, 1);
-      colors.add(1, 1, 1, 0);
+      colors.add(_meshInnerColor);
+      colors.add(_meshOuterColor);
     }
   
     // the two last indices
@@ -130,10 +132,12 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   }
 
 
-  public BusyMeshRenderer(Color backgroundColor)
+  public BusyMeshRenderer(Color backgroundColor, Color meshOuterColor, Color meshInnerColor)
   {
      _degrees = 0;
      _backgroundColor = backgroundColor;
+     _meshOuterColor = meshOuterColor;
+     _meshInnerColor = meshInnerColor;
      _projectionFeature = null;
      _modelFeature = null;
      _glState = new GLState();
@@ -148,10 +152,9 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    //GL* gl = rc->getGL();
     createGLState();
   
-    //gl->clearScreen(*_backgroundColor);
+    rc.getGL().clearScreen(_backgroundColor);
   
     Mesh mesh = getMesh(rc);
     if (mesh != null)
@@ -180,8 +183,6 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   {
     if (_mesh != null)
        _mesh.dispose();
-    if (_backgroundColor != null)
-       _backgroundColor.dispose();
 
     _glState._release();
   }

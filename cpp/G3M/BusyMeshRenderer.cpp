@@ -102,8 +102,8 @@ Mesh* BusyMeshRenderer::createMesh(const G3MRenderContext* rc) {
     //    colors.add(Color::red().wheelStep(numStrides, step));
     //    colors.add(Color::red().wheelStep(numStrides, step));
 
-    colors.add(1, 1, 1, 1);
-    colors.add(1, 1, 1, 0);
+    colors.add(_meshInnerColor);
+    colors.add(_meshOuterColor);
   }
 
   // the two last indices
@@ -152,10 +152,9 @@ Mesh* BusyMeshRenderer::getMesh(const G3MRenderContext* rc) {
 void BusyMeshRenderer::render(const G3MRenderContext* rc,
                               GLState* glState)
 {
-  //GL* gl = rc->getGL();
   createGLState();
 
-  //gl->clearScreen(*_backgroundColor);
+  rc->getGL()->clearScreen(_backgroundColor);
 
   Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {

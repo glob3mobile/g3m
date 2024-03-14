@@ -19,7 +19,9 @@ class BusyMeshRenderer : public ProtoRenderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;
-  Color*  _backgroundColor;
+  const Color _backgroundColor;
+  const Color _meshOuterColor;
+  const Color _meshInnerColor;
 
   MutableMatrix44D _projectionMatrix;
   mutable MutableMatrix44D _modelviewMatrix;
@@ -37,9 +39,13 @@ private:
 
 
 public:
-  BusyMeshRenderer(Color* backgroundColor):
+  BusyMeshRenderer(const Color& backgroundColor,
+                   const Color& meshOuterColor,
+                   const Color& meshInnerColor):
   _degrees(0),
   _backgroundColor(backgroundColor),
+  _meshOuterColor(meshOuterColor),
+  _meshInnerColor(meshInnerColor),
   _projectionFeature(NULL),
   _modelFeature(NULL),
   _glState(new GLState()),
@@ -59,7 +65,6 @@ public:
 
   virtual ~BusyMeshRenderer() {
     delete _mesh;
-    delete _backgroundColor;
 
     _glState->_release();
   }

@@ -7,7 +7,6 @@
 //
 
 #include "StringUtils_iOS.hpp"
-#include <algorithm>
 #include <sstream>
 
 #import "NSString_CppAdditions.h"
@@ -79,24 +78,23 @@ std::string StringUtils_iOS::substring(const std::string& string,
 }
 
 std::string StringUtils_iOS::ltrim(const std::string& string) const {
-  std::string s = string;
-  s.erase(s.begin(),
-          std::find_if(s.begin(),
-                       s.end(),
-                       std::not1(std::ptr_fun<int, int>(std::isspace))
-                       )
-          );
-  return s;
+  std::size_t start;
+  for (start = 0; start < string.length(); ++start) {
+    if (!std::isspace(string[start])) {
+      break;
+    }
+  }
+  return string.substr(start);
 }
 
 std::string StringUtils_iOS::rtrim(const std::string& string) const {
-  std::string s = string;
-  s.erase(std::find_if(s.rbegin(),
-                       s.rend(),
-                       std::not1(std::ptr_fun<int, int>(std::isspace))
-                       ).base(),
-          s.end());
-  return s;
+  int end;
+  for (end = string.length() - 1; end >= 0; --end) {
+    if (!std::isspace(string[end])) {
+      break;
+    }
+  }
+  return string.substr(0, end + 1);
 }
 
 bool StringUtils_iOS::endsWith(const std::string& string,
@@ -204,7 +202,6 @@ std::string StringUtils_iOS::replaceAll(const std::string& originalString,
 }
 
 std::string StringUtils_iOS::capitalize(const std::string& string) const {
-
   NSString* nsString = [NSString stringWithCppString: string];
   return std::string([[nsString capitalizedString] UTF8String]);
 }
