@@ -223,7 +223,9 @@ CameraRenderer* IG3MBuilder::getCameraRenderer() {
  */
 ProtoRenderer* IG3MBuilder::getBusyRenderer() {
   if (!_busyRenderer) {
-    _busyRenderer = new BusyMeshRenderer(Color::newFromRGBA((float)0, (float)0, (float)0, (float)1));
+    _busyRenderer = new BusyMeshRenderer(Color::TRANSPARENT, /* backgroundColor */
+                                         Color::TRANSPARENT, /* meshOuterColor  */
+                                         Color::WHITE        /* meshInnerColor  */);
   }
 
   return _busyRenderer;
