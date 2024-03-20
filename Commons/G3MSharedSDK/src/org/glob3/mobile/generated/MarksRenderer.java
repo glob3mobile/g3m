@@ -273,6 +273,7 @@ public class MarksRenderer extends DefaultRenderer
       if (_lastCamera != null)
       {
         final Vector2F touchedPixel = touchEvent.getTouch(0).getPos();
+  
         final Planet planet = ec.getPlanet();
   
         double minSqDistance = IMathUtils.instance().maxDouble();
@@ -322,12 +323,12 @@ public class MarksRenderer extends DefaultRenderer
   
         if (nearestMark != null)
         {
-          handled = nearestMark.touched();
+          handled = nearestMark.touched(touchEvent);
           if (!handled)
           {
             if (_markTouchListener != null)
             {
-              handled = _markTouchListener.touchedMark(nearestMark);
+              handled = _markTouchListener.touchedMark(nearestMark, touchEvent);
             }
           }
         }

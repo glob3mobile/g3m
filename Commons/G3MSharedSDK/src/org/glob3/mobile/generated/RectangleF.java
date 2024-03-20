@@ -121,14 +121,15 @@ public class RectangleF
   public final String description()
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
-    isb.addString("Rectangle: X:");
-    isb.addDouble(_x);
-    isb.addString(" Y:");
-    isb.addDouble(_y);
-    isb.addString(" WIDTH:");
-    isb.addDouble(_width);
-    isb.addString(" HEIGHT:");
-    isb.addDouble(_height);
+    isb.addString("(RectangleF x:");
+    isb.addFloat(_x);
+    isb.addString(", y:");
+    isb.addFloat(_y);
+    isb.addString(", width:");
+    isb.addFloat(_width);
+    isb.addString(", height:");
+    isb.addFloat(_height);
+    isb.addString(")");
     final String s = isb.getString();
     if (isb != null)
        isb.dispose();
@@ -139,13 +140,13 @@ public class RectangleF
   {
     IStringBuilder isb = IStringBuilder.newStringBuilder();
     isb.addString("RectangleF|");
-    isb.addDouble(_x);
+    isb.addFloat(_x);
     isb.addString("|");
-    isb.addDouble(_y);
+    isb.addFloat(_y);
     isb.addString("|");
-    isb.addDouble(_width);
+    isb.addFloat(_width);
     isb.addString("|");
-    isb.addDouble(_height);
+    isb.addFloat(_height);
     final String s = isb.getString();
     if (isb != null)
        isb.dispose();

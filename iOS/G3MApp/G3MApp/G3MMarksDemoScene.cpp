@@ -15,12 +15,13 @@
 #include <G3M/Mark.hpp>
 #include <G3M/MarksRenderer.hpp>
 #include <G3M/MarkTouchListener.hpp>
+#include <G3M/TouchEvent.hpp>
 
 #include "G3MDemoModel.hpp"
 
 class G3MMarksDemoScene_MarkTouchListener : public MarkTouchListener {
-  bool touchedMark(Mark* mark) {
-    ILogger::instance()->logInfo("Mark touched!");
+  bool touchedMark(Mark* mark, const TouchEvent* touchEvent) {
+    ILogger::instance()->logInfo("Mark touched! " + touchEvent->description());
 
     return true;
   }
@@ -41,9 +42,9 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
                         Geodetic3D::fromDegrees(21.580896830714426216, -71.930032768589384773, 0), // position
                         ABSOLUTE,                                                                  // altitudeMode
                         4500000,                                                                   // minDistanceToCamera=4.5e+06
-                        NULL,                                                                      // userData=NULL,
-                        true,                                                                      // autoDeleteUserData=true,
-                        new G3MMarksDemoScene_MarkTouchListener(),                                 // MarkTouchListener* listener=NULL,
+                        NULL,                                                                      // userData=NULL
+                        true,                                                                      // autoDeleteUserData=true
+                        new G3MMarksDemoScene_MarkTouchListener(),                                 // MarkTouchListener* listener=NULL
                         true                                                                       // autoDeleteListener=false
                         );
 
@@ -51,8 +52,8 @@ void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   mark->setMarkAnchor(0.5, 1);
 //  mark->setMarkAnchor(1, 1);
 
-//  mark->setOnScreenSizeOnProportionToImage(2, 0.5);
-//  mark->setOnScreenSizeOnProportionToImage(0.5, 2);
+//  mark->setScreenSizeScale(2, 0.5);
+  mark->setScreenSizeScale(0.5, 1.5);
 
   model->getMarksRenderer()->addMark(mark);
 

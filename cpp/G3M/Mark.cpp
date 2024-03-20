@@ -752,8 +752,8 @@ const Vector3D* Mark::getCartesianPosition(const Planet* planet) {
   return _cartesianPosition;
 }
 
-bool Mark::touched() {
-  return (_listener == NULL) ? false : _listener->touchedMark(this);
+bool Mark::touched(const TouchEvent* touchEvent) {
+  return (_listener == NULL) ? false : _listener->touchedMark(this, touchEvent);
 }
 
 void Mark::setMinDistanceToCamera(double minDistanceToCamera) {
