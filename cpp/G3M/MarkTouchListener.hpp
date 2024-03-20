@@ -15,7 +15,8 @@ public:
   virtual ~MarkTouchListener() {
   }
 
-  virtual bool touchedMark(Mark* mark) = 0;
+  virtual bool touchedMark(Mark* mark,
+                           const TouchEvent* touchEvent) = 0;
 };
 
 #endif

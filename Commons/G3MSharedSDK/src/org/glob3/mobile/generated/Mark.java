@@ -836,9 +836,9 @@ public class Mark implements SurfaceElevationListener
     _userData = userData;
   }
 
-  public final boolean touched()
+  public final boolean touched(TouchEvent touchEvent)
   {
-    return (_listener == null) ? false : _listener.touchedMark(this);
+    return (_listener == null) ? false : _listener.touchedMark(this, touchEvent);
   }
 
   public final void setMinDistanceToCamera(double minDistanceToCamera)

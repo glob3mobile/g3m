@@ -15,5 +15,5 @@ public abstract class MarkTouchListener
   {
   }
 
-  public abstract boolean touchedMark(Mark mark);
+  public abstract boolean touchedMark(Mark mark, TouchEvent touchEvent);
 }

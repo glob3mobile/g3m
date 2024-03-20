@@ -36,6 +36,7 @@ class EffectTarget;
 class IImageBuilder;
 class MarksRenderer;
 class MarkImageBuilderListener;
+class TouchEvent;
 
 class MarkUserData {
 public:
@@ -331,7 +332,7 @@ public:
     _userData = userData;
   }
 
-  bool touched();
+  bool touched(const TouchEvent* touchEvent);
 
   void setMinDistanceToCamera(double minDistanceToCamera);
   double getMinDistanceToCamera();

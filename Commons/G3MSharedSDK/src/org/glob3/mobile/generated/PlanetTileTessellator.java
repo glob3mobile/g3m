@@ -95,7 +95,6 @@ public class PlanetTileTessellator extends TileTessellator
   
         if ((elevationData != null) || (grid != null))
         {
-          @SuppressWarnings("null")
           final double rawElevation = (elevationData == null) ? grid.getElevation(i, j) : elevationData.getElevationAt(position);
   
           elevation = (rawElevation != rawElevation)? 0 : rawElevation * verticalExaggeration;

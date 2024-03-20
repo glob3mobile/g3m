@@ -42,7 +42,7 @@ public:
   {
   }
 
-  bool touchedMark(Mark* mark) {
+  bool touchedMark(Mark* mark, const TouchEvent* touchEvent) {
     const std::string name = _name.empty() ? "<no name>" : _name;
     _model->showDialog(name, "Restaurant");
     return true;
