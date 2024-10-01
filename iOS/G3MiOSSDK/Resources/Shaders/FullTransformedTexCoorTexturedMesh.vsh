@@ -10,7 +10,6 @@ uniform float uPointSize;
 uniform float uRotationAngleTexCoord;
 uniform vec2 uRotationCenterTexCoord;
 
-varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
 void main() {

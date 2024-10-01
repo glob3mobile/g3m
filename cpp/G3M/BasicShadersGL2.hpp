@@ -120,7 +120,6 @@ public:
             "precision mediump float;\n" +
             "#endif\n" +
             "varying vec2 TextureCoordOut;\n" +
-            "varying vec4 VertexColor;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
             "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
@@ -353,7 +352,6 @@ public:
             "uniform float uPointSize;\n" +
             "uniform float uRotationAngleTexCoord;\n" +
             "uniform vec2 uRotationCenterTexCoord;\n" +
-            "varying vec4 VertexColor;\n" +
             "varying vec2 TextureCoordOut;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
