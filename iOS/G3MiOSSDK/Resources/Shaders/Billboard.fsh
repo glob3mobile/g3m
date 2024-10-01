@@ -4,7 +4,7 @@ precision highp float;
 precision mediump float;
 #endif
 
-varying mediump vec2 TextureCoordOut;
+varying vec2 TextureCoordOut;
 uniform sampler2D Sampler;
 
 void main() {

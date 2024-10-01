@@ -4,9 +4,9 @@ precision highp float;
 precision mediump float;
 #endif
 
-varying mediump vec2 TextureCoordOut;
+varying vec2 TextureCoordOut;
 
-varying mediump vec4 VertexColor;
+varying vec4 VertexColor;
 
 uniform sampler2D Sampler;
 uniform bool EnableTexture;
@@ -14,8 +14,8 @@ uniform lowp vec4 uFlatColor;
 
 uniform bool EnableColorPerVertex;
 uniform bool EnableFlatColor;
-uniform mediump float FlatColorIntensity;
-uniform mediump float ColorPerVertexIntensity;
+uniform float FlatColorIntensity;
+uniform float ColorPerVertexIntensity;
 
 void main() {
   if (EnableTexture) {

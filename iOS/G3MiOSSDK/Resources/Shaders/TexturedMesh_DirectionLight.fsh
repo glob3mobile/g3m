@@ -4,11 +4,11 @@ precision highp float;
 precision mediump float;
 #endif
 
-varying mediump vec2 TextureCoordOut;
+varying vec2 TextureCoordOut;
 
 uniform sampler2D Sampler;
 
-varying mediump vec3 lightColor;
+varying vec3 lightColor;
 
 void main() {
   vec4 texColor = texture2D(Sampler, TextureCoordOut);

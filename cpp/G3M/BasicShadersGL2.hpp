@@ -29,7 +29,7 @@ public:
             "attribute vec4 aColor;\n" +
             "uniform mat4 uModelview;\n" +
             "uniform float uPointSize;\n" +
-            "varying mediump vec4 VertexColor;\n" +
+            "varying vec4 VertexColor;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
             "  VertexColor = aColor;\n" +
@@ -83,13 +83,13 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
-            "varying mediump vec2 TextureCoordOut2;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut2;\n" +
             "uniform sampler2D Sampler;\n" +
             "uniform sampler2D Sampler2;\n" +
             "void main() {\n" +
-            "  mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
-            "  mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
+            "  vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
             "  \n" +
             "  gl_FragColor = tex1 * tex2;\n" +
             "}\n");
@@ -119,8 +119,8 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
-            "varying mediump vec4 VertexColor;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "varying vec4 VertexColor;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
             "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
@@ -158,8 +158,8 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "uniform lowp vec4 uFlatColor;\n" +
-            "varying mediump vec3 lightColor;\n" +
+            "uniform vec4 uFlatColor;\n" +
+            "varying vec3 lightColor;\n" +
             "void main() {\n" +
             "  gl_FragColor.rgb = uFlatColor.rgb * lightColor.rgb;\n" +
             "  gl_FragColor.a   = uFlatColor.a;\n" +
@@ -194,13 +194,13 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
-            "varying mediump vec2 TextureCoordOut2;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut2;\n" +
             "uniform sampler2D Sampler;\n" +
             "uniform sampler2D Sampler2;\n" +
             "void main() {\n" +
-            "  mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
-            "  mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
+            "  vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
             "  gl_FragColor = tex1 * tex2;\n" +
             "}\n");
          this->add(srcTransformedTexCoorMultiTexturedMesh);
@@ -227,7 +227,7 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
             "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
@@ -264,7 +264,7 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
             "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
@@ -296,7 +296,7 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "uniform lowp vec4 uFlatColor;\n" +
+            "uniform vec4 uFlatColor;\n" +
             "void main() {\n" +
             "  gl_FragColor = uFlatColor;\n" +
             "}\n");
@@ -327,13 +327,13 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
-            "varying mediump vec2 TextureCoordOut2;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut2;\n" +
             "uniform sampler2D Sampler;\n" +
             "uniform sampler2D Sampler2;\n" +
             "void main() {\n" +
-            "  mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
-            "  mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
+            "  vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
             "  \n" +
             "  gl_FragColor = tex1 * tex2;\n" +
             "}\n");
@@ -372,7 +372,7 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
             "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
@@ -415,9 +415,9 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
-            "varying mediump vec3 lightColor;\n" +
+            "varying vec3 lightColor;\n" +
             "void main() {\n" +
             "  vec4 texColor = texture2D(Sampler, TextureCoordOut);\n" +
             "  gl_FragColor.rgb = texColor.rgb * lightColor.rgb;\n" +
@@ -459,9 +459,9 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
-            "varying mediump vec3 lightColor;\n" +
+            "varying vec3 lightColor;\n" +
             "void main() {\n" +
             "  vec4 texColor = texture2D(Sampler, TextureCoordOut);\n" +
             "  gl_FragColor.rgb = texColor.rgb * lightColor.rgb;\n" +
@@ -504,15 +504,15 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
-            "varying mediump vec4 VertexColor;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "varying vec4 VertexColor;\n" +
             "uniform sampler2D Sampler;\n" +
             "uniform bool EnableTexture;\n" +
-            "uniform lowp vec4 FlatColor;\n" +
+            "uniform vec4 FlatColor;\n" +
             "uniform bool EnableColorPerVertex;\n" +
             "uniform bool EnableFlatColor;\n" +
-            "uniform mediump float FlatColorIntensity;\n" +
-            "uniform mediump float ColorPerVertexIntensity;\n" +
+            "uniform float FlatColorIntensity;\n" +
+            "uniform float ColorPerVertexIntensity;\n" +
             "void main() {\n" +
             "  if (EnableTexture) {\n" +
             "    gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
@@ -602,7 +602,7 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
             "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
@@ -748,7 +748,7 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "uniform lowp vec4 uFlatColor;\n" +
+            "uniform vec4 uFlatColor;\n" +
             "void main() {\n" +
             "  gl_FragColor = uFlatColor;\n" +
             "}\n");
@@ -781,15 +781,15 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
-            "varying mediump vec4 VertexColor;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "varying vec4 VertexColor;\n" +
             "uniform sampler2D Sampler;\n" +
             "uniform bool EnableTexture;\n" +
             "uniform lowp vec4 uFlatColor;\n" +
             "uniform bool EnableColorPerVertex;\n" +
             "uniform bool EnableFlatColor;\n" +
-            "uniform mediump float FlatColorIntensity;\n" +
-            "uniform mediump float ColorPerVertexIntensity;\n" +
+            "uniform float FlatColorIntensity;\n" +
+            "uniform float ColorPerVertexIntensity;\n" +
             "void main() {\n" +
             "  if (EnableTexture) {\n" +
             "    gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
@@ -851,7 +851,7 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
             "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +

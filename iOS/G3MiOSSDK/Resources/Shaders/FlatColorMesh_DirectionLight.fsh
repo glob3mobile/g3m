@@ -4,8 +4,8 @@ precision highp float;
 precision mediump float;
 #endif
 
-uniform lowp vec4 uFlatColor;
-varying mediump vec3 lightColor;
+uniform vec4 uFlatColor;
+varying vec3 lightColor;
 
 void main() {
   gl_FragColor.rgb = uFlatColor.rgb * lightColor.rgb;

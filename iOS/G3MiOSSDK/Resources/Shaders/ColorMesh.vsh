@@ -5,7 +5,7 @@ uniform mat4 uModelview;
 
 uniform float uPointSize;
 
-varying mediump vec4 VertexColor;
+varying vec4 VertexColor;
 
 void main() {
   gl_Position = uModelview * aPosition;
