@@ -1,9 +1,3 @@
-//
-//  FlatColorMesh_DirectionLight
-//
-//  Created by José Miguel Santana Núñez
-//
-
 attribute vec4 aPosition;
 attribute vec3 aNormal;
 
@@ -19,10 +13,9 @@ uniform vec3 uDiffuseLightDirection; //We must normalize
 varying vec3 lightColor;
 
 void main() {
-
   vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
   vec3 lightDirNormalized = normalize( uDiffuseLightDirection );
-  
+
   float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);
 
   gl_Position = uModelview * aPosition;
@@ -31,7 +24,5 @@ void main() {
 
   //Computing Total Light in Vertex
   lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;
-  lightColor.x = min(lightColor.x, 1.0);
-  lightColor.y = min(lightColor.y, 1.0);
-  lightColor.z = min(lightColor.z, 1.0);
+  lightColor = clamp(lightColor, 0.0, 1.0);
 }

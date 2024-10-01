@@ -19,6 +19,7 @@ class IGLTextureID;
 class IImage;
 class GPUUniform;
 class GPUAttribute;
+class ILogger;
 
 #include "ShaderType.hpp"
 
@@ -192,10 +193,10 @@ public:
   virtual int createShader(ShaderType type) const = 0;
   virtual bool compileShader (int shader, const std::string& source) const = 0;
   virtual bool deleteShader(int shader) const = 0;
-  virtual void printShaderInfoLog(int shader) const = 0;
+  virtual void logShaderInfoLog(ILogger* logger, int shader) const = 0;
   virtual bool linkProgram(int program) const = 0;
-  virtual void printProgramInfoLog(int program) const = 0;
-  
+  virtual void logProgramInfoLog(ILogger* logger, int program) const = 0;
+
   virtual void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const = 0;
   
   virtual int getProgramiv(const GPUProgram* program, int param) const = 0;

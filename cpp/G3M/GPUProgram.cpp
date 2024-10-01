@@ -23,7 +23,6 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
                                       const std::string& name,
                                       const std::string& vertexSource,
                                       const std::string& fragmentSource) {
-
   GPUProgram* p = new GPUProgram();
 
   p->_name = name;
@@ -33,9 +32,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
   // compile vertex shader
   int vertexShader= gl->createShader(VERTEX_SHADER);
   if (!p->compileShader(gl, vertexShader, vertexSource)) {
-    ILogger::instance()->logError("Program name: %s", name.c_str());
-    ILogger::instance()->logError("GPUProgram: ERROR compiling vertex shader:\n %s\n", vertexSource.c_str());
-    gl->printShaderInfoLog(vertexShader);
+    ILogger::instance()->logError("GPUProgram %s: Error compiling vertex shader.", name.c_str());
+    gl->logShaderInfoLog(ILogger::instance(), vertexShader);
 
     p->deleteShader(gl, vertexShader);
     p->deleteProgram(gl, p);
@@ -47,9 +45,8 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
   // compile fragment shader
   int fragmentShader = gl->createShader(FRAGMENT_SHADER);
   if (!p->compileShader(gl, fragmentShader, fragmentSource)) {
-    ILogger::instance()->logError("Program name: %s", name.c_str());
-    ILogger::instance()->logError("GPUProgram: ERROR compiling fragment shader:\n %s\n", fragmentSource.c_str());
-    gl->printShaderInfoLog(fragmentShader);
+    ILogger::instance()->logError("GPUProgram %s: Error compiling fragment shader.", name.c_str());
+    gl->logShaderInfoLog(ILogger::instance(), fragmentShader);
 
     p->deleteShader(gl, fragmentShader);
     p->deleteProgram(gl, p);
@@ -62,8 +59,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
 
   // link program
   if (!p->linkProgram(gl)) {
-    ILogger::instance()->logError("Program name: %s", name.c_str());
-    ILogger::instance()->logError("GPUProgram: ERROR linking graphic program\n");
+    ILogger::instance()->logError("GPUProgram %s: Error linking graphic program.", name.c_str());
     p->deleteShader(gl, vertexShader);
     p->deleteShader(gl, fragmentShader);
     p->deleteProgram(gl, p);
@@ -78,8 +74,7 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
 
   const int error = gl->getError();
   if (error != GLError::noError()) {
-    ILogger::instance()->logError("Program name: %s", name.c_str());
-    ILogger::instance()->logError("Error while compiling program");
+    ILogger::instance()->logError("GPUProgram %s: Error %d while compiling program.", name.c_str(), error);
   }
 
   return p;
@@ -87,7 +82,6 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
 
 
 GPUProgram::~GPUProgram() {
-
   //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
 
   //  if (_manager != NULL) {
@@ -106,20 +100,23 @@ GPUProgram::~GPUProgram() {
   delete[] _createdUniforms;
 
   if (!_gl->deleteProgram(this)) {
-    ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
+    ILogger::instance()->logError("GPUProgram %s: Problem encountered while deleting program.", _name.c_str());
   }
 }
 
 bool GPUProgram::linkProgram(GL* gl) const {
-  bool result = gl->linkProgram(_programID);
+  const bool result = gl->linkProgram(_programID);
   //#if defined(DEBUG)
   //  _nativeGL->printProgramInfoLog(_programID);
   //#endif
+  if (!result) {
+    gl->logProgramInfoLog(ILogger::instance(), _programID);
+  }
   return result;
 }
 
 bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) const {
-  bool result = gl->compileShader(shader, source);
+  const bool result = gl->compileShader(shader, source);
 
   //#if defined(DEBUG)
   //  _nativeGL->printShaderInfoLog(shader);
@@ -129,7 +126,8 @@ bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) co
     gl->attachShader(_programID, shader);
   }
   else {
-    ILogger::instance()->logError("GPUProgram: Problem encountered while compiling shader.");
+    ILogger::instance()->logError("GPUProgram %s: Problem encountered while compiling shader.", _name.c_str());
+    gl->logShaderInfoLog(ILogger::instance(), shader);
   }
 
   return result;
@@ -137,24 +135,23 @@ bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) co
 
 void GPUProgram::deleteShader(GL* gl, int shader) const {
   if (!gl->deleteShader(shader)) {
-    ILogger::instance()->logError("GPUProgram: Problem encountered while deleting shader.");
+    ILogger::instance()->logError("GPUProgram %s: Problem encountered while deleting shader.", _name.c_str());
   }
 }
 
 void GPUProgram::deleteProgram(GL* gl, const GPUProgram* p) {
   if (!gl->deleteProgram(p)) {
-    ILogger::instance()->logError("GPUProgram: Problem encountered while deleting program.");
+    ILogger::instance()->logError("GPUProgram %s: Problem encountered while deleting program.", _name.c_str());
   }
 }
 
 void GPUProgram::getVariables(GL* gl) {
-
   for (int i = 0; i < 32; i++) {
     _uniforms[i] = NULL;
     _attributes[i] = NULL;
   }
 
-  //Uniforms
+  // Uniforms
   _uniformsCode = 0;
   _nUniforms = gl->getProgramiv(this, GLVariable::activeUniforms());
 
@@ -173,7 +170,7 @@ void GPUProgram::getVariables(GL* gl) {
     _createdUniforms[counter++] = u; //Adding to created uniforms array
   }
 
-  //Attributes
+  // Attributes
   _attributesCode = 0;
   _nAttributes = gl->getProgramiv(this, GLVariable::activeAttributes());
 
@@ -207,43 +204,47 @@ GPUUniform* GPUProgram::getGPUUniform(const std::string& name) const {
 
 GPUUniformBool* GPUProgram::getGPUUniformBool(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->_type == GLType::glBool()) {
-    return (GPUUniformBool*)u;
+  if ((u != NULL) &&
+      (u->_type == GLType::glBool())) {
+    return (GPUUniformBool*) u;
   }
   return NULL;
 }
 
 GPUUniformVec2Float* GPUProgram::getGPUUniformVec2Float(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->_type == GLType::glVec2Float()) {
-    return (GPUUniformVec2Float*)u;
+  if ((u != NULL) &&
+      (u->_type == GLType::glVec2Float())) {
+    return (GPUUniformVec2Float*) u;
   }
   return NULL;
 }
 
 GPUUniformVec4Float* GPUProgram::getGPUUniformVec4Float(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->_type == GLType::glVec4Float()) {
-    return (GPUUniformVec4Float*)u;
+  if ((u != NULL) &&
+      (u->_type == GLType::glVec4Float())) {
+    return (GPUUniformVec4Float*) u;
   }
   return NULL;
 }
 
 GPUUniformFloat* GPUProgram::getGPUUniformFloat(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->_type == GLType::glFloat()) {
-    return (GPUUniformFloat*)u;
+  if ((u != NULL) &&
+      (u->_type == GLType::glFloat())) {
+    return (GPUUniformFloat*) u;
   }
   return NULL;
 }
 
 GPUUniformMatrix4Float* GPUProgram::getGPUUniformMatrix4Float(const std::string& name) const {
   GPUUniform* u = getGPUUniform(name);
-  if (u!= NULL && u->_type == GLType::glMatrix4Float()) {
-    return (GPUUniformMatrix4Float*)u;
+  if ((u != NULL) &&
+      (u->_type == GLType::glMatrix4Float())) {
+    return (GPUUniformMatrix4Float*) u;
   }
   return NULL;
-
 }
 
 GPUAttribute* GPUProgram::getGPUAttribute(const std::string& name) const {
@@ -279,7 +280,6 @@ GPUAttributeVec1Float* GPUProgram::getGPUAttributeVec1Float(const std::string& n
     return a;
   }
   return NULL;
-
 }
 
 GPUAttributeVec2Float* GPUProgram::getGPUAttributeVec2Float(const std::string& name) const {
@@ -290,7 +290,6 @@ GPUAttributeVec2Float* GPUProgram::getGPUAttributeVec2Float(const std::string& n
     return a;
   }
   return NULL;
-
 }
 
 GPUAttributeVec3Float* GPUProgram::getGPUAttributeVec3Float(const std::string& name) const {
@@ -301,7 +300,6 @@ GPUAttributeVec3Float* GPUProgram::getGPUAttributeVec3Float(const std::string& n
     return a;
   }
   return NULL;
-
 }
 
 GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string& name) const {
@@ -312,20 +310,20 @@ GPUAttributeVec4Float* GPUProgram::getGPUAttributeVec4Float(const std::string& n
     return a;
   }
   return NULL;
-
 }
 
 /**
  Must be called when the program is used
  */
 void GPUProgram::onUsed() {
-  //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
+  // ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
 }
+
 /**
  Must be called when the program is no longer used
  */
 void GPUProgram::onUnused(GL* gl) {
-  //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
+  // ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
 
   for (int i = 0; i < _nUniforms; i++) {
     if (_createdUniforms[i] != NULL) { //Texture Samplers return null
@@ -344,7 +342,6 @@ void GPUProgram::onUnused(GL* gl) {
  Must be called before drawing to apply Uniforms and Attributes new values
  */
 void GPUProgram::applyChanges(GL* gl) {
-
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* uniform = _createdUniforms[i];
     if (uniform != NULL) { //Texture Samplers return null

@@ -56,7 +56,7 @@ public class GPUProgram
 
   private boolean compileShader(GL gl, int shader, String source)
   {
-    boolean result = gl.compileShader(shader, source);
+    final boolean result = gl.compileShader(shader, source);
   
     ///#if defined(DEBUG)
     //  _nativeGL->printShaderInfoLog(shader);
@@ -68,44 +68,48 @@ public class GPUProgram
     }
     else
     {
-      ILogger.instance().logError("GPUProgram: Problem encountered while compiling shader.");
+      ILogger.instance().logError("GPUProgram %s: Problem encountered while compiling shader.", _name);
+      gl.logShaderInfoLog(ILogger.instance(), shader);
     }
   
     return result;
   }
   private boolean linkProgram(GL gl)
   {
-    boolean result = gl.linkProgram(_programID);
+    final boolean result = gl.linkProgram(_programID);
     ///#if defined(DEBUG)
     //  _nativeGL->printProgramInfoLog(_programID);
     ///#endif
+    if (!result)
+    {
+      gl.logProgramInfoLog(ILogger.instance(), _programID);
+    }
     return result;
   }
   private void deleteShader(GL gl, int shader)
   {
     if (!gl.deleteShader(shader))
     {
-      ILogger.instance().logError("GPUProgram: Problem encountered while deleting shader.");
+      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting shader.", _name);
     }
   }
   private void deleteProgram(GL gl, GPUProgram p)
   {
     if (!gl.deleteProgram(p))
     {
-      ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
+      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting program.", _name);
     }
   }
 
   private void getVariables(GL gl)
   {
-  
     for (int i = 0; i < 32; i++)
     {
       _uniforms[i] = null;
       _attributes[i] = null;
     }
   
-    //Uniforms
+    // Uniforms
     _uniformsCode = 0;
     _nUniforms = gl.getProgramiv(this, GLVariable.activeUniforms());
   
@@ -126,7 +130,7 @@ public class GPUProgram
       _createdUniforms[counter++] = u; //Adding to created uniforms array
     }
   
-    //Attributes
+    // Attributes
     _attributesCode = 0;
     _nAttributes = gl.getProgramiv(this, GLVariable.activeAttributes());
   
@@ -169,7 +173,6 @@ public class GPUProgram
 
   public void dispose()
   {
-  
     //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
   
     //  if (_manager != NULL) {
@@ -193,13 +196,12 @@ public class GPUProgram
   
     if (!_gl.deleteProgram(this))
     {
-      ILogger.instance().logError("GPUProgram: Problem encountered while deleting program.");
+      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting program.", _name);
     }
   }
 
   public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
   {
-  
     GPUProgram p = new GPUProgram();
   
     p._name = name;
@@ -210,9 +212,8 @@ public class GPUProgram
     int vertexShader = gl.createShader(ShaderType.VERTEX_SHADER);
     if (!p.compileShader(gl, vertexShader, vertexSource))
     {
-      ILogger.instance().logError("Program name: %s", name);
-      ILogger.instance().logError("GPUProgram: ERROR compiling vertex shader:\n %s\n", vertexSource);
-      gl.printShaderInfoLog(vertexShader);
+      ILogger.instance().logError("GPUProgram %s: Error compiling vertex shader.", name);
+      gl.logShaderInfoLog(ILogger.instance(), vertexShader);
   
       p.deleteShader(gl, vertexShader);
       p.deleteProgram(gl, p);
@@ -225,9 +226,8 @@ public class GPUProgram
     int fragmentShader = gl.createShader(ShaderType.FRAGMENT_SHADER);
     if (!p.compileShader(gl, fragmentShader, fragmentSource))
     {
-      ILogger.instance().logError("Program name: %s", name);
-      ILogger.instance().logError("GPUProgram: ERROR compiling fragment shader:\n %s\n", fragmentSource);
-      gl.printShaderInfoLog(fragmentShader);
+      ILogger.instance().logError("GPUProgram %s: Error compiling fragment shader.", name);
+      gl.logShaderInfoLog(ILogger.instance(), fragmentShader);
   
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p);
@@ -241,8 +241,7 @@ public class GPUProgram
     // link program
     if (!p.linkProgram(gl))
     {
-      ILogger.instance().logError("Program name: %s", name);
-      ILogger.instance().logError("GPUProgram: ERROR linking graphic program\n");
+      ILogger.instance().logError("GPUProgram %s: Error linking graphic program.", name);
       p.deleteShader(gl, vertexShader);
       p.deleteShader(gl, fragmentShader);
       p.deleteProgram(gl, p);
@@ -258,8 +257,7 @@ public class GPUProgram
     final int error = gl.getError();
     if (error != GLError.noError())
     {
-      ILogger.instance().logError("Program name: %s", name);
-      ILogger.instance().logError("Error while compiling program");
+      ILogger.instance().logError("GPUProgram %s: Error %d while compiling program.", name, error);
     }
   
     return p;
@@ -298,48 +296,47 @@ public class GPUProgram
   public final GPUUniformBool getGPUUniformBool(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u._type == GLType.glBool())
+    if ((u != null) && (u._type == GLType.glBool()))
     {
-      return (GPUUniformBool)u;
+      return (GPUUniformBool) u;
     }
     return null;
   }
   public final GPUUniformVec2Float getGPUUniformVec2Float(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u._type == GLType.glVec2Float())
+    if ((u != null) && (u._type == GLType.glVec2Float()))
     {
-      return (GPUUniformVec2Float)u;
+      return (GPUUniformVec2Float) u;
     }
     return null;
   }
   public final GPUUniformVec4Float getGPUUniformVec4Float(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u._type == GLType.glVec4Float())
+    if ((u != null) && (u._type == GLType.glVec4Float()))
     {
-      return (GPUUniformVec4Float)u;
+      return (GPUUniformVec4Float) u;
     }
     return null;
   }
   public final GPUUniformFloat getGPUUniformFloat(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u._type == GLType.glFloat())
+    if ((u != null) && (u._type == GLType.glFloat()))
     {
-      return (GPUUniformFloat)u;
+      return (GPUUniformFloat) u;
     }
     return null;
   }
   public final GPUUniformMatrix4Float getGPUUniformMatrix4Float(String name)
   {
     GPUUniform u = getGPUUniform(name);
-    if (u!= null && u._type == GLType.glMatrix4Float())
+    if ((u != null) && (u._type == GLType.glMatrix4Float()))
     {
-      return (GPUUniformMatrix4Float)u;
+      return (GPUUniformMatrix4Float) u;
     }
     return null;
-  
   }
 
   public final GPUAttribute getGPUAttributeVecXFloat(String name, int x)
@@ -366,7 +363,6 @@ public class GPUProgram
       return a;
     }
     return null;
-  
   }
   public final GPUAttributeVec2Float getGPUAttributeVec2Float(String name)
   {
@@ -376,7 +372,6 @@ public class GPUProgram
       return a;
     }
     return null;
-  
   }
   public final GPUAttributeVec3Float getGPUAttributeVec3Float(String name)
   {
@@ -386,7 +381,6 @@ public class GPUProgram
       return a;
     }
     return null;
-  
   }
   public final GPUAttributeVec4Float getGPUAttributeVec4Float(String name)
   {
@@ -396,7 +390,6 @@ public class GPUProgram
       return a;
     }
     return null;
-  
   }
 
 
@@ -405,14 +398,15 @@ public class GPUProgram
    */
   public final void onUsed()
   {
-    //  ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
+    // ILogger::instance()->logInfo("GPUProgram %s being used", _name.c_str());
   }
+
   /**
    Must be called when the program is no longer used
    */
   public final void onUnused(GL gl)
   {
-    //ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
+    // ILogger::instance()->logInfo("GPUProgram %s unused", _name.c_str());
   
     for (int i = 0; i < _nUniforms; i++)
     {
@@ -436,7 +430,6 @@ public class GPUProgram
    */
   public final void applyChanges(GL gl)
   {
-  
     for (int i = 0; i < _nUniforms; i++)
     {
       GPUUniform uniform = _createdUniforms[i];

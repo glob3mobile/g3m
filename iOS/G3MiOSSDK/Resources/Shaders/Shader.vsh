@@ -1,15 +1,9 @@
-//
-//  Shader.vsh
-//
-//  Created by Agustin Trujillo Pino on 12/01/11.
-//
-
 attribute vec4 Position;
 attribute vec2 TextureCoord;
 attribute vec4 Color;
 
-uniform mediump vec2 TranslationTexCoord;
-uniform mediump vec2 ScaleTexCoord;
+uniform vec2 TranslationTexCoord;
+uniform vec2 ScaleTexCoord;
 
 uniform mat4 Projection;
 uniform mat4 Modelview;

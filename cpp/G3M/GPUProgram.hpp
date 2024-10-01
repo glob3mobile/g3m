@@ -46,12 +46,12 @@ class GPUProgram {
   GL* _gl;
 
   int _nReferences; //Number of items that reference this Program
-  
+
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
   void deleteShader(GL* gl, int shader) const;
   void deleteProgram(GL* gl, const GPUProgram* p);
-  
+
   void getVariables(GL* gl);
 
   GPUProgram():
@@ -72,40 +72,40 @@ public:
 
 
   ~GPUProgram();
-  
+
   static GPUProgram* createProgram(GL* gl,
                                    const std::string& name,
                                    const std::string& vertexSource,
                                    const std::string& fragmentSource);
 
   const std::string getName() const { return _name; }
-  
+
   int getProgramID() const { return _programID; }
-  
+
   int getGPUAttributesNumber() const { return _nAttributes; }
   int getGPUUniformsNumber() const { return _nUniforms; }
-  
+
   GPUUniform* getGPUUniform(const std::string& name) const;
   GPUAttribute* getGPUAttribute(const std::string& name) const;
-  
+
   GPUUniformBool* getGPUUniformBool(const std::string& name) const;
   GPUUniformVec2Float* getGPUUniformVec2Float(const std::string& name) const;
   GPUUniformVec4Float* getGPUUniformVec4Float(const std::string& name) const;
   GPUUniformFloat* getGPUUniformFloat(const std::string& name) const;
   GPUUniformMatrix4Float* getGPUUniformMatrix4Float(const std::string& name) const;
-  
+
   GPUAttribute* getGPUAttributeVecXFloat(const std::string& name, int x) const;
   GPUAttributeVec1Float* getGPUAttributeVec1Float(const std::string& name) const;
   GPUAttributeVec2Float* getGPUAttributeVec2Float(const std::string& name) const;
   GPUAttributeVec3Float* getGPUAttributeVec3Float(const std::string& name) const;
   GPUAttributeVec4Float* getGPUAttributeVec4Float(const std::string& name) const;
-  
+
   void onUsed();
   void onUnused(GL* gl);
   void applyChanges(GL* gl);
-  
+
   GPUUniform* getUniformOfType(const std::string& name, int type) const;
-  
+
   GPUUniform* getGPUUniform(int key) const;
   GPUAttribute* getGPUAttribute(int key) const;
   GPUAttribute* getGPUAttributeVecXFloat(int key, int x) const;

@@ -139,16 +139,16 @@ public:
     return _nativeGL->deleteShader(shader);
   }
 
-  void printShaderInfoLog(int shader) const {
-    _nativeGL->printShaderInfoLog(shader);
+  void logShaderInfoLog(ILogger* logger, int shader) const {
+    _nativeGL->logShaderInfoLog(logger, shader);
   }
 
   bool linkProgram(int program) const {
     return _nativeGL->linkProgram(program);
   }
 
-  void printProgramInfoLog(int program) const {
-    _nativeGL->linkProgram(program);
+  void logProgramInfoLog(ILogger* logger, int program) const {
+    _nativeGL->logProgramInfoLog(logger, program);
   }
 
   bool deleteProgram(const GPUProgram* program) {
@@ -246,7 +246,7 @@ public:
   void viewport(int x, int y, int width, int height) const {
     _nativeGL->viewport(x, y, width, height);
   }
-  
+
   void clearDepthBuffer();
 
   int getMaxTextureSize() const {

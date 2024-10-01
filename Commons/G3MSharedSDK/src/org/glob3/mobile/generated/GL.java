@@ -240,9 +240,9 @@ public class GL
     return _nativeGL.deleteShader(shader);
   }
 
-  public final void printShaderInfoLog(int shader)
+  public final void logShaderInfoLog(ILogger logger, int shader)
   {
-    _nativeGL.printShaderInfoLog(shader);
+    _nativeGL.logShaderInfoLog(logger, shader);
   }
 
   public final boolean linkProgram(int program)
@@ -250,9 +250,9 @@ public class GL
     return _nativeGL.linkProgram(program);
   }
 
-  public final void printProgramInfoLog(int program)
+  public final void logProgramInfoLog(ILogger logger, int program)
   {
-    _nativeGL.linkProgram(program);
+    _nativeGL.logProgramInfoLog(logger, program);
   }
 
   public final boolean deleteProgram(GPUProgram program)

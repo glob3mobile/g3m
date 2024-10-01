@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 //class IImage;
 //class GPUUniform;
 //class GPUAttribute;
+//class ILogger;
 
 
 
@@ -160,9 +161,9 @@ public abstract class INativeGL
   public abstract int createShader(ShaderType type);
   public abstract boolean compileShader (int shader, String source);
   public abstract boolean deleteShader(int shader);
-  public abstract void printShaderInfoLog(int shader);
+  public abstract void logShaderInfoLog(ILogger logger, int shader);
   public abstract boolean linkProgram(int program);
-  public abstract void printProgramInfoLog(int program);
+  public abstract void logProgramInfoLog(ILogger logger, int program);
 
   public abstract void bindAttribLocation(GPUProgram program, int loc, String name);
 

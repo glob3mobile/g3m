@@ -120,13 +120,20 @@ public final class NativeGL_WebGL extends INativeGL {
 
     if (e == gl.INVALID_ENUM) {
       console.error("NativeGL_WebGL: INVALID_ENUM");
-    } else if (e == gl.INVALID_VALUE) {
+    }
+    else if (e == gl.INVALID_VALUE) {
       console.error("NativeGL_WebGL: INVALID_VALUE");
-    } else if (e == gl.INVALID_OPERATION) {
+    }
+    else if (e == gl.INVALID_OPERATION) {
       console.error("NativeGL_WebGL: INVALID_OPERATION");
-    } else if (e == gl.OUT_OF_MEMORY) {
-      console.error("NativeGL_WebGL: INVALID_OPERATION");
-    } else if (e == gl.CONTEXT_LOST_WEBGL) {
+    }
+    else if (e == gl.INVALID_FRAMEBUFFER_OPERATION) {
+      console.error("NativeGL_WebGL: INVALID_FRAMEBUFFER_OPERATION");
+    }
+    else if (e == gl.OUT_OF_MEMORY) {
+      console.error("NativeGL_WebGL: OUT_OF_MEMORY");
+    }
+    else if (e == gl.CONTEXT_LOST_WEBGL) {
       console.error("NativeGL_WebGL: CONTEXT_LOST_WEBGL");
     }
 
@@ -473,16 +480,22 @@ public final class NativeGL_WebGL extends INativeGL {
     //return gl.deleteShader(jsoShader);
    }-*/;
 
-   @Override
-   public native void printShaderInfoLog(final int shader) /*-{
+   private native String getShaderInfoLog(final int shader) /*-{
     var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
     var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
     var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
 
     if (!gl.getShaderParameter(jsoShader, gl.COMPILE_STATUS)) {
-      $wnd.alert("Error compiling shaders: " + gl.getShaderInfoLog(jsoShader));
+      return gl.getShaderInfoLog(jsoShader);
     }
+    return "** Can't get Shader Info Log **";
    }-*/;
+
+   @Override
+   public void logShaderInfoLog(final ILogger logger, final int shader) {
+      final String infoLog = getShaderInfoLog(shader);
+      logger.logError("Shader Info Log: " + infoLog);
+   }
 
    @Override
    public native boolean linkProgram(final int program) /*-{
@@ -492,19 +505,30 @@ public final class NativeGL_WebGL extends INativeGL {
 
     gl.linkProgram(jsoProgram);
 
-    return gl.getProgramParameter(jsoProgram, gl.LINK_STATUS);
+    var linkStatus = gl.getProgramParameter(jsoProgram, gl.LINK_STATUS);
+    if (!linkStatus) {
+      var info = gl.getProgramInfoLog(jsoProgram);
+      $wnd.console.error("Could not compile WebGL program.\n----------\n" + info + "\n----------");
+    }
+    return linkStatus;
    }-*/;
 
-   @Override
-   public native void printProgramInfoLog(final int program) /*-{
+   private native String getProgramInfoLog(final int program) /*-{
     var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
     var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
     var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 
     if (!gl.getProgramParameter(jsoProgram, gl.LINK_STATUS)) {
-      $wnd.alert("Error linking program: " + gl.getProgramInfoLog(jsoProgram));
+      return gl.getProgramInfoLog(jsoProgram);
     }
+    return "** Can't get Program Info Log **";
    }-*/;
+
+   @Override
+   public void logProgramInfoLog(final ILogger logger, final int program) {
+      final String infoLog = getProgramInfoLog(program);
+      logger.logError("Program Info Log: " + infoLog);
+   }
 
    @Override
    public native int BlendFactor_One() /*-{

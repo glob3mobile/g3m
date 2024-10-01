@@ -7,7 +7,8 @@
 
 #include "G3MNonOverlappingMarksDemoScene.hpp"
 
-#include <G3M/URLTemplateLayer.hpp>
+//#include <G3M/URLTemplateLayer.hpp>
+#include <G3M/OSMLayer.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/NonOverlappingMarksRenderer.hpp>
 #include <G3M/DownloaderImageBuilder.hpp>
@@ -138,16 +139,18 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
   std::vector<const Info*>* layerInfo = new std::vector<const Info*>();
 //  layerInfo->push_back( new Info("(C) Stamen") );
 
-  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://[abcd].tile.stamen.com/watercolor/{level}/{x}/{y}.png",
-                                                          Sector::fullSphere(),
-                                                          true,
-                                                          1,
-                                                          18,
-                                                          TimeInterval::fromDays(30),
-                                                          true,
-                                                          1, // transparency
-                                                          NULL, // condition
-                                                          layerInfo);
+//  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://[abcd].tile.stamen.com/watercolor/{level}/{x}/{y}.png",
+//                                                          Sector::fullSphere(),
+//                                                          true,
+//                                                          1,
+//                                                          18,
+//                                                          TimeInterval::fromDays(30),
+//                                                          true,
+//                                                          1, // transparency
+//                                                          NULL, // condition
+//                                                          layerInfo);
+//  model->getLayerSet()->addLayer(layer);
+  OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
   model->getLayerSet()->addLayer(layer);
 
   NonOverlappingMarksRenderer* renderer = model->getNonOverlappingMarksRenderer();

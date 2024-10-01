@@ -1,5 +1,10 @@
-varying mediump vec2 TextureCoordOut;
-varying mediump vec4 VertexColor;
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+
+varying vec2 TextureCoordOut;
 
 uniform sampler2D Sampler;
 
