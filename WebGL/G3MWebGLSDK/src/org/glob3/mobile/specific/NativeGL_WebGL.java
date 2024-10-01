@@ -127,8 +127,11 @@ public final class NativeGL_WebGL extends INativeGL {
     else if (e == gl.INVALID_OPERATION) {
       console.error("NativeGL_WebGL: INVALID_OPERATION");
     }
+    else if (e == gl.INVALID_FRAMEBUFFER_OPERATION) {
+      console.error("NativeGL_WebGL: INVALID_FRAMEBUFFER_OPERATION");
+    }
     else if (e == gl.OUT_OF_MEMORY) {
-      console.error("NativeGL_WebGL: INVALID_OPERATION");
+      console.error("NativeGL_WebGL: OUT_OF_MEMORY");
     }
     else if (e == gl.CONTEXT_LOST_WEBGL) {
       console.error("NativeGL_WebGL: CONTEXT_LOST_WEBGL");
