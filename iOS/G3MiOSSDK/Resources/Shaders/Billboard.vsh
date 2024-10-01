@@ -1,7 +1,3 @@
-//
-//  Billboard.vsh
-//
-
 attribute vec2 aTextureCoord;
 
 uniform mat4 uModelview;
@@ -20,8 +16,8 @@ void main() {
   float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;
   float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;
 
-  gl_Position.x += ((aTextureCoord.x - 0.5) - (uBillboardAnchor.x - 0.5)) * fx;
-  gl_Position.y -= ((aTextureCoord.y - 0.5) - (uBillboardAnchor.y - 0.5)) * fy;
+  gl_Position.x += (aTextureCoord.x - uBillboardAnchor.x) * fx;
+  gl_Position.y -= (aTextureCoord.y - uBillboardAnchor.y) * fy;
 
   TextureCoordOut = aTextureCoord;
 }

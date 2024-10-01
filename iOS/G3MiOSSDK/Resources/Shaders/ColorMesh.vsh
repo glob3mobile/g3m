@@ -1,7 +1,3 @@
-//
-//  Default.vsh
-//
-
 attribute vec4 aPosition;
 attribute vec4 aColor;
 
@@ -9,7 +5,7 @@ uniform mat4 uModelview;
 
 uniform float uPointSize;
 
-varying vec4 VertexColor;
+varying mediump vec4 VertexColor;
 
 void main() {
   gl_Position = uModelview * aPosition;

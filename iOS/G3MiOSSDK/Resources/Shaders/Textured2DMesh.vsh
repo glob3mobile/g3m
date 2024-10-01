@@ -1,7 +1,3 @@
-//
-//  Default.vsh
-//
-
 attribute vec2 aPosition2D;
 attribute vec2 aTextureCoord;
 uniform float uPointSize;
@@ -15,12 +11,12 @@ void main() {
   vec2 pixel = aPosition2D;
   pixel.x -= uViewPortExtent.x / 2.0;
   pixel.y += uViewPortExtent.y / 2.0;
-
+  
   gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0),
                      (pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0),
                      0, 1);
-
+  
   TextureCoordOut = aTextureCoord;
-
+  
   gl_PointSize = uPointSize;
 }

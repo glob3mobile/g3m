@@ -1,7 +1,3 @@
-//
-//  Default.vsh
-//
-
 attribute vec2 aPosition2D;
 uniform float uPointSize;
 

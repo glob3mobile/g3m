@@ -19,15 +19,6 @@ void main() {
   float s = sin( uRotationAngleTexCoord );
   float c = cos( uRotationAngleTexCoord );
 
-  //  vec2 textureCoord = aTextureCoord - uRotationCenterTexCoord;
-  //
-  //  vec2 newTextureCoord = vec2((textureCoord.x * c) + (textureCoord.y * s),
-  //                              (-textureCoord.x * s) + (textureCoord.y * c));
-  //
-  //  newTextureCoord += uRotationCenterTexCoord;
-  //
-  //  TextureCoordOut = (newTextureCoord + uTranslationTexCoord) * uScaleTexCoord;
-
   TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
 
   TextureCoordOut = TextureCoordOut - uRotationCenterTexCoord;

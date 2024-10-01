@@ -1,9 +1,3 @@
-//
-//  Shader.fsh
-//
-//  Created by Agustin Trujillo Pino on 12/01/11.
-//
-
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
 #else
@@ -11,8 +5,6 @@ precision mediump float;
 #endif
 
 varying mediump vec2 TextureCoordOut;
-//uniform mediump vec2 TranslationTexCoord;
-//uniform mediump vec2 ScaleTexCoord;
 
 varying mediump vec4 VertexColor;
 

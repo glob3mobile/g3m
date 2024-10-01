@@ -1,7 +1,3 @@
-//
-//  TexturedMesh_DirectionLight
-//
-
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
 #else
@@ -12,7 +8,7 @@ varying mediump vec2 TextureCoordOut;
 
 uniform sampler2D Sampler;
 
-varying vec3 lightColor;
+varying mediump vec3 lightColor;
 
 void main() {
   vec4 texColor = texture2D(Sampler, TextureCoordOut);
