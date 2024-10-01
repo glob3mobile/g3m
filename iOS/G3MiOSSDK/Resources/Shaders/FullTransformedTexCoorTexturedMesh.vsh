@@ -1,8 +1,8 @@
 attribute vec4 aPosition;
 attribute vec2 aTextureCoord;
 
-uniform mediump vec2 uTranslationTexCoord;
-uniform mediump vec2 uScaleTexCoord;
+uniform vec2 uTranslationTexCoord;
+uniform vec2 uScaleTexCoord;
 uniform mat4 uModelview;
 
 uniform float uPointSize;

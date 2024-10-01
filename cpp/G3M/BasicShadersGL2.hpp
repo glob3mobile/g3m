@@ -41,7 +41,7 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying mediump vec4 VertexColor;\n" +
+            "varying vec4 VertexColor;\n" +
             "void main() {\n" +
             "  gl_FragColor = VertexColor;\n" +
             "}\n");
@@ -60,8 +60,8 @@ public:
             "uniform float uPointSize;\n" +
             "varying vec2 TextureCoordOut;\n" +
             "varying vec2 TextureCoordOut2;\n" +
-            "uniform mediump vec2 uTranslationTexCoord;\n" +
-            "uniform mediump vec2 uScaleTexCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
             "uniform float uRotationAngleTexCoord;\n" +
             "uniform vec2 uRotationCenterTexCoord;\n" +
             "void main() {\n" +
@@ -103,8 +103,8 @@ public:
             emptyString +
             "attribute vec4 aPosition;\n" +
             "attribute vec2 aTextureCoord;\n" +
-            "uniform mediump vec2 uTranslationTexCoord;\n" +
-            "uniform mediump vec2 uScaleTexCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
             "uniform mat4 uModelview;\n" +
             "uniform float uPointSize;\n" +
             "varying vec2 TextureCoordOut;\n" +
@@ -141,7 +141,7 @@ public:
             "uniform vec3 uAmbientLightColor;\n" +
             "uniform vec3 uDiffuseLightColor;\n" +
             "uniform vec3 uDiffuseLightDirection; //We must normalize\n" +
-            "varying mediump vec3 lightColor;\n" +
+            "varying vec3 lightColor;\n" +
             "void main() {\n" +
             "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
             "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
@@ -179,8 +179,8 @@ public:
             "uniform float uPointSize;\n" +
             "varying vec2 TextureCoordOut;\n" +
             "varying vec2 TextureCoordOut2;\n" +
-            "uniform mediump vec2 uTranslationTexCoord;\n" +
-            "uniform mediump vec2 uScaleTexCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
             "  //Transforming TextureCoordOut\n" +
@@ -246,8 +246,8 @@ public:
             "uniform vec2 uBillboardAnchor; // Anchor in UV (texture-like) coordinates\n" +
             "uniform vec2 uTextureExtent;\n" +
             "uniform vec2 uViewPortExtent;\n" +
-            "uniform mediump vec2 uTranslationTexCoord;\n" +
-            "uniform mediump vec2 uScaleTexCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
             "varying vec2 TextureCoordOut;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * uBillboardPosition;\n" +
@@ -347,8 +347,8 @@ public:
             emptyString +
             "attribute vec4 aPosition;\n" +
             "attribute vec2 aTextureCoord;\n" +
-            "uniform mediump vec2 uTranslationTexCoord;\n" +
-            "uniform mediump vec2 uScaleTexCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
             "uniform mat4 uModelview;\n" +
             "uniform float uPointSize;\n" +
             "uniform float uRotationAngleTexCoord;\n" +
@@ -391,13 +391,13 @@ public:
             "uniform mat4 uModelview;\n" +
             "uniform mat4 uModel;\n" +
             "uniform float uPointSize;\n" +
-            "varying mediump vec2 TextureCoordOut;\n" +
-            "uniform mediump vec2 uTranslationTexCoord;\n" +
-            "uniform mediump vec2 uScaleTexCoord;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
             "uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED\n" +
             "uniform vec3 uAmbientLightColor;\n" +
             "uniform vec3 uDiffuseLightColor;\n" +
-            "varying mediump vec3 lightColor;\n" +
+            "varying vec3 lightColor;\n" +
             "void main() {\n" +
             "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
             "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
@@ -441,7 +441,7 @@ public:
             "uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED IN SHADER\n" +
             "uniform vec3 uAmbientLightColor;\n" +
             "uniform vec3 uDiffuseLightColor;\n" +
-            "varying mediump vec3 lightColor;\n" +
+            "varying vec3 lightColor;\n" +
             "void main() {\n" +
             "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
             "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
@@ -478,8 +478,8 @@ public:
             "attribute vec4 Position;\n" +
             "attribute vec2 TextureCoord;\n" +
             "attribute vec4 Color;\n" +
-            "uniform mediump vec2 TranslationTexCoord;\n" +
-            "uniform mediump vec2 ScaleTexCoord;\n" +
+            "uniform vec2 TranslationTexCoord;\n" +
+            "uniform vec2 ScaleTexCoord;\n" +
             "uniform mat4 Projection;\n" +
             "uniform mat4 Modelview;\n" +
             "uniform bool BillBoard;\n" +
@@ -763,8 +763,8 @@ public:
             "attribute vec4 aPosition;\n" +
             "attribute vec2 aTextureCoord;\n" +
             "attribute vec4 aColor;\n" +
-            "uniform mediump vec2 uTranslationTexCoord;\n" +
-            "uniform mediump vec2 uScaleTexCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
             "uniform mat4 uModelview;\n" +
             "uniform float uPointSize;\n" +
             "varying vec4 VertexColor;\n" +

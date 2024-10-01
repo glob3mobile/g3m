@@ -8,8 +8,8 @@ uniform vec2 uBillboardAnchor; // Anchor in UV (texture-like) coordinates
 uniform vec2 uTextureExtent;
 uniform vec2 uViewPortExtent;
 
-uniform mediump vec2 uTranslationTexCoord;
-uniform mediump vec2 uScaleTexCoord;
+uniform vec2 uTranslationTexCoord;
+uniform vec2 uScaleTexCoord;
 
 varying vec2 TextureCoordOut;
 

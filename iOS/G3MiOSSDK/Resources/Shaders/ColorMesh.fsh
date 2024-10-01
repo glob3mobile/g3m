@@ -4,7 +4,7 @@ precision highp float;
 precision mediump float;
 #endif
 
-varying mediump vec4 VertexColor;
+varying vec4 VertexColor;
 
 void main() {
   gl_FragColor = VertexColor;

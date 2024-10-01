@@ -10,7 +10,7 @@ uniform vec3 uAmbientLightColor;
 uniform vec3 uDiffuseLightColor;
 
 uniform vec3 uDiffuseLightDirection; //We must normalize
-varying mediump vec3 lightColor;
+varying vec3 lightColor;
 
 void main() {
   vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));

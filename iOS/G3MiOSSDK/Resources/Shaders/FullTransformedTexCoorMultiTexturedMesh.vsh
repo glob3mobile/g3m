@@ -8,8 +8,8 @@ uniform float uPointSize;
 varying vec2 TextureCoordOut;
 varying vec2 TextureCoordOut2;
 
-uniform mediump vec2 uTranslationTexCoord;
-uniform mediump vec2 uScaleTexCoord;
+uniform vec2 uTranslationTexCoord;
+uniform vec2 uScaleTexCoord;
 uniform float uRotationAngleTexCoord;
 uniform vec2 uRotationCenterTexCoord;
 

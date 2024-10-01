@@ -7,17 +7,17 @@ uniform mat4 uModel;
 
 uniform float uPointSize;
 
-varying mediump vec2 TextureCoordOut;
+varying vec2 TextureCoordOut;
 
-uniform mediump vec2 uTranslationTexCoord;
-uniform mediump vec2 uScaleTexCoord;
+uniform vec2 uTranslationTexCoord;
+uniform vec2 uScaleTexCoord;
 
 uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED
 
 uniform vec3 uAmbientLightColor;
 uniform vec3 uDiffuseLightColor;
 
-varying mediump vec3 lightColor;
+varying vec3 lightColor;
 
 void main() {
   vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
