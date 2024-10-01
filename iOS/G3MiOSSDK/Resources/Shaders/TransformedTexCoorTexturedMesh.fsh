@@ -5,7 +5,6 @@ precision mediump float;
 #endif
 
 varying vec2 TextureCoordOut;
-varying vec4 VertexColor;
 
 uniform sampler2D Sampler;
 
