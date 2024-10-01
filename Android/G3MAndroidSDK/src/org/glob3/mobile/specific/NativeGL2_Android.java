@@ -4,12 +4,9 @@ package org.glob3.mobile.specific;
 import java.nio.*;
 import java.nio.charset.*;
 import java.util.*;
-
 import org.glob3.mobile.generated.*;
-
 import android.graphics.*;
 import android.opengl.*;
-import android.util.*;
 
 public final class NativeGL2_Android extends INativeGL {
 
@@ -490,13 +487,13 @@ public final class NativeGL2_Android extends INativeGL {
    }
 
    @Override
-   public void printShaderInfoLog(final int shader) {
+   public void logShaderInfoLog(final ILogger logger, final int shader) {
       checkOpenGLThread();
       final int[] compiled = new int[1];
       GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
       if (compiled[0] == 0) {
-         Log.e("GL2Shaders", "Could not compile shader " + shader + ":");
-         Log.e("GL2Shaders", GLES20.glGetShaderInfoLog(shader));
+         final String infoLog = GLES20.glGetShaderInfoLog(shader);
+         logger.logError("Shader Info Log: " + infoLog);
       }
    }
 
@@ -510,13 +507,13 @@ public final class NativeGL2_Android extends INativeGL {
    }
 
    @Override
-   public void printProgramInfoLog(final int program) {
+   public void logProgramInfoLog(final ILogger logger, final int program) {
       checkOpenGLThread();
       final int[] linkStatus = new int[1];
       GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
       if (linkStatus[0] == GLES20.GL_TRUE) {
-         Log.e("GL2Shaders", "Could not link program: ");
-         Log.e("GL2Shaders", GLES20.glGetProgramInfoLog(program));
+         final String infoLog = GLES20.glGetProgramInfoLog(program);
+         logger.logError("Program Info Log: " + infoLog);
       }
    }
 

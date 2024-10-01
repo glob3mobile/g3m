@@ -1,8 +1,6 @@
 //
 //  Default.vsh
 //
-//  Created by José Miguel Santana Núñez
-//
 
 attribute vec4 aPosition; //Position of ZNear Frame corners in world-space
 uniform mat4 uModelview; //Model + Projection

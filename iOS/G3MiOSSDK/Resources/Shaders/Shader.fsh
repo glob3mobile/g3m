@@ -4,6 +4,12 @@
 //  Created by Agustin Trujillo Pino on 12/01/11.
 //
 
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+
 varying mediump vec2 TextureCoordOut;
 //uniform mediump vec2 TranslationTexCoord;
 //uniform mediump vec2 ScaleTexCoord;
@@ -20,7 +26,6 @@ uniform mediump float FlatColorIntensity;
 uniform mediump float ColorPerVertexIntensity;
 
 void main() {
-  
   if (EnableTexture) {
     gl_FragColor = texture2D(Sampler, TextureCoordOut);
 
@@ -35,7 +40,7 @@ void main() {
       else {
         color = VertexColor;
       }
-      
+
       lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;
       gl_FragColor = mix(gl_FragColor,
                          VertexColor,
@@ -43,7 +48,6 @@ void main() {
     }
   }
   else {
-    
     if (EnableColorPerVertex) {
       gl_FragColor = VertexColor;
       if (EnableFlatColor) {
@@ -53,7 +57,5 @@ void main() {
     else {
       gl_FragColor = FlatColor;
     }
-    
   }
-  
 }

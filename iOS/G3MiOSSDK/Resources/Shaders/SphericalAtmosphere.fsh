@@ -1,8 +1,9 @@
 //
 //  Default.vsh
 //
-//  Created by José Miguel Santana Núñez
-//
+
+// medium for atmosfhere
+precision mediump float;
 
 uniform highp vec3 uCameraPosition;
 varying highp vec3 rayDirection;

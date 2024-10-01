@@ -36,6 +36,11 @@ public:
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec4 VertexColor;\n" +
             "void main() {\n" +
             "  gl_FragColor = VertexColor;\n" +
@@ -70,10 +75,14 @@ public:
             "                         (-TextureCoordOut.x * s) + (TextureCoordOut.y * c));\n" +
             "  TextureCoordOut += uRotationCenterTexCoord;\n" +
             "  TextureCoordOut2 = aTextureCoord2;\n" +
-            "  \n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "varying mediump vec2 TextureCoordOut2;\n" +
             "uniform sampler2D Sampler;\n" +
@@ -81,6 +90,7 @@ public:
             "void main() {\n" +
             "  mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
             "  mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
+            "  \n" +
             "  gl_FragColor = tex1 * tex2;\n" +
             "}\n");
          this->add(srcFullTransformedTexCoorMultiTexturedMesh);
@@ -102,10 +112,14 @@ public:
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
             "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
-            "  \n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "varying mediump vec4 VertexColor;\n" +
             "uniform sampler2D Sampler;\n" +
@@ -132,7 +146,6 @@ public:
             "void main() {\n" +
             "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
             "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
-            "  \n" +
             "  float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
             "  gl_Position = uModelview * aPosition;\n" +
             "  gl_PointSize = uPointSize;\n" +
@@ -151,10 +164,8 @@ public:
             "uniform lowp vec4 uFlatColor;\n" +
             "varying vec3 lightColor;\n" +
             "void main() {\n" +
-            "  gl_FragColor.r = uFlatColor.r * lightColor.r;\n" +
-            "  gl_FragColor.g = uFlatColor.g * lightColor.r;\n" +
-            "  gl_FragColor.b = uFlatColor.b * lightColor.r;\n" +
-            "  gl_FragColor.a = uFlatColor.a;\n" +
+            "  gl_FragColor.rgb = uFlatColor.rgb * lightColor.rgb;\n" +
+            "  gl_FragColor.a   = uFlatColor.a;\n" +
             "}\n");
          this->add(srcFlatColorMesh_DirectionLight);
       }
@@ -175,13 +186,20 @@ public:
             "uniform mediump vec2 uScaleTexCoord;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
+            "  \n" +
             "  //Transforming TextureCoordOut\n" +
             "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "  \n" +
             "  TextureCoordOut2 = aTextureCoord2;\n" +
             "  \n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "varying mediump vec2 TextureCoordOut2;\n" +
             "uniform sampler2D Sampler;\n" +
@@ -189,6 +207,7 @@ public:
             "void main() {\n" +
             "  mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
             "  mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
+            "  \n" +
             "  gl_FragColor = tex1 * tex2;\n" +
             "}\n");
          this->add(srcTransformedTexCoorMultiTexturedMesh);
@@ -210,6 +229,11 @@ public:
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
@@ -226,7 +250,7 @@ public:
             "attribute vec2 aTextureCoord;\n" +
             "uniform mat4 uModelview;\n" +
             "uniform vec4 uBillboardPosition;\n" +
-            "uniform vec2 uBillboardAnchor; //Anchor in UV (texture-like) coordinates\n" +
+            "uniform vec2 uBillboardAnchor; // Anchor in UV (texture-like) coordinates\n" +
             "uniform vec2 uTextureExtent;\n" +
             "uniform vec2 uViewPortExtent;\n" +
             "uniform mediump vec2 uTranslationTexCoord;\n" +
@@ -234,17 +258,19 @@ public:
             "varying vec2 TextureCoordOut;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * uBillboardPosition;\n" +
-            "  \n" +
             "  float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;\n" +
             "  float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;\n" +
-            "  \n" +
             "  gl_Position.x += ((aTextureCoord.x - 0.5) - (uBillboardAnchor.x - 0.5)) * fx;\n" +
             "  gl_Position.y -= ((aTextureCoord.y - 0.5) - (uBillboardAnchor.y - 0.5)) * fy;\n" +
-            "  \n" +
             "  //Transformed Tex Coords applied to Billboard\n" +
             "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
@@ -263,18 +289,20 @@ public:
             "uniform vec2 uTranslation2D;\n" +
             "uniform vec2 uViewPortExtent;\n" +
             "void main() {\n" +
-            "  \n" +
             "  vec2 pixel = aPosition2D;\n" +
             "  pixel.x -= uViewPortExtent.x / 2.0;\n" +
             "  pixel.y += uViewPortExtent.y / 2.0;\n" +
-            "  \n" +
             "  gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0),\n" +
             "                     (pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0),\n" +
             "                     0, 1);\n" +
-            "  \n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "uniform lowp vec4 uFlatColor;\n" +
             "void main() {\n" +
             "  gl_FragColor = uFlatColor;\n" +
@@ -298,10 +326,14 @@ public:
             "  gl_Position = uModelview * aPosition;\n" +
             "  TextureCoordOut = aTextureCoord;\n" +
             "  TextureCoordOut2 = aTextureCoord2;\n" +
-            "  \n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "varying mediump vec2 TextureCoordOut2;\n" +
             "uniform sampler2D Sampler;\n" +
@@ -309,6 +341,7 @@ public:
             "void main() {\n" +
             "  mediump vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
             "  mediump vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
+            "  \n" +
             "  gl_FragColor = tex1 * tex2;\n" +
             "}\n");
          this->add(srcMultiTexturedMesh);
@@ -349,6 +382,11 @@ public:
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "varying mediump vec4 VertexColor;\n" +
             "uniform sampler2D Sampler;\n" +
@@ -369,28 +407,35 @@ public:
             "uniform mat4 uModelview;\n" +
             "uniform mat4 uModel;\n" +
             "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
+            "varying mediump vec2 TextureCoordOut;\n" +
             "uniform mediump vec2 uTranslationTexCoord;\n" +
             "uniform mediump vec2 uScaleTexCoord;\n" +
             "uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED\n" +
-            "varying float diffuseLightIntensity;\n" +
             "uniform vec3 uAmbientLightColor;\n" +
             "uniform vec3 uDiffuseLightColor;\n" +
             "varying vec3 lightColor;\n" +
-            "void main() {\n" +
+            "void main() {  \n" +
             "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
             "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
+            "  \n" +
             "  float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
+            "  \n" +
             "  gl_Position = uModelview * aPosition;\n" +
+            "  \n" +
             "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "  \n" +
             "  gl_PointSize = uPointSize;\n" +
+            "  \n" +
             "  //Computing Total Light in Vertex\n" +
             "  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
-            "  lightColor.x = min(lightColor.x, 1.0);\n" +
-            "  lightColor.y = min(lightColor.y, 1.0);\n" +
-            "  lightColor.z = min(lightColor.z, 1.0);\n" +
+            "  lightColor = clamp(lightColor, 0.0, 1.0);\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
             "precision highp float;\n" +
             "#else\n" +
@@ -401,9 +446,7 @@ public:
             "varying vec3 lightColor;\n" +
             "void main() {\n" +
             "  vec4 texColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "  gl_FragColor.r = texColor.r * lightColor.r;\n" +
-            "  gl_FragColor.g = texColor.g * lightColor.r;\n" +
-            "  gl_FragColor.b = texColor.b * lightColor.r;\n" +
+            "  gl_FragColor.rgb = texColor.rgb * lightColor.rgb;\n" +
             "  gl_FragColor.a = texColor.a;\n" +
             "}\n");
          this->add(srcTransformedTexCoorTexturedMesh_DirectionLight);
@@ -422,17 +465,14 @@ public:
             "uniform float uPointSize;\n" +
             "varying vec2 TextureCoordOut;\n" +
             "uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED IN SHADER\n" +
-            "varying float diffuseLightIntensity;\n" +
             "uniform vec3 uAmbientLightColor;\n" +
             "uniform vec3 uDiffuseLightColor;\n" +
             "varying vec3 lightColor;\n" +
             "void main() {\n" +
-            "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+            "   vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
             "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
-            "  \n" +
             "  float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
             "  gl_Position = uModelview * aPosition;\n" +
-            "  \n" +
             "  TextureCoordOut = aTextureCoord;\n" +
             "  gl_PointSize = uPointSize;\n" +
             "  //Computing Total Light in Vertex\n" +
@@ -452,10 +492,8 @@ public:
             "varying vec3 lightColor;\n" +
             "void main() {\n" +
             "  vec4 texColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "  gl_FragColor.r = texColor.r * lightColor.r;\n" +
-            "  gl_FragColor.g = texColor.g * lightColor.r;\n" +
-            "  gl_FragColor.b = texColor.b * lightColor.r;\n" +
-            "  gl_FragColor.a = texColor.a;\n" +
+            "  gl_FragColor.rgb = texColor.rgb * lightColor.rgb;\n" +
+            "  gl_FragColor.a   = texColor.a;\n" +
             "}\n");
          this->add(srcTexturedMesh_DirectionLight);
       }
@@ -480,15 +518,24 @@ public:
             "varying vec2 TextureCoordOut;\n" +
             "void main() {\n" +
             "  gl_Position = Projection * Modelview * Position;\n" +
+            "  \n" +
             "  if (BillBoard) {\n" +
             "    gl_Position.x += ((TextureCoord.x - 0.5) * 2.0 * TextureExtent.x / ViewPortExtent.x) * gl_Position.w;\n" +
             "    gl_Position.y -= ((TextureCoord.y - 0.5) * 2.0 * TextureExtent.y / ViewPortExtent.y) * gl_Position.w;\n" +
             "  }\n" +
+            "  \n" +
             "  TextureCoordOut = (TextureCoord * ScaleTexCoord) + TranslationTexCoord;\n" +
+            "  \n" +
             "  VertexColor = Color;\n" +
+            "  \n" +
             "  gl_PointSize = PointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "varying mediump vec4 VertexColor;\n" +
             "uniform sampler2D Sampler;\n" +
@@ -499,7 +546,6 @@ public:
             "uniform mediump float FlatColorIntensity;\n" +
             "uniform mediump float ColorPerVertexIntensity;\n" +
             "void main() {\n" +
-            "  \n" +
             "  if (EnableTexture) {\n" +
             "    gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
             "    if (EnableFlatColor || EnableColorPerVertex) {\n" +
@@ -513,7 +559,6 @@ public:
             "      else {\n" +
             "        color = VertexColor;\n" +
             "      }\n" +
-            "      \n" +
             "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;\n" +
             "      gl_FragColor = mix(gl_FragColor,\n" +
             "                         VertexColor,\n" +
@@ -521,7 +566,6 @@ public:
             "    }\n" +
             "  }\n" +
             "  else {\n" +
-            "    \n" +
             "    if (EnableColorPerVertex) {\n" +
             "      gl_FragColor = VertexColor;\n" +
             "      if (EnableFlatColor) {\n" +
@@ -531,9 +575,7 @@ public:
             "    else {\n" +
             "      gl_FragColor = FlatColor;\n" +
             "    }\n" +
-            "    \n" +
             "  }\n" +
-            "  \n" +
             "}\n");
          this->add(srcShader);
       }
@@ -551,6 +593,11 @@ public:
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "void main() {\n" +
             "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" +
             "}\n");
@@ -569,25 +616,25 @@ public:
             "uniform vec2 uTranslation2D;\n" +
             "uniform vec2 uViewPortExtent;\n" +
             "void main() {\n" +
-            "  \n" +
             "  vec2 pixel = aPosition2D;\n" +
             "  pixel.x -= uViewPortExtent.x / 2.0;\n" +
             "  pixel.y += uViewPortExtent.y / 2.0;\n" +
-            "  \n" +
-            "  \n" +
             "  gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0),\n" +
             "                     (pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0),\n" +
             "                     0, 1);\n" +
             "  TextureCoordOut = aTextureCoord;\n" +
-            "  \n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
             "void main() {\n" +
             "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "  //gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); //RED\n" +
             "}\n");
          this->add(srcTextured2DMesh);
       }
@@ -611,6 +658,7 @@ public:
             "  rayDirection = planePos - uCameraPosition;\n" +
             "}\n",
             emptyString +
+            "precision mediump float;\n" +
             "uniform highp vec3 uCameraPosition;\n" +
             "varying highp vec3 rayDirection;\n" +
             "const highp float earthRadius = 6.36744e6;\n" +
@@ -720,6 +768,11 @@ public:
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "uniform lowp vec4 uFlatColor;\n" +
             "void main() {\n" +
             "  gl_FragColor = uFlatColor;\n" +
@@ -743,14 +796,16 @@ public:
             "varying vec2 TextureCoordOut;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
-            "  \n" +
             "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
-            "  \n" +
             "  VertexColor = aColor;\n" +
-            "  \n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
             "varying mediump vec2 TextureCoordOut;\n" +
             "varying mediump vec4 VertexColor;\n" +
             "uniform sampler2D Sampler;\n" +
@@ -761,10 +816,8 @@ public:
             "uniform mediump float FlatColorIntensity;\n" +
             "uniform mediump float ColorPerVertexIntensity;\n" +
             "void main() {\n" +
-            "  \n" +
             "  if (EnableTexture) {\n" +
             "    gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "    \n" +
             "    if (EnableFlatColor || EnableColorPerVertex) {\n" +
             "      lowp vec4 color;\n" +
             "      if (EnableFlatColor) {\n" +
@@ -776,7 +829,6 @@ public:
             "      else {\n" +
             "        color = VertexColor;\n" +
             "      }\n" +
-            "      \n" +
             "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;\n" +
             "      gl_FragColor = mix(gl_FragColor,\n" +
             "                         VertexColor,\n" +
@@ -784,7 +836,6 @@ public:
             "    }\n" +
             "  }\n" +
             "  else {\n" +
-            "    \n" +
             "    if (EnableColorPerVertex) {\n" +
             "      gl_FragColor = VertexColor;\n" +
             "      if (EnableFlatColor) {\n" +
@@ -794,9 +845,7 @@ public:
             "    else {\n" +
             "      gl_FragColor = uFlatColor;\n" +
             "    }\n" +
-            "    \n" +
             "  }\n" +
-            "  \n" +
             "}\n");
          this->add(srcDefault);
       }
@@ -809,19 +858,16 @@ public:
             "attribute vec2 aTextureCoord;\n" +
             "uniform mat4 uModelview;\n" +
             "uniform vec4 uBillboardPosition;\n" +
-            "uniform vec2 uBillboardAnchor; //Anchor in UV (texture-like) coordinates\n" +
+            "uniform vec2 uBillboardAnchor; // Anchor in UV (texture-like) coordinates\n" +
             "uniform vec2 uTextureExtent;\n" +
             "uniform vec2 uViewPortExtent;\n" +
             "varying vec2 TextureCoordOut;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * uBillboardPosition;\n" +
-            "  \n" +
             "  float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;\n" +
             "  float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;\n" +
-            "  \n" +
             "  gl_Position.x += ((aTextureCoord.x - 0.5) - (uBillboardAnchor.x - 0.5)) * fx;\n" +
             "  gl_Position.y -= ((aTextureCoord.y - 0.5) - (uBillboardAnchor.y - 0.5)) * fy;\n" +
-            "  \n" +
             "  TextureCoordOut = aTextureCoord;\n" +
             "}\n",
             emptyString +

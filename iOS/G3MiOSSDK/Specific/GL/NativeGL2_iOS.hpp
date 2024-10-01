@@ -1,4 +1,4 @@
- //
+//
 //  NativeGL_iOS.hpp
 //  G3MiOSSDK
 //
@@ -29,12 +29,12 @@ class NativeGL2_iOS: public INativeGL {
 public:
 
   void useProgram(GPUProgram* program) const {
-    
+
 #warning TODO: Check all the parameters that should be changed on OpenGL after a glUseProgram()
-    
+
     //Must forget bound buffer
     FloatBuffer_iOS::onGPUProgramHasChanged();
-    
+
     glUseProgram(program->getProgramID());
   }
 
@@ -109,26 +109,26 @@ public:
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-//#warning uncoment for no VBO
-//    const float* pointer = buffer_iOS->getPointer();
-//    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
+    //#warning uncoment for no VBO
+    //    const float* pointer = buffer_iOS->getPointer();
+    //    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
   }
 
-//  void drawElements(int mode,
-//                    int count,
-//                    IIntBuffer* buffer) const {
-//    int has_to_set_GL_UNSIGNED_INT; //???????
-//    const int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
-//    glDrawElements(mode, count, GL_UNSIGNED_INT, pointer);
-//  }
+  //  void drawElements(int mode,
+  //                    int count,
+  //                    IIntBuffer* buffer) const {
+  //    int has_to_set_GL_UNSIGNED_INT; //???????
+  //    const int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
+  //    glDrawElements(mode, count, GL_UNSIGNED_INT, pointer);
+  //  }
   void drawElements(int mode,
                     int count,
                     IShortBuffer* buffer) const {
 
-//    printf("-----DRAW\n");
-//    ShortBuffer_iOS* bufferIOS = (ShortBuffer_iOS*) buffer; //UNCOMMENT FOR IBO USING
-//    bufferIOS->bindAsIBOToGPU();
-//    glDrawElements(mode, count, GL_UNSIGNED_SHORT, 0);
+    //    printf("-----DRAW\n");
+    //    ShortBuffer_iOS* bufferIOS = (ShortBuffer_iOS*) buffer; //UNCOMMENT FOR IBO USING
+    //    bufferIOS->bindAsIBOToGPU();
+    //    glDrawElements(mode, count, GL_UNSIGNED_SHORT, 0);
 
     const short* pointer = ((ShortBuffer_iOS*) buffer)->getPointer();
     glDrawElements(mode, count, GL_UNSIGNED_SHORT, pointer);
@@ -290,7 +290,7 @@ public:
   int Type_Int() const {
     return GL_INT;
   }
-  
+
   int Type_Vec2Float() const {
     return GL_FLOAT_VEC2;
   }
@@ -334,11 +334,11 @@ public:
   int Primitive_Points() const {
     return GL_POINTS;
   }
-  
+
   int BlendFactor_One() const {
     return GL_ONE;
   }
-  
+
   int BlendFactor_Zero() const {
     return GL_ZERO;
   }
@@ -397,11 +397,11 @@ public:
   int Variable_Viewport() const {
     return GL_VIEWPORT;
   }
-  
+
   int Variable_ActiveAttributes() const {
     return GL_ACTIVE_ATTRIBUTES;
   }
-  
+
   virtual int Variable_ActiveUniforms() const {
     return GL_ACTIVE_UNIFORMS;
   }
@@ -409,11 +409,11 @@ public:
   int Error_NoError() const {
     return GL_NO_ERROR;
   }
-  
+
   int createProgram() const {
     return glCreateProgram();
   }
-  
+
   bool deleteProgram(int program) const {
     //ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
@@ -427,20 +427,20 @@ public:
       return (markedToBeDeleted == GL_TRUE);
     }
   }
-  
+
   void attachShader(int program, int shader) const {
     glAttachShader(program, shader);
   }
-  
+
   int createShader(ShaderType type) const {
     switch (type) {
       case VERTEX_SHADER:
         return glCreateShader(GL_VERTEX_SHADER);
       case FRAGMENT_SHADER:
         return glCreateShader(GL_FRAGMENT_SHADER);
-    }  
+    }
   }
-  
+
   bool compileShader(int shader, const std::string& source) const {
     int status;
     const char *s = source.c_str();
@@ -456,57 +456,57 @@ public:
     glGetShaderiv(shader, GL_DELETE_STATUS, &ds);
     return (ds == GL_TRUE);
   }
-  
-  void printShaderInfoLog(int shader) const {
+
+  void logShaderInfoLog(ILogger* logger, int shader) const {
     GLint logLength;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0) {
       GLchar* log = (GLchar* ) malloc(logLength);
       glGetShaderInfoLog(shader, logLength, &logLength, log);
-      NSLog(@"Shader compile log:\n%s", log);
+      logger->logInfo("Shader Info Log: %s", log);
       free(log);
     }
   }
-  
+
   bool linkProgram(int program) const {
     int status;
     glLinkProgram(program);
     glGetProgramiv(program, GL_LINK_STATUS, &status);
     return status;
   }
-  
-  void printProgramInfoLog(int program) const {
+
+  void logProgramInfoLog(ILogger* logger, int program) const {
     GLint logLength;
     glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0) {
       GLchar* log = (GLchar* ) malloc(logLength);
       glGetProgramInfoLog(program, logLength, &logLength, log);
-      NSLog(@"Program link log:\n%s", log);
+      logger->logInfo("Program Info Log: %s", log);
       free(log);
     }
   }
-  
+
   void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {
     glBindAttribLocation(program->getProgramID(), loc, name.c_str());
   }
-  
+
   int getProgramiv(const GPUProgram* program, int pname) const {
     int i = 0;
     glGetProgramiv(program->getProgramID(), pname, &i);
     return i;
   }
-  
+
   GPUAttribute* getActiveAttribute(const GPUProgram* program, int i) const {
     GLint maxLength;
     glGetProgramiv(program->getProgramID(), GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
-  
+
     GLsizei bufsize = maxLength;
-    
+
     GLchar name[maxLength];
     GLsizei length;
     GLint size;
     GLenum type;
-    
+
     glGetActiveAttrib(program->getProgramID(),
                       i,
                       bufsize,
@@ -514,10 +514,10 @@ public:
                       &size,
                       &type,
                       name);
-    
-    
+
+
     const int id = glGetAttribLocation(program->getProgramID(), name);
-    
+
     //NSLog(@"Attribute Name: %s - %d, BitCode: %d", name, id, GPUVariable::getAttributeCode(GPUVariable::getAttributeKey(name)));
     switch (type) {
       case GL_FLOAT_VEC2:
@@ -531,18 +531,18 @@ public:
         break;
     }
   }
-  
+
   GPUUniform* getActiveUniform(const GPUProgram* program, int i) const {
     GLint maxLength;
     glGetProgramiv(program->getProgramID(), GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLength);
-    
+
     GLsizei bufsize = maxLength;
-    
+
     GLchar name[maxLength];
     GLsizei length;
     GLint size;
     GLenum type;
-    
+
     glGetActiveUniform(program->getProgramID(),
                        i,
                        bufsize,
@@ -550,9 +550,9 @@ public:
                        &size,
                        &type,
                        name);
-    
+
     const int id = glGetUniformLocation(program->getProgramID(), name);
-    
+
     //NSLog(@"Uniform Name: %s - %d, BitCode: %d", name, id, GPUVariable::getUniformCode(GPUVariable::getUniformKey(name))  );
     switch (type) {
       case GL_FLOAT_MAT4:
@@ -578,7 +578,7 @@ public:
   void depthMask(bool v) const {
     glDepthMask(v);
   }
-  
+
   void viewport(int x, int y, int width, int height) const {
     glViewport(x, y, width, height);
   }

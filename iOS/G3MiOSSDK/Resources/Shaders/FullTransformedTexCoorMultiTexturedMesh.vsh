@@ -1,8 +1,6 @@
 //
 //  Default.vsh
 //
-//  Created by José Miguel Santana Núñez
-//
 
 attribute vec4 aPosition;
 attribute vec2 aTextureCoord;
@@ -37,6 +35,6 @@ void main() {
   TextureCoordOut += uRotationCenterTexCoord;
 
   TextureCoordOut2 = aTextureCoord2;
-  
+
   gl_PointSize = uPointSize;
 }

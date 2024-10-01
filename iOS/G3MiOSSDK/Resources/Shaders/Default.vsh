@@ -1,8 +1,6 @@
 //
 //  Default.vsh
 //
-//  Created by José Miguel Santana Núñez
-//
 
 attribute vec4 aPosition;
 attribute vec2 aTextureCoord;
@@ -21,10 +19,10 @@ varying vec2 TextureCoordOut;
 
 void main() {
   gl_Position = uModelview * aPosition;
-  
+
   TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;
-  
+
   VertexColor = aColor;
-  
+
   gl_PointSize = uPointSize;
 }
