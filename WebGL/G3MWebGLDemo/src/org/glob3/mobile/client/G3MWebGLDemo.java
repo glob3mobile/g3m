@@ -1,23 +1,15 @@
 
-
 package org.glob3.mobile.client;
 
-
 import org.glob3.mobile.specific.*;
-
 import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.ui.*;
 
-
-public class G3MWebGLDemo
-                          implements
-                             EntryPoint {
+public class G3MWebGLDemo implements EntryPoint {
 
    private static final String G3MWIDGETHOLDER_ID = "g3mWidgetHolder";
 
-
    private G3MWidget_WebGL _widget = null;
-
 
    @Override
    public void onModuleLoad() {
@@ -30,10 +22,22 @@ public class G3MWebGLDemo
        * =============================================================================
        */
 
-      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL();
+      final WebGLContextAttributes webGLContextAttributes = new WebGLContextAttributes( //
+            false, /* alpha */
+            null, /* depth */
+            null, /* stencil */
+            null, /* antialias */
+            null, /* premultipliedAlpha */
+            null, /* preserveDrawingBuffer */
+            null, /* powerPreference */
+            null, /* failIfMajorPerformanceCaveat */
+            null /* desynchronized */
+      );
 
-      //      builder.setPlanet(SphericalPlanet.createEarth());
-      //      builder.setPlanet(FlatPlanet.createEarth());
+      final G3MBuilder_WebGL builder = new G3MBuilder_WebGL(webGLContextAttributes);
+
+      // builder.setPlanet(SphericalPlanet.createEarth());
+      // builder.setPlanet(FlatPlanet.createEarth());
 
       builder.setAtmosphere(true);
 
@@ -44,6 +48,5 @@ public class G3MWebGLDemo
       final Panel g3mWidgetHolder = RootPanel.get(G3MWIDGETHOLDER_ID);
       g3mWidgetHolder.add(_widget);
    }
-
 
 }

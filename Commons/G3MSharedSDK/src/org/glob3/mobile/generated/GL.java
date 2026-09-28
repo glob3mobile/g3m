@@ -155,7 +155,9 @@ public class GL
   
       if (generateMipmap)
       {
-        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), GLTextureParameterValue.linearMipmapNearest());
+        // Trilinear: blends between mipmap levels instead of snapping to the nearest one,
+        // which removes the visible sharpness bands on terrain seen at grazing angles.
+        _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), GLTextureParameterValue.linearMipmapLinear());
       }
       else
       {
