@@ -33,6 +33,8 @@ private:
   long long _cancelsCounter;
 
   bool _started;
+  
+  NSTimeInterval _timeoutInterval;
 
   long long request(const URL &url,
                     long long priority,
@@ -43,8 +45,9 @@ public:
   
   void removeDownloadingHandlerForNSURL(const NSURL* nsURL);
   
-  Downloader_iOS(int maxConcurrentOperationCount);
-  
+  Downloader_iOS(int maxConcurrentOperationCount,
+                 NSTimeInterval timeoutInterval);
+
   long long requestBuffer(const URL& url,
                           long long priority,
                           const TimeInterval& timeToCache,

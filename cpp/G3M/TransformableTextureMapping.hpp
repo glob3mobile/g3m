@@ -39,6 +39,14 @@ protected:
   }
 
 public:
+  bool isIdentity() const {
+    return ((_translationU      == 0) &&
+            (_translationV      == 0) &&
+            (_scaleU            == 1) &&
+            (_scaleV            == 1) &&
+            (_rotationInRadians == 0));
+  }
+
   void setTranslation(float u,
                       float v);
 

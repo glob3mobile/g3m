@@ -1,12 +1,10 @@
 
 package org.glob3.mobile.tools.commandline.core;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.glob3.mobile.tools.commandline.core.CommandLine.StreamGobbler;
-import org.glob3.mobile.tools.gdal.GDALException;
-import org.glob3.mobile.tools.utils.FileUtils;
+import java.io.*;
+import org.glob3.mobile.tools.commandline.core.CommandLine.*;
+import org.glob3.mobile.tools.gdal.*;
+import org.glob3.mobile.tools.utils.*;
 
 public class DecompressManager {
 
@@ -30,10 +28,7 @@ public class DecompressManager {
          }
 
       }
-      catch (final IOException e) {
-         throw new CommandLineException(e.getMessage(), e.getCause());
-      }
-      catch (final InterruptedException e) {
+      catch (final IOException | InterruptedException e) {
          throw new CommandLineException(e.getMessage(), e.getCause());
       }
       finally {
@@ -67,13 +62,7 @@ public class DecompressManager {
             sb = CommandLine.execute(cmd);
             return decompressDir;
          }
-         catch (final IOException e) {
-            if (decompressDir.exists()) {
-               FileUtils.deleteDirectory(decompressDir);
-            }
-            throw new CommandLineException(e.getMessage(), e.getCause());
-         }
-         catch (final InterruptedException e) {
+         catch (final IOException | InterruptedException e) {
             if (decompressDir.exists()) {
                FileUtils.deleteDirectory(decompressDir);
             }

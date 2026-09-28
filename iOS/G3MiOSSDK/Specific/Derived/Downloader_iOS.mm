@@ -34,11 +34,12 @@ Downloader_iOS::~Downloader_iOS() {
   stop();
 }
 
-Downloader_iOS::Downloader_iOS(int maxConcurrentOperationCount) :
+Downloader_iOS::Downloader_iOS(int maxConcurrentOperationCount, NSTimeInterval timeoutInterval) :
 _requestIDCounter(1),
 _requestsCounter(0),
 _cancelsCounter(0),
-_started(false)
+_started(false),
+_timeoutInterval(timeoutInterval)
 {
   NSURLCache* cache = [[NSURLCache alloc] initWithMemoryCapacity: 0
                                                     diskCapacity: 0
@@ -250,6 +251,7 @@ long long Downloader_iOS::request(const URL &url,
       // new handler and queue it
       handler = [[Downloader_iOS_Handler alloc] initWithNSURL: nsURL
                                                           url: new URL(url)
+                                              timeoutInterval: _timeoutInterval
                                                      listener: iosListener
                                                      priority: priority
                                                     requestID: requestID];

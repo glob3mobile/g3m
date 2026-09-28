@@ -376,7 +376,7 @@ public:
 class DTT_NotFullProviderImageListener : public IImageListener {
 private:
   DTT_TileTextureBuilder* _builder;
-  const std::string& _imageID;
+  const std::string       _imageID;
 
 public:
   DTT_NotFullProviderImageListener(DTT_TileTextureBuilder* builder,

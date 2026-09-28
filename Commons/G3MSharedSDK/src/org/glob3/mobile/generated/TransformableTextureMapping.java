@@ -38,6 +38,11 @@ public abstract class TransformableTextureMapping extends TextureMapping
      _rotationCenterV = rotationCenterV;
   }
 
+  public final boolean isIdentity()
+  {
+    return ((_translationU == 0) && (_translationV == 0) && (_scaleU == 1) && (_scaleV == 1) && (_rotationInRadians == 0));
+  }
+
   public final void setTranslation(float u, float v)
   {
     _translationU = u;

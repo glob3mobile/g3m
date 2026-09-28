@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class TextureIDReference;
 //class IFloatBuffer;
 //class IGLTextureID;
+//class TextureGLFeature;
 
 public class SimpleTextureMapping extends TransformableTextureMapping
 {
@@ -42,6 +43,16 @@ public class SimpleTextureMapping extends TransformableTextureMapping
     {
       ILogger.instance().logError("Releasing invalid simple texture mapping");
     }
+  }
+
+  private TextureGLFeature createTextureFeature()
+  {
+    if (isIdentity())
+    {
+      return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    }
+  
+    return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV);
   }
 
 
@@ -104,26 +115,9 @@ public class SimpleTextureMapping extends TransformableTextureMapping
       else
       {
         state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
-        //if ((_scaleU != 1) ||
-        //    (_scaleV != 1) ||
-        //    (_translationU != 0) ||
-        //    (_translationV != 0) ||
-        //    (_rotationInRadians != 0)) {
-        state.addGLFeature(new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
-        //}
-        //else {
-        //  state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
-        //                                          _texCoords,
-        //                                          2,
-        //                                          0,
-        //                                          false,
-        //                                          0,
-        //                                          _transparent,
-        //                                          _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
-        //                                          GLBlendFactor::oneMinusSrcAlpha()
-        //                                          ),
-        //                     false);
-        //}
+  
+        TextureGLFeature textureFeature = createTextureFeature();
+        state.addGLFeature(textureFeature, false);
       }
     }
   }

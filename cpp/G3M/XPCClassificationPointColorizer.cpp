@@ -18,7 +18,7 @@
 #include "MutableColor.hpp"
 
 
-void XPCClassificationPointColorizer::initializeColors(std::vector<const Color>& colors,
+void XPCClassificationPointColorizer::initializeColors(std::vector<Color>& colors,
                                                        const float alpha) {
   const int alpha255 = IMathUtils::instance()->round( alpha * 255.0f );
 

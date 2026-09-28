@@ -1,12 +1,8 @@
 
 package org.glob3.mobile.tools.commandline.core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import org.glob3.mobile.tools.commandline.core.CommandLine.ExecResult.ExecResultType;
+import java.io.*;
+import org.glob3.mobile.tools.commandline.core.CommandLine.ExecResult.*;
 
 public class CommandLine {
 
@@ -28,10 +24,7 @@ public class CommandLine {
          cmd.append("\"");
          sg = execute(cmd.toString());
       }
-      catch (final IOException e) {
-         e.printStackTrace();
-      }
-      catch (final InterruptedException e) {
+      catch (final IOException | InterruptedException e) {
          e.printStackTrace();
       }
       finally {
@@ -134,9 +127,7 @@ public class CommandLine {
       final ExecResultType _type;
       final StringBuffer   _result = new StringBuffer();
 
-      private ExecResult(final ExecResultType type,
-                         final BufferedReader br) throws IOException {
-         super();
+      private ExecResult(final ExecResultType type, final BufferedReader br) throws IOException {
          _type = type;
 
          String line = null;
@@ -173,8 +164,7 @@ public class CommandLine {
       final streamGobblerType _type;
       final StringBuilder     _sb = new StringBuilder();
 
-      public StreamGobbler(final BufferedReader br,
-                           final streamGobblerType type) {
+      public StreamGobbler(final BufferedReader br, final streamGobblerType type) {
          _br   = br;
          _type = type;
       }

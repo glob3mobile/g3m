@@ -258,12 +258,13 @@ public class G3MWidget_WebGL extends Composite {
       var context = null;
       try {
         context = jsCanvas.getContext(contextNames[cn], {
-            preserveDrawingBuffer : true,
-            alpha : false,
-            powerPreference : "low-power",
-            antialias : false
+          preserveDrawingBuffer : true,
+          alpha : false,
+          powerPreference : "low-power",
+          antialias : false
         });
-      } catch (e) {
+      }
+      catch (e) {
         console.log(e);
       }
 
@@ -273,15 +274,11 @@ public class G3MWidget_WebGL extends Composite {
           console.log("WebGL context lost: ", event);
           if (event.statusMessage) {
             $wnd.alert("WebGL context lost: " + event.statusMessage + ".\n\nPlease try reloading the page.");
-          } else {
+          }
+          else {
             $wnd.alert("WebGL context lost.\n\nPlease try reloading the page.");
           }
         }, false);
-
-        //// simulate webglcontextlost
-        //$wnd.setTimeout(function() {
-        //  context.getExtension("WEBGL_lose_context").loseContext();
-        //}, 10000);
 
         var contextAttributes = context.getContextAttributes();
         console.log("WebGL Context Attributes: ", contextAttributes);

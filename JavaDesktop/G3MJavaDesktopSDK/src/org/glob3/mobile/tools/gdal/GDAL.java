@@ -2,7 +2,6 @@
 package org.glob3.mobile.tools.gdal;
 
 import java.io.*;
-
 import org.glob3.mobile.tools.commandline.core.*;
 import org.glob3.mobile.tools.commandline.core.CommandLine.*;
 import org.glob3.mobile.tools.utils.*;
@@ -66,10 +65,7 @@ public class GDAL {
             return true;
          }
       }
-      catch (final IOException e) {
-         throw new GDALException(e.getMessage(), e.getCause());
-      }
-      catch (final InterruptedException e) {
+      catch (final IOException | InterruptedException e) {
          throw new GDALException(e.getMessage(), e.getCause());
       }
       finally {
@@ -104,10 +100,7 @@ public class GDAL {
                return true;
             }
          }
-         catch (final IOException e) {
-            throw new GDALException(e.getMessage(), e.getCause());
-         }
-         catch (final InterruptedException e) {
+         catch (final IOException | InterruptedException e) {
             throw new GDALException(e.getMessage(), e.getCause());
 
          }
@@ -136,10 +129,7 @@ public class GDAL {
                return true;
             }
          }
-         catch (final IOException e) {
-            throw new GDALException(e.getMessage(), e.getCause());
-         }
-         catch (final InterruptedException e) {
+         catch (final IOException | InterruptedException e) {
             throw new GDALException(e.getMessage(), e.getCause());
          }
          finally {
@@ -226,10 +216,7 @@ public class GDAL {
             System.out.println(sb.getResult());
             return outputFile;
          }
-         catch (final IOException e) {
-            throw new GDALException(e.getMessage(), e.getCause());
-         }
-         catch (final InterruptedException e) {
+         catch (final IOException | InterruptedException e) {
             throw new GDALException(e.getMessage(), e.getCause());
          }
          finally {
@@ -252,43 +239,35 @@ public class GDAL {
          }
 
          try {
-            if (outputFile.createNewFile()) {
-               try (final BufferedWriter out = new BufferedWriter(new FileWriter(outputFile))) {
-                  try (final BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)))) {
-
-                     final int factor = 10;
-
-                     out.write("{\"points\": [");
-                     //Read File Line By Line
-                     boolean firstComma = true;
-                     int     k          = 0;
-                     String  strLine;
-                     while ((strLine = br.readLine()) != null) {
-                        // Print the content on the console
-                        System.out.println("" + strLine);
-                        if (firstComma) {
-                           out.write(strLine);
-                           firstComma = false;
-                        }
-                        else {
-                           if ((k % factor) == 0) {
-                              out.write("," + strLine);
-                           }
-                        }
-                        k++;
-                     }
-                     out.write("]}");
-
-                  }
-               }
-            }
-            else {
+            if (!outputFile.createNewFile()) {
                throw new GDALException("Out put file can't be created.", null);
             }
-         }
-         catch (final FileNotFoundException e) {
-            throw new GDALException(e.getMessage(), e.getCause());
+            try (final BufferedWriter out = new BufferedWriter(new FileWriter(outputFile))) {
+               try (final BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)))) {
 
+                  final int factor = 10;
+
+                  out.write("{\"points\": [");
+                  //Read File Line By Line
+                  boolean firstComma = true;
+                  int     k          = 0;
+                  String  strLine;
+                  while ((strLine = br.readLine()) != null) {
+                     // Print the content on the console
+                     System.out.println("" + strLine);
+                     if (firstComma) {
+                        out.write(strLine);
+                        firstComma = false;
+                     }
+                     else if ((k % factor) == 0) {
+                        out.write("," + strLine);
+                     }
+                     k++;
+                  }
+                  out.write("]}");
+
+               }
+            }
          }
          catch (final IOException e) {
             throw new GDALException(e.getMessage(), e.getCause());

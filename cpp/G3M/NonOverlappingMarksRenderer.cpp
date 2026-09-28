@@ -298,7 +298,7 @@ void NonOverlappingMark::applyHookesLaw() {   //Spring
   Vector2F d = getScreenPos().sub(getAnchorScreenPos());
   double mod = d.length();
   double displacement = _springLengthInPixels - mod;
-  Vector2F direction = d.div((float)mod);
+  Vector2F direction = (mod == 0) ? Vector2F::ZERO : d.div((float)mod);
 
   float force = (float)(_springK * displacement);
 
@@ -399,8 +399,16 @@ void NonOverlappingMark::updatePositionWithCurrentForce(float timeInSeconds,
 
   Vector2F anchorPosition = _anchorWidget->getScreenPos();
 
-  //  Vector2F spring = Vector2F(newX,newY).sub(anchorPosition).clampLength(_minSpringLength, _maxSpringLength);
-  Vector2F spring = Vector2F(newX - anchorPosition._x, newY - anchorPosition._y).clampLength(_minSpringLength, _maxSpringLength);
+  float springX = newX - anchorPosition._x;
+  float springY = newY - anchorPosition._y;
+
+  if ((springX * springX) + (springY * springY) < 0.000001f) {
+    const IMathUtils* mu = IMathUtils::instance();
+    springX = (float) (mu->nextRandomDouble() * 2 - 1);
+    springY = (float) (mu->nextRandomDouble() * 2 - 1);
+  }
+
+  Vector2F spring = Vector2F(springX, springY).clampLength(_minSpringLength, _maxSpringLength);
 
   _widget->setAndClampScreenPos(anchorPosition._x + spring._x,
                                 anchorPosition._y + spring._y,

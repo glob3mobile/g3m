@@ -1,12 +1,10 @@
 
 package org.glob3.mobile.tools.gdal;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.tools.commandline.core.CommandLineException;
-import org.glob3.mobile.tools.conversion.jbson2bjson.JBson2BJsonException;
+import java.io.*;
+import org.glob3.mobile.generated.*;
+import org.glob3.mobile.tools.commandline.core.*;
+import org.glob3.mobile.tools.conversion.jbson2bjson.*;
 
 public class MainGdal2Bson {
 
@@ -28,13 +26,7 @@ public class MainGdal2Bson {
          GDAL.initialize(gdalHome);
          GeoBSONConverter.instance().convert(inputFile, inputFile.getParentFile(), outputFileName, true);
       }
-      catch (final GDALException e) {
-         ILogger.instance().logError(e.getMessage(), e.getCause());
-      }
-      catch (final JBson2BJsonException e) {
-         ILogger.instance().logError(e.getMessage(), e.getCause());
-      }
-      catch (final CommandLineException e) {
+      catch (final GDALException | JBson2BJsonException | CommandLineException e) {
          ILogger.instance().logError(e.getMessage(), e.getCause());
       }
    }

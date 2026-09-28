@@ -14,6 +14,7 @@
 class TextureIDReference;
 class IFloatBuffer;
 class IGLTextureID;
+class TextureGLFeature;
 
 class SimpleTextureMapping : public TransformableTextureMapping {
 private:
@@ -30,6 +31,8 @@ private:
   const bool _transparent;
 
   void releaseGLTextureID();
+
+  TextureGLFeature* createTextureFeature() const;
 
 public:
 
@@ -81,7 +84,7 @@ public:
   }
 
   void modifyGLState(GLState& state) const;
-  
+
 };
 
 #endif

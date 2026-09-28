@@ -25,9 +25,9 @@ private:
   
   bool _ok;
 
-  std::vector<const Color> _colors;
+  std::vector<Color> _colors;
 
-  static void initializeColors(std::vector<const Color>& colors,
+  static void initializeColors(std::vector<Color>& colors,
                                const float alpha);
 
 public:

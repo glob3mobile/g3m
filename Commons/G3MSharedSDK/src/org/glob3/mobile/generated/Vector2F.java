@@ -89,6 +89,11 @@ public class Vector2F
     return (_x != _x) || (_y != _y);
   }
 
+  public final boolean isZero()
+  {
+    return (_x == 0) && (_y == 0);
+  }
+
   public final Vector2F sub(Vector2F v)
   {
     return new Vector2F(_x - v._x, _y - v._y);
@@ -116,7 +121,11 @@ public class Vector2F
 
   public final Vector2F clampLength(float min, float max)
   {
-    float length = (float) this.length();
+    if (isZero())
+    {
+      return this;
+    }
+    final float length = (float) this.length();
     if (length < min)
     {
       return times(min / length);
