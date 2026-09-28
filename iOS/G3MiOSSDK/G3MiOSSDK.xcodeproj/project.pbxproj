@@ -923,6 +923,8 @@
 		CFC54E0125B9B8CC00424542 /* XPCIntensityPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54DFD25B9B76300424542 /* XPCIntensityPointColorizer.hpp */; };
 		CFC54E0525B9BD7300424542 /* XPCClassificationPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */; };
 		CFC54E0825B9C02700424542 /* XPCClassificationPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC54E0425B9BD7300424542 /* XPCClassificationPointColorizer.hpp */; };
+		CFDE685F306A60F000FEEF4D /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = CFDE685E306A60F000FEEF4D /* NSData+SRB64Additions.m */; };
+		CFDE6861306A611A00FEEF4D /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = CFDE6860306A611A00FEEF4D /* base64.c */; };
 		CFF35E9425F9371C003F5265 /* MeasureRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF35E9225F9371C003F5265 /* MeasureRenderer.cpp */; };
 		CFF35E9725F93763003F5265 /* MeasureRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF35E9325F9371C003F5265 /* MeasureRenderer.hpp */; };
 		CFF35E9825F93763003F5265 /* CameraMouseWheelHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D877330B25DC0A8D009C6B6E /* CameraMouseWheelHandler.hpp */; };
@@ -2414,6 +2416,10 @@
 		CFCCFE0A16F506210082F383 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CFD66B481863505B008EC15B /* FullTransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
 		CFD66B491863505B008EC15B /* FullTransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullTransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
+		CFDE685C306A60C300FEEF4D /* base64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		CFDE685D306A60EC00FEEF4D /* NSData+SRB64Additions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+SRB64Additions.h"; sourceTree = "<group>"; };
+		CFDE685E306A60F000FEEF4D /* NSData+SRB64Additions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+SRB64Additions.m"; sourceTree = "<group>"; };
+		CFDE6860306A611A00FEEF4D /* base64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
 		CFF35E9225F9371C003F5265 /* MeasureRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeasureRenderer.cpp; sourceTree = "<group>"; };
 		CFF35E9325F9371C003F5265 /* MeasureRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeasureRenderer.hpp; sourceTree = "<group>"; };
 		CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = TextUtils_iOS.mm; path = Specific/Derived/TextUtils_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2519,6 +2525,10 @@
 				CF4027DB1770E7B900D5A80C /* SRWebSocket.h */,
 				CF4027DC1770E7B900D5A80C /* SRWebSocket.m */,
 				383BD37F1577EDCB0012AC53 /* Widget */,
+				CFDE685C306A60C300FEEF4D /* base64.h */,
+				CFDE685D306A60EC00FEEF4D /* NSData+SRB64Additions.h */,
+				CFDE685E306A60F000FEEF4D /* NSData+SRB64Additions.m */,
+				CFDE6860306A611A00FEEF4D /* base64.c */,
 			);
 			name = Specific;
 			sourceTree = "<group>";
@@ -3851,6 +3861,7 @@
 				CF66088023DF330600795C7F /* GPUProgram.cpp in Sources */,
 				CF66088123DF330600795C7F /* BSONGenerator.cpp in Sources */,
 				CF66088223DF330600795C7F /* NonOverlappingMarksRenderer.cpp in Sources */,
+				CFDE6861306A611A00FEEF4D /* base64.c in Sources */,
 				CF66088323DF330600795C7F /* JSONNull.cpp in Sources */,
 				CF66088423DF330600795C7F /* GEOFeature.cpp in Sources */,
 				CF66088523DF330600795C7F /* TransformableMesh.cpp in Sources */,
@@ -3939,6 +3950,7 @@
 				CF6608D223DF330600795C7F /* FrustumData.cpp in Sources */,
 				CF6608D323DF330600795C7F /* MeshFilter.cpp in Sources */,
 				CF6608D423DF330600795C7F /* GPUAttributeValueVec4Float.cpp in Sources */,
+				CFDE685F306A60F000FEEF4D /* NSData+SRB64Additions.m in Sources */,
 				CF6608D523DF330600795C7F /* TileElevationDataRequest.cpp in Sources */,
 				CF6608D623DF330600795C7F /* SGMesh.cpp in Sources */,
 				CF6608D723DF330600795C7F /* SGTextureNode.cpp in Sources */,
