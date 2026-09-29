@@ -23,7 +23,8 @@ public enum GPUAttributeKey
   NORMAL(3),
   TEXTURE_COORDS_2(4),
   TEXTURE_COORDS_3(5),
-  POSITION_2D(6);
+  POSITION_2D(6),
+  RIBBON_SIDE(7);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUAttributeKey> mappings;

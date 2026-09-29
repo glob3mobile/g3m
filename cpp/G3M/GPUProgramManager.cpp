@@ -45,6 +45,11 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
 
 GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
 
+  // checked first: a ribbon also carries VIEWPORT_EXTENT, which below means "billboard"
+  if (GPUVariable::hasUniform(uniformsCode, RIBBON_WIDTH)) {
+    return compileProgramWithName(gl, "RibbonMesh");
+  }
+
   const bool texture     = GPUVariable::hasAttribute(attributesCode, TEXTURE_COORDS);
   const bool flatColor   = GPUVariable::hasUniform(uniformsCode,     FLAT_COLOR);
   const bool billboard   = GPUVariable::hasUniform(uniformsCode,     VIEWPORT_EXTENT);

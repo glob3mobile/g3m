@@ -143,6 +143,9 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   else if (name == "uCameraPosition") {
     return CAMERA_POSITION;
   }
+  else if (name == "uRibbonWidth") {
+    return RIBBON_WIDTH;
+  }
   else {
     return UNRECOGNIZED_UNIFORM;
   }
@@ -169,6 +172,9 @@ GPUAttributeKey GPUVariable::getAttributeKey(const std::string& name) {
   }
   else if (name == "aPosition2D") {
     return POSITION_2D;
+  }
+  else if (name == "aRibbonSide") {
+    return RIBBON_SIDE;
   }
   else {
     return UNRECOGNIZED_ATTRIBUTE;

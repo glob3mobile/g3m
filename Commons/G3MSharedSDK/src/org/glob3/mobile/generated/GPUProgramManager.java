@@ -63,6 +63,12 @@ public class GPUProgramManager
   private GPUProgram getNewProgram(GL gl, int uniformsCode, int attributesCode)
   {
   
+    // checked first: a ribbon also carries VIEWPORT_EXTENT, which below means "billboard"
+    if (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.RIBBON_WIDTH))
+    {
+      return compileProgramWithName(gl, "RibbonMesh");
+    }
+  
     final boolean texture = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.TEXTURE_COORDS);
     final boolean flatColor = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.FLAT_COLOR);
     final boolean billboard = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.VIEWPORT_EXTENT);

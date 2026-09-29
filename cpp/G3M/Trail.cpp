@@ -22,6 +22,9 @@
 #include "IMathUtils.hpp"
 #include "Geodetic2D.hpp"
 #include "Geodetic3D.hpp"
+#include "GLState.hpp"
+#include "GLFeature.hpp"
+#include "Camera.hpp"
 
 
 const int Trail::SEGMENT_ALPHA_STATUS_UNKNOWN       = 1;
@@ -31,6 +34,7 @@ const int Trail::SEGMENT_ALPHA_STATUS_FULL_VISIBLE  = 4;
 
 Trail::Segment::Segment(const Color& color,
                         const float  ribbonWidth,
+                        const float  minWidthPixels,
                         const bool   depthTest,
                         const bool   polygonOffsetFill,
                         const float  polygonOffsetFactor,
@@ -38,6 +42,7 @@ Trail::Segment::Segment(const Color& color,
                         const double visibleAlpha) :
 _color(color),
 _ribbonWidth(ribbonWidth),
+_minWidthPixels(minWidthPixels),
 _depthTest(depthTest),
 _polygonOffsetFill(polygonOffsetFill),
 _polygonOffsetFactor(polygonOffsetFactor),
@@ -48,6 +53,8 @@ _minAlpha( IMathUtils::instance()->maxDouble() ),
 _maxAlpha( IMathUtils::instance()->minDouble() ),
 _positionsDirty(true),
 _mesh(NULL),
+_ribbonSides(NULL),
+_ribbonGLState(NULL),
 _nextSegmentFirstPosition(NULL),
 _previousSegmentLastPosition(NULL)
 {
@@ -58,6 +65,7 @@ Trail::Segment::~Segment() {
   delete _nextSegmentFirstPosition;
 
   delete _mesh;
+  setRibbonSides(NULL);
 
   const size_t positionsSize = _positions.size();
   for (size_t i = 0; i < positionsSize; i++) {
@@ -166,6 +174,28 @@ Mesh* Trail::Segment::getMesh(const Planet* planet) {
   return _mesh;
 }
 
+void Trail::Segment::setRibbonSides(IFloatBuffer* ribbonSides) {
+  if (_ribbonGLState != NULL) {
+    _ribbonGLState->_release();
+    _ribbonGLState = NULL;
+  }
+  delete _ribbonSides;
+  _ribbonSides = ribbonSides;
+
+  if (_ribbonSides != NULL) {
+    _ribbonGLState = new GLState();
+    _ribbonGLState->addGLFeature(new RibbonSideGLFeature(_ribbonSides), false);
+  }
+}
+
+const GLState* Trail::Segment::getMeshGLState(const GLState* parent) {
+  if (_ribbonGLState == NULL) {
+    return parent;
+  }
+  _ribbonGLState->setParent(parent);
+  return _ribbonGLState;
+}
+
 const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
   const size_t positionsSize = _positions.size();
 
@@ -241,6 +271,26 @@ const MutableMatrix44D Trail::Segment::createMatrix(const Angle& bearing,
   return geoMatrix.multiply(rotationMatrix);
 }
 
+void Trail::Segment::addRibbonVertices(const MutableMatrix44D& matrix,
+                                       FloatBufferBuilderFromCartesian3D* vertices,
+                                       FloatBufferBuilderFromCartesian3D* sideVectors) const {
+  if (sideVectors == NULL) {
+    const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
+    const Vector3D offsetP( _ribbonWidth/2, 0, 0);
+    vertices->add(offsetN.transformedBy(matrix, 1));
+    vertices->add(offsetP.transformedBy(matrix, 1));
+  }
+  else {
+    // both edges sit on the center line; RibbonMesh.vsh pushes them apart along ±side
+    const Vector3D center = Vector3D::ZERO.transformedBy(matrix, 1);
+    const Vector3D side   = Vector3D::UP_X.transformedBy(matrix, 0).normalized();
+    vertices->add(center);
+    sideVectors->add(side.times(-1));
+    vertices->add(center);
+    sideVectors->add(side);
+  }
+}
+
 Mesh* Trail::Segment::createMesh(const Planet* planet) {
   const size_t positionsSize = _positions.size();
 
@@ -250,10 +300,10 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
 
   const IFloatBuffer* bearings = getBearingsInRadians();
 
-  const Vector3D offsetP(_ribbonWidth/2, 0, 0);
-  const Vector3D offsetN(-_ribbonWidth/2, 0, 0);
-
   FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  FloatBufferBuilderFromCartesian3D* sideVectors = (_minWidthPixels > 0)
+  ? FloatBufferBuilderFromCartesian3D::builderWithoutCenter()
+  : NULL;
 
   double lastAlpha = 0;
 
@@ -281,8 +331,7 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
                                                          rotationAxis,
                                                          planet);
 
-            vertices->add(offsetN.transformedBy(matrix, 1));
-            vertices->add(offsetP.transformedBy(matrix, 1));
+            addRibbonVertices(matrix, vertices, sideVectors);
           }
         }
         break;
@@ -298,8 +347,7 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
                                                  rotationAxis,
                                                  planet);
 
-    vertices->add(offsetN.transformedBy(matrix, 1));
-    vertices->add(offsetP.transformedBy(matrix, 1));
+    addRibbonVertices(matrix, vertices, sideVectors);
   }
 
   delete bearings;
@@ -322,6 +370,9 @@ Mesh* Trail::Segment::createMesh(const Planet* planet) {
                                      );
 
   delete vertices;
+
+  setRibbonSides((sideVectors == NULL) ? NULL : sideVectors->create());
+  delete sideVectors;
 
   surfaceMesh->setUserData(new SegmentMeshUserData(_alphaStatus, _visibleAlpha));
 
@@ -355,7 +406,7 @@ void Trail::Segment::render(const G3MRenderContext* rc,
       BoundingVolume* bounding = mesh->getBoundingVolume();
       if (bounding != NULL) {
         if (bounding->touchesFrustum(frustum)) {
-          mesh->render(rc, state);
+          mesh->render(rc, getMeshGLState(state));
         }
       }
     }
@@ -378,18 +429,29 @@ Trail::Trail(const Color& color,
              const float  polygonOffsetFactor,
              const float  polygonOffsetUnits,
              const double deltaHeight,
-             const int    maxPositionsPerSegment) :
+             const int    maxPositionsPerSegment,
+             const float  minWidthPixels) :
 _visible(true),
 _color(color),
 _ribbonWidth(ribbonWidth),
+_minWidthPixels(minWidthPixels),
 _depthTest(depthTest),
 _polygonOffsetFill(polygonOffsetFill),
 _polygonOffsetFactor(polygonOffsetFactor),
 _polygonOffsetUnits(polygonOffsetUnits),
 _deltaHeight(deltaHeight),
 _maxPositionsPerSegment(maxPositionsPerSegment),
-_alpha(1.0)
+_alpha(1.0),
+_ribbonGLState(NULL),
+_ribbonViewportExtent(NULL)
 {
+  if (_minWidthPixels > 0) {
+    _ribbonGLState = new GLState();
+    _ribbonGLState->addGLFeature(new RibbonWidthGLFeature(_ribbonWidth, _minWidthPixels),
+                                 false);
+    _ribbonViewportExtent = new ViewportExtentGLFeature(0, 0); // real extent set on every render
+    _ribbonGLState->addGLFeature(_ribbonViewportExtent, false);
+  }
 }
 
 Trail::~Trail() {
@@ -397,6 +459,10 @@ Trail::~Trail() {
   for (size_t i = 0; i < segmentsSize; i++) {
     Segment* segment = _segments[i];
     delete segment;
+  }
+
+  if (_ribbonGLState != NULL) {
+    _ribbonGLState->_release();
   }
 }
 
@@ -441,6 +507,7 @@ void Trail::addPosition(const Angle& latitude,
   if (segmentsSize == 0) {
     currentSegment = new Segment(_color,
                                  _ribbonWidth,
+                                 _minWidthPixels,
                                  _depthTest,
                                  _polygonOffsetFill,
                                  _polygonOffsetFactor,
@@ -454,6 +521,7 @@ void Trail::addPosition(const Angle& latitude,
     if (currentSegment->getSize() >= _maxPositionsPerSegment) {
       Segment* newSegment = new Segment(_color,
                                         _ribbonWidth,
+                                        _minWidthPixels,
                                         _depthTest,
                                         _polygonOffsetFill,
                                         _polygonOffsetFactor,
@@ -480,14 +548,33 @@ void Trail::addPosition(const Angle& latitude,
                               heading);
 }
 
+const GLState* Trail::getSegmentsGLState(const G3MRenderContext* rc,
+                                         const GLState* parent) {
+  if (_ribbonGLState == NULL) {
+    return parent;
+  }
+
+  const Camera* camera = rc->getCurrentCamera();
+  int logicWidth = camera->getViewPortWidth();
+  if (rc->getViewMode() == STEREO) {
+    logicWidth /= 2;
+  }
+  _ribbonViewportExtent->changeExtent(logicWidth, camera->getViewPortHeight());
+
+  _ribbonGLState->setParent(parent);
+  return _ribbonGLState;
+}
+
 void Trail::render(const G3MRenderContext* rc,
                    const Frustum* frustum,
                    const GLState* state) {
   if (_visible) {
+    const GLState* segmentsState = getSegmentsGLState(rc, state);
+
     const size_t segmentsSize = _segments.size();
     for (size_t i = 0; i < segmentsSize; i++) {
       Segment* segment = _segments[i];
-      segment->render(rc, frustum, state);
+      segment->render(rc, frustum, segmentsState);
     }
   }
 }

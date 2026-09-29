@@ -14,6 +14,12 @@ public class BasicShadersGL2 extends GPUProgramFactory
    {
       final String emptyString = "";
 
+// RibbonMesh
+      {
+         GPUProgramSources srcRibbonMesh = new GPUProgramSources("RibbonMesh", emptyString + "attribute vec4 aPosition;   // ribbon center line\n" + "attribute vec3 aRibbonSide; // unit side vector, +1/-1 per ribbon edge\n" + "uniform mat4 uModelview;\n" + "uniform float uPointSize;\n" + "uniform vec2 uViewPortExtent;\n" + "uniform vec2 uRibbonWidth; // x = width in meters, y = minimum width in pixels\n" + "void main() {\n" + "  vec4 center = uModelview * aPosition;\n" + "  vec4 side   = uModelview * (aPosition + vec4(aRibbonSide * (uRibbonWidth.x * 0.5), 0.0));\n" + "  if ((center.w <= 0.0) || (side.w <= 0.0)) {\n" + "    // behind the camera: perspective division is meaningless, keep the plain meters offset\n" + "    gl_Position = side;\n" + "  }\n" + "  else {\n" + "    vec2 halfViewport = uViewPortExtent * 0.5;\n" + "    vec2 dirPx = (side.xy / side.w - center.xy / center.w) * halfViewport;\n" + "    float metersPx = length(dirPx);\n" + "    gl_Position = center;\n" + "    if (metersPx > 0.0) {\n" + "      float halfPx = max(metersPx, uRibbonWidth.y * 0.5);\n" + "      vec2 offsetNDC = (dirPx / metersPx) * halfPx / halfViewport;\n" + "      gl_Position.xy += offsetNDC * center.w;\n" + "    }\n" + "  }\n" + "  gl_PointSize = uPointSize;\n" + "}\n", emptyString + "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" + "precision highp float;\n" + "#else\n" + "precision mediump float;\n" + "#endif\n" + "uniform vec4 uFlatColor;\n" + "void main() {\n" + "  gl_FragColor = uFlatColor;\n" + "}\n");
+         this.add(srcRibbonMesh);
+      }
+
 // ColorMesh
       {
          GPUProgramSources srcColorMesh = new GPUProgramSources("ColorMesh", emptyString + "attribute vec4 aPosition;\n" + "attribute vec4 aColor;\n" + "uniform mat4 uModelview;\n" + "uniform float uPointSize;\n" + "varying vec4 VertexColor;\n" + "void main() {\n" + "  gl_Position = uModelview * aPosition;\n" + "  VertexColor = aColor;\n" + "  gl_PointSize = uPointSize;\n" + "}\n", emptyString + "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" + "precision highp float;\n" + "#else\n" + "precision mediump float;\n" + "#endif\n" + "varying vec4 VertexColor;\n" + "void main() {\n" + "  gl_FragColor = VertexColor;\n" + "}\n");

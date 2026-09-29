@@ -35,7 +35,9 @@ enum GLFeatureID {
   GLF_VERTEX_NORMAL,
   GLF_MODEL_VIEW,
   GLF_BLENDING_MODE,
-  GLF_CAMERA_POSITION
+  GLF_CAMERA_POSITION,
+  GLF_RIBBON_WIDTH,
+  GLF_RIBBON_SIDE
 };
 
 
@@ -122,6 +124,45 @@ public:
 
   void changeExtent(int viewportWidth,
                     int viewportHeight);
+};
+
+
+// Ribbon half-width is resolved in the vertex shader as max(widthInMeters, minWidthInPixels)
+class RibbonWidthGLFeature: public GLFeature {
+private:
+  ~RibbonWidthGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  GPUUniformValueVec2FloatMutable* _width;
+
+public:
+  RibbonWidthGLFeature(float widthInMeters,
+                       float minWidthInPixels);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+
+  void changeWidth(float widthInMeters,
+                   float minWidthInPixels);
+};
+
+
+// Per-vertex unit vector the RibbonMesh shader offsets along. Deliberately not the NORMAL
+// attribute: normals would drag the lighting path (MODEL uniform) into the GL state.
+class RibbonSideGLFeature: public GLFeature {
+private:
+  ~RibbonSideGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  RibbonSideGLFeature(const IFloatBuffer* sides);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
 };
 
 

@@ -1546,6 +1546,8 @@
 		CF4E996B25D03CAC008EE532 /* XPCRenderingState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCRenderingState.hpp; sourceTree = "<group>"; };
 		CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = DeviceInfo_iOS.mm; path = Specific/Derived/DeviceInfo_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceInfo_iOS.hpp; path = Specific/Derived/DeviceInfo_iOS.hpp; sourceTree = "<group>"; };
+		CF63F642306C056800966F36 /* RibbonMesh.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = RibbonMesh.fsh; sourceTree = "<group>"; };
+		CF63F643306C056800966F36 /* RibbonMesh.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = RibbonMesh.vsh; sourceTree = "<group>"; };
 		CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCPointSelectionListener.cpp; sourceTree = "<group>"; };
 		CF64ADEE25BDC6C500815620 /* XPCPointSelectionListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCPointSelectionListener.hpp; sourceTree = "<group>"; };
 		CF66016B23DF2DA500795C7F /* SGTranslateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGTranslateNode.cpp; sourceTree = "<group>"; };
@@ -3598,6 +3600,8 @@
 				D88EE1B61869A1D800AED85A /* MultiTexturedMesh.vsh */,
 				D8769D8B17C394AC00CEF074 /* NoColorMesh.fsh */,
 				D8769D8C17C394AC00CEF074 /* NoColorMesh.vsh */,
+				CF63F642306C056800966F36 /* RibbonMesh.fsh */,
+				CF63F643306C056800966F36 /* RibbonMesh.vsh */,
 				E70B56E116D3CCCD00C5FFFB /* Shader.fsh */,
 				E70B56E216D3CCCD00C5FFFB /* Shader.vsh */,
 				D8B50F821DABCBDA00FA96FA /* SphericalAtmosphere.fsh */,

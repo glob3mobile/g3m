@@ -112,6 +112,10 @@ public class GPUVariable
     {
       return GPUUniformKey.CAMERA_POSITION;
     }
+    else if (name.equals("uRibbonWidth"))
+    {
+      return GPUUniformKey.RIBBON_WIDTH;
+    }
     else
     {
       return GPUUniformKey.UNRECOGNIZED_UNIFORM;
@@ -146,6 +150,10 @@ public class GPUVariable
     else if (name.equals("aPosition2D"))
     {
       return GPUAttributeKey.POSITION_2D;
+    }
+    else if (name.equals("aRibbonSide"))
+    {
+      return GPUAttributeKey.RIBBON_SIDE;
     }
     else
     {

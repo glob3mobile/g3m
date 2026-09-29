@@ -23,6 +23,8 @@ class IFloatBuffer;
 class MutableMatrix44D;
 class Geodetic2D;
 class Geodetic3D;
+class FloatBufferBuilderFromCartesian3D;
+class ViewportExtentGLFeature;
 
 
 class Trail {
@@ -89,6 +91,7 @@ private:
   private:
     const Color _color;
     const float _ribbonWidth;
+    const float _minWidthPixels;
     const bool  _depthTest;
     const bool  _polygonOffsetFill;
     const float _polygonOffsetFactor;
@@ -109,6 +112,12 @@ private:
     Mesh* _mesh;
     Mesh* getMesh(const Planet* planet);
 
+    // ribbon mode only: the RibbonSideGLFeature attribute buffer lives here, not in the mesh
+    IFloatBuffer* _ribbonSides;
+    GLState*      _ribbonGLState;
+    void setRibbonSides(IFloatBuffer* ribbonSides);
+    const GLState* getMeshGLState(const GLState* parent);
+
     const IFloatBuffer* getBearingsInRadians() const;
 
     int calculateAlphaStatus();
@@ -122,9 +131,14 @@ private:
                                         const Vector3D& rotationAxis,
                                         const Planet* planet) const;
 
+    void addRibbonVertices(const MutableMatrix44D& matrix,
+                           FloatBufferBuilderFromCartesian3D* vertices,
+                           FloatBufferBuilderFromCartesian3D* sideVectors) const;
+
   public:
     Segment(const Color& color,
             const float  ribbonWidth,
+            const float  minWidthPixels,
             const bool   depthTest,
             const bool   polygonOffsetFill,
             const float  polygonOffsetFactor,
@@ -168,6 +182,7 @@ private:
 
   const Color  _color;
   const float  _ribbonWidth;
+  const float  _minWidthPixels;
   const bool   _depthTest;
   const bool   _polygonOffsetFill;
   const float  _polygonOffsetFactor;
@@ -179,7 +194,16 @@ private:
 
   std::vector<Segment*> _segments;
 
+  // only when minWidthPixels > 0. The viewport feature must stay out of any shared state:
+  // GPUProgramManager reads VIEWPORT_EXTENT alone as "billboard"
+  GLState*                 _ribbonGLState;
+  ViewportExtentGLFeature* _ribbonViewportExtent;
+  const GLState* getSegmentsGLState(const G3MRenderContext* rc,
+                                    const GLState* parent);
+
 public:
+  // minWidthPixels > 0 switches to the RibbonMesh program: the ribbon never gets thinner
+  // than that on screen, no matter how far the camera is. 0 keeps the plain fixed-width mesh.
   Trail(const Color& color,
         const float  ribbonWidth,
         const bool   depthTest,
@@ -187,7 +211,8 @@ public:
         const float  polygonOffsetFactor,
         const float  polygonOffsetUnits,
         const double deltaHeight            = 0.0,
-        const int    maxPositionsPerSegment = 32);
+        const int    maxPositionsPerSegment = 32,
+        const float  minWidthPixels         = 0);
 
   ~Trail();
 

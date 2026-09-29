@@ -26,6 +26,8 @@ package org.glob3.mobile.generated;
 //class MutableMatrix44D;
 //class Geodetic2D;
 //class Geodetic3D;
+//class FloatBufferBuilderFromCartesian3D;
+//class ViewportExtentGLFeature;
 
 
 public class Trail
@@ -98,6 +100,7 @@ public class Trail
   {
     private final Color _color ;
     private final float _ribbonWidth;
+    private final float _minWidthPixels;
     private final boolean _depthTest;
     private final boolean _polygonOffsetFill;
     private final float _polygonOffsetFactor;
@@ -124,10 +127,8 @@ public class Trail
     
       final IFloatBuffer bearings = getBearingsInRadians();
     
-      final Vector3D offsetP = new Vector3D(_ribbonWidth/2, 0, 0);
-      final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
-    
       FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+      FloatBufferBuilderFromCartesian3D sideVectors = (_minWidthPixels > 0) ? FloatBufferBuilderFromCartesian3D.builderWithoutCenter() : null;
     
       double lastAlpha = 0;
     
@@ -149,8 +150,7 @@ public class Trail
     
                 final MutableMatrix44D matrix = createMatrix(Angle.fromRadians(bearings.get(i)), Angle.linearInterpolation(previousPosition._latitude, position._latitude, normalizedAlpha), Angle.linearInterpolation(previousPosition._longitude, position._longitude, normalizedAlpha), IMathUtils.instance().linearInterpolation(previousPosition._height, position._height, normalizedAlpha), rotationAxis, planet);
     
-                vertices.add(offsetN.transformedBy(matrix, 1));
-                vertices.add(offsetP.transformedBy(matrix, 1));
+                addRibbonVertices(matrix, vertices, sideVectors);
               }
             }
             break;
@@ -161,8 +161,7 @@ public class Trail
     
         final MutableMatrix44D matrix = createMatrix(Angle.fromRadians(bearings.get(i)), position._latitude, position._longitude, position._height, rotationAxis, planet);
     
-        vertices.add(offsetN.transformedBy(matrix, 1));
-        vertices.add(offsetP.transformedBy(matrix, 1));
+        addRibbonVertices(matrix, vertices, sideVectors);
       }
     
       if (bearings != null)
@@ -172,6 +171,10 @@ public class Trail
     
       if (vertices != null)
          vertices.dispose();
+    
+      setRibbonSides((sideVectors == null) ? null : sideVectors.create());
+      if (sideVectors != null)
+         sideVectors.dispose();
     
       surfaceMesh.setUserData(new SegmentMeshUserData(_alphaStatus, _visibleAlpha));
     
@@ -189,6 +192,36 @@ public class Trail
         _positionsDirty = false;
       }
       return _mesh;
+    }
+
+    // ribbon mode only: the RibbonSideGLFeature attribute buffer lives here, not in the mesh
+    private IFloatBuffer _ribbonSides;
+    private GLState _ribbonGLState;
+    private void setRibbonSides(IFloatBuffer ribbonSides)
+    {
+      if (_ribbonGLState != null)
+      {
+        _ribbonGLState._release();
+        _ribbonGLState = null;
+      }
+      if (_ribbonSides != null)
+         _ribbonSides.dispose();
+      _ribbonSides = ribbonSides;
+    
+      if (_ribbonSides != null)
+      {
+        _ribbonGLState = new GLState();
+        _ribbonGLState.addGLFeature(new RibbonSideGLFeature(_ribbonSides), false);
+      }
+    }
+    private GLState getMeshGLState(GLState parent)
+    {
+      if (_ribbonGLState == null)
+      {
+        return parent;
+      }
+      _ribbonGLState.setParent(parent);
+      return _ribbonGLState;
     }
 
     private IFloatBuffer getBearingsInRadians()
@@ -278,10 +311,32 @@ public class Trail
       return geoMatrix.multiply(rotationMatrix);
     }
 
-    public Segment(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double visibleAlpha)
+    private void addRibbonVertices(MutableMatrix44D matrix, FloatBufferBuilderFromCartesian3D vertices, FloatBufferBuilderFromCartesian3D sideVectors)
+    {
+      if (sideVectors == null)
+      {
+        final Vector3D offsetN = new Vector3D(-_ribbonWidth/2, 0, 0);
+        final Vector3D offsetP = new Vector3D(_ribbonWidth/2, 0, 0);
+        vertices.add(offsetN.transformedBy(matrix, 1));
+        vertices.add(offsetP.transformedBy(matrix, 1));
+      }
+      else
+      {
+        // both edges sit on the center line; RibbonMesh.vsh pushes them apart along ±side
+        final Vector3D center = Vector3D.ZERO.transformedBy(matrix, 1);
+        final Vector3D side = Vector3D.UP_X.transformedBy(matrix, 0).normalized();
+        vertices.add(center);
+        sideVectors.add(side.times(-1));
+        vertices.add(center);
+        sideVectors.add(side);
+      }
+    }
+
+    public Segment(Color color, float ribbonWidth, float minWidthPixels, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double visibleAlpha)
     {
        _color = color;
        _ribbonWidth = ribbonWidth;
+       _minWidthPixels = minWidthPixels;
        _depthTest = depthTest;
        _polygonOffsetFill = polygonOffsetFill;
        _polygonOffsetFactor = polygonOffsetFactor;
@@ -292,6 +347,8 @@ public class Trail
        _maxAlpha = IMathUtils.instance().minDouble();
        _positionsDirty = true;
        _mesh = null;
+       _ribbonSides = null;
+       _ribbonGLState = null;
        _nextSegmentFirstPosition = null;
        _previousSegmentLastPosition = null;
     }
@@ -305,6 +362,7 @@ public class Trail
     
       if (_mesh != null)
          _mesh.dispose();
+      setRibbonSides(null);
     
       final int positionsSize = _positions.size();
       for (int i = 0; i < positionsSize; i++)
@@ -385,7 +443,7 @@ public class Trail
           {
             if (bounding.touchesFrustum(frustum))
             {
-              mesh.render(rc, state);
+              mesh.render(rc, getMeshGLState(state));
             }
           }
         }
@@ -408,6 +466,7 @@ public class Trail
 
   private final Color _color ;
   private final float _ribbonWidth;
+  private final float _minWidthPixels;
   private final boolean _depthTest;
   private final boolean _polygonOffsetFill;
   private final float _polygonOffsetFactor;
@@ -419,19 +478,49 @@ public class Trail
 
   private java.util.ArrayList<Segment> _segments = new java.util.ArrayList<Segment>();
 
+  // only when minWidthPixels > 0. The viewport feature must stay out of any shared state:
+  // GPUProgramManager reads VIEWPORT_EXTENT alone as "billboard"
+  private GLState _ribbonGLState;
+  private ViewportExtentGLFeature _ribbonViewportExtent;
+  private GLState getSegmentsGLState(G3MRenderContext rc, GLState parent)
+  {
+    if (_ribbonGLState == null)
+    {
+      return parent;
+    }
+  
+    final Camera camera = rc.getCurrentCamera();
+    int logicWidth = camera.getViewPortWidth();
+    if (rc.getViewMode() == ViewMode.STEREO)
+    {
+      logicWidth /= 2;
+    }
+    _ribbonViewportExtent.changeExtent(logicWidth, camera.getViewPortHeight());
+  
+    _ribbonGLState.setParent(parent);
+    return _ribbonGLState;
+  }
+
+  // minWidthPixels > 0 switches to the RibbonMesh program: the ribbon never gets thinner
+  // than that on screen, no matter how far the camera is. 0 keeps the plain fixed-width mesh.
+  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight, int maxPositionsPerSegment)
+  {
+     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, deltaHeight, maxPositionsPerSegment, 0);
+  }
   public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight)
   {
-     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, deltaHeight, 32);
+     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, deltaHeight, 32, 0);
   }
   public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
   {
-     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, 0.0, 32);
+     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, 0.0, 32, 0);
   }
-  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight, int maxPositionsPerSegment)
+  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight, int maxPositionsPerSegment, float minWidthPixels)
   {
      _visible = true;
      _color = color;
      _ribbonWidth = ribbonWidth;
+     _minWidthPixels = minWidthPixels;
      _depthTest = depthTest;
      _polygonOffsetFill = polygonOffsetFill;
      _polygonOffsetFactor = polygonOffsetFactor;
@@ -439,6 +528,15 @@ public class Trail
      _deltaHeight = deltaHeight;
      _maxPositionsPerSegment = maxPositionsPerSegment;
      _alpha = 1.0;
+     _ribbonGLState = null;
+     _ribbonViewportExtent = null;
+    if (_minWidthPixels > 0)
+    {
+      _ribbonGLState = new GLState();
+      _ribbonGLState.addGLFeature(new RibbonWidthGLFeature(_ribbonWidth, _minWidthPixels), false);
+      _ribbonViewportExtent = new ViewportExtentGLFeature(0, 0); // real extent set on every render
+      _ribbonGLState.addGLFeature(_ribbonViewportExtent, false);
+    }
   }
 
   public void dispose()
@@ -450,17 +548,24 @@ public class Trail
       if (segment != null)
          segment.dispose();
     }
+  
+    if (_ribbonGLState != null)
+    {
+      _ribbonGLState._release();
+    }
   }
 
   public final void render(G3MRenderContext rc, Frustum frustum, GLState state)
   {
     if (_visible)
     {
+      final GLState segmentsState = getSegmentsGLState(rc, state);
+  
       final int segmentsSize = _segments.size();
       for (int i = 0; i < segmentsSize; i++)
       {
         Segment segment = _segments.get(i);
-        segment.render(rc, frustum, state);
+        segment.render(rc, frustum, segmentsState);
       }
     }
   }
@@ -486,7 +591,7 @@ public class Trail
     final int segmentsSize = _segments.size();
     if (segmentsSize == 0)
     {
-      currentSegment = new Segment(_color, _ribbonWidth, _depthTest, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _alpha);
+      currentSegment = new Segment(_color, _ribbonWidth, _minWidthPixels, _depthTest, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _alpha);
       _segments.add(currentSegment);
     }
     else
@@ -495,7 +600,7 @@ public class Trail
   
       if (currentSegment.getSize() >= _maxPositionsPerSegment)
       {
-        Segment newSegment = new Segment(_color, _ribbonWidth, _depthTest, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _alpha);
+        Segment newSegment = new Segment(_color, _ribbonWidth, _minWidthPixels, _depthTest, _polygonOffsetFill, _polygonOffsetFactor, _polygonOffsetUnits, _alpha);
         _segments.add(newSegment);
   
         currentSegment.setNextSegmentFirstPosition(latitude, longitude, height + _deltaHeight, alpha, heading);

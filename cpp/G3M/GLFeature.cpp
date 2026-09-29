@@ -51,6 +51,31 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
   _extent->changeValue(viewportWidth, viewportHeight);
 }
 
+RibbonWidthGLFeature::RibbonWidthGLFeature(float widthInMeters,
+                                           float minWidthInPixels) :
+GLFeature(NO_GROUP, GLF_RIBBON_WIDTH)
+{
+  _width = new GPUUniformValueVec2FloatMutable(widthInMeters,
+                                               minWidthInPixels);
+
+  _values->addUniformValue(RIBBON_WIDTH,
+                           _width,
+                           false);
+}
+
+void RibbonWidthGLFeature::changeWidth(float widthInMeters,
+                                       float minWidthInPixels) {
+  _width->changeValue(widthInMeters, minWidthInPixels);
+}
+
+RibbonSideGLFeature::RibbonSideGLFeature(const IFloatBuffer* sides) :
+GLFeature(NO_GROUP, GLF_RIBBON_SIDE)
+{
+  _values->addAttributeValue(RIBBON_SIDE,
+                             new GPUAttributeValueVec3Float(sides, 3, 0, 0, false),
+                             false);
+}
+
 CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam):
 GLFeature(NO_GROUP, GLF_CAMERA_POSITION) {
   const Vector3D p = cam->getCartesianPosition();
