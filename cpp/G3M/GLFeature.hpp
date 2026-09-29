@@ -454,6 +454,7 @@ public:
                    int target = 0);
 
   bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
+  bool hasRotation() const { return _rotationAngle != NULL && _rotationCenter != NULL; }
 
   void setTranslation(float u, float v);
   void setScale(float u, float v);

@@ -65,10 +65,15 @@ MultiTextureMapping::~MultiTextureMapping() {
 void MultiTextureMapping::modifyGLState(GLState& state) const {
   GLFeatureSet* tglfs = state.getGLFeatures(GLF_TEXTURE);
 
+  // See SimpleTextureMapping::modifyGLState: the in-place update is only valid if the
+  // target-0 feature already owns the rotation uniforms when the mapping needs them.
+  const bool needsRotation = (_rotationInRadians != 0);
+
   for (int i = 0; i < tglfs->size(); i++) {
-    TextureGLFeature* tglf =  (TextureGLFeature*) tglfs->get(0);
+    TextureGLFeature* tglf =  (TextureGLFeature*) tglfs->get(i);
     if ((tglf->getTarget() == 0) &&
-        (tglf->getTextureID() == _glTextureID1->getID())) {
+        (tglf->getTextureID() == _glTextureID1->getID()) &&
+        (!needsRotation || tglf->hasRotation())) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
       tglf->setRotation(_rotationInRadians,
