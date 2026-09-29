@@ -197,16 +197,9 @@ public class GL
     if (textureID != null)
     {
       _currentGLGlobalState.onTextureDelete(textureID);
-  
-      if (_nativeGL.deleteTexture(textureID))
-      {
-        _texturesIDBag.addLast(textureID);
-      }
-      else
-      {
-        if (textureID != null)
-           textureID.dispose();
-      }
+      _nativeGL.deleteTexture(textureID);
+      if (textureID != null)
+         textureID.dispose();
     }
   }
 
@@ -237,9 +230,9 @@ public class GL
     return _nativeGL.compileShader(shader, source);
   }
 
-  public final boolean deleteShader(int shader)
+  public final void deleteShader(int shader)
   {
-    return _nativeGL.deleteShader(shader);
+    _nativeGL.deleteShader(shader);
   }
 
   public final void logShaderInfoLog(ILogger logger, int shader)
@@ -257,11 +250,11 @@ public class GL
     _nativeGL.logProgramInfoLog(logger, program);
   }
 
-  public final boolean deleteProgram(GPUProgram program)
+  public final void deleteProgram(GPUProgram program)
   {
     if (program == null)
     {
-      return false;
+      return;
     }
 
     if (_currentGPUProgram == program) //In case of deleting active program
@@ -270,7 +263,7 @@ public class GL
       _currentGPUProgram = null;
     }
 
-    return _nativeGL.deleteProgram(program.getProgramID());
+    _nativeGL.deleteProgram(program.getProgramID());
   }
 
   public final INativeGL getNative()

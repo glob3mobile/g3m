@@ -145,8 +145,7 @@ public:
   void bindTexture(int target,
                    const IGLTextureID* texture) const;
 
-  /* Delete Texture from GPU, and answer if the TextureID can be reused */
-  bool deleteTexture(const IGLTextureID* texture) const;
+  void deleteTexture(const IGLTextureID* texture) const;
 
   void enableVertexAttribArray(int location) const;
 
@@ -240,11 +239,11 @@ public:
   int Error_NoError() const;
 
   int createProgram() const;
-  bool deleteProgram(int program) const;
+  void deleteProgram(int program) const;
   void attachShader(int program, int shader) const;
   int createShader(ShaderType type) const;
   bool compileShader(int shader, const std::string& source) const;
-  bool deleteShader(int shader) const;
+  void deleteShader(int shader) const;
   void printShaderInfoLog(int shader) const;
   bool linkProgram(int program) const;
   void printProgramInfoLog(int program) const;

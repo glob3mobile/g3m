@@ -64,8 +64,7 @@ public abstract class INativeGL
 
   public abstract void bindTexture(int target, IGLTextureID texture);
 
-  /* Delete Texture from GPU, and answer if the TextureID can be reused */
-  public abstract boolean deleteTexture(IGLTextureID texture);
+  public abstract void deleteTexture(IGLTextureID texture);
 
   public abstract void enableVertexAttribArray(int location);
 
@@ -156,11 +155,11 @@ public abstract class INativeGL
   public abstract int getMaxTextureSize();
 
   public abstract int createProgram();
-  public abstract boolean deleteProgram(int program);
+  public abstract void deleteProgram(int program);
   public abstract void attachShader(int program, int shader);
   public abstract int createShader(ShaderType type);
   public abstract boolean compileShader (int shader, String source);
-  public abstract boolean deleteShader(int shader);
+  public abstract void deleteShader(int shader);
   public abstract void logShaderInfoLog(ILogger logger, int shader);
   public abstract boolean linkProgram(int program);
   public abstract void logProgramInfoLog(ILogger logger, int program);

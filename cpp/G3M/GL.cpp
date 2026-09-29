@@ -147,10 +147,8 @@ const IGLTextureID* GL::uploadTexture(const IImage* image,
     _nativeGL->texImage2D(image, format);
 
     if (generateMipmap) {
-      if (
-          isPowerOfTwo(image->getWidth()) &&
-          isPowerOfTwo(image->getHeight())
-          ) {
+      if (isPowerOfTwo(image->getWidth()) &&
+          isPowerOfTwo(image->getHeight())) {
         _nativeGL->generateMipmap(texture2D);
       }
       else {
@@ -197,13 +195,8 @@ const IGLTextureID* GL::getGLTextureID() {
 void GL::deleteTexture(const IGLTextureID* textureID) {
   if (textureID != NULL) {
     _currentGLGlobalState->onTextureDelete(textureID);
-
-    if ( _nativeGL->deleteTexture(textureID) ) {
-      _texturesIDBag.push_back(textureID);
-    }
-    else {
-      delete textureID;
-    }
+    _nativeGL->deleteTexture(textureID);
+    delete textureID;
   }
 }
 
@@ -222,5 +215,5 @@ void GL::useProgram(GPUProgram* program) {
       _currentGPUProgram->addReference();
     }
   }
-  
+
 }

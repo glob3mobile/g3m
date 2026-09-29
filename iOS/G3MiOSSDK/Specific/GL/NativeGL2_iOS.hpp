@@ -156,14 +156,12 @@ public:
     }
   }
 
-  bool deleteTexture(const IGLTextureID* texture) const {
+  void deleteTexture(const IGLTextureID* texture) const {
     const unsigned int textures[] = {
       ((GLTextureID_iOS*) texture)->getGLTextureID()
     };
 
     glDeleteTextures(1, textures);
-
-    return false;
   }
 
   void enableVertexAttribArray(int location) const {
@@ -414,18 +412,9 @@ public:
     return glCreateProgram();
   }
 
-  bool deleteProgram(int program) const {
+  void deleteProgram(int program) const {
     //ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
-
-    if (glIsProgram(program) == GL_FALSE) {
-      return true;
-    }
-    else {
-      int markedToBeDeleted;
-      glGetProgramiv(program, GL_DELETE_STATUS, &markedToBeDeleted);
-      return (markedToBeDeleted == GL_TRUE);
-    }
   }
 
   void attachShader(int program, int shader) const {
@@ -450,11 +439,8 @@ public:
     return status;
   }
 
-  bool deleteShader(int shader) const {
+  void deleteShader(int shader) const {
     glDeleteShader(shader);
-    int ds;
-    glGetShaderiv(shader, GL_DELETE_STATUS, &ds);
-    return (ds == GL_TRUE);
   }
 
   void logShaderInfoLog(ILogger* logger, int shader) const {

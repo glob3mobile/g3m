@@ -91,8 +91,7 @@ public:
   virtual void bindTexture(int target,
                            const IGLTextureID* texture) const = 0;
 
-  /* Delete Texture from GPU, and answer if the TextureID can be reused */
-  virtual bool deleteTexture(const IGLTextureID* texture) const = 0;
+  virtual void deleteTexture(const IGLTextureID* texture) const = 0;
 
   virtual void enableVertexAttribArray(int location) const = 0;
 
@@ -188,11 +187,11 @@ public:
   virtual int getMaxTextureSize() const = 0;
 
   virtual int createProgram() const = 0;
-  virtual bool deleteProgram(int program) const = 0;
+  virtual void deleteProgram(int program) const = 0;
   virtual void attachShader(int program, int shader) const = 0;
   virtual int createShader(ShaderType type) const = 0;
   virtual bool compileShader (int shader, const std::string& source) const = 0;
-  virtual bool deleteShader(int shader) const = 0;
+  virtual void deleteShader(int shader) const = 0;
   virtual void logShaderInfoLog(ILogger* logger, int shader) const = 0;
   virtual bool linkProgram(int program) const = 0;
   virtual void logProgramInfoLog(ILogger* logger, int program) const = 0;

@@ -152,10 +152,9 @@ public final class NativeGL_WebGL extends INativeGL {
    }-*/;
 
    @Override
-   public native boolean deleteTexture(final IGLTextureID texture) /*-{
+   public native void deleteTexture(final IGLTextureID texture) /*-{
     var textureID = texture.@org.glob3.mobile.specific.GLTextureID_WebGL::getWebGLTexture()();
     this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteTexture(textureID);
-    return false;
    }-*/;
 
    @Override
@@ -416,13 +415,11 @@ public final class NativeGL_WebGL extends INativeGL {
    }-*/;
 
    @Override
-   public native boolean deleteProgram(final int program) /*-{
+   public native void deleteProgram(final int program) /*-{
     var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
     var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 
     this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteProgram(jsoProgram);
-
-    return true;
    }-*/;
 
    @Override
@@ -471,13 +468,11 @@ public final class NativeGL_WebGL extends INativeGL {
    }-*/;
 
    @Override
-   public native boolean deleteShader(final int shader) /*-{
-    //TODO: IMPLEMENTATION FAILS
+   public native void deleteShader(final int shader) /*-{
     var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
     var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
     var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
-    return true;
-    //return gl.deleteShader(jsoShader);
+    gl.deleteShader(jsoShader);
    }-*/;
 
    private native String getShaderInfoLog(final int shader) /*-{

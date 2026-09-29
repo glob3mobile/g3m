@@ -88,17 +88,11 @@ public class GPUProgram
   }
   private void deleteShader(GL gl, int shader)
   {
-    if (!gl.deleteShader(shader))
-    {
-      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting shader.", _name);
-    }
+    gl.deleteShader(shader);
   }
   private void deleteProgram(GL gl, GPUProgram p)
   {
-    if (!gl.deleteProgram(p))
-    {
-      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting program.", _name);
-    }
+    gl.deleteProgram(p);
   }
 
   private void getVariables(GL gl)
@@ -184,20 +178,16 @@ public class GPUProgram
       if (_createdUniforms[i] != null)
          _createdUniforms[i].dispose();
     }
+    _createdUniforms = null;
   
     for (int i = 0; i < _nAttributes; i++)
     {
       if (_createdAttributes[i] != null)
          _createdAttributes[i].dispose();
     }
-  
     _createdAttributes = null;
-    _createdUniforms = null;
   
-    if (!_gl.deleteProgram(this))
-    {
-      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting program.", _name);
-    }
+    _gl.deleteProgram(this);
   }
 
   public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)

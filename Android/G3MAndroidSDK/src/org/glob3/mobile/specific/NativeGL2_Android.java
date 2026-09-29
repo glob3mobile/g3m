@@ -136,10 +136,9 @@ public final class NativeGL2_Android extends INativeGL {
    }
 
    @Override
-   public boolean deleteTexture(final IGLTextureID texture) {
+   public void deleteTexture(final IGLTextureID texture) {
       checkOpenGLThread();
       GLES20.glDeleteTextures(1, new int[] { ((GLTextureID_Android) texture).getGLTextureId() }, 0);
-      return false;
    }
 
    @Override
@@ -444,10 +443,9 @@ public final class NativeGL2_Android extends INativeGL {
    }
 
    @Override
-   public boolean deleteProgram(final int program) {
+   public void deleteProgram(final int program) {
       checkOpenGLThread();
       GLES20.glDeleteProgram(program);
-      return true;
    }
 
    @Override
@@ -480,10 +478,9 @@ public final class NativeGL2_Android extends INativeGL {
    }
 
    @Override
-   public boolean deleteShader(final int shader) {
+   public void deleteShader(final int shader) {
       checkOpenGLThread();
       GLES20.glDeleteShader(shader);
-      return true;
    }
 
    @Override
