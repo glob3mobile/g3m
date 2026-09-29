@@ -239,6 +239,11 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     _pendingEffects.add(new ShapePendingEffect(effect, false));
   }
 
+  public final EffectTarget getEffectTarget()
+  {
+    return this;
+  }
+
   public final void setAnimatedPosition(TimeInterval duration, Geodetic3D position)
   {
      setAnimatedPosition(duration, position, false);

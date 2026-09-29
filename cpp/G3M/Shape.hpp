@@ -92,6 +92,10 @@ public:
 
   void addShapeEffect(Effect* effect);
 
+  EffectTarget* getEffectTarget() {
+    return this;
+  }
+
   void setAnimatedPosition(const TimeInterval& duration,
                            const Geodetic3D& position,
                            bool linearInterpolation=false);
