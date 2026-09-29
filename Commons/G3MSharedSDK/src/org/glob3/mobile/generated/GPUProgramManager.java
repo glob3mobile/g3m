@@ -213,7 +213,7 @@ public class GPUProgramManager
     return p;
   }
 
-  public final void removeUnused()
+  public final void removeUnused(GL gl)
   {
     final java.util.Iterator<java.util.Map.Entry<String, GPUProgram>> iterator = _programs.entrySet().iterator();
     while (iterator.hasNext()) {
@@ -221,6 +221,8 @@ public class GPUProgramManager
       final GPUProgram program = entry.getValue();
       if (program.getNReferences() == 0) {
         ILogger.instance().logInfo("Deleting program %s", program.getName());
+        program.deleteGLProgram(gl);
+        program.dispose();
         iterator.remove();
       }
     }

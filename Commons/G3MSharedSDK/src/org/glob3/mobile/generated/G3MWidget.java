@@ -228,7 +228,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     //Removing unused programs
     if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0)
     {
-      _gpuProgramManager.removeUnused();
+      _gpuProgramManager.removeUnused(_gl);
     }
   
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();

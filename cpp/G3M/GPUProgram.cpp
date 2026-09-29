@@ -27,7 +27,6 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
 
   p->_name = name;
   p->_programID = gl->createProgram();
-  p->_gl = gl;
 
   // compile vertex shader
   int vertexShader= gl->createShader(VERTEX_SHADER);
@@ -35,8 +34,9 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
     ILogger::instance()->logError("GPUProgram %s: Error compiling vertex shader.", name.c_str());
     gl->logShaderInfoLog(ILogger::instance(), vertexShader);
 
-    p->deleteShader(gl, vertexShader);
-    p->deleteProgram(gl, p);
+    gl->deleteShader(vertexShader);
+    p->deleteGLProgram(gl);
+    delete p;
     return NULL;
   }
 
@@ -48,8 +48,9 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
     ILogger::instance()->logError("GPUProgram %s: Error compiling fragment shader.", name.c_str());
     gl->logShaderInfoLog(ILogger::instance(), fragmentShader);
 
-    p->deleteShader(gl, fragmentShader);
-    p->deleteProgram(gl, p);
+    gl->deleteShader(fragmentShader);
+    p->deleteGLProgram(gl);
+    delete p;
     return NULL;
   }
 
@@ -60,15 +61,16 @@ GPUProgram* GPUProgram::createProgram(GL* gl,
   // link program
   if (!p->linkProgram(gl)) {
     ILogger::instance()->logError("GPUProgram %s: Error linking graphic program.", name.c_str());
-    p->deleteShader(gl, vertexShader);
-    p->deleteShader(gl, fragmentShader);
-    p->deleteProgram(gl, p);
+    gl->deleteShader(vertexShader);
+    gl->deleteShader(fragmentShader);
+    p->deleteGLProgram(gl);
+    delete p;
     return NULL;
   }
 
   //Mark shaders for deleting when program is deleted
-  p->deleteShader(gl, vertexShader);
-  p->deleteShader(gl, fragmentShader);
+  gl->deleteShader(vertexShader);
+  gl->deleteShader(fragmentShader);
 
   p->getVariables(gl);
 
@@ -97,8 +99,11 @@ GPUProgram::~GPUProgram() {
     delete _createdAttributes[i];
   }
   delete[] _createdAttributes;
+}
 
-  _gl->deleteProgram(this);
+void GPUProgram::deleteGLProgram(GL* gl) {
+  gl->deleteProgram(this);
+  _programID = 0;
 }
 
 bool GPUProgram::linkProgram(GL* gl) const {
@@ -122,20 +127,8 @@ bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) co
   if (result) {
     gl->attachShader(_programID, shader);
   }
-  else {
-    ILogger::instance()->logError("GPUProgram %s: Problem encountered while compiling shader.", _name.c_str());
-    gl->logShaderInfoLog(ILogger::instance(), shader);
-  }
 
   return result;
-}
-
-void GPUProgram::deleteShader(GL* gl, int shader) const {
-  gl->deleteShader(shader);
-}
-
-void GPUProgram::deleteProgram(GL* gl, const GPUProgram* p) {
-  gl->deleteProgram(p);
 }
 
 void GPUProgram::getVariables(GL* gl) {

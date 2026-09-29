@@ -43,14 +43,10 @@ class GPUProgram {
 
   std::string _name;
 
-  GL* _gl;
-
   int _nReferences; //Number of items that reference this Program
 
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
-  void deleteShader(GL* gl, int shader) const;
-  void deleteProgram(GL* gl, const GPUProgram* p);
 
   void getVariables(GL* gl);
 
@@ -61,7 +57,6 @@ class GPUProgram {
   _createdAttributes(NULL),
   _uniformsCode(0),
   _attributesCode(0),
-  _gl(NULL),
   _nReferences(0)
   {
   }
@@ -71,12 +66,15 @@ class GPUProgram {
 public:
 
 
+  // Only releases host memory. Call deleteGLProgram() first to release the GPU program.
   ~GPUProgram();
 
   static GPUProgram* createProgram(GL* gl,
                                    const std::string& name,
                                    const std::string& vertexSource,
                                    const std::string& fragmentSource);
+
+  void deleteGLProgram(GL* gl);
 
   const std::string getName() const { return _name; }
 

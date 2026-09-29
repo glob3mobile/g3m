@@ -37,7 +37,7 @@ public:
 
   GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode);
 
-  void removeUnused();
+  void removeUnused(GL* gl);
 };
 
 #endif
