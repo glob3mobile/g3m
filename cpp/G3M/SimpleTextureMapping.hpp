@@ -34,6 +34,8 @@ private:
 
   TextureGLFeature* createTextureFeature() const;
 
+  bool canUpdateInPlace(const TextureGLFeature* tglf) const;
+
 public:
 
   SimpleTextureMapping(const TextureIDReference* glTextureID,

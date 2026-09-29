@@ -81,6 +81,15 @@ TextureGLFeature* SimpleTextureMapping::createTextureFeature() const {
                               _rotationCenterV);
 }
 
+bool SimpleTextureMapping::canUpdateInPlace(const TextureGLFeature* tglf) const {
+  // GLState snapshots the feature's uniform pointers once; a uniform created later
+  // by setRotation/setTranslation/setScale would never reach the GPU program
+  const bool needsRotation = (_rotationInRadians != 0);
+  return ((tglf->getTextureID() == _glTextureID->getID()) &&
+          (!needsRotation || tglf->hasRotation()) &&
+          (isIdentity() || tglf->hasTranslateAndScale()));
+}
+
 void SimpleTextureMapping::modifyGLState(GLState& state) const {
   if (_texCoords == NULL) {
     ILogger::instance()->logError("SimpleTextureMapping::bind() with _texCoords == NULL");
@@ -88,17 +97,7 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const {
   else {
     TextureGLFeature* tglf = (TextureGLFeature*) state.getGLFeature(GLF_TEXTURE);
 
-    // The in-place update is only valid if the existing feature already owns the
-    // uniforms this mapping needs. GLState snapshots the uniform pointers once and
-    // only rebuilds on structural changes, so a uniform created later by
-    // setRotation/setTranslation/setScale would never reach the GPU program.
-    const bool needsRotation = (_rotationInRadians != 0);
-    const bool canUpdateInPlace = ((tglf != NULL) &&
-                                   (tglf->getTextureID() == _glTextureID->getID()) &&
-                                   (!needsRotation || tglf->hasRotation()) &&
-                                   (isIdentity() || tglf->hasTranslateAndScale()));
-
-    if (canUpdateInPlace) {
+    if ((tglf != NULL) && canUpdateInPlace(tglf)) {
       tglf->setScale(_scaleU, _scaleV);
       tglf->setTranslation(_translationU, _translationV);
       tglf->setRotation(_rotationInRadians,

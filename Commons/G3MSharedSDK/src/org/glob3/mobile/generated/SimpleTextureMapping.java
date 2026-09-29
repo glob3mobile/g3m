@@ -55,6 +55,14 @@ public class SimpleTextureMapping extends TransformableTextureMapping
     return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV);
   }
 
+  private boolean canUpdateInPlace(TextureGLFeature tglf)
+  {
+    // GLState snapshots the feature's uniform pointers once; a uniform created later
+    // by setRotation/setTranslation/setScale would never reach the GPU program
+    final boolean needsRotation = (_rotationInRadians != 0);
+    return ((tglf.getTextureID() == _glTextureID.getID()) && (!needsRotation || tglf.hasRotation()) && (isIdentity() || tglf.hasTranslateAndScale()));
+  }
+
 
   public SimpleTextureMapping(TextureIDReference glTextureID, IFloatBuffer texCoords, boolean ownedTexCoords, boolean transparent)
   {
@@ -107,14 +115,7 @@ public class SimpleTextureMapping extends TransformableTextureMapping
     {
       TextureGLFeature tglf = (TextureGLFeature) state.getGLFeature(GLFeatureID.GLF_TEXTURE);
   
-      // The in-place update is only valid if the existing feature already owns the
-      // uniforms this mapping needs. GLState snapshots the uniform pointers once and
-      // only rebuilds on structural changes, so a uniform created later by
-      // setRotation/setTranslation/setScale would never reach the GPU program.
-      final boolean needsRotation = (_rotationInRadians != 0);
-      final boolean canUpdateInPlace = ((tglf != null) && (tglf.getTextureID() == _glTextureID.getID()) && (!needsRotation || tglf.hasRotation()) && (isIdentity() || tglf.hasTranslateAndScale()));
-  
-      if (canUpdateInPlace)
+      if ((tglf != null) && canUpdateInPlace(tglf))
       {
         tglf.setScale(_scaleU, _scaleV);
         tglf.setTranslation(_translationU, _translationV);
