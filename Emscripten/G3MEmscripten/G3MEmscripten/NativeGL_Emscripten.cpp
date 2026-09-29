@@ -498,6 +498,8 @@ int NativeGL_Emscripten::createProgram() const {
 void NativeGL_Emscripten::deleteProgram(int program) const {
   const val jsoProgram = _shaderList[program];
   _gl.call<void>("deleteProgram", jsoProgram);
+  // ids are list indices and are never reused, so only drop the reference to let the JS object be collected
+  _shaderList[program] = val::null();
 }
 
 void NativeGL_Emscripten::attachShader(int program, int shader) const {
@@ -544,6 +546,7 @@ bool NativeGL_Emscripten::compileShader(int shader, const std::string& source) c
 void NativeGL_Emscripten::deleteShader(int shader) const {
   const val jsoShader = _shaderList[shader];
   _gl.call<void>("deleteShader", jsoShader);
+  _shaderList[shader] = val::null();
 }
 
 void NativeGL_Emscripten::printShaderInfoLog(int shader) const {

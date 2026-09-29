@@ -420,6 +420,8 @@ public final class NativeGL_WebGL extends INativeGL {
     var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 
     this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteProgram(jsoProgram);
+    // ids are list indices and are never reused, so only drop the reference to let the JS object be collected
+    shaderList.@java.util.ArrayList::set(ILjava/lang/Object;)(program, null);
    }-*/;
 
    @Override
@@ -473,6 +475,7 @@ public final class NativeGL_WebGL extends INativeGL {
     var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
     var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
     gl.deleteShader(jsoShader);
+    shaderList.@java.util.ArrayList::set(ILjava/lang/Object;)(shader, null);
    }-*/;
 
    private native String getShaderInfoLog(final int shader) /*-{
