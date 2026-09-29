@@ -52,6 +52,8 @@
 		CF4E996E25D03DFD008EE532 /* ShapeFilter.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FB77D25C5A5500009313E /* ShapeFilter.hpp */; };
 		CF4E996F25D03DFD008EE532 /* XPCRenderingState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4E996B25D03CAC008EE532 /* XPCRenderingState.hpp */; };
 		CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */; };
+		CF63F646306C1F4600966F36 /* CameraPose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF63F645306C1F4600966F36 /* CameraPose.cpp */; };
+		CF63F647306C1FA900966F36 /* CameraPose.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF63F644306C1F4600966F36 /* CameraPose.hpp */; };
 		CF64ADEF25BDC6C500815620 /* XPCPointSelectionListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */; };
 		CF64ADF325BDCE8300815620 /* XPCPointSelectionListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF64ADEE25BDC6C500815620 /* XPCPointSelectionListener.hpp */; };
 		CF66063E23DF2FFD00795C7F /* BufferElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66016C23DF2DA500795C7F /* BufferElevationData.hpp */; };
@@ -973,6 +975,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF63F647306C1FA900966F36 /* CameraPose.hpp in CopyFiles */,
 				CFF35E9725F93763003F5265 /* MeasureRenderer.hpp in CopyFiles */,
 				CFF35E9825F93763003F5265 /* CameraMouseWheelHandler.hpp in CopyFiles */,
 				D8AB49C825E15330002AB306 /* TranslateScaleGizmo.hpp in CopyFiles */,
@@ -1548,6 +1551,8 @@
 		CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceInfo_iOS.hpp; path = Specific/Derived/DeviceInfo_iOS.hpp; sourceTree = "<group>"; };
 		CF63F642306C056800966F36 /* RibbonMesh.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = RibbonMesh.fsh; sourceTree = "<group>"; };
 		CF63F643306C056800966F36 /* RibbonMesh.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = RibbonMesh.vsh; sourceTree = "<group>"; };
+		CF63F644306C1F4600966F36 /* CameraPose.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CameraPose.hpp; sourceTree = "<group>"; };
+		CF63F645306C1F4600966F36 /* CameraPose.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraPose.cpp; sourceTree = "<group>"; };
 		CF64ADED25BDC6C500815620 /* XPCPointSelectionListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCPointSelectionListener.cpp; sourceTree = "<group>"; };
 		CF64ADEE25BDC6C500815620 /* XPCPointSelectionListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCPointSelectionListener.hpp; sourceTree = "<group>"; };
 		CF66016B23DF2DA500795C7F /* SGTranslateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGTranslateNode.cpp; sourceTree = "<group>"; };
@@ -2732,6 +2737,8 @@
 				CF66028223DF2DA600795C7F /* CameraGoToPositionEffect.cpp */,
 				D877330B25DC0A8D009C6B6E /* CameraMouseWheelHandler.hpp */,
 				D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */,
+				CF63F644306C1F4600966F36 /* CameraPose.hpp */,
+				CF63F645306C1F4600966F36 /* CameraPose.cpp */,
 				CF66038623DF2DA800795C7F /* CameraRenderer.hpp */,
 				CF6602C623DF2DA600795C7F /* CameraRenderer.cpp */,
 				CF66017023DF2DA500795C7F /* CameraRotationHandler.hpp */,
@@ -3963,6 +3970,7 @@
 				CF6608DA23DF330600795C7F /* AbstractImageBuilder.cpp in Sources */,
 				CF6608DB23DF330600795C7F /* NullStorage.cpp in Sources */,
 				CF6608DC23DF330600795C7F /* GEOStyle.cpp in Sources */,
+				CF63F646306C1F4600966F36 /* CameraPose.cpp in Sources */,
 				CF6608DD23DF330600795C7F /* JSONBaseObject.cpp in Sources */,
 				CF6608DE23DF330600795C7F /* TilesRenderParameters.cpp in Sources */,
 				CF6608DF23DF330600795C7F /* GPUAttributeVec4Float.cpp in Sources */,

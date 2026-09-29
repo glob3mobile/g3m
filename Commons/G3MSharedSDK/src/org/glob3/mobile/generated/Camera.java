@@ -461,6 +461,51 @@ public class Camera
     //  _dirtyFlags.setAllDirty();
   }
 
+  /**
+   Finds where a camera with the given pitch must stand so that position1 shows up at screenPosition1
+   and position2 at screenPosition2. Screen positions are viewport fractions: (0,0) top-left,
+   (1,1) bottom-right, the same frame point2Pixel uses. Does not move this camera.
+
+   Returns CameraPose::nan() when no such camera exists: same screen spot for both, points too far
+   apart for a curved planet, or a target that would fall above the horizon.
+   */
+  public final CameraPose computeCameraPose(Geodetic3D position1, Vector2F screenPosition1, Geodetic3D position2, Vector2F screenPosition2, Angle pitch)
+  {
+    if (position1.isNan() || position2.isNan() || screenPosition1.isNan() || screenPosition2.isNan() || pitch.isNan())
+    {
+      return CameraPose.nan();
+    }
+  
+    final Vector2F target1 = new Vector2F(screenPosition1._x * _viewPortWidth, screenPosition1._y * _viewPortHeight);
+    final Vector2F target2 = new Vector2F(screenPosition2._x * _viewPortWidth, screenPosition2._y * _viewPortHeight);
+    if (target2.sub(target1).length() < 1)
+    {
+      return CameraPose.nan();
+    }
+  
+    final Vector3D cartesian1 = _planet.toCartesian(position1);
+    final Vector3D cartesian2 = _planet.toCartesian(position2);
+    final double chord = cartesian2.sub(cartesian1).length();
+    if (chord < 1)
+    {
+      return CameraPose.nan();
+    }
+  
+    final Geodetic3D initialCenter = new Geodetic3D(_planet.getMidPoint(position1.asGeodetic2D(), position2.asGeodetic2D()), (position1._height + position2._height) / 2);
+  
+    Camera workingCamera = new Camera(-1, _frustumPolicy.copy());
+    workingCamera.copyFrom(this, true);
+  
+    final boolean solved = workingCamera.solvePointOfView(cartesian1, target1, cartesian2, target2, initialCenter, chord * 2, pitch);
+  
+    final CameraPose pose = solved ? new CameraPose(workingCamera.getGeodeticPosition(), workingCamera.getHeading(), workingCamera.getPitch()) : CameraPose.nan();
+  
+    if (workingCamera != null)
+       workingCamera.dispose();
+  
+    return pose;
+  }
+
   public final void forceMatrixCreation()
   {
     getGeodeticCenterOfView();
@@ -794,6 +839,125 @@ public class Camera
   private Vector3D centerOfViewOnPlanet()
   {
     return _planet.closestIntersection(_position.asVector3D(), getViewDirection());
+  }
+
+  // computeCameraPose() runs this on a working copy; on success the copy is left at the solution
+  private boolean solvePointOfView(Vector3D cartesian1, Vector2F target1, Vector3D cartesian2, Vector2F target2, Geodetic3D initialCenter, double initialDistance, Angle pitch)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+  
+    final Vector2F targetDelta = target2.sub(target1);
+    final double targetAngle = mu.atan2((double) targetDelta._y, (double) targetDelta._x);
+    final double targetLength = targetDelta.length();
+    final Vector2F targetMiddle = target1.add(target2).div(2);
+    final Vector2F viewportCenter = new Vector2F(_viewPortWidth / 2.0f, _viewPortHeight / 2.0f);
+  
+    final double centerHeight = initialCenter._height;
+    double centerLatitudeInRadians = initialCenter._latitude._radians;
+    double centerLongitudeInRadians = initialCenter._longitude._radians;
+    double distance = initialDistance;
+    double azimuthInRadians = 0;
+    // setPointOfView's altitude is the elevation over the horizon at the center (90 = straight down).
+    // On a curved planet that is not the camera's own pitch, so it gets corrected below.
+    double altitudeInRadians = -pitch._radians;
+  
+    // the azimuth turns the on-screen segment one way or the other; measure which instead of assuming
+    setPointOfView(initialCenter, distance, Angle.fromRadians(0), Angle.fromRadians(altitudeInRadians));
+    final double angleAtZero = screenAngleOfSegment(cartesian1, cartesian2);
+    setPointOfView(initialCenter, distance, Angle.fromRadians(0.05), Angle.fromRadians(altitudeInRadians));
+    final double angleAtProbe = screenAngleOfSegment(cartesian1, cartesian2);
+    final double azimuthSign = (signedAngleInRadians(angleAtProbe - angleAtZero) > 0) ? 1 : -1;
+  
+    final int maxIterations = 50;
+    double previousError = 0;
+    int growingErrorCount = 0;
+    for (int i = 0; i < maxIterations; i++)
+    {
+      final Geodetic3D center = new Geodetic3D(Angle.fromRadians(centerLatitudeInRadians), Angle.fromRadians(centerLongitudeInRadians), centerHeight);
+  
+      // 1. pitch: the camera's own pitch must match the requested one
+      setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), Angle.fromRadians(altitudeInRadians));
+      final double pitchErrorInRadians = signedAngleInRadians(getPitch()._radians - pitch._radians);
+      altitudeInRadians += pitchErrorInRadians;
+      final Angle altitude = Angle.fromRadians(altitudeInRadians);
+  
+      // 2. heading: turn until the segment has the target direction
+      setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), altitude);
+      final Vector2F pixel1 = point2Pixel(cartesian1);
+      final Vector2F pixel2 = point2Pixel(cartesian2);
+      if (pixel1.isNan() || pixel2.isNan())
+      {
+        return false;
+      }
+      final double error = mu.max(pixel1.sub(target1).length(), pixel2.sub(target2).length());
+      if ((error < 0.5) && (mu.abs(pitchErrorInRadians) < 0.0001))
+      {
+        return isAboveHorizonOf(cartesian1) && isAboveHorizonOf(cartesian2);
+      }
+      growingErrorCount = (error > previousError) ? growingErrorCount + 1 : 0;
+      previousError = error;
+      if (growingErrorCount >= 5)
+      {
+        return false;
+      }
+      final Vector2F delta = pixel2.sub(pixel1);
+      if (delta.length() < 0.001)
+      {
+        return false;
+      }
+      final double angleError = signedAngleInRadians(targetAngle - mu.atan2((double) delta._y, (double) delta._x));
+      azimuthInRadians += azimuthSign * angleError;
+  
+      // 3. distance: move away or closer until the segment has the target length
+      setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), altitude);
+      final double currentLength = point2Pixel(cartesian2).sub(point2Pixel(cartesian1)).length();
+      if (currentLength < 0.001)
+      {
+        return false;
+      }
+      distance *= currentLength / targetLength;
+  
+      // 4. center: look at whatever is now under the pixel that must end up at the viewport center
+      setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), altitude);
+      final Vector2F currentMiddle = point2Pixel(cartesian1).add(point2Pixel(cartesian2)).div(2);
+      final Vector2F pixelForCenter = viewportCenter.add(currentMiddle).sub(targetMiddle);
+      final Vector3D newCenter = _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixelForCenter));
+      if (newCenter.isNan())
+      {
+        return false;
+      }
+      final Geodetic2D newCenter2D = _planet.toGeodetic2D(newCenter);
+      centerLatitudeInRadians = newCenter2D._latitude._radians;
+      centerLongitudeInRadians = newCenter2D._longitude._radians;
+    }
+  
+    return false;
+  }
+
+  private double screenAngleOfSegment(Vector3D cartesian1, Vector3D cartesian2)
+  {
+    final Vector2F delta = point2Pixel(cartesian2).sub(point2Pixel(cartesian1));
+    return IMathUtils.instance().atan2((double) delta._y, (double) delta._x);
+  }
+
+  // point2Pixel projects points hidden behind the planet too; this tells them apart
+  private boolean isAboveHorizonOf(Vector3D point)
+  {
+    final Vector3D toCamera = _position.asVector3D().sub(point);
+    return _planet.geodeticSurfaceNormal(point).dot(toCamera) > 0;
+  }
+
+  private static double signedAngleInRadians(double radians)
+  {
+    while (radians > DefineConstants.PI)
+    {
+      radians -= 2 * DefineConstants.PI;
+    }
+    while (radians < -DefineConstants.PI)
+    {
+      radians += 2 * DefineConstants.PI;
+    }
+    return radians;
   }
 
   private void setCenter(MutableVector3D v)

@@ -15,6 +15,7 @@
 #include "Frustum.hpp"
 #include "MutableVector3D.hpp"
 #include "MutableMatrix44D.hpp"
+#include "CameraPose.hpp"
 
 class FrustumPolicy;
 class Vector3D;
@@ -221,6 +222,20 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
+  /**
+   Finds where a camera with the given pitch must stand so that position1 shows up at screenPosition1
+   and position2 at screenPosition2. Screen positions are viewport fractions: (0,0) top-left,
+   (1,1) bottom-right, the same frame point2Pixel uses. Does not move this camera.
+
+   Returns CameraPose::nan() when no such camera exists: same screen spot for both, points too far
+   apart for a curved planet, or a target that would fall above the horizon.
+   */
+  CameraPose computeCameraPose(const Geodetic3D& position1,
+                               const Vector2F&   screenPosition1,
+                               const Geodetic3D& position2,
+                               const Vector2F&   screenPosition2,
+                               const Angle&      pitch) const;
+
   void forceMatrixCreation() const;
 
   Matrix44D* getModelMatrix44D() const;
@@ -388,6 +403,23 @@ private:
   CameraEffectTarget* _camEffectTarget;
 
   Vector3D centerOfViewOnPlanet() const;
+
+  // computeCameraPose() runs this on a working copy; on success the copy is left at the solution
+  bool solvePointOfView(const Vector3D& cartesian1,
+                        const Vector2F& target1,
+                        const Vector3D& cartesian2,
+                        const Vector2F& target2,
+                        const Geodetic3D& initialCenter,
+                        const double initialDistance,
+                        const Angle& pitch);
+
+  double screenAngleOfSegment(const Vector3D& cartesian1,
+                              const Vector3D& cartesian2) const;
+
+  // point2Pixel projects points hidden behind the planet too; this tells them apart
+  bool isAboveHorizonOf(const Vector3D& point) const;
+
+  static double signedAngleInRadians(double radians); // wraps into (-PI, PI]
 
   void setCenter(const MutableVector3D& v) {
     if (!v.equalTo(_center)) {
