@@ -118,6 +118,7 @@ _height(1),
 _frustumPolicy(frustumPolicy),
 _currentCamera(new Camera(1, frustumPolicy->copy())),
 _nextCamera(new Camera(2, frustumPolicy->copy())),
+_lastCopiedNextCameraTimestamp(-1),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -774,7 +775,12 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrains(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFrom(*_nextCamera, false);
+  // the near-frustum renderer bumps _currentCamera's own timestamp every frame, so it can't be compared with _nextCamera's
+  const long long nextCameraTimestamp = _nextCamera->getTimestamp();
+  if (nextCameraTimestamp != _lastCopiedNextCameraTimestamp) {
+    _currentCamera->copyFrom(*_nextCamera, true);
+    _lastCopiedNextCameraTimestamp = nextCameraTimestamp;
+  }
 
 #ifdef C_CODE
   delete _rendererState;

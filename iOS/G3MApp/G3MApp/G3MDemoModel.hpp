@@ -13,6 +13,7 @@
 
 class G3MDemoListener;
 class G3MDemoScene;
+class Layer;
 class LayerSet;
 class G3MWidget;
 class G3MContext;
@@ -83,6 +84,8 @@ public:
   LayerSet* getLayerSet() const {
     return _layerSet;
   }
+
+  Layer* createRasterLayer() const;
 
   GEORenderer* getGEORenderer() const {
     return _geoRenderer;

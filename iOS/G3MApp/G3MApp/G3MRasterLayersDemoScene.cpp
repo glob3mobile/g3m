@@ -15,7 +15,7 @@
 #include <G3M/WMSLayer.hpp>
 #include <G3M/LevelTileCondition.hpp>
 #include <G3M/OSMLayer.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
 #include <G3M/URLTemplateLayer.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/TimeInterval.hpp>
@@ -123,27 +123,10 @@ https://api.maptiler.com/maps/topo/0/0/0.png?key=frA669oJCFswgMJKS3DP
   layerSet->addLayer(osmLayer);
 
 
-  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
-                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                         TimeInterval::fromDays(30));
-  bingMapsAerialLayer->setTitle("Bing Aerial");
-  bingMapsAerialLayer->setEnable(false);
-  layerSet->addLayer(bingMapsAerialLayer);
-
-
-  BingMapsLayer* bingMapsAerialWithLabels = new BingMapsLayer(BingMapType::AerialWithLabels(),
-                                                              "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                              TimeInterval::fromDays(30));
-  bingMapsAerialWithLabels->setTitle("Bing Aerial With Labels");
-  bingMapsAerialWithLabels->setEnable(false);
-  layerSet->addLayer(bingMapsAerialWithLabels);
-
-  BingMapsLayer* bingMapsCollinsBart = new BingMapsLayer(BingMapType::CollinsBart(),
-                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                         TimeInterval::fromDays(30));
-  bingMapsCollinsBart->setTitle("Bing Collins Bart");
-  bingMapsCollinsBart->setEnable(false);
-  layerSet->addLayer(bingMapsCollinsBart);
+  Layer* sentinel2Layer = getModel()->createRasterLayer();
+  sentinel2Layer->setTitle("Sentinel-2 cloudless");
+  sentinel2Layer->setEnable(false);
+  layerSet->addLayer(sentinel2Layer);
 
 
   std::vector<std::string> subdomains;
@@ -275,14 +258,8 @@ void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
                                                                                   -77.2,
                                                                                   30000));
   }
-  else if (option == "Bing Aerial") {
-    layerSet->getLayerByTitle("Bing Aerial")->setEnable(true);
-  }
-  else if (option == "Bing Aerial with Labels") {
-    layerSet->getLayerByTitle("Bing Aerial With Labels")->setEnable(true);
-  }
-  else if (option == "Bing Collins Bart") {
-    layerSet->getLayerByTitle("Bing Collins Bart")->setEnable(true);
+  else if (option == "Sentinel-2 cloudless") {
+    layerSet->getLayerByTitle("Sentinel-2 cloudless")->setEnable(true);
   }
   else if (option == "Uruguay (WMS)") {
     layerSet->getLayerByTitle("Nasa Blue Marble (WMS)")->setEnable(true);

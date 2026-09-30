@@ -39,8 +39,7 @@ public:
 
     // _options.push_back("ESRI ArcGis Online");
 
-    _options.push_back("Bing Aerial");
-    _options.push_back("Bing Aerial with Labels");
+    _options.push_back("Sentinel-2 cloudless");
 
     _options.push_back("Uruguay (WMS)");
   }

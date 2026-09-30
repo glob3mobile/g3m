@@ -24,6 +24,10 @@
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/MeasureRenderer.hpp>
+#include <G3M/URLTemplateLayer.hpp>
+#include <G3M/Sector.hpp>
+#include <G3M/TimeInterval.hpp>
+#include <G3M/Info.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -52,7 +56,6 @@
 #include "G3MExtrusionDemoScene.hpp"
 #include "G3MSoccerMatchDemoScene.hpp"
 #include "G3MTranslateScaleGizmoDemoScene.hpp"
-
 
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
@@ -163,6 +166,26 @@ void G3MDemoModel::reset() {
 
 PlanetRenderer* G3MDemoModel::getPlanetRenderer() const {
   return _g3mWidget->getPlanetRenderer();
+}
+
+Layer* G3MDemoModel::createRasterLayer() const {
+  const std::string sentinel2CloudlessTemplate = "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg";
+  const int firstLevel = 2;
+  const int eoxMaxServedLevel = 17;
+
+  std::vector<const Info*>* layerInfo = new std::vector<const Info*>();
+  layerInfo->push_back(new Info("Sentinel-2 cloudless by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2020)"));
+
+  return URLTemplateLayer::newMercator(sentinel2CloudlessTemplate,
+                                       Sector::FULL_SPHERE,
+                                       false, // isTransparent
+                                       firstLevel,
+                                       eoxMaxServedLevel,
+                                       TimeInterval::fromDays(30),
+                                       true,  // readExpired
+                                       1,     // transparency
+                                       NULL,  // condition
+                                       layerInfo);
 }
 
 G3MDemoScene* G3MDemoModel::getSceneByName(const std::string& sceneName) const {

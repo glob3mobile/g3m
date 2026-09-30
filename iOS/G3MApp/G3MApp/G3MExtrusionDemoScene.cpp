@@ -26,7 +26,6 @@
 #include <G3M/SingleBILElevationDataProvider.hpp>
 #include <G3M/LayerTilesRenderParameters.hpp>
 #include <G3M/URLTemplateLayer.hpp>
-#include <G3M/BingMapsLayer.hpp>
 #include <G3M/IMathUtils.hpp>
 #include <G3M/OSMLayer.hpp>
 
@@ -88,10 +87,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 //    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
 //    layerSet->addLayer(osmLayer);
 
-  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
-                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                         TimeInterval::fromDays(30));
-  layerSet->addLayer(bingMapsAerialLayer);
+  layerSet->addLayer( model->createRasterLayer() );
 //#error diego;
 
 //  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));

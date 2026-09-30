@@ -285,6 +285,7 @@ private:
   const FrustumPolicy* _frustumPolicy;
   Camera*              _currentCamera;
   Camera*              _nextCamera;
+  long long            _lastCopiedNextCameraTimestamp;
 
   TexturesHandler* _texturesHandler;
 

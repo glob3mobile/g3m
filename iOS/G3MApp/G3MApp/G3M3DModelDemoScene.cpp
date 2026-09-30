@@ -8,7 +8,7 @@
 #include "G3M3DModelDemoScene.hpp"
 
 #include <G3M/G3MWidget.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/ShapesRenderer.hpp>
 #include <G3M/SGShape.hpp>
@@ -67,9 +67,7 @@ void G3M3DModelDemoScene::rawActivate(const G3MContext* context) {
   
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
   
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
   
   

@@ -10,7 +10,7 @@
 #include <G3M/G3MWidget.hpp>
 #include <G3M/PlanetRenderer.hpp>
 #include <G3M/SingleBILElevationDataProvider.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/Geodetic3D.hpp>
 #include <G3M/Color.hpp>
@@ -40,9 +40,7 @@ void G3MScenarioDEMDemoScene::rawActivate(const G3MContext* context) {
   planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 
 

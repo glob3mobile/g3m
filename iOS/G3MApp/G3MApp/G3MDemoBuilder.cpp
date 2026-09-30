@@ -26,6 +26,8 @@
 #include <G3M/WrapperNearFrustumRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/MeasureRenderer.hpp>
+#include <G3M/BusyMeshRenderer.hpp>
+#include <G3M/Color.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -66,6 +68,13 @@ void G3MDemoBuilder::build() {
   }
 
   IG3MBuilder* builder = getG3MBuilder();
+
+  // Same color as the LaunchBackground color set (UILaunchScreen), so splash, busy wheel and sky don't flash
+  const Color backgroundColor = Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
+  builder->setBackgroundColor(new Color(backgroundColor));
+  builder->setBusyRenderer(new BusyMeshRenderer(backgroundColor,
+                                                Color::TRANSPARENT, /* meshOuterColor */
+                                                Color::WHITE        /* meshInnerColor */));
 
   builder->setAtmosphere(true);
 

@@ -13,7 +13,7 @@
 #include <G3M/Geodetic3D.hpp>
 #include <G3M/Color.hpp>
 #include <G3M/G3MWidget.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/G3MContext.hpp>
 #include <G3M/GLConstants.hpp>
@@ -50,9 +50,7 @@ void G3MTranslateScaleGizmoDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA(0.9f, 0.21f, 0.21f, 1.0f));
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 
   const Geodetic3D ellipsoidPosition = Geodetic3D::fromDegrees(37.39996584, -1.75035672, 0);

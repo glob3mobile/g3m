@@ -9,7 +9,8 @@
 #include "G3MDemoModel.hpp"
 #include <G3M/G3MWidget.hpp>
 #include <G3M/LayerSet.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
+#include <G3M/TimeInterval.hpp>
 #include <G3M/GEORasterSymbolizer.hpp>
 #include <G3M/GEO2DLineRasterStyle.hpp>
 #include <G3M/GEOGeometry.hpp>
@@ -196,10 +197,7 @@ void G3MTiledVectorDemoScene::rawActivate(const G3MContext* context) {
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
 
-  BingMapsLayer* rasterLayer = new BingMapsLayer(BingMapType::Aerial(),
-                                                 "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                 TimeInterval::fromDays(30));
-
+  Layer* rasterLayer = model->createRasterLayer();
   model->getLayerSet()->addLayer(rasterLayer);
 
   const std::string urlTemplate = "http://aerog3m.cloudapp.net/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";

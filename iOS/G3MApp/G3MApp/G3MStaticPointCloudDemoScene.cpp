@@ -8,7 +8,8 @@
 #include "G3MStaticPointCloudDemoScene.hpp"
 
 #include <G3M/G3MWidget.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
+#include <G3M/TimeInterval.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/IDownloader.hpp>
 #include <G3M/DownloadPriority.hpp>
@@ -217,9 +218,7 @@ void G3MStaticPointCloudDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 
 

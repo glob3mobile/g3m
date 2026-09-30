@@ -37,10 +37,28 @@
 	<string>GPS access is needed</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>G3M: Please allow me to get the device location.</string>
-	<key>UIMainStoryboardFile</key>
-	<string>MainStoryboard-iPhone</string>
-	<key>UIMainStoryboardFile~ipad</key>
-	<string>MainStoryboard-iPad</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>G3MSceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
