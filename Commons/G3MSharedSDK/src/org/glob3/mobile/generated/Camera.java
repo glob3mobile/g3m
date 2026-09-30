@@ -905,8 +905,9 @@ public class Camera
       {
         return false;
       }
-      final double angleError = signedAngleInRadians(targetAngle - mu.atan2((double) delta._y, (double) delta._x));
-      azimuthInRadians += azimuthSign * angleError;
+      final double screenAngle = mu.atan2((double) delta._y, (double) delta._x);
+      final double angleError = signedAngleInRadians(targetAngle - screenAngle);
+      azimuthInRadians += azimuthSign * angleError / segmentTurnPerAzimuth(screenAngle, altitudeInRadians);
   
       // 3. distance: move away or closer until the segment has the target length
       setPointOfView(center, distance, Angle.fromRadians(azimuthInRadians), altitude);
@@ -958,6 +959,19 @@ public class Camera
       radians += 2 * DefineConstants.PI;
     }
     return radians;
+  }
+
+  // how much the projected ground segment turns per unit of azimuth, for the heading step of solvePointOfView
+
+  // sin(e) when the segment lies across the view, 1/sin(e) when it lies along it, 1 looking straight down
+  private static double segmentTurnPerAzimuth(double screenAngleInRadians, double elevationInRadians)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    final double grazingLimit = 0.05;
+    final double sinElevation = mu.max(mu.sin(elevationInRadians), grazingLimit);
+    final double cosScreen = mu.cos(screenAngleInRadians);
+    final double sinScreen = mu.sin(screenAngleInRadians);
+    return ((sinElevation * sinElevation * cosScreen * cosScreen) + (sinScreen * sinScreen)) / sinElevation;
   }
 
   private void setCenter(MutableVector3D v)

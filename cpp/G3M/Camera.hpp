@@ -421,6 +421,10 @@ private:
 
   static double signedAngleInRadians(double radians); // wraps into (-PI, PI]
 
+  // how much the projected ground segment turns per unit of azimuth, for the heading step of solvePointOfView
+  static double segmentTurnPerAzimuth(double screenAngleInRadians,
+                                      double elevationInRadians);
+
   void setCenter(const MutableVector3D& v) {
     if (!v.equalTo(_center)) {
       _timestamp++;

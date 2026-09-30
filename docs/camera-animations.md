@@ -56,7 +56,7 @@ CameraPose Camera::computeCameraPose(const Geodetic3D& position1, const Vector2F
                                      const Angle& pitch) const;
 ```
 
-Given two geodetic points, where each of them should land on screen (uv in 0..1, origin top-left) and a pitch, it returns the camera pose (`_position`, `_heading`, `_pitch`) that achieves it, without moving the camera. The caller then chooses `setCameraPosition` or `setAnimatedCameraPosition`. It returns `CameraPose::nan()` when there is no solution, for instance points hidden behind the planet or a ray that would have to look above the horizon; `isNan()` tells. In portrait, oblique pitches often have no solution when the anchors sit on the vertical axis, because the far anchor would need a ray above the horizon.
+Given two geodetic points, where each of them should land on screen (uv in 0..1, origin top-left) and a pitch, it returns the camera pose (`_position`, `_heading`, `_pitch`) that achieves it, without moving the camera. The caller then chooses `setCameraPosition` or `setAnimatedCameraPosition`. It returns `CameraPose::nan()` when there is no solution, for instance points hidden behind the planet or a ray that would have to look above the horizon; `isNan()` tells. The solver iterates pitch, heading, distance and center; the heading step divides the on-screen angle error by how fast the projected segment turns per unit of azimuth, `sin e` when the segment lies across the view and `1 / sin e` when it lies along it, with `e` the camera elevation over the target. Without that, oblique views with the anchors along the vertical screen axis oscillated and never converged.
 
 ## Shortest path on the planet
 

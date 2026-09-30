@@ -470,6 +470,17 @@ double Camera::signedAngleInRadians(double radians) {
   return radians;
 }
 
+// sin(e) when the segment lies across the view, 1/sin(e) when it lies along it, 1 looking straight down
+double Camera::segmentTurnPerAzimuth(double screenAngleInRadians,
+                                     double elevationInRadians) {
+  const IMathUtils* mu = IMathUtils::instance();
+  const double grazingLimit = 0.05;
+  const double sinElevation = mu->max(mu->sin(elevationInRadians), grazingLimit);
+  const double cosScreen = mu->cos(screenAngleInRadians);
+  const double sinScreen = mu->sin(screenAngleInRadians);
+  return ((sinElevation * sinElevation * cosScreen * cosScreen) + (sinScreen * sinScreen)) / sinElevation;
+}
+
 bool Camera::solvePointOfView(const Vector3D& cartesian1,
                               const Vector2F& target1,
                               const Vector3D& cartesian2,
@@ -536,8 +547,9 @@ bool Camera::solvePointOfView(const Vector3D& cartesian1,
     if (delta.length() < 0.001) {
       return false;
     }
-    const double angleError = signedAngleInRadians(targetAngle - mu->atan2((double) delta._y, (double) delta._x));
-    azimuthInRadians += azimuthSign * angleError;
+    const double screenAngle = mu->atan2((double) delta._y, (double) delta._x);
+    const double angleError  = signedAngleInRadians(targetAngle - screenAngle);
+    azimuthInRadians += azimuthSign * angleError / segmentTurnPerAzimuth(screenAngle, altitudeInRadians);
 
     // 3. distance: move away or closer until the segment has the target length
     setPointOfView(center, distance, Angle::fromRadians(azimuthInRadians), altitude);
