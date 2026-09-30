@@ -15,6 +15,12 @@ public:
   double sinh(double v) const;
   float  sinh(float v)  const;
 
+  double cosh(double v) const;
+  float  cosh(float v)  const;
+
+  double tanh(double v) const;
+  float  tanh(float v)  const;
+
   double asin(double v) const;
   float  asin(float v)  const;
 

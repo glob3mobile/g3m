@@ -67,6 +67,18 @@ public:
   virtual double sinh(double v) const = 0;
   virtual float  sinh(float v)  const = 0;
 
+  virtual double cosh(double v) const = 0;
+  virtual float  cosh(float v)  const = 0;
+
+  virtual double tanh(double v) const = 0;
+  virtual float  tanh(float v)  const = 0;
+
+  // Java's Math has no asinh; the log form is evaluated on |v| to stay stable for large magnitudes
+  virtual double asinh(double v) const {
+    const double magnitude = log(abs(v) + sqrt((v * v) + 1));
+    return (v < 0) ? -magnitude : magnitude;
+  }
+
   virtual double asin(double v) const = 0;
   virtual float  asin(float v)  const = 0;
 

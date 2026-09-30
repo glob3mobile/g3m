@@ -64,6 +64,19 @@ public abstract class IMathUtils
   public abstract double sinh(double v);
   public abstract float sinh(float v);
 
+  public abstract double cosh(double v);
+  public abstract float cosh(float v);
+
+  public abstract double tanh(double v);
+  public abstract float tanh(float v);
+
+  // Java's Math has no asinh; the log form is evaluated on |v| to stay stable for large magnitudes
+  public double asinh(double v)
+  {
+    final double magnitude = Math.log(Math.abs(v) + Math.sqrt((v * v) + 1));
+    return (v < 0) ? -magnitude : magnitude;
+  }
+
   public abstract double asin(double v);
   public abstract float asin(float v);
 

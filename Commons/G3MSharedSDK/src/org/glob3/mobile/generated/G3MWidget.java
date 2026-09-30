@@ -587,38 +587,33 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
       return;
     }
   
-    double finalLatInDegrees = toPosition._latitude._degrees;
-    double finalLonInDegrees = toPosition._longitude._degrees;
-  
-    //Fixing final latitude
-    while (finalLatInDegrees > 90)
-    {
-      finalLatInDegrees -= 180;
-    }
-    while (finalLatInDegrees < -90)
-    {
-      finalLatInDegrees += 180;
-    }
-  
-    //Fixing final longitude
-    while (finalLonInDegrees > 360)
-    {
-      finalLonInDegrees -= 360;
-    }
-    while (finalLonInDegrees < 0)
-    {
-      finalLonInDegrees += 360;
-    }
-    if (Math.abs(finalLonInDegrees - fromPosition._longitude._degrees) > 180)
-    {
-      finalLonInDegrees -= 360;
-    }
-  
-    final Geodetic3D finalToPosition = Geodetic3D.fromDegrees(finalLatInDegrees, finalLonInDegrees, toPosition._height);
+    final Geodetic3D finalToPosition = nearestEquivalentPosition(fromPosition, toPosition);
   
     cancelCameraAnimation();
   
     _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, finalToPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
+  }
+
+  public final void setCameraPointOfView(Geodetic3D target, double distance, Angle azimuth, Angle altitude)
+  {
+    _nextCamera.setPointOfView(target, distance, azimuth, altitude);
+  }
+
+  public final void setAnimatedCameraPointOfView(TimeInterval interval, Geodetic3D fromTarget, Geodetic3D toTarget, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude, boolean linearTiming)
+  {
+     setAnimatedCameraPointOfView(interval, fromTarget, toTarget, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, linearTiming, false);
+  }
+  public final void setAnimatedCameraPointOfView(TimeInterval interval, Geodetic3D fromTarget, Geodetic3D toTarget, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
+  {
+     setAnimatedCameraPointOfView(interval, fromTarget, toTarget, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, false, false);
+  }
+  public final void setAnimatedCameraPointOfView(TimeInterval interval, Geodetic3D fromTarget, Geodetic3D toTarget, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude, boolean linearTiming, boolean linearDistance)
+  {
+    final Geodetic3D finalToTarget = nearestEquivalentPosition(fromTarget, toTarget);
+  
+    cancelCameraAnimation();
+  
+    _effectsScheduler.startEffect(new CameraPointOfViewEffect(interval, fromTarget, finalToTarget, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, linearTiming, linearDistance), _nextCamera.getEffectTarget());
   }
 
   public final void cancelCameraAnimation()
@@ -1185,6 +1180,36 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
       }
     }
   
+  }
+
+  private Geodetic3D nearestEquivalentPosition(Geodetic3D from, Geodetic3D to)
+  {
+    double latInDegrees = to._latitude._degrees;
+    double lonInDegrees = to._longitude._degrees;
+  
+    while (latInDegrees > 90)
+    {
+      latInDegrees -= 180;
+    }
+    while (latInDegrees < -90)
+    {
+      latInDegrees += 180;
+    }
+  
+    while (lonInDegrees > 360)
+    {
+      lonInDegrees -= 360;
+    }
+    while (lonInDegrees < 0)
+    {
+      lonInDegrees += 360;
+    }
+    if (Math.abs(lonInDegrees - from._longitude._degrees) > 180)
+    {
+      lonInDegrees -= 360;
+    }
+  
+    return Geodetic3D.fromDegrees(latInDegrees, lonInDegrees, to._height);
   }
 
   private void rawRenderMono(RenderState_Type renderStateType)

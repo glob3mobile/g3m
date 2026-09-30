@@ -930,6 +930,10 @@
 		CFF35E9425F9371C003F5265 /* MeasureRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF35E9225F9371C003F5265 /* MeasureRenderer.cpp */; };
 		CFF35E9725F93763003F5265 /* MeasureRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFF35E9325F9371C003F5265 /* MeasureRenderer.hpp */; };
 		CFF35E9825F93763003F5265 /* CameraMouseWheelHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D877330B25DC0A8D009C6B6E /* CameraMouseWheelHandler.hpp */; };
+		CFFE6600306D264A004728AD /* CameraPointOfViewEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE65FF306D264A004728AD /* CameraPointOfViewEffect.cpp */; };
+		CFFE6601306D2677004728AD /* CameraPointOfViewEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFE65FE306D264A004728AD /* CameraPointOfViewEffect.hpp */; };
+		CFFE6604306D456E004728AD /* CameraFlightArc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE6603306D456E004728AD /* CameraFlightArc.cpp */; };
+		CFFE6605306D4589004728AD /* CameraFlightArc.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFE6602306D456E004728AD /* CameraFlightArc.hpp */; };
 		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
 		D877330C25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */; };
@@ -975,6 +979,8 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CFFE6605306D4589004728AD /* CameraFlightArc.hpp in CopyFiles */,
+				CFFE6601306D2677004728AD /* CameraPointOfViewEffect.hpp in CopyFiles */,
 				CF63F647306C1FA900966F36 /* CameraPose.hpp in CopyFiles */,
 				CFF35E9725F93763003F5265 /* MeasureRenderer.hpp in CopyFiles */,
 				CFF35E9825F93763003F5265 /* CameraMouseWheelHandler.hpp in CopyFiles */,
@@ -2431,6 +2437,10 @@
 		CFF35E9325F9371C003F5265 /* MeasureRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeasureRenderer.hpp; sourceTree = "<group>"; };
 		CFFAFD71169F2E3000BCE129 /* TextUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = TextUtils_iOS.mm; path = Specific/Derived/TextUtils_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CFFAFD72169F2E3000BCE129 /* TextUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = TextUtils_iOS.hpp; path = Specific/Derived/TextUtils_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CFFE65FE306D264A004728AD /* CameraPointOfViewEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CameraPointOfViewEffect.hpp; sourceTree = "<group>"; };
+		CFFE65FF306D264A004728AD /* CameraPointOfViewEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraPointOfViewEffect.cpp; sourceTree = "<group>"; };
+		CFFE6602306D456E004728AD /* CameraFlightArc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CameraFlightArc.hpp; sourceTree = "<group>"; };
+		CFFE6603306D456E004728AD /* CameraFlightArc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraFlightArc.cpp; sourceTree = "<group>"; };
 		CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader_iOS.hpp; path = Specific/Derived/Downloader_iOS.hpp; sourceTree = "<group>"; };
 		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
@@ -2733,10 +2743,14 @@
 				CF66035023DF2DA700795C7F /* CameraEventGesture.hpp */,
 				CF66028923DF2DA600795C7F /* CameraEventGesture.cpp */,
 				CF66025723DF2DA600795C7F /* CameraEventHandler.hpp */,
+				CFFE6602306D456E004728AD /* CameraFlightArc.hpp */,
+				CFFE6603306D456E004728AD /* CameraFlightArc.cpp */,
 				CF66033D23DF2DA700795C7F /* CameraGoToPositionEffect.hpp */,
 				CF66028223DF2DA600795C7F /* CameraGoToPositionEffect.cpp */,
 				D877330B25DC0A8D009C6B6E /* CameraMouseWheelHandler.hpp */,
 				D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */,
+				CFFE65FE306D264A004728AD /* CameraPointOfViewEffect.hpp */,
+				CFFE65FF306D264A004728AD /* CameraPointOfViewEffect.cpp */,
 				CF63F644306C1F4600966F36 /* CameraPose.hpp */,
 				CF63F645306C1F4600966F36 /* CameraPose.cpp */,
 				CF66038623DF2DA800795C7F /* CameraRenderer.hpp */,
@@ -3881,6 +3895,7 @@
 				CF66088723DF330600795C7F /* G3MContext.cpp in Sources */,
 				CF66088823DF330600795C7F /* TransformableTextureMapping.cpp in Sources */,
 				CF66088923DF330600795C7F /* GEOLineRasterSymbol.cpp in Sources */,
+				CFFE6600306D264A004728AD /* CameraPointOfViewEffect.cpp in Sources */,
 				CF66088A23DF330600795C7F /* Ray.cpp in Sources */,
 				CF66088B23DF330600795C7F /* ErrorRenderer.cpp in Sources */,
 				CF66088C23DF330600795C7F /* CameraZoomAndRotateHandler.cpp in Sources */,
@@ -4124,6 +4139,7 @@
 				CF66096723DF330700795C7F /* GPUAttributeValueVec2Float.cpp in Sources */,
 				CF66096823DF330700795C7F /* GPUAttributeValueVec3Float.cpp in Sources */,
 				CF66096923DF330700795C7F /* CompositeMesh.cpp in Sources */,
+				CFFE6604306D456E004728AD /* CameraFlightArc.cpp in Sources */,
 				CF66096A23DF330700795C7F /* ICanvasUtils.cpp in Sources */,
 				CF66096B23DF330700795C7F /* DecoratorTileVisibilityTester.cpp in Sources */,
 				CF66096C23DF330700795C7F /* G3MMeshMaterial.cpp in Sources */,

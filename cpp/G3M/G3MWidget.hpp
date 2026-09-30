@@ -208,6 +208,23 @@ public:
                                  const bool linearTiming  = false,
                                  const bool linearHeight  = false);
 
+  void setCameraPointOfView(const Geodetic3D& target,
+                            const double distance,
+                            const Angle& azimuth,
+                            const Angle& altitude);
+
+  void setAnimatedCameraPointOfView(const TimeInterval& interval,
+                                    const Geodetic3D& fromTarget,
+                                    const Geodetic3D& toTarget,
+                                    const double fromDistance,
+                                    const double toDistance,
+                                    const Angle& fromAzimuth,
+                                    const Angle& toAzimuth,
+                                    const Angle& fromAltitude,
+                                    const Angle& toAltitude,
+                                    const bool linearTiming   = false,
+                                    const bool linearDistance = false);
+
   void cancelCameraAnimation();
 
   void cancelAllEffects();
@@ -388,6 +405,9 @@ private:
 
   void rawRender(const RenderState_Type renderStateType);
   
+  Geodetic3D nearestEquivalentPosition(const Geodetic3D& from,
+                                       const Geodetic3D& to) const;
+
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);

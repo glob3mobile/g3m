@@ -23,6 +23,7 @@
 #include "GLConstants.hpp"
 #include "PeriodicalTask.hpp"
 #include "CameraGoToPositionEffect.hpp"
+#include "CameraPointOfViewEffect.hpp"
 #include "CameraRenderer.hpp"
 #include "IStorage.hpp"
 #include "OrderedRenderable.hpp"
@@ -997,31 +998,7 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
     return;
   }
 
-  double finalLatInDegrees = toPosition._latitude._degrees;
-  double finalLonInDegrees = toPosition._longitude._degrees;
-
-  //Fixing final latitude
-  while (finalLatInDegrees > 90) {
-    finalLatInDegrees -= 180;
-  }
-  while (finalLatInDegrees < -90) {
-    finalLatInDegrees += 180;
-  }
-
-  //Fixing final longitude
-  while (finalLonInDegrees > 360) {
-    finalLonInDegrees -= 360;
-  }
-  while (finalLonInDegrees < 0) {
-    finalLonInDegrees += 360;
-  }
-  if (fabs(finalLonInDegrees - fromPosition._longitude._degrees) > 180) {
-    finalLonInDegrees -= 360;
-  }
-
-  const Geodetic3D finalToPosition = Geodetic3D::fromDegrees(finalLatInDegrees,
-                                                             finalLonInDegrees,
-                                                             toPosition._height);
+  const Geodetic3D finalToPosition = nearestEquivalentPosition(fromPosition, toPosition);
 
   cancelCameraAnimation();
 
@@ -1031,6 +1008,63 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                                               fromPitch,    toPitch,
                                                               linearTiming,
                                                               linearHeight),
+                                 _nextCamera->getEffectTarget());
+}
+
+Geodetic3D G3MWidget::nearestEquivalentPosition(const Geodetic3D& from,
+                                                const Geodetic3D& to) const {
+  double latInDegrees = to._latitude._degrees;
+  double lonInDegrees = to._longitude._degrees;
+
+  while (latInDegrees > 90) {
+    latInDegrees -= 180;
+  }
+  while (latInDegrees < -90) {
+    latInDegrees += 180;
+  }
+
+  while (lonInDegrees > 360) {
+    lonInDegrees -= 360;
+  }
+  while (lonInDegrees < 0) {
+    lonInDegrees += 360;
+  }
+  if (fabs(lonInDegrees - from._longitude._degrees) > 180) {
+    lonInDegrees -= 360;
+  }
+
+  return Geodetic3D::fromDegrees(latInDegrees, lonInDegrees, to._height);
+}
+
+void G3MWidget::setCameraPointOfView(const Geodetic3D& target,
+                                     const double distance,
+                                     const Angle& azimuth,
+                                     const Angle& altitude) {
+  _nextCamera->setPointOfView(target, distance, azimuth, altitude);
+}
+
+void G3MWidget::setAnimatedCameraPointOfView(const TimeInterval& interval,
+                                             const Geodetic3D& fromTarget,
+                                             const Geodetic3D& toTarget,
+                                             const double fromDistance,
+                                             const double toDistance,
+                                             const Angle& fromAzimuth,
+                                             const Angle& toAzimuth,
+                                             const Angle& fromAltitude,
+                                             const Angle& toAltitude,
+                                             const bool linearTiming,
+                                             const bool linearDistance) {
+  const Geodetic3D finalToTarget = nearestEquivalentPosition(fromTarget, toTarget);
+
+  cancelCameraAnimation();
+
+  _effectsScheduler->startEffect(new CameraPointOfViewEffect(interval,
+                                                             fromTarget,   finalToTarget,
+                                                             fromDistance, toDistance,
+                                                             fromAzimuth,  toAzimuth,
+                                                             fromAltitude, toAltitude,
+                                                             linearTiming,
+                                                             linearDistance),
                                  _nextCamera->getEffectTarget());
 }
 

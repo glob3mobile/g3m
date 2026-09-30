@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //class Planet;
+//class CameraFlightArc;
 
 
 public class CameraGoToPositionEffect extends EffectWithDuration
@@ -32,35 +33,24 @@ public class CameraGoToPositionEffect extends EffectWithDuration
   private final Angle _toPitch ;
 
   private final boolean _linearHeight;
-  private double _middleHeight;
+  private CameraFlightArc _arc;
 
-  private double calculateMaxHeight(Planet planet)
+  private double _planetRadius;
+  private double _fromAngleBelowHorizonRadians;
+  private double _toAngleBelowHorizonRadians;
+
+  private double horizonDepressionRadians(double height)
   {
-    // curve parameters
-    final double distanceInDegreesMaxHeight = 180;
-    final double maxHeight = planet.getRadii().axisAverage() * 5;
-  
-  
-    // rough estimation of distance using lat/lon degrees
-    final double deltaLatInDeg = _fromPosition._latitude._degrees - _toPosition._latitude._degrees;
-    final double deltaLonInDeg = _fromPosition._longitude._degrees - _toPosition._longitude._degrees;
-    final double distanceInDeg = IMathUtils.instance().sqrt((deltaLatInDeg * deltaLatInDeg) + (deltaLonInDeg * deltaLonInDeg));
-  
-    if (distanceInDeg >= distanceInDegreesMaxHeight)
+    if ((_planetRadius <= 0) || (height <= 0))
     {
-      return maxHeight;
+      return 0;
     }
-  
-    final double middleHeight = (distanceInDeg / distanceInDegreesMaxHeight) * maxHeight;
-  
-    final double averageHeight = (_fromPosition._height + _toPosition._height) / 2;
-    if (middleHeight < averageHeight)
-    {
-      final double delta = (averageHeight - middleHeight) / 2.0;
-      return averageHeight + delta;
-    }
-  
-    return middleHeight;
+    return IMathUtils.instance().acos(_planetRadius / (_planetRadius + height));
+  }
+
+  private double angleBelowHorizonRadians(Angle pitch, double height)
+  {
+    return -pitch._radians - horizonDepressionRadians(height);
   }
 
 
@@ -74,54 +64,60 @@ public class CameraGoToPositionEffect extends EffectWithDuration
      _fromPitch = new Angle(fromPitch);
      _toPitch = new Angle(toPitch);
      _linearHeight = linearHeight;
+     _arc = null;
+     _planetRadius = 0;
+     _fromAngleBelowHorizonRadians = 0;
+     _toAngleBelowHorizonRadians = 0;
+  }
+
+  public void dispose()
+  {
+    if (_arc != null)
+       _arc.dispose();
   }
 
   public final void start(G3MRenderContext rc, TimeInterval when)
   {
     super.start(rc, when);
   
-    _middleHeight = calculateMaxHeight(rc.getPlanet());
+    final Planet planet = rc.getPlanet();
+    if (_arc != null)
+       _arc.dispose();
+    _arc = new CameraFlightArc(planet, _fromPosition, _toPosition, _fromPosition._height, _toPosition._height);
+    _planetRadius = planet.isFlat() ? 0 : planet.getRadii().axisAverage();
+  
+    _fromAngleBelowHorizonRadians = angleBelowHorizonRadians(_fromPitch, _fromPosition._height);
+    _toAngleBelowHorizonRadians = angleBelowHorizonRadians(_toPitch, _toPosition._height);
   }
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
     final double alpha = getAlpha(when);
   
+    double pan;
     double height;
     if (_linearHeight)
     {
+      pan = alpha;
       height = IMathUtils.instance().linearInterpolation(_fromPosition._height, _toPosition._height, alpha);
     }
     else
     {
-      height = IMathUtils.instance().quadraticBezierInterpolation(_fromPosition._height, _middleHeight, _toPosition._height, alpha);
+      pan = _arc.panAt(alpha);
+      height = _arc.valueAt(alpha);
     }
   
     Camera camera = rc.getNextCamera();
-    camera.setGeodeticPosition(Angle.linearInterpolation(_fromPosition._latitude, _toPosition._latitude, alpha), Angle.linearInterpolation(_fromPosition._longitude, _toPosition._longitude, alpha), height);
+    camera.setGeodeticPosition(Angle.linearInterpolation(_fromPosition._latitude, _toPosition._latitude, pan), Angle.linearInterpolation(_fromPosition._longitude, _toPosition._longitude, pan), height);
   
   
     final Angle heading = Angle.linearInterpolation(_fromHeading, _toHeading, alpha);
     camera.setHeading(heading);
   
-    final Angle middlePitch = Angle._MINUS_HALF_PI;
-    //    const Angle pitch =  (alpha < 0.5)
-    //    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
-    //    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);
-  
-    if (alpha <= 0.1)
-    {
-      camera.setPitch(Angle.linearInterpolation(_fromPitch, middlePitch, alpha *10));
-    }
-    else if (alpha >= 0.9)
-    {
-      camera.setPitch(Angle.linearInterpolation(middlePitch, _toPitch, (alpha-0.9)*10));
-    }
-    else
-    {
-      camera.setPitch(middlePitch);
-    }
-  
+    // the horizon keeps its place on screen while the height changes; beyond the nadir the camera would look backwards
+    final double belowHorizonRadians = IMathUtils.instance().linearInterpolation(_fromAngleBelowHorizonRadians, _toAngleBelowHorizonRadians, alpha);
+    final double pitchRadians = -(horizonDepressionRadians(height) + belowHorizonRadians);
+    camera.setPitch(Angle.fromRadians(IMathUtils.instance().max(pitchRadians, Angle._MINUS_HALF_PI._radians)));
   }
 
   public final void stop(G3MRenderContext rc, TimeInterval when)

@@ -13,40 +13,36 @@
 #include "Vector3D.hpp"
 #include "G3MRenderContext.hpp"
 #include "Camera.hpp"
+#include "CameraFlightArc.hpp"
 
 
-double CameraGoToPositionEffect::calculateMaxHeight(const Planet* planet) {
-  // curve parameters
-  const double distanceInDegreesMaxHeight = 180;
-  const double maxHeight = planet->getRadii().axisAverage() * 5;
+CameraGoToPositionEffect::~CameraGoToPositionEffect() {
+  delete _arc;
+}
 
-
-  // rough estimation of distance using lat/lon degrees
-  const double deltaLatInDeg = _fromPosition._latitude._degrees  - _toPosition._latitude._degrees;
-  const double deltaLonInDeg = _fromPosition._longitude._degrees - _toPosition._longitude._degrees;
-  const double distanceInDeg = IMathUtils::instance()->sqrt((deltaLatInDeg * deltaLatInDeg) +
-                                                            (deltaLonInDeg * deltaLonInDeg));
-
-  if (distanceInDeg >= distanceInDegreesMaxHeight) {
-    return maxHeight;
+double CameraGoToPositionEffect::horizonDepressionRadians(const double height) const {
+  if ((_planetRadius <= 0) || (height <= 0)) {
+    return 0;
   }
+  return IMathUtils::instance()->acos(_planetRadius / (_planetRadius + height));
+}
 
-  const double middleHeight = (distanceInDeg / distanceInDegreesMaxHeight) * maxHeight;
-
-  const double averageHeight = (_fromPosition._height + _toPosition._height) / 2;
-  if (middleHeight < averageHeight) {
-    const double delta = (averageHeight - middleHeight) / 2.0;
-    return averageHeight + delta;
-  }
-
-  return middleHeight;
+double CameraGoToPositionEffect::angleBelowHorizonRadians(const Angle& pitch,
+                                                          const double height) const {
+  return -pitch._radians - horizonDepressionRadians(height);
 }
 
 void CameraGoToPositionEffect::start(const G3MRenderContext* rc,
                                      const TimeInterval& when) {
   EffectWithDuration::start(rc, when);
 
-  _middleHeight = calculateMaxHeight(rc->getPlanet());
+  const Planet* planet = rc->getPlanet();
+  delete _arc;
+  _arc = new CameraFlightArc(planet, _fromPosition, _toPosition, _fromPosition._height, _toPosition._height);
+  _planetRadius = planet->isFlat() ? 0 : planet->getRadii().axisAverage();
+
+  _fromAngleBelowHorizonRadians = angleBelowHorizonRadians(_fromPitch, _fromPosition._height);
+  _toAngleBelowHorizonRadians   = angleBelowHorizonRadians(_toPitch,   _toPosition._height);
 }
 
 
@@ -55,43 +51,34 @@ void CameraGoToPositionEffect::doStep(const G3MRenderContext* rc,
                                       const TimeInterval& when) {
   const double alpha = getAlpha(when);
 
+  double pan;
   double height;
   if (_linearHeight) {
+    pan    = alpha;
     height = IMathUtils::instance()->linearInterpolation(_fromPosition._height,
                                                          _toPosition._height,
                                                          alpha);
   }
   else {
-    height = IMathUtils::instance()->quadraticBezierInterpolation(_fromPosition._height,
-                                                                  _middleHeight,
-                                                                  _toPosition._height,
-                                                                  alpha);
+    pan    = _arc->panAt(alpha);
+    height = _arc->valueAt(alpha);
   }
 
   Camera *camera = rc->getNextCamera();
-  camera->setGeodeticPosition(Angle::linearInterpolation(_fromPosition._latitude,  _toPosition._latitude,  alpha),
-                              Angle::linearInterpolation(_fromPosition._longitude, _toPosition._longitude, alpha),
+  camera->setGeodeticPosition(Angle::linearInterpolation(_fromPosition._latitude,  _toPosition._latitude,  pan),
+                              Angle::linearInterpolation(_fromPosition._longitude, _toPosition._longitude, pan),
                               height);
 
 
   const Angle heading = Angle::linearInterpolation(_fromHeading, _toHeading, alpha);
   camera->setHeading(heading);
 
-  const Angle middlePitch = Angle::_MINUS_HALF_PI;
-  //    const Angle pitch =  (alpha < 0.5)
-  //    ? Angle::linearInterpolation(_fromPitch, middlePitch, alpha*2)
-  //    : Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.5)*2);
-
-  if (alpha <= 0.1) {
-    camera->setPitch( Angle::linearInterpolation(_fromPitch, middlePitch, alpha*10) );
-  }
-  else if (alpha >= 0.9) {
-    camera->setPitch( Angle::linearInterpolation(middlePitch, _toPitch, (alpha-0.9)*10) );
-  }
-  else {
-    camera->setPitch(middlePitch);
-  }
-
+  // the horizon keeps its place on screen while the height changes; beyond the nadir the camera would look backwards
+  const double belowHorizonRadians = IMathUtils::instance()->linearInterpolation(_fromAngleBelowHorizonRadians,
+                                                                                 _toAngleBelowHorizonRadians,
+                                                                                 alpha);
+  const double pitchRadians = -(horizonDepressionRadians(height) + belowHorizonRadians);
+  camera->setPitch( Angle::fromRadians( IMathUtils::instance()->max(pitchRadians, Angle::_MINUS_HALF_PI._radians) ) );
 }
 
 

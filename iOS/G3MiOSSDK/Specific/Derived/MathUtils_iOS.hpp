@@ -19,6 +19,8 @@ class MathAux {
 public:
   static inline double sin_  (double v)           { return sin(v);     }
   static inline double sinh_ (double v)           { return sinh(v);    }
+  static inline double cosh_ (double v)           { return cosh(v);    }
+  static inline double tanh_ (double v)           { return tanh(v);    }
   static inline double asin_ (double v)           { return asin(v);    }
   static inline double cos_  (double v)           { return cos(v);     }
   static inline double acos_ (double v)           { return acos(v);    }
@@ -49,6 +51,12 @@ public:
 
   double sinh(double v) const { return MathAux::sinh_(v); }
   float  sinh(float v)  const { return sinhf(v); }
+
+  double cosh(double v) const { return MathAux::cosh_(v); }
+  float  cosh(float v)  const { return coshf(v); }
+
+  double tanh(double v) const { return MathAux::tanh_(v); }
+  float  tanh(float v)  const { return tanhf(v); }
 
   double asin(double v) const { return MathAux::asin_(v); }
   float  asin(float v)  const { return asinf(v); }

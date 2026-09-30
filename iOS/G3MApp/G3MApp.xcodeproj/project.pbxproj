@@ -93,6 +93,7 @@
 		CFF9D20C1A7C5048005429A6 /* g3m-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF9D20B1A7C5048005429A6 /* g3m-mark.png */; };
 		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
 		CFFE65F5306CF45B004728AD /* G3MSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFE65F4306CF45B004728AD /* G3MSceneDelegate.m */; };
+		CFFE65FC306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE65FB306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp */; };
 		D82CA3F01C64D837008FAAD2 /* G3MStereoDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */; };
 		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
@@ -267,6 +268,8 @@
 		CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "BuenosAires-Wikipedia.json"; sourceTree = "<group>"; };
 		CFFE65F3306CF45B004728AD /* G3MSceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = G3MSceneDelegate.h; sourceTree = "<group>"; };
 		CFFE65F4306CF45B004728AD /* G3MSceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = G3MSceneDelegate.m; sourceTree = "<group>"; };
+		CFFE65FA306D2190004728AD /* G3MCameraTransitionsDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MCameraTransitionsDemoScene.hpp; sourceTree = "<group>"; };
+		CFFE65FB306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCameraTransitionsDemoScene.cpp; sourceTree = "<group>"; };
 		D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MStereoDemoScene.mm; sourceTree = "<group>"; };
 		D82CA3EF1C64D837008FAAD2 /* G3MStereoDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStereoDemoScene.hpp; sourceTree = "<group>"; };
 		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -363,6 +366,8 @@
 				CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */,
 				CFE3B3DB183AD38D0078C796 /* G3MCameraDemoScene.hpp */,
 				CFE3B3DA183AD38D0078C796 /* G3MCameraDemoScene.cpp */,
+				CFFE65FA306D2190004728AD /* G3MCameraTransitionsDemoScene.hpp */,
+				CFFE65FB306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp */,
 				CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */,
 				CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */,
 				CF3F8FDE183526AE00589B4C /* G3MDemoBuilder.hpp */,
@@ -770,6 +775,7 @@
 				E7D1B61516D2436700AF47C1 /* main.m in Sources */,
 				CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */,
 				CFBF9E852B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp in Sources */,
+				CFFE65FC306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp in Sources */,
 				CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */,
 				CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */,
 				CFE3B3D0183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp in Sources */,
