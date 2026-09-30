@@ -12,11 +12,11 @@ class Planet;
 class Geodetic3D;
 
 
-// Pan and height (or distance) of a camera flight along the same geodesic, so the perceived speed stays constant
-// (van Wijk & Nuij, "Smooth and efficient zooming and panning", 2003)
+// Height (or distance) along a camera flight: a quadratic Bezier over the pan that passes through the height
+// the geodesic of van Wijk & Nuij ("Smooth and efficient zooming and panning", 2003) has halfway,
+// high enough for both ends to fit in view; a flight that does not move zooms in log scale
 class CameraFlightArc {
 private:
-  static const double RHO;
   static const double RHO_SQUARED;
 
   const double _fromValue;
@@ -24,10 +24,7 @@ private:
   const double _separation;
 
   bool   _pureZoom;
-  double _r0;
-  double _coshR0;
-  double _sinhR0;
-  double _length;
+  double _controlValue;
 
   static double positive(const double value);
 
@@ -42,15 +39,7 @@ public:
   ~CameraFlightArc() {
   }
 
-  // fraction of the way between from and to, 0..1
-  double panAt(const double alpha) const;
-
   double valueAt(const double alpha) const;
-
-  // length in the pan+zoom metric; the flight takes length / speed seconds
-  double getLength() const {
-    return _length;
-  }
 
 };
 

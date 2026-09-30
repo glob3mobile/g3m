@@ -96,6 +96,11 @@ public:
 
   virtual Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const = 0;
 
+  // point along the shortest path from P0 to P1, alpha 0..1
+  virtual Geodetic2D getIntermediatePoint(const Geodetic2D& P0,
+                                          const Geodetic2D& P1,
+                                          const double alpha) const = 0;
+
 
   virtual double computePreciseLatLonDistance(const Geodetic2D& g1,
                                               const Geodetic2D& g2) const = 0;

@@ -94,21 +94,12 @@ public class CameraGoToPositionEffect extends EffectWithDuration
   {
     final double alpha = getAlpha(when);
   
-    double pan;
-    double height;
-    if (_linearHeight)
-    {
-      pan = alpha;
-      height = IMathUtils.instance().linearInterpolation(_fromPosition._height, _toPosition._height, alpha);
-    }
-    else
-    {
-      pan = _arc.panAt(alpha);
-      height = _arc.valueAt(alpha);
-    }
+    final double height = _linearHeight ? IMathUtils.instance().linearInterpolation(_fromPosition._height, _toPosition._height, alpha) : _arc.valueAt(alpha);
+  
+    final Geodetic2D ground = rc.getPlanet().getIntermediatePoint(_fromPosition.asGeodetic2D(), _toPosition.asGeodetic2D(), alpha);
   
     Camera camera = rc.getNextCamera();
-    camera.setGeodeticPosition(Angle.linearInterpolation(_fromPosition._latitude, _toPosition._latitude, pan), Angle.linearInterpolation(_fromPosition._longitude, _toPosition._longitude, pan), height);
+    camera.setGeodeticPosition(ground._latitude, ground._longitude, height);
   
   
     final Angle heading = Angle.linearInterpolation(_fromHeading, _toHeading, alpha);

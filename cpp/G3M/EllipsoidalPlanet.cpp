@@ -230,12 +230,24 @@ Vector3D EllipsoidalPlanet::scaleToGeocentricSurface(const Vector3D& position) c
 
 Geodetic2D EllipsoidalPlanet::getMidPoint (const Geodetic2D& P0,
                                            const Geodetic2D& P1) const {
+  return getIntermediatePoint(P0, P1, 0.5);
+}
+
+Geodetic2D EllipsoidalPlanet::getIntermediatePoint(const Geodetic2D& P0,
+                                                   const Geodetic2D& P1,
+                                                   const double alpha) const {
   const Vector3D v0 = toCartesian(P0);
   const Vector3D v1 = toCartesian(P1);
-  const Vector3D normal = v0.cross(v1).normalized();
   const Angle theta = v0.angleBetween(v1);
-  const Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
-  return toGeodetic2D(midPoint);
+
+  // coincident or antipodal points have no single great circle
+  const double epsilon = 1e-9;
+  if ((theta._radians < epsilon) || (theta._radians > (PI - epsilon))) {
+    return Geodetic2D::linearInterpolation(P0, P1, alpha);
+  }
+
+  const Vector3D normal = v0.cross(v1).normalized();
+  return toGeodetic2D( scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(alpha))) );
 }
 
 

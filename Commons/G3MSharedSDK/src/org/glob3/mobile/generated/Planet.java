@@ -84,6 +84,9 @@ public abstract class Planet
 
   public abstract Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1);
 
+  // point along the shortest path from P0 to P1, alpha 0..1
+  public abstract Geodetic2D getIntermediatePoint(Geodetic2D P0, Geodetic2D P1, double alpha);
+
 
   public abstract double computePreciseLatLonDistance(Geodetic2D g1, Geodetic2D g2);
 

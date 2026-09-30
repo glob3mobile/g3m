@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 //class CameraFlightArc;
+//class Planet;
 
 
 // Moves the camera around a target that stays at the center of the viewport (see Camera::setPointOfView)
@@ -37,9 +38,10 @@ public class CameraPointOfViewEffect extends EffectWithDuration
   private final boolean _linearDistance;
   private CameraFlightArc _arc;
 
-  private Geodetic3D targetAt(double pan)
+  private Geodetic3D targetAt(Planet planet, double alpha)
   {
-    return new Geodetic3D(Angle.linearInterpolation(_fromTarget._latitude, _toTarget._latitude, pan), Angle.linearInterpolation(_fromTarget._longitude, _toTarget._longitude, pan), IMathUtils.instance().linearInterpolation(_fromTarget._height, _toTarget._height, pan));
+    final Geodetic2D ground = planet.getIntermediatePoint(_fromTarget.asGeodetic2D(), _toTarget.asGeodetic2D(), alpha);
+    return new Geodetic3D(ground, IMathUtils.instance().linearInterpolation(_fromTarget._height, _toTarget._height, alpha));
   }
   private double distanceAt(double alpha)
   {
@@ -84,9 +86,8 @@ public class CameraPointOfViewEffect extends EffectWithDuration
   public final void doStep(G3MRenderContext rc, TimeInterval when)
   {
     final double alpha = getAlpha(when);
-    final double pan = _linearDistance ? alpha : _arc.panAt(alpha);
   
-    rc.getNextCamera().setPointOfView(targetAt(pan), distanceAt(alpha), Angle.linearInterpolation(_fromAzimuth, _toAzimuth, alpha), Angle.linearInterpolation(_fromAltitude, _toAltitude, alpha));
+    rc.getNextCamera().setPointOfView(targetAt(rc.getPlanet(), alpha), distanceAt(alpha), Angle.linearInterpolation(_fromAzimuth, _toAzimuth, alpha), Angle.linearInterpolation(_fromAltitude, _toAltitude, alpha));
   }
 
   public final void stop(G3MRenderContext rc, TimeInterval when)

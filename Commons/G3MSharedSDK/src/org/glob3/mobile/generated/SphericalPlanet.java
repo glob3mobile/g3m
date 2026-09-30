@@ -244,12 +244,24 @@ public class SphericalPlanet extends Planet
 
   public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
   {
+    return getIntermediatePoint(P0, P1, 0.5);
+  }
+
+  public final Geodetic2D getIntermediatePoint(Geodetic2D P0, Geodetic2D P1, double alpha)
+  {
     final Vector3D v0 = toCartesian(P0);
     final Vector3D v1 = toCartesian(P1);
-    final Vector3D normal = v0.cross(v1).normalized();
     final Angle theta = v0.angleBetween(v1);
-    final Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
-    return toGeodetic2D(midPoint);
+  
+    // coincident or antipodal points have no single great circle
+    final double epsilon = 1e-9;
+    if ((theta._radians < epsilon) || (theta._radians > (DefineConstants.PI - epsilon)))
+    {
+      return Geodetic2D.linearInterpolation(P0, P1, alpha);
+    }
+  
+    final Vector3D normal = v0.cross(v1).normalized();
+    return toGeodetic2D(scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(alpha))));
   }
 
 

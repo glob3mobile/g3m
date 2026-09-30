@@ -14,6 +14,7 @@
 #include "Angle.hpp"
 
 class CameraFlightArc;
+class Planet;
 
 
 // Moves the camera around a target that stays at the center of the viewport (see Camera::setPointOfView)
@@ -34,7 +35,8 @@ private:
   const bool       _linearDistance;
   CameraFlightArc* _arc;
 
-  Geodetic3D targetAt(const double pan) const;
+  Geodetic3D targetAt(const Planet* planet,
+                      const double alpha) const;
   double     distanceAt(const double alpha) const;
 
 public:

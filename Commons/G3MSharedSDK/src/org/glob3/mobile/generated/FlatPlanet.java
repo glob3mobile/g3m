@@ -186,6 +186,17 @@ public class FlatPlanet extends Planet
   }
 
 
+  // the flat planet is still the Earth: the shortest path is the great circle, drawn curved on the flat map
+  public final Geodetic2D getIntermediatePoint(Geodetic2D P0, Geodetic2D P1, double alpha)
+  {
+    if (P0.isEquals(P1))
+    {
+      return P0;
+    }
+    return IMathUtils.instance().greatCircleIntermediatePoint(P0._latitude, P0._longitude, P1._latitude, P1._longitude, alpha);
+  }
+
+
 
   // compute distance from two points
   public final double computePreciseLatLonDistance(Geodetic2D g1, Geodetic2D g2)

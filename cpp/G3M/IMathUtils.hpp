@@ -79,6 +79,10 @@ public:
     return (v < 0) ? -magnitude : magnitude;
   }
 
+  virtual double acosh(double v) const {
+    return log(v + sqrt((v * v) - 1));
+  }
+
   virtual double asin(double v) const = 0;
   virtual float  asin(float v)  const = 0;
 

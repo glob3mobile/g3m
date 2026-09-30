@@ -77,6 +77,11 @@ public abstract class IMathUtils
     return (v < 0) ? -magnitude : magnitude;
   }
 
+  public double acosh(double v)
+  {
+    return Math.log(v + Math.sqrt((v * v) - 1));
+  }
+
   public abstract double asin(double v);
   public abstract float asin(float v);
 
