@@ -24,8 +24,8 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MeshRenderer;
 import org.glob3.mobile.generated.Quality;
 import org.glob3.mobile.generated.Sector;
@@ -212,21 +212,8 @@ public class PointCloudActivity
       final Sector demSector = new Sector(lower, upper);
 
 
-      //      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
-      //      layerSet.disableAllLayers();
-      //      layerSet.getLayerByTitle("MapQuest Aerial").setEnable(true);
-
       final LayerSet layerSet = new LayerSet();
-
-      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
-      //      layerSet.addLayer(mboxTerrainLayer);
-      //      final MapBoxLayer mboxTownLidar = new MapBoxLayer("bobbysud.town-lidar", TimeInterval.fromDays(30), true, 10);
-      //      mboxTownLidar.setEnable(true);
-      //      layerSet.addLayer(mboxTownLidar);
-
-      final MapBoxLayer mboxMatterhornLidar = new MapBoxLayer("bobbysud.matterhorn-imagery", TimeInterval.fromDays(30), true, 10);
-      mboxMatterhornLidar.setEnable(true);
-      layerSet.addLayer(mboxMatterhornLidar);
+      layerSet.addLayer(LayerBuilder.createSentinel2CloudlessLayer());
 
 
       _builder = new G3MBuilder_Android(this);

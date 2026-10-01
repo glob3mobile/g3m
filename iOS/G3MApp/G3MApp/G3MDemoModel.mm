@@ -24,10 +24,8 @@
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/MeasureRenderer.hpp>
-#include <G3M/URLTemplateLayer.hpp>
+#include <G3M/LayerBuilder.hpp>
 #include <G3M/Sector.hpp>
-#include <G3M/TimeInterval.hpp>
-#include <G3M/Info.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -89,9 +87,9 @@ _measureRenderer(measureRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
+  _scenes.push_back(  new G3MRasterLayersDemoScene(this)        );
   _scenes.push_back(  new G3MMarksDemoScene(this)               );
   _scenes.push_back(  new G3MXPointCloudDemoScene(this)         );
-  _scenes.push_back(  new G3MRasterLayersDemoScene(this)        );
   _scenes.push_back(  new G3MScenarioDEMDemoScene(this)         );
   _scenes.push_back(  new G3MOLDPointCloud1DemoScene(this)      );
   _scenes.push_back(  new G3MOLDPointCloud2DemoScene(this)      );
@@ -171,23 +169,7 @@ PlanetRenderer* G3MDemoModel::getPlanetRenderer() const {
 }
 
 Layer* G3MDemoModel::createRasterLayer() const {
-  const std::string sentinel2CloudlessTemplate = "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg";
-  const int firstLevel = 2;
-  const int eoxMaxServedLevel = 17;
-
-  std::vector<const Info*>* layerInfo = new std::vector<const Info*>();
-  layerInfo->push_back(new Info("Sentinel-2 cloudless by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2020)"));
-
-  return URLTemplateLayer::newMercator(sentinel2CloudlessTemplate,
-                                       Sector::FULL_SPHERE,
-                                       false, // isTransparent
-                                       firstLevel,
-                                       eoxMaxServedLevel,
-                                       TimeInterval::fromDays(30),
-                                       true,  // readExpired
-                                       1,     // transparency
-                                       NULL,  // condition
-                                       layerInfo);
+  return LayerBuilder::createSentinel2CloudlessLayer();
 }
 
 G3MDemoScene* G3MDemoModel::getSceneByName(const std::string& sceneName) const {

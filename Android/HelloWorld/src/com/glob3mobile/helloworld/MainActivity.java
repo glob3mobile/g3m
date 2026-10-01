@@ -49,10 +49,6 @@ public class MainActivity
       //     builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
 
-      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 11);
-      //      layerSet.addLayer(mboxTerrainLayer);
-
-
       final G3MWidget_Android g3mWidget = builder.createWidget();
 
       //  g3mWidget.setCameraPosition(new Geodetic3D(demSector.getCenter(), 10000));

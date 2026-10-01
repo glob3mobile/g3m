@@ -8,7 +8,7 @@
 #include "G3MCanvas2DDemoScene.hpp"
 
 #include <G3M/G3MWidget.hpp>
-#include <G3M/OSMLayer.hpp>
+#include <G3M/LayerBuilder.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/IFactory.hpp>
 #include <G3M/ICanvas.hpp>
@@ -145,8 +145,7 @@ void G3MCanvas2DDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
-  model->getLayerSet()->addLayer(layer);
+  model->getLayerSet()->addLayer( LayerBuilder::createOSMLayer() );
 
 
   context->getDownloader()->requestImage(//URL("file:///colorgrid.jpg"),

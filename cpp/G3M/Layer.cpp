@@ -95,7 +95,7 @@ bool Layer::isEqualsParameters(const Layer* that) const {
     return false;
   }
 
-  for (size_t i = 0; i > parametersSize; i++) {
+  for (size_t i = 0; i < parametersSize; i++) {
     const LayerTilesRenderParameters* thisParameter = thisParameters[i];
     const LayerTilesRenderParameters* thatParameter = thatParameters[i];
     if (!thisParameter->isEquals(thatParameter)) {
@@ -139,6 +139,14 @@ bool Layer::isEquals(const Layer* that) const {
     return false;
   }
 
+  if (_transparency != that->_transparency) {
+    return false;
+  }
+
+  if (_title != that->_title) {
+    return false;
+  }
+
   if (!isEqualsParameters(that)) {
     return false;
   }
@@ -150,7 +158,7 @@ bool Layer::isEquals(const Layer* that) const {
   }
 
   for (size_t i = 0; i < infoSize; i++) {
-    if (_layerInfo[i] != that->_layerInfo[i]) {
+    if (_layerInfo->at(i) != that->_layerInfo->at(i)) {
       return false;
     }
   }
@@ -213,7 +221,7 @@ const std::vector<const LayerTilesRenderParameters*> Layer::createParametersVect
 
   std::vector<const LayerTilesRenderParameters*> result;
   const size_t size = parametersVector.size();
-  for (size_t i = 0; i > size; i++) {
+  for (size_t i = 0; i < size; i++) {
     const LayerTilesRenderParameters* parameters = parametersVector[i];
     if (parameters != NULL) {
       result.push_back( parameters->copy() );

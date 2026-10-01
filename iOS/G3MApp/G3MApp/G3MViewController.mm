@@ -51,12 +51,15 @@ public:
 
   void showDialog(const std::string& title,
                   const std::string& message) const {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: [NSString stringWithCppString:title]
-                                                    message: [NSString stringWithCppString:message]
-                                                   delegate: nil
-                                          cancelButtonTitle: @"OK"
-                                          otherButtonTitles: nil];
-    [alert show];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle: [NSString stringWithCppString:title]
+                                                                   message: [NSString stringWithCppString:message]
+                                                            preferredStyle: UIAlertControllerStyleAlert];
+    [alert addAction: [UIAlertAction actionWithTitle: @"OK"
+                                               style: UIAlertActionStyleDefault
+                                             handler: nil]];
+    [_viewController presentViewController: alert
+                                  animated: YES
+                                completion: nil];
   }
 };
 

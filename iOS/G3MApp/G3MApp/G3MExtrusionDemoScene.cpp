@@ -13,7 +13,6 @@
 #include <G3M/LayerSet.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/Geodetic3D.hpp>
-#include <G3M/OSMLayer.hpp>
 #include <G3M/IBufferDownloadListener.hpp>
 #include <G3M/IJSONParser.hpp>
 #include <G3M/G3MMeshParser.hpp>
@@ -27,7 +26,6 @@
 #include <G3M/LayerTilesRenderParameters.hpp>
 #include <G3M/URLTemplateLayer.hpp>
 #include <G3M/IMathUtils.hpp>
-#include <G3M/OSMLayer.hpp>
 
 
 void G3MExtrusionDemoScene::rawSelectOption(const std::string& option,
@@ -84,14 +82,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   LayerSet* layerSet = model->getLayerSet();
 
-//    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-//    layerSet->addLayer(osmLayer);
-
   layerSet->addLayer( model->createRasterLayer() );
-//#error diego;
-
-//  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-//  layerSet->addLayer(osmLayer);
 
   //  LayerTilesRenderParameters* parameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE,
   //                                                                                       1, // topSectorSplitsByLatitude

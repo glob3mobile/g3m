@@ -45,7 +45,7 @@ public abstract class Layer
       return false;
     }
   
-    for (int i = 0; i > parametersSize; i++)
+    for (int i = 0; i < parametersSize; i++)
     {
       final LayerTilesRenderParameters thisParameter = thisParameters.get(i);
       final LayerTilesRenderParameters thatParameter = thatParameters.get(i);
@@ -101,7 +101,7 @@ public abstract class Layer
   
     final java.util.ArrayList<LayerTilesRenderParameters> result = new java.util.ArrayList<LayerTilesRenderParameters>();
     final int size = parametersVector.size();
-    for (int i = 0; i > size; i++)
+    for (int i = 0; i < size; i++)
     {
       final LayerTilesRenderParameters parameters = parametersVector.get(i);
       if (parameters != null)
@@ -266,6 +266,16 @@ public abstract class Layer
     }
   
     if (_enable != that._enable)
+    {
+      return false;
+    }
+  
+    if (_transparency != that._transparency)
+    {
+      return false;
+    }
+  
+    if (!_title.equals(that._title))
     {
       return false;
     }

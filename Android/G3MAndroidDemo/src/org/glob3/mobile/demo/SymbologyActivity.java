@@ -65,10 +65,6 @@ public class SymbologyActivity
       final double DELTA_HEIGHT = 0;
       final LayerSet layerSet = new LayerSet();
 
-
-      //final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 13);
-
-
       final BingMapsLayer bingMapsAerialLayer = new BingMapsLayer(BingMapType.Aerial(),
                "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30));
       bingMapsAerialLayer.setTitle("Bing Aerial");

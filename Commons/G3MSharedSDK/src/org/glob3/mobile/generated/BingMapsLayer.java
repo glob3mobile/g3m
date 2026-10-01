@@ -75,6 +75,11 @@ public class BingMapsLayer extends RasterLayer
       return false;
     }
   
+    if (!_culture.equals(t._culture))
+    {
+      return false;
+    }
+  
     if (!_key.equals(t._key))
     {
       return false;

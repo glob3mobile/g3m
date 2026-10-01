@@ -16,7 +16,11 @@ class LayerBuilder {
 public:
   
   static Layer* createOSMLayer();
-  
+
+  static Layer* createSentinel2CloudlessLayer();
+
+  static Layer* createBlueMarbleLayer();
+
   static LayerSet* createDefault();
   
 };

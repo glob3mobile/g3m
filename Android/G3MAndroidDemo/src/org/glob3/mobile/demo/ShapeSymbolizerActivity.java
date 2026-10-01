@@ -9,8 +9,8 @@ import org.glob3.mobile.generated.FlatPlanet;
 import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.Geodetic2D;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SingleBILElevationDataProvider;
 import org.glob3.mobile.generated.TimeInterval;
@@ -54,14 +54,7 @@ public class ShapeSymbolizerActivity
       builder.setPlanet(FlatPlanet.createEarth());
 
       final LayerSet layerSet = new LayerSet();
-      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 3);
-      //
-      //      final
-
-      final MapBoxLayer mboxOSMLayer = new MapBoxLayer("bobbysud.lff1o1c6", TimeInterval.fromDays(30), true, 2);
-      mboxOSMLayer.setTitle("Map Box");
-      mboxOSMLayer.setEnable(true);
-      layerSet.addLayer(mboxOSMLayer);
+      layerSet.addLayer(LayerBuilder.createOSMLayer());
 
 
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
