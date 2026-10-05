@@ -20,7 +20,6 @@
 #include <G3M/IJSONParser.hpp>
 #include <G3M/JSONArray.hpp>
 #include <G3M/JSONObject.hpp>
-#include <G3M/BoxImageBackground.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
@@ -74,19 +73,12 @@ public:
         const std::string urlS      = article->getAsString("url", "");
         const std::string thumbnail = article->getAsString("thumbnail", "");
 
-        LabelImageFactory* titleBuilder = new LabelImageFactory(title,                /* text         */
-                                                                GFont::sansSerif(10), /* font         */
-                                                                Color::BLACK,         /* color        */
-                                                                Color::TRANSPARENT,   /* shadowColor  */
-                                                                0,                    /* shadowBlur   */
-                                                                Vector2F(0, 0),       /* shadowOffset */
-                                                                new BoxImageBackground(Vector2F::zero(),   /* margin          */
-                                                                                       0,                  /* borderWidth     */
-                                                                                       Color::TRANSPARENT, /* borderColor     */
-                                                                                       Vector2F(4, 4),     /* padding         */
-                                                                                       Color::WHITE,       /* backgroundColor */
-                                                                                       4                   /* cornerRadius    */)
-                                                                );
+        LabelImageFactory* titleBuilder = new LabelImageFactory(title,
+                                                                LabelStyle::boxed(GFont::sansSerif(10),
+                                                                                  Color::BLACK,   /* color           */
+                                                                                  Vector2F(4, 4), /* padding         */
+                                                                                  Color::WHITE,   /* backgroundColor */
+                                                                                  4               /* cornerRadius    */));
 
         NonOverlappingMark* mark;
         if (thumbnail == "") {

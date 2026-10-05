@@ -19,74 +19,38 @@ package org.glob3.mobile.generated;
 
 
 
-//class ImageBackground;
-
 
 public class LabelImageFactory extends AbstractImageFactory
 {
   private String _text;
-  private final GFont _font;
-  private final Color _color ;
-
-  private final Color _shadowColor ;
-  private final float _shadowBlur;
-  private final Vector2F _shadowOffset;
-
-  private final ImageBackground _background;
-
+  private final LabelStyle _style;
   private final boolean _isMutable;
 
   private String getImageName()
   {
-    final IStringUtils su = IStringUtils.instance();
-    return (_text + "/" + _font.description() + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + _shadowOffset.description() + "/" + _background.description());
+    return _text + "/" + _style.description();
   }
 
   public void dispose()
   {
-    if (_background != null)
-       _background.dispose();
+    if (_style != null)
+       _style.dispose();
     super.dispose();
   }
 
 
-  public LabelImageFactory(String text, GFont font, Color color, Color shadowColor, float shadowBlur, Vector2F shadowOffset, ImageBackground background)
-  {
-     this(text, font, color, shadowColor, shadowBlur, shadowOffset, background, false);
-  }
-  public LabelImageFactory(String text, GFont font, Color color, Color shadowColor, float shadowBlur, Vector2F shadowOffset)
-  {
-     this(text, font, color, shadowColor, shadowBlur, shadowOffset, null, false);
-  }
-  public LabelImageFactory(String text, GFont font, Color color, Color shadowColor, float shadowBlur)
-  {
-     this(text, font, color, shadowColor, shadowBlur, Vector2F.zero(), null, false);
-  }
-  public LabelImageFactory(String text, GFont font, Color color, Color shadowColor)
-  {
-     this(text, font, color, shadowColor, 0, Vector2F.zero(), null, false);
-  }
-  public LabelImageFactory(String text, GFont font, Color color)
-  {
-     this(text, font, color, Color.transparent(), 0, Vector2F.zero(), null, false);
-  }
-  public LabelImageFactory(String text, GFont font)
-  {
-     this(text, font, Color.white(), Color.transparent(), 0, Vector2F.zero(), null, false);
-  }
-  public LabelImageFactory(String text)
-  {
-     this(text, GFont.sansSerif(), Color.white(), Color.transparent(), 0, Vector2F.zero(), null, false);
-  }
-  public LabelImageFactory(String text, GFont font, Color color, Color shadowColor, float shadowBlur, Vector2F shadowOffset, ImageBackground background, boolean isMutable)
+  public LabelImageFactory(String text, LabelStyle style)
   {
      _text = text;
-     _font = font;
-     _color = color;
-     _shadowColor = shadowColor;
-     _shadowBlur = shadowBlur;
-     _shadowOffset = shadowOffset;
-     _background = (background == null) ? new NullImageBackground() : background;
+     _style = new LabelStyle(style);
+     _isMutable = false;
+  }
+
+  /** a mutable label accepts setText() and notifies its change listener */
+  public LabelImageFactory(String text, LabelStyle style, boolean isMutable)
+  {
+     _text = text;
+     _style = new LabelStyle(style);
      _isMutable = isMutable;
   }
 
@@ -116,18 +80,19 @@ public class LabelImageFactory extends AbstractImageFactory
   
     ICanvas canvas = context.getFactory().createCanvas(true);
   
-    canvas.setFont(_font);
+    canvas.setFont(_style.getFont());
   
     final Vector2F textExtent = canvas.textExtent(_text);
   
-    final Vector2F contentPos = _background.initializeCanvas(canvas, textExtent._x, textExtent._y);
+    final Vector2F contentPos = _style.initializeCanvas(canvas, textExtent);
   
-    if (!_shadowColor.isFullTransparent())
+    if (_style.hasShadow())
     {
-      canvas.setShadow(_shadowColor, _shadowBlur, _shadowOffset._x, _shadowOffset._y);
+      final Vector2F shadowOffset = _style.getShadowOffset();
+      canvas.setShadow(_style.getShadowColor(), _style.getShadowBlur(), shadowOffset._x, shadowOffset._y);
     }
   
-    canvas.setFillColor(_color);
+    canvas.setFillColor(_style.getColor());
     canvas.fillText(_text, contentPos._x, contentPos._y);
   
     canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new LabelImageFactory_ImageListener(listener, deleteListener, getImageName()), true), true);

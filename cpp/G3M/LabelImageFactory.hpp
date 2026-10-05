@@ -13,43 +13,30 @@
 
 #include <string>
 
-#include "GFont.hpp"
-#include "Color.hpp"
-#include "Vector2F.hpp"
-
-class ImageBackground;
+#include "LabelStyle.hpp"
 
 
 class LabelImageFactory : public AbstractImageFactory {
 private:
-  std::string _text;
-  const GFont _font;
-  const Color _color;
-  
-  const Color _shadowColor;
-  const float _shadowBlur;
-  const Vector2F _shadowOffset;
+  std::string       _text;
+  const LabelStyle* _style;
+  const bool        _isMutable;
 
-  const ImageBackground* _background;
-  
-  const bool  _isMutable;
-  
   const std::string getImageName() const;
 
 protected:
   ~LabelImageFactory();
 
 public:
-  
-  LabelImageFactory(const std::string&     text,
-                    const GFont&           font         = GFont::sansSerif(),
-                    const Color&           color        = Color::white(),
-                    const Color&           shadowColor  = Color::transparent(),
-                    const float            shadowBlur   = 0,
-                    const Vector2F&        shadowOffset = Vector2F::zero(),
-                    const ImageBackground* background   = NULL,
-                    const bool             isMutable    = false);
-  
+
+  LabelImageFactory(const std::string& text,
+                    const LabelStyle&  style);
+
+  /** a mutable label accepts setText() and notifies its change listener */
+  LabelImageFactory(const std::string& text,
+                    const LabelStyle&  style,
+                    const bool         isMutable);
+
   bool isMutable() const {
     return _isMutable;
   }

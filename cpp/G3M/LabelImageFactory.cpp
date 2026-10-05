@@ -8,7 +8,6 @@
 
 #include "LabelImageFactory.hpp"
 
-#include "IStringUtils.hpp"
 #include "ImageBackground.hpp"
 #include "IImageListener.hpp"
 #include "IImageFactoryListener.hpp"
@@ -16,7 +15,6 @@
 #include "IFactory.hpp"
 #include "ICanvas.hpp"
 #include "ErrorHandling.hpp"
-#include "NullImageBackground.hpp"
 #include "CanvasOwnerImageListenerWrapper.hpp"
 
 
@@ -54,41 +52,32 @@ public:
 };
 
 
-LabelImageFactory::LabelImageFactory(const std::string&     text,
-                                     const GFont&           font,
-                                     const Color&           color,
-                                     const Color&           shadowColor,
-                                     const float            shadowBlur,
-                                     const Vector2F&        shadowOffset,
-                                     const ImageBackground* background,
-                                     const bool             isMutable) :
+LabelImageFactory::LabelImageFactory(const std::string& text,
+                                     const LabelStyle&  style) :
 _text(text),
-_font(font),
-_color(color),
-_shadowColor(shadowColor),
-_shadowBlur(shadowBlur),
-_shadowOffset(shadowOffset),
-_background((background == NULL) ? new NullImageBackground() : background),
+_style(new LabelStyle(style)),
+_isMutable(false)
+{
+}
+
+LabelImageFactory::LabelImageFactory(const std::string& text,
+                                     const LabelStyle&  style,
+                                     const bool         isMutable) :
+_text(text),
+_style(new LabelStyle(style)),
 _isMutable(isMutable)
 {
 }
 
 LabelImageFactory::~LabelImageFactory() {
-  delete _background;
+  delete _style;
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
 const std::string LabelImageFactory::getImageName() const {
-  const IStringUtils* su = IStringUtils::instance();
-  return (_text                       + "/" +
-          _font.description()         + "/" +
-          _color.id()                 + "/" +
-          _shadowColor.id()           + "/" +
-          su->toString(_shadowBlur)   + "/" +
-          _shadowOffset.description() + "/" +
-          _background->description() );
+  return _text + "/" + _style->description();
 }
 
 
@@ -110,22 +99,21 @@ void LabelImageFactory::create(const G3MContext* context,
   
   ICanvas* canvas = context->getFactory()->createCanvas(true);
   
-  canvas->setFont(_font);
+  canvas->setFont(_style->getFont());
   
   const Vector2F textExtent = canvas->textExtent(_text);
   
-  const Vector2F contentPos = _background->initializeCanvas(canvas,
-                                                            textExtent._x,
-                                                            textExtent._y);
+  const Vector2F contentPos = _style->initializeCanvas(canvas, textExtent);
   
-  if (!_shadowColor.isFullTransparent()) {
-    canvas->setShadow(_shadowColor,
-                      _shadowBlur,
-                      _shadowOffset._x,
-                      _shadowOffset._y);
+  if (_style->hasShadow()) {
+    const Vector2F shadowOffset = _style->getShadowOffset();
+    canvas->setShadow(_style->getShadowColor(),
+                      _style->getShadowBlur(),
+                      shadowOffset._x,
+                      shadowOffset._y);
   }
   
-  canvas->setFillColor(_color);
+  canvas->setFillColor(_style->getColor());
   canvas->fillText(_text, contentPos._x, contentPos._y);
 
   canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,

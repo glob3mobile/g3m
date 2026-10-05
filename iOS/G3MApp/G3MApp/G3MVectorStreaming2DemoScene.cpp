@@ -125,12 +125,11 @@ public:
     Mark* mark = new Mark(new StackLayoutImageFactory(new CircleImageFactory(Color::WHITE,
                                                                              radius),
                                                       new LabelImageFactory(label,
-                                                                            GFont::sansSerif(labelFontSize, true),
-                                                                            Color::BLACK,       // color
-                                                                            Color::WHITE,       // shadowColor
-                                                                            5.0f,               // shadowBlur
-                                                                            Vector2F(0, 0),     // shadowOffset
-                                                                            NULL)
+                                                                            LabelStyle::shadowed(GFont::sansSerif(labelFontSize, true),
+                                                                                                 Color::BLACK,   /* color        */
+                                                                                                 Color::WHITE,   /* shadowColor  */
+                                                                                                 5.0f,           /* shadowBlur   */
+                                                                                                 Vector2F(0, 0)) /* shadowOffset */)
                                                       ),
                           position,
                           ABSOLUTE,
