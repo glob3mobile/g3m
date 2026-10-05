@@ -397,6 +397,13 @@ public:
 
   void animatedRemove(bool deleteMark);
 
+  // true once the zoom-out effect owns the mark and will delete it on its own
+  bool isDisappearing() const {
+    return _zoomOutDisappearsStarted;
+  }
+
+  void cancelEffects();
+
 };
 
 class TextureAtlasMarkAnimationTask: public PeriodicalTask{

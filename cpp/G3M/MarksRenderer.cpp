@@ -303,11 +303,31 @@ size_t MarksRenderer::removeAllMarks(const MarkFilter& filter,
   const size_t marksSize = _marks.size();
 
   if (animated) {
+    std::vector<Mark*> survivingMarks;
     for (size_t i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
       if (filter.test(mark)) {
-        mark->animatedRemove(deleteMarks);
+        removed++;
+        const bool visible = isEnable() && mark->isRendered();
+        if (visible || mark->isDisappearing()) {
+          mark->animatedRemove(deleteMarks);
+          survivingMarks.push_back(mark); // the zoom-out effect removes it when done
+        }
+        else {
+          // nobody sees it, and the zoom-out only starts on render, which may never come
+          mark->cancelEffects();
+          if (deleteMarks) {
+            delete mark;
+          }
+        }
       }
+      else {
+        survivingMarks.push_back(mark);
+      }
+    }
+
+    if (removed > 0) {
+      _marks = survivingMarks;
     }
   }
   else {

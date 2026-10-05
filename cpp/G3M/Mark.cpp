@@ -956,6 +956,12 @@ void Mark::animatedRemove(bool deleteMark) {
   _deleteMarkOnDisappears = deleteMark;
 }
 
+void Mark::cancelEffects() {
+  if (_effectsScheduler != NULL) {
+    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+  }
+}
+
 void Mark::elevationChanged(const Geodetic2D& position,
                             double rawElevation,  // Without considering vertical exaggeration
                             double verticalExaggeration) {

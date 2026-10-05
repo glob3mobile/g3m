@@ -406,13 +406,39 @@ public class MarksRenderer extends DefaultRenderer
   
     if (animated)
     {
+      java.util.ArrayList<Mark> survivingMarks = new java.util.ArrayList<Mark>();
       for (int i = 0; i < marksSize; i++)
       {
         Mark mark = _marks.get(i);
         if (filter.test(mark))
         {
-          mark.animatedRemove(deleteMarks);
+          removed++;
+          final boolean visible = isEnable() && mark.isRendered();
+          if (visible || mark.isDisappearing())
+          {
+            mark.animatedRemove(deleteMarks);
+            survivingMarks.add(mark); // the zoom-out effect removes it when done
+          }
+          else
+          {
+            // nobody sees it, and the zoom-out only starts on render, which may never come
+            mark.cancelEffects();
+            if (deleteMarks)
+            {
+              if (mark != null)
+                 mark.dispose();
+            }
+          }
         }
+        else
+        {
+          survivingMarks.add(mark);
+        }
+      }
+  
+      if (removed > 0)
+      {
+        _marks = survivingMarks;
       }
     }
     else

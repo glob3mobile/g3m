@@ -1138,4 +1138,18 @@ public class Mark implements SurfaceElevationListener
     _deleteMarkOnDisappears = deleteMark;
   }
 
+  // true once the zoom-out effect owns the mark and will delete it on its own
+  public final boolean isDisappearing()
+  {
+    return _zoomOutDisappearsStarted;
+  }
+
+  public final void cancelEffects()
+  {
+    if (_effectsScheduler != null)
+    {
+      _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
+    }
+  }
+
 }
