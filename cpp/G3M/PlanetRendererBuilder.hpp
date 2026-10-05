@@ -25,7 +25,7 @@ class ElevationDataProvider;
 class DEMProvider;
 class Sector;
 class ChangedRendererInfoListener;
-class IImageBuilder;
+class IImageFactory;
 class PlanetRenderer;
 
 
@@ -93,9 +93,9 @@ private:
   
   TouchEventType getTouchEventTypeOfTerrainTouchListener() const;
   
-  mutable IImageBuilder* _defaultTileBackgroundImage;
+  mutable IImageFactory* _defaultTileBackgroundImage;
   
-  IImageBuilder* getDefaultTileBackgroundImageBuilder() const;
+  IImageFactory* getDefaultTileBackgroundImageFactory() const;
   
   TileLODTester* createDefaultTileLODTester() const;
 
@@ -144,7 +144,7 @@ public:
   
   void setTouchEventTypeOfTerrainTouchListener(TouchEventType touchEventTypeOfTerrainTouchListener);
   
-  void setDefaultTileBackgroundImage(IImageBuilder* defaultTileBackgroundImage);
+  void setDefaultTileBackgroundImage(IImageFactory* defaultTileBackgroundImage);
   
   void setTileLODTester(TileLODTester* tlt);
   

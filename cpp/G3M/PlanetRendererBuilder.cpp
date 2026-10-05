@@ -14,7 +14,7 @@
 #include "GEOVectorLayer.hpp"
 #include "TileTessellator.hpp"
 #include "LayerSet.hpp"
-#include "DefaultChessCanvasImageBuilder.hpp"
+#include "DefaultChessCanvasImageFactory.hpp"
 #include "PlanetRenderer.hpp"
 #include "ProjectedCornersDistanceTileLODTester.hpp"
 #include "MaxLevelTileLODTester.hpp"
@@ -97,7 +97,7 @@ TileTessellator* PlanetRendererBuilder::getTileTessellator() const {
  */
 TileTexturizer* PlanetRendererBuilder::getTexturizer() const {
   if (_texturizer == NULL) {
-    _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageBuilder(),
+    _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageFactory(),
                                             getVerboseTileTexturizerErrors());
   }
   return _texturizer;
@@ -315,14 +315,14 @@ TouchEventType PlanetRendererBuilder::getTouchEventTypeOfTerrainTouchListener() 
   return _touchEventTypeOfTerrainTouchListener;
 }
 
-void PlanetRendererBuilder::setDefaultTileBackgroundImage(IImageBuilder* defaultTileBackgroundImage) {
+void PlanetRendererBuilder::setDefaultTileBackgroundImage(IImageFactory* defaultTileBackgroundImage) {
   _defaultTileBackgroundImage = defaultTileBackgroundImage;
 }
 
-IImageBuilder* PlanetRendererBuilder::getDefaultTileBackgroundImageBuilder() const {
+IImageFactory* PlanetRendererBuilder::getDefaultTileBackgroundImageFactory() const {
   if (_defaultTileBackgroundImage == NULL) {
-    // _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color::BLACK, Color::WHITE, 4);
-    _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color::WHITE, Color::TRANSPARENT, 4);
+    // _defaultTileBackgroundImage = new DefaultChessCanvasImageFactory(256, 256, Color::BLACK, Color::WHITE, 4);
+    _defaultTileBackgroundImage = new DefaultChessCanvasImageFactory(256, 256, Color::WHITE, Color::TRANSPARENT, 4);
   }
   return _defaultTileBackgroundImage;
 }

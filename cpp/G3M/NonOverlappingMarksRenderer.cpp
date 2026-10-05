@@ -22,8 +22,8 @@
 #include "DirectMesh.hpp"
 #include "TexturedMesh.hpp"
 #include "RenderState.hpp"
-#include "IImageBuilder.hpp"
-#include "IImageBuilderListener.hpp"
+#include "IImageFactory.hpp"
+#include "IImageFactoryListener.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "MultiTextureMapping.hpp"
 #include "TextureIDReference.hpp"
@@ -37,9 +37,9 @@
 #include "ILogger.hpp"
 
 
-MarkWidget::MarkWidget(IImageBuilder* imageBuilder):
+MarkWidget::MarkWidget(IImageFactory* imageFactory):
 _image(NULL),
-_imageBuilder(imageBuilder),
+_imageFactory(imageFactory),
 _viewportExtentGLFeature(NULL),
 _geo2Dfeature(NULL),
 _glState(NULL),
@@ -58,7 +58,7 @@ void MarkWidget::WidgetImageListener::onError(const std::string& error) {
 
 MarkWidget::~MarkWidget() {
   delete _image;
-  delete _imageBuilder;
+  delete _imageFactory;
 
   delete _vertices;
   delete _textureMapping;
@@ -75,7 +75,7 @@ void MarkWidget::init(const G3MRenderContext* rc) {
                                                            rc->getViewMode());
 
     _texHandler = rc->getTexturesHandler();
-    _imageBuilder->build(rc, new WidgetImageListener(this), true);
+    _imageFactory->create(rc, new WidgetImageListener(this), true);
 
     _glState->addGLFeature(_viewportExtentGLFeature, false);
   }
@@ -201,8 +201,8 @@ int MarkWidget::getHeight() const {
   return _image == NULL ? 0 : _image->getHeight();
 }
 
-NonOverlappingMark::NonOverlappingMark(IImageBuilder* imageBuilderWidget,
-                                       IImageBuilder* imageBuilderAnchor,
+NonOverlappingMark::NonOverlappingMark(IImageFactory* imageFactoryWidget,
+                                       IImageFactory* imageFactoryAnchor,
                                        const Geodetic3D& position,
                                        NonOverlappingMarkTouchListener* touchListener,
                                        float springLengthInPixels,
@@ -228,8 +228,8 @@ _springGLState(NULL),
 _springVertices(NULL),
 _springViewportExtentGLFeature(NULL)
 {
-  _widget = new MarkWidget(imageBuilderWidget);
-  _anchorWidget = new MarkWidget(imageBuilderAnchor);
+  _widget = new MarkWidget(imageFactoryWidget);
+  _anchorWidget = new MarkWidget(imageFactoryAnchor);
 }
 
 NonOverlappingMark::~NonOverlappingMark() {

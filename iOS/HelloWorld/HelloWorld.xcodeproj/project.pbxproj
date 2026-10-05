@@ -81,8 +81,8 @@
 		E71C0ECD19B9B0A600EA387C /* base64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
 		E71C0ECF19B9B0A600EA387C /* .cproject */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = .cproject; sourceTree = "<group>"; };
 		E71C0ED019B9B0A600EA387C /* .project */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = .project; sourceTree = "<group>"; };
-		E71C0ED219B9B0A600EA387C /* AbstractImageBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractImageBuilder.cpp; sourceTree = "<group>"; };
-		E71C0ED319B9B0A600EA387C /* AbstractImageBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AbstractImageBuilder.hpp; sourceTree = "<group>"; };
+		E71C0ED219B9B0A600EA387C /* AbstractImageFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractImageFactory.cpp; sourceTree = "<group>"; };
+		E71C0ED319B9B0A600EA387C /* AbstractImageFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AbstractImageFactory.hpp; sourceTree = "<group>"; };
 		E71C0ED419B9B0A600EA387C /* BalloonCanvasElement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BalloonCanvasElement.cpp; sourceTree = "<group>"; };
 		E71C0ED519B9B0A600EA387C /* BalloonCanvasElement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BalloonCanvasElement.hpp; sourceTree = "<group>"; };
 		E71C0ED619B9B0A600EA387C /* BasicShadersGL2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BasicShadersGL2.hpp; sourceTree = "<group>"; };
@@ -97,8 +97,8 @@
 		E71C0EDF19B9B0A600EA387C /* CameraGoToPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CameraGoToPositionEffect.hpp; sourceTree = "<group>"; };
 		E71C0EE019B9B0A600EA387C /* CanvasElement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasElement.cpp; sourceTree = "<group>"; };
 		E71C0EE119B9B0A600EA387C /* CanvasElement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasElement.hpp; sourceTree = "<group>"; };
-		E71C0EE219B9B0A600EA387C /* CanvasImageBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasImageBuilder.cpp; sourceTree = "<group>"; };
-		E71C0EE319B9B0A600EA387C /* CanvasImageBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasImageBuilder.hpp; sourceTree = "<group>"; };
+		E71C0EE219B9B0A600EA387C /* CanvasImageFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasImageFactory.cpp; sourceTree = "<group>"; };
+		E71C0EE319B9B0A600EA387C /* CanvasImageFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasImageFactory.hpp; sourceTree = "<group>"; };
 		E71C0EE419B9B0A600EA387C /* CanvasTileImageProvider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasTileImageProvider.cpp; sourceTree = "<group>"; };
 		E71C0EE519B9B0A600EA387C /* CanvasTileImageProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasTileImageProvider.hpp; sourceTree = "<group>"; };
 		E71C0EE619B9B0A600EA387C /* CanvasTileRasterizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasTileRasterizer.cpp; sourceTree = "<group>"; };
@@ -139,8 +139,8 @@
 		E71C0F0919B9B0A600EA387C /* DecimatedSubviewElevationData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DecimatedSubviewElevationData.hpp; sourceTree = "<group>"; };
 		E71C0F0A19B9B0A600EA387C /* DefaultTileTexturizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DefaultTileTexturizer.cpp; sourceTree = "<group>"; };
 		E71C0F0B19B9B0A600EA387C /* DefaultTileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DefaultTileTexturizer.hpp; sourceTree = "<group>"; };
-		E71C0F0C19B9B0A600EA387C /* DownloaderImageBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DownloaderImageBuilder.cpp; sourceTree = "<group>"; };
-		E71C0F0D19B9B0A600EA387C /* DownloaderImageBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DownloaderImageBuilder.hpp; sourceTree = "<group>"; };
+		E71C0F0C19B9B0A600EA387C /* DownloaderImageFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DownloaderImageFactory.cpp; sourceTree = "<group>"; };
+		E71C0F0D19B9B0A600EA387C /* DownloaderImageFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DownloaderImageFactory.hpp; sourceTree = "<group>"; };
 		E71C0F0E19B9B0A600EA387C /* DownloadPriority.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DownloadPriority.cpp; sourceTree = "<group>"; };
 		E71C0F0F19B9B0A600EA387C /* DownloadPriority.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DownloadPriority.hpp; sourceTree = "<group>"; };
 		E71C0F1019B9B0A600EA387C /* Effects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Effects.cpp; sourceTree = "<group>"; };
@@ -183,9 +183,9 @@
 		E71C0F3519B9B0A600EA387C /* IFloatBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IFloatBuffer.hpp; sourceTree = "<group>"; };
 		E71C0F3619B9B0A600EA387C /* IG3MBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IG3MBuilder.cpp; sourceTree = "<group>"; };
 		E71C0F3719B9B0A600EA387C /* IG3MBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IG3MBuilder.hpp; sourceTree = "<group>"; };
-		E71C0F3819B9B0A600EA387C /* IImageBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IImageBuilder.cpp; sourceTree = "<group>"; };
-		E71C0F3919B9B0A600EA387C /* IImageBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IImageBuilder.hpp; sourceTree = "<group>"; };
-		E71C0F3A19B9B0A600EA387C /* IImageBuilderListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IImageBuilderListener.hpp; sourceTree = "<group>"; };
+		E71C0F3819B9B0A600EA387C /* IImageFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IImageFactory.cpp; sourceTree = "<group>"; };
+		E71C0F3919B9B0A600EA387C /* IImageFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IImageFactory.hpp; sourceTree = "<group>"; };
+		E71C0F3A19B9B0A600EA387C /* IImageFactoryListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IImageFactoryListener.hpp; sourceTree = "<group>"; };
 		E71C0F3B19B9B0A600EA387C /* IImageUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IImageUtils.cpp; sourceTree = "<group>"; };
 		E71C0F3C19B9B0A600EA387C /* IImageUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IImageUtils.hpp; sourceTree = "<group>"; };
 		E71C0F3D19B9B0A600EA387C /* IIntBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IIntBuffer.hpp; sourceTree = "<group>"; };
@@ -201,8 +201,8 @@
 		E71C0F4719B9B0A600EA387C /* ITexturizerData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ITexturizerData.hpp; sourceTree = "<group>"; };
 		E71C0F4819B9B0A600EA387C /* IThreadUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IThreadUtils.cpp; sourceTree = "<group>"; };
 		E71C0F4919B9B0A600EA387C /* IThreadUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IThreadUtils.hpp; sourceTree = "<group>"; };
-		E71C0F4A19B9B0A600EA387C /* LabelImageBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LabelImageBuilder.cpp; sourceTree = "<group>"; };
-		E71C0F4B19B9B0A600EA387C /* LabelImageBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LabelImageBuilder.hpp; sourceTree = "<group>"; };
+		E71C0F4A19B9B0A600EA387C /* LabelImageFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LabelImageFactory.cpp; sourceTree = "<group>"; };
+		E71C0F4B19B9B0A600EA387C /* LabelImageFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LabelImageFactory.hpp; sourceTree = "<group>"; };
 		E71C0F4C19B9B0A600EA387C /* LabelPosition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LabelPosition.h; sourceTree = "<group>"; };
 		E71C0F4D19B9B0A600EA387C /* LayerBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LayerBuilder.cpp; sourceTree = "<group>"; };
 		E71C0F4E19B9B0A600EA387C /* LayerBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LayerBuilder.hpp; sourceTree = "<group>"; };
@@ -981,8 +981,8 @@
 		E71C0ED119B9B0A600EA387C /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				E71C0ED219B9B0A600EA387C /* AbstractImageBuilder.cpp */,
-				E71C0ED319B9B0A600EA387C /* AbstractImageBuilder.hpp */,
+				E71C0ED219B9B0A600EA387C /* AbstractImageFactory.cpp */,
+				E71C0ED319B9B0A600EA387C /* AbstractImageFactory.hpp */,
 				E71C0ED419B9B0A600EA387C /* BalloonCanvasElement.cpp */,
 				E71C0ED519B9B0A600EA387C /* BalloonCanvasElement.hpp */,
 				E71C0ED619B9B0A600EA387C /* BasicShadersGL2.hpp */,
@@ -997,8 +997,8 @@
 				E71C0EDF19B9B0A600EA387C /* CameraGoToPositionEffect.hpp */,
 				E71C0EE019B9B0A600EA387C /* CanvasElement.cpp */,
 				E71C0EE119B9B0A600EA387C /* CanvasElement.hpp */,
-				E71C0EE219B9B0A600EA387C /* CanvasImageBuilder.cpp */,
-				E71C0EE319B9B0A600EA387C /* CanvasImageBuilder.hpp */,
+				E71C0EE219B9B0A600EA387C /* CanvasImageFactory.cpp */,
+				E71C0EE319B9B0A600EA387C /* CanvasImageFactory.hpp */,
 				E71C0EE419B9B0A600EA387C /* CanvasTileImageProvider.cpp */,
 				E71C0EE519B9B0A600EA387C /* CanvasTileImageProvider.hpp */,
 				E71C0EE619B9B0A600EA387C /* CanvasTileRasterizer.cpp */,
@@ -1039,8 +1039,8 @@
 				E71C0F0919B9B0A600EA387C /* DecimatedSubviewElevationData.hpp */,
 				E71C0F0A19B9B0A600EA387C /* DefaultTileTexturizer.cpp */,
 				E71C0F0B19B9B0A600EA387C /* DefaultTileTexturizer.hpp */,
-				E71C0F0C19B9B0A600EA387C /* DownloaderImageBuilder.cpp */,
-				E71C0F0D19B9B0A600EA387C /* DownloaderImageBuilder.hpp */,
+				E71C0F0C19B9B0A600EA387C /* DownloaderImageFactory.cpp */,
+				E71C0F0D19B9B0A600EA387C /* DownloaderImageFactory.hpp */,
 				E71C0F0E19B9B0A600EA387C /* DownloadPriority.cpp */,
 				E71C0F0F19B9B0A600EA387C /* DownloadPriority.hpp */,
 				E71C0F1019B9B0A600EA387C /* Effects.cpp */,
@@ -1083,9 +1083,9 @@
 				E71C0F3519B9B0A600EA387C /* IFloatBuffer.hpp */,
 				E71C0F3619B9B0A600EA387C /* IG3MBuilder.cpp */,
 				E71C0F3719B9B0A600EA387C /* IG3MBuilder.hpp */,
-				E71C0F3819B9B0A600EA387C /* IImageBuilder.cpp */,
-				E71C0F3919B9B0A600EA387C /* IImageBuilder.hpp */,
-				E71C0F3A19B9B0A600EA387C /* IImageBuilderListener.hpp */,
+				E71C0F3819B9B0A600EA387C /* IImageFactory.cpp */,
+				E71C0F3919B9B0A600EA387C /* IImageFactory.hpp */,
+				E71C0F3A19B9B0A600EA387C /* IImageFactoryListener.hpp */,
 				E71C0F3B19B9B0A600EA387C /* IImageUtils.cpp */,
 				E71C0F3C19B9B0A600EA387C /* IImageUtils.hpp */,
 				E71C0F3D19B9B0A600EA387C /* IIntBuffer.hpp */,
@@ -1101,8 +1101,8 @@
 				E71C0F4719B9B0A600EA387C /* ITexturizerData.hpp */,
 				E71C0F4819B9B0A600EA387C /* IThreadUtils.cpp */,
 				E71C0F4919B9B0A600EA387C /* IThreadUtils.hpp */,
-				E71C0F4A19B9B0A600EA387C /* LabelImageBuilder.cpp */,
-				E71C0F4B19B9B0A600EA387C /* LabelImageBuilder.hpp */,
+				E71C0F4A19B9B0A600EA387C /* LabelImageFactory.cpp */,
+				E71C0F4B19B9B0A600EA387C /* LabelImageFactory.hpp */,
 				E71C0F4C19B9B0A600EA387C /* LabelPosition.h */,
 				E71C0F4D19B9B0A600EA387C /* LayerBuilder.cpp */,
 				E71C0F4E19B9B0A600EA387C /* LayerBuilder.hpp */,

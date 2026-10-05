@@ -10,7 +10,7 @@
 #include <G3M/Layer.hpp>
 #include <G3M/TimeInterval.hpp>
 #include <G3M/LayerSet.hpp>
-#include <G3M/CanvasImageBuilder.hpp>
+#include <G3M/CanvasImageFactory.hpp>
 #include <G3M/ICanvas.hpp>
 #include <G3M/Color.hpp>
 #include <G3M/IStringUtils.hpp>
@@ -20,8 +20,8 @@
 #include <G3M/HUDRenderer.hpp>
 #include <G3M/HUDRelativePosition.hpp>
 #include <G3M/HUDRelativeSize.hpp>
-#include <G3M/LabelImageBuilder.hpp>
-#include <G3M/DownloaderImageBuilder.hpp>
+#include <G3M/LabelImageFactory.hpp>
+#include <G3M/DownloaderImageFactory.hpp>
 #include <G3M/HUDAbsolutePosition.hpp>
 #include <G3M/GTask.hpp>
 #include <G3M/G3MWidget.hpp>
@@ -32,7 +32,7 @@
 #include "G3MDemoModel.hpp"
 
 
-class AltimeterCanvasImageBuilder : public CanvasImageBuilder {
+class AltimeterCanvasImageFactory : public CanvasImageFactory {
 private:
   float _altitude = 38500;
   float _step     = 100;
@@ -85,8 +85,8 @@ protected:
 
 
 public:
-  AltimeterCanvasImageBuilder() :
-  CanvasImageBuilder(256, 256*3, true)
+  AltimeterCanvasImageFactory() :
+  CanvasImageFactory(256, 256*3, true)
   {
   }
 
@@ -116,8 +116,8 @@ private:
   HUDQuadWidget*     _compass1;
   HUDQuadWidget*     _compass2;
   HUDQuadWidget*     _ruler;
-  LabelImageBuilder* _labelBuilder;
-  AltimeterCanvasImageBuilder* _altimeterCanvasImageBuilder;
+  LabelImageFactory* _labelBuilder;
+  AltimeterCanvasImageFactory* _altimeterCanvasImageFactory;
 
   double _angleInRadians;
 
@@ -128,13 +128,13 @@ public:
   AnimateHUDWidgetsTask(HUDQuadWidget* compass1,
                         HUDQuadWidget* compass2,
                         HUDQuadWidget* ruler,
-                        LabelImageBuilder* labelBuilder,
-                        AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder) :
+                        LabelImageFactory* labelBuilder,
+                        AltimeterCanvasImageFactory* altimeterCanvasImageFactory) :
   _compass1(compass1),
   _compass2(compass2),
   _ruler(ruler),
   _labelBuilder(labelBuilder),
-  _altimeterCanvasImageBuilder(altimeterCanvasImageBuilder),
+  _altimeterCanvasImageFactory(altimeterCanvasImageFactory),
   _angleInRadians(0),
   _translationV(0),
   _translationStep(0.002)
@@ -165,7 +165,7 @@ public:
     _translationV += _translationStep;
     _ruler->setTexCoordsTranslation(0, _translationV);
 
-    _altimeterCanvasImageBuilder->step();
+    _altimeterCanvasImageFactory->step();
   }
 };
 
@@ -184,8 +184,8 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
 
 
 
-  AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder = new AltimeterCanvasImageBuilder();
-  HUDQuadWidget* test = new HUDQuadWidget(altimeterCanvasImageBuilder,
+  AltimeterCanvasImageFactory* altimeterCanvasImageFactory = new AltimeterCanvasImageFactory();
+  HUDQuadWidget* test = new HUDQuadWidget(altimeterCanvasImageFactory,
                                           new HUDRelativePosition(0,
                                                                   HUDRelativePosition::VIEWPORT_WIDTH,
                                                                   HUDRelativePosition::LEFT,
@@ -200,7 +200,7 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
                                           );
   hudRenderer->addWidget(test);
 
-  LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               /* text         */
+  LabelImageFactory* labelBuilder = new LabelImageFactory("glob3",               /* text         */
                                                           GFont::monospaced(38), /* font         */
                                                           Color::YELLOW,         /* color        */
                                                           Color::BLACK,          /* shadowColor  */
@@ -221,7 +221,7 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
                                            new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGHT) );
   hudRenderer->addWidget(label);
 
-  HUDQuadWidget* compass2 = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
+  HUDQuadWidget* compass2 = new HUDQuadWidget(new DownloaderImageFactory(URL("file:///CompassHeadings.png")),
                                               new HUDRelativePosition(0.5,
                                                                       HUDRelativePosition::VIEWPORT_WIDTH,
                                                                       HUDRelativePosition::CENTER),
@@ -238,7 +238,7 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
   hudRenderer->addWidget(compass2);
 
   float visibleFactor = 3;
-  HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
+  HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageFactory(URL("file:///altimeter-ruler-1536x113.png")),
                                            new HUDRelativePosition(1,
                                                                    HUDRelativePosition::VIEWPORT_WIDTH,
                                                                    HUDRelativePosition::RIGHT,
@@ -250,7 +250,7 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
                                                                HUDRelativeSize::VIEWPORT_MIN_AXIS),
                                            new HUDRelativeSize(2 / visibleFactor,
                                                                HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                           new DownloaderImageBuilder(URL("file:///widget-background.png")));
+                                           new DownloaderImageFactory(URL("file:///widget-background.png")));
   ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
   hudRenderer->addWidget(ruler);
 
@@ -259,6 +259,6 @@ void G3MHUDDemoScene::rawActivate(const G3MContext *context) {
                                                                             compass2,
                                                                             ruler,
                                                                             labelBuilder,
-                                                                            altimeterCanvasImageBuilder)));
+                                                                            altimeterCanvasImageFactory)));
   
 }

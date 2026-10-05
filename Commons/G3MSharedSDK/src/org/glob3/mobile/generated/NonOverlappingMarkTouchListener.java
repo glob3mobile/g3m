@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-//class IImageBuilder;
+//class IImageFactory;
 //class Geodetic3D;
 //class Vector2D;
 //class Camera;

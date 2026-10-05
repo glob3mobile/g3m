@@ -33,9 +33,9 @@ class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
 class EffectTarget;
-class IImageBuilder;
+class IImageFactory;
 class MarksRenderer;
-class MarkImageBuilderListener;
+class MarkImageFactoryListener;
 class TouchEvent;
 
 class MarkUserData {
@@ -48,8 +48,8 @@ public:
 class Mark : public SurfaceElevationListener {
 private:
 
-  IImageBuilder* _imageBuilder;
-  MarkImageBuilderListener* _imageBuilderListener;
+  IImageFactory* _imageFactory;
+  MarkImageFactoryListener* _imageFactoryListener;
 
   /**
    * The text the mark displays.
@@ -266,9 +266,9 @@ public:
        bool               autoDeleteListener=false);
 
   /**
-   * Creates a mark whith a IImageBuilder, in future versions it'll be the only constructor
+   * Creates a mark whith a IImageFactory, in future versions it'll be the only constructor
    */
-  Mark(IImageBuilder*     imageBuilder,
+  Mark(IImageFactory*     imageFactory,
        const Geodetic3D&  position,
        AltitudeMode       altitudeMode,
        double             minDistanceToCamera=4.5e+06,

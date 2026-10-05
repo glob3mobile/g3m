@@ -28,8 +28,8 @@
 		CF27452525B1F2C20056304B /* XPCDimension.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27452325B1F2C20056304B /* XPCDimension.cpp */; };
 		CF27452925B2047B0056304B /* XPCNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27452725B2047B0056304B /* XPCNode.cpp */; };
 		CF27452E25B2F73C0056304B /* XPCParsing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27452C25B2F73C0056304B /* XPCParsing.cpp */; };
-		CF277C8423E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF277C8223E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp */; };
-		CF277C8523E2C083000B969C /* CanvasOwnerImageBuilderWrapper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF277C8323E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.hpp */; };
+		CF277C8423E2BFCA000B969C /* CanvasOwnerImageFactoryWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF277C8223E2BFCA000B969C /* CanvasOwnerImageFactoryWrapper.cpp */; };
+		CF277C8523E2C083000B969C /* CanvasOwnerImageFactoryWrapper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF277C8323E2BFCA000B969C /* CanvasOwnerImageFactoryWrapper.hpp */; };
 		CF277C8823E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF277C8623E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp */; };
 		CF277C8923E2C5E7000B969C /* CanvasOwnerImageListenerWrapper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF277C8723E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.hpp */; };
 		CF32C66F25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF32C66D25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp */; };
@@ -168,7 +168,7 @@
 		CF6606AA23DF2FFD00795C7F /* Planet.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023323DF2DA600795C7F /* Planet.hpp */; };
 		CF6606AB23DF2FFD00795C7F /* ViewMode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023A23DF2DA600795C7F /* ViewMode.hpp */; };
 		CF6606AC23DF2FFD00795C7F /* InfoDisplay.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023B23DF2DA600795C7F /* InfoDisplay.hpp */; };
-		CF6606AD23DF2FFD00795C7F /* CircleImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023C23DF2DA600795C7F /* CircleImageBuilder.hpp */; };
+		CF6606AD23DF2FFD00795C7F /* CircleImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023C23DF2DA600795C7F /* CircleImageFactory.hpp */; };
 		CF6606AE23DF2FFD00795C7F /* MercatorPyramidDEMProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023E23DF2DA600795C7F /* MercatorPyramidDEMProvider.hpp */; };
 		CF6606AF23DF2FFD00795C7F /* LayoutUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66023F23DF2DA600795C7F /* LayoutUtils.hpp */; };
 		CF6606B023DF2FFD00795C7F /* DefaultRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024023DF2DA600795C7F /* DefaultRenderer.hpp */; };
@@ -181,7 +181,7 @@
 		CF6606B823DF2FFD00795C7F /* DebugTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024D23DF2DA600795C7F /* DebugTileImageProvider.hpp */; };
 		CF6606B923DF2FFD00795C7F /* CircleShape.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024E23DF2DA600795C7F /* CircleShape.hpp */; };
 		CF6606BA23DF2FFD00795C7F /* GEO2DMultiPolygonGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66024F23DF2DA600795C7F /* GEO2DMultiPolygonGeometry.hpp */; };
-		CF6606BB23DF2FFD00795C7F /* StaticImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66025223DF2DA600795C7F /* StaticImageBuilder.hpp */; };
+		CF6606BB23DF2FFD00795C7F /* StaticImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66025223DF2DA600795C7F /* StaticImageFactory.hpp */; };
 		CF6606BC23DF2FFD00795C7F /* TileImageListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66025423DF2DA600795C7F /* TileImageListener.hpp */; };
 		CF6606BD23DF2FFD00795C7F /* BasicShadersGL2.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66025623DF2DA600795C7F /* BasicShadersGL2.hpp */; };
 		CF6606BE23DF2FFD00795C7F /* CameraEventHandler.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66025723DF2DA600795C7F /* CameraEventHandler.hpp */; };
@@ -206,7 +206,7 @@
 		CF6606D123DF2FFD00795C7F /* GEOSymbolizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66027323DF2DA600795C7F /* GEOSymbolizer.hpp */; };
 		CF6606D223DF2FFD00795C7F /* Vector3F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66027423DF2DA600795C7F /* Vector3F.hpp */; };
 		CF6606D323DF2FFD00795C7F /* Vector3D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66027523DF2DA600795C7F /* Vector3D.hpp */; };
-		CF6606D423DF2FFD00795C7F /* AbstractImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66027823DF2DA600795C7F /* AbstractImageBuilder.hpp */; };
+		CF6606D423DF2FFD00795C7F /* AbstractImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66027823DF2DA600795C7F /* AbstractImageFactory.hpp */; };
 		CF6606D523DF2FFD00795C7F /* SceneJSShapesParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66027A23DF2DA600795C7F /* SceneJSShapesParser.hpp */; };
 		CF6606D623DF2FFD00795C7F /* IImageDownloadListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66027B23DF2DA600795C7F /* IImageDownloadListener.hpp */; };
 		CF6606D723DF2FFD00795C7F /* SGMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66027D23DF2DA600795C7F /* SGMesh.hpp */; };
@@ -305,13 +305,13 @@
 		CF66073723DF2FFD00795C7F /* RCObject.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66034E23DF2DA700795C7F /* RCObject.hpp */; };
 		CF66073823DF2FFD00795C7F /* PyramidNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66034F23DF2DA700795C7F /* PyramidNode.hpp */; };
 		CF66073923DF2FFD00795C7F /* CameraEventGesture.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035023DF2DA700795C7F /* CameraEventGesture.hpp */; };
-		CF66073A23DF2FFD00795C7F /* ResizerImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035523DF2DA800795C7F /* ResizerImageBuilder.hpp */; };
+		CF66073A23DF2FFD00795C7F /* ResizerImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035523DF2DA800795C7F /* ResizerImageFactory.hpp */; };
 		CF66073B23DF2FFD00795C7F /* CameraEffects.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035623DF2DA800795C7F /* CameraEffects.hpp */; };
-		CF66073C23DF2FFD00795C7F /* RowLayoutImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035823DF2DA800795C7F /* RowLayoutImageBuilder.hpp */; };
+		CF66073C23DF2FFD00795C7F /* RowLayoutImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035823DF2DA800795C7F /* RowLayoutImageFactory.hpp */; };
 		CF66073D23DF2FFD00795C7F /* ChildRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035923DF2DA800795C7F /* ChildRenderer.hpp */; };
 		CF66073E23DF2FFD00795C7F /* GEO2DLineStringGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035A23DF2DA800795C7F /* GEO2DLineStringGeometry.hpp */; };
 		CF66073F23DF2FFD00795C7F /* URL.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035B23DF2DA800795C7F /* URL.hpp */; };
-		CF66074023DF2FFD00795C7F /* IImageBuilderListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035C23DF2DA800795C7F /* IImageBuilderListener.hpp */; };
+		CF66074023DF2FFD00795C7F /* IImageFactoryListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66035C23DF2DA800795C7F /* IImageFactoryListener.hpp */; };
 		CF66074123DF2FFD00795C7F /* DecimatedDEMGrid.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66036023DF2DA800795C7F /* DecimatedDEMGrid.hpp */; };
 		CF66074223DF2FFD00795C7F /* Sector.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66036123DF2DA800795C7F /* Sector.hpp */; };
 		CF66074323DF2FFD00795C7F /* AbstractGeometryMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66036223DF2DA800795C7F /* AbstractGeometryMesh.hpp */; };
@@ -342,7 +342,7 @@
 		CF66075C23DF2FFD00795C7F /* FloatBufferBuilderFromColor.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66039423DF2DA800795C7F /* FloatBufferBuilderFromColor.hpp */; };
 		CF66075D23DF2FFD00795C7F /* CenterStrategy.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66039623DF2DA800795C7F /* CenterStrategy.hpp */; };
 		CF66075E23DF2FFD00795C7F /* MutableVector2F.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66039823DF2DA800795C7F /* MutableVector2F.hpp */; };
-		CF66075F23DF2FFD00795C7F /* DownloaderImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66039923DF2DA800795C7F /* DownloaderImageBuilder.hpp */; };
+		CF66075F23DF2FFD00795C7F /* DownloaderImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66039923DF2DA800795C7F /* DownloaderImageFactory.hpp */; };
 		CF66076023DF2FFD00795C7F /* IG3MBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66039A23DF2DA800795C7F /* IG3MBuilder.hpp */; };
 		CF66076123DF2FFD00795C7F /* GLFeatureGroup.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66039B23DF2DA800795C7F /* GLFeatureGroup.hpp */; };
 		CF66076223DF2FFD00795C7F /* DefaultTileTexturizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66039E23DF2DA800795C7F /* DefaultTileTexturizer.hpp */; };
@@ -370,15 +370,15 @@
 		CF66077823DF2FFE00795C7F /* Color.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603C523DF2DA800795C7F /* Color.hpp */; };
 		CF66077923DF2FFE00795C7F /* CanvasElement.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603C623DF2DA900795C7F /* CanvasElement.hpp */; };
 		CF66077A23DF2FFE00795C7F /* DEMListener.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603C923DF2DA900795C7F /* DEMListener.hpp */; };
-		CF66077B23DF2FFE00795C7F /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603CB23DF2DA900795C7F /* DefaultChessCanvasImageBuilder.hpp */; };
-		CF66077C23DF2FFE00795C7F /* CanvasImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603CD23DF2DA900795C7F /* CanvasImageBuilder.hpp */; };
+		CF66077B23DF2FFE00795C7F /* DefaultChessCanvasImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603CB23DF2DA900795C7F /* DefaultChessCanvasImageFactory.hpp */; };
+		CF66077C23DF2FFE00795C7F /* CanvasImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603CD23DF2DA900795C7F /* CanvasImageFactory.hpp */; };
 		CF66077D23DF2FFE00795C7F /* GEO3DGeometry.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603CE23DF2DA900795C7F /* GEO3DGeometry.hpp */; };
 		CF66077F23DF2FFE00795C7F /* JSONNumber.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603D123DF2DA900795C7F /* JSONNumber.hpp */; };
 		CF66078123DF2FFE00795C7F /* PlanetRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603D423DF2DA900795C7F /* PlanetRenderer.hpp */; };
 		CF66078223DF2FFE00795C7F /* HUDErrorRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603D723DF2DA900795C7F /* HUDErrorRenderer.hpp */; };
 		CF66078323DF2FFE00795C7F /* HUDRelativeSize.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603D823DF2DA900795C7F /* HUDRelativeSize.hpp */; };
 		CF66078423DF2FFE00795C7F /* MutableColor255.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603D923DF2DA900795C7F /* MutableColor255.hpp */; };
-		CF66078523DF2FFE00795C7F /* LayoutImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603DA23DF2DA900795C7F /* LayoutImageBuilder.hpp */; };
+		CF66078523DF2FFE00795C7F /* LayoutImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603DA23DF2DA900795C7F /* LayoutImageFactory.hpp */; };
 		CF66078623DF2FFE00795C7F /* SGTranslateNode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603DC23DF2DA900795C7F /* SGTranslateNode.hpp */; };
 		CF66078723DF2FFE00795C7F /* LayerCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603DE23DF2DA900795C7F /* LayerCondition.hpp */; };
 		CF66078823DF2FFE00795C7F /* MaxFrameTimeTileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603DF23DF2DA900795C7F /* MaxFrameTimeTileLODTester.hpp */; };
@@ -388,8 +388,8 @@
 		CF66078C23DF2FFE00795C7F /* IImage.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603EA23DF2DA900795C7F /* IImage.hpp */; };
 		CF66078D23DF2FFE00795C7F /* ElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603EB23DF2DA900795C7F /* ElevationData.hpp */; };
 		CF66078E23DF2FFE00795C7F /* GEORasterSymbolizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603EC23DF2DA900795C7F /* GEORasterSymbolizer.hpp */; };
-		CF66078F23DF2FFE00795C7F /* LabelImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603ED23DF2DA900795C7F /* LabelImageBuilder.hpp */; };
-		CF66079023DF2FFE00795C7F /* IImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603EE23DF2DA900795C7F /* IImageBuilder.hpp */; };
+		CF66078F23DF2FFE00795C7F /* LabelImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603ED23DF2DA900795C7F /* LabelImageFactory.hpp */; };
+		CF66079023DF2FFE00795C7F /* IImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603EE23DF2DA900795C7F /* IImageFactory.hpp */; };
 		CF66079123DF2FFE00795C7F /* VectorLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603EF23DF2DA900795C7F /* VectorLayer.hpp */; };
 		CF66079223DF2FFE00795C7F /* SimpleCameraConstrainer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603F023DF2DA900795C7F /* SimpleCameraConstrainer.hpp */; };
 		CF66079323DF2FFE00795C7F /* TileData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6603F223DF2DA900795C7F /* TileData.hpp */; };
@@ -414,7 +414,7 @@
 		CF6607A723DF2FFE00795C7F /* RampColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66040D23DF2DA900795C7F /* RampColorizer.hpp */; };
 		CF6607A823DF2FFE00795C7F /* BoundingArea.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66041223DF2DA900795C7F /* BoundingArea.hpp */; };
 		CF6607A923DF2FFE00795C7F /* GFont.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66041423DF2DAA00795C7F /* GFont.hpp */; };
-		CF6607AA23DF2FFE00795C7F /* ColumnLayoutImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66041623DF2DAA00795C7F /* ColumnLayoutImageBuilder.hpp */; };
+		CF6607AA23DF2FFE00795C7F /* ColumnLayoutImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66041623DF2DAA00795C7F /* ColumnLayoutImageFactory.hpp */; };
 		CF6607AB23DF2FFE00795C7F /* HUDRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66041823DF2DAA00795C7F /* HUDRenderer.hpp */; };
 		CF6607AC23DF2FFE00795C7F /* GEOJSONParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66041A23DF2DAA00795C7F /* GEOJSONParser.hpp */; };
 		CF6607AD23DF2FFE00795C7F /* PeriodicalTask.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66041B23DF2DAA00795C7F /* PeriodicalTask.hpp */; };
@@ -468,7 +468,7 @@
 		CF6607DD23DF2FFE00795C7F /* ICanvas.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66048A23DF2DAB00795C7F /* ICanvas.hpp */; };
 		CF6607DE23DF2FFE00795C7F /* GPUAttribute.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66048B23DF2DAB00795C7F /* GPUAttribute.hpp */; };
 		CF6607DF23DF2FFE00795C7F /* MapzenDEMProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66048D23DF2DAB00795C7F /* MapzenDEMProvider.hpp */; };
-		CF6607E023DF2FFE00795C7F /* StackLayoutImageBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66048E23DF2DAB00795C7F /* StackLayoutImageBuilder.hpp */; };
+		CF6607E023DF2FFE00795C7F /* StackLayoutImageFactory.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66048E23DF2DAB00795C7F /* StackLayoutImageFactory.hpp */; };
 		CF6607E123DF2FFE00795C7F /* IImageUtils.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66048F23DF2DAB00795C7F /* IImageUtils.hpp */; };
 		CF6607E223DF2FFE00795C7F /* TileLODTester.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66049223DF2DAB00795C7F /* TileLODTester.hpp */; };
 		CF6607E323DF2FFE00795C7F /* JSONInteger.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66049723DF2DAB00795C7F /* JSONInteger.hpp */; };
@@ -486,7 +486,7 @@
 		CF6607EF23DF2FFE00795C7F /* IShortBuffer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6604AB23DF2DAB00795C7F /* IShortBuffer.hpp */; };
 		CF6607F423DF330600795C7F /* SGTranslateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66016B23DF2DA500795C7F /* SGTranslateNode.cpp */; };
 		CF6607F523DF330600795C7F /* MutableColor255.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66016F23DF2DA500795C7F /* MutableColor255.cpp */; };
-		CF6607F623DF330600795C7F /* LayoutImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66017123DF2DA500795C7F /* LayoutImageBuilder.cpp */; };
+		CF6607F623DF330600795C7F /* LayoutImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66017123DF2DA500795C7F /* LayoutImageFactory.cpp */; };
 		CF6607F723DF330600795C7F /* HUDErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66017223DF2DA500795C7F /* HUDErrorRenderer.cpp */; };
 		CF6607F823DF330600795C7F /* HUDRelativeSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66017323DF2DA500795C7F /* HUDRelativeSize.cpp */; };
 		CF6607F923DF330600795C7F /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66017423DF2DA500795C7F /* IntBufferBuilder.cpp */; };
@@ -497,13 +497,13 @@
 		CF6607FE23DF330600795C7F /* HUDSize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018323DF2DA500795C7F /* HUDSize.cpp */; };
 		CF6607FF23DF330600795C7F /* ProjectedCornersDistanceTileLODTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018523DF2DA500795C7F /* ProjectedCornersDistanceTileLODTester.cpp */; };
 		CF66080023DF330600795C7F /* IStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018723DF2DA500795C7F /* IStringUtils.cpp */; };
-		CF66080123DF330600795C7F /* LabelImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018823DF2DA500795C7F /* LabelImageBuilder.cpp */; };
+		CF66080123DF330600795C7F /* LabelImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018823DF2DA500795C7F /* LabelImageFactory.cpp */; };
 		CF66080223DF330600795C7F /* ElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018923DF2DA500795C7F /* ElevationData.cpp */; };
 		CF66080323DF330600795C7F /* GEORasterSymbolizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018A23DF2DA500795C7F /* GEORasterSymbolizer.cpp */; };
 		CF66080423DF330600795C7F /* MutableQuaternionF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018C23DF2DA500795C7F /* MutableQuaternionF.cpp */; };
 		CF66080523DF330600795C7F /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018D23DF2DA500795C7F /* TexturesHandler.cpp */; };
 		CF66080623DF330600795C7F /* TileData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018E23DF2DA500795C7F /* TileData.cpp */; };
-		CF66080723DF330600795C7F /* IImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018F23DF2DA500795C7F /* IImageBuilder.cpp */; };
+		CF66080723DF330600795C7F /* IImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66018F23DF2DA500795C7F /* IImageFactory.cpp */; };
 		CF66080823DF330600795C7F /* SimpleCameraConstrainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66019023DF2DA500795C7F /* SimpleCameraConstrainer.cpp */; };
 		CF66080923DF330600795C7F /* VectorLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66019123DF2DA500795C7F /* VectorLayer.cpp */; };
 		CF66080A23DF330600795C7F /* TiledVectorLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66019323DF2DA500795C7F /* TiledVectorLayer.cpp */; };
@@ -523,7 +523,7 @@
 		CF66081923DF330600795C7F /* GFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6601B223DF2DA500795C7F /* GFont.cpp */; };
 		CF66081A23DF330600795C7F /* HUDPosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6601B423DF2DA500795C7F /* HUDPosition.cpp */; };
 		CF66081B23DF330600795C7F /* GEOJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6601B523DF2DA500795C7F /* GEOJSONParser.cpp */; };
-		CF66081C23DF330600795C7F /* ColumnLayoutImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6601B723DF2DA500795C7F /* ColumnLayoutImageBuilder.cpp */; };
+		CF66081C23DF330600795C7F /* ColumnLayoutImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6601B723DF2DA500795C7F /* ColumnLayoutImageFactory.cpp */; };
 		CF66081D23DF330600795C7F /* HUDRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6601B823DF2DA500795C7F /* HUDRenderer.cpp */; };
 		CF66081E23DF330600795C7F /* GEORasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6601BA23DF2DA500795C7F /* GEORasterSymbol.cpp */; };
 		CF66081F23DF330600795C7F /* SurfaceElevationProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6601BD23DF2DA500795C7F /* SurfaceElevationProvider.cpp */; };
@@ -565,7 +565,7 @@
 		CF66084323DF330600795C7F /* FrustumPolicyHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66021523DF2DA600795C7F /* FrustumPolicyHandler.cpp */; };
 		CF66084423DF330600795C7F /* GPUAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66021A23DF2DA600795C7F /* GPUAttribute.cpp */; };
 		CF66084523DF330600795C7F /* MapzenDEMProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66021B23DF2DA600795C7F /* MapzenDEMProvider.cpp */; };
-		CF66084623DF330600795C7F /* StackLayoutImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66021E23DF2DA600795C7F /* StackLayoutImageBuilder.cpp */; };
+		CF66084623DF330600795C7F /* StackLayoutImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66021E23DF2DA600795C7F /* StackLayoutImageFactory.cpp */; };
 		CF66084723DF330600795C7F /* ICanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66022123DF2DA600795C7F /* ICanvas.cpp */; };
 		CF66084823DF330600795C7F /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66022323DF2DA600795C7F /* Box.cpp */; };
 		CF66084923DF330600795C7F /* IDeviceInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66022623DF2DA600795C7F /* IDeviceInfo.cpp */; };
@@ -605,7 +605,7 @@
 		CF66086B23DF330600795C7F /* TiledVectorLayerTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66027C23DF2DA600795C7F /* TiledVectorLayerTileImageProvider.cpp */; };
 		CF66086C23DF330600795C7F /* Vector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66027F23DF2DA600795C7F /* Vector2I.cpp */; };
 		CF66086D23DF330600795C7F /* CameraGoToPositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028223DF2DA600795C7F /* CameraGoToPositionEffect.cpp */; };
-		CF66086E23DF330600795C7F /* ResizerImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028723DF2DA600795C7F /* ResizerImageBuilder.cpp */; };
+		CF66086E23DF330600795C7F /* ResizerImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028723DF2DA600795C7F /* ResizerImageFactory.cpp */; };
 		CF66086F23DF330600795C7F /* CameraEventGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028923DF2DA600795C7F /* CameraEventGesture.cpp */; };
 		CF66087023DF330600795C7F /* CameraEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028B23DF2DA600795C7F /* CameraEffects.cpp */; };
 		CF66087123DF330600795C7F /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028C23DF2DA600795C7F /* RectangleI.cpp */; };
@@ -614,7 +614,7 @@
 		CF66087423DF330600795C7F /* GEO2DGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66029123DF2DA600795C7F /* GEO2DGeometry.cpp */; };
 		CF66087523DF330600795C7F /* Projection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66029223DF2DA600795C7F /* Projection.cpp */; };
 		CF66087623DF330600795C7F /* DecimatedDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66029523DF2DA600795C7F /* DecimatedDEMGrid.cpp */; };
-		CF66087723DF330600795C7F /* RowLayoutImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66029723DF2DA600795C7F /* RowLayoutImageBuilder.cpp */; };
+		CF66087723DF330600795C7F /* RowLayoutImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66029723DF2DA600795C7F /* RowLayoutImageFactory.cpp */; };
 		CF66087823DF330600795C7F /* ChildRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66029823DF2DA600795C7F /* ChildRenderer.cpp */; };
 		CF66087923DF330600795C7F /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66029923DF2DA600795C7F /* GEO2DLineStringGeometry.cpp */; };
 		CF66087A23DF330600795C7F /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66029A23DF2DA600795C7F /* URL.cpp */; };
@@ -644,7 +644,7 @@
 		CF66089223DF330600795C7F /* GEOPolygonRasterSymbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602CD23DF2DA600795C7F /* GEOPolygonRasterSymbol.cpp */; };
 		CF66089323DF330600795C7F /* MarkFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602CE23DF2DA600795C7F /* MarkFilter.cpp */; };
 		CF66089423DF330600795C7F /* MutableVector2F.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602CF23DF2DA700795C7F /* MutableVector2F.cpp */; };
-		CF66089523DF330600795C7F /* DownloaderImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602D023DF2DA700795C7F /* DownloaderImageBuilder.cpp */; };
+		CF66089523DF330600795C7F /* DownloaderImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602D023DF2DA700795C7F /* DownloaderImageFactory.cpp */; };
 		CF66089623DF330600795C7F /* GLFeatureGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602D223DF2DA700795C7F /* GLFeatureGroup.cpp */; };
 		CF66089723DF330600795C7F /* IG3MBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602D323DF2DA700795C7F /* IG3MBuilder.cpp */; };
 		CF66089823DF330600795C7F /* EllipsoidShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602D523DF2DA700795C7F /* EllipsoidShape.cpp */; };
@@ -671,16 +671,16 @@
 		CF6608AD23DF330600795C7F /* SingleBILElevationDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602FE23DF2DA700795C7F /* SingleBILElevationDataProvider.cpp */; };
 		CF6608AE23DF330600795C7F /* WMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6602FF23DF2DA700795C7F /* WMSLayer.cpp */; };
 		CF6608AF23DF330600795C7F /* DecimatedSubviewElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030023DF2DA700795C7F /* DecimatedSubviewElevationData.cpp */; };
-		CF6608B023DF330600795C7F /* CanvasImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030123DF2DA700795C7F /* CanvasImageBuilder.cpp */; };
+		CF6608B023DF330600795C7F /* CanvasImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030123DF2DA700795C7F /* CanvasImageFactory.cpp */; };
 		CF6608B223DF330600795C7F /* GEO3DGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030323DF2DA700795C7F /* GEO3DGeometry.cpp */; };
 		CF6608B423DF330600795C7F /* PlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030623DF2DA700795C7F /* PlanetRenderer.cpp */; };
 		CF6608B523DF330600795C7F /* JSONNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030823DF2DA700795C7F /* JSONNumber.cpp */; };
 		CF6608B623DF330600795C7F /* CanvasElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030B23DF2DA700795C7F /* CanvasElement.cpp */; };
 		CF6608B723DF330600795C7F /* DEMListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030E23DF2DA700795C7F /* DEMListener.cpp */; };
-		CF6608B823DF330600795C7F /* DefaultChessCanvasImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030F23DF2DA700795C7F /* DefaultChessCanvasImageBuilder.cpp */; };
+		CF6608B823DF330600795C7F /* DefaultChessCanvasImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66030F23DF2DA700795C7F /* DefaultChessCanvasImageFactory.cpp */; };
 		CF6608B923DF330600795C7F /* GEO2DMultiPolygonGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66031123DF2DA700795C7F /* GEO2DMultiPolygonGeometry.cpp */; };
 		CF6608BA23DF330600795C7F /* CircleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66031223DF2DA700795C7F /* CircleShape.cpp */; };
-		CF6608BB23DF330600795C7F /* StaticImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66031523DF2DA700795C7F /* StaticImageBuilder.cpp */; };
+		CF6608BB23DF330600795C7F /* StaticImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66031523DF2DA700795C7F /* StaticImageFactory.cpp */; };
 		CF6608BC23DF330600795C7F /* SGLayerNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66031723DF2DA700795C7F /* SGLayerNode.cpp */; };
 		CF6608BD23DF330600795C7F /* GEO2DLineRasterStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66031823DF2DA700795C7F /* GEO2DLineRasterStyle.cpp */; };
 		CF6608BE23DF330600795C7F /* PlanetTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66031923DF2DA700795C7F /* PlanetTileTessellator.cpp */; };
@@ -711,7 +711,7 @@
 		CF6608D723DF330600795C7F /* SGTextureNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66034223DF2DA700795C7F /* SGTextureNode.cpp */; };
 		CF6608D823DF330600795C7F /* Vector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66034523DF2DA700795C7F /* Vector3D.cpp */; };
 		CF6608D923DF330600795C7F /* SceneJSShapesParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66034623DF2DA700795C7F /* SceneJSShapesParser.cpp */; };
-		CF6608DA23DF330600795C7F /* AbstractImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66034823DF2DA700795C7F /* AbstractImageBuilder.cpp */; };
+		CF6608DA23DF330600795C7F /* AbstractImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66034823DF2DA700795C7F /* AbstractImageFactory.cpp */; };
 		CF6608DB23DF330600795C7F /* NullStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66034923DF2DA700795C7F /* NullStorage.cpp */; };
 		CF6608DC23DF330600795C7F /* GEOStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66034A23DF2DA700795C7F /* GEOStyle.cpp */; };
 		CF6608DD23DF330600795C7F /* JSONBaseObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66035123DF2DA700795C7F /* JSONBaseObject.cpp */; };
@@ -873,7 +873,7 @@
 		CF66097D23DF330700795C7F /* LayoutUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66049D23DF2DAB00795C7F /* LayoutUtils.cpp */; };
 		CF66097E23DF330700795C7F /* Vector4D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6604A023DF2DAB00795C7F /* Vector4D.cpp */; };
 		CF66097F23DF330700795C7F /* ViewMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6604A223DF2DAB00795C7F /* ViewMode.cpp */; };
-		CF66098023DF330700795C7F /* CircleImageBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6604A823DF2DAB00795C7F /* CircleImageBuilder.cpp */; };
+		CF66098023DF330700795C7F /* CircleImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6604A823DF2DAB00795C7F /* CircleImageFactory.cpp */; };
 		CF66098123DF330700795C7F /* MercatorPyramidDEMProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6604AA23DF2DAB00795C7F /* MercatorPyramidDEMProvider.cpp */; };
 		CF66098223DF330700795C7F /* InfoDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6604AC23DF2DAB00795C7F /* InfoDisplay.cpp */; };
 		CF66098423DF330700795C7F /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
@@ -998,7 +998,7 @@
 				CF27451D25B1D1CD0056304B /* XPCMetadataListener.hpp in CopyFiles */,
 				CF27450125B1B0260056304B /* XPCRenderer.hpp in CopyFiles */,
 				CF277C8923E2C5E7000B969C /* CanvasOwnerImageListenerWrapper.hpp in CopyFiles */,
-				CF277C8523E2C083000B969C /* CanvasOwnerImageBuilderWrapper.hpp in CopyFiles */,
+				CF277C8523E2C083000B969C /* CanvasOwnerImageFactoryWrapper.hpp in CopyFiles */,
 				CF66063E23DF2FFD00795C7F /* BufferElevationData.hpp in CopyFiles */,
 				CF66063F23DF2FFD00795C7F /* GPUAttributeValueVecFloat.hpp in CopyFiles */,
 				CF66064023DF2FFD00795C7F /* ILogger.hpp in CopyFiles */,
@@ -1109,7 +1109,7 @@
 				CF6606AA23DF2FFD00795C7F /* Planet.hpp in CopyFiles */,
 				CF6606AB23DF2FFD00795C7F /* ViewMode.hpp in CopyFiles */,
 				CF6606AC23DF2FFD00795C7F /* InfoDisplay.hpp in CopyFiles */,
-				CF6606AD23DF2FFD00795C7F /* CircleImageBuilder.hpp in CopyFiles */,
+				CF6606AD23DF2FFD00795C7F /* CircleImageFactory.hpp in CopyFiles */,
 				CF6606AE23DF2FFD00795C7F /* MercatorPyramidDEMProvider.hpp in CopyFiles */,
 				CF6606AF23DF2FFD00795C7F /* LayoutUtils.hpp in CopyFiles */,
 				CF6606B023DF2FFD00795C7F /* DefaultRenderer.hpp in CopyFiles */,
@@ -1122,7 +1122,7 @@
 				CF6606B823DF2FFD00795C7F /* DebugTileImageProvider.hpp in CopyFiles */,
 				CF6606B923DF2FFD00795C7F /* CircleShape.hpp in CopyFiles */,
 				CF6606BA23DF2FFD00795C7F /* GEO2DMultiPolygonGeometry.hpp in CopyFiles */,
-				CF6606BB23DF2FFD00795C7F /* StaticImageBuilder.hpp in CopyFiles */,
+				CF6606BB23DF2FFD00795C7F /* StaticImageFactory.hpp in CopyFiles */,
 				CF6606BC23DF2FFD00795C7F /* TileImageListener.hpp in CopyFiles */,
 				CF6606BD23DF2FFD00795C7F /* BasicShadersGL2.hpp in CopyFiles */,
 				CF6606BE23DF2FFD00795C7F /* CameraEventHandler.hpp in CopyFiles */,
@@ -1147,7 +1147,7 @@
 				CF6606D123DF2FFD00795C7F /* GEOSymbolizer.hpp in CopyFiles */,
 				CF6606D223DF2FFD00795C7F /* Vector3F.hpp in CopyFiles */,
 				CF6606D323DF2FFD00795C7F /* Vector3D.hpp in CopyFiles */,
-				CF6606D423DF2FFD00795C7F /* AbstractImageBuilder.hpp in CopyFiles */,
+				CF6606D423DF2FFD00795C7F /* AbstractImageFactory.hpp in CopyFiles */,
 				CF6606D523DF2FFD00795C7F /* SceneJSShapesParser.hpp in CopyFiles */,
 				CF6606D623DF2FFD00795C7F /* IImageDownloadListener.hpp in CopyFiles */,
 				CF6606D723DF2FFD00795C7F /* SGMesh.hpp in CopyFiles */,
@@ -1246,13 +1246,13 @@
 				CF66073723DF2FFD00795C7F /* RCObject.hpp in CopyFiles */,
 				CF66073823DF2FFD00795C7F /* PyramidNode.hpp in CopyFiles */,
 				CF66073923DF2FFD00795C7F /* CameraEventGesture.hpp in CopyFiles */,
-				CF66073A23DF2FFD00795C7F /* ResizerImageBuilder.hpp in CopyFiles */,
+				CF66073A23DF2FFD00795C7F /* ResizerImageFactory.hpp in CopyFiles */,
 				CF66073B23DF2FFD00795C7F /* CameraEffects.hpp in CopyFiles */,
-				CF66073C23DF2FFD00795C7F /* RowLayoutImageBuilder.hpp in CopyFiles */,
+				CF66073C23DF2FFD00795C7F /* RowLayoutImageFactory.hpp in CopyFiles */,
 				CF66073D23DF2FFD00795C7F /* ChildRenderer.hpp in CopyFiles */,
 				CF66073E23DF2FFD00795C7F /* GEO2DLineStringGeometry.hpp in CopyFiles */,
 				CF66073F23DF2FFD00795C7F /* URL.hpp in CopyFiles */,
-				CF66074023DF2FFD00795C7F /* IImageBuilderListener.hpp in CopyFiles */,
+				CF66074023DF2FFD00795C7F /* IImageFactoryListener.hpp in CopyFiles */,
 				CF66074123DF2FFD00795C7F /* DecimatedDEMGrid.hpp in CopyFiles */,
 				CF66074223DF2FFD00795C7F /* Sector.hpp in CopyFiles */,
 				CF66074323DF2FFD00795C7F /* AbstractGeometryMesh.hpp in CopyFiles */,
@@ -1283,7 +1283,7 @@
 				CF66075C23DF2FFD00795C7F /* FloatBufferBuilderFromColor.hpp in CopyFiles */,
 				CF66075D23DF2FFD00795C7F /* CenterStrategy.hpp in CopyFiles */,
 				CF66075E23DF2FFD00795C7F /* MutableVector2F.hpp in CopyFiles */,
-				CF66075F23DF2FFD00795C7F /* DownloaderImageBuilder.hpp in CopyFiles */,
+				CF66075F23DF2FFD00795C7F /* DownloaderImageFactory.hpp in CopyFiles */,
 				CF66076023DF2FFD00795C7F /* IG3MBuilder.hpp in CopyFiles */,
 				CF66076123DF2FFD00795C7F /* GLFeatureGroup.hpp in CopyFiles */,
 				CF66076223DF2FFD00795C7F /* DefaultTileTexturizer.hpp in CopyFiles */,
@@ -1311,15 +1311,15 @@
 				CF66077823DF2FFE00795C7F /* Color.hpp in CopyFiles */,
 				CF66077923DF2FFE00795C7F /* CanvasElement.hpp in CopyFiles */,
 				CF66077A23DF2FFE00795C7F /* DEMListener.hpp in CopyFiles */,
-				CF66077B23DF2FFE00795C7F /* DefaultChessCanvasImageBuilder.hpp in CopyFiles */,
-				CF66077C23DF2FFE00795C7F /* CanvasImageBuilder.hpp in CopyFiles */,
+				CF66077B23DF2FFE00795C7F /* DefaultChessCanvasImageFactory.hpp in CopyFiles */,
+				CF66077C23DF2FFE00795C7F /* CanvasImageFactory.hpp in CopyFiles */,
 				CF66077D23DF2FFE00795C7F /* GEO3DGeometry.hpp in CopyFiles */,
 				CF66077F23DF2FFE00795C7F /* JSONNumber.hpp in CopyFiles */,
 				CF66078123DF2FFE00795C7F /* PlanetRenderer.hpp in CopyFiles */,
 				CF66078223DF2FFE00795C7F /* HUDErrorRenderer.hpp in CopyFiles */,
 				CF66078323DF2FFE00795C7F /* HUDRelativeSize.hpp in CopyFiles */,
 				CF66078423DF2FFE00795C7F /* MutableColor255.hpp in CopyFiles */,
-				CF66078523DF2FFE00795C7F /* LayoutImageBuilder.hpp in CopyFiles */,
+				CF66078523DF2FFE00795C7F /* LayoutImageFactory.hpp in CopyFiles */,
 				CF66078623DF2FFE00795C7F /* SGTranslateNode.hpp in CopyFiles */,
 				CF66078723DF2FFE00795C7F /* LayerCondition.hpp in CopyFiles */,
 				CF66078823DF2FFE00795C7F /* MaxFrameTimeTileLODTester.hpp in CopyFiles */,
@@ -1329,8 +1329,8 @@
 				CF66078C23DF2FFE00795C7F /* IImage.hpp in CopyFiles */,
 				CF66078D23DF2FFE00795C7F /* ElevationData.hpp in CopyFiles */,
 				CF66078E23DF2FFE00795C7F /* GEORasterSymbolizer.hpp in CopyFiles */,
-				CF66078F23DF2FFE00795C7F /* LabelImageBuilder.hpp in CopyFiles */,
-				CF66079023DF2FFE00795C7F /* IImageBuilder.hpp in CopyFiles */,
+				CF66078F23DF2FFE00795C7F /* LabelImageFactory.hpp in CopyFiles */,
+				CF66079023DF2FFE00795C7F /* IImageFactory.hpp in CopyFiles */,
 				CF66079123DF2FFE00795C7F /* VectorLayer.hpp in CopyFiles */,
 				CF66079223DF2FFE00795C7F /* SimpleCameraConstrainer.hpp in CopyFiles */,
 				CF66079323DF2FFE00795C7F /* TileData.hpp in CopyFiles */,
@@ -1355,7 +1355,7 @@
 				CF6607A723DF2FFE00795C7F /* RampColorizer.hpp in CopyFiles */,
 				CF6607A823DF2FFE00795C7F /* BoundingArea.hpp in CopyFiles */,
 				CF6607A923DF2FFE00795C7F /* GFont.hpp in CopyFiles */,
-				CF6607AA23DF2FFE00795C7F /* ColumnLayoutImageBuilder.hpp in CopyFiles */,
+				CF6607AA23DF2FFE00795C7F /* ColumnLayoutImageFactory.hpp in CopyFiles */,
 				CF6607AB23DF2FFE00795C7F /* HUDRenderer.hpp in CopyFiles */,
 				CF6607AC23DF2FFE00795C7F /* GEOJSONParser.hpp in CopyFiles */,
 				CF6607AD23DF2FFE00795C7F /* PeriodicalTask.hpp in CopyFiles */,
@@ -1409,7 +1409,7 @@
 				CF6607DD23DF2FFE00795C7F /* ICanvas.hpp in CopyFiles */,
 				CF6607DE23DF2FFE00795C7F /* GPUAttribute.hpp in CopyFiles */,
 				CF6607DF23DF2FFE00795C7F /* MapzenDEMProvider.hpp in CopyFiles */,
-				CF6607E023DF2FFE00795C7F /* StackLayoutImageBuilder.hpp in CopyFiles */,
+				CF6607E023DF2FFE00795C7F /* StackLayoutImageFactory.hpp in CopyFiles */,
 				CF6607E123DF2FFE00795C7F /* IImageUtils.hpp in CopyFiles */,
 				CF6607E223DF2FFE00795C7F /* TileLODTester.hpp in CopyFiles */,
 				CF6607E323DF2FFE00795C7F /* JSONInteger.hpp in CopyFiles */,
@@ -1506,8 +1506,8 @@
 		CF27452825B2047B0056304B /* XPCNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCNode.hpp; sourceTree = "<group>"; };
 		CF27452C25B2F73C0056304B /* XPCParsing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCParsing.cpp; sourceTree = "<group>"; };
 		CF27452D25B2F73C0056304B /* XPCParsing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCParsing.hpp; sourceTree = "<group>"; };
-		CF277C8223E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasOwnerImageBuilderWrapper.cpp; sourceTree = "<group>"; };
-		CF277C8323E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasOwnerImageBuilderWrapper.hpp; sourceTree = "<group>"; };
+		CF277C8223E2BFCA000B969C /* CanvasOwnerImageFactoryWrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasOwnerImageFactoryWrapper.cpp; sourceTree = "<group>"; };
+		CF277C8323E2BFCA000B969C /* CanvasOwnerImageFactoryWrapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasOwnerImageFactoryWrapper.hpp; sourceTree = "<group>"; };
 		CF277C8623E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasOwnerImageListenerWrapper.cpp; sourceTree = "<group>"; };
 		CF277C8723E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasOwnerImageListenerWrapper.hpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
@@ -1551,7 +1551,7 @@
 		CF66016E23DF2DA500795C7F /* ILogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ILogger.hpp; sourceTree = "<group>"; };
 		CF66016F23DF2DA500795C7F /* MutableColor255.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MutableColor255.cpp; sourceTree = "<group>"; };
 		CF66017023DF2DA500795C7F /* CameraRotationHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CameraRotationHandler.hpp; sourceTree = "<group>"; };
-		CF66017123DF2DA500795C7F /* LayoutImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66017123DF2DA500795C7F /* LayoutImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutImageFactory.cpp; sourceTree = "<group>"; };
 		CF66017223DF2DA500795C7F /* HUDErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDErrorRenderer.cpp; sourceTree = "<group>"; };
 		CF66017323DF2DA500795C7F /* HUDRelativeSize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDRelativeSize.cpp; sourceTree = "<group>"; };
 		CF66017423DF2DA500795C7F /* IntBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntBufferBuilder.cpp; sourceTree = "<group>"; };
@@ -1574,14 +1574,14 @@
 		CF66018523DF2DA500795C7F /* ProjectedCornersDistanceTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectedCornersDistanceTileLODTester.cpp; sourceTree = "<group>"; };
 		CF66018623DF2DA500795C7F /* BufferDEMGrid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BufferDEMGrid.hpp; sourceTree = "<group>"; };
 		CF66018723DF2DA500795C7F /* IStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IStringUtils.cpp; sourceTree = "<group>"; };
-		CF66018823DF2DA500795C7F /* LabelImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LabelImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66018823DF2DA500795C7F /* LabelImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LabelImageFactory.cpp; sourceTree = "<group>"; };
 		CF66018923DF2DA500795C7F /* ElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ElevationData.cpp; sourceTree = "<group>"; };
 		CF66018A23DF2DA500795C7F /* GEORasterSymbolizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEORasterSymbolizer.cpp; sourceTree = "<group>"; };
 		CF66018B23DF2DA500795C7F /* GAsyncTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GAsyncTask.hpp; sourceTree = "<group>"; };
 		CF66018C23DF2DA500795C7F /* MutableQuaternionF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MutableQuaternionF.cpp; sourceTree = "<group>"; };
 		CF66018D23DF2DA500795C7F /* TexturesHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TexturesHandler.cpp; sourceTree = "<group>"; };
 		CF66018E23DF2DA500795C7F /* TileData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TileData.cpp; sourceTree = "<group>"; };
-		CF66018F23DF2DA500795C7F /* IImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66018F23DF2DA500795C7F /* IImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IImageFactory.cpp; sourceTree = "<group>"; };
 		CF66019023DF2DA500795C7F /* SimpleCameraConstrainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SimpleCameraConstrainer.cpp; sourceTree = "<group>"; };
 		CF66019123DF2DA500795C7F /* VectorLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VectorLayer.cpp; sourceTree = "<group>"; };
 		CF66019223DF2DA500795C7F /* IWebSocketListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IWebSocketListener.hpp; sourceTree = "<group>"; };
@@ -1620,7 +1620,7 @@
 		CF6601B423DF2DA500795C7F /* HUDPosition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDPosition.cpp; sourceTree = "<group>"; };
 		CF6601B523DF2DA500795C7F /* GEOJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOJSONParser.cpp; sourceTree = "<group>"; };
 		CF6601B623DF2DA500795C7F /* CachedDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CachedDownloader.hpp; sourceTree = "<group>"; };
-		CF6601B723DF2DA500795C7F /* ColumnLayoutImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnLayoutImageBuilder.cpp; sourceTree = "<group>"; };
+		CF6601B723DF2DA500795C7F /* ColumnLayoutImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnLayoutImageFactory.cpp; sourceTree = "<group>"; };
 		CF6601B823DF2DA500795C7F /* HUDRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDRenderer.cpp; sourceTree = "<group>"; };
 		CF6601B923DF2DA500795C7F /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SGShape.hpp; sourceTree = "<group>"; };
 		CF6601BA23DF2DA500795C7F /* GEORasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEORasterSymbol.cpp; sourceTree = "<group>"; };
@@ -1722,7 +1722,7 @@
 		CF66021B23DF2DA600795C7F /* MapzenDEMProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapzenDEMProvider.cpp; sourceTree = "<group>"; };
 		CF66021C23DF2DA600795C7F /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FrameTasksExecutor.hpp; sourceTree = "<group>"; };
 		CF66021D23DF2DA600795C7F /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = INativeGL.hpp; sourceTree = "<group>"; };
-		CF66021E23DF2DA600795C7F /* StackLayoutImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StackLayoutImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66021E23DF2DA600795C7F /* StackLayoutImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StackLayoutImageFactory.cpp; sourceTree = "<group>"; };
 		CF66021F23DF2DA600795C7F /* SGGeometryNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SGGeometryNode.hpp; sourceTree = "<group>"; };
 		CF66022023DF2DA600795C7F /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Renderer.hpp; sourceTree = "<group>"; };
 		CF66022123DF2DA600795C7F /* ICanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ICanvas.cpp; sourceTree = "<group>"; };
@@ -1752,7 +1752,7 @@
 		CF66023923DF2DA600795C7F /* MultiTextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiTextureMapping.cpp; sourceTree = "<group>"; };
 		CF66023A23DF2DA600795C7F /* ViewMode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ViewMode.hpp; sourceTree = "<group>"; };
 		CF66023B23DF2DA600795C7F /* InfoDisplay.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InfoDisplay.hpp; sourceTree = "<group>"; };
-		CF66023C23DF2DA600795C7F /* CircleImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CircleImageBuilder.hpp; sourceTree = "<group>"; };
+		CF66023C23DF2DA600795C7F /* CircleImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CircleImageFactory.hpp; sourceTree = "<group>"; };
 		CF66023D23DF2DA600795C7F /* InitialCameraPositionProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InitialCameraPositionProvider.cpp; sourceTree = "<group>"; };
 		CF66023E23DF2DA600795C7F /* MercatorPyramidDEMProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MercatorPyramidDEMProvider.hpp; sourceTree = "<group>"; };
 		CF66023F23DF2DA600795C7F /* LayoutUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LayoutUtils.hpp; sourceTree = "<group>"; };
@@ -1773,7 +1773,7 @@
 		CF66024F23DF2DA600795C7F /* GEO2DMultiPolygonGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEO2DMultiPolygonGeometry.hpp; sourceTree = "<group>"; };
 		CF66025023DF2DA600795C7F /* GPUAttributeValueVec1Float.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeValueVec1Float.cpp; sourceTree = "<group>"; };
 		CF66025123DF2DA600795C7F /* GPUUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUUniform.cpp; sourceTree = "<group>"; };
-		CF66025223DF2DA600795C7F /* StaticImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StaticImageBuilder.hpp; sourceTree = "<group>"; };
+		CF66025223DF2DA600795C7F /* StaticImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StaticImageFactory.hpp; sourceTree = "<group>"; };
 		CF66025323DF2DA600795C7F /* PlanetRenderContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlanetRenderContext.cpp; sourceTree = "<group>"; };
 		CF66025423DF2DA600795C7F /* TileImageListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TileImageListener.hpp; sourceTree = "<group>"; };
 		CF66025523DF2DA600795C7F /* G3MRenderContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MRenderContext.cpp; sourceTree = "<group>"; };
@@ -1811,7 +1811,7 @@
 		CF66027523DF2DA600795C7F /* Vector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vector3D.hpp; sourceTree = "<group>"; };
 		CF66027623DF2DA600795C7F /* ShaderType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderType.cpp; sourceTree = "<group>"; };
 		CF66027723DF2DA600795C7F /* Layer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Layer.cpp; sourceTree = "<group>"; };
-		CF66027823DF2DA600795C7F /* AbstractImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AbstractImageBuilder.hpp; sourceTree = "<group>"; };
+		CF66027823DF2DA600795C7F /* AbstractImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AbstractImageFactory.hpp; sourceTree = "<group>"; };
 		CF66027923DF2DA600795C7F /* GPUAttributeValue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeValue.cpp; sourceTree = "<group>"; };
 		CF66027A23DF2DA600795C7F /* SceneJSShapesParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneJSShapesParser.hpp; sourceTree = "<group>"; };
 		CF66027B23DF2DA600795C7F /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IImageDownloadListener.hpp; sourceTree = "<group>"; };
@@ -1826,7 +1826,7 @@
 		CF66028423DF2DA600795C7F /* GPUAttributeVec4Float.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeVec4Float.hpp; sourceTree = "<group>"; };
 		CF66028523DF2DA600795C7F /* TilesRenderParameters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TilesRenderParameters.hpp; sourceTree = "<group>"; };
 		CF66028623DF2DA600795C7F /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
-		CF66028723DF2DA600795C7F /* ResizerImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResizerImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66028723DF2DA600795C7F /* ResizerImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResizerImageFactory.cpp; sourceTree = "<group>"; };
 		CF66028823DF2DA600795C7F /* JSONBaseObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONBaseObject.hpp; sourceTree = "<group>"; };
 		CF66028923DF2DA600795C7F /* CameraEventGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraEventGesture.cpp; sourceTree = "<group>"; };
 		CF66028A23DF2DA600795C7F /* BusyMeshRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BusyMeshRenderer.hpp; sourceTree = "<group>"; };
@@ -1842,7 +1842,7 @@
 		CF66029423DF2DA600795C7F /* SGRotateNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SGRotateNode.hpp; sourceTree = "<group>"; };
 		CF66029523DF2DA600795C7F /* DecimatedDEMGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecimatedDEMGrid.cpp; sourceTree = "<group>"; };
 		CF66029623DF2DA600795C7F /* TimedCacheTileVisibilityTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TimedCacheTileVisibilityTester.hpp; sourceTree = "<group>"; };
-		CF66029723DF2DA600795C7F /* RowLayoutImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RowLayoutImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66029723DF2DA600795C7F /* RowLayoutImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RowLayoutImageFactory.cpp; sourceTree = "<group>"; };
 		CF66029823DF2DA600795C7F /* ChildRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChildRenderer.cpp; sourceTree = "<group>"; };
 		CF66029923DF2DA600795C7F /* GEO2DLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEO2DLineStringGeometry.cpp; sourceTree = "<group>"; };
 		CF66029A23DF2DA600795C7F /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = URL.cpp; sourceTree = "<group>"; };
@@ -1898,7 +1898,7 @@
 		CF6602CD23DF2DA600795C7F /* GEOPolygonRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOPolygonRasterSymbol.cpp; sourceTree = "<group>"; };
 		CF6602CE23DF2DA600795C7F /* MarkFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MarkFilter.cpp; sourceTree = "<group>"; };
 		CF6602CF23DF2DA700795C7F /* MutableVector2F.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MutableVector2F.cpp; sourceTree = "<group>"; };
-		CF6602D023DF2DA700795C7F /* DownloaderImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DownloaderImageBuilder.cpp; sourceTree = "<group>"; };
+		CF6602D023DF2DA700795C7F /* DownloaderImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DownloaderImageFactory.cpp; sourceTree = "<group>"; };
 		CF6602D123DF2DA700795C7F /* MultiTexturedHUDQuadWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MultiTexturedHUDQuadWidget.hpp; sourceTree = "<group>"; };
 		CF6602D223DF2DA700795C7F /* GLFeatureGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFeatureGroup.cpp; sourceTree = "<group>"; };
 		CF6602D323DF2DA700795C7F /* IG3MBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IG3MBuilder.cpp; sourceTree = "<group>"; };
@@ -1945,7 +1945,7 @@
 		CF6602FE23DF2DA700795C7F /* SingleBILElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SingleBILElevationDataProvider.cpp; sourceTree = "<group>"; };
 		CF6602FF23DF2DA700795C7F /* WMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WMSLayer.cpp; sourceTree = "<group>"; };
 		CF66030023DF2DA700795C7F /* DecimatedSubviewElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecimatedSubviewElevationData.cpp; sourceTree = "<group>"; };
-		CF66030123DF2DA700795C7F /* CanvasImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66030123DF2DA700795C7F /* CanvasImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasImageFactory.cpp; sourceTree = "<group>"; };
 		CF66030323DF2DA700795C7F /* GEO3DGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEO3DGeometry.cpp; sourceTree = "<group>"; };
 		CF66030523DF2DA700795C7F /* TrailsRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TrailsRenderer.hpp; sourceTree = "<group>"; };
 		CF66030623DF2DA700795C7F /* PlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlanetRenderer.cpp; sourceTree = "<group>"; };
@@ -1957,13 +1957,13 @@
 		CF66030C23DF2DA700795C7F /* Rectangle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Rectangle.hpp; sourceTree = "<group>"; };
 		CF66030D23DF2DA700795C7F /* TileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TileTexturizer.hpp; sourceTree = "<group>"; };
 		CF66030E23DF2DA700795C7F /* DEMListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DEMListener.cpp; sourceTree = "<group>"; };
-		CF66030F23DF2DA700795C7F /* DefaultChessCanvasImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DefaultChessCanvasImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66030F23DF2DA700795C7F /* DefaultChessCanvasImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DefaultChessCanvasImageFactory.cpp; sourceTree = "<group>"; };
 		CF66031023DF2DA700795C7F /* GradualSplitsTileLODTester.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GradualSplitsTileLODTester.hpp; sourceTree = "<group>"; };
 		CF66031123DF2DA700795C7F /* GEO2DMultiPolygonGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEO2DMultiPolygonGeometry.cpp; sourceTree = "<group>"; };
 		CF66031223DF2DA700795C7F /* CircleShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CircleShape.cpp; sourceTree = "<group>"; };
 		CF66031323DF2DA700795C7F /* PlanetRenderContext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PlanetRenderContext.hpp; sourceTree = "<group>"; };
 		CF66031423DF2DA700795C7F /* GPUAttributeValueVec1Float.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValueVec1Float.hpp; sourceTree = "<group>"; };
-		CF66031523DF2DA700795C7F /* StaticImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66031523DF2DA700795C7F /* StaticImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageFactory.cpp; sourceTree = "<group>"; };
 		CF66031623DF2DA700795C7F /* GPUUniform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUUniform.hpp; sourceTree = "<group>"; };
 		CF66031723DF2DA700795C7F /* SGLayerNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGLayerNode.cpp; sourceTree = "<group>"; };
 		CF66031823DF2DA700795C7F /* GEO2DLineRasterStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEO2DLineRasterStyle.cpp; sourceTree = "<group>"; };
@@ -2014,7 +2014,7 @@
 		CF66034523DF2DA700795C7F /* Vector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector3D.cpp; sourceTree = "<group>"; };
 		CF66034623DF2DA700795C7F /* SceneJSShapesParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneJSShapesParser.cpp; sourceTree = "<group>"; };
 		CF66034723DF2DA700795C7F /* GPUAttributeValue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValue.hpp; sourceTree = "<group>"; };
-		CF66034823DF2DA700795C7F /* AbstractImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractImageBuilder.cpp; sourceTree = "<group>"; };
+		CF66034823DF2DA700795C7F /* AbstractImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractImageFactory.cpp; sourceTree = "<group>"; };
 		CF66034923DF2DA700795C7F /* NullStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NullStorage.cpp; sourceTree = "<group>"; };
 		CF66034A23DF2DA700795C7F /* GEOStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOStyle.cpp; sourceTree = "<group>"; };
 		CF66034B23DF2DA700795C7F /* RectangleI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RectangleI.hpp; sourceTree = "<group>"; };
@@ -2027,14 +2027,14 @@
 		CF66035223DF2DA800795C7F /* TilesRenderParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TilesRenderParameters.cpp; sourceTree = "<group>"; };
 		CF66035323DF2DA800795C7F /* GPUAttributeVec4Float.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUAttributeVec4Float.cpp; sourceTree = "<group>"; };
 		CF66035423DF2DA800795C7F /* LeveledTexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeveledTexturedMesh.cpp; sourceTree = "<group>"; };
-		CF66035523DF2DA800795C7F /* ResizerImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ResizerImageBuilder.hpp; sourceTree = "<group>"; };
+		CF66035523DF2DA800795C7F /* ResizerImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ResizerImageFactory.hpp; sourceTree = "<group>"; };
 		CF66035623DF2DA800795C7F /* CameraEffects.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CameraEffects.hpp; sourceTree = "<group>"; };
 		CF66035723DF2DA800795C7F /* BusyMeshRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BusyMeshRenderer.cpp; sourceTree = "<group>"; };
-		CF66035823DF2DA800795C7F /* RowLayoutImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RowLayoutImageBuilder.hpp; sourceTree = "<group>"; };
+		CF66035823DF2DA800795C7F /* RowLayoutImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RowLayoutImageFactory.hpp; sourceTree = "<group>"; };
 		CF66035923DF2DA800795C7F /* ChildRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ChildRenderer.hpp; sourceTree = "<group>"; };
 		CF66035A23DF2DA800795C7F /* GEO2DLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEO2DLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CF66035B23DF2DA800795C7F /* URL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = URL.hpp; sourceTree = "<group>"; };
-		CF66035C23DF2DA800795C7F /* IImageBuilderListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IImageBuilderListener.hpp; sourceTree = "<group>"; };
+		CF66035C23DF2DA800795C7F /* IImageFactoryListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IImageFactoryListener.hpp; sourceTree = "<group>"; };
 		CF66035D23DF2DA800795C7F /* SphericalPlanet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalPlanet.cpp; sourceTree = "<group>"; };
 		CF66035E23DF2DA800795C7F /* SGRotateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGRotateNode.cpp; sourceTree = "<group>"; };
 		CF66035F23DF2DA800795C7F /* TimedCacheTileVisibilityTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimedCacheTileVisibilityTester.cpp; sourceTree = "<group>"; };
@@ -2094,7 +2094,7 @@
 		CF66039623DF2DA800795C7F /* CenterStrategy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CenterStrategy.hpp; sourceTree = "<group>"; };
 		CF66039723DF2DA800795C7F /* Vector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2D.cpp; sourceTree = "<group>"; };
 		CF66039823DF2DA800795C7F /* MutableVector2F.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MutableVector2F.hpp; sourceTree = "<group>"; };
-		CF66039923DF2DA800795C7F /* DownloaderImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DownloaderImageBuilder.hpp; sourceTree = "<group>"; };
+		CF66039923DF2DA800795C7F /* DownloaderImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DownloaderImageFactory.hpp; sourceTree = "<group>"; };
 		CF66039A23DF2DA800795C7F /* IG3MBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IG3MBuilder.hpp; sourceTree = "<group>"; };
 		CF66039B23DF2DA800795C7F /* GLFeatureGroup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLFeatureGroup.hpp; sourceTree = "<group>"; };
 		CF66039C23DF2DA800795C7F /* CameraDoubleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraDoubleDragHandler.cpp; sourceTree = "<group>"; };
@@ -2142,9 +2142,9 @@
 		CF6603C823DF2DA900795C7F /* ColumnCanvasElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnCanvasElement.cpp; sourceTree = "<group>"; };
 		CF6603C923DF2DA900795C7F /* DEMListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DEMListener.hpp; sourceTree = "<group>"; };
 		CF6603CA23DF2DA900795C7F /* GradualSplitsTileLODTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GradualSplitsTileLODTester.cpp; sourceTree = "<group>"; };
-		CF6603CB23DF2DA900795C7F /* DefaultChessCanvasImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DefaultChessCanvasImageBuilder.hpp; sourceTree = "<group>"; };
+		CF6603CB23DF2DA900795C7F /* DefaultChessCanvasImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DefaultChessCanvasImageFactory.hpp; sourceTree = "<group>"; };
 		CF6603CC23DF2DA900795C7F /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TileTexturizer.cpp; sourceTree = "<group>"; };
-		CF6603CD23DF2DA900795C7F /* CanvasImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CanvasImageBuilder.hpp; sourceTree = "<group>"; };
+		CF6603CD23DF2DA900795C7F /* CanvasImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CanvasImageFactory.hpp; sourceTree = "<group>"; };
 		CF6603CE23DF2DA900795C7F /* GEO3DGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEO3DGeometry.hpp; sourceTree = "<group>"; };
 		CF6603D023DF2DA900795C7F /* CompositeElevationDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeElevationDataProvider.cpp; sourceTree = "<group>"; };
 		CF6603D123DF2DA900795C7F /* JSONNumber.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONNumber.hpp; sourceTree = "<group>"; };
@@ -2155,7 +2155,7 @@
 		CF6603D723DF2DA900795C7F /* HUDErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDErrorRenderer.hpp; sourceTree = "<group>"; };
 		CF6603D823DF2DA900795C7F /* HUDRelativeSize.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDRelativeSize.hpp; sourceTree = "<group>"; };
 		CF6603D923DF2DA900795C7F /* MutableColor255.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MutableColor255.hpp; sourceTree = "<group>"; };
-		CF6603DA23DF2DA900795C7F /* LayoutImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LayoutImageBuilder.hpp; sourceTree = "<group>"; };
+		CF6603DA23DF2DA900795C7F /* LayoutImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LayoutImageFactory.hpp; sourceTree = "<group>"; };
 		CF6603DB23DF2DA900795C7F /* CameraRotationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraRotationHandler.cpp; sourceTree = "<group>"; };
 		CF6603DC23DF2DA900795C7F /* SGTranslateNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SGTranslateNode.hpp; sourceTree = "<group>"; };
 		CF6603DD23DF2DA900795C7F /* BufferElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferElevationData.cpp; sourceTree = "<group>"; };
@@ -2174,8 +2174,8 @@
 		CF6603EA23DF2DA900795C7F /* IImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IImage.hpp; sourceTree = "<group>"; };
 		CF6603EB23DF2DA900795C7F /* ElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ElevationData.hpp; sourceTree = "<group>"; };
 		CF6603EC23DF2DA900795C7F /* GEORasterSymbolizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEORasterSymbolizer.hpp; sourceTree = "<group>"; };
-		CF6603ED23DF2DA900795C7F /* LabelImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LabelImageBuilder.hpp; sourceTree = "<group>"; };
-		CF6603EE23DF2DA900795C7F /* IImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IImageBuilder.hpp; sourceTree = "<group>"; };
+		CF6603ED23DF2DA900795C7F /* LabelImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LabelImageFactory.hpp; sourceTree = "<group>"; };
+		CF6603EE23DF2DA900795C7F /* IImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IImageFactory.hpp; sourceTree = "<group>"; };
 		CF6603EF23DF2DA900795C7F /* VectorLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VectorLayer.hpp; sourceTree = "<group>"; };
 		CF6603F023DF2DA900795C7F /* SimpleCameraConstrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SimpleCameraConstrainer.hpp; sourceTree = "<group>"; };
 		CF6603F123DF2DA900795C7F /* GAsyncTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GAsyncTask.cpp; sourceTree = "<group>"; };
@@ -2214,7 +2214,7 @@
 		CF66041323DF2DA900795C7F /* BoxShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoxShape.cpp; sourceTree = "<group>"; };
 		CF66041423DF2DAA00795C7F /* GFont.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GFont.hpp; sourceTree = "<group>"; };
 		CF66041523DF2DAA00795C7F /* GEORenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEORenderer.cpp; sourceTree = "<group>"; };
-		CF66041623DF2DAA00795C7F /* ColumnLayoutImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColumnLayoutImageBuilder.hpp; sourceTree = "<group>"; };
+		CF66041623DF2DAA00795C7F /* ColumnLayoutImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColumnLayoutImageFactory.hpp; sourceTree = "<group>"; };
 		CF66041723DF2DAA00795C7F /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGShape.cpp; sourceTree = "<group>"; };
 		CF66041823DF2DAA00795C7F /* HUDRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDRenderer.hpp; sourceTree = "<group>"; };
 		CF66041923DF2DAA00795C7F /* CachedDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CachedDownloader.cpp; sourceTree = "<group>"; };
@@ -2333,7 +2333,7 @@
 		CF66048B23DF2DAB00795C7F /* GPUAttribute.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUAttribute.hpp; sourceTree = "<group>"; };
 		CF66048C23DF2DAB00795C7F /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameTasksExecutor.cpp; sourceTree = "<group>"; };
 		CF66048D23DF2DAB00795C7F /* MapzenDEMProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MapzenDEMProvider.hpp; sourceTree = "<group>"; };
-		CF66048E23DF2DAB00795C7F /* StackLayoutImageBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StackLayoutImageBuilder.hpp; sourceTree = "<group>"; };
+		CF66048E23DF2DAB00795C7F /* StackLayoutImageFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StackLayoutImageFactory.hpp; sourceTree = "<group>"; };
 		CF66048F23DF2DAB00795C7F /* IImageUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IImageUtils.hpp; sourceTree = "<group>"; };
 		CF66049023DF2DAB00795C7F /* FloatBufferBuilderFromGeodetic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloatBufferBuilderFromGeodetic.cpp; sourceTree = "<group>"; };
 		CF66049123DF2DAB00795C7F /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MutableMatrix44D.cpp; sourceTree = "<group>"; };
@@ -2359,7 +2359,7 @@
 		CF6604A523DF2DAB00795C7F /* SectorTileCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SectorTileCondition.hpp; sourceTree = "<group>"; };
 		CF6604A623DF2DAB00795C7F /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		CF6604A723DF2DAB00795C7F /* TextCanvasElement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TextCanvasElement.hpp; sourceTree = "<group>"; };
-		CF6604A823DF2DAB00795C7F /* CircleImageBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CircleImageBuilder.cpp; sourceTree = "<group>"; };
+		CF6604A823DF2DAB00795C7F /* CircleImageFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CircleImageFactory.cpp; sourceTree = "<group>"; };
 		CF6604A923DF2DAB00795C7F /* InitialCameraPositionProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InitialCameraPositionProvider.hpp; sourceTree = "<group>"; };
 		CF6604AA23DF2DAB00795C7F /* MercatorPyramidDEMProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MercatorPyramidDEMProvider.cpp; sourceTree = "<group>"; };
 		CF6604AB23DF2DAB00795C7F /* IShortBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IShortBuffer.hpp; sourceTree = "<group>"; };
@@ -2646,8 +2646,8 @@
 				CF66043323DF2DAA00795C7F /* AbsoluteImageSizer.cpp */,
 				CF66036223DF2DA800795C7F /* AbstractGeometryMesh.hpp */,
 				CF6602A123DF2DA600795C7F /* AbstractGeometryMesh.cpp */,
-				CF66027823DF2DA600795C7F /* AbstractImageBuilder.hpp */,
-				CF66034823DF2DA700795C7F /* AbstractImageBuilder.cpp */,
+				CF66027823DF2DA600795C7F /* AbstractImageFactory.hpp */,
+				CF66034823DF2DA700795C7F /* AbstractImageFactory.cpp */,
 				CF66018423DF2DA500795C7F /* AbstractMesh.hpp */,
 				CF6603FB23DF2DA900795C7F /* AbstractMesh.cpp */,
 				CF6601CE23DF2DA500795C7F /* AbstractMeshShape.hpp */,
@@ -2733,10 +2733,10 @@
 				CF6602C323DF2DA600795C7F /* CameraZoomAndRotateHandler.cpp */,
 				CF6603C623DF2DA900795C7F /* CanvasElement.hpp */,
 				CF66030B23DF2DA700795C7F /* CanvasElement.cpp */,
-				CF6603CD23DF2DA900795C7F /* CanvasImageBuilder.hpp */,
-				CF66030123DF2DA700795C7F /* CanvasImageBuilder.cpp */,
-				CF277C8323E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.hpp */,
-				CF277C8223E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp */,
+				CF6603CD23DF2DA900795C7F /* CanvasImageFactory.hpp */,
+				CF66030123DF2DA700795C7F /* CanvasImageFactory.cpp */,
+				CF277C8323E2BFCA000B969C /* CanvasOwnerImageFactoryWrapper.hpp */,
+				CF277C8223E2BFCA000B969C /* CanvasOwnerImageFactoryWrapper.cpp */,
 				CF277C8723E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.hpp */,
 				CF277C8623E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.cpp */,
 				CF6601F923DF2DA500795C7F /* CanvasTileImageProvider.hpp */,
@@ -2755,16 +2755,16 @@
 				CF66046C23DF2DAB00795C7F /* ChessboardTileImageProvider.cpp */,
 				CF66035923DF2DA800795C7F /* ChildRenderer.hpp */,
 				CF66029823DF2DA600795C7F /* ChildRenderer.cpp */,
-				CF66023C23DF2DA600795C7F /* CircleImageBuilder.hpp */,
-				CF6604A823DF2DAB00795C7F /* CircleImageBuilder.cpp */,
+				CF66023C23DF2DA600795C7F /* CircleImageFactory.hpp */,
+				CF6604A823DF2DAB00795C7F /* CircleImageFactory.cpp */,
 				CF66024E23DF2DA600795C7F /* CircleShape.hpp */,
 				CF66031223DF2DA700795C7F /* CircleShape.cpp */,
 				CF6603C523DF2DA800795C7F /* Color.hpp */,
 				CF6602F723DF2DA700795C7F /* Color.cpp */,
 				CF66030A23DF2DA700795C7F /* ColumnCanvasElement.hpp */,
 				CF6603C823DF2DA900795C7F /* ColumnCanvasElement.cpp */,
-				CF66041623DF2DAA00795C7F /* ColumnLayoutImageBuilder.hpp */,
-				CF6601B723DF2DA500795C7F /* ColumnLayoutImageBuilder.cpp */,
+				CF66041623DF2DAA00795C7F /* ColumnLayoutImageFactory.hpp */,
+				CF6601B723DF2DA500795C7F /* ColumnLayoutImageFactory.cpp */,
 				CF6602B923DF2DA600795C7F /* CompositeElevationData.hpp */,
 				CF66038323DF2DA800795C7F /* CompositeElevationData.cpp */,
 				CF66030723DF2DA700795C7F /* CompositeElevationDataProvider.hpp */,
@@ -2797,8 +2797,8 @@
 				CF6602DC23DF2DA700795C7F /* DecoratorTileLODTester.cpp */,
 				CF66021123DF2DA600795C7F /* DecoratorTileVisibilityTester.hpp */,
 				CF66047C23DF2DAB00795C7F /* DecoratorTileVisibilityTester.cpp */,
-				CF6603CB23DF2DA900795C7F /* DefaultChessCanvasImageBuilder.hpp */,
-				CF66030F23DF2DA700795C7F /* DefaultChessCanvasImageBuilder.cpp */,
+				CF6603CB23DF2DA900795C7F /* DefaultChessCanvasImageFactory.hpp */,
+				CF66030F23DF2DA700795C7F /* DefaultChessCanvasImageFactory.cpp */,
 				CF6601D723DF2DA500795C7F /* DefaultInfoDisplay.hpp */,
 				CF66043723DF2DAA00795C7F /* DefaultInfoDisplay.cpp */,
 				CF66024023DF2DA600795C7F /* DefaultRenderer.hpp */,
@@ -2819,8 +2819,8 @@
 				CF6601A023DF2DA500795C7F /* DeviceAttitudeCameraHandler.cpp */,
 				CF66042F23DF2DAA00795C7F /* DirectMesh.hpp */,
 				CF6601BF23DF2DA500795C7F /* DirectMesh.cpp */,
-				CF66039923DF2DA800795C7F /* DownloaderImageBuilder.hpp */,
-				CF6602D023DF2DA700795C7F /* DownloaderImageBuilder.cpp */,
+				CF66039923DF2DA800795C7F /* DownloaderImageFactory.hpp */,
+				CF6602D023DF2DA700795C7F /* DownloaderImageFactory.cpp */,
 				CF66042A23DF2DAA00795C7F /* DownloadPriority.hpp */,
 				CF6601C423DF2DA500795C7F /* DownloadPriority.cpp */,
 				CF6603AA23DF2DA800795C7F /* DynamicFrustumPolicy.hpp */,
@@ -3086,10 +3086,10 @@
 				CF66029C23DF2DA600795C7F /* IGLTextureID.hpp */,
 				CF6603B023DF2DA800795C7F /* IGLUniformID.hpp */,
 				CF6603EA23DF2DA900795C7F /* IImage.hpp */,
-				CF6603EE23DF2DA900795C7F /* IImageBuilder.hpp */,
-				CF66018F23DF2DA500795C7F /* IImageBuilder.cpp */,
-				CF66035C23DF2DA800795C7F /* IImageBuilderListener.hpp */,
 				CF66027B23DF2DA600795C7F /* IImageDownloadListener.hpp */,
+				CF6603EE23DF2DA900795C7F /* IImageFactory.hpp */,
+				CF66018F23DF2DA500795C7F /* IImageFactory.cpp */,
+				CF66035C23DF2DA800795C7F /* IImageFactoryListener.hpp */,
 				CF6602AF23DF2DA600795C7F /* IImageListener.hpp */,
 				CF66048F23DF2DAB00795C7F /* IImageUtils.hpp */,
 				CF66022F23DF2DA600795C7F /* IImageUtils.cpp */,
@@ -3166,8 +3166,8 @@
 				CF6601EA23DF2DA500795C7F /* JSONString.hpp */,
 				CF66045723DF2DAA00795C7F /* JSONString.cpp */,
 				CF66047F23DF2DAB00795C7F /* JSONVisitor.hpp */,
-				CF6603ED23DF2DA900795C7F /* LabelImageBuilder.hpp */,
-				CF66018823DF2DA500795C7F /* LabelImageBuilder.cpp */,
+				CF6603ED23DF2DA900795C7F /* LabelImageFactory.hpp */,
+				CF66018823DF2DA500795C7F /* LabelImageFactory.cpp */,
 				CF6601D323DF2DA500795C7F /* LabelPosition.h */,
 				CF66034323DF2DA700795C7F /* Layer.hpp */,
 				CF66027723DF2DA600795C7F /* Layer.cpp */,
@@ -3179,8 +3179,8 @@
 				CF6601FA23DF2DA500795C7F /* LayerTilesRenderParameters.hpp */,
 				CF66046423DF2DAA00795C7F /* LayerTilesRenderParameters.cpp */,
 				CF6602C923DF2DA600795C7F /* LayerTouchEventListener.hpp */,
-				CF6603DA23DF2DA900795C7F /* LayoutImageBuilder.hpp */,
-				CF66017123DF2DA500795C7F /* LayoutImageBuilder.cpp */,
+				CF6603DA23DF2DA900795C7F /* LayoutImageFactory.hpp */,
+				CF66017123DF2DA500795C7F /* LayoutImageFactory.cpp */,
 				CF66023F23DF2DA600795C7F /* LayoutUtils.hpp */,
 				CF66049D23DF2DAB00795C7F /* LayoutUtils.cpp */,
 				CF6602F823DF2DA700795C7F /* LeveledMesh.hpp */,
@@ -3314,10 +3314,10 @@
 				CF66048823DF2DAB00795C7F /* Renderer.cpp */,
 				CF66042B23DF2DAA00795C7F /* RenderState.hpp */,
 				CF6601C523DF2DA500795C7F /* RenderState.cpp */,
-				CF66035523DF2DA800795C7F /* ResizerImageBuilder.hpp */,
-				CF66028723DF2DA600795C7F /* ResizerImageBuilder.cpp */,
-				CF66035823DF2DA800795C7F /* RowLayoutImageBuilder.hpp */,
-				CF66029723DF2DA600795C7F /* RowLayoutImageBuilder.cpp */,
+				CF66035523DF2DA800795C7F /* ResizerImageFactory.hpp */,
+				CF66028723DF2DA600795C7F /* ResizerImageFactory.cpp */,
+				CF66035823DF2DA800795C7F /* RowLayoutImageFactory.hpp */,
+				CF66029723DF2DA600795C7F /* RowLayoutImageFactory.cpp */,
 				CF6601F523DF2DA500795C7F /* SceneJSMeshParser.hpp */,
 				CF66046123DF2DAA00795C7F /* SceneJSMeshParser.cpp */,
 				CF6601A323DF2DA500795C7F /* SceneJSNodeParser.hpp */,
@@ -3385,10 +3385,10 @@
 				CF6603E323DF2DA900795C7F /* Sphere.cpp */,
 				CF66029323DF2DA600795C7F /* SphericalPlanet.hpp */,
 				CF66035D23DF2DA800795C7F /* SphericalPlanet.cpp */,
-				CF66048E23DF2DAB00795C7F /* StackLayoutImageBuilder.hpp */,
-				CF66021E23DF2DA600795C7F /* StackLayoutImageBuilder.cpp */,
-				CF66025223DF2DA600795C7F /* StaticImageBuilder.hpp */,
-				CF66031523DF2DA700795C7F /* StaticImageBuilder.cpp */,
+				CF66048E23DF2DAB00795C7F /* StackLayoutImageFactory.hpp */,
+				CF66021E23DF2DA600795C7F /* StackLayoutImageFactory.cpp */,
+				CF66025223DF2DA600795C7F /* StaticImageFactory.hpp */,
+				CF66031523DF2DA700795C7F /* StaticImageFactory.cpp */,
 				CF6601FB23DF2DA500795C7F /* SubsetDEMGrid.hpp */,
 				CF66045C23DF2DAA00795C7F /* SubsetDEMGrid.cpp */,
 				CF66021623DF2DA600795C7F /* SubviewElevationData.hpp */,
@@ -3696,7 +3696,7 @@
 				CF6609A023DF332400795C7F /* G3MWidget_iOS.mm in Sources */,
 				CF6607F423DF330600795C7F /* SGTranslateNode.cpp in Sources */,
 				CF6607F523DF330600795C7F /* MutableColor255.cpp in Sources */,
-				CF6607F623DF330600795C7F /* LayoutImageBuilder.cpp in Sources */,
+				CF6607F623DF330600795C7F /* LayoutImageFactory.cpp in Sources */,
 				CF32C66F25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp in Sources */,
 				CF6607F723DF330600795C7F /* HUDErrorRenderer.cpp in Sources */,
 				CF6607F823DF330600795C7F /* HUDRelativeSize.cpp in Sources */,
@@ -3708,13 +3708,13 @@
 				CF6607FE23DF330600795C7F /* HUDSize.cpp in Sources */,
 				CF6607FF23DF330600795C7F /* ProjectedCornersDistanceTileLODTester.cpp in Sources */,
 				CF66080023DF330600795C7F /* IStringUtils.cpp in Sources */,
-				CF66080123DF330600795C7F /* LabelImageBuilder.cpp in Sources */,
+				CF66080123DF330600795C7F /* LabelImageFactory.cpp in Sources */,
 				CF66080223DF330600795C7F /* ElevationData.cpp in Sources */,
 				CF66080323DF330600795C7F /* GEORasterSymbolizer.cpp in Sources */,
 				CF66080423DF330600795C7F /* MutableQuaternionF.cpp in Sources */,
 				CF66080523DF330600795C7F /* TexturesHandler.cpp in Sources */,
 				CF66080623DF330600795C7F /* TileData.cpp in Sources */,
-				CF66080723DF330600795C7F /* IImageBuilder.cpp in Sources */,
+				CF66080723DF330600795C7F /* IImageFactory.cpp in Sources */,
 				CF66080823DF330600795C7F /* SimpleCameraConstrainer.cpp in Sources */,
 				CF66080923DF330600795C7F /* VectorLayer.cpp in Sources */,
 				CF66080A23DF330600795C7F /* TiledVectorLayer.cpp in Sources */,
@@ -3734,7 +3734,7 @@
 				CF66081923DF330600795C7F /* GFont.cpp in Sources */,
 				CF66081A23DF330600795C7F /* HUDPosition.cpp in Sources */,
 				CF66081B23DF330600795C7F /* GEOJSONParser.cpp in Sources */,
-				CF66081C23DF330600795C7F /* ColumnLayoutImageBuilder.cpp in Sources */,
+				CF66081C23DF330600795C7F /* ColumnLayoutImageFactory.cpp in Sources */,
 				CF66081D23DF330600795C7F /* HUDRenderer.cpp in Sources */,
 				CF66081E23DF330600795C7F /* GEORasterSymbol.cpp in Sources */,
 				CF66081F23DF330600795C7F /* SurfaceElevationProvider.cpp in Sources */,
@@ -3779,7 +3779,7 @@
 				CF66084323DF330600795C7F /* FrustumPolicyHandler.cpp in Sources */,
 				CF66084423DF330600795C7F /* GPUAttribute.cpp in Sources */,
 				CF66084523DF330600795C7F /* MapzenDEMProvider.cpp in Sources */,
-				CF66084623DF330600795C7F /* StackLayoutImageBuilder.cpp in Sources */,
+				CF66084623DF330600795C7F /* StackLayoutImageFactory.cpp in Sources */,
 				CF66084723DF330600795C7F /* ICanvas.cpp in Sources */,
 				CF66084823DF330600795C7F /* Box.cpp in Sources */,
 				CF66084923DF330600795C7F /* IDeviceInfo.cpp in Sources */,
@@ -3820,7 +3820,7 @@
 				CF66086B23DF330600795C7F /* TiledVectorLayerTileImageProvider.cpp in Sources */,
 				CF66086C23DF330600795C7F /* Vector2I.cpp in Sources */,
 				CF66086D23DF330600795C7F /* CameraGoToPositionEffect.cpp in Sources */,
-				CF66086E23DF330600795C7F /* ResizerImageBuilder.cpp in Sources */,
+				CF66086E23DF330600795C7F /* ResizerImageFactory.cpp in Sources */,
 				CF66086F23DF330600795C7F /* CameraEventGesture.cpp in Sources */,
 				CF66087023DF330600795C7F /* CameraEffects.cpp in Sources */,
 				CF66087123DF330600795C7F /* RectangleI.cpp in Sources */,
@@ -3831,7 +3831,7 @@
 				CF66087523DF330600795C7F /* Projection.cpp in Sources */,
 				CF66087623DF330600795C7F /* DecimatedDEMGrid.cpp in Sources */,
 				CF2744FF25B1AF450056304B /* XPCRenderer.cpp in Sources */,
-				CF66087723DF330600795C7F /* RowLayoutImageBuilder.cpp in Sources */,
+				CF66087723DF330600795C7F /* RowLayoutImageFactory.cpp in Sources */,
 				CF66087823DF330600795C7F /* ChildRenderer.cpp in Sources */,
 				CF66087923DF330600795C7F /* GEO2DLineStringGeometry.cpp in Sources */,
 				CF66087A23DF330600795C7F /* URL.cpp in Sources */,
@@ -3864,7 +3864,7 @@
 				CF66089223DF330600795C7F /* GEOPolygonRasterSymbol.cpp in Sources */,
 				CF66089323DF330600795C7F /* MarkFilter.cpp in Sources */,
 				CF66089423DF330600795C7F /* MutableVector2F.cpp in Sources */,
-				CF66089523DF330600795C7F /* DownloaderImageBuilder.cpp in Sources */,
+				CF66089523DF330600795C7F /* DownloaderImageFactory.cpp in Sources */,
 				CF66089623DF330600795C7F /* GLFeatureGroup.cpp in Sources */,
 				CF66089723DF330600795C7F /* IG3MBuilder.cpp in Sources */,
 				D877330C25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp in Sources */,
@@ -3892,7 +3892,7 @@
 				CF6608AD23DF330600795C7F /* SingleBILElevationDataProvider.cpp in Sources */,
 				CF6608AE23DF330600795C7F /* WMSLayer.cpp in Sources */,
 				CF6608AF23DF330600795C7F /* DecimatedSubviewElevationData.cpp in Sources */,
-				CF6608B023DF330600795C7F /* CanvasImageBuilder.cpp in Sources */,
+				CF6608B023DF330600795C7F /* CanvasImageFactory.cpp in Sources */,
 				CF6608B223DF330600795C7F /* GEO3DGeometry.cpp in Sources */,
 				D8FF64A025E0897700B6C9D4 /* Arrow.cpp in Sources */,
 				CF709CF225FCE254004F3191 /* XPCPointCloudUpdateListener.cpp in Sources */,
@@ -3900,11 +3900,11 @@
 				CF6608B523DF330600795C7F /* JSONNumber.cpp in Sources */,
 				CF6608B623DF330600795C7F /* CanvasElement.cpp in Sources */,
 				CF6608B723DF330600795C7F /* DEMListener.cpp in Sources */,
-				CF6608B823DF330600795C7F /* DefaultChessCanvasImageBuilder.cpp in Sources */,
+				CF6608B823DF330600795C7F /* DefaultChessCanvasImageFactory.cpp in Sources */,
 				CF27452925B2047B0056304B /* XPCNode.cpp in Sources */,
 				CF6608B923DF330600795C7F /* GEO2DMultiPolygonGeometry.cpp in Sources */,
 				CF6608BA23DF330600795C7F /* CircleShape.cpp in Sources */,
-				CF6608BB23DF330600795C7F /* StaticImageBuilder.cpp in Sources */,
+				CF6608BB23DF330600795C7F /* StaticImageFactory.cpp in Sources */,
 				CF6608BC23DF330600795C7F /* SGLayerNode.cpp in Sources */,
 				CF6608BD23DF330600795C7F /* GEO2DLineRasterStyle.cpp in Sources */,
 				CF6608BE23DF330600795C7F /* PlanetTileTessellator.cpp in Sources */,
@@ -3937,7 +3937,7 @@
 				CF6608D723DF330600795C7F /* SGTextureNode.cpp in Sources */,
 				CF6608D823DF330600795C7F /* Vector3D.cpp in Sources */,
 				CF6608D923DF330600795C7F /* SceneJSShapesParser.cpp in Sources */,
-				CF6608DA23DF330600795C7F /* AbstractImageBuilder.cpp in Sources */,
+				CF6608DA23DF330600795C7F /* AbstractImageFactory.cpp in Sources */,
 				CF6608DB23DF330600795C7F /* NullStorage.cpp in Sources */,
 				CF6608DC23DF330600795C7F /* GEOStyle.cpp in Sources */,
 				CF63F646306C1F4600966F36 /* CameraPose.cpp in Sources */,
@@ -4027,7 +4027,7 @@
 				CF66092B23DF330700795C7F /* QuadTree.cpp in Sources */,
 				CF66092C23DF330700795C7F /* SceneJSNodeParser.cpp in Sources */,
 				CF27451525B1D0700056304B /* XPCPointColorizer.cpp in Sources */,
-				CF277C8423E2BFCA000B969C /* CanvasOwnerImageBuilderWrapper.cpp in Sources */,
+				CF277C8423E2BFCA000B969C /* CanvasOwnerImageFactoryWrapper.cpp in Sources */,
 				CF66092D23DF330700795C7F /* IndexedGeometryMesh.cpp in Sources */,
 				CF66092E23DF330700795C7F /* SimpleTextureMapping.cpp in Sources */,
 				CF66092F23DF330700795C7F /* FrustumPolicy.cpp in Sources */,
@@ -4115,7 +4115,7 @@
 				CF66097D23DF330700795C7F /* LayoutUtils.cpp in Sources */,
 				CF66097E23DF330700795C7F /* Vector4D.cpp in Sources */,
 				CF66097F23DF330700795C7F /* ViewMode.cpp in Sources */,
-				CF66098023DF330700795C7F /* CircleImageBuilder.cpp in Sources */,
+				CF66098023DF330700795C7F /* CircleImageFactory.cpp in Sources */,
 				D8FF649125DEEA1100B6C9D4 /* Cylinder.cpp in Sources */,
 				CF66098123DF330700795C7F /* MercatorPyramidDEMProvider.cpp in Sources */,
 				CF66098223DF330700795C7F /* InfoDisplay.cpp in Sources */,

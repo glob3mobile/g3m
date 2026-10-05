@@ -24,29 +24,29 @@
 #include "TextureIDReference.hpp"
 #include "ErrorHandling.hpp"
 #include "Effects.hpp"
-#include "IImageBuilder.hpp"
+#include "IImageFactory.hpp"
 #include "G3MRenderContext.hpp"
 #include "Planet.hpp"
 #include "MarksRenderer.hpp"
-#include "IImageBuilderListener.hpp"
+#include "IImageFactoryListener.hpp"
 
 
-class MarkImageBuilderListener : public IImageBuilderListener {
+class MarkImageFactoryListener : public IImageFactoryListener {
 private:
-  IImageBuilder* _imageBuilder;
+  IImageFactory* _imageFactory;
   Mark* _mark;
 
 public:
-  MarkImageBuilderListener(IImageBuilder* imageBuilder,
+  MarkImageFactoryListener(IImageFactory* imageFactory,
                            Mark* mark) :
-  _imageBuilder(imageBuilder),
+  _imageFactory(imageFactory),
   _mark(mark)
   {
 
   }
 
-  ~MarkImageBuilderListener() {
-    delete _imageBuilder;
+  ~MarkImageFactoryListener() {
+    delete _imageFactory;
   }
 
   void forgetMark() {
@@ -301,8 +301,8 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-_imageBuilder(NULL),
-_imageBuilderListener(NULL),
+_imageFactory(NULL),
+_imageFactoryListener(NULL),
 _label(label),
 _iconURL(iconURL),
 _position(new Geodetic3D(position)),
@@ -363,8 +363,8 @@ Mark::Mark(const std::string& label,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-_imageBuilder(NULL),
-_imageBuilderListener(NULL),
+_imageFactory(NULL),
+_imageFactoryListener(NULL),
 _label(label),
 _labelBottom(true),
 _iconURL("", false),
@@ -422,8 +422,8 @@ Mark::Mark(const URL&         iconURL,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-_imageBuilder(NULL),
-_imageBuilderListener(NULL),
+_imageFactory(NULL),
+_imageFactoryListener(NULL),
 _label(""),
 _labelBottom(true),
 _iconURL(iconURL),
@@ -482,8 +482,8 @@ Mark::Mark(const IImage*      image,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-_imageBuilder(NULL),
-_imageBuilderListener(NULL),
+_imageFactory(NULL),
+_imageFactoryListener(NULL),
 _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
@@ -532,7 +532,7 @@ _token("")
 
 }
 
-Mark::Mark(IImageBuilder*     imageBuilder,
+Mark::Mark(IImageFactory*     imageFactory,
            const Geodetic3D&  position,
            AltitudeMode       altitudeMode,
            double             minDistanceToCamera,
@@ -540,8 +540,8 @@ Mark::Mark(IImageBuilder*     imageBuilder,
            bool               autoDeleteUserData,
            MarkTouchListener* listener,
            bool               autoDeleteListener) :
-_imageBuilder(imageBuilder),
-_imageBuilderListener(NULL),
+_imageFactory(imageFactory),
+_imageFactoryListener(NULL),
 _label(""),
 _labelBottom(true),
 _iconURL(URL("", false)),
@@ -587,8 +587,8 @@ _deleteMarkOnDisappears(false),
 _zoomOutDisappearsStarted(false),
 _token("")
 {
-  if (_imageBuilder->isMutable()) {
-    ILogger::instance()->logError("Marks doesn't support mutable image builders");
+  if (_imageFactory->isMutable()) {
+    ILogger::instance()->logError("Marks doesn't support mutable image factories");
   }
 }
 
@@ -606,12 +606,12 @@ void Mark::initialize(const G3MContext* context,
   }
 
   if (!_textureSolved) {
-    if (_imageBuilder != NULL) {
-      _imageBuilderListener = new MarkImageBuilderListener(_imageBuilder, this);
-      _imageBuilder->build(context,
-                           _imageBuilderListener,
+    if (_imageFactory != NULL) {
+      _imageFactoryListener = new MarkImageFactoryListener(_imageFactory, this);
+      _imageFactory->create(context,
+                           _imageFactoryListener,
                            true);
-      _imageBuilder = NULL; // ownership moved to MarkImageBuilderListener
+      _imageFactory = NULL; // ownership moved to MarkImageFactoryListener
     }
     else {
       const bool hasIconURL = ( _iconURL._path.length() != 0 );
@@ -689,10 +689,10 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
-  if (_imageBuilderListener) {
-    _imageBuilderListener->forgetMark();
+  if (_imageFactoryListener) {
+    _imageFactoryListener->forgetMark();
   }
-  delete _imageBuilder;
+  delete _imageFactory;
 
   //  if (_effectsScheduler != NULL) {
   //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
@@ -1095,9 +1095,9 @@ void Mark::onImageCreationError(const std::string& error) {
   //  delete _labelShadowColor;
   //  _labelShadowColor = NULL;
 
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
-  _imageBuilderListener = NULL;
+  //  delete _imageFactory;
+  //  _imageFactory = NULL;
+  _imageFactoryListener = NULL;
 
   ILogger::instance()->logError("Can't create image for Mark: \"%s\"",
                                 error.c_str());
@@ -1113,9 +1113,9 @@ void Mark::onImageCreated(const IImage* image,
   //  delete _labelShadowColor;
   //  _labelShadowColor = NULL;
 
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
-  _imageBuilderListener = NULL;
+  //  delete _imageFactory;
+  //  _imageFactory = NULL;
+  _imageFactoryListener = NULL;
 
   _textureImage = image;
 

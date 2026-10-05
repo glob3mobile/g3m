@@ -24,8 +24,8 @@
 #include "ICanvas.hpp"
 #include "RectangleF.hpp"
 #include "IImageListener.hpp"
-#include "IImageBuilder.hpp"
-#include "IImageBuilderListener.hpp"
+#include "IImageFactory.hpp"
+#include "IImageFactoryListener.hpp"
 #include "PlanetRenderContext.hpp"
 #include "TilesRenderParameters.hpp"
 #include "G3MRenderContext.hpp"
@@ -578,9 +578,9 @@ public:
   }
 };
 
-DefaultTileTexturizer::DefaultTileTexturizer(IImageBuilder* defaultBackgroundImageBuilder,
+DefaultTileTexturizer::DefaultTileTexturizer(IImageFactory* defaultBackgroundImageFactory,
                                              const bool verboseErrors) :
-_defaultBackgroundImageBuilder(defaultBackgroundImageBuilder),
+_defaultBackgroundImageFactory(defaultBackgroundImageFactory),
 _defaultBackgroundImageLoaded(false),
 _verboseErrors(verboseErrors)
 {
@@ -609,7 +609,7 @@ RenderState DefaultTileTexturizer::getRenderState(LayerSet* layerSet) {
   return RenderState::ready();
 }
 
-class DTT_IImageBuilderListener: public IImageBuilderListener {
+class DTT_IImageFactoryListener: public IImageFactoryListener {
 
 private:
 
@@ -617,12 +617,12 @@ private:
 
 public:
 
-  DTT_IImageBuilderListener(DefaultTileTexturizer* defaultTileTexturizer) :
+  DTT_IImageFactoryListener(DefaultTileTexturizer* defaultTileTexturizer) :
   _defaultTileTexturizer(defaultTileTexturizer)
   {
   }
 
-  ~DTT_IImageBuilderListener() {
+  ~DTT_IImageFactoryListener() {
   }
 
   void imageCreated(const IImage* image,
@@ -646,7 +646,7 @@ void DefaultTileTexturizer::initialize(const G3MContext* context,
                                        const TilesRenderParameters* parameters) {
   ILogger::instance()->logInfo("Initializing texturizer...");
 
-  _defaultBackgroundImageBuilder->build(context, new DTT_IImageBuilderListener(this), true);
+  _defaultBackgroundImageFactory->create(context, new DTT_IImageFactoryListener(this), true);
 
   // do nothing
 }

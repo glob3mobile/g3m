@@ -19,8 +19,8 @@
 #include "HUDPosition.hpp"
 #include "HUDSize.hpp"
 #include "RenderState.hpp"
-#include "IImageBuilder.hpp"
-#include "IImageBuilderListener.hpp"
+#include "IImageFactory.hpp"
+#include "IImageFactoryListener.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "MultiTextureMapping.hpp"
 #include "TextureIDReference.hpp"
@@ -31,20 +31,20 @@
 #include "GLConstants.hpp"
 
 
-class HUDQuadWidget_ImageBuilderListener : public IImageBuilderListener {
+class HUDQuadWidget_ImageFactoryListener : public IImageFactoryListener {
 private:
   HUDQuadWidget* _quadWidget;
   const int      _imageRole;
 
 public:
-  HUDQuadWidget_ImageBuilderListener(HUDQuadWidget* quadWidget,
+  HUDQuadWidget_ImageFactoryListener(HUDQuadWidget* quadWidget,
                                      int            imageRole) :
   _quadWidget(quadWidget),
   _imageRole(imageRole)
   {
   }
 
-  ~HUDQuadWidget_ImageBuilderListener() {
+  ~HUDQuadWidget_ImageFactoryListener() {
   }
 
   void imageCreated(const IImage* image,
@@ -59,8 +59,8 @@ public:
 
 
 HUDQuadWidget::~HUDQuadWidget() {
-  delete _imageBuilder;
-  delete _backgroundImageBuilder;
+  delete _imageFactory;
+  delete _backgroundImageFactory;
 
   delete _image;
   delete _backgroundImage;
@@ -79,7 +79,7 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
     return NULL;
   }
 
-  const bool hasBackground = (_backgroundImageBuilder != NULL);
+  const bool hasBackground = (_backgroundImageFactory != NULL);
 
   if (hasBackground && (_backgroundImage == NULL)) {
     return NULL;
@@ -220,22 +220,22 @@ void HUDQuadWidget::initialize(const G3MContext* context) {
 
   if (!_buildingImage && (_image == NULL)) {
     _buildingImage = true;
-    _imageBuilder->build(context,
-                         new HUDQuadWidget_ImageBuilderListener(this, 0),
+    _imageFactory->create(context,
+                         new HUDQuadWidget_ImageFactoryListener(this, 0),
                          true);
-    if (_imageBuilder->isMutable()) {
-      _imageBuilder->setChangeListener( this );
+    if (_imageFactory->isMutable()) {
+      _imageFactory->setChangeListener( this );
     }
   }
 
-  if (_backgroundImageBuilder != NULL) {
+  if (_backgroundImageFactory != NULL) {
     if (!_buildingBackgroundImage && (_backgroundImage == NULL)) {
       _buildingBackgroundImage = true;
-      _backgroundImageBuilder->build(context,
-                                     new HUDQuadWidget_ImageBuilderListener(this, 1),
+      _backgroundImageFactory->create(context,
+                                     new HUDQuadWidget_ImageFactoryListener(this, 1),
                                      true);
-      if (_backgroundImageBuilder->isMutable()) {
-        _backgroundImageBuilder->setChangeListener( this );
+      if (_backgroundImageFactory->isMutable()) {
+        _backgroundImageFactory->setChangeListener( this );
       }
     }
   }
@@ -258,18 +258,18 @@ void HUDQuadWidget::changed() {
   _imageHeight = 0;
 
   _buildingImage = true;
-  _imageBuilder->build(_context,
-                       new HUDQuadWidget_ImageBuilderListener(this, 0),
+  _imageFactory->create(_context,
+                       new HUDQuadWidget_ImageFactoryListener(this, 0),
                        true);
 
   delete _backgroundImage;
   _backgroundImage = NULL;
   _backgroundImageName = "";
 
-  if (_backgroundImageBuilder != NULL) {
+  if (_backgroundImageFactory != NULL) {
     _buildingBackgroundImage = true;
-    _backgroundImageBuilder->build(_context,
-                                   new HUDQuadWidget_ImageBuilderListener(this, 1),
+    _backgroundImageFactory->create(_context,
+                                   new HUDQuadWidget_ImageFactoryListener(this, 1),
                                    true);
   }
 }

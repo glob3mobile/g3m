@@ -19,9 +19,9 @@
 #include <G3M/JSONObject.hpp>
 #include <G3M/JSONString.hpp>
 #include <G3M/JSONNumber.hpp>
-#include <G3M/StackLayoutImageBuilder.hpp>
-#include <G3M/CircleImageBuilder.hpp>
-#include <G3M/LabelImageBuilder.hpp>
+#include <G3M/StackLayoutImageFactory.hpp>
+#include <G3M/CircleImageFactory.hpp>
+#include <G3M/LabelImageFactory.hpp>
 #include <G3M/MarksRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -85,7 +85,7 @@ public:
 
     int pointSize = 12;
 
-    Mark* mark = new Mark(new CircleImageBuilder(featureColor, pointSize),
+    Mark* mark = new Mark(new CircleImageFactory(featureColor, pointSize),
                           position,
                           ABSOLUTE,
                           0 // minDistanceToCamera
@@ -122,9 +122,9 @@ public:
     const double area = (15000.0 * clusterPercent);
     const int radius = 12 + mu->round((float) mu->sqrt(area / PI));
 
-    Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::WHITE,
+    Mark* mark = new Mark(new StackLayoutImageFactory(new CircleImageFactory(Color::WHITE,
                                                                              radius),
-                                                      new LabelImageBuilder(label,
+                                                      new LabelImageFactory(label,
                                                                             GFont::sansSerif(labelFontSize, true),
                                                                             Color::BLACK,       // color
                                                                             Color::WHITE,       // shadowColor

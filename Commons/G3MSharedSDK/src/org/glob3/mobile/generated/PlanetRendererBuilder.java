@@ -28,7 +28,7 @@ package org.glob3.mobile.generated;
 //class DEMProvider;
 //class Sector;
 //class ChangedRendererInfoListener;
-//class IImageBuilder;
+//class IImageFactory;
 //class PlanetRenderer;
 
 
@@ -81,7 +81,7 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-      _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageBuilder(), getVerboseTileTexturizerErrors());
+      _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageFactory(), getVerboseTileTexturizerErrors());
     }
     return _texturizer;
   }
@@ -251,14 +251,14 @@ public class PlanetRendererBuilder
     return _touchEventTypeOfTerrainTouchListener;
   }
 
-  private IImageBuilder _defaultTileBackgroundImage;
+  private IImageFactory _defaultTileBackgroundImage;
 
-  private IImageBuilder getDefaultTileBackgroundImageBuilder()
+  private IImageFactory getDefaultTileBackgroundImageFactory()
   {
     if (_defaultTileBackgroundImage == null)
     {
-      // _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color::BLACK, Color::WHITE, 4);
-      _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color.WHITE, Color.TRANSPARENT, 4);
+      // _defaultTileBackgroundImage = new DefaultChessCanvasImageFactory(256, 256, Color::BLACK, Color::WHITE, 4);
+      _defaultTileBackgroundImage = new DefaultChessCanvasImageFactory(256, 256, Color.WHITE, Color.TRANSPARENT, 4);
     }
     return _defaultTileBackgroundImage;
   }
@@ -520,7 +520,7 @@ public class PlanetRendererBuilder
     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
   }
 
-  public final void setDefaultTileBackgroundImage(IImageBuilder defaultTileBackgroundImage)
+  public final void setDefaultTileBackgroundImage(IImageFactory defaultTileBackgroundImage)
   {
     _defaultTileBackgroundImage = defaultTileBackgroundImage;
   }

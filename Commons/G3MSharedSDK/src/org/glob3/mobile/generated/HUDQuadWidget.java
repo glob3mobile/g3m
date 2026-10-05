@@ -23,13 +23,13 @@ package org.glob3.mobile.generated;
 //class IImage;
 //class Mesh;
 //class TransformableTextureMapping;
-//class IImageBuilder;
+//class IImageFactory;
 
 
 public class HUDQuadWidget extends HUDWidget implements ChangedListener
 {
-  private IImageBuilder _imageBuilder;
-  private IImageBuilder _backgroundImageBuilder;
+  private IImageFactory _imageFactory;
+  private IImageFactory _backgroundImageFactory;
 
   private final HUDPosition _xPosition;
   private final HUDPosition _yPosition;
@@ -67,7 +67,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
       return null;
     }
   
-    final boolean hasBackground = (_backgroundImageBuilder != null);
+    final boolean hasBackground = (_backgroundImageFactory != null);
   
     if (hasBackground && (_backgroundImage == null))
     {
@@ -168,18 +168,18 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     }
   }
 
-  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
+  public HUDQuadWidget(IImageFactory imageFactory, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
   {
-     this(imageBuilder, xPosition, yPosition, widthSize, heightSize, null);
+     this(imageFactory, xPosition, yPosition, widthSize, heightSize, null);
   }
-  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize, IImageBuilder backgroundImageBuilder)
+  public HUDQuadWidget(IImageFactory imageFactory, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize, IImageFactory backgroundImageFactory)
   {
-     _imageBuilder = imageBuilder;
+     _imageFactory = imageFactory;
      _xPosition = xPosition;
      _yPosition = yPosition;
      _widthSize = widthSize;
      _heightSize = heightSize;
-     _backgroundImageBuilder = backgroundImageBuilder;
+     _backgroundImageFactory = backgroundImageFactory;
      _mesh = null;
      _textureMapping = null;
      _image = null;
@@ -239,10 +239,10 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
 
   public void dispose()
   {
-    if (_imageBuilder != null)
-       _imageBuilder.dispose();
-    if (_backgroundImageBuilder != null)
-       _backgroundImageBuilder.dispose();
+    if (_imageFactory != null)
+       _imageFactory.dispose();
+    if (_backgroundImageFactory != null)
+       _backgroundImageFactory.dispose();
   
     _image = null;
     _backgroundImage = null;
@@ -268,22 +268,22 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     if (!_buildingImage && (_image == null))
     {
       _buildingImage = true;
-      _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this, 0), true);
-      if (_imageBuilder.isMutable())
+      _imageFactory.create(context, new HUDQuadWidget_ImageFactoryListener(this, 0), true);
+      if (_imageFactory.isMutable())
       {
-        _imageBuilder.setChangeListener(this);
+        _imageFactory.setChangeListener(this);
       }
     }
   
-    if (_backgroundImageBuilder != null)
+    if (_backgroundImageFactory != null)
     {
       if (!_buildingBackgroundImage && (_backgroundImage == null))
       {
         _buildingBackgroundImage = true;
-        _backgroundImageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this, 1), true);
-        if (_backgroundImageBuilder.isMutable())
+        _backgroundImageFactory.create(context, new HUDQuadWidget_ImageFactoryListener(this, 1), true);
+        if (_backgroundImageFactory.isMutable())
         {
-          _backgroundImageBuilder.setChangeListener(this);
+          _backgroundImageFactory.setChangeListener(this);
         }
       }
     }
@@ -346,16 +346,16 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     _imageHeight = 0;
   
     _buildingImage = true;
-    _imageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this, 0), true);
+    _imageFactory.create(_context, new HUDQuadWidget_ImageFactoryListener(this, 0), true);
   
     _backgroundImage = null;
     _backgroundImage = null;
     _backgroundImageName = "";
   
-    if (_backgroundImageBuilder != null)
+    if (_backgroundImageFactory != null)
     {
       _buildingBackgroundImage = true;
-      _backgroundImageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this, 1), true);
+      _backgroundImageFactory.create(_context, new HUDQuadWidget_ImageFactoryListener(this, 1), true);
     }
   }
 

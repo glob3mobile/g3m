@@ -20,14 +20,14 @@ class HUDSize;
 class IImage;
 class Mesh;
 class TransformableTextureMapping;
-class IImageBuilder;
+class IImageFactory;
 
 #include "ChangedListener.hpp"
 
 class HUDQuadWidget : public HUDWidget, public ChangedListener {
 private:
-  IImageBuilder* _imageBuilder;
-  IImageBuilder* _backgroundImageBuilder;
+  IImageFactory* _imageFactory;
+  IImageFactory* _backgroundImageFactory;
 
   const HUDPosition* _xPosition;
   const HUDPosition* _yPosition;
@@ -81,18 +81,18 @@ protected:
                  GLState* glState);
 
 public:
-  HUDQuadWidget(IImageBuilder* imageBuilder,
+  HUDQuadWidget(IImageFactory* imageFactory,
                 HUDPosition* xPosition,
                 HUDPosition* yPosition,
                 HUDSize* widthSize,
                 HUDSize* heightSize,
-                IImageBuilder* backgroundImageBuilder = NULL) :
-  _imageBuilder(imageBuilder),
+                IImageFactory* backgroundImageFactory = NULL) :
+  _imageFactory(imageFactory),
   _xPosition(xPosition),
   _yPosition(yPosition),
   _widthSize(widthSize),
   _heightSize(heightSize),
-  _backgroundImageBuilder(backgroundImageBuilder),
+  _backgroundImageFactory(backgroundImageFactory),
   _mesh(NULL),
   _textureMapping(NULL),
   _image(NULL),

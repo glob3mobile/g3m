@@ -54,8 +54,8 @@ public class MainActivity
    //      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
    //
    //      return new NonOverlappingMark( //
-   //               new DownloaderImageBuilder(markBitmapURL), //
-   //               new DownloaderImageBuilder(anchorBitmapURL), //
+   //               new DownloaderImageFactory(markBitmapURL), //
+   //               new DownloaderImageFactory(anchorBitmapURL), //
    //               position);
    //   }
 
@@ -65,14 +65,14 @@ public class MainActivity
    //      final URL markBitmapURL = new URL("file:///g3m-marker.png");
    //      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
    //
-   //      final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
-   //               new DownloaderImageBuilder(markBitmapURL), //
-   //               new LabelImageBuilder(label, GFont.monospaced()) //
+   //      final ColumnLayoutImageFactory imageFactoryWidget = new ColumnLayoutImageFactory( //
+   //               new DownloaderImageFactory(markBitmapURL), //
+   //               new LabelImageFactory(label, GFont.monospaced()) //
    //      );
    //
    //      return new NonOverlappingMark( //
-   //               imageBuilderWidget, //
-   //               new DownloaderImageBuilder(anchorBitmapURL), //
+   //               imageFactoryWidget, //
+   //               new DownloaderImageFactory(anchorBitmapURL), //
    //               position);
    //   }
 

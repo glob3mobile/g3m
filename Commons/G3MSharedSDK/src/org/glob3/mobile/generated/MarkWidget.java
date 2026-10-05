@@ -5,7 +5,7 @@ public class MarkWidget
   private Geometry2DGLFeature _geo2Dfeature;
   private ViewportExtentGLFeature _viewportExtentGLFeature;
   private IImage _image;
-  private IImageBuilder _imageBuilder;
+  private IImageFactory _imageFactory;
   private TexturesHandler _texHandler;
 
   private IFloatBuffer _vertices;
@@ -18,7 +18,7 @@ public class MarkWidget
   private float _x;
   private float _y;
 
-  private static class WidgetImageListener implements IImageBuilderListener
+  private static class WidgetImageListener implements IImageFactoryListener
   {
     private MarkWidget _widget;
     public WidgetImageListener(MarkWidget widget)
@@ -86,10 +86,10 @@ public class MarkWidget
     _textureMapping.modifyGLState(_glState);
   }
 
-  public MarkWidget(IImageBuilder imageBuilder)
+  public MarkWidget(IImageFactory imageFactory)
   {
      _image = null;
-     _imageBuilder = imageBuilder;
+     _imageFactory = imageFactory;
      _viewportExtentGLFeature = null;
      _geo2Dfeature = null;
      _glState = null;
@@ -104,8 +104,8 @@ public class MarkWidget
   public void dispose()
   {
     _image = null;
-    if (_imageBuilder != null)
-       _imageBuilder.dispose();
+    if (_imageFactory != null)
+       _imageFactory.dispose();
   
     if (_vertices != null)
        _vertices.dispose();
@@ -126,7 +126,7 @@ public class MarkWidget
       _viewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
   
       _texHandler = rc.getTexturesHandler();
-      _imageBuilder.build(rc, new WidgetImageListener(this), true);
+      _imageFactory.create(rc, new WidgetImageListener(this), true);
   
       _glState.addGLFeature(_viewportExtentGLFeature, false);
     }
