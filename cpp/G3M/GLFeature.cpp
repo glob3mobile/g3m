@@ -9,6 +9,7 @@
 #include "GLFeature.hpp"
 
 #include "Camera.hpp"
+#include "Color.hpp"
 #include "Vector2F.hpp"
 #include "ILogger.hpp"
 #include "GPUAttributeValueVec2Float.hpp"
@@ -76,20 +77,45 @@ GLFeature(NO_GROUP, GLF_RIBBON_SIDE)
                              false);
 }
 
-CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam):
-GLFeature(NO_GROUP, GLF_CAMERA_POSITION) {
+CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam,
+                                                 bool groundHazePass,
+                                                 const Color& spaceColor):
+GLFeature(NO_GROUP, GLF_CAMERA_POSITION),
+_groundHazePass(groundHazePass) {
   const Vector3D p = cam->getCartesianPosition();
   _camPos = new GPUUniformValueVec3FloatMutable((float) p._x,
                                                 (float) p._y,
                                                 (float) p._z);
   _values->addUniformValue(CAMERA_POSITION, _camPos, false);
+  _values->addUniformValue(GROUND_HAZE_PASS,
+                           new GPUUniformValueFloat(groundHazePass ? 1.0f : 0.0f),
+                           false);
+  _spaceColor = new GPUUniformValueVec3FloatMutable(spaceColor._red,
+                                                    spaceColor._green,
+                                                    spaceColor._blue);
+  _values->addUniformValue(SPACE_COLOR, _spaceColor, false);
 }
 
-void CameraPositionGLFeature::update(const Camera* cam) {
+void CameraPositionGLFeature::update(const Camera* cam,
+                                     const Color& spaceColor) {
   const Vector3D p = cam->getCartesianPosition();
   _camPos->changeValue((float) p._x,
                        (float) p._y,
                        (float) p._z);
+  _spaceColor->changeValue(spaceColor._red,
+                           spaceColor._green,
+                           spaceColor._blue);
+}
+
+StarsIntensityGLFeature::StarsIntensityGLFeature(float intensity) :
+GLFeature(NO_GROUP, GLF_STARS_INTENSITY)
+{
+  _intensity = new GPUUniformValueFloatMutable(intensity);
+  _values->addUniformValue(STARS_INTENSITY, _intensity, false);
+}
+
+void StarsIntensityGLFeature::changeIntensity(float intensity) {
+  _intensity->changeValue(intensity);
 }
 
 BillboardGLFeature::BillboardGLFeature(float billboardWidth,

@@ -17,6 +17,7 @@
 
 
 class Camera;
+class Color;
 
 
 enum GLFeatureID {
@@ -37,7 +38,8 @@ enum GLFeatureID {
   GLF_BLENDING_MODE,
   GLF_CAMERA_POSITION,
   GLF_RIBBON_WIDTH,
-  GLF_RIBBON_SIDE
+  GLF_RIBBON_SIDE,
+  GLF_STARS_INTENSITY
 };
 
 
@@ -174,19 +176,45 @@ private:
 #endif
   }
 
+  const bool _groundHazePass;
   GPUUniformValueVec3FloatMutable* _camPos;
+  GPUUniformValueVec3FloatMutable* _spaceColor;
 
 public:
-  CameraPositionGLFeature(const Camera* cam);
+  CameraPositionGLFeature(const Camera* cam,
+                          bool groundHazePass,
+                          const Color& spaceColor);
 
+  // The sky adds its light and dims what is behind it (the background, the stars) by its transmittance;
+  // the haze is a fog colour faded in by its opacity
   void applyOnGlobalGLState(GLGlobalState* state)  const {
-    //Used for atmospheric blending
     state->enableBlend();
-    state->setBlendFactors(GLBlendFactor::srcAlpha(),
+    state->setBlendFactors(_groundHazePass ? GLBlendFactor::srcAlpha() : GLBlendFactor::one(),
                            GLBlendFactor::oneMinusSrcAlpha());
   }
 
-  void update(const Camera* cam);
+  void update(const Camera* cam,
+              const Color& spaceColor);
+};
+
+
+// Multiplies the brightness of every star of the Stars program
+class StarsIntensityGLFeature: public GLFeature {
+private:
+  ~StarsIntensityGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  GPUUniformValueFloatMutable* _intensity;
+
+public:
+  StarsIntensityGLFeature(float intensity);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+
+  void changeIntensity(float intensity);
 };
 
 

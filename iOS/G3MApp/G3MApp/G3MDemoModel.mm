@@ -24,6 +24,7 @@
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/MeasureRenderer.hpp>
+#include <G3M/AtmosphereRenderer.hpp>
 #include <G3M/LayerBuilder.hpp>
 #include <G3M/Sector.hpp>
 
@@ -38,6 +39,8 @@
 #include "G3M3DModelDemoScene.hpp"
 #include "G3MCameraDemoScene.hpp"
 #include "G3MCameraTransitionsDemoScene.hpp"
+#include "G3MAtmosphereDemoScene.hpp"
+#include "G3MNightSkyDemoScene.hpp"
 #include "G3MIsosurfaceDemoScene.hpp"
 #include "G3MScenarioDEMDemoScene.hpp"
 #include "G3MTiledVectorDemoScene.hpp"
@@ -69,7 +72,9 @@ G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
                            VectorStreamingRenderer*     vectorStreamingRenderer,
                            CompositeRenderer*           compositeRenderer,
-                           MeasureRenderer*             measureRenderer) :
+                           MeasureRenderer*             measureRenderer,
+                           AtmosphereRenderer*          skyRenderer,
+                           AtmosphereRenderer*          groundHazeRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
@@ -84,6 +89,8 @@ _nonOverlappingMarksRenderer(nonOverlappingMarksRenderer),
 _vectorStreamingRenderer(vectorStreamingRenderer),
 _compositeRenderer(compositeRenderer),
 _measureRenderer(measureRenderer),
+_skyRenderer(skyRenderer),
+_groundHazeRenderer(groundHazeRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
@@ -100,6 +107,8 @@ _context(NULL)
   _scenes.push_back(  new G3M3DModelDemoScene(this)             );
   _scenes.push_back(  new G3MCameraDemoScene(this)              );
   _scenes.push_back(  new G3MCameraTransitionsDemoScene(this)   );
+  _scenes.push_back(  new G3MAtmosphereDemoScene(this)          );
+  _scenes.push_back(  new G3MNightSkyDemoScene(this)            );
   _scenes.push_back(  new G3MIsosurfaceDemoScene(this)          );
   _scenes.push_back(  new G3MTiledVectorDemoScene(this)         );
   _scenes.push_back(  new G3MHUDDemoScene(this)                 );
@@ -131,6 +140,15 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
   _g3mWidget = g3mWidget;
 }
 
+void G3MDemoModel::setAtmosphereEnable(bool enable) {
+  if (_skyRenderer != NULL) {
+    _skyRenderer->setEnable(enable);
+  }
+  if (_groundHazeRenderer != NULL) {
+    _groundHazeRenderer->setEnable(enable);
+  }
+}
+
 void G3MDemoModel::reset() {
   getG3MWidget()->setViewMode(MONO);
   getG3MWidget()->cancelAllEffects();
@@ -160,6 +178,7 @@ void G3MDemoModel::reset() {
   getVectorStreamingRenderer()->removeAllVectorSets();
   getCompositeRenderer()->removeAllRenderers();
   getMeasureRenderer()->removeAllMeasures();
+  setAtmosphereEnable(true);
 
   _layerSet->removeAllLayers(true);
 }

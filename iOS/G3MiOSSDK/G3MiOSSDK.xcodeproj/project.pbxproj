@@ -926,6 +926,10 @@
 		CFFE6601306D2677004728AD /* CameraPointOfViewEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFE65FE306D264A004728AD /* CameraPointOfViewEffect.hpp */; };
 		CFFE6604306D456E004728AD /* CameraFlightArc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE6603306D456E004728AD /* CameraFlightArc.cpp */; };
 		CFFE6605306D4589004728AD /* CameraFlightArc.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFE6602306D456E004728AD /* CameraFlightArc.hpp */; };
+		CFFED2E53076635A003B788A /* StarsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFED2E43076635A003B788A /* StarsRenderer.cpp */; };
+		CFFED2E63076637B003B788A /* StarsRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFED2E33076635A003B788A /* StarsRenderer.hpp */; };
+		CFFED2E9307664A4003B788A /* YaleBrightStars.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFED2E8307664A4003B788A /* YaleBrightStars.cpp */; };
+		CFFED2EA307664BB003B788A /* YaleBrightStars.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFED2E7307664A4003B788A /* YaleBrightStars.hpp */; };
 		D84251F01C29717B00273D3A /* DeviceAttitude_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA31BFB337200E6557E /* DeviceAttitude_iOS.hpp */; };
 		D84251F11C29717B00273D3A /* DeviceLocation_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8378FA51BFB337200E6557E /* DeviceLocation_iOS.hpp */; };
 		D877330C25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */; };
@@ -971,6 +975,8 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CFFED2EA307664BB003B788A /* YaleBrightStars.hpp in CopyFiles */,
+				CFFED2E63076637B003B788A /* StarsRenderer.hpp in CopyFiles */,
 				CF8938233073B5B30021D9AF /* LabelStyle.hpp in CopyFiles */,
 				CF89381E3073B5350021D9AF /* FittedLabelImageFactory.hpp in CopyFiles */,
 				CF563498306E706200B56019 /* DebugTilesLayer.hpp in CopyFiles */,
@@ -2423,6 +2429,12 @@
 		CFFE6603306D456E004728AD /* CameraFlightArc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraFlightArc.cpp; sourceTree = "<group>"; };
 		CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader_iOS.hpp; path = Specific/Derived/Downloader_iOS.hpp; sourceTree = "<group>"; };
 		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
+		CFFED2E33076635A003B788A /* StarsRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StarsRenderer.hpp; sourceTree = "<group>"; };
+		CFFED2E43076635A003B788A /* StarsRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StarsRenderer.cpp; sourceTree = "<group>"; };
+		CFFED2E7307664A4003B788A /* YaleBrightStars.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = YaleBrightStars.hpp; sourceTree = "<group>"; };
+		CFFED2E8307664A4003B788A /* YaleBrightStars.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = YaleBrightStars.cpp; sourceTree = "<group>"; };
+		CFFED2EB30766F7D003B788A /* Stars.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Stars.fsh; sourceTree = "<group>"; };
+		CFFED2EC30766F7D003B788A /* Stars.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Stars.vsh; sourceTree = "<group>"; };
 		D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.fsh; sourceTree = "<group>"; };
 		D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh.vsh; sourceTree = "<group>"; };
 		D807875E1846141400A6DB28 /* FlatColorMesh_DirectionLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh_DirectionLight.fsh; sourceTree = "<group>"; };
@@ -3401,6 +3413,8 @@
 				CF66035D23DF2DA800795C7F /* SphericalPlanet.cpp */,
 				CF66048E23DF2DAB00795C7F /* StackLayoutImageFactory.hpp */,
 				CF66021E23DF2DA600795C7F /* StackLayoutImageFactory.cpp */,
+				CFFED2E33076635A003B788A /* StarsRenderer.hpp */,
+				CFFED2E43076635A003B788A /* StarsRenderer.cpp */,
 				CF66025223DF2DA600795C7F /* StaticImageFactory.hpp */,
 				CF66031523DF2DA700795C7F /* StaticImageFactory.cpp */,
 				CF6601FB23DF2DA500795C7F /* SubsetDEMGrid.hpp */,
@@ -3500,6 +3514,8 @@
 				CF66040023DF2DA900795C7F /* WrapperNearFrustumRenderer.hpp */,
 				CF66019C23DF2DA500795C7F /* WrapperNearFrustumRenderer.cpp */,
 				CF05D55825B82B8900220105 /* XCP */,
+				CFFED2E7307664A4003B788A /* YaleBrightStars.hpp */,
+				CFFED2E8307664A4003B788A /* YaleBrightStars.cpp */,
 			);
 			name = G3M;
 			path = ../../cpp/G3M;
@@ -3599,6 +3615,8 @@
 				E70B56E216D3CCCD00C5FFFB /* Shader.vsh */,
 				D8B50F821DABCBDA00FA96FA /* SphericalAtmosphere.fsh */,
 				D8B50F831DABCBDA00FA96FA /* SphericalAtmosphere.vsh */,
+				CFFED2EB30766F7D003B788A /* Stars.fsh */,
+				CFFED2EC30766F7D003B788A /* Stars.vsh */,
 				D8CA641C1A75282200B9EABC /* Textured2DMesh.fsh */,
 				D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */,
 				D84625D51777291F00FC4862 /* TexturedMesh.fsh */,
@@ -3742,6 +3760,7 @@
 				CF66081323DF330600795C7F /* DeviceAttitudeCameraHandler.cpp in Sources */,
 				CF66081423DF330600795C7F /* BoundingArea.cpp in Sources */,
 				CF66081523DF330600795C7F /* RampColorizer.cpp in Sources */,
+				CFFED2E9307664A4003B788A /* YaleBrightStars.cpp in Sources */,
 				CF66081623DF330600795C7F /* JSONLong.cpp in Sources */,
 				CF66081723DF330600795C7F /* NearFrustumRenderer.cpp in Sources */,
 				CF66081823DF330600795C7F /* ShapeFullPositionEffect.cpp in Sources */,
@@ -3827,6 +3846,7 @@
 				CFF35E9425F9371C003F5265 /* MeasureRenderer.cpp in Sources */,
 				CF66086323DF330600795C7F /* ByteBufferIterator.cpp in Sources */,
 				CF66086423DF330600795C7F /* OrderedRenderable.cpp in Sources */,
+				CFFED2E53076635A003B788A /* StarsRenderer.cpp in Sources */,
 				CF66086523DF330600795C7F /* MutableVector3D.cpp in Sources */,
 				CF66086623DF330600795C7F /* GEO2DCoordinatesArrayData.cpp in Sources */,
 				CF66086723DF330600795C7F /* FrameTask.cpp in Sources */,

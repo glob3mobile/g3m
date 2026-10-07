@@ -95,13 +95,13 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
-  planetRenderer->setVerticalExaggeration(16);
-
-  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
-                                                                                     Sector::fullSphere(),
-                                                                                     Vector2I(2048, 1024));
-  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
+//  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
+//  planetRenderer->setVerticalExaggeration(16);
+//
+//  ElevationDataProvider* elevationDataProvider = new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+//                                                                                     Sector::fullSphere(),
+//                                                                                     Vector2I(2048, 1024));
+//  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
 
   Layer* rasterLayer = model->createRasterLayer();
@@ -109,8 +109,6 @@ void G3M3DSymbologyDemoScene::rawActivate(const G3MContext* context) {
 
   GEOVectorLayer* vectorLayer = new GEOVectorLayer();
   model->getLayerSet()->addLayer(vectorLayer);
-
-  g3mWidget->setBackgroundColor( Color::fromRGBA(0.19f, 0.23f, 0.22f, 1.0f) );
 
   GEORenderer* geoRenderer = model->getGEORenderer();
   geoRenderer->setGEOVectorLayer(vectorLayer, false);

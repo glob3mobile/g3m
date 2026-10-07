@@ -13,36 +13,37 @@
 
 #include "DefaultRenderer.hpp"
 
-#include "Color.hpp"
-
-class Mesh;
+class DirectMesh;
 class IFloatBuffer;
 class CameraPositionGLFeature;
 class Camera;
+class Color;
 
 class AtmosphereRenderer : public DefaultRenderer {
 private:
-  const Color  _blueSky;
-  const Color  _darkSpace;
-  const double _minHeight;
-
+  const bool               _groundHazePass;
   GLState*                 _glState;
-  Mesh*                    _directMesh;
+  DirectMesh*              _directMesh;
   IFloatBuffer*            _vertices;
   CameraPositionGLFeature* _camPosGLF;
-  Color*                   _previousBackgroundColor;
-  bool                     _overPrecisionThreshold;
 
-  void updateGLState(const Camera* camera);
+  void updateGLState(const Camera* camera,
+                     const Color& spaceColor);
+
+  void updateVerticesOfZNearPlaneRelativeToCamera(const Camera* camera);
+
+  AtmosphereRenderer(bool groundHazePass);
 
 public:
-  AtmosphereRenderer();
+  // the sky and the space, drawn before the PlanetRenderer
+  static AtmosphereRenderer* createSky();
+
+  // the air in front of the ground, drawn after the PlanetRenderer
+  static AtmosphereRenderer* createGroundHaze();
 
   ~AtmosphereRenderer();
 
   void start(const G3MRenderContext* rc);
-
-  void stop(const G3MRenderContext* rc);
 
   void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {

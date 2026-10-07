@@ -94,6 +94,8 @@
 		CFFCD2C91AD2C748004C7112 /* BuenosAires-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CFFCD2C81AD2C748004C7112 /* BuenosAires-Wikipedia.json */; };
 		CFFE65F5306CF45B004728AD /* G3MSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFE65F4306CF45B004728AD /* G3MSceneDelegate.m */; };
 		CFFE65FC306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE65FB306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp */; };
+		CFFE6602306D3A10004728AD /* G3MAtmosphereDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE6601306D3A10004728AD /* G3MAtmosphereDemoScene.cpp */; };
+		CFFED2EF30766FAD003B788A /* G3MNightSkyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFED2EE30766FAD003B788A /* G3MNightSkyDemoScene.cpp */; };
 		D82CA3F01C64D837008FAAD2 /* G3MStereoDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */; };
 		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
@@ -270,6 +272,10 @@
 		CFFE65F4306CF45B004728AD /* G3MSceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = G3MSceneDelegate.m; sourceTree = "<group>"; };
 		CFFE65FA306D2190004728AD /* G3MCameraTransitionsDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MCameraTransitionsDemoScene.hpp; sourceTree = "<group>"; };
 		CFFE65FB306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCameraTransitionsDemoScene.cpp; sourceTree = "<group>"; };
+		CFFE6600306D3A10004728AD /* G3MAtmosphereDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MAtmosphereDemoScene.hpp; sourceTree = "<group>"; };
+		CFFE6601306D3A10004728AD /* G3MAtmosphereDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MAtmosphereDemoScene.cpp; sourceTree = "<group>"; };
+		CFFED2ED30766FAD003B788A /* G3MNightSkyDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MNightSkyDemoScene.hpp; sourceTree = "<group>"; };
+		CFFED2EE30766FAD003B788A /* G3MNightSkyDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MNightSkyDemoScene.cpp; sourceTree = "<group>"; };
 		D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MStereoDemoScene.mm; sourceTree = "<group>"; };
 		D82CA3EF1C64D837008FAAD2 /* G3MStereoDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStereoDemoScene.hpp; sourceTree = "<group>"; };
 		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -362,6 +368,8 @@
 				CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */,
 				D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */,
 				D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */,
+				CFFE6600306D3A10004728AD /* G3MAtmosphereDemoScene.hpp */,
+				CFFE6601306D3A10004728AD /* G3MAtmosphereDemoScene.cpp */,
 				CFB136CA1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.hpp */,
 				CFB136C91AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm */,
 				CFE3B3DB183AD38D0078C796 /* G3MCameraDemoScene.hpp */,
@@ -390,6 +398,8 @@
 				CFE3B3ED183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp */,
 				CFE3B3C6183A99070078C796 /* G3MMarksDemoScene.hpp */,
 				CFE3B3C5183A99070078C796 /* G3MMarksDemoScene.cpp */,
+				CFFED2ED30766FAD003B788A /* G3MNightSkyDemoScene.hpp */,
+				CFFED2EE30766FAD003B788A /* G3MNightSkyDemoScene.cpp */,
 				CFF9D2051A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.hpp */,
 				CFF9D2041A7C4903005429A6 /* G3MNonOverlappingMarksDemoScene.mm */,
 				CFBD815119A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.hpp */,
@@ -776,6 +786,7 @@
 				CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */,
 				CFBF9E852B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp in Sources */,
 				CFFE65FC306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp in Sources */,
+				CFFE6602306D3A10004728AD /* G3MAtmosphereDemoScene.cpp in Sources */,
 				CFE3B3C7183A99070078C796 /* G3MMarksDemoScene.cpp in Sources */,
 				CFE3B3D5183AD04A0078C796 /* G3M3DModelDemoScene.cpp in Sources */,
 				CFE3B3D0183AC7D20078C796 /* G3MStaticPointCloudDemoScene.cpp in Sources */,
@@ -799,6 +810,7 @@
 				CFE3B3EF183C05F70078C796 /* G3MIsosurfaceDemoScene.cpp in Sources */,
 				CFFE65F5306CF45B004728AD /* G3MSceneDelegate.m in Sources */,
 				CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */,
+				CFFED2EF30766FAD003B788A /* G3MNightSkyDemoScene.cpp in Sources */,
 				D82CA3F01C64D837008FAAD2 /* G3MStereoDemoScene.mm in Sources */,
 				CFC664CA1BC476B10062BAF5 /* G3MVectorStreaming2DemoScene.cpp in Sources */,
 				CFECA7771B6AAA2F00A0A44E /* G3MVectorStreaming1DemoScene.cpp in Sources */,

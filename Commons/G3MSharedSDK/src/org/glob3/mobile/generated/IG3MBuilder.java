@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//class StarsRenderer;
+//class AtmosphereRenderer;
 //class GL;
 //class IStorage;
 //class IDownloader;
@@ -73,7 +75,9 @@ public abstract class IG3MBuilder
   private SceneLighting _sceneLighting;
   private Sector _shownSector;
   private InfoDisplay _infoDisplay;
-  private boolean _atmosphere;
+  private AtmosphereRenderer _skyRenderer;
+  private AtmosphereRenderer _groundHazeRenderer;
+  private StarsRenderer _starsRenderer;
   private FrustumPolicy _frustumPolicy;
   private boolean _verboseCameraHandlers;
 
@@ -402,24 +406,37 @@ public abstract class IG3MBuilder
      * If not, the main renderer will be made up of an only renderer (planetRenderer).
      */
     Renderer mainRenderer = null;
-    if ((getRenderers().size() > 0) || _atmosphere)
+    if ((getRenderers().size() > 0) || (_skyRenderer != null) || (_starsRenderer != null))
     {
       CompositeRenderer composite = new CompositeRenderer();
   
-      if (_atmosphere)
-      {
-        // has be here, before the PlanetRenderer
-        composite.addRenderer(new AtmosphereRenderer());
-      }
-  
+      java.util.ArrayList<Renderer> renderers = new java.util.ArrayList<Renderer>();
       if (!containsPlanetRenderer(getRenderers()))
       {
-        composite.addRenderer(getPlanetRendererBuilder().create());
+        renderers.add(getPlanetRendererBuilder().create());
       }
-  
       for (int i = 0; i < getRenderers().size(); i++)
       {
-        composite.addRenderer(getRenderers().get(i));
+        renderers.add(getRenderers().get(i));
+      }
+  
+      for (int i = 0; i < renderers.size(); i++)
+      {
+        Renderer renderer = renderers.get(i);
+        if (renderer.isPlanetRenderer() && (_starsRenderer != null))
+        {
+          composite.addRenderer(_starsRenderer);
+        }
+        final boolean surroundWithAtmosphere = (_skyRenderer != null) && renderer.isPlanetRenderer();
+        if (surroundWithAtmosphere)
+        {
+          composite.addRenderer(_skyRenderer);
+        }
+        composite.addRenderer(renderer);
+        if (surroundWithAtmosphere)
+        {
+          composite.addRenderer(_groundHazeRenderer);
+        }
       }
   
       mainRenderer = composite;
@@ -455,6 +472,9 @@ public abstract class IG3MBuilder
     _busyRenderer = null;
     _errorRenderer = null;
     _hudRenderer = null;
+    _starsRenderer = null;
+    _skyRenderer = null;
+    _groundHazeRenderer = null;
     _nearFrustumRenderer = null;
     _initializationTask = null;
     _periodicalTasks = null;
@@ -501,7 +521,9 @@ public abstract class IG3MBuilder
      _sceneLighting = null;
      _shownSector = null;
      _infoDisplay = null;
-     _atmosphere = false;
+     _skyRenderer = null;
+     _groundHazeRenderer = null;
+     _starsRenderer = null;
      _frustumPolicy = null;
      _verboseCameraHandlers = false;
   }
@@ -546,6 +568,12 @@ public abstract class IG3MBuilder
        _errorRenderer.dispose();
     if (_hudRenderer != null)
        _hudRenderer.dispose();
+    if (_starsRenderer != null)
+       _starsRenderer.dispose();
+    if (_skyRenderer != null)
+       _skyRenderer.dispose();
+    if (_groundHazeRenderer != null)
+       _groundHazeRenderer.dispose();
     if (_nearFrustumRenderer != null)
        _nearFrustumRenderer.dispose();
     if (_backgroundColor != null)
@@ -622,8 +650,49 @@ public abstract class IG3MBuilder
 
   public final void setAtmosphere(boolean atmosphere)
   {
-    _atmosphere = atmosphere;
-    setBackgroundColor(_atmosphere ? Color.newFromRGBA(0, 0, 0, 1) : null);
+    if (_skyRenderer != null)
+       _skyRenderer.dispose();
+    if (_groundHazeRenderer != null)
+       _groundHazeRenderer.dispose();
+    if (atmosphere)
+    {
+      _skyRenderer = AtmosphereRenderer.createSky();
+      _groundHazeRenderer = AtmosphereRenderer.createGroundHaze();
+    }
+    else
+    {
+      _skyRenderer = null;
+      _groundHazeRenderer = null;
+    }
+    setBackgroundColor(atmosphere ? Color.newFromRGBA(0, 0, 0, 1) : null);
+  }
+
+  // NULL without atmosphere; drawn before the planet
+  public final AtmosphereRenderer getSkyRenderer()
+  {
+    return _skyRenderer;
+  }
+
+  // NULL without atmosphere; drawn after the planet
+  public final AtmosphereRenderer getGroundHazeRenderer()
+  {
+    return _groundHazeRenderer;
+  }
+
+  // drawn behind everything, before the sky
+  public final void setStarsRenderer(StarsRenderer starsRenderer)
+  {
+    if (_starsRenderer != null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: starsRenderer already initialized");
+      return;
+    }
+    if (starsRenderer == null)
+    {
+      ILogger.instance().logError("LOGIC ERROR: starsRenderer cannot be NULL");
+      return;
+    }
+    _starsRenderer = starsRenderer;
   }
 
   public final void setVerboseCameraHandlers(boolean verboseCameraHandlers)

@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class Camera;
+//class Color;
 
 
 public enum GLFeatureID
@@ -40,7 +41,8 @@ public enum GLFeatureID
   GLF_BLENDING_MODE,
   GLF_CAMERA_POSITION,
   GLF_RIBBON_WIDTH,
-  GLF_RIBBON_SIDE;
+  GLF_RIBBON_SIDE,
+  GLF_STARS_INTENSITY;
 
    public int getValue()
    {

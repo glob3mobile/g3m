@@ -48,8 +48,6 @@ void G3MTranslateScaleGizmoDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  g3mWidget->setBackgroundColor(Color::fromRGBA(0.9f, 0.21f, 0.21f, 1.0f));
-
   Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 

@@ -30,6 +30,7 @@ class NonOverlappingMarksRenderer;
 class VectorStreamingRenderer;
 class CompositeRenderer;
 class MeasureRenderer;
+class AtmosphereRenderer;
 
 
 class G3MDemoModel {
@@ -50,6 +51,8 @@ private:
   VectorStreamingRenderer*     _vectorStreamingRenderer;
   CompositeRenderer*           _compositeRenderer;
   MeasureRenderer*             _measureRenderer;
+  AtmosphereRenderer*          _skyRenderer;
+  AtmosphereRenderer*          _groundHazeRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -70,7 +73,9 @@ public:
                NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
                VectorStreamingRenderer*     vectorStreamingRenderer,
                CompositeRenderer*           compositeRenderer,
-               MeasureRenderer*             measureRenderer);
+               MeasureRenderer*             measureRenderer,
+               AtmosphereRenderer*          skyRenderer,
+               AtmosphereRenderer*          groundHazeRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -130,6 +135,9 @@ public:
   MeasureRenderer* getMeasureRenderer() const {
     return _measureRenderer;
   }
+
+  // the sky and the ground haze go on and off together; reset() turns them on
+  void setAtmosphereEnable(bool enable);
 
   PlanetRenderer* getPlanetRenderer() const;
 

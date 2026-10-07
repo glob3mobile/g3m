@@ -39,6 +39,7 @@
 #include "PlanetRenderer.hpp"
 #include "InitialCameraPositionProvider.hpp"
 #include "AtmosphereRenderer.hpp"
+#include "StarsRenderer.hpp"
 #include "DynamicFrustumPolicy.hpp"
 #include "CameraRenderer.hpp"
 #include "NearFrustumRenderer.hpp"
@@ -70,7 +71,9 @@ _userData(NULL),
 _sceneLighting(NULL),
 _shownSector(NULL),
 _infoDisplay(NULL),
-_atmosphere(false),
+_skyRenderer(NULL),
+_groundHazeRenderer(NULL),
+_starsRenderer(NULL),
 _frustumPolicy(NULL),
 _verboseCameraHandlers(false)
 {
@@ -99,6 +102,9 @@ IG3MBuilder::~IG3MBuilder() {
   delete _busyRenderer;
   delete _errorRenderer;
   delete _hudRenderer;
+  delete _starsRenderer;
+  delete _skyRenderer;
+  delete _groundHazeRenderer;
   delete _nearFrustumRenderer;
   delete _backgroundColor;
   delete _initializationTask;
@@ -692,8 +698,37 @@ void IG3MBuilder::setUserData(WidgetUserData *userData) {
 }
 
 void IG3MBuilder::setAtmosphere(const bool atmosphere) {
-  _atmosphere = atmosphere;
-  setBackgroundColor( _atmosphere ? Color::newFromRGBA(0, 0, 0, 1) : NULL );
+  delete _skyRenderer;
+  delete _groundHazeRenderer;
+  if (atmosphere) {
+    _skyRenderer        = AtmosphereRenderer::createSky();
+    _groundHazeRenderer = AtmosphereRenderer::createGroundHaze();
+  }
+  else {
+    _skyRenderer        = NULL;
+    _groundHazeRenderer = NULL;
+  }
+  setBackgroundColor( atmosphere ? Color::newFromRGBA(0, 0, 0, 1) : NULL );
+}
+
+AtmosphereRenderer* IG3MBuilder::getSkyRenderer() const {
+  return _skyRenderer;
+}
+
+AtmosphereRenderer* IG3MBuilder::getGroundHazeRenderer() const {
+  return _groundHazeRenderer;
+}
+
+void IG3MBuilder::setStarsRenderer(StarsRenderer* starsRenderer) {
+  if (_starsRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: starsRenderer already initialized");
+    return;
+  }
+  if (!starsRenderer) {
+    ILogger::instance()->logError("LOGIC ERROR: starsRenderer cannot be NULL");
+    return;
+  }
+  _starsRenderer = starsRenderer;
 }
 
 FrustumPolicy* IG3MBuilder::getFrustumPolicy() {
@@ -739,20 +774,30 @@ G3MWidget* IG3MBuilder::create() {
    * If not, the main renderer will be made up of an only renderer (planetRenderer).
    */
   Renderer* mainRenderer = NULL;
-  if ((getRenderers()->size() > 0) || _atmosphere) {
+  if ((getRenderers()->size() > 0) || (_skyRenderer != NULL) || (_starsRenderer != NULL)) {
     CompositeRenderer* composite = new CompositeRenderer();
 
-    if (_atmosphere) {
-      // has be here, before the PlanetRenderer
-      composite->addRenderer(new AtmosphereRenderer());
-    }
-
+    std::vector<Renderer*> renderers;
     if (!containsPlanetRenderer(*getRenderers())) {
-      composite->addRenderer(getPlanetRendererBuilder()->create());
+      renderers.push_back(getPlanetRendererBuilder()->create());
+    }
+    for (unsigned int i = 0; i < getRenderers()->size(); i++) {
+      renderers.push_back(getRenderers()->at(i));
     }
 
-    for (unsigned int i = 0; i < getRenderers()->size(); i++) {
-      composite->addRenderer(getRenderers()->at(i));
+    for (unsigned int i = 0; i < renderers.size(); i++) {
+      Renderer* renderer = renderers[i];
+      if (renderer->isPlanetRenderer() && (_starsRenderer != NULL)) {
+        composite->addRenderer(_starsRenderer);
+      }
+      const bool surroundWithAtmosphere = (_skyRenderer != NULL) && renderer->isPlanetRenderer();
+      if (surroundWithAtmosphere) {
+        composite->addRenderer(_skyRenderer);
+      }
+      composite->addRenderer(renderer);
+      if (surroundWithAtmosphere) {
+        composite->addRenderer(_groundHazeRenderer);
+      }
     }
 
     mainRenderer = composite;
@@ -812,6 +857,9 @@ G3MWidget* IG3MBuilder::create() {
   _busyRenderer = NULL;
   _errorRenderer = NULL;
   _hudRenderer = NULL;
+  _starsRenderer = NULL;
+  _skyRenderer = NULL;
+  _groundHazeRenderer = NULL;
   _nearFrustumRenderer = NULL;
   _initializationTask = NULL;
   delete _periodicalTasks;

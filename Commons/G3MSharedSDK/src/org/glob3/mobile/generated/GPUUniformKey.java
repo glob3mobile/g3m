@@ -41,7 +41,10 @@ public enum GPUUniformKey
   TRANSLATION_2D(21),
   BILLBOARD_ANCHOR(22),
   CAMERA_POSITION(23),
-  RIBBON_WIDTH(24);
+  RIBBON_WIDTH(24),
+  GROUND_HAZE_PASS(25),
+  SPACE_COLOR(26),
+  STARS_INTENSITY(27);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

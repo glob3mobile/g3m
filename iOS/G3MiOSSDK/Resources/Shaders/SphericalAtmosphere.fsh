@@ -5,127 +5,185 @@ precision mediump float;
 #endif
 
 uniform vec3 uCameraPosition;
+// 1.0 draws the haze in front of the ground (after the planet), 0.0 the sky and the space (before it)
+uniform float uGroundHazePass;
+// the background colour, painted where the sky is under the planet edge
+uniform vec3 uSpaceColor;
 varying vec3 rayDirection;
 
 //ATM parameters
 const float earthRadius = 6.36744e6;
+// WGS84, as EllipsoidalPlanet::createEarth()
+const vec3 earthRadii = vec3(6378137.0, 6378137.0, 6356752.314245);
 
-const float atmosphereScale = 15.0;
-const float stratoHeight = 50e3 * atmosphereScale;
+// Air density falls as exp(-height / scaleHeight); the real scale height is 8 km
+const float realScaleHeight = 8.0;
+// The sky uses air twice as high as the real one, so the halo seen from space is wide;
+// the haze over the ground uses the real air, so it does not thicken too fast towards the horizon
+const float atmosphereScale = 2.0;
+const float skyScaleHeight = realScaleHeight * atmosphereScale;
+// the density there is exp(-12): the air above adds nothing visible
+const float stratoHeight = 12.0 * skyScaleHeight * 1000.0;
+// the sky is drawn under the planet edge too, so no background shows where the tiles fall short of the ellipsoid
 const float atmUndergroundOffset = 100e3;
 
-//Height at which the effect is replaced by a blue background
-const float minHeight = 35000.0;
+// Rayleigh scattering coefficients at sea level for red, green and blue (680, 550, 440 nm), in 1e-6 / m, that is 1e-3 / km
+const vec3 rayleighScattering = vec3(5.802, 13.558, 33.1) * 1e-3;
+// Fitted so the zenith seen from the ground is the one of Google Earth, (59, 89, 138); the sky only
+const float skyRayleighScatteringScale = 1.78;
 
-//Multicolor gradient
-const vec4 whiteSky = vec4(1.0, 1.0, 1.0, 1.0);
-//const vec4 blueSky = vec4(32.0 / 255.0, 173.0 / 255.0, 249.0 / 255.0, 1.0);
-//const vec4 darkSpace = vec4(0.0, 0.0, 0.0, 0.0);
-const vec4 blueSky = vec4(135.0 / 255.0,
-                                206.0 / 255.0,
-                                235.0 / 255.0,
-                                1.0);
-const vec4 darkSpace = vec4(0.0, 0.0, 0.0, 1.0);
-const vec4 groundSkyColor = mix(blueSky, whiteSky, smoothstep(0.0, 1.0, 0.5));
+// Scattered light tends to this colour instead of white on long paths (horizon, limb);
+// the horizon of Google Earth seen from the ground
+const vec3 horizonColor = vec3(201.0, 227.0, 242.0) / 255.0;
+
+const int opticalDepthSamples = 16;
+
+const vec4 noAir = vec4(0.0, 0.0, 0.0, 0.0);
 
 
-bool intersectionsWithAtmosphere(vec3 o, vec3 d,
-                                 out vec3 p1,
-                                 out vec3 p2) {
+bool rayIntersectsSphere(vec3 o, vec3 d, float radius,
+                         out float tNear,
+                         out float tFar) {
   // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 
   float a = dot(d,d);
   float b = 2.0 * dot(o,d);
-  float r = earthRadius - atmUndergroundOffset; //Earth radius
-  float c = dot(o,o) - (r*r);
+  float c = dot(o,o) - (radius*radius);
 
-  float q1 = (b*b) - 4.0 * a * c;
-
-  r = earthRadius + stratoHeight; //Atm. radius
-  c = dot(o,o) - (r*r);
-
-  float q2 = (b*b) - 4.0 * a * c;
-  bool valid = (q1 < 0.0) && (q2 > 0.0);
-
-  if (valid) {
-    float sq = sqrt(q2);
-    float t1 = (-b - sq) / (2.0*a);
-    float t2 = (-b + sq) / (2.0*a);
-
-    if (t1 < 0.0 && t2 < 0.0) {
-      return false;
-    }
-
-    p1 = o + d * max(min(t1,t2), 0.0);
-    p2 = o + d * max(t1,t2);
+  float q = (b*b) - 4.0 * a * c;
+  if (q <= 0.0) {
+    return false;
   }
 
-  return valid;
+  float sq = sqrt(q);
+  tNear = (-b - sq) / (2.0*a);
+  tFar  = (-b + sq) / (2.0*a);
+  return true;
 }
 
-float getRayFactor(vec3 o, vec3 d) {
+bool rayHitsGround(vec3 o, vec3 d, out float tGround) {
+  // the ellipsoid is the unit sphere once the space is divided by its radii
+  float tFar;
+  return rayIntersectsSphere(o / earthRadii, d / earthRadii, 1.0, tGround, tFar) && (tGround > 0.0);
+}
 
-  // Ray density calculations explained in: https://github.com/amazingsmash/AtmosphericShaders
+// Where the ray hits the ground or, when it misses, where it passes closest to it:
+// an antialiased pixel on the horizon can hold some ground although its centre misses it
+float groundDistanceAlongRay(vec3 o, vec3 d) {
+  float tGround;
+  if (rayHitsGround(o, d, tGround)) {
+    return tGround;
+  }
+  vec3 oInUnitSphere = o / earthRadii;
+  vec3 dInUnitSphere = d / earthRadii;
+  return -dot(oInUnitSphere, dInUnitSphere) / dot(dInUnitSphere, dInUnitSphere);
+}
 
-  // Scaling the scene down to improve floating point calculations
-  d /= 1000.0;
-  o /= 1000.0;
-  float er = earthRadius / 1000.0;
-  float sh = (stratoHeight + earthRadius) / 1000.0;
+float airDensity(vec3 point, float scaleHeight) {
+  float heightInKm = (length(point) - earthRadius) / 1000.0;
+  return exp(-heightInKm / scaleHeight);
+}
 
-  float ld = dot(d,d);
-  float pdo = dot(d,o);
+// km of sea-level air along the segment (midpoint rule; no closed form for exponential air)
+float opticalDepthInAtmosphere(vec3 p1, vec3 p2, float scaleHeight) {
+  vec3 sampleStep = (p2 - p1) / float(opticalDepthSamples);
+  float densitySum = 0.0;
+  for (int i = 0; i < opticalDepthSamples; i++) {
+    densitySum += airDensity(p1 + sampleStep * (float(i) + 0.5), scaleHeight);
+  }
+  return densitySum * length(sampleStep) / 1000.0;
+}
 
-  float dx = d.x;
-  float dy = d.y;
-  float dz = d.z;
+// km of sea-level air in the vertical column from the point to the top
+float opticalDepthAbove(vec3 point, float scaleHeight) {
+  return scaleHeight * airDensity(point, scaleHeight);
+}
 
-  float ox = o.x;
-  float oy = o.y;
-  float oz = o.z;
+vec3 skyExtinction(float opticalDepth) {
+  return rayleighScattering * skyRayleighScatteringScale * opticalDepth;
+}
 
-  float dox2 = (dx + ox) * (dx + ox);
-  float doy2 = (dy + oy) * (dy + oy);
-  float doz2 = (dz + oz) * (dz + oz);
+vec3 hazeExtinction(float opticalDepth) {
+  return rayleighScattering * opticalDepth;
+}
 
-  float ox2 = ox * ox;
-  float oy2 = oy * oy;
-  float oz2 = oz * oz;
+vec3 transmittance(vec3 airExtinction) {
+  return exp(-airExtinction);
+}
 
-  float dx2 = dx * dx;
-  float dy2 = dy * dy;
-  float dz2 = dz * dz;
+// Same as 1 - transmittance for thin air, but saturates to horizonColor
+vec3 scatteredLight(vec3 airExtinction) {
+  return horizonColor * (vec3(1.0) - exp(-airExtinction / horizonColor));
+}
 
-  return ((((dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz))*
-            sqrt(dox2 + doy2 + doz2))/ld -
-           (sqrt(ox2 + oy2 + oz2)*pdo)/ld - 2.*sh +
-           ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
-             dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
-            log(dx*(dx + ox) + dy*(dy + oy) + dz*(dz + oz) +
-                sqrt(ld)*sqrt(dox2 + doy2 + doz2)))/pow(ld,1.5) -
-           ((dz2*(ox2 + oy2) - 2.0*dx*dz*ox*oz - 2.0*dy*oy*(dx*ox + dz*oz) +
-             dy2*(ox2 + oz2) + dx2*(oy2 + oz2))*
-            log(sqrt(ld)*sqrt(ox2 + oy2 + oz2) + pdo))/pow(ld,1.5))/
-          (2.*(er - 1.*sh)));
+// Interleaved gradient noise (Jimenez 2014), uniform in [0, 1) and fixed on the screen
+float screenNoise() {
+  return fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
+}
+
+// 8 bits have no level between 0 and 1/255: a dark gradient shows as bands with hard edges.
+// Half a level of noise mixes the two neighbouring levels so the eye sees the value in between
+vec3 dithered(vec3 light) {
+  return light + (screenNoise() - 0.5) / 255.0;
+}
+
+vec4 sky(vec3 o, vec3 d) {
+  float tAtmosphereIn, tAtmosphereOut;
+  if (!rayIntersectsSphere(o, d, earthRadius + stratoHeight, tAtmosphereIn, tAtmosphereOut) || (tAtmosphereOut <= 0.0)) {
+    return noAir;
+  }
+
+  float tUnderground, tUndergroundFar;
+  if (rayIntersectsSphere(o, d, earthRadius - atmUndergroundOffset, tUnderground, tUndergroundFar) && (tUnderground > 0.0)) {
+    return vec4(uSpaceColor, 1.0);
+  }
+
+  float opticalDepth = opticalDepthInAtmosphere(o + d * max(tAtmosphereIn, 0.0), o + d * tAtmosphereOut, skyScaleHeight);
+  vec3 airExtinction = skyExtinction(opticalDepth);
+  vec3 light = dithered(scatteredLight(airExtinction));
+
+  // opaque where the planet is behind, so no star shows where the tiles fall short of the ellipsoid
+  float tGround;
+  if (rayHitsGround(o, d, tGround)) {
+    return vec4(light, 1.0);
+  }
+  // blended with one / oneMinusSrcAlpha: light + background * transmittance (one alpha, the transmittance of green)
+  return vec4(light, 1.0 - transmittance(airExtinction).g);
+}
+
+// Grey fog towards horizonColor, blended with srcAlpha / oneMinusSrcAlpha: horizonColor * opacity + ground * (1 - opacity).
+// One alpha can only attenuate the three channels alike, so the fog uses the transmittance of green (550 nm)
+vec4 groundHaze(vec3 o, vec3 d) {
+  float tAtmosphereIn, tAtmosphereOut;
+  if (!rayIntersectsSphere(o, d, earthRadius + stratoHeight, tAtmosphereIn, tAtmosphereOut)) {
+    return noAir;
+  }
+
+  float tGround = groundDistanceAlongRay(o, d);
+  float tStart = max(tAtmosphereIn, 0.0);
+  if (tGround <= tStart) {
+    return noAir;
+  }
+
+  // only the air beyond the vertical column above the ground point hazes it, so looking down is not veiled
+  vec3 groundPoint = o + d * tGround;
+  float opticalDepth = max(opticalDepthInAtmosphere(o + d * tStart, groundPoint, realScaleHeight) - opticalDepthAbove(groundPoint, realScaleHeight), 0.0);
+  float opacity = 1.0 - transmittance(hazeExtinction(opticalDepth)).g;
+  if (opacity <= 0.0) {
+    return noAir;
+  }
+  return vec4(horizonColor, opacity);
 }
 
 void main() {
   //Ray [O + tD = X]
-  vec3 sp1, sp2;
-  bool valid = intersectionsWithAtmosphere(uCameraPosition, rayDirection, sp1, sp2);
-  if (valid) {
-    //Calculating color
-    float f = getRayFactor(sp1, sp2 - sp1) * 1.3;
+  vec3 o = uCameraPosition;
+  vec3 d = normalize(rayDirection);
 
-    vec4 color = mix(darkSpace, blueSky, smoothstep(0.0, 1.0, f));
-    color = mix(color, whiteSky, smoothstep(0.7, 1.0, f));
-
-    //Calculating camera Height (for precision problems)
-    //Below a certain threshold float precision is not enough for calculations
-    float camHeight = length(uCameraPosition) - earthRadius;
-    gl_FragColor = mix(color, groundSkyColor, smoothstep(minHeight, minHeight / 4.0, camHeight));
+  if (uGroundHazePass > 0.5) {
+    gl_FragColor = groundHaze(o, d);
   }
   else {
-    gl_FragColor = darkSpace;
+    gl_FragColor = sky(o, d);
   }
 }

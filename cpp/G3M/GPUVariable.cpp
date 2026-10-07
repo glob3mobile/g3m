@@ -146,6 +146,15 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   else if (name == "uRibbonWidth") {
     return RIBBON_WIDTH;
   }
+  else if (name == "uGroundHazePass") {
+    return GROUND_HAZE_PASS;
+  }
+  else if (name == "uSpaceColor") {
+    return SPACE_COLOR;
+  }
+  else if (name == "uStarsIntensity") {
+    return STARS_INTENSITY;
+  }
   else {
     return UNRECOGNIZED_UNIFORM;
   }

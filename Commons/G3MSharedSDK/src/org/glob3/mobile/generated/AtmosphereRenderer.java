@@ -18,26 +18,21 @@ package org.glob3.mobile.generated;
 
 
 
-
-//class Mesh;
+//class DirectMesh;
 //class IFloatBuffer;
 //class CameraPositionGLFeature;
 //class Camera;
+//class Color;
 
 public class AtmosphereRenderer extends DefaultRenderer
 {
-  private final Color _blueSky ;
-  private final Color _darkSpace ;
-  private final double _minHeight;
-
+  private final boolean _groundHazePass;
   private GLState _glState;
-  private Mesh _directMesh;
+  private DirectMesh _directMesh;
   private IFloatBuffer _vertices;
   private CameraPositionGLFeature _camPosGLF;
-  private Color _previousBackgroundColor;
-  private boolean _overPrecisionThreshold;
 
-  private void updateGLState(Camera camera)
+  private void updateGLState(Camera camera, Color spaceColor)
   {
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
@@ -49,34 +44,53 @@ public class AtmosphereRenderer extends DefaultRenderer
       f.setMatrix(camera.getModelViewMatrix44D());
     }
   
-    //Updating ZNEAR plane
-    camera.getVerticesOfZNearPlane(_vertices);
+    // The quad is placed relative to the camera, so the shader gets small numbers
+    // and the ray directions keep their float precision at low altitude
+    updateVerticesOfZNearPlaneRelativeToCamera(camera);
+    _directMesh.setUserTransformMatrix(new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(camera.getCartesianPosition())));
   
     //CamPos
-    _camPosGLF.update(camera);
+    _camPosGLF.update(camera, spaceColor);
   }
 
-  public AtmosphereRenderer()
-  //_blueSky(Color::fromRGBA(( 32.0f / 2.0f + 128.0f) / 256.0f,
-  //                         (173.0f / 2.0f + 128.0f) / 256.0f,
-  //                         (249.0f / 2.0f + 128.0f) / 256.0f,
-  //                         1.0f)),
+  private void updateVerticesOfZNearPlaneRelativeToCamera(Camera camera)
   {
-     _blueSky = new Color(Color.fromRGBA255(135, 206, 235, 255));
-     _darkSpace = Color.BLACK;
-     _minHeight = 8000.0;
-     _previousBackgroundColor = null;
-     _overPrecisionThreshold = true;
+    final FrustumData frustumData = camera.getFrustumData();
+  
+    final Vector3D viewDirection = camera.getViewDirection().normalized();
+    final Vector3D center = viewDirection.times(frustumData._zNear);
+    final Vector3D up = camera.getUp().normalized().times(frustumData._top * 2.0);
+    final Vector3D right = viewDirection.cross(up).normalized().times(frustumData._right * 2.0);
+  
+    _vertices.putVector3D(0, center.sub(up).sub(right));
+    _vertices.putVector3D(1, center.add(up).sub(right));
+    _vertices.putVector3D(2, center.sub(up).add(right));
+    _vertices.putVector3D(3, center.add(right).add(up));
+  }
+
+  private AtmosphereRenderer(boolean groundHazePass)
+  {
+     _groundHazePass = groundHazePass;
      _glState = null;
      _directMesh = null;
      _vertices = null;
      _camPosGLF = null;
   }
 
+  // the sky and the space, drawn before the PlanetRenderer
+  public static AtmosphereRenderer createSky()
+  {
+    return new AtmosphereRenderer(false);
+  }
+
+  // the air in front of the ground, drawn after the PlanetRenderer
+  public static AtmosphereRenderer createGroundHaze()
+  {
+    return new AtmosphereRenderer(true);
+  }
+
   public void dispose()
   {
-    if (_previousBackgroundColor != null)
-       _previousBackgroundColor.dispose();
     if (_directMesh != null)
        _directMesh.dispose();
     _glState._release();
@@ -103,35 +117,9 @@ public class AtmosphereRenderer extends DefaultRenderer
       fbb = null;
   
       //CamPos
-      _camPosGLF = new CameraPositionGLFeature(rc.getCurrentCamera());
+      // the background colour is the colour of space, seen through the air
+      _camPosGLF = new CameraPositionGLFeature(rc.getCurrentCamera(), _groundHazePass, rc.getWidget().getBackgroundColor());
       _glState.addGLFeature(_camPosGLF, false);
-    }
-  
-    if (_previousBackgroundColor != null)
-       _previousBackgroundColor.dispose();
-    _previousBackgroundColor = new Color(rc.getWidget().getBackgroundColor());
-  
-    //Computing background color
-    final double camHeight = rc.getCurrentCamera().getGeodeticHeight();
-    _overPrecisionThreshold = (camHeight < _minHeight * 1.2);
-    if (_overPrecisionThreshold)
-    {
-      rc.getWidget().setBackgroundColor(_blueSky);
-    }
-    else
-    {
-      rc.getWidget().setBackgroundColor(_darkSpace);
-    }
-  }
-
-  public final void stop(G3MRenderContext rc)
-  {
-    if (_previousBackgroundColor != null)
-    {
-      rc.getWidget().setBackgroundColor(_previousBackgroundColor);
-      if (_previousBackgroundColor != null)
-         _previousBackgroundColor.dispose();
-      _previousBackgroundColor = null;
     }
   }
 
@@ -148,32 +136,10 @@ public class AtmosphereRenderer extends DefaultRenderer
       return;
     }
   
-    //Rendering
-    final double camHeigth = rc.getCurrentCamera().getGeodeticHeight();
-    if (camHeigth > _minHeight)
-    {
-      updateGLState(rc.getCurrentCamera());
-      _glState.setParent(glState);
+    updateGLState(rc.getCurrentCamera(), rc.getWidget().getBackgroundColor());
+    _glState.setParent(glState);
   
-      _directMesh.render(rc, _glState);
-    }
-  
-    final boolean nowIsOverPrecisionThreshold = (camHeigth < _minHeight * 1.2);
-  
-    if (_overPrecisionThreshold != nowIsOverPrecisionThreshold)
-    {
-      //Changing background color
-      _overPrecisionThreshold = nowIsOverPrecisionThreshold;
-  
-      if (_overPrecisionThreshold)
-      {
-        rc.getWidget().setBackgroundColor(_blueSky);
-      }
-      else
-      {
-        rc.getWidget().setBackgroundColor(_darkSpace);
-      }
-    }
+    _directMesh.render(rc, _glState);
   }
 
 }

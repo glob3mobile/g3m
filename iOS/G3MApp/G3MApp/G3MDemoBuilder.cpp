@@ -23,6 +23,7 @@
 #include <G3M/NonOverlappingMarksRenderer.hpp>
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/AtmosphereRenderer.hpp>
+#include <G3M/StarsRenderer.hpp>
 #include <G3M/WrapperNearFrustumRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/MeasureRenderer.hpp>
@@ -77,6 +78,7 @@ void G3MDemoBuilder::build() {
                                                 Color::WHITE        /* meshInnerColor */));
 
   builder->setAtmosphere(true);
+  builder->setStarsRenderer(new StarsRenderer(2 /* starPointSize */, 3 /* starsIntensity */));
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
@@ -139,7 +141,9 @@ void G3MDemoBuilder::build() {
                             nonOverlappingMarksRenderer,
                             vectorStreamingRenderer,
                             compositeRenderer,
-                            measureRenderer);
+                            measureRenderer,
+                            builder->getSkyRenderer(),
+                            builder->getGroundHazeRenderer());
 
   const double zNear = 0.1;
   Renderer* renderer = new MeshRenderer();

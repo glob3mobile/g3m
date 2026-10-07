@@ -10,6 +10,8 @@
 #define __G3M__IG3MBuilder__
 
 #include <vector>
+class StarsRenderer;
+class AtmosphereRenderer;
 class GL;
 class IStorage;
 class IDownloader;
@@ -71,7 +73,9 @@ private:
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
   InfoDisplay*                      _infoDisplay;
-  bool                              _atmosphere;
+  AtmosphereRenderer*               _skyRenderer;
+  AtmosphereRenderer*               _groundHazeRenderer;
+  StarsRenderer*                    _starsRenderer;
   FrustumPolicy*                    _frustumPolicy;
   bool                              _verboseCameraHandlers;
 
@@ -132,6 +136,15 @@ public:
                                        const double mouseWheelZoomSpeed = 0.05);
 
   void setAtmosphere(const bool atmosphere);
+
+  // NULL without atmosphere; drawn before the planet
+  AtmosphereRenderer* getSkyRenderer() const;
+
+  // NULL without atmosphere; drawn after the planet
+  AtmosphereRenderer* getGroundHazeRenderer() const;
+
+  // drawn behind everything, before the sky
+  void setStarsRenderer(StarsRenderer* starsRenderer);
 
   void setVerboseCameraHandlers(const bool verboseCameraHandlers);
 

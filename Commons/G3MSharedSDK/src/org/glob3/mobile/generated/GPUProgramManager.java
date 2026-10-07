@@ -69,6 +69,11 @@ public class GPUProgramManager
       return compileProgramWithName(gl, "RibbonMesh");
     }
   
+    if (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.STARS_INTENSITY))
+    {
+      return compileProgramWithName(gl, "Stars");
+    }
+  
     final boolean texture = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.TEXTURE_COORDS);
     final boolean flatColor = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.FLAT_COLOR);
     final boolean billboard = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.VIEWPORT_EXTENT);

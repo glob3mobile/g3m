@@ -216,8 +216,6 @@ void G3MStaticPointCloudDemoScene::rawActivate(const G3MContext* context) {
 
   g3mWidget->setForceBusyRenderer(true);
 
-  g3mWidget->setBackgroundColor(Color::fromRGBA255(175, 221, 233, 255));
-
   Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 

@@ -50,6 +50,10 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     return compileProgramWithName(gl, "RibbonMesh");
   }
 
+  if (GPUVariable::hasUniform(uniformsCode, STARS_INTENSITY)) {
+    return compileProgramWithName(gl, "Stars");
+  }
+
   const bool texture     = GPUVariable::hasAttribute(attributesCode, TEXTURE_COORDS);
   const bool flatColor   = GPUVariable::hasUniform(uniformsCode,     FLAT_COLOR);
   const bool billboard   = GPUVariable::hasUniform(uniformsCode,     VIEWPORT_EXTENT);

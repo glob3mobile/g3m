@@ -116,6 +116,18 @@ public class GPUVariable
     {
       return GPUUniformKey.RIBBON_WIDTH;
     }
+    else if (name.equals("uGroundHazePass"))
+    {
+      return GPUUniformKey.GROUND_HAZE_PASS;
+    }
+    else if (name.equals("uSpaceColor"))
+    {
+      return GPUUniformKey.SPACE_COLOR;
+    }
+    else if (name.equals("uStarsIntensity"))
+    {
+      return GPUUniformKey.STARS_INTENSITY;
+    }
     else
     {
       return GPUUniformKey.UNRECOGNIZED_UNIFORM;
