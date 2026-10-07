@@ -31,9 +31,9 @@ public:
   _theEiffelTowerShape(NULL),
   _arcDeTriompheShape(NULL)
   {
-    _options.push_back("The Sphynx");
-    _options.push_back("The Eiffel Tower");
-    _options.push_back("Arc de Triomphe");
+    addOption("The Sphynx");
+    addOption("The Eiffel Tower");
+    addOption("Arc de Triomphe");
   }
 
   void setTheSphynxShape(SGShape* shape) {

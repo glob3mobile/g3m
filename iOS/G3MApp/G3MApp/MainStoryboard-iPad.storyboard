@@ -20,145 +20,15 @@
                     <view key="view" contentMode="scaleToFill" id="4Jv-Yl-n8N" customClass="G3MWidget_iOS">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9zC-iw-ZAJ">
-                                <rect key="frame" x="548" y="28" width="200" height="48"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" backgroundImage="selector-background.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="esp-gn-RRS" kind="popover" identifier="changeDemo" popoverAnchorView="9zC-iw-ZAJ" id="yv6-AK-HcC">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
-                                </connections>
-                            </button>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Czs-4F-pgG">
-                                <rect key="frame" x="548" y="956" width="200" height="48"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" backgroundImage="selector-background.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="LPl-L5-MUv" kind="popover" identifier="changeOption" popoverAnchorView="Czs-4F-pgG" id="z7U-jt-yhi">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="9zC-iw-ZAJ" secondAttribute="trailing" constant="20" id="5Z7-Vw-dd4"/>
-                            <constraint firstAttribute="trailing" secondItem="Czs-4F-pgG" secondAttribute="trailing" constant="20" id="9KO-D1-FFI"/>
-                            <constraint firstItem="k94-eN-oGw" firstAttribute="top" secondItem="Czs-4F-pgG" secondAttribute="bottom" constant="20" id="O5C-Pj-hi3"/>
-                            <constraint firstItem="9zC-iw-ZAJ" firstAttribute="top" secondItem="9A7-Ha-ABB" secondAttribute="bottom" constant="8" id="q99-Sm-kSc"/>
-                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="demoSelector" destination="9zC-iw-ZAJ" id="ob2-A0-40Q"/>
                         <outlet property="g3mWidget" destination="4Jv-Yl-n8N" id="jcc-PX-zMk"/>
-                        <outlet property="optionSelector" destination="Czs-4F-pgG" id="KL6-mW-Pof"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EEo-iH-Gas" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-304.6875" y="-294.7265625"/>
         </scene>
-        <!--Select Demo Scene View Controller-->
-        <scene sceneID="4Bi-N0-hZL">
-            <objects>
-                <tableViewController id="esp-gn-RRS" customClass="G3MSelectDemoSceneViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1yb-IB-Sk6">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="1ZR-Dl-Ttf">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ZR-Dl-Ttf" id="2cf-ZJ-VMD">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ib9-9F-2Rh">
-                                            <rect key="frame" x="5" y="7" width="310" height="30"/>
-                                            <state key="normal" title="                                   ">
-                                                <color key="titleColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="changeDemo:" destination="esp-gn-RRS" eventType="touchUpInside" id="Ss7-jP-Ygf"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="Ib9-9F-2Rh" firstAttribute="centerX" secondItem="2cf-ZJ-VMD" secondAttribute="centerX" id="VF8-CV-HGw"/>
-                                        <constraint firstItem="Ib9-9F-2Rh" firstAttribute="leading" secondItem="2cf-ZJ-VMD" secondAttribute="leading" constant="5" id="arY-bd-pPo"/>
-                                        <constraint firstItem="Ib9-9F-2Rh" firstAttribute="top" secondItem="2cf-ZJ-VMD" secondAttribute="top" constant="7" id="wT2-sm-Lmw"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <sections/>
-                        <connections>
-                            <outlet property="dataSource" destination="esp-gn-RRS" id="bOD-i9-PGy"/>
-                            <outlet property="delegate" destination="esp-gn-RRS" id="IJa-1R-mze"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="j5W-U5-XF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="441" y="-507"/>
-        </scene>
-        <!--Select Option View Controller-->
-        <scene sceneID="Sox-JV-nHy">
-            <objects>
-                <tableViewController id="LPl-L5-MUv" customClass="G3MSelectOptionViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rU2-4z-r5h">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="wLk-1r-mmT">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wLk-1r-mmT" id="H0H-l3-WC6">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1dR-hE-jHq">
-                                            <rect key="frame" x="5" y="7" width="310" height="30"/>
-                                            <state key="normal" title="                               ">
-                                                <color key="titleColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="changeOption:" destination="LPl-L5-MUv" eventType="touchUpInside" id="KAz-Ji-bf0"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="1dR-hE-jHq" firstAttribute="leading" secondItem="H0H-l3-WC6" secondAttribute="leading" constant="5" id="97F-d8-2bQ"/>
-                                        <constraint firstItem="1dR-hE-jHq" firstAttribute="top" secondItem="H0H-l3-WC6" secondAttribute="top" constant="7" id="DX4-GT-Orn"/>
-                                        <constraint firstItem="1dR-hE-jHq" firstAttribute="centerX" secondItem="H0H-l3-WC6" secondAttribute="centerX" id="S4a-7k-Ih7"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="LPl-L5-MUv" id="COB-J4-cid"/>
-                            <outlet property="delegate" destination="LPl-L5-MUv" id="pKF-5T-OGJ"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2GO-RP-ZUa" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="441" y="139"/>
-        </scene>
     </scenes>
-    <resources>
-        <image name="selector-background.png" width="200" height="48"/>
-    </resources>
 </document>

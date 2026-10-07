@@ -1009,6 +1009,20 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
   }
 }
 
+void PlanetRenderer::setColorMatrix(const Matrix44D* colorMatrix) {
+  ColorGradeGLFeature* colorGrade = (ColorGradeGLFeature*) _glState->getGLFeature(GLF_COLOR_GRADE);
+  if (colorGrade == NULL) {
+    _glState->addGLFeature(new ColorGradeGLFeature(colorMatrix), false);
+  }
+  else {
+    colorGrade->changeColorMatrix(colorMatrix);
+  }
+}
+
+void PlanetRenderer::removeColorMatrix() {
+  _glState->clearGLFeatures(GLF_COLOR_GRADE);
+}
+
 void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                                     const size_t rendererID) {
   if (_changedInfoListener != NULL) {

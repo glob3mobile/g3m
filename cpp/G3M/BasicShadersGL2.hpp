@@ -92,6 +92,40 @@ public:
          this->add(srcColorMesh);
       }
 
+// TransformedTexCoorTexturedMesh_ColorGrade
+      {
+         GPUProgramSources srcTransformedTexCoorTexturedMesh_ColorGrade(
+            "TransformedTexCoorTexturedMesh_ColorGrade",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "uniform mat4 uColorMatrix;\n" +
+            "void main() {\n" +
+            "  vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec3 gradedColor = (uColorMatrix * vec4(color.rgb, 1.0)).rgb;\n" +
+            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, 1.0), color.a);\n" +
+            "}\n");
+         this->add(srcTransformedTexCoorTexturedMesh_ColorGrade);
+      }
+
 // FullTransformedTexCoorMultiTexturedMesh
       {
          GPUProgramSources srcFullTransformedTexCoorMultiTexturedMesh(
@@ -510,6 +544,38 @@ public:
             "  gl_FragColor.a   = texColor.a;\n" +
             "}\n");
          this->add(srcTexturedMesh_DirectionLight);
+      }
+
+// TexturedMesh_ColorGrade
+      {
+         GPUProgramSources srcTexturedMesh_ColorGrade(
+            "TexturedMesh_ColorGrade",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  TextureCoordOut = aTextureCoord;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "uniform mat4 uColorMatrix;\n" +
+            "void main() {\n" +
+            "  vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec3 gradedColor = (uColorMatrix * vec4(color.rgb, 1.0)).rgb;\n" +
+            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, 1.0), color.a);\n" +
+            "}\n");
+         this->add(srcTexturedMesh_ColorGrade);
       }
 
 // Shader

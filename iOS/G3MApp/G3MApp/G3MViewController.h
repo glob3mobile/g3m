@@ -12,18 +12,25 @@
 @class G3MWidget_iOS;
 class G3MDemoModel;
 class G3MDemoScene;
+class G3MColorGradingDemoScene;
+@class G3MColorGradingPanel;
 
 @interface G3MViewController : UIViewController {
   G3MDemoModel* _demoModel;
+  UIButton*     _demoSelector;
+  UIStackView*  _optionSelectors;
+  G3MColorGradingPanel* _colorGradingPanel;
 }
 
 @property (retain, nonatomic) IBOutlet G3MWidget_iOS* g3mWidget;
-@property (weak, nonatomic)   IBOutlet UIButton*      demoSelector;
-@property (weak, nonatomic)   IBOutlet UIButton*      optionSelector;
 
 -(void) onChangedScene:(const G3MDemoScene*) scene;
 
--(void) onChangedOption:(const std::string&) option
-                inScene:(const G3MDemoScene*) scene;
+-(void) onChangedOptionInGroup:(size_t) groupIndex
+                       inScene:(const G3MDemoScene*) scene;
+
+-(void) showColorGradingPanel:(G3MColorGradingDemoScene*) scene;
+
+-(void) hideColorGradingPanel;
 
 @end

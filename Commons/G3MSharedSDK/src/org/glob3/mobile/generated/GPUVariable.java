@@ -132,6 +132,10 @@ public class GPUVariable
     {
       return GPUUniformKey.STAR_SIZE_EXPONENT;
     }
+    else if (name.equals("uColorMatrix"))
+    {
+      return GPUUniformKey.COLOR_MATRIX;
+    }
     else
     {
       return GPUUniformKey.UNRECOGNIZED_UNIFORM;

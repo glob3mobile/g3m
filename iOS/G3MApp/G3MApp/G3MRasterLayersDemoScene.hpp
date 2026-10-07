@@ -20,12 +20,6 @@ class G3MRasterLayersDemoScene : public G3MDemoScene {
 private:
   WMSFeatureInfoListener* _featureInfoListener;
 
-  static Layer* createMercatorLayer(const std::string& title,
-                                    const std::string& urlTemplate,
-                                    const int maxLevel,
-                                    const bool isTransparent,
-                                    const std::string& attribution);
-
   Layer* createWMSLayer(const std::string& title,
                         const std::string& mapLayer,
                         const std::string& serverURL,
@@ -46,25 +40,31 @@ protected:
                        int optionIndex);
 
 public:
+  static Layer* createMercatorLayer(const std::string& title,
+                                    const std::string& urlTemplate,
+                                    const int maxLevel,
+                                    const bool isTransparent,
+                                    const std::string& attribution);
+
   G3MRasterLayersDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "Raster Layers", "", 0),
   _featureInfoListener(NULL)
   {
-    _options.push_back("Open Street Map");
-    _options.push_back("Sentinel-2 cloudless");
-    _options.push_back("Sentinel-2 cloudless + labels");
-    _options.push_back("Blue Marble (EOX)");
-    _options.push_back("Black Marble (EOX)");
-    _options.push_back("Terrain Light (EOX)");
-    _options.push_back("OpenTopoMap");
-    _options.push_back("ESRI World Imagery");
-    _options.push_back("Nasa Blue Marble (WMS)");
-    _options.push_back("OpenStreetMap (WMS)");
-    _options.push_back("Spain PNOA orthoimage (WMS)");
-    _options.push_back("Spain Catastro over PNOA (WMS)");
-    _options.push_back("Chessboard");
-    _options.push_back("Chessboard + Debug tiles");
-    _options.push_back("Open Street Map + Debug tiles");
+    addOption("Open Street Map");
+    addOption("Sentinel-2 cloudless");
+    addOption("Sentinel-2 cloudless + labels");
+    addOption("Blue Marble (EOX)");
+    addOption("Black Marble (EOX)");
+    addOption("Terrain Light (EOX)");
+    addOption("OpenTopoMap");
+    addOption("ESRI World Imagery");
+    addOption("Nasa Blue Marble (WMS)");
+    addOption("OpenStreetMap (WMS)");
+    addOption("Spain PNOA orthoimage (WMS)");
+    addOption("Spain Catastro over PNOA (WMS)");
+    addOption("Chessboard");
+    addOption("Chessboard + Debug tiles");
+    addOption("Open Street Map + Debug tiles");
   }
 
 };

@@ -33,6 +33,7 @@ class Layer;
 class TerrainTouchListener;
 class DEMProvider;
 class IStringBuilder;
+class Matrix44D;
 
 
 class TilesStatistics {
@@ -398,6 +399,10 @@ public:
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
+
+  void setColorMatrix(const Matrix44D* colorMatrix);
+
+  void removeColorMatrix();
 
   ElevationDataProvider* getElevationDataProvider() const {
     return _elevationDataProvider;

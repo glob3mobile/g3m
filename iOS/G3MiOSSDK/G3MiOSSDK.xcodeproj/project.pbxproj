@@ -926,6 +926,8 @@
 		CFFE6601306D2677004728AD /* CameraPointOfViewEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFE65FE306D264A004728AD /* CameraPointOfViewEffect.hpp */; };
 		CFFE6604306D456E004728AD /* CameraFlightArc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE6603306D456E004728AD /* CameraFlightArc.cpp */; };
 		CFFE6605306D4589004728AD /* CameraFlightArc.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFE6602306D456E004728AD /* CameraFlightArc.hpp */; };
+		CFC010333077A1B0003B788A /* ColorMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC010313077A1B0003B788A /* ColorMatrix.cpp */; };
+		CFC010323077A1B0003B788A /* ColorMatrix.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFC010303077A1B0003B788A /* ColorMatrix.hpp */; };
 		CFFED2E53076635A003B788A /* StarsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFED2E43076635A003B788A /* StarsRenderer.cpp */; };
 		CFFED2E63076637B003B788A /* StarsRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CFFED2E33076635A003B788A /* StarsRenderer.hpp */; };
 		CFFED2E9307664A4003B788A /* YaleBrightStars.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFED2E8307664A4003B788A /* YaleBrightStars.cpp */; };
@@ -977,6 +979,7 @@
 			files = (
 				CFFED2EA307664BB003B788A /* YaleBrightStars.hpp in CopyFiles */,
 				CFFED2E63076637B003B788A /* StarsRenderer.hpp in CopyFiles */,
+				CFC010323077A1B0003B788A /* ColorMatrix.hpp in CopyFiles */,
 				CF8938233073B5B30021D9AF /* LabelStyle.hpp in CopyFiles */,
 				CF89381E3073B5350021D9AF /* FittedLabelImageFactory.hpp in CopyFiles */,
 				CF563498306E706200B56019 /* DebugTilesLayer.hpp in CopyFiles */,
@@ -2408,6 +2411,10 @@
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
 		CFBD42DE16AA1A8900663F21 /* ShortBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShortBuffer_iOS.cpp; path = Specific/Derived/ShortBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CFBD42DF16AA1A8900663F21 /* ShortBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShortBuffer_iOS.hpp; path = Specific/Derived/ShortBuffer_iOS.hpp; sourceTree = "<group>"; };
+		CFC0102A3077A1B0003B788A /* TexturedMesh_ColorGrade.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_ColorGrade.fsh; sourceTree = "<group>"; };
+		CFC0102B3077A1B0003B788A /* TexturedMesh_ColorGrade.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = TexturedMesh_ColorGrade.vsh; sourceTree = "<group>"; };
+		CFC0102C3077A1B0003B788A /* TransformedTexCoorTexturedMesh_ColorGrade.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_ColorGrade.fsh; sourceTree = "<group>"; };
+		CFC0102D3077A1B0003B788A /* TransformedTexCoorTexturedMesh_ColorGrade.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_ColorGrade.vsh; sourceTree = "<group>"; };
 		CFC54DFC25B9B76300424542 /* XPCIntensityPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCIntensityPointColorizer.cpp; sourceTree = "<group>"; };
 		CFC54DFD25B9B76300424542 /* XPCIntensityPointColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCIntensityPointColorizer.hpp; sourceTree = "<group>"; };
 		CFC54E0325B9BD7300424542 /* XPCClassificationPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCClassificationPointColorizer.cpp; sourceTree = "<group>"; };
@@ -2429,6 +2436,8 @@
 		CFFE6603306D456E004728AD /* CameraFlightArc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CameraFlightArc.cpp; sourceTree = "<group>"; };
 		CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader_iOS.hpp; path = Specific/Derived/Downloader_iOS.hpp; sourceTree = "<group>"; };
 		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
+		CFC010303077A1B0003B788A /* ColorMatrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ColorMatrix.hpp; sourceTree = "<group>"; };
+		CFC010313077A1B0003B788A /* ColorMatrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColorMatrix.cpp; sourceTree = "<group>"; };
 		CFFED2E33076635A003B788A /* StarsRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StarsRenderer.hpp; sourceTree = "<group>"; };
 		CFFED2E43076635A003B788A /* StarsRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StarsRenderer.cpp; sourceTree = "<group>"; };
 		CFFED2E7307664A4003B788A /* YaleBrightStars.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = YaleBrightStars.hpp; sourceTree = "<group>"; };
@@ -2783,6 +2792,8 @@
 				CF66031223DF2DA700795C7F /* CircleShape.cpp */,
 				CF6603C523DF2DA800795C7F /* Color.hpp */,
 				CF6602F723DF2DA700795C7F /* Color.cpp */,
+				CFC010303077A1B0003B788A /* ColorMatrix.hpp */,
+				CFC010313077A1B0003B788A /* ColorMatrix.cpp */,
 				CF66030A23DF2DA700795C7F /* ColumnCanvasElement.hpp */,
 				CF6603C823DF2DA900795C7F /* ColumnCanvasElement.cpp */,
 				CF66041623DF2DAA00795C7F /* ColumnLayoutImageFactory.hpp */,
@@ -3621,12 +3632,16 @@
 				D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */,
 				D84625D51777291F00FC4862 /* TexturedMesh.fsh */,
 				D84625D61777291F00FC4862 /* TexturedMesh.vsh */,
+				CFC0102A3077A1B0003B788A /* TexturedMesh_ColorGrade.fsh */,
+				CFC0102B3077A1B0003B788A /* TexturedMesh_ColorGrade.vsh */,
 				D80787601846141400A6DB28 /* TexturedMesh_DirectionLight.fsh */,
 				D80787611846141400A6DB28 /* TexturedMesh_DirectionLight.vsh */,
 				D83171F4186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.fsh */,
 				D83171F3186C52CD00522E1B /* TransformedTexCoorMultiTexturedMesh.vsh */,
 				D802448B177B314800F58D0D /* TransformedTexCoorTexturedMesh.fsh */,
 				D802448C177B314800F58D0D /* TransformedTexCoorTexturedMesh.vsh */,
+				CFC0102C3077A1B0003B788A /* TransformedTexCoorTexturedMesh_ColorGrade.fsh */,
+				CFC0102D3077A1B0003B788A /* TransformedTexCoorTexturedMesh_ColorGrade.vsh */,
 				D8FFA4C1183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.fsh */,
 				D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.vsh */,
 			);
@@ -3847,6 +3862,7 @@
 				CF66086323DF330600795C7F /* ByteBufferIterator.cpp in Sources */,
 				CF66086423DF330600795C7F /* OrderedRenderable.cpp in Sources */,
 				CFFED2E53076635A003B788A /* StarsRenderer.cpp in Sources */,
+				CFC010333077A1B0003B788A /* ColorMatrix.cpp in Sources */,
 				CF66086523DF330600795C7F /* MutableVector3D.cpp in Sources */,
 				CF66086623DF330600795C7F /* GEO2DCoordinatesArrayData.cpp in Sources */,
 				CF66086723DF330600795C7F /* FrameTask.cpp in Sources */,

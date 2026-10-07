@@ -93,6 +93,28 @@ void GLFeatureSet::clearFeatures(GLFeatureGroupName g) {
   
 }
 
+void GLFeatureSet::clearFeatures(GLFeatureID id) {
+  
+  for (int i = 0; i < _nFeatures; i++) {
+    const GLFeature* f = _features[i];
+    if (f->_id == id) {
+      f->_release();
+      
+      for (int j = i; j < _nFeatures; j++) {
+        if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
+          _features[j] = NULL;
+        }
+        else {
+          _features[j] = _features[j+1];
+        }
+      }
+      i--;
+      _nFeatures--;
+    }
+  }
+  
+}
+
 void GLFeatureSet::clearFeatures() {
   
   for (int i = 0; i < _nFeatures; i++) {

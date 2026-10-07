@@ -218,6 +218,12 @@ public class GLState extends RCObject
     hasChangedStructure();
   }
 
+  public final void clearGLFeatures(GLFeatureID id)
+  {
+    _features.clearFeatures(id);
+    hasChangedStructure();
+  }
+
   public final void clearAllGLFeatures()
   {
     _features.clearFeatures();

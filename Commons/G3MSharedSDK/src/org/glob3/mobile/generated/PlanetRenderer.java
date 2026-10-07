@@ -1004,6 +1004,24 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     }
   }
 
+  public final void setColorMatrix(Matrix44D colorMatrix)
+  {
+    ColorGradeGLFeature colorGrade = (ColorGradeGLFeature) _glState.getGLFeature(GLFeatureID.GLF_COLOR_GRADE);
+    if (colorGrade == null)
+    {
+      _glState.addGLFeature(new ColorGradeGLFeature(colorMatrix), false);
+    }
+    else
+    {
+      colorGrade.changeColorMatrix(colorMatrix);
+    }
+  }
+
+  public final void removeColorMatrix()
+  {
+    _glState.clearGLFeatures(GLFeatureID.GLF_COLOR_GRADE);
+  }
+
   public final ElevationDataProvider getElevationDataProvider()
   {
     return _elevationDataProvider;

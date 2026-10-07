@@ -15,59 +15,53 @@ class G3MDemoModel;
 class G3MContext;
 
 
-class G3MDemoScene {
+class G3MDemoOptionGroup {
 private:
-  G3MDemoModel* _model;
-  int _selectedOptionIndex;
-
-  int getOptionIndex(const std::string& option) const;
-
-protected:
   const std::string        _name;
-  const std::string        _optionSelectorDefaultTitle;
+  const std::string        _unselectedTitle;
+  const int                _autoselectOptionIndex;
   std::vector<std::string> _options;
-  const int _autoselectOptionIndex;
+  int                      _selectedOptionIndex;
 
-  G3MDemoScene(G3MDemoModel* model,
-               const std::string& name,
-               const std::string& optionSelectorDefaultTitle,
-               const int autoselectOptionIndex) :
-  _model(model),
+public:
+  G3MDemoOptionGroup(const std::string& name,
+                     const std::string& unselectedTitle,
+                     const int autoselectOptionIndex) :
   _name(name),
-  _optionSelectorDefaultTitle(optionSelectorDefaultTitle),
+  _unselectedTitle(unselectedTitle),
   _autoselectOptionIndex(autoselectOptionIndex),
   _selectedOptionIndex(-1)
   {
-  }
-
-  virtual void rawActivate(const G3MContext* context) = 0;
-
-  virtual void rawSelectOption(const std::string& option,
-                               int optionIndex) = 0;
-
-public:
-
-  virtual ~G3MDemoScene() {
   }
 
   const std::string getName() const {
     return _name;
   }
 
-  const std::string getOptionSelectorDefaultTitle() const {
-    return _optionSelectorDefaultTitle;
+  void addOption(const std::string& option) {
+    _options.push_back(option);
   }
 
-  G3MDemoModel* getModel() const {
-    return _model;
-  }
-
-  const size_t getOptionsCount() const {
+  size_t getOptionsCount() const {
     return _options.size();
   }
 
   const std::string getOption(size_t index) const {
     return _options[index];
+  }
+
+  int getOptionIndex(const std::string& option) const;
+
+  int getAutoselectOptionIndex() const {
+    return _autoselectOptionIndex;
+  }
+
+  int getSelectedOptionIndex() const {
+    return _selectedOptionIndex;
+  }
+
+  void setSelectedOptionIndex(int optionIndex) {
+    _selectedOptionIndex = optionIndex;
   }
 
   bool isSelectedOption(const std::string& option) const {
@@ -77,7 +71,92 @@ public:
     return _options[_selectedOptionIndex] == option;
   }
 
-  void selectOption(const std::string& option);
+  const std::string getTitle() const {
+    if (_selectedOptionIndex < 0) {
+      return _unselectedTitle;
+    }
+    return _options[_selectedOptionIndex];
+  }
+
+};
+
+
+class G3MDemoScene {
+private:
+  G3MDemoModel* _model;
+  std::vector<G3MDemoOptionGroup*> _optionGroups;
+
+protected:
+  const std::string _name;
+
+  G3MDemoScene(G3MDemoModel* model,
+               const std::string& name,
+               const std::string& optionSelectorDefaultTitle,
+               const int autoselectOptionIndex) :
+  _model(model),
+  _name(name)
+  {
+    addOptionGroup("", optionSelectorDefaultTitle, autoselectOptionIndex);
+  }
+
+  G3MDemoScene(G3MDemoModel* model,
+               const std::string& name,
+               const std::string& firstGroupName,
+               const std::string& firstGroupUnselectedTitle,
+               const int firstGroupAutoselectOptionIndex) :
+  _model(model),
+  _name(name)
+  {
+    addOptionGroup(firstGroupName, firstGroupUnselectedTitle, firstGroupAutoselectOptionIndex);
+  }
+
+  size_t addOptionGroup(const std::string& name,
+                        const std::string& unselectedTitle,
+                        const int autoselectOptionIndex);
+
+  void addOption(const std::string& option) {
+    addOption(0, option);
+  }
+
+  void addOption(size_t groupIndex,
+                 const std::string& option) {
+    _optionGroups[groupIndex]->addOption(option);
+  }
+
+  virtual void rawActivate(const G3MContext* context) = 0;
+
+  virtual void rawSelectOption(const std::string& option,
+                               int optionIndex) = 0;
+
+  // Scenes with more than one option group override this one.
+  virtual void rawSelectGroupOption(size_t groupIndex,
+                                    const std::string& option,
+                                    int optionIndex) {
+    rawSelectOption(option, optionIndex);
+  }
+
+public:
+
+  virtual ~G3MDemoScene();
+
+  const std::string getName() const {
+    return _name;
+  }
+
+  G3MDemoModel* getModel() const {
+    return _model;
+  }
+
+  size_t getOptionGroupsCount() const {
+    return _optionGroups.size();
+  }
+
+  const G3MDemoOptionGroup* getOptionGroup(size_t groupIndex) const {
+    return _optionGroups[groupIndex];
+  }
+
+  void selectOption(size_t groupIndex,
+                    const std::string& option);
 
   void activate(const G3MContext* context);
 

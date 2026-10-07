@@ -49,18 +49,18 @@ public:
   G3MCameraTransitionsDemoScene(G3MDemoModel* model) :
   G3MDemoScene(model, "Camera Transitions", "<select transition>", -1)
   {
-    _options.push_back("Nadir -> nadir (Madrid -> Sydney)");
-    _options.push_back("Sky at the end (pitch -15)");
-    _options.push_back("Two anchors (Madrid -> Amsterdam)");
-    _options.push_back("Two anchors, oblique (Madrid -> Amsterdam, pitch -35)");
-    _options.push_back("Two anchors, no solution (Madrid -> Sydney)");
-    _options.push_back("PoV: Madrid, horizon -> nadir");
-    _options.push_back("PoV: Madrid -> Toledo, horizon kept");
-    _options.push_back("PoV: Lisbon -> Tokyo, oblique kept");
-    _options.push_back("PoV: Washington -> Buenos Aires, oblique kept");
-    _options.push_back("PoV: Buenos Aires -> Washington, nadir");
-    _options.push_back("PoV: New York -> San Francisco, everything changes");
-    _options.push_back("PoV: Madrid, zoom out 2 km -> 4000 km");
+    addOption("Nadir -> nadir (Madrid -> Sydney)");
+    addOption("Sky at the end (pitch -15)");
+    addOption("Two anchors (Madrid -> Amsterdam)");
+    addOption("Two anchors, oblique (Madrid -> Amsterdam, pitch -35)");
+    addOption("Two anchors, no solution (Madrid -> Sydney)");
+    addOption("PoV: Madrid, horizon -> nadir");
+    addOption("PoV: Madrid -> Toledo, horizon kept");
+    addOption("PoV: Lisbon -> Tokyo, oblique kept");
+    addOption("PoV: Washington -> Buenos Aires, oblique kept");
+    addOption("PoV: Buenos Aires -> Washington, nadir");
+    addOption("PoV: New York -> San Francisco, everything changes");
+    addOption("PoV: Madrid, zoom out 2 km -> 4000 km");
   }
 
 };

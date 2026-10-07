@@ -120,6 +120,17 @@ void StarsGLFeature::changeFullStarMagnitude(float fullStarMagnitude) {
   _fullStarMagnitude->changeValue(fullStarMagnitude);
 }
 
+ColorGradeGLFeature::ColorGradeGLFeature(const Matrix44D* colorMatrix) :
+GLFeature(NO_GROUP, GLF_COLOR_GRADE),
+_colorMatrixHolder(new Matrix44DHolder(colorMatrix))
+{
+  _values->addUniformValue(COLOR_MATRIX, new GPUUniformValueMatrix4(_colorMatrixHolder), false);
+}
+
+void ColorGradeGLFeature::changeColorMatrix(const Matrix44D* colorMatrix) {
+  _colorMatrixHolder->setMatrix(colorMatrix);
+}
+
 BillboardGLFeature::BillboardGLFeature(float billboardWidth,
                                        float billboardHeight,
                                        float anchorU, float anchorV) :

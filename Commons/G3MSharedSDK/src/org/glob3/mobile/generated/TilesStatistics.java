@@ -29,6 +29,7 @@ package org.glob3.mobile.generated;
 //class TerrainTouchListener;
 //class DEMProvider;
 //class IStringBuilder;
+//class Matrix44D;
 
 
 public class TilesStatistics

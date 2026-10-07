@@ -40,7 +40,7 @@ G3MNightSkyDemoScene::G3MNightSkyDemoScene(G3MDemoModel* model) :
 G3MDemoScene(model, "Night Sky", "<select constellation>", 0)
 {
   for (int i = 0; i < CONSTELLATIONS_COUNT; i++) {
-    _options.push_back(CONSTELLATIONS[i]._name);
+    addOption(CONSTELLATIONS[i]._name);
   }
 }
 

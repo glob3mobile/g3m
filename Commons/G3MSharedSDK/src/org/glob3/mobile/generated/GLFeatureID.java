@@ -1,27 +1,4 @@
 package org.glob3.mobile.generated;
-//
-//  GLFeature.cpp
-//  G3M
-//
-//  Created by Jose Miguel SN on 18/03/13.
-//
-//
-
-//
-//  GLFeature.hpp
-//  G3M
-//
-//  Created by Agustín Trujillo Pino on 27/10/12.
-//
-
-
-
-
-
-//class Camera;
-//class Color;
-
-
 public enum GLFeatureID
 {
   GLF_BILLBOARD,
@@ -42,7 +19,8 @@ public enum GLFeatureID
   GLF_CAMERA_POSITION,
   GLF_RIBBON_WIDTH,
   GLF_RIBBON_SIDE,
-  GLF_STARS;
+  GLF_STARS,
+  GLF_COLOR_GRADE;
 
    public int getValue()
    {

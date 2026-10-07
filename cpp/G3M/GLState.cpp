@@ -156,6 +156,11 @@ void GLState::clearGLFeatureGroup(GLFeatureGroupName g) {
   hasChangedStructure();
 }
 
+void GLState::clearGLFeatures(GLFeatureID id) {
+  _features->clearFeatures(id);
+  hasChangedStructure();
+}
+
 void GLState::clearAllGLFeatures() {
   _features->clearFeatures();
   hasChangedStructure();

@@ -158,6 +158,9 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   else if (name == "uStarSizeExponent") {
     return STAR_SIZE_EXPONENT;
   }
+  else if (name == "uColorMatrix") {
+    return COLOR_MATRIX;
+  }
   else {
     return UNRECOGNIZED_UNIFORM;
   }

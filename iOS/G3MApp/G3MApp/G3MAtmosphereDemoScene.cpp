@@ -51,7 +51,7 @@ _satelliteLayer(NULL),
 _openStreetMapLayer(NULL)
 {
   for (int i = 0; i < POSES_COUNT; i++) {
-    _options.push_back(POSES[i]._name);
+    addOption(POSES[i]._name);
   }
 }
 

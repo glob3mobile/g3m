@@ -41,6 +41,7 @@
 #include "G3MCameraTransitionsDemoScene.hpp"
 #include "G3MAtmosphereDemoScene.hpp"
 #include "G3MNightSkyDemoScene.hpp"
+#include "G3MColorGradingDemoScene.hpp"
 #include "G3MIsosurfaceDemoScene.hpp"
 #include "G3MScenarioDEMDemoScene.hpp"
 #include "G3MTiledVectorDemoScene.hpp"
@@ -109,6 +110,7 @@ _context(NULL)
   _scenes.push_back(  new G3MCameraTransitionsDemoScene(this)   );
   _scenes.push_back(  new G3MAtmosphereDemoScene(this)          );
   _scenes.push_back(  new G3MNightSkyDemoScene(this)            );
+  _scenes.push_back(  new G3MColorGradingDemoScene(this)        );
   _scenes.push_back(  new G3MIsosurfaceDemoScene(this)          );
   _scenes.push_back(  new G3MTiledVectorDemoScene(this)         );
   _scenes.push_back(  new G3MHUDDemoScene(this)                 );
@@ -161,6 +163,8 @@ void G3MDemoModel::reset() {
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setShowStatistics(false);
   planetRenderer->setIncrementalTileQuality(false);
+  planetRenderer->removeColorMatrix();
+  hideColorGradingPanel();
   // reset DEM
   planetRenderer->setVerticalExaggeration(1);
   planetRenderer->setElevationDataProvider(NULL, true);
@@ -237,6 +241,7 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
 }
 
 void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
+                                       size_t groupIndex,
                                        const std::string& option,
                                        int optionIndex) {
   ILogger::instance()->logInfo("Selected option \"%s\" in scene \"%s\"",
@@ -244,7 +249,7 @@ void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
                                scene->getName().c_str());
 
   if (_listener != NULL) {
-    _listener->onChangeSceneOption(scene, option, optionIndex);
+    _listener->onChangeSceneOption(scene, groupIndex, option, optionIndex);
   }
 }
 
@@ -256,5 +261,17 @@ void G3MDemoModel::showDialog(const std::string& title,
 
   if (_listener != NULL) {
     _listener->showDialog(title, message);
+  }
+}
+
+void G3MDemoModel::showColorGradingPanel(G3MColorGradingDemoScene* scene) {
+  if (_listener != NULL) {
+    _listener->showColorGradingPanel(scene);
+  }
+}
+
+void G3MDemoModel::hideColorGradingPanel() {
+  if (_listener != NULL) {
+    _listener->hideColorGradingPanel();
   }
 }

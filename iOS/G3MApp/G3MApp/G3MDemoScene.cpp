@@ -9,25 +9,8 @@
 
 #include "G3MDemoModel.hpp"
 
-void G3MDemoScene::deactivate(const G3MContext* context) {
-  _model->reset();
 
-  _selectedOptionIndex = -1;
-}
-
-void G3MDemoScene::activate(const G3MContext* context) {
-  rawActivate(context);
-}
-
-void G3MDemoScene::activateOptions(const G3MContext* context) {
-  if (_autoselectOptionIndex >= 0) {
-    if (_options.size() > _autoselectOptionIndex) {
-      selectOption(_options[_autoselectOptionIndex]);
-    }
-  }
-}
-
-int G3MDemoScene::getOptionIndex(const std::string& option) const {
+int G3MDemoOptionGroup::getOptionIndex(const std::string& option) const {
   const int optionsSize = _options.size();
   for (int i = 0; i < optionsSize; i++) {
     if (_options[i] == option) {
@@ -38,15 +21,53 @@ int G3MDemoScene::getOptionIndex(const std::string& option) const {
   return -1;
 }
 
-void G3MDemoScene::selectOption(const std::string& option) {
-  const int optionIndex = getOptionIndex(option);
-  if (optionIndex != _selectedOptionIndex) {
-    if (optionIndex >= 0) {
-      _selectedOptionIndex = optionIndex;
 
-      rawSelectOption(option, optionIndex);
+G3MDemoScene::~G3MDemoScene() {
+  for (size_t i = 0; i < _optionGroups.size(); i++) {
+    delete _optionGroups[i];
+  }
+}
 
-      _model->onChangeSceneOption(this, option, optionIndex);
+size_t G3MDemoScene::addOptionGroup(const std::string& name,
+                                    const std::string& unselectedTitle,
+                                    const int autoselectOptionIndex) {
+  _optionGroups.push_back( new G3MDemoOptionGroup(name, unselectedTitle, autoselectOptionIndex) );
+  return _optionGroups.size() - 1;
+}
+
+void G3MDemoScene::deactivate(const G3MContext* context) {
+  _model->reset();
+
+  for (size_t i = 0; i < _optionGroups.size(); i++) {
+    _optionGroups[i]->setSelectedOptionIndex(-1);
+  }
+}
+
+void G3MDemoScene::activate(const G3MContext* context) {
+  rawActivate(context);
+}
+
+void G3MDemoScene::activateOptions(const G3MContext* context) {
+  for (size_t groupIndex = 0; groupIndex < _optionGroups.size(); groupIndex++) {
+    const G3MDemoOptionGroup* group = _optionGroups[groupIndex];
+    const int autoselectOptionIndex = group->getAutoselectOptionIndex();
+    if ((autoselectOptionIndex >= 0) &&
+        (group->getOptionsCount() > autoselectOptionIndex)) {
+      selectOption(groupIndex, group->getOption(autoselectOptionIndex));
     }
+  }
+}
+
+void G3MDemoScene::selectOption(size_t groupIndex,
+                                const std::string& option) {
+  G3MDemoOptionGroup* group = _optionGroups[groupIndex];
+  const int optionIndex = group->getOptionIndex(option);
+  if ((optionIndex >= 0) &&
+      (optionIndex != group->getSelectedOptionIndex())) {
+    group->setSelectedOptionIndex(optionIndex);
+
+    rawSelectGroupOption(groupIndex, option, optionIndex);
+
+    _model->onChangeSceneOption(this, groupIndex, option, optionIndex);
   }
 }

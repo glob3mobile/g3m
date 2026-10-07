@@ -61,6 +61,8 @@ public:
 
   void clearGLFeatureGroup(GLFeatureGroupName g);
 
+  void clearGLFeatures(GLFeatureID id);
+
   void clearAllGLFeatures();
 
   int getNumberOfGLFeatures() const;

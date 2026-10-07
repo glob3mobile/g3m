@@ -20,29 +20,6 @@ class Camera;
 class Color;
 
 
-enum GLFeatureID {
-  GLF_BILLBOARD,
-  GLF_VIEWPORT_EXTENT,
-  GLF_GEOMETRY,
-  GLF_MODEL,
-  GLF_PROJECTION,
-  GLF_MODEL_TRANSFORM,
-  GLF_TEXTURE,
-  GLF_COLOR,
-  GLF_FLATCOLOR,
-  GLF_TEXTURE_ID,
-  GLF_TEXTURE_COORDS,
-  GLF_DIRECTION_LIGTH,
-  GLF_VERTEX_NORMAL,
-  GLF_MODEL_VIEW,
-  GLF_BLENDING_MODE,
-  GLF_CAMERA_POSITION,
-  GLF_RIBBON_WIDTH,
-  GLF_RIBBON_SIDE,
-  GLF_STARS
-};
-
-
 class GLFeature: public RCObject {
 protected:
   ~GLFeature() {
@@ -216,6 +193,34 @@ public:
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
 
   void changeFullStarMagnitude(float fullStarMagnitude);
+};
+
+
+// Tile color = (colorMatrix * (r, g, b, 1)).rgb, clamped; alpha is untouched.
+// The fourth column of the homogeneous matrix is the color offset.
+class ColorGradeGLFeature: public GLFeature {
+private:
+#ifdef C_CODE
+  Matrix44DHolder* _colorMatrixHolder;
+#endif
+#ifdef JAVA_CODE
+  private Matrix44DHolder _colorMatrixHolder;
+#endif
+
+  ~ColorGradeGLFeature() {
+    _colorMatrixHolder->_release();
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  ColorGradeGLFeature(const Matrix44D* colorMatrix);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+
+  void changeColorMatrix(const Matrix44D* colorMatrix);
 };
 
 

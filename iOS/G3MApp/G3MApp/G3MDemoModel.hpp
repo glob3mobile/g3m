@@ -12,6 +12,7 @@
 #include <string>
 
 class G3MDemoListener;
+class G3MColorGradingDemoScene;
 class G3MDemoScene;
 class Layer;
 class LayerSet;
@@ -166,11 +167,16 @@ public:
   void reset();
 
   void onChangeSceneOption(G3MDemoScene* scene,
+                           size_t groupIndex,
                            const std::string& option,
                            int optionIndex);
 
   void showDialog(const std::string& title,
                   const std::string& message) const;
+
+  void showColorGradingPanel(G3MColorGradingDemoScene* scene);
+
+  void hideColorGradingPanel();
 
 };
 

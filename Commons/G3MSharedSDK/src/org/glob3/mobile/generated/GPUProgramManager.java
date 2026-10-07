@@ -81,6 +81,7 @@ public class GPUProgramManager
     final boolean transformTC = (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS));
     final boolean rotationTC = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS);
     final boolean hasLight = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT_COLOR);
+    final boolean colorGrade = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.COLOR_MATRIX);
   
     final boolean hasTexture2 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER2);
   //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
@@ -157,9 +158,17 @@ public class GPUProgramManager
         {
           return compileProgramWithName(gl, "FullTransformedTexCoorTexturedMesh");
         }
+        if (colorGrade)
+        {
+          return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_ColorGrade");
+        }
         return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
       }
   
+      if (colorGrade)
+      {
+        return compileProgramWithName(gl, "TexturedMesh_ColorGrade");
+      }
       return compileProgramWithName(gl, "TexturedMesh");
     }
   
