@@ -152,7 +152,7 @@ void G3MDemoModel::setAtmosphereEnable(bool enable) {
 void G3MDemoModel::reset() {
   getG3MWidget()->setViewMode(MONO);
   getG3MWidget()->cancelAllEffects();
-  getG3MWidget()->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
+  getG3MWidget()->setBackgroundColor( Color::black() );
   getG3MWidget()->setRenderedSector( Sector::fullSphere() );
   getG3MWidget()->removeAllPeriodicalTasks();
 

@@ -24,7 +24,8 @@ private:
                       short declination,
                       short red,
                       short green,
-                      short blue);
+                      short blue,
+                      short magnitude);
 
   static void putStars0(IFloatBuffer* directions,
                         IFloatBuffer* colors);
@@ -50,13 +51,19 @@ private:
   static void putStars7(IFloatBuffer* directions,
                         IFloatBuffer* colors);
 
+  static void putStars8(IFloatBuffer* directions,
+                        IFloatBuffer* colors);
+
+  static void putStars9(IFloatBuffer* directions,
+                        IFloatBuffer* colors);
+
 public:
   static size_t starsCount() {
     return 9096;
   }
 
   // directions: 3 floats per star, unit vectors on the planet's cartesian axes (J2000, x towards right ascension 0h, z north)
-  // colors: 4 floats per star, RGBA
+  // colors: 4 floats per star, the hue at full brightness (red, green, blue) and the visual magnitude
   static void putStars(IFloatBuffer* directions,
                        IFloatBuffer* colors);
 

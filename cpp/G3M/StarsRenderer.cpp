@@ -22,23 +22,24 @@
 #include "IMathUtils.hpp"
 
 
-StarsRenderer::StarsRenderer(float starPointSize,
-                             float starsIntensity) :
-_starPointSize(starPointSize),
+StarsRenderer::StarsRenderer(float smallestStarDiameter,
+                             float fullStarMagnitude,
+                             float starSizeExponent) :
+_smallestStarDiameter(smallestStarDiameter),
 _starsMesh(NULL),
 _glState(new GLState()),
-_starsIntensityGLFeature(new StarsIntensityGLFeature(starsIntensity))
+_starsGLFeature(new StarsGLFeature(fullStarMagnitude, starSizeExponent))
 {
-  _glState->addGLFeature(_starsIntensityGLFeature, true);
+  _glState->addGLFeature(_starsGLFeature, true);
 }
 
-void StarsRenderer::setStarsIntensity(float starsIntensity) {
-  _starsIntensityGLFeature->changeIntensity(starsIntensity);
+void StarsRenderer::setFullStarMagnitude(float fullStarMagnitude) {
+  _starsGLFeature->changeFullStarMagnitude(fullStarMagnitude);
 }
 
 StarsRenderer::~StarsRenderer() {
   delete _starsMesh;
-  _starsIntensityGLFeature->_release();
+  _starsGLFeature->_release();
   _glState->_release();
 #ifdef JAVA_CODE
   super.dispose();
@@ -56,7 +57,7 @@ DirectMesh* StarsRenderer::createStarsMesh() const {
                         Vector3D::ZERO,
                         directions,
                         1,
-                        _starPointSize,
+                        _smallestStarDiameter,
                         NULL,
                         colors,
                         false);

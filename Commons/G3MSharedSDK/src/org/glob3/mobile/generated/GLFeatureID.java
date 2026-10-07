@@ -42,7 +42,7 @@ public enum GLFeatureID
   GLF_CAMERA_POSITION,
   GLF_RIBBON_WIDTH,
   GLF_RIBBON_SIDE,
-  GLF_STARS_INTENSITY;
+  GLF_STARS;
 
    public int getValue()
    {

@@ -69,7 +69,7 @@ public class GPUProgramManager
       return compileProgramWithName(gl, "RibbonMesh");
     }
   
-    if (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.STARS_INTENSITY))
+    if (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.FULL_STAR_MAGNITUDE))
     {
       return compileProgramWithName(gl, "Stars");
     }

@@ -3,14 +3,14 @@ Converts the Yale Bright Star Catalogue (BSC5) into YaleBrightStars.hpp/.cpp, th
 
 Input:  bsc5.json from https://github.com/brettonw/YaleBrightStarCatalog (MIT), a JSON
         conversion of BSC5 (Hoffleit & Warren 1991, http://tdc-www.harvard.edu/catalogs/bsc5.html)
-Output: the stars as short arrays, 5 numbers per star (right ascension, declination, red, green, blue),
+Output: the stars as short arrays, 6 numbers per star (right ascension, declination, red, green, blue, magnitude),
         split in methods small enough for Java (64 KB of bytecode per method)
 
 usage: python3 make_stars_cpp.py bsc5.json <G3M cpp folder>
 """
 import json, math, os, re, sys
 
-STARS_PER_METHOD = 1200  # 6000 shorts, under 64 KB of Java bytecode
+STARS_PER_METHOD = 1000  # 6000 shorts, under 64 KB of Java bytecode
 
 def angleInDegrees(text, isRightAscension):
     numbers = [float(n) for n in re.findall(r"[\d.]+", text)]
@@ -36,18 +36,16 @@ def blackBodyColour(kelvin):
 def encodedStars(inputPath):
     stars = [s for s in json.load(open(inputPath)) if "Vmag" in s and "RA" in s and "Dec" in s]
     magnitudes = [float(s["Vmag"]) for s in stars]
-    brightestMagnitude, faintestMagnitude = min(magnitudes), max(magnitudes)
     result = []
     for star, magnitude in zip(stars, magnitudes):
-        # linear in magnitude (the eye's scale); the faintest star keeps one magnitude of brightness
-        brightness = (faintestMagnitude + 1 - magnitude) / (faintestMagnitude + 1 - brightestMagnitude)
         colour = blackBodyColour(temperature(float(star["B-V"]))) if "B-V" in star else [1, 1, 1]
         rightAscensionInTurns = angleInDegrees(star["RA"], True) / 360
         declinationInQuarterTurns = angleInDegrees(star["Dec"], False) / 90
         result.append([round(rightAscensionInTurns * 65536) % 65536 - 32768,
                        round(declinationInQuarterTurns * 32767)] +
-                      [round(c * brightness * 255) for c in colour])
-    print(f"{len(stars)} stars, magnitudes {brightestMagnitude} to {faintestMagnitude}")
+                      [round(c * 255) for c in colour] +
+                      [round(magnitude * 100)])
+    print(f"{len(stars)} stars, magnitudes {min(magnitudes)} to {max(magnitudes)}")
     return result
 
 HEADER = """//
@@ -76,7 +74,8 @@ private:
                       short declination,
                       short red,
                       short green,
-                      short blue);
+                      short blue,
+                      short magnitude);
 
 %(declarations)s
 
@@ -86,7 +85,7 @@ public:
   }
 
   // directions: 3 floats per star, unit vectors on the planet's cartesian axes (J2000, x towards right ascension 0h, z north)
-  // colors: 4 floats per star, RGBA
+  // colors: 4 floats per star, the hue at full brightness (red, green, blue) and the visual magnitude
   static void putStars(IFloatBuffer* directions,
                        IFloatBuffer* colors);
 
@@ -110,7 +109,7 @@ SOURCE_HEAD = """//
 
 
 // rightAscension in 1/65536 of a turn, shifted by half a turn to fit a short;
-// declination in 1/32767 of a quarter turn; red, green and blue from 0 to 255
+// declination in 1/32767 of a quarter turn; red, green and blue from 0 to 255; magnitude in hundredths
 void YaleBrightStars::putStar(IFloatBuffer* directions,
                               IFloatBuffer* colors,
                               size_t star,
@@ -118,7 +117,8 @@ void YaleBrightStars::putStar(IFloatBuffer* directions,
                               short declination,
                               short red,
                               short green,
-                              short blue) {
+                              short blue,
+                              short magnitude) {
   const IMathUtils* mu = IMathUtils::instance();
   const double rightAscensionInRadians = (rightAscension + 32768) / 65536.0 * 2 * PI;
   const double declinationInRadians    = declination / 32767.0 * HALF_PI;
@@ -131,7 +131,7 @@ void YaleBrightStars::putStar(IFloatBuffer* directions,
   colors->put(star*4    , red   / 255.0f);
   colors->put(star*4 + 1, green / 255.0f);
   colors->put(star*4 + 2, blue  / 255.0f);
-  colors->put(star*4 + 3, 1);
+  colors->put(star*4 + 3, magnitude / 100.0f);
 }
 
 void YaleBrightStars::putStars(IFloatBuffer* directions,
@@ -149,8 +149,8 @@ void YaleBrightStars::putStars%(index)d(IFloatBuffer* directions,
   const size_t firstStar = %(firstStar)d;
   const size_t starsCount = %(starsCount)d;
   for (size_t i = 0; i < starsCount; i++) {
-    const size_t s = i * 5;
-    putStar(directions, colors, firstStar + i, stars[s], stars[s + 1], stars[s + 2], stars[s + 3], stars[s + 4]);
+    const size_t s = i * 6;
+    putStar(directions, colors, firstStar + i, stars[s], stars[s + 1], stars[s + 2], stars[s + 3], stars[s + 4], stars[s + 5]);
   }
 }
 """

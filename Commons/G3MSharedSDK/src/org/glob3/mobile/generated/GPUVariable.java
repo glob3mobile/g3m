@@ -124,9 +124,13 @@ public class GPUVariable
     {
       return GPUUniformKey.SPACE_COLOR;
     }
-    else if (name.equals("uStarsIntensity"))
+    else if (name.equals("uFullStarMagnitude"))
     {
-      return GPUUniformKey.STARS_INTENSITY;
+      return GPUUniformKey.FULL_STAR_MAGNITUDE;
+    }
+    else if (name.equals("uStarSizeExponent"))
+    {
+      return GPUUniformKey.STAR_SIZE_EXPONENT;
     }
     else
     {

@@ -60,6 +60,7 @@ void G3MNightSkyDemoScene::rawSelectOption(const std::string& option,
   g3mWidget->setAnimatedCameraPosition(Geodetic3D::fromDegrees(constellation._declinationDegrees,
                                                                constellation._rightAscensionDegrees,
                                                                CAMERA_HEIGHT),
-                                       Angle::zero(),
+                                       // looking up, heading north leaves the south at the top of the screen
+                                       Angle::fromDegrees(180),
                                        Angle::fromDegrees(90));
 }

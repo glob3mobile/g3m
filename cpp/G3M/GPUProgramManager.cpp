@@ -50,7 +50,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
     return compileProgramWithName(gl, "RibbonMesh");
   }
 
-  if (GPUVariable::hasUniform(uniformsCode, STARS_INTENSITY)) {
+  if (GPUVariable::hasUniform(uniformsCode, FULL_STAR_MAGNITUDE)) {
     return compileProgramWithName(gl, "Stars");
   }
 

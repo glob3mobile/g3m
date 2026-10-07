@@ -945,17 +945,22 @@ public:
             "attribute vec4 aColor;\n" +
             "uniform mat4 uModelview;\n" +
             "uniform float uPointSize;\n" +
-            "uniform float uStarsIntensity;\n" +
+            "uniform float uFullStarMagnitude;\n" +
+            "uniform float uStarSizeExponent;\n" +
             "varying vec4  StarColor;\n" +
             "varying float StarPointSize;\n" +
+            "const float colourVisionMagnitude = 1.0;\n" +
+            "float lightOfMagnitude(float magnitude, float referenceMagnitude) {\n" +
+            "  return pow(10.0, 0.4 * (referenceMagnitude - magnitude));\n" +
+            "}\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
-            "  // the star colours are the hue at full brightness times the star brightness\n" +
-            "  float brightness = max(aColor.r, max(aColor.g, aColor.b));\n" +
-            "  float light = brightness * uStarsIntensity;\n" +
-            "  StarColor = vec4(aColor.rgb / brightness, min(light, 1.0));\n" +
-            "  // the disc area grows with the light\n" +
-            "  StarPointSize = uPointSize * sqrt(max(light, 1.0));\n" +
+            "  float magnitude = aColor.a;\n" +
+            "  float light = lightOfMagnitude(magnitude, uFullStarMagnitude);\n" +
+            "  float colourSaturation = min(lightOfMagnitude(magnitude, colourVisionMagnitude), 1.0);\n" +
+            "  vec3 colour = mix(vec3(1.0), aColor.rgb, colourSaturation);\n" +
+            "  StarColor = vec4(colour, min(light, 1.0));\n" +
+            "  StarPointSize = uPointSize * pow(max(light, 1.0), uStarSizeExponent);\n" +
             "  gl_PointSize = StarPointSize;\n" +
             "}\n",
             emptyString +

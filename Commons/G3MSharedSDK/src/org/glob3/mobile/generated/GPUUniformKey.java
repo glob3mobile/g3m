@@ -44,7 +44,8 @@ public enum GPUUniformKey
   RIBBON_WIDTH(24),
   GROUND_HAZE_PASS(25),
   SPACE_COLOR(26),
-  STARS_INTENSITY(27);
+  FULL_STAR_MAGNITUDE(27),
+  STAR_SIZE_EXPONENT(28);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

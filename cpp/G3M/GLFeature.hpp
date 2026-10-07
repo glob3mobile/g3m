@@ -39,7 +39,7 @@ enum GLFeatureID {
   GLF_CAMERA_POSITION,
   GLF_RIBBON_WIDTH,
   GLF_RIBBON_SIDE,
-  GLF_STARS_INTENSITY
+  GLF_STARS
 };
 
 
@@ -199,22 +199,23 @@ public:
 
 
 // Multiplies the brightness of every star of the Stars program
-class StarsIntensityGLFeature: public GLFeature {
+class StarsGLFeature: public GLFeature {
 private:
-  ~StarsIntensityGLFeature() {
+  ~StarsGLFeature() {
 #ifdef JAVA_CODE
     super.dispose();
 #endif
   }
 
-  GPUUniformValueFloatMutable* _intensity;
+  GPUUniformValueFloatMutable* _fullStarMagnitude;
 
 public:
-  StarsIntensityGLFeature(float intensity);
+  StarsGLFeature(float fullStarMagnitude,
+                 float starSizeExponent);
 
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
 
-  void changeIntensity(float intensity);
+  void changeFullStarMagnitude(float fullStarMagnitude);
 };
 
 

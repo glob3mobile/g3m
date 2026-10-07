@@ -18,17 +18,17 @@ package org.glob3.mobile.generated;
 //class DirectMesh;
 //class GLState;
 //class Camera;
-//class StarsIntensityGLFeature;
+//class StarsGLFeature;
 
 
-// The stars of the Yale Bright Star Catalogue, fixed on the planet's cartesian axes,
-// drawn as round discs; the light above white makes a star bigger
+// The stars of the Yale Bright Star Catalogue, fixed on the planet's cartesian axes, drawn as round discs
+// from their real light (as Stellarium): the faint stars fade at the smallest diameter, the bright ones grow
 public class StarsRenderer extends DefaultRenderer
 {
-  private final float _starPointSize;
+  private final float _smallestStarDiameter;
   private DirectMesh _starsMesh;
   private GLState _glState;
-  private StarsIntensityGLFeature _starsIntensityGLFeature;
+  private StarsGLFeature _starsGLFeature;
 
   private DirectMesh createStarsMesh()
   {
@@ -37,7 +37,7 @@ public class StarsRenderer extends DefaultRenderer
     IFloatBuffer colors = IFactory.instance().createFloatBuffer(starsCount * 4);
     YaleBrightStars.putStars(directions, colors);
   
-    return new DirectMesh(GLPrimitive.points(), true, Vector3D.ZERO, directions, 1, _starPointSize, null, colors, false);
+    return new DirectMesh(GLPrimitive.points(), true, Vector3D.ZERO, directions, 1, _smallestStarDiameter, null, colors, false);
   }
 
   private void updateGLState(Camera camera)
@@ -60,27 +60,28 @@ public class StarsRenderer extends DefaultRenderer
     _starsMesh.setUserTransformMatrix(new MutableMatrix44D(aroundCamera));
   }
 
-  // starPointSize: diameter in pixels of a star as bright as white;
-  // starsIntensity: multiplies the brightness of every star (1 keeps the catalogue brightness)
-  public StarsRenderer(float starPointSize, float starsIntensity)
+  // smallestStarDiameter: in pixels, the diameter of the faint stars;
+  // fullStarMagnitude: a star of this magnitude is drawn opaque at the smallest diameter (fainter ones fade);
+  // starSizeExponent: the diameter of the brighter stars grows as their light to this power
+  public StarsRenderer(float smallestStarDiameter, float fullStarMagnitude, float starSizeExponent)
   {
-     _starPointSize = starPointSize;
+     _smallestStarDiameter = smallestStarDiameter;
      _starsMesh = null;
      _glState = new GLState();
-     _starsIntensityGLFeature = new StarsIntensityGLFeature(starsIntensity);
-    _glState.addGLFeature(_starsIntensityGLFeature, true);
+     _starsGLFeature = new StarsGLFeature(fullStarMagnitude, starSizeExponent);
+    _glState.addGLFeature(_starsGLFeature, true);
   }
 
-  public final void setStarsIntensity(float starsIntensity)
+  public final void setFullStarMagnitude(float fullStarMagnitude)
   {
-    _starsIntensityGLFeature.changeIntensity(starsIntensity);
+    _starsGLFeature.changeFullStarMagnitude(fullStarMagnitude);
   }
 
   public void dispose()
   {
     if (_starsMesh != null)
        _starsMesh.dispose();
-    _starsIntensityGLFeature._release();
+    _starsGLFeature._release();
     _glState._release();
     super.dispose();
   }

@@ -13,29 +13,31 @@
 class DirectMesh;
 class GLState;
 class Camera;
-class StarsIntensityGLFeature;
+class StarsGLFeature;
 
 
-// The stars of the Yale Bright Star Catalogue, fixed on the planet's cartesian axes,
-// drawn as round discs; the light above white makes a star bigger
+// The stars of the Yale Bright Star Catalogue, fixed on the planet's cartesian axes, drawn as round discs
+// from their real light (as Stellarium): the faint stars fade at the smallest diameter, the bright ones grow
 class StarsRenderer : public DefaultRenderer {
 private:
-  const float _starPointSize;
+  const float _smallestStarDiameter;
   DirectMesh* _starsMesh;
   GLState*    _glState;
-  StarsIntensityGLFeature* _starsIntensityGLFeature;
+  StarsGLFeature* _starsGLFeature;
 
   DirectMesh* createStarsMesh() const;
 
   void updateGLState(const Camera* camera);
 
 public:
-  // starPointSize: diameter in pixels of a star as bright as white;
-  // starsIntensity: multiplies the brightness of every star (1 keeps the catalogue brightness)
-  StarsRenderer(float starPointSize,
-                float starsIntensity);
+  // smallestStarDiameter: in pixels, the diameter of the faint stars;
+  // fullStarMagnitude: a star of this magnitude is drawn opaque at the smallest diameter (fainter ones fade);
+  // starSizeExponent: the diameter of the brighter stars grows as their light to this power
+  StarsRenderer(float smallestStarDiameter,
+                float fullStarMagnitude,
+                float starSizeExponent);
 
-  void setStarsIntensity(float starsIntensity);
+  void setFullStarMagnitude(float fullStarMagnitude);
 
   ~StarsRenderer();
 

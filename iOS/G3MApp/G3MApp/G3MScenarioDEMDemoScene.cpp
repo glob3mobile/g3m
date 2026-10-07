@@ -24,7 +24,7 @@ void G3MScenarioDEMDemoScene::rawActivate(const G3MContext* context) {
   PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   planetRenderer->setVerticalExaggeration(2);
 
-  g3mWidget->setBackgroundColor( Color::fromRGBA255(185, 221, 209, 255).muchDarker() );
+  g3mWidget->setBackgroundColor( Color::black() );
 
 
   const Sector demSector = Sector::fromDegrees(40.1665739916489, -5.85449532145337,

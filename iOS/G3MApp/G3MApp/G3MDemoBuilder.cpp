@@ -78,7 +78,9 @@ void G3MDemoBuilder::build() {
                                                 Color::WHITE        /* meshInnerColor */));
 
   builder->setAtmosphere(true);
-  builder->setStarsRenderer(new StarsRenderer(2 /* starPointSize */, 3 /* starsIntensity */));
+  builder->setStarsRenderer(new StarsRenderer(2   /* smallestStarDiameter */,
+                                              4   /* fullStarMagnitude    */,
+                                              0.3 /* starSizeExponent     */));
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);

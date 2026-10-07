@@ -107,15 +107,17 @@ void CameraPositionGLFeature::update(const Camera* cam,
                            spaceColor._blue);
 }
 
-StarsIntensityGLFeature::StarsIntensityGLFeature(float intensity) :
-GLFeature(NO_GROUP, GLF_STARS_INTENSITY)
+StarsGLFeature::StarsGLFeature(float fullStarMagnitude,
+                               float starSizeExponent) :
+GLFeature(NO_GROUP, GLF_STARS)
 {
-  _intensity = new GPUUniformValueFloatMutable(intensity);
-  _values->addUniformValue(STARS_INTENSITY, _intensity, false);
+  _fullStarMagnitude = new GPUUniformValueFloatMutable(fullStarMagnitude);
+  _values->addUniformValue(FULL_STAR_MAGNITUDE, _fullStarMagnitude, false);
+  _values->addUniformValue(STAR_SIZE_EXPONENT, new GPUUniformValueFloat(starSizeExponent), false);
 }
 
-void StarsIntensityGLFeature::changeIntensity(float intensity) {
-  _intensity->changeValue(intensity);
+void StarsGLFeature::changeFullStarMagnitude(float fullStarMagnitude) {
+  _fullStarMagnitude->changeValue(fullStarMagnitude);
 }
 
 BillboardGLFeature::BillboardGLFeature(float billboardWidth,
