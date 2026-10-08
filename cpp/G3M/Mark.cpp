@@ -27,18 +27,22 @@
 #include "IImageFactoryListener.hpp"
 #include "MarkOutfit.hpp"
 #include "MarkAnchor.hpp"
+#include "IMathUtils.hpp"
 
 
 class MarkImageFactoryListener : public IImageFactoryListener {
 private:
   IImageFactory* _imageFactory;
-  Mark* _mark;
+  Mark*          _mark;
+  const size_t   _outfitIndex;
 
 public:
   MarkImageFactoryListener(IImageFactory* imageFactory,
-                           Mark* mark) :
+                           Mark*          mark,
+                           const size_t   outfitIndex) :
   _imageFactory(imageFactory),
-  _mark(mark)
+  _mark(mark),
+  _outfitIndex(outfitIndex)
   {
 
   }
@@ -54,16 +58,72 @@ public:
   void imageCreated(const IImage*      image,
                     const std::string& imageName) {
     if (_mark) {
-      _mark->onImageCreated(image, imageName);
+      _mark->onImageCreated(_outfitIndex, image, imageName);
     }
   }
 
   void onError(const std::string& error)  {
     if (_mark) {
-      _mark->onImageCreationError(error);
+      _mark->onImageCreationError(_outfitIndex, error);
     }
   }
 
+};
+
+
+/** an outfit's image and texture: the mark's own fields hold the outfit on screen, these the others */
+class MarkOutfitImage {
+public:
+  IImageFactory*            _imageFactory; // until the image is asked for
+  MarkImageFactoryListener* _listener;     // while the image is being created
+  bool                      _solved;
+#ifdef C_CODE
+  const IImage*             _image;
+  const TextureIDReference* _textureID;
+  const MarkAnchor*         _anchor;
+#endif
+#ifdef JAVA_CODE
+  public IImage             _image;
+  public TextureIDReference _textureID;
+  public MarkAnchor         _anchor;
+#endif
+  std::string               _imageID;
+  float                     _width;
+  float                     _height;
+  bool                      _hasAnchor; // the outfit's anchor, computed once its image exists
+  float                     _anchorU;
+  float                     _anchorV;
+
+  MarkOutfitImage(IImageFactory* imageFactory,
+                  const MarkAnchor* anchor) :
+  _imageFactory(imageFactory),
+  _listener(NULL),
+  _solved(false),
+  _image(NULL),
+  _textureID(NULL),
+  _anchor(anchor),
+  _imageID(""),
+  _width(0),
+  _height(0),
+  _hasAnchor(false),
+  _anchorU(0.5f),
+  _anchorV(0.5f)
+  {
+  }
+
+  ~MarkOutfitImage() {
+    if (_listener != NULL) {
+      _listener->forgetMark();
+    }
+    delete _imageFactory;
+    delete _image;
+    if (_textureID != NULL) {
+#ifdef JAVA_CODE
+      _textureID.dispose();
+#endif
+      delete _textureID;
+    }
+  }
 };
 
 
@@ -192,8 +252,15 @@ Mark::Mark(const std::vector<MarkOutfit*>& outfits,
            MarkTouchListener*              listener,
            bool                            autoDeleteListener,
            bool                            zoomInAppears) :
-_imageFactory(outfits[0]->takeImageFactory()),
-_imageFactoryListener(NULL),
+_outfitIndex(0),
+_priority(NAND),
+_hasHint(false),
+_appAnchorU(0.5),
+_appAnchorV(0.5),
+_declutterHidden(false),
+_declutterTarget(0),
+_transitionScale(1),
+_lastTransitionMS(-1),
 _position(new Geodetic3D(position)),
 _altitudeMode(altitudeMode),
 _textureID(NULL),
@@ -240,11 +307,14 @@ _token("")
 {
   // element by element: in Java an assignment would share the caller's list
   for (size_t i = 0; i < outfits.size(); i++) {
-    _outfits.push_back(outfits[i]);
-  }
+    MarkOutfit* outfit = outfits[i];
+    _outfits.push_back(outfit);
 
-  if (_imageFactory->isMutable()) {
-    ILogger::instance()->logError("Marks doesn't support mutable image factories");
+    IImageFactory* imageFactory = outfit->takeImageFactory();
+    if (imageFactory->isMutable()) {
+      ILogger::instance()->logError("Marks doesn't support mutable image factories");
+    }
+    _outfitImages.push_back(new MarkOutfitImage(imageFactory, outfit->getAnchor()));
   }
 }
 
@@ -261,12 +331,21 @@ void Mark::initialize(const G3MContext* context,
     }
   }
 
-  if (!_textureSolved && (_imageFactory != NULL)) {
-    _imageFactoryListener = new MarkImageFactoryListener(_imageFactory, this);
-    _imageFactory->create(context,
-                          _imageFactoryListener,
-                          true);
-    _imageFactory = NULL; // ownership moved to MarkImageFactoryListener
+  createPendingOutfitImages(context);
+}
+
+// every outfit at once: choosing between them needs their sizes
+void Mark::createPendingOutfitImages(const G3MContext* context) {
+  for (size_t i = 0; i < _outfitImages.size(); i++) {
+    MarkOutfitImage* outfitImage = _outfitImages[i];
+    if (outfitImage->_imageFactory != NULL) {
+      outfitImage->_listener = new MarkImageFactoryListener(outfitImage->_imageFactory, this, i);
+      IImageFactory* imageFactory = outfitImage->_imageFactory;
+      outfitImage->_imageFactory = NULL; // ownership moved to MarkImageFactoryListener
+      imageFactory->create(context,
+                           outfitImage->_listener,
+                           true);
+    }
   }
 }
 
@@ -291,10 +370,9 @@ Mark::~Mark() {
     cancelEffects();
   }
 
-  if (_imageFactoryListener) {
-    _imageFactoryListener->forgetMark();
+  for (size_t i = 0; i < _outfitImages.size(); i++) {
+    delete _outfitImages[i];
   }
-  delete _imageFactory;
 
   delete _effectTarget;
 
@@ -424,16 +502,10 @@ void Mark::render(const G3MRenderContext* rc,
                   const Planet* planet,
                   GL* gl,
                   IFloatBuffer* billboardTexCoords) {
-  const Vector3D* markPosition = getCartesianPosition(planet);
-
-  _markCameraVector.set(markPosition->_x - cameraPosition.x(),
-                        markPosition->_y - cameraPosition.y(),
-                        markPosition->_z - cameraPosition.z());
-
   _renderedMark = false;
 
-  if (isRenderableByDistance() &&
-      !isOccludedByHorizon(planet, cameraPosition, cameraHeight, markPosition)) {
+  if (!_declutterHidden &&
+      isVisibleFrom(planet, cameraPosition, cameraHeight)) {
     ensureTexture(rc);
     if (_textureID != NULL) {
       ensureGLState(planet, billboardTexCoords, parentGLState);
@@ -442,6 +514,42 @@ void Mark::render(const G3MRenderContext* rc,
       _renderedMark = true;
     }
   }
+}
+
+bool Mark::isVisibleFrom(const Planet* planet,
+                         const MutableVector3D& cameraPosition,
+                         double cameraHeight) {
+  const Vector3D* markPosition = getCartesianPosition(planet);
+
+  _markCameraVector.set(markPosition->_x - cameraPosition.x(),
+                        markPosition->_y - cameraPosition.y(),
+                        markPosition->_z - cameraPosition.z());
+
+  return (isRenderableByDistance() &&
+          !isOccludedByHorizon(planet, cameraPosition, cameraHeight, markPosition));
+}
+
+Vector2F Mark::getOutfitScreenSize(size_t outfitIndex) const {
+  float width;
+  float height;
+  if (_textureSizeSetExternally || (outfitIndex == _outfitIndex)) {
+    width  = _textureWidth;
+    height = _textureHeight;
+  }
+  else {
+    const MarkOutfitImage* outfitImage = _outfitImages[outfitIndex];
+    width  = outfitImage->_width;
+    height = outfitImage->_height;
+  }
+  return Vector2F(width * _textureWidthScale, height * _textureHeightScale);
+}
+
+Vector2F Mark::getOutfitAnchor(size_t outfitIndex) const {
+  const MarkOutfitImage* outfitImage = _outfitImages[outfitIndex];
+  if (outfitImage->_hasAnchor) {
+    return Vector2F(outfitImage->_anchorU, outfitImage->_anchorV);
+  }
+  return Vector2F(_appAnchorU, _appAnchorV);
 }
 
 bool Mark::isRenderableByDistance() const {
@@ -678,11 +786,23 @@ void Mark::setTextureCoordinatesTransformation(const float translationX,
 }
 
 void Mark::setMarkAnchor(float anchorU, float anchorV) {
+  _appAnchorU = anchorU;
+  _appAnchorV = anchorV;
+  changeAnchor(anchorU, anchorV);
+}
+
+void Mark::changeAnchor(float anchorU, float anchorV) {
   if (_billboardGLF != NULL) {
     _billboardGLF->changeAnchor(anchorU, anchorV);
   }
   _anchorU = anchorU;
   _anchorV = anchorV;
+}
+
+void Mark::addHint(MarkOutfit* hint) {
+  _outfits.push_back(hint);
+  _outfitImages.push_back(new MarkOutfitImage(hint->takeImageFactory(), hint->getAnchor()));
+  _hasHint = true;
 }
 
 Vector2F Mark::getMarkAnchor() const {
@@ -697,26 +817,131 @@ float Mark::getMarkAnchorV() const {
   return _anchorV;
 }
 
-void Mark::onImageCreationError(const std::string& error) {
-  _textureSolved = true;
+void Mark::onImageCreationError(size_t outfitIndex,
+                                const std::string& error) {
+  MarkOutfitImage* outfitImage = _outfitImages[outfitIndex];
+  outfitImage->_listener = NULL;
+  outfitImage->_solved   = true;
 
-  _imageFactoryListener = NULL;
+  if (outfitIndex == _outfitIndex) {
+    _textureSolved = true;
+  }
 
   ILogger::instance()->logError("Can't create image for Mark: \"%s\"",
                                 error.c_str());
 }
 
-void Mark::onImageCreated(const IImage* image,
+void Mark::onImageCreated(size_t outfitIndex,
+                          const IImage* image,
                           const std::string& imageName) {
-  _imageID = imageName;
-
-  _imageFactoryListener = NULL;
-
-  const MarkAnchor* anchor = _outfits[0]->getAnchor();
-  if (anchor != NULL) {
-    const Vector2F anchorUV = anchor->getAnchor(image);
-    setMarkAnchor(anchorUV._x, anchorUV._y);
+  MarkOutfitImage* outfitImage = _outfitImages[outfitIndex];
+  outfitImage->_listener = NULL;
+  outfitImage->_solved   = true;
+  outfitImage->_imageID  = imageName;
+  outfitImage->_width    = image->getWidth();
+  outfitImage->_height   = image->getHeight();
+  if (outfitImage->_anchor != NULL) {
+    const Vector2F anchorUV = outfitImage->_anchor->getAnchor(image);
+    outfitImage->_hasAnchor = true;
+    outfitImage->_anchorU   = anchorUV._x;
+    outfitImage->_anchorV   = anchorUV._y;
   }
 
-  onTextureResolved(image);
+  if (outfitIndex == _outfitIndex) {
+    _imageID = imageName;
+    applyOutfitAnchor(outfitImage);
+    onTextureResolved(image);
+  }
+  else {
+    outfitImage->_image = image;
+  }
+}
+
+void Mark::applyOutfitAnchor(const MarkOutfitImage* outfitImage) {
+  if (outfitImage->_hasAnchor) {
+    changeAnchor(outfitImage->_anchorU, outfitImage->_anchorV);
+  }
+  else {
+    changeAnchor(_appAnchorU, _appAnchorV);
+  }
+}
+
+void Mark::stepDeclutterTransition(long long nowMS,
+                                   long long growMS,
+                                   long long shrinkMS) {
+  const long long elapsedMS = (_lastTransitionMS < 0) ? 0 : (nowMS - _lastTransitionMS);
+  _lastTransitionMS = nowMS;
+
+  const bool targetOnScreen = !_declutterHidden && (_declutterTarget >= 0) && (_outfitIndex == (size_t) _declutterTarget);
+  if (targetOnScreen) {
+    if (_transitionScale < 1) {
+      _transitionScale = (growMS <= 0) ? 1 : IMathUtils::instance()->min(1.0f, _transitionScale + ((float) elapsedMS / growMS));
+      updateBillboardSize();
+    }
+    return;
+  }
+
+  if (_declutterHidden) {
+    if (_declutterTarget >= 0) {
+      setOutfit(_declutterTarget);
+      _declutterHidden = false;
+      _transitionScale = 0;
+      updateBillboardSize();
+    }
+    return;
+  }
+
+  _transitionScale = (shrinkMS <= 0) ? 0 : IMathUtils::instance()->max(0.0f, _transitionScale - ((float) elapsedMS / shrinkMS));
+  if (_transitionScale <= 0) {
+    if (_declutterTarget >= 0) {
+      setOutfit(_declutterTarget);
+    }
+    else {
+      _declutterHidden = true;
+    }
+  }
+  updateBillboardSize();
+}
+
+void Mark::resetDeclutter() {
+  _declutterTarget  = 0;
+  _declutterHidden  = false;
+  _transitionScale  = 1;
+  _lastTransitionMS = -1;
+  setOutfit(0);
+  updateBillboardSize();
+}
+
+bool Mark::hasPriority() const {
+  return !ISNAN(_priority);
+}
+
+void Mark::setOutfit(size_t outfitIndex) {
+  if (outfitIndex == _outfitIndex) {
+    return;
+  }
+
+  // the outfit leaving the screen keeps its image or texture
+  MarkOutfitImage* leaving = _outfitImages[_outfitIndex];
+  leaving->_textureID = _textureID;
+  leaving->_image     = _textureImage;
+  leaving->_imageID   = _imageID;
+
+  MarkOutfitImage* arriving = _outfitImages[outfitIndex];
+  _textureID     = arriving->_textureID;
+  _textureImage  = arriving->_image;
+  _imageID       = arriving->_imageID;
+  _textureSolved = arriving->_solved;
+  arriving->_textureID = NULL;
+  arriving->_image     = NULL;
+
+  if (!_textureSizeSetExternally) {
+    _textureWidth  = arriving->_width;
+    _textureHeight = arriving->_height;
+  }
+  applyOutfitAnchor(arriving);
+
+  _outfitIndex = outfitIndex;
+
+  clearGLState();
 }

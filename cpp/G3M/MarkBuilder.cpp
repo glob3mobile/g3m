@@ -12,6 +12,8 @@
 #include "MarkTouchListener.hpp"
 #include "Geodetic3D.hpp"
 #include "ErrorHandling.hpp"
+#include "IMathUtils.hpp"
+#include "FixedMarkAnchor.hpp"
 
 
 MarkBuilder::MarkBuilder() :
@@ -23,12 +25,15 @@ _position(NULL),
 _userData(NULL),
 _autoDeleteUserData(false),
 _touchListener(NULL),
-_autoDeleteTouchListener(false)
+_autoDeleteTouchListener(false),
+_priority(NAND),
+_hint(NULL)
 {
 }
 
 MarkBuilder::~MarkBuilder() {
   delete _position;
+  delete _hint;
 
   for (size_t i = 0; i < _outfits.size(); i++) {
     delete _outfits[i];
@@ -90,6 +95,17 @@ void MarkBuilder::setTouchListener(MarkTouchListener* touchListener,
   _autoDeleteTouchListener = autoDeleteTouchListener;
 }
 
+void MarkBuilder::setPriority(double priority) {
+  _priority = priority;
+}
+
+void MarkBuilder::setHint(IImageFactory* imageFactory,
+                          MarkAnchor*    anchor) {
+  delete _hint;
+  _hint = new MarkOutfit(imageFactory,
+                         (anchor == NULL) ? new FixedMarkAnchor(0.5f, 0.5f) : anchor);
+}
+
 // what belongs to the mark just built goes with it
 void MarkBuilder::clearMarkProperties() {
   delete _position;
@@ -102,6 +118,10 @@ void MarkBuilder::clearMarkProperties() {
 
   _touchListener           = NULL;
   _autoDeleteTouchListener = false;
+
+  _priority = NAND;
+
+  _hint = NULL;
 }
 
 Mark* MarkBuilder::build() {
@@ -122,6 +142,10 @@ Mark* MarkBuilder::build() {
                         _touchListener,
                         _autoDeleteTouchListener,
                         _zoomInAppears);
+  mark->setPriority(_priority);
+  if (_hint != NULL) {
+    mark->addHint(_hint);
+  }
 
   clearMarkProperties();
 

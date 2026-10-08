@@ -2,10 +2,44 @@ package org.glob3.mobile.generated;
 public class Mark implements SurfaceElevationListener
 {
 
-  private IImageFactory _imageFactory;
-  private MarkImageFactoryListener _imageFactoryListener;
-
   private java.util.ArrayList<MarkOutfit> _outfits = new java.util.ArrayList<MarkOutfit>();
+  private java.util.ArrayList<MarkOutfitImage> _outfitImages = new java.util.ArrayList<MarkOutfitImage>(); // one per outfit: the image and texture of the outfits not on screen
+  private int _outfitIndex;
+
+  private double _priority; // NAND: none, the renderer's order decides
+  private boolean _declutterHidden;
+
+  // the outfit the renderer wants on screen (-1: none); the one on screen shrinks away before it grows in
+  private int _declutterTarget;
+  private float _transitionScale;
+  private long _lastTransitionMS;
+
+  private void applyOutfitAnchor(MarkOutfitImage outfitImage)
+  {
+    if (outfitImage._hasAnchor)
+    {
+      changeAnchor(outfitImage._anchorU, outfitImage._anchorV);
+    }
+    else
+    {
+      changeAnchor(_appAnchorU, _appAnchorV);
+    }
+  }
+
+  private boolean _hasHint; // the last outfit is a hint: drawn when nothing else fits, not touchable
+
+  // the anchor the app set: outfits without their own anchor use it
+  private float _appAnchorU;
+  private float _appAnchorV;
+  private void changeAnchor(float anchorU, float anchorV)
+  {
+    if (_billboardGLF != null)
+    {
+      _billboardGLF.changeAnchor(anchorU, anchorV);
+    }
+    _anchorU = anchorU;
+    _anchorV = anchorV;
+  }
 
   /**
    * The point where the mark will be geo-located.
@@ -277,8 +311,15 @@ public class Mark implements SurfaceElevationListener
   /** outfits: largest first, at least one; the mark keeps a copy of the vector and owns the outfits. MarkBuilder fills them */
   public Mark(java.util.ArrayList<MarkOutfit> outfits, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, double maxDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener, boolean zoomInAppears)
   {
-     _imageFactory = outfits.get(0).takeImageFactory();
-     _imageFactoryListener = null;
+     _outfitIndex = 0;
+     _priority = Double.NaN;
+     _hasHint = false;
+     _appAnchorU = 0.5F;
+     _appAnchorV = 0.5F;
+     _declutterHidden = false;
+     _declutterTarget = 0;
+     _transitionScale = 1F;
+     _lastTransitionMS = -1;
      _position = new Geodetic3D(position);
      _altitudeMode = altitudeMode;
      _textureID = null;
@@ -325,12 +366,15 @@ public class Mark implements SurfaceElevationListener
     // element by element: in Java an assignment would share the caller's list
     for (int i = 0; i < outfits.size(); i++)
     {
-      _outfits.add(outfits.get(i));
-    }
+      MarkOutfit outfit = outfits.get(i);
+      _outfits.add(outfit);
   
-    if (_imageFactory.isMutable())
-    {
-      ILogger.instance().logError("Marks doesn't support mutable image factories");
+      IImageFactory imageFactory = outfit.takeImageFactory();
+      if (imageFactory.isMutable())
+      {
+        ILogger.instance().logError("Marks doesn't support mutable image factories");
+      }
+      _outfitImages.add(new MarkOutfitImage(imageFactory, outfit.getAnchor()));
     }
   }
 
@@ -342,12 +386,11 @@ public class Mark implements SurfaceElevationListener
       cancelEffects();
     }
   
-    if (_imageFactoryListener != null)
+    for (int i = 0; i < _outfitImages.size(); i++)
     {
-      _imageFactoryListener.forgetMark();
+      if (_outfitImages.get(i) != null)
+         _outfitImages.get(i).dispose();
     }
-    if (_imageFactory != null)
-       _imageFactory.dispose();
   
     if (_effectTarget != null)
        _effectTarget.dispose();
@@ -423,12 +466,7 @@ public class Mark implements SurfaceElevationListener
       }
     }
   
-    if (!_textureSolved && (_imageFactory != null))
-    {
-      _imageFactoryListener = new MarkImageFactoryListener(_imageFactory, this);
-      _imageFactory.create(context, _imageFactoryListener, true);
-      _imageFactory = null; // ownership moved to MarkImageFactoryListener
-    }
+    createPendingOutfitImages(context);
   }
 
   public final boolean isReady()
@@ -441,29 +479,253 @@ public class Mark implements SurfaceElevationListener
     return _renderedMark;
   }
 
-  public final void onImageCreated(IImage image, String imageName)
+  public final void onImageCreated(int outfitIndex, IImage image, String imageName)
   {
-    _imageID = imageName;
-  
-    _imageFactoryListener = null;
-  
-    final MarkAnchor anchor = _outfits.get(0).getAnchor();
-    if (anchor != null)
+    MarkOutfitImage outfitImage = _outfitImages.get(outfitIndex);
+    outfitImage._listener = null;
+    outfitImage._solved = true;
+    outfitImage._imageID = imageName;
+    outfitImage._width = image.getWidth();
+    outfitImage._height = image.getHeight();
+    if (outfitImage._anchor != null)
     {
-      final Vector2F anchorUV = anchor.getAnchor(image);
-      setMarkAnchor(anchorUV._x, anchorUV._y);
+      final Vector2F anchorUV = outfitImage._anchor.getAnchor(image);
+      outfitImage._hasAnchor = true;
+      outfitImage._anchorU = anchorUV._x;
+      outfitImage._anchorV = anchorUV._y;
     }
   
-    onTextureResolved(image);
+    if (outfitIndex == _outfitIndex)
+    {
+      _imageID = imageName;
+      applyOutfitAnchor(outfitImage);
+      onTextureResolved(image);
+    }
+    else
+    {
+      outfitImage._image = image;
+    }
   }
 
-  public final void onImageCreationError(String error)
+  public final void onImageCreationError(int outfitIndex, String error)
   {
-    _textureSolved = true;
+    MarkOutfitImage outfitImage = _outfitImages.get(outfitIndex);
+    outfitImage._listener = null;
+    outfitImage._solved = true;
   
-    _imageFactoryListener = null;
+    if (outfitIndex == _outfitIndex)
+    {
+      _textureSolved = true;
+    }
   
     ILogger.instance().logError("Can't create image for Mark: \"%s\"", error);
+  }
+
+  public final int getOutfitsCount()
+  {
+    return _outfits.size();
+  }
+
+  public final int getOutfitIndex()
+  {
+    return _outfitIndex;
+  }
+
+  /** the outfit drawn from now on; 0 is the largest */
+  public final void setOutfit(int outfitIndex)
+  {
+    if (outfitIndex == _outfitIndex)
+    {
+      return;
+    }
+  
+    // the outfit leaving the screen keeps its image or texture
+    MarkOutfitImage leaving = _outfitImages.get(_outfitIndex);
+    leaving._textureID = _textureID;
+    leaving._image = _textureImage;
+    leaving._imageID = _imageID;
+  
+    MarkOutfitImage arriving = _outfitImages.get(outfitIndex);
+    _textureID = arriving._textureID;
+    _textureImage = arriving._image;
+    _imageID = arriving._imageID;
+    _textureSolved = arriving._solved;
+    arriving._textureID = null;
+    arriving._image = null;
+  
+    if (!_textureSizeSetExternally)
+    {
+      _textureWidth = arriving._width;
+      _textureHeight = arriving._height;
+    }
+    applyOutfitAnchor(arriving);
+  
+    _outfitIndex = outfitIndex;
+  
+    clearGLState();
+  }
+
+  /** the smallest outfit, after the others: a sign that there is more to see when zooming in; the mark owns it */
+  public final void addHint(MarkOutfit hint)
+  {
+    _outfits.add(hint);
+    _outfitImages.add(new MarkOutfitImage(hint.takeImageFactory(), hint.getAnchor()));
+    _hasHint = true;
+  }
+
+  public final boolean hasHint()
+  {
+    return _hasHint;
+  }
+
+  public final boolean isShowingHint()
+  {
+    return _hasHint && (_outfitIndex == (_outfits.size() - 1));
+  }
+
+  /** starts creating the images of the outfits that do not have one yet */
+
+  // every outfit at once: choosing between them needs their sizes
+  public final void createPendingOutfitImages(G3MContext context)
+  {
+    for (int i = 0; i < _outfitImages.size(); i++)
+    {
+      MarkOutfitImage outfitImage = _outfitImages.get(i);
+      if (outfitImage._imageFactory != null)
+      {
+        outfitImage._listener = new MarkImageFactoryListener(outfitImage._imageFactory, this, i);
+        IImageFactory imageFactory = outfitImage._imageFactory;
+        outfitImage._imageFactory = null; // ownership moved to MarkImageFactoryListener
+        imageFactory.create(context, outfitImage._listener, true);
+      }
+    }
+  }
+
+  /** an outfit's size on screen (with the app's scale), or zero while its image does not exist */
+  public final Vector2F getOutfitScreenSize(int outfitIndex)
+  {
+    float width;
+    float height;
+    if (_textureSizeSetExternally || (outfitIndex == _outfitIndex))
+    {
+      width = _textureWidth;
+      height = _textureHeight;
+    }
+    else
+    {
+      final MarkOutfitImage outfitImage = _outfitImages.get(outfitIndex);
+      width = outfitImage._width;
+      height = outfitImage._height;
+    }
+    return new Vector2F(width * _textureWidthScale, height * _textureHeightScale);
+  }
+
+  /** an outfit's anchor in UV: its own, or the mark's when the outfit has none */
+  public final Vector2F getOutfitAnchor(int outfitIndex)
+  {
+    final MarkOutfitImage outfitImage = _outfitImages.get(outfitIndex);
+    if (outfitImage._hasAnchor)
+    {
+      return new Vector2F(outfitImage._anchorU, outfitImage._anchorV);
+    }
+    return new Vector2F(_appAnchorU, _appAnchorV);
+  }
+
+  /** true when the camera can see the position (distance limits and horizon); keeps the mark-camera vector */
+  public final boolean isVisibleFrom(Planet planet, MutableVector3D cameraPosition, double cameraHeight)
+  {
+    final Vector3D markPosition = getCartesianPosition(planet);
+  
+    _markCameraVector.set(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
+  
+    return (isRenderableByDistance() && !isOccludedByHorizon(planet, cameraPosition, cameraHeight, markPosition));
+  }
+
+  public final boolean isDeclutterHidden()
+  {
+    return _declutterHidden;
+  }
+
+  /** the outfit a decluttering renderer chose, -1 when none fits; the mark gets there through stepDeclutterTransition */
+  public final void setDeclutterTarget(int outfitIndex)
+  {
+    _declutterTarget = outfitIndex;
+  }
+
+  public final int getDeclutterTarget()
+  {
+    return _declutterTarget;
+  }
+
+  /** shrinks the outfit on screen while it is not the target, then grows the target in; reversible halfway */
+  public final void stepDeclutterTransition(long nowMS, long growMS, long shrinkMS)
+  {
+    final long elapsedMS = (_lastTransitionMS < 0) ? 0 : (nowMS - _lastTransitionMS);
+    _lastTransitionMS = nowMS;
+  
+    final boolean targetOnScreen = !_declutterHidden && (_declutterTarget >= 0) && (_outfitIndex == (int) _declutterTarget);
+    if (targetOnScreen)
+    {
+      if (_transitionScale < 1)
+      {
+        _transitionScale = (growMS <= 0) ? 1 : IMathUtils.instance().min(1.0f, _transitionScale + ((float) elapsedMS / growMS));
+        updateBillboardSize();
+      }
+      return;
+    }
+  
+    if (_declutterHidden)
+    {
+      if (_declutterTarget >= 0)
+      {
+        setOutfit(_declutterTarget);
+        _declutterHidden = false;
+        _transitionScale = 0F;
+        updateBillboardSize();
+      }
+      return;
+    }
+  
+    _transitionScale = (shrinkMS <= 0) ? 0 : IMathUtils.instance().max(0.0f, _transitionScale - ((float) elapsedMS / shrinkMS));
+    if (_transitionScale <= 0)
+    {
+      if (_declutterTarget >= 0)
+      {
+        setOutfit(_declutterTarget);
+      }
+      else
+      {
+        _declutterHidden = true;
+      }
+    }
+    updateBillboardSize();
+  }
+
+  /** back to the first outfit, on screen and at full size, with no transition */
+  public final void resetDeclutter()
+  {
+    _declutterTarget = 0;
+    _declutterHidden = false;
+    _transitionScale = 1F;
+    _lastTransitionMS = -1;
+    setOutfit(0);
+    updateBillboardSize();
+  }
+
+  /** the order among the marks that compete for space: the higher, the earlier */
+  public final void setPriority(double priority)
+  {
+    _priority = priority;
+  }
+
+  public final boolean hasPriority()
+  {
+    return !(_priority != _priority);
+  }
+
+  public final double getPriority()
+  {
+    return _priority;
   }
 
   public final float getTextureWidth()
@@ -479,12 +741,12 @@ public class Mark implements SurfaceElevationListener
   /** the size drawn on screen: the texture size times the app's and the effects' scales */
   public final float getScreenWidth()
   {
-    return _textureWidth * _textureWidthScale * _effectScale;
+    return _textureWidth * _textureWidthScale * _effectScale * _transitionScale;
   }
 
   public final float getScreenHeight()
   {
-    return _textureHeight * _textureHeightScale * _effectScale;
+    return _textureHeight * _textureHeightScale * _effectScale * _transitionScale;
   }
 
   public final Vector2F getTextureExtent()
@@ -549,13 +811,9 @@ public class Mark implements SurfaceElevationListener
 
   public final void render(G3MRenderContext rc, MarksRenderer renderer, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
-    final Vector3D markPosition = getCartesianPosition(planet);
-  
-    _markCameraVector.set(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
-  
     _renderedMark = false;
   
-    if (isRenderableByDistance() && !isOccludedByHorizon(planet, cameraPosition, cameraHeight, markPosition))
+    if (!_declutterHidden && isVisibleFrom(planet, cameraPosition, cameraHeight))
     {
       ensureTexture(rc);
       if (_textureID != null)
@@ -666,12 +924,9 @@ public class Mark implements SurfaceElevationListener
 
   public final void setMarkAnchor(float anchorU, float anchorV)
   {
-    if (_billboardGLF != null)
-    {
-      _billboardGLF.changeAnchor(anchorU, anchorV);
-    }
-    _anchorU = anchorU;
-    _anchorV = anchorV;
+    _appAnchorU = anchorU;
+    _appAnchorV = anchorV;
+    changeAnchor(anchorU, anchorV);
   }
 
   public final Vector2F getMarkAnchor()

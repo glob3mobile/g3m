@@ -31,6 +31,16 @@
 #include <G3M/IImage.hpp>
 #include <G3M/IFactory.hpp>
 #include <G3M/IDeviceInfo.hpp>
+#include <G3M/IDownloader.hpp>
+#include <G3M/IBufferDownloadListener.hpp>
+#include <G3M/IByteBuffer.hpp>
+#include <G3M/IJSONParser.hpp>
+#include <G3M/JSONBaseObject.hpp>
+#include <G3M/JSONArray.hpp>
+#include <G3M/JSONObject.hpp>
+#include <G3M/IMathUtils.hpp>
+#include <G3M/MarkFilter.hpp>
+#include <G3M/StackLayoutImageFactory.hpp>
 #include <G3M/MarksRenderer.hpp>
 #include <G3M/MarkTouchListener.hpp>
 #include <G3M/TouchEvent.hpp>
@@ -156,6 +166,64 @@ public:
 };
 
 
+class G3MMarksDemoScene_MagnitudeUserData : public MarkUserData {
+public:
+  const double _magnitude;
+
+  G3MMarksDemoScene_MagnitudeUserData(const double magnitude) :
+  _magnitude(magnitude)
+  {
+  }
+};
+
+
+class G3MMarksDemoScene_AllMarksFilter : public MarkFilter {
+public:
+  bool test(const Mark* mark) const {
+    return true;
+  }
+};
+
+
+class G3MMarksDemoScene_LondonDownloadListener : public IBufferDownloadListener {
+private:
+  G3MMarksDemoScene* _scene;
+  const int          _featureGeneration;
+
+public:
+  G3MMarksDemoScene_LondonDownloadListener(G3MMarksDemoScene* scene) :
+  _scene(scene),
+  _featureGeneration(scene->getFeatureGeneration())
+  {
+  }
+
+  void onDownload(const URL& url,
+                  IByteBuffer* buffer,
+                  bool expired) {
+    if (_scene->getFeatureGeneration() == _featureGeneration) {
+      const JSONBaseObject* json = IJSONParser::instance()->parse(buffer);
+      if (json != NULL) {
+        _scene->addLondonMarks(json->asArray());
+        delete json;
+      }
+    }
+    delete buffer;
+  }
+
+  void onError(const URL& url) {
+    ILogger::instance()->logError("Can't load %s", url._path.c_str());
+  }
+
+  void onCancel(const URL& url) {
+  }
+
+  void onCanceledDownload(const URL& url,
+                          IByteBuffer* buffer,
+                          bool expired) {
+  }
+};
+
+
 void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model = getModel();
 
@@ -167,17 +235,20 @@ void G3MMarksDemoScene::rawSelectOption(const std::string& option,
                                         int optionIndex) {
   removeFeature();
 
-  if (option == "Basic") {
+  if (option == "Basic - icon, anchor, scale") {
     showBasicMark();
   }
-  else if (option == "Animated") {
+  else if (option == "Animated - sprites, resizing") {
     showAnimatedMarks();
   }
-  else if (option == "Moving") {
+  else if (option == "Moving - across the horizon") {
     showMovingMark();
   }
-  else if (option == "Labels") {
+  else if (option == "Labels - alignment, icon anchor") {
     showLabels();
+  }
+  else if (option == "London - declutter") {
+    showLondon();
   }
 }
 
@@ -191,9 +262,49 @@ void G3MMarksDemoScene::animateCameraTo(const Geodetic3D& position,
                                                         pitch);
 }
 
+void G3MMarksDemoScene::rawSelectGroupOption(size_t groupIndex,
+                                             const std::string& option,
+                                             int optionIndex) {
+  if (groupIndex == 0) {
+    rawSelectOption(option, optionIndex);
+  }
+  else if (getOptionGroup(0)->isSelectedOption("London - declutter")) {
+    if (groupIndex == 1) {
+      moveLondonCamera(option);
+    }
+    else {
+      applyLondonDeclutter(option);
+    }
+  }
+}
+
+/** By magnitude: the marks carry it as their priority. By drawing order: the same marks without priority */
+void G3MMarksDemoScene::applyLondonDeclutter(const std::string& declutterOption) {
+  MarksRenderer* marksRenderer = getModel()->getMarksRenderer();
+  marksRenderer->setDeclutter((declutterOption == "By magnitude") || (declutterOption == "By drawing order"));
+  _londonPrioritized = (declutterOption != "By drawing order");
+
+  const std::vector<Mark*> marks = marksRenderer->getAllMarks(G3MMarksDemoScene_AllMarksFilter());
+  for (size_t i = 0; i < marks.size(); i++) {
+    Mark* mark = marks[i];
+    const G3MMarksDemoScene_MagnitudeUserData* magnitude = (const G3MMarksDemoScene_MagnitudeUserData*) mark->getUserData();
+    if (magnitude != NULL) {
+      mark->setPriority(_londonPrioritized ? magnitude->_magnitude : NAND);
+    }
+  }
+}
+
+bool G3MMarksDemoScene::isOptionGroupVisible(size_t groupIndex) const {
+  return (groupIndex == 0) || getOptionGroup(0)->isSelectedOption("London - declutter");
+}
+
 // the periodical tasks animate the marks: they go with them
 void G3MMarksDemoScene::removeFeature() {
+  _featureGeneration++;
+
   G3MDemoModel* model = getModel();
+  model->getMarksRenderer()->setDeclutter(false);
+  model->getMarksRenderer()->setHint(NULL);
   model->getG3MWidget()->removeAllPeriodicalTasks();
   model->getMarksRenderer()->removeAllMarks();
 }
@@ -374,6 +485,138 @@ void G3MMarksDemoScene::showLabels() {
   animateCameraTo(Geodetic3D::fromDegrees(48.55, 2.35, 45000),
                   Angle::zero(),
                   Angle::fromDegrees(-60));
+}
+
+void G3MMarksDemoScene::showLondon() {
+  G3MWidget* g3mWidget = getModel()->getG3MWidget();
+
+  // the third outfit of every mark: a dot that says there is more when zooming in
+  getModel()->getMarksRenderer()->setHint(new StackLayoutImageFactory(new CircleImageFactory(Color::fromRGBA(0, 0, 0, 0.6f), 4),
+                                                                       new CircleImageFactory(Color::WHITE, 2)));
+
+  g3mWidget->getG3MContext()->getDownloader()->requestBuffer(URL("file:///London-Wikipedia.json"),
+                                                             100000,
+                                                             TimeInterval::zero(),
+                                                             false,
+                                                             new G3MMarksDemoScene_LondonDownloadListener(this),
+                                                             true);
+
+  moveLondonCamera(getOptionGroup(1)->getTitle());
+  applyLondonDeclutter(getOptionGroup(2)->getTitle());
+}
+
+void G3MMarksDemoScene::moveLondonCamera(const std::string& cameraOption) {
+  if (cameraOption == "Westminster") {
+    animateCameraTo(Geodetic3D::fromDegrees(51.475, -0.125, 2500),
+                    Angle::zero(),
+                    Angle::fromDegrees(-40));
+  }
+  else if (cameraOption == "Bloomsbury and the City") {
+    animateCameraTo(Geodetic3D::fromDegrees(51.495, -0.110, 3000),
+                    Angle::zero(),
+                    Angle::fromDegrees(-40));
+  }
+  else {
+    // from where only London itself fits down to the street level, to watch the marks unfold while zooming in
+    getModel()->getG3MWidget()->setAnimatedCameraPosition(TimeInterval::fromSeconds(20),
+                                                          Geodetic3D::fromDegrees(51.50, -0.12, 300000),
+                                                          Geodetic3D::fromDegrees(51.50, -0.125, 2500),
+                                                          Angle::zero(),            Angle::zero(),            /* heading */
+                                                          Angle::fromDegrees(-90),  Angle::fromDegrees(-90)  /* pitch: looking straight down */);
+  }
+}
+
+/**
+ * The Wikipedia articles of central London as pythagoras draws them: one box
+ * with the icon on the left of the label, the font size from the magnitude.
+ * Each mark also carries its icon-only outfit, for when space is short.
+ */
+void G3MMarksDemoScene::addLondonMarks(const JSONArray* articles) {
+  if (articles == NULL) {
+    return;
+  }
+
+  const IMathUtils* mu = IMathUtils::instance();
+
+  double minMagnitude = mu->maxDouble();
+  double maxMagnitude = mu->minDouble();
+  for (size_t i = 0; i < articles->size(); i++) {
+    const double magnitude = articles->getAsObject(i)->getAsNumber("magnitude", 0);
+    minMagnitude = mu->min(minMagnitude, magnitude);
+    maxMagnitude = mu->max(maxMagnitude, magnitude);
+  }
+
+  const float minFontSize = 10;
+  const float maxFontSize = 16;
+
+  const float    pixelRatio      = IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+  const Vector2F padding         = Vector2F(6, 4).times(pixelRatio); // pixels: the row layout draws on a plain canvas
+  const int      separation      = mu->round(5 * pixelRatio);
+  const Color    backgroundColor = Color::fromRGBA(0, 0, 0, 0.6f);
+  const float    cornerRadius    = 6 * pixelRatio;
+
+  MarksRenderer* marksRenderer = getModel()->getMarksRenderer();
+  MarkBuilder builder;
+
+  for (size_t i = 0; i < articles->size(); i++) {
+    const JSONObject* article = articles->getAsObject(i);
+
+    const double magnitude = article->getAsNumber("magnitude", minMagnitude);
+    const double alpha     = (maxMagnitude > minMagnitude) ? ((magnitude - minMagnitude) / (maxMagnitude - minMagnitude)) : 1;
+    const float  fontSize  = mu->round((float) (minFontSize + ((maxFontSize - minFontSize) * alpha)));
+
+    const std::string title = article->getAsString("title", "");
+    const std::string icon  = article->getAsString("icon", "");
+
+    builder.setPosition(Geodetic3D::fromDegrees(article->getAsNumber("lat", 0),
+                                                article->getAsNumber("lon", 0),
+                                                0));
+
+    if (icon.empty()) {
+      builder.addOutfit(new FittedLabelImageFactory(title,
+                                                    LabelStyle::boxed(GFont::sansSerif(fontSize),
+                                                                      Color::WHITE,
+                                                                      padding.div(pixelRatio),
+                                                                      backgroundColor,
+                                                                      cornerRadius / pixelRatio),
+                                                    "Washington, D.C.",
+                                                    0.7f,
+                                                    2));
+    }
+    else {
+      const URL iconURL("file:///wp-" + icon + ".png");
+      // about one and a half W of its label, as in pythagoras (a sans-serif W is ~0.94 of the font size)
+      const int iconPoints = mu->round(fontSize * 1.4f);
+
+      builder.addOutfit(new RowLayoutImageFactory(new ResizerImageFactory(new DownloaderImageFactory(iconURL),
+                                                                          new AbsoluteImageSizer(iconPoints),
+                                                                          new AbsoluteImageSizer(iconPoints)),
+                                                  new FittedLabelImageFactory(title,
+                                                                              LabelStyle::plain(GFont::sansSerif(fontSize), Color::WHITE),
+                                                                              "Washington, D.C.",
+                                                                              0.7f,
+                                                                              2,
+                                                                              Left),
+                                                  new BoxImageBackground(Vector2F::ZERO, 0, Color::TRANSPARENT,
+                                                                         padding, backgroundColor, cornerRadius),
+                                                  separation),
+                        // the resizer draws on a retina canvas: the icon is iconPoints times the pixel ratio
+                        new G3MMarksDemoScene_IconCenterMarkAnchor(padding._x + ((iconPoints * pixelRatio) / 2)));
+
+      builder.addOutfit(new RowLayoutImageFactory(new ResizerImageFactory(new DownloaderImageFactory(iconURL),
+                                                                          new AbsoluteImageSizer(iconPoints),
+                                                                          new AbsoluteImageSizer(iconPoints)),
+                                                  new BoxImageBackground(Vector2F::ZERO, 0, Color::TRANSPARENT,
+                                                                         padding, backgroundColor, cornerRadius),
+                                                  separation));
+    }
+
+    builder.setUserData(new G3MMarksDemoScene_MagnitudeUserData(magnitude), true);
+    if (_londonPrioritized) {
+      builder.setPriority(magnitude);
+    }
+    marksRenderer->addMark(builder.build());
+  }
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {

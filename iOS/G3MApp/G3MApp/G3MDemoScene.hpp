@@ -155,6 +155,11 @@ public:
     return _optionGroups[groupIndex];
   }
 
+  /** a group can depend on the option chosen in another; the app hides it while it does not apply */
+  virtual bool isOptionGroupVisible(size_t groupIndex) const {
+    return true;
+  }
+
   void selectOption(size_t groupIndex,
                     const std::string& option);
 

@@ -3,11 +3,13 @@ public class MarkImageFactoryListener implements IImageFactoryListener
 {
   private IImageFactory _imageFactory;
   private Mark _mark;
+  private final int _outfitIndex;
 
-  public MarkImageFactoryListener(IImageFactory imageFactory, Mark mark)
+  public MarkImageFactoryListener(IImageFactory imageFactory, Mark mark, int outfitIndex)
   {
      _imageFactory = imageFactory;
      _mark = mark;
+     _outfitIndex = outfitIndex;
 
   }
 
@@ -26,7 +28,7 @@ public class MarkImageFactoryListener implements IImageFactoryListener
   {
     if (_mark != null)
     {
-      _mark.onImageCreated(image, imageName);
+      _mark.onImageCreated(_outfitIndex, image, imageName);
     }
   }
 
@@ -34,7 +36,7 @@ public class MarkImageFactoryListener implements IImageFactoryListener
   {
     if (_mark != null)
     {
-      _mark.onImageCreationError(error);
+      _mark.onImageCreationError(_outfitIndex, error);
     }
   }
 

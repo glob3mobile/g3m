@@ -13,6 +13,12 @@
 
 class Mark;
 class Camera;
+class Planet;
+class TimeInterval;
+class IImageFactory;
+class IImage;
+class MarksRenderer_HintListener;
+class MutableVector3D;
 class MarkTouchListener;
 class IFloatBuffer;
 class ITimer;
@@ -46,6 +52,39 @@ private:
   bool _progressiveInitialization;
   ITimer* _initializationTimer;
 
+  bool      _declutter;
+  float     _declutterMargin;
+  long long _growMS;
+  long long _shrinkMS;
+
+  // the default hint: one image, shared by every mark without a hint of its own
+  IImageFactory*              _hintImageFactory;
+  MarksRenderer_HintListener* _hintListener;
+#ifdef C_CODE
+  const IImage*               _hintImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage              _hintImage;
+#endif
+  std::string                 _hintImageName;
+
+  void startHintImage();
+  void attachHint(Mark* mark);
+  // reused between frames: the marks in placing order and the screen rectangles taken
+  std::vector<Mark*> _declutterCandidates;
+  std::vector<Mark*> _declutterOrder;
+  std::vector<float> _takenLeft;
+  std::vector<float> _takenTop;
+  std::vector<float> _takenRight;
+  std::vector<float> _takenBottom;
+
+  void declutter(const Camera* camera,
+                 const Planet* planet,
+                 const MutableVector3D& cameraPosition,
+                 double cameraHeight);
+
+  bool isFree(float left, float top, float right, float bottom) const;
+
 public:
 
   MarksRenderer(bool readyWhenMarksReady,
@@ -55,6 +94,33 @@ public:
   void setRenderInReverse(bool renderInReverse) {
     _renderInReverse = renderInReverse;
   }
+
+  /**
+   * Each frame, every visible mark takes its largest outfit that does not
+   * overlap the marks placed before it, or hides when none fits. Marks with
+   * priority go first, the highest first; the rest in the order they are drawn
+   * on top.
+   */
+  void setDeclutter(bool declutter);
+
+  bool getDeclutter() const {
+    return _declutter;
+  }
+
+  /** the free space a mark needs around it to grow or come back; it keeps its place with no margin, so it does not blink */
+  void setDeclutterMargin(float marginInPixels) {
+    _declutterMargin = marginInPixels;
+  }
+
+  /** the hint of the marks without their own: drawn centred on the position when nothing else fits; the renderer owns the factory; NULL: no hint for the marks added from now on */
+  void setHint(IImageFactory* hintImageFactory);
+
+  void onHintImageCreated(const IImage* image,
+                          const std::string& imageName);
+
+  /** how long an outfit takes to grow in and to shrink away; by default those of the marks' zoom effects */
+  void setDeclutterTransitionDurations(const TimeInterval& grow,
+                                       const TimeInterval& shrink);
 
   bool getRenderInReverse() const {
     return _renderInReverse;

@@ -1,0 +1,800 @@
+[
+ {
+  "title": "London",
+  "lat": 51.50722,
+  "lon": -0.1275,
+  "magnitude": -3.39755,
+  "icon": "home-star"
+ },
+ {
+  "title": "BBC",
+  "lat": 51.51856,
+  "lon": -0.14377,
+  "magnitude": -3.85308,
+  "icon": "building-broadcast-tower"
+ },
+ {
+  "title": "British Empire",
+  "lat": 51.50722,
+  "lon": -0.1275,
+  "magnitude": -3.99438,
+  "icon": "flag"
+ },
+ {
+  "title": "Parliament of the United Kingdom",
+  "lat": 51.49944,
+  "lon": -0.12472,
+  "magnitude": -4.0631,
+  "icon": "building-bank"
+ },
+ {
+  "title": "House of Commons of the United Kingdom",
+  "lat": 51.49989,
+  "lon": -0.12467,
+  "magnitude": -4.08437,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Commonwealth of Nations",
+  "lat": 51.505,
+  "lon": -0.13583,
+  "magnitude": -4.09896,
+  "icon": "world"
+ },
+ {
+  "title": "House of Lords",
+  "lat": 51.49881,
+  "lon": -0.12486,
+  "magnitude": -4.21243,
+  "icon": "building-bank"
+ },
+ {
+  "title": "2012 Summer Olympics",
+  "lat": 51.50487,
+  "lon": -0.07857,
+  "magnitude": -4.26103,
+  "icon": "olympics"
+ },
+ {
+  "title": "British Museum",
+  "lat": 51.5194,
+  "lon": -0.1269,
+  "magnitude": -4.29154,
+  "icon": "building-arch"
+ },
+ {
+  "title": "East India Company",
+  "lat": 51.513,
+  "lon": -0.082,
+  "magnitude": -4.29803,
+  "icon": "briefcase"
+ },
+ {
+  "title": "Government of the United Kingdom",
+  "lat": 51.50344,
+  "lon": -0.12771,
+  "magnitude": -4.32761,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Kingdom of Great Britain",
+  "lat": 51.5,
+  "lon": -0.13333,
+  "magnitude": -4.34467,
+  "icon": "history"
+ },
+ {
+  "title": "Royal Society",
+  "lat": 51.50583,
+  "lon": -0.13222,
+  "magnitude": -4.36279,
+  "icon": "school"
+ },
+ {
+  "title": "University College London",
+  "lat": 51.52472,
+  "lon": -0.13361,
+  "magnitude": -4.44387,
+  "icon": "school"
+ },
+ {
+  "title": "University of London",
+  "lat": 51.521,
+  "lon": -0.1253,
+  "magnitude": -4.44494,
+  "icon": "school"
+ },
+ {
+  "title": "City of London",
+  "lat": 51.51556,
+  "lon": -0.09306,
+  "magnitude": -4.46485,
+  "icon": "home"
+ },
+ {
+  "title": "Amnesty International",
+  "lat": 51.52619,
+  "lon": -0.11128,
+  "magnitude": -4.48994,
+  "icon": "briefcase"
+ },
+ {
+  "title": "London School of Economics",
+  "lat": 51.51389,
+  "lon": -0.11667,
+  "magnitude": -4.52226,
+  "icon": "school"
+ },
+ {
+  "title": "Westminster Abbey",
+  "lat": 51.49944,
+  "lon": -0.1275,
+  "magnitude": -4.57262,
+  "icon": "building-church"
+ },
+ {
+  "title": "Arsenal F.C.",
+  "lat": 51.555,
+  "lon": -0.10833,
+  "magnitude": -4.60148,
+  "icon": "ball-football"
+ },
+ {
+  "title": "King's College London",
+  "lat": 51.51194,
+  "lon": -0.11611,
+  "magnitude": -4.6287,
+  "icon": "school"
+ },
+ {
+  "title": "Royal Academy of Arts",
+  "lat": 51.50917,
+  "lon": -0.13944,
+  "magnitude": -4.63645,
+  "icon": "school"
+ },
+ {
+  "title": "Natural History Museum, London",
+  "lat": 51.49611,
+  "lon": -0.17639,
+  "magnitude": -4.64098,
+  "icon": "building-arch"
+ },
+ {
+  "title": "Chelsea F.C.",
+  "lat": 51.4817,
+  "lon": -0.1908,
+  "magnitude": -4.64437,
+  "icon": "ball-football"
+ },
+ {
+  "title": "Greater London",
+  "lat": 51.52,
+  "lon": -0.1,
+  "magnitude": -4.64829,
+  "icon": "home"
+ },
+ {
+  "title": "Victoria and Albert Museum",
+  "lat": 51.49667,
+  "lon": -0.17194,
+  "magnitude": -4.6679,
+  "icon": "building-arch"
+ },
+ {
+  "title": "Palace of Westminster",
+  "lat": 51.49917,
+  "lon": -0.12472,
+  "magnitude": -4.68018,
+  "icon": "building"
+ },
+ {
+  "title": "Foreign, Commonwealth and Development Office",
+  "lat": 51.50269,
+  "lon": -0.12769,
+  "magnitude": -4.71945,
+  "icon": "building-bank"
+ },
+ {
+  "title": "London Underground",
+  "lat": 51.49278,
+  "lon": -0.10083,
+  "magnitude": -4.73489,
+  "icon": ""
+ },
+ {
+  "title": "Ministry of Defence (United Kingdom)",
+  "lat": 51.50403,
+  "lon": -0.12489,
+  "magnitude": -4.73856,
+  "icon": "building-bank"
+ },
+ {
+  "title": "High Court of Justice",
+  "lat": 51.51361,
+  "lon": -0.11333,
+  "magnitude": -4.74615,
+  "icon": "gavel"
+ },
+ {
+  "title": "Imperial College London",
+  "lat": 51.49831,
+  "lon": -0.17688,
+  "magnitude": -4.79751,
+  "icon": "school"
+ },
+ {
+  "title": "1908 Summer Olympics",
+  "lat": 51.51362,
+  "lon": -0.2274,
+  "magnitude": -4.82332,
+  "icon": "olympics"
+ },
+ {
+  "title": "Abbey Road Studios",
+  "lat": 51.53194,
+  "lon": -0.17833,
+  "magnitude": -5.0976,
+  "icon": "building-factory"
+ },
+ {
+  "title": "Royal Horticultural Society",
+  "lat": 51.4945,
+  "lon": -0.1348,
+  "magnitude": -4.73857,
+  "icon": "briefcase"
+ },
+ {
+  "title": "Westminster",
+  "lat": 51.49472,
+  "lon": -0.13528,
+  "magnitude": -4.74826,
+  "icon": "home"
+ },
+ {
+  "title": "London Stock Exchange",
+  "lat": 51.5153,
+  "lon": -0.0992,
+  "magnitude": -4.75706,
+  "icon": "chart-candle"
+ },
+ {
+  "title": "West End theatre",
+  "lat": 51.51139,
+  "lon": -0.12806,
+  "magnitude": -4.76097,
+  "icon": ""
+ },
+ {
+  "title": "St Paul's Cathedral",
+  "lat": 51.5138,
+  "lon": -0.0983,
+  "magnitude": -4.76629,
+  "icon": "building-church"
+ },
+ {
+  "title": "Bank of England",
+  "lat": 51.51389,
+  "lon": -0.08833,
+  "magnitude": -4.76645,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Tower of London",
+  "lat": 51.50806,
+  "lon": -0.07611,
+  "magnitude": -4.77363,
+  "icon": "building-arch"
+ },
+ {
+  "title": "Shell plc",
+  "lat": 51.50383,
+  "lon": -0.11689,
+  "magnitude": -4.80416,
+  "icon": "briefcase"
+ },
+ {
+  "title": "Buckingham Palace",
+  "lat": 51.50083,
+  "lon": -0.14194,
+  "magnitude": -4.80734,
+  "icon": "building-arch"
+ },
+ {
+  "title": "Royal Albert Hall",
+  "lat": 51.5011,
+  "lon": -0.1774,
+  "magnitude": -4.88406,
+  "icon": "masks-theater"
+ },
+ {
+  "title": "Greenwich",
+  "lat": 51.48,
+  "lon": 0,
+  "magnitude": -4.95324,
+  "icon": "home"
+ },
+ {
+  "title": "Kensington",
+  "lat": 51.5,
+  "lon": -0.19,
+  "magnitude": -5.00148,
+  "icon": "home"
+ },
+ {
+  "title": "Hampstead",
+  "lat": 51.5541,
+  "lon": -0.1744,
+  "magnitude": -5.01692,
+  "icon": "home"
+ },
+ {
+  "title": "Prime meridian",
+  "lat": 51.47768,
+  "lon": 0,
+  "magnitude": -5.07621,
+  "icon": ""
+ },
+ {
+  "title": "Royal College of Art",
+  "lat": 51.50114,
+  "lon": -0.17928,
+  "magnitude": -5.08033,
+  "icon": "school"
+ },
+ {
+  "title": "Royal Observatory, Greenwich",
+  "lat": 51.477,
+  "lon": 0,
+  "magnitude": -5.09318,
+  "icon": "building-arch"
+ },
+ {
+  "title": "BT Group",
+  "lat": 51.51433,
+  "lon": -0.07179,
+  "magnitude": -5.11083,
+  "icon": "briefcase"
+ },
+ {
+  "title": "Ernst & Young",
+  "lat": 51.50515,
+  "lon": -0.08323,
+  "magnitude": -5.14258,
+  "icon": ""
+ },
+ {
+  "title": "East End of London",
+  "lat": 51.51417,
+  "lon": -0.055,
+  "magnitude": -5.15664,
+  "icon": "home-2"
+ },
+ {
+  "title": "British Film Institute",
+  "lat": 51.50356,
+  "lon": -0.11682,
+  "magnitude": -4.81779,
+  "icon": "heart-handshake"
+ },
+ {
+  "title": "National Gallery",
+  "lat": 51.5089,
+  "lon": -0.1283,
+  "magnitude": -4.82342,
+  "icon": "building-arch"
+ },
+ {
+  "title": "Marylebone Cricket Club",
+  "lat": 51.52957,
+  "lon": -0.17299,
+  "magnitude": -4.82991,
+  "icon": "cricket"
+ },
+ {
+  "title": "National Portrait Gallery, London",
+  "lat": 51.5094,
+  "lon": -0.1281,
+  "magnitude": -4.83882,
+  "icon": "building-arch"
+ },
+ {
+  "title": "Metropolitan Police",
+  "lat": 51.49861,
+  "lon": -0.13305,
+  "magnitude": -4.85793,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Lord's",
+  "lat": 51.5294,
+  "lon": -0.1727,
+  "magnitude": -4.87187,
+  "icon": "cricket"
+ },
+ {
+  "title": "Commonwealth of England",
+  "lat": 51.5,
+  "lon": -0.11667,
+  "magnitude": -4.87657,
+  "icon": "history"
+ },
+ {
+  "title": "City of Westminster",
+  "lat": 51.51222,
+  "lon": -0.16333,
+  "magnitude": -4.88256,
+  "icon": "home"
+ },
+ {
+  "title": "Home Office",
+  "lat": 51.49583,
+  "lon": -0.12995,
+  "magnitude": -4.89333,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Linnean Society of London",
+  "lat": 51.5085,
+  "lon": -0.1395,
+  "magnitude": -4.9047,
+  "icon": "heart-handshake"
+ },
+ {
+  "title": "British Academy",
+  "lat": 51.5064,
+  "lon": -0.1313,
+  "magnitude": -4.91476,
+  "icon": "school"
+ },
+ {
+  "title": "Supreme Court of the United Kingdom",
+  "lat": 51.5004,
+  "lon": -0.1281,
+  "magnitude": -4.91744,
+  "icon": "gavel"
+ },
+ {
+  "title": "War Office",
+  "lat": 51.50556,
+  "lon": -0.12583,
+  "magnitude": -4.92976,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Chelsea, London",
+  "lat": 51.4875,
+  "lon": -0.1684,
+  "magnitude": -4.99256,
+  "icon": "home"
+ },
+ {
+  "title": "Royal Geographical Society",
+  "lat": 51.5013,
+  "lon": -0.1754,
+  "magnitude": -5.03531,
+  "icon": "school"
+ },
+ {
+  "title": "Transport for London",
+  "lat": 51.49788,
+  "lon": -0.13516,
+  "magnitude": -5.06224,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Hyde Park, London",
+  "lat": 51.50861,
+  "lon": -0.16361,
+  "magnitude": -5.06816,
+  "icon": "trees"
+ },
+ {
+  "title": "Islington",
+  "lat": 51.544,
+  "lon": -0.1027,
+  "magnitude": -5.08128,
+  "icon": "home"
+ },
+ {
+  "title": "British Science Association",
+  "lat": 51.4971,
+  "lon": -0.179,
+  "magnitude": -5.09432,
+  "icon": "heart-handshake"
+ },
+ {
+  "title": "Southwark",
+  "lat": 51.4988,
+  "lon": -0.0901,
+  "magnitude": -5.10065,
+  "icon": "home"
+ },
+ {
+  "title": "Great Exhibition",
+  "lat": 51.50306,
+  "lon": -0.17,
+  "magnitude": -5.12904,
+  "icon": "confetti"
+ },
+ {
+  "title": "BBC Proms",
+  "lat": 51.50111,
+  "lon": -0.1775,
+  "magnitude": -5.13884,
+  "icon": "confetti"
+ },
+ {
+  "title": "BP",
+  "lat": 51.5079,
+  "lon": -0.1343,
+  "magnitude": -4.90589,
+  "icon": "briefcase"
+ },
+ {
+  "title": "Royal Opera House",
+  "lat": 51.5131,
+  "lon": -0.1228,
+  "magnitude": -4.93311,
+  "icon": "masks-theater"
+ },
+ {
+  "title": "HM Treasury",
+  "lat": 51.50169,
+  "lon": -0.12786,
+  "magnitude": -4.94485,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Royal Institute of British Architects",
+  "lat": 51.52139,
+  "lon": -0.145,
+  "magnitude": -4.96158,
+  "icon": "briefcase"
+ },
+ {
+  "title": "2012 Summer Paralympics",
+  "lat": 51.5,
+  "lon": -0.12,
+  "magnitude": -4.97346,
+  "icon": "olympics"
+ },
+ {
+  "title": "Judicial Committee of the Privy Council",
+  "lat": 51.50036,
+  "lon": -0.12814,
+  "magnitude": -4.97495,
+  "icon": "gavel"
+ },
+ {
+  "title": "PwC",
+  "lat": 51.50798,
+  "lon": -0.12466,
+  "magnitude": -4.97581,
+  "icon": "briefcase"
+ },
+ {
+  "title": "British Phonographic Industry",
+  "lat": 51.5012,
+  "lon": -0.1195,
+  "magnitude": -4.97681,
+  "icon": "heart-handshake"
+ },
+ {
+  "title": "Ofcom",
+  "lat": 51.5079,
+  "lon": -0.0953,
+  "magnitude": -4.983,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Christie's",
+  "lat": 51.5219,
+  "lon": -0.1422,
+  "magnitude": -5.01382,
+  "icon": "school"
+ },
+ {
+  "title": "Lincoln's Inn",
+  "lat": 51.51713,
+  "lon": -0.11458,
+  "magnitude": -5.01408,
+  "icon": "school"
+ },
+ {
+  "title": "Royal Society of Arts",
+  "lat": 51.50904,
+  "lon": -0.12215,
+  "magnitude": -5.01439,
+  "icon": "heart-handshake"
+ },
+ {
+  "title": "College of Arms",
+  "lat": 51.51222,
+  "lon": -0.09889,
+  "magnitude": -5.01718,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Sotheby's",
+  "lat": 51.51194,
+  "lon": -0.14361,
+  "magnitude": -5.0173,
+  "icon": "briefcase"
+ },
+ {
+  "title": "Inner Temple",
+  "lat": 51.5127,
+  "lon": -0.1097,
+  "magnitude": -5.04425,
+  "icon": "school"
+ },
+ {
+  "title": "Deloitte",
+  "lat": 51.51603,
+  "lon": -0.10781,
+  "magnitude": -5.05313,
+  "icon": ""
+ },
+ {
+  "title": "Royal College of Physicians",
+  "lat": 51.52583,
+  "lon": -0.145,
+  "magnitude": -5.05795,
+  "icon": "school"
+ },
+ {
+  "title": "Society of Antiquaries of London",
+  "lat": 51.50899,
+  "lon": -0.13951,
+  "magnitude": -5.06744,
+  "icon": "heart-handshake"
+ },
+ {
+  "title": "SOAS University of London",
+  "lat": 51.52205,
+  "lon": -0.129,
+  "magnitude": -5.08915,
+  "icon": "school"
+ },
+ {
+  "title": "The Oval",
+  "lat": 51.48361,
+  "lon": -0.115,
+  "magnitude": -5.11177,
+  "icon": "cricket"
+ },
+ {
+  "title": "YouGov",
+  "lat": 51.52484,
+  "lon": -0.08965,
+  "magnitude": -5.1544,
+  "icon": "briefcase"
+ },
+ {
+  "title": "International Maritime Organization",
+  "lat": 51.49337,
+  "lon": -0.121,
+  "magnitude": -4.98997,
+  "icon": "world"
+ },
+ {
+  "title": "Covent Garden",
+  "lat": 51.5125,
+  "lon": -0.1225,
+  "magnitude": -5.01687,
+  "icon": "home-2"
+ },
+ {
+  "title": "Tate",
+  "lat": 51.49083,
+  "lon": -0.12722,
+  "magnitude": -5.03087,
+  "icon": "briefcase"
+ },
+ {
+  "title": "Westminster School",
+  "lat": 51.4984,
+  "lon": -0.1284,
+  "magnitude": -5.03171,
+  "icon": "school"
+ },
+ {
+  "title": "Whitehall",
+  "lat": 51.50417,
+  "lon": -0.12639,
+  "magnitude": -5.03347,
+  "icon": "road"
+ },
+ {
+  "title": "Middle Temple",
+  "lat": 51.51192,
+  "lon": -0.11134,
+  "magnitude": -5.04144,
+  "icon": "briefcase"
+ },
+ {
+  "title": "Royal National Theatre",
+  "lat": 51.5071,
+  "lon": -0.1141,
+  "magnitude": -5.04483,
+  "icon": "masks-theater"
+ },
+ {
+  "title": "MI6",
+  "lat": 51.48722,
+  "lon": -0.12417,
+  "magnitude": -5.05258,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Central London",
+  "lat": 51.5075,
+  "lon": -0.1275,
+  "magnitude": -5.05337,
+  "icon": "map"
+ },
+ {
+  "title": "HM Revenue and Customs",
+  "lat": 51.50164,
+  "lon": -0.12677,
+  "magnitude": -5.07202,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Department for Transport",
+  "lat": 51.4946,
+  "lon": -0.1293,
+  "magnitude": -5.08099,
+  "icon": "building-bank"
+ },
+ {
+  "title": "Trafalgar Square",
+  "lat": 51.50806,
+  "lon": -0.12806,
+  "magnitude": -5.10857,
+  "icon": "fountain"
+ },
+ {
+  "title": "Theatre Royal, Drury Lane",
+  "lat": 51.51306,
+  "lon": -0.12028,
+  "magnitude": -5.11812,
+  "icon": "masks-theater"
+ },
+ {
+  "title": "British Council",
+  "lat": 51.50717,
+  "lon": -0.12881,
+  "magnitude": -5.13481,
+  "icon": "school"
+ },
+ {
+  "title": "Soho",
+  "lat": 51.51278,
+  "lon": -0.13111,
+  "magnitude": -5.15463,
+  "icon": "home"
+ },
+ {
+  "title": "Fleet Street",
+  "lat": 51.5138,
+  "lon": -0.1105,
+  "magnitude": -5.16243,
+  "icon": "road"
+ },
+ {
+  "title": "Cabinet Office",
+  "lat": 51.50361,
+  "lon": -0.12667,
+  "magnitude": -5.11545,
+  "icon": "building-bank"
+ },
+ {
+  "title": "10 Downing Street",
+  "lat": 51.5033,
+  "lon": -0.1275,
+  "magnitude": -5.15053,
+  "icon": "building"
+ }
+]

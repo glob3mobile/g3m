@@ -43,6 +43,8 @@ public class MarkBuilder
   private boolean _autoDeleteUserData;
   private MarkTouchListener _touchListener;
   private boolean _autoDeleteTouchListener;
+  private double _priority;
+  private MarkOutfit _hint;
 
 
   // what belongs to the mark just built goes with it
@@ -59,6 +61,10 @@ public class MarkBuilder
   
     _touchListener = null;
     _autoDeleteTouchListener = false;
+  
+    _priority = Double.NaN;
+  
+    _hint = null;
   }
 
   /** defaults: ABSOLUTE, no distance limits, zoom in on appearing */
@@ -73,12 +79,16 @@ public class MarkBuilder
      _autoDeleteUserData = false;
      _touchListener = null;
      _autoDeleteTouchListener = false;
+     _priority = Double.NaN;
+     _hint = null;
   }
 
   public void dispose()
   {
     if (_position != null)
        _position.dispose();
+    if (_hint != null)
+       _hint.dispose();
   
     for (int i = 0; i < _outfits.size(); i++)
     {
@@ -160,6 +170,20 @@ public class MarkBuilder
     _autoDeleteTouchListener = autoDeleteTouchListener;
   }
 
+  /** the order among the marks that compete for space: the higher, the earlier; without it, the renderer's order */
+  public final void setPriority(double priority)
+  {
+    _priority = priority;
+  }
+
+  /** the mark's own hint, drawn when nothing else fits; without it, the renderer's; anchor NULL: centred */
+  public final void setHint(IImageFactory imageFactory, MarkAnchor anchor)
+  {
+    if (_hint != null)
+       _hint.dispose();
+    _hint = new MarkOutfit(imageFactory, (anchor == null) ? new FixedMarkAnchor(0.5f, 0.5f) : anchor);
+  }
+
   /** needs a position and at least one outfit */
   public final Mark build()
   {
@@ -173,6 +197,11 @@ public class MarkBuilder
     }
   
     Mark mark = new Mark(_outfits, _position, _altitudeMode, _minDistanceToCamera, _maxDistanceToCamera, _userData, _autoDeleteUserData, _touchListener, _autoDeleteTouchListener, _zoomInAppears);
+    mark.setPriority(_priority);
+    if (_hint != null)
+    {
+      mark.addHint(_hint);
+    }
   
     clearMarkProperties();
   

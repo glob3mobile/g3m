@@ -17,6 +17,12 @@ package org.glob3.mobile.generated;
 
 //class Mark;
 //class Camera;
+//class Planet;
+//class TimeInterval;
+//class IImageFactory;
+//class IImage;
+//class MarksRenderer_HintListener;
+//class MutableVector3D;
 //class MarkTouchListener;
 //class IFloatBuffer;
 //class ITimer;
@@ -76,6 +82,149 @@ public class MarksRenderer extends DefaultRenderer
   private boolean _progressiveInitialization;
   private ITimer _initializationTimer;
 
+  private boolean _declutter;
+  private float _declutterMargin;
+  private long _growMS;
+  private long _shrinkMS;
+
+  // the default hint: one image, shared by every mark without a hint of its own
+  private IImageFactory _hintImageFactory;
+  private MarksRenderer_HintListener _hintListener;
+  private IImage              _hintImage;
+  private String _hintImageName;
+
+  private void startHintImage()
+  {
+    if ((_context == null) || (_hintImageFactory == null))
+    {
+      return;
+    }
+    IImageFactory hintImageFactory = _hintImageFactory;
+    _hintImageFactory = null; // ownership moved to the listener
+    _hintListener = new MarksRenderer_HintListener(this, hintImageFactory);
+    hintImageFactory.create(_context, _hintListener, true);
+  }
+
+  // every mark gets its own copy of the image; the same name shares the texture
+  private void attachHint(Mark mark)
+  {
+    if ((_hintImage == null) || mark.hasHint())
+    {
+      return;
+    }
+    mark.addHint(new MarkOutfit(new StaticImageFactory(_hintImage.shallowCopy(), _hintImageName), new FixedMarkAnchor(0.5f, 0.5f)));
+    if (mark.isInitialized())
+    {
+      mark.createPendingOutfitImages(_context);
+    }
+  }
+  // reused between frames: the marks in placing order and the screen rectangles taken
+  private java.util.ArrayList<Mark> _declutterCandidates = new java.util.ArrayList<Mark>();
+  private java.util.ArrayList<Mark> _declutterOrder = new java.util.ArrayList<Mark>();
+  private java.util.ArrayList<Float> _takenLeft = new java.util.ArrayList<Float>();
+  private java.util.ArrayList<Float> _takenTop = new java.util.ArrayList<Float>();
+  private java.util.ArrayList<Float> _takenRight = new java.util.ArrayList<Float>();
+  private java.util.ArrayList<Float> _takenBottom = new java.util.ArrayList<Float>();
+
+  private void declutter(Camera camera, Planet planet, MutableVector3D cameraPosition, double cameraHeight)
+  {
+    // the order the marks end up on top: the last drawn is the first one
+    java.util.ArrayList<Mark> candidates = _declutterCandidates;
+    candidates.clear();
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
+    {
+      final int ii = _renderInReverse ? i : (marksSize-1-i);
+      Mark mark = _marks.get(ii);
+      if (mark.isReady() && mark.isVisibleFrom(planet, cameraPosition, cameraHeight))
+      {
+        candidates.add(mark);
+      }
+    }
+  
+    // explicit priorities first, the highest first; a stable insertion keeps the drawing order for the rest
+    java.util.ArrayList<Mark> ordered = _declutterOrder;
+    ordered.clear();
+    for (int i = 0; i < candidates.size(); i++)
+    {
+      Mark mark = candidates.get(i);
+      if (mark.hasPriority())
+      {
+        int position = 0;
+        while ((position < ordered.size()) && (ordered.get(position).getPriority() >= mark.getPriority()))
+        {
+          position++;
+        }
+        ordered.add(position, mark);
+      }
+    }
+    for (int i = 0; i < candidates.size(); i++)
+    {
+      Mark mark = candidates.get(i);
+      if (!mark.hasPriority())
+      {
+        ordered.add(mark);
+      }
+    }
+  
+    _takenLeft.clear();
+    _takenTop.clear();
+    _takenRight.clear();
+    _takenBottom.clear();
+  
+    for (int i = 0; i < ordered.size(); i++)
+    {
+      Mark mark = ordered.get(i);
+      final Vector2F markPixel = camera.point2Pixel(mark.getCartesianPosition(planet));
+  
+      boolean placed = false;
+      final int outfitsCount = mark.getOutfitsCount();
+      for (int outfitIndex = 0; (outfitIndex < outfitsCount) && !placed; outfitIndex++)
+      {
+        final Vector2F size = mark.getOutfitScreenSize(outfitIndex);
+        if ((size._x <= 0) || (size._y <= 0))
+        {
+          continue; // its image does not exist yet
+        }
+        final Vector2F anchor = mark.getOutfitAnchor(outfitIndex);
+        final float left = markPixel._x - (size._x * anchor._x);
+        final float top = markPixel._y - (size._y * anchor._y);
+  
+        final int target = mark.getDeclutterTarget();
+        final boolean grows = (target < 0) || ((int) outfitIndex < target);
+        final float margin = grows ? _declutterMargin : 0;
+  
+        if (isFree(left - margin, top - margin, left + size._x + margin, top + size._y + margin))
+        {
+          mark.setDeclutterTarget((int) outfitIndex);
+          _takenLeft.add(left);
+          _takenTop.add(top);
+          _takenRight.add(left + size._x);
+          _takenBottom.add(top + size._y);
+          placed = true;
+        }
+      }
+  
+      if (!placed)
+      {
+        mark.setDeclutterTarget(-1);
+      }
+    }
+  }
+
+  private boolean isFree(float left, float top, float right, float bottom)
+  {
+    final int takenSize = _takenLeft.size();
+    for (int i = 0; i < takenSize; i++)
+    {
+      if ((left < _takenRight.get(i)) && (right > _takenLeft.get(i)) && (top < _takenBottom.get(i)) && (bottom > _takenTop.get(i)))
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
 
   public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse)
   {
@@ -90,6 +239,14 @@ public class MarksRenderer extends DefaultRenderer
      _readyWhenMarksReady = readyWhenMarksReady;
      _renderInReverse = renderInReverse;
      _progressiveInitialization = progressiveInitialization;
+     _declutter = false;
+     _declutterMargin = 2F;
+     _growMS = 500;
+     _shrinkMS = 300;
+     _hintImageFactory = null;
+     _hintListener = null;
+     _hintImage = null;
+     _hintImageName = "";
      _lastCamera = null;
      _markTouchListener = null;
      _autoDeleteMarkTouchListener = false;
@@ -103,6 +260,72 @@ public class MarksRenderer extends DefaultRenderer
   public final void setRenderInReverse(boolean renderInReverse)
   {
     _renderInReverse = renderInReverse;
+  }
+
+  /**
+   * Each frame, every visible mark takes its largest outfit that does not
+   * overlap the marks placed before it, or hides when none fits. Marks with
+   * priority go first, the highest first; the rest in the order they are drawn
+   * on top.
+   */
+  public final void setDeclutter(boolean declutter)
+  {
+    _declutter = declutter;
+    if (!_declutter)
+    {
+      for (int i = 0; i < _marks.size(); i++)
+      {
+        _marks.get(i).resetDeclutter();
+      }
+    }
+  }
+
+  public final boolean getDeclutter()
+  {
+    return _declutter;
+  }
+
+  /** the free space a mark needs around it to grow or come back; it keeps its place with no margin, so it does not blink */
+  public final void setDeclutterMargin(float marginInPixels)
+  {
+    _declutterMargin = marginInPixels;
+  }
+
+  /** the hint of the marks without their own: drawn centred on the position when nothing else fits; the renderer owns the factory; NULL: no hint for the marks added from now on */
+  public final void setHint(IImageFactory hintImageFactory)
+  {
+    if (_hintListener != null)
+    {
+      _hintListener.forgetRenderer();
+      _hintListener = null;
+    }
+    if (_hintImageFactory != null)
+       _hintImageFactory.dispose();
+    _hintImage = null;
+    _hintImage = null;
+    _hintImageName = "";
+  
+    _hintImageFactory = hintImageFactory;
+    startHintImage();
+  }
+
+  public final void onHintImageCreated(IImage image, String imageName)
+  {
+    _hintListener = null;
+    _hintImage = image;
+    _hintImageName = imageName;
+  
+    for (int i = 0; i < _marks.size(); i++)
+    {
+      attachHint(_marks.get(i));
+    }
+  }
+
+  /** how long an outfit takes to grow in and to shrink away; by default those of the marks' zoom effects */
+  public final void setDeclutterTransitionDurations(TimeInterval grow, TimeInterval shrink)
+  {
+    _growMS = grow.milliseconds();
+    _shrinkMS = shrink.milliseconds();
   }
 
   public final boolean getRenderInReverse()
@@ -126,6 +349,14 @@ public class MarksRenderer extends DefaultRenderer
   {
     if (_initializationTimer != null)
        _initializationTimer.dispose();
+  
+    if (_hintListener != null)
+    {
+      _hintListener.forgetRenderer();
+    }
+    if (_hintImageFactory != null)
+       _hintImageFactory.dispose(); // only while it waits for a context
+    _hintImage = null;
   
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
@@ -151,6 +382,8 @@ public class MarksRenderer extends DefaultRenderer
 
   public void onChangedContext()
   {
+    startHintImage();
+  
     final int marksSize = _marks.size();
     for (int i = 0; i < marksSize; i++)
     {
@@ -207,6 +440,17 @@ public class MarksRenderer extends DefaultRenderer
         }
       }
   
+      if (_declutter)
+      {
+        declutter(camera, planet, cameraPosition, cameraHeight);
+  
+        final long nowMS = rc.getFrameStartTimer().nowInMilliseconds();
+        for (int i = 0; i < marksSize; i++)
+        {
+          _marks.get(i).stepDeclutterTransition(nowMS, _growMS, _shrinkMS);
+        }
+      }
+  
       for (int i = 0; i < marksSize; i++)
       {
         final int ii = _renderInReverse ? (marksSize-1-i) : i;
@@ -226,6 +470,7 @@ public class MarksRenderer extends DefaultRenderer
 
   public final void addMark(Mark mark)
   {
+    attachHint(mark);
     _marks.add(mark);
     if ((_context != null) && !_progressiveInitialization)
     {
@@ -288,7 +533,7 @@ public class MarksRenderer extends DefaultRenderer
           {
             continue;
           }
-          if (!mark.isRendered())
+          if (!mark.isRendered() || mark.isShowingHint())
           {
             continue;
           }

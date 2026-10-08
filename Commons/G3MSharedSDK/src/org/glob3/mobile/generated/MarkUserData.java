@@ -31,6 +31,7 @@ package org.glob3.mobile.generated;
 //class TouchEvent;
 //class ModelTransformGLFeature;
 //class MarkOutfit;
+//class MarkOutfitImage;
 
 public class MarkUserData
 {

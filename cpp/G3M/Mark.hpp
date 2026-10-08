@@ -40,6 +40,7 @@ class MarkImageFactoryListener;
 class TouchEvent;
 class ModelTransformGLFeature;
 class MarkOutfit;
+class MarkOutfitImage;
 
 class MarkUserData {
 public:
@@ -51,10 +52,26 @@ public:
 class Mark : public SurfaceElevationListener {
 private:
 
-  IImageFactory* _imageFactory;
-  MarkImageFactoryListener* _imageFactoryListener;
+  std::vector<MarkOutfit*>      _outfits;
+  std::vector<MarkOutfitImage*> _outfitImages; // one per outfit: the image and texture of the outfits not on screen
+  size_t                        _outfitIndex;
 
-  std::vector<MarkOutfit*> _outfits;
+  double _priority; // NAND: none, the renderer's order decides
+  bool   _declutterHidden;
+
+  // the outfit the renderer wants on screen (-1: none); the one on screen shrinks away before it grows in
+  int       _declutterTarget;
+  float     _transitionScale;
+  long long _lastTransitionMS;
+
+  void applyOutfitAnchor(const MarkOutfitImage* outfitImage);
+
+  bool _hasHint; // the last outfit is a hint: drawn when nothing else fits, not touchable
+
+  // the anchor the app set: outfits without their own anchor use it
+  float _appAnchorU;
+  float _appAnchorV;
+  void changeAnchor(float anchorU, float anchorV);
 
   /**
    * The point where the mark will be geo-located.
@@ -214,10 +231,80 @@ public:
     return _renderedMark;
   }
 
-  void onImageCreated(const IImage* image,
+  void onImageCreated(size_t outfitIndex,
+                      const IImage* image,
                       const std::string& imageName);
 
-  void onImageCreationError(const std::string& error);
+  void onImageCreationError(size_t outfitIndex,
+                            const std::string& error);
+
+  size_t getOutfitsCount() const {
+    return _outfits.size();
+  }
+
+  size_t getOutfitIndex() const {
+    return _outfitIndex;
+  }
+
+  /** the outfit drawn from now on; 0 is the largest */
+  void setOutfit(size_t outfitIndex);
+
+  /** the smallest outfit, after the others: a sign that there is more to see when zooming in; the mark owns it */
+  void addHint(MarkOutfit* hint);
+
+  bool hasHint() const {
+    return _hasHint;
+  }
+
+  bool isShowingHint() const {
+    return _hasHint && (_outfitIndex == (_outfits.size() - 1));
+  }
+
+  /** starts creating the images of the outfits that do not have one yet */
+  void createPendingOutfitImages(const G3MContext* context);
+
+  /** an outfit's size on screen (with the app's scale), or zero while its image does not exist */
+  Vector2F getOutfitScreenSize(size_t outfitIndex) const;
+
+  /** an outfit's anchor in UV: its own, or the mark's when the outfit has none */
+  Vector2F getOutfitAnchor(size_t outfitIndex) const;
+
+  /** true when the camera can see the position (distance limits and horizon); keeps the mark-camera vector */
+  bool isVisibleFrom(const Planet* planet,
+                     const MutableVector3D& cameraPosition,
+                     double cameraHeight);
+
+  bool isDeclutterHidden() const {
+    return _declutterHidden;
+  }
+
+  /** the outfit a decluttering renderer chose, -1 when none fits; the mark gets there through stepDeclutterTransition */
+  void setDeclutterTarget(int outfitIndex) {
+    _declutterTarget = outfitIndex;
+  }
+
+  int getDeclutterTarget() const {
+    return _declutterTarget;
+  }
+
+  /** shrinks the outfit on screen while it is not the target, then grows the target in; reversible halfway */
+  void stepDeclutterTransition(long long nowMS,
+                               long long growMS,
+                               long long shrinkMS);
+
+  /** back to the first outfit, on screen and at full size, with no transition */
+  void resetDeclutter();
+
+  /** the order among the marks that compete for space: the higher, the earlier */
+  void setPriority(double priority) {
+    _priority = priority;
+  }
+
+  bool hasPriority() const;
+
+  double getPriority() const {
+    return _priority;
+  }
 
   float getTextureWidth() const {
     return _textureWidth;
@@ -229,11 +316,11 @@ public:
 
   /** the size drawn on screen: the texture size times the app's and the effects' scales */
   float getScreenWidth() const {
-    return _textureWidth * _textureWidthScale * _effectScale;
+    return _textureWidth * _textureWidthScale * _effectScale * _transitionScale;
   }
 
   float getScreenHeight() const {
-    return _textureHeight * _textureHeightScale * _effectScale;
+    return _textureHeight * _textureHeightScale * _effectScale * _transitionScale;
   }
 
   Vector2F getTextureExtent() const {

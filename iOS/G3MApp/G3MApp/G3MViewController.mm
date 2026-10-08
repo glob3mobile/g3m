@@ -176,7 +176,7 @@ public:
                    ofSelector: selector];
   selector.menu   = [self createMenuForGroup: groupIndex
                                      ofScene: scene];
-  selector.hidden = (group->getOptionsCount() == 0);
+  selector.hidden = (group->getOptionsCount() == 0) || !scene->isOptionGroupVisible(groupIndex);
 }
 
 -(void) onChangedScene:(const G3MDemoScene*) scene
@@ -200,13 +200,16 @@ public:
   }
 }
 
+// every selector, not only the changed one: an option can show or hide other groups
 -(void) onChangedOptionInGroup:(size_t) groupIndex
                        inScene:(const G3MDemoScene*) scene
 {
-  UIButton* selector = (UIButton*) _optionSelectors.arrangedSubviews[groupIndex];
-  [self updateSelector: selector
-              forGroup: groupIndex
-               ofScene: _demoModel->getSelectedScene()];
+  G3MDemoScene* selectedScene = _demoModel->getSelectedScene();
+  for (size_t i = 0; i < _optionSelectors.arrangedSubviews.count; i++) {
+    [self updateSelector: (UIButton*) _optionSelectors.arrangedSubviews[i]
+                forGroup: i
+                 ofScene: selectedScene];
+  }
 }
 
 -(void) showColorGradingPanel:(G3MColorGradingDemoScene*) scene

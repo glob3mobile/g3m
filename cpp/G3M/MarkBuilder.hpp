@@ -39,6 +39,8 @@ private:
   bool                      _autoDeleteUserData;
   MarkTouchListener*        _touchListener;
   bool                      _autoDeleteTouchListener;
+  double                    _priority;
+  MarkOutfit*               _hint;
 
   void clearMarkProperties();
 
@@ -71,6 +73,13 @@ public:
 
   void setTouchListener(MarkTouchListener* touchListener,
                         bool               autoDeleteTouchListener);
+
+  /** the order among the marks that compete for space: the higher, the earlier; without it, the renderer's order */
+  void setPriority(double priority);
+
+  /** the mark's own hint, drawn when nothing else fits; without it, the renderer's; anchor NULL: centred */
+  void setHint(IImageFactory* imageFactory,
+               MarkAnchor*    anchor);
 
   /** needs a position and at least one outfit */
   Mark* build();

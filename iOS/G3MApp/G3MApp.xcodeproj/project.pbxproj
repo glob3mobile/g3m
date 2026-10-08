@@ -12,6 +12,33 @@
 		CF2744FA25B1A8990056304B /* G3MXPointCloudDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */; };
 		CF28408A2729A3B900BC64BA /* OUTPUT-4326.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */; };
 		CF28DDCE26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */; };
+		CF29565F3077EE7F00FC4904 /* wp-home-star.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956573077EE7F00FC4904 /* wp-home-star.png */; };
+		CF2956603077EE7F00FC4904 /* wp-masks-theater.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956593077EE7F00FC4904 /* wp-masks-theater.png */; };
+		CF2956613077EE7F00FC4904 /* wp-home-2.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956563077EE7F00FC4904 /* wp-home-2.png */; };
+		CF2956623077EE7F00FC4904 /* wp-trees.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29565D3077EE7F00FC4904 /* wp-trees.png */; };
+		CF2956633077EE7F00FC4904 /* wp-world.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29565E3077EE7F00FC4904 /* wp-world.png */; };
+		CF2956643077EE7F00FC4904 /* wp-map.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956583077EE7F00FC4904 /* wp-map.png */; };
+		CF2956653077EE7F00FC4904 /* wp-heart-handshake.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956533077EE7F00FC4904 /* wp-heart-handshake.png */; };
+		CF2956663077EE7F00FC4904 /* wp-road.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29565B3077EE7F00FC4904 /* wp-road.png */; };
+		CF2956673077EE7F00FC4904 /* wp-building-broadcast-tower.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29564A3077EE7F00FC4904 /* wp-building-broadcast-tower.png */; };
+		CF2956683077EE7F00FC4904 /* wp-olympics.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29565A3077EE7F00FC4904 /* wp-olympics.png */; };
+		CF2956693077EE7F00FC4904 /* wp-building-bank.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956493077EE7F00FC4904 /* wp-building-bank.png */; };
+		CF29566A3077EE7F00FC4904 /* wp-cricket.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29564F3077EE7F00FC4904 /* wp-cricket.png */; };
+		CF29566B3077EE7F00FC4904 /* London-Wikipedia.json in Resources */ = {isa = PBXBuildFile; fileRef = CF2956443077EE7F00FC4904 /* London-Wikipedia.json */; };
+		CF29566C3077EE7F00FC4904 /* wp-ball-football.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956453077EE7F00FC4904 /* wp-ball-football.png */; };
+		CF29566D3077EE7F00FC4904 /* wp-building-church.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29564B3077EE7F00FC4904 /* wp-building-church.png */; };
+		CF29566E3077EE7F00FC4904 /* wp-home.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956553077EE7F00FC4904 /* wp-home.png */; };
+		CF29566F3077EE7F00FC4904 /* wp-flag.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956503077EE7F00FC4904 /* wp-flag.png */; };
+		CF2956703077EE7F00FC4904 /* wp-confetti.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29564E3077EE7F00FC4904 /* wp-confetti.png */; };
+		CF2956713077EE7F00FC4904 /* wp-briefcase.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956463077EE7F00FC4904 /* wp-briefcase.png */; };
+		CF2956723077EE7F00FC4904 /* wp-history.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956543077EE7F00FC4904 /* wp-history.png */; };
+		CF2956733077EE7F00FC4904 /* wp-chart-candle.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29564D3077EE7F00FC4904 /* wp-chart-candle.png */; };
+		CF2956743077EE7F00FC4904 /* wp-building.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956473077EE7F00FC4904 /* wp-building.png */; };
+		CF2956753077EE7F00FC4904 /* wp-gavel.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956523077EE7F00FC4904 /* wp-gavel.png */; };
+		CF2956763077EE7F00FC4904 /* wp-building-arch.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956483077EE7F00FC4904 /* wp-building-arch.png */; };
+		CF2956773077EE7F00FC4904 /* wp-fountain.png in Resources */ = {isa = PBXBuildFile; fileRef = CF2956513077EE7F00FC4904 /* wp-fountain.png */; };
+		CF2956783077EE7F00FC4904 /* wp-building-factory.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29564C3077EE7F00FC4904 /* wp-building-factory.png */; };
+		CF2956793077EE7F00FC4904 /* wp-school.png in Resources */ = {isa = PBXBuildFile; fileRef = CF29565C3077EE7F00FC4904 /* wp-school.png */; };
 		CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */; };
 		CF37F5EE183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */; };
 		CF37F5F1183D26500050CAEF /* 0576.bil in Resources */ = {isa = PBXBuildFile; fileRef = CF37F5F0183D26500050CAEF /* 0576.bil */; };
@@ -157,6 +184,33 @@
 		CF2744F925B1A8990056304B /* G3MXPointCloudDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MXPointCloudDemoScene.mm; sourceTree = "<group>"; };
 		CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OUTPUT-4326.bil"; sourceTree = "<group>"; };
 		CF28DDCC26CA828C00116F66 /* Track_A-Sphere-70-2048x2048.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Track_A-Sphere-70-2048x2048.jpg"; sourceTree = "<group>"; };
+		CF2956443077EE7F00FC4904 /* London-Wikipedia.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "London-Wikipedia.json"; sourceTree = "<group>"; };
+		CF2956453077EE7F00FC4904 /* wp-ball-football.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-ball-football.png"; sourceTree = "<group>"; };
+		CF2956463077EE7F00FC4904 /* wp-briefcase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-briefcase.png"; sourceTree = "<group>"; };
+		CF2956473077EE7F00FC4904 /* wp-building.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-building.png"; sourceTree = "<group>"; };
+		CF2956483077EE7F00FC4904 /* wp-building-arch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-building-arch.png"; sourceTree = "<group>"; };
+		CF2956493077EE7F00FC4904 /* wp-building-bank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-building-bank.png"; sourceTree = "<group>"; };
+		CF29564A3077EE7F00FC4904 /* wp-building-broadcast-tower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-building-broadcast-tower.png"; sourceTree = "<group>"; };
+		CF29564B3077EE7F00FC4904 /* wp-building-church.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-building-church.png"; sourceTree = "<group>"; };
+		CF29564C3077EE7F00FC4904 /* wp-building-factory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-building-factory.png"; sourceTree = "<group>"; };
+		CF29564D3077EE7F00FC4904 /* wp-chart-candle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-chart-candle.png"; sourceTree = "<group>"; };
+		CF29564E3077EE7F00FC4904 /* wp-confetti.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-confetti.png"; sourceTree = "<group>"; };
+		CF29564F3077EE7F00FC4904 /* wp-cricket.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-cricket.png"; sourceTree = "<group>"; };
+		CF2956503077EE7F00FC4904 /* wp-flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-flag.png"; sourceTree = "<group>"; };
+		CF2956513077EE7F00FC4904 /* wp-fountain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-fountain.png"; sourceTree = "<group>"; };
+		CF2956523077EE7F00FC4904 /* wp-gavel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-gavel.png"; sourceTree = "<group>"; };
+		CF2956533077EE7F00FC4904 /* wp-heart-handshake.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-heart-handshake.png"; sourceTree = "<group>"; };
+		CF2956543077EE7F00FC4904 /* wp-history.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-history.png"; sourceTree = "<group>"; };
+		CF2956553077EE7F00FC4904 /* wp-home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-home.png"; sourceTree = "<group>"; };
+		CF2956563077EE7F00FC4904 /* wp-home-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-home-2.png"; sourceTree = "<group>"; };
+		CF2956573077EE7F00FC4904 /* wp-home-star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-home-star.png"; sourceTree = "<group>"; };
+		CF2956583077EE7F00FC4904 /* wp-map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-map.png"; sourceTree = "<group>"; };
+		CF2956593077EE7F00FC4904 /* wp-masks-theater.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-masks-theater.png"; sourceTree = "<group>"; };
+		CF29565A3077EE7F00FC4904 /* wp-olympics.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-olympics.png"; sourceTree = "<group>"; };
+		CF29565B3077EE7F00FC4904 /* wp-road.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-road.png"; sourceTree = "<group>"; };
+		CF29565C3077EE7F00FC4904 /* wp-school.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-school.png"; sourceTree = "<group>"; };
+		CF29565D3077EE7F00FC4904 /* wp-trees.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-trees.png"; sourceTree = "<group>"; };
+		CF29565E3077EE7F00FC4904 /* wp-world.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wp-world.png"; sourceTree = "<group>"; };
 		CF371AD11DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3M3DLandDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF371AD21DA3EBCA006F2BC6 /* G3M3DLandDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = G3M3DLandDemoScene.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF37F5EC183D239A0050CAEF /* G3MScenarioDEMDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MScenarioDEMDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -546,6 +600,33 @@
 		E7D1B7F116D2750400AF47C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CF2956443077EE7F00FC4904 /* London-Wikipedia.json */,
+				CF2956453077EE7F00FC4904 /* wp-ball-football.png */,
+				CF2956463077EE7F00FC4904 /* wp-briefcase.png */,
+				CF2956473077EE7F00FC4904 /* wp-building.png */,
+				CF2956483077EE7F00FC4904 /* wp-building-arch.png */,
+				CF2956493077EE7F00FC4904 /* wp-building-bank.png */,
+				CF29564A3077EE7F00FC4904 /* wp-building-broadcast-tower.png */,
+				CF29564B3077EE7F00FC4904 /* wp-building-church.png */,
+				CF29564C3077EE7F00FC4904 /* wp-building-factory.png */,
+				CF29564D3077EE7F00FC4904 /* wp-chart-candle.png */,
+				CF29564E3077EE7F00FC4904 /* wp-confetti.png */,
+				CF29564F3077EE7F00FC4904 /* wp-cricket.png */,
+				CF2956503077EE7F00FC4904 /* wp-flag.png */,
+				CF2956513077EE7F00FC4904 /* wp-fountain.png */,
+				CF2956523077EE7F00FC4904 /* wp-gavel.png */,
+				CF2956533077EE7F00FC4904 /* wp-heart-handshake.png */,
+				CF2956543077EE7F00FC4904 /* wp-history.png */,
+				CF2956553077EE7F00FC4904 /* wp-home.png */,
+				CF2956563077EE7F00FC4904 /* wp-home-2.png */,
+				CF2956573077EE7F00FC4904 /* wp-home-star.png */,
+				CF2956583077EE7F00FC4904 /* wp-map.png */,
+				CF2956593077EE7F00FC4904 /* wp-masks-theater.png */,
+				CF29565A3077EE7F00FC4904 /* wp-olympics.png */,
+				CF29565B3077EE7F00FC4904 /* wp-road.png */,
+				CF29565C3077EE7F00FC4904 /* wp-school.png */,
+				CF29565D3077EE7F00FC4904 /* wp-trees.png */,
+				CF29565E3077EE7F00FC4904 /* wp-world.png */,
 				CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */,
 				CF3B19B7293515D40055B5C4 /* Track_E-CAM8-1_2022.06.27_11.32.23(451).jpg */,
 				CF2840882729A2C600BC64BA /* OUTPUT-4326.bil */,
@@ -706,6 +787,33 @@
 				E7D1B63D16D2462B00AF47C1 /* Default-Landscape@2x.png in Resources */,
 				E7D1B63E16D2462B00AF47C1 /* Default-Portrait.png in Resources */,
 				CFE3B3E6183ADAFF0078C796 /* eifel in Resources */,
+				CF29565F3077EE7F00FC4904 /* wp-home-star.png in Resources */,
+				CF2956603077EE7F00FC4904 /* wp-masks-theater.png in Resources */,
+				CF2956613077EE7F00FC4904 /* wp-home-2.png in Resources */,
+				CF2956623077EE7F00FC4904 /* wp-trees.png in Resources */,
+				CF2956633077EE7F00FC4904 /* wp-world.png in Resources */,
+				CF2956643077EE7F00FC4904 /* wp-map.png in Resources */,
+				CF2956653077EE7F00FC4904 /* wp-heart-handshake.png in Resources */,
+				CF2956663077EE7F00FC4904 /* wp-road.png in Resources */,
+				CF2956673077EE7F00FC4904 /* wp-building-broadcast-tower.png in Resources */,
+				CF2956683077EE7F00FC4904 /* wp-olympics.png in Resources */,
+				CF2956693077EE7F00FC4904 /* wp-building-bank.png in Resources */,
+				CF29566A3077EE7F00FC4904 /* wp-cricket.png in Resources */,
+				CF29566B3077EE7F00FC4904 /* London-Wikipedia.json in Resources */,
+				CF29566C3077EE7F00FC4904 /* wp-ball-football.png in Resources */,
+				CF29566D3077EE7F00FC4904 /* wp-building-church.png in Resources */,
+				CF29566E3077EE7F00FC4904 /* wp-home.png in Resources */,
+				CF29566F3077EE7F00FC4904 /* wp-flag.png in Resources */,
+				CF2956703077EE7F00FC4904 /* wp-confetti.png in Resources */,
+				CF2956713077EE7F00FC4904 /* wp-briefcase.png in Resources */,
+				CF2956723077EE7F00FC4904 /* wp-history.png in Resources */,
+				CF2956733077EE7F00FC4904 /* wp-chart-candle.png in Resources */,
+				CF2956743077EE7F00FC4904 /* wp-building.png in Resources */,
+				CF2956753077EE7F00FC4904 /* wp-gavel.png in Resources */,
+				CF2956763077EE7F00FC4904 /* wp-building-arch.png in Resources */,
+				CF2956773077EE7F00FC4904 /* wp-fountain.png in Resources */,
+				CF2956783077EE7F00FC4904 /* wp-building-factory.png in Resources */,
+				CF2956793077EE7F00FC4904 /* wp-school.png in Resources */,
 				E7D1B63F16D2462B00AF47C1 /* Default-Portrait@2x.png in Resources */,
 				CF483ECB1A2E62B600B70D7E /* altimeter-ruler-1536x113.png in Resources */,
 				CF483ECD1A2E62C400B70D7E /* widget-background.png in Resources */,
