@@ -18,10 +18,12 @@
 
 ColumnLayoutImageFactory::ColumnLayoutImageFactory(const std::vector<IImageFactory*>& children,
                                                    const ImageBackground*             background,
-                                                   const int                          childrenSeparation) :
+                                                   const int                          childrenSeparation,
+                                                   const HorizontalAlignment          childrenAlignment) :
 LayoutImageFactory(children,
                    background),
-_childrenSeparation(childrenSeparation)
+_childrenSeparation(childrenSeparation),
+_childrenAlignment(childrenAlignment)
 {
 
 }
@@ -29,21 +31,25 @@ _childrenSeparation(childrenSeparation)
 ColumnLayoutImageFactory::ColumnLayoutImageFactory(IImageFactory*         child0,
                                                    IImageFactory*         child1,
                                                    const ImageBackground* background,
-                                                   const int              childrenSeparation) :
+                                                   const int              childrenSeparation,
+                                                   const HorizontalAlignment childrenAlignment) :
 LayoutImageFactory(child0,
                    child1,
                    background),
-_childrenSeparation(childrenSeparation)
+_childrenSeparation(childrenSeparation),
+_childrenAlignment(childrenAlignment)
 {
 
 }
 
 ColumnLayoutImageFactory::ColumnLayoutImageFactory(IImageFactory*         child0,
                                                    const ImageBackground* background,
-                                                   const int              childrenSeparation) :
+                                                   const int              childrenSeparation,
+                                                   const HorizontalAlignment childrenAlignment) :
 LayoutImageFactory(child0,
                    background),
-_childrenSeparation(childrenSeparation)
+_childrenSeparation(childrenSeparation),
+_childrenAlignment(childrenAlignment)
 {
 
 }
@@ -130,7 +136,18 @@ void ColumnLayoutImageFactory::doLayout(const G3MContext* context,
       const int imageWidth  = image->getWidth();
       const int imageHeight = image->getHeight();
       
-      const float left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
+      float left;
+      switch (_childrenAlignment) {
+        case Left:
+          left = contentPos._x;
+          break;
+        case Right:
+          left = contentPos._x + (contentWidth - imageWidth);
+          break;
+        default:
+          left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
+          break;
+      }
       canvas->drawImage(image, left, cursorTop);
       cursorTop += imageHeight + _childrenSeparation;
     }

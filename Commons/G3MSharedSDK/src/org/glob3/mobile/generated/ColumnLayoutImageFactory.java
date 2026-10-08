@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 public class ColumnLayoutImageFactory extends LayoutImageFactory
 {
   private final int _childrenSeparation;
+  private final HorizontalAlignment _childrenAlignment;
 
   public void dispose()
   {
@@ -89,7 +90,19 @@ public class ColumnLayoutImageFactory extends LayoutImageFactory
         final int imageWidth = image.getWidth();
         final int imageHeight = image.getHeight();
   
-        final float left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
+        float left;
+        switch (_childrenAlignment)
+        {
+          case Left:
+            left = contentPos._x;
+            break;
+          case Right:
+            left = contentPos._x + (contentWidth - imageWidth);
+            break;
+          default:
+            left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
+            break;
+        }
         canvas.drawImage(image, left, cursorTop);
         cursorTop += imageHeight + _childrenSeparation;
       }
@@ -106,48 +119,63 @@ public class ColumnLayoutImageFactory extends LayoutImageFactory
   }
 
 
+  public ColumnLayoutImageFactory(java.util.ArrayList<IImageFactory> children, ImageBackground background, int childrenSeparation)
+  {
+     this(children, background, childrenSeparation, HorizontalAlignment.Center);
+  }
   public ColumnLayoutImageFactory(java.util.ArrayList<IImageFactory> children, ImageBackground background)
   {
-     this(children, background, 0);
+     this(children, background, 0, HorizontalAlignment.Center);
   }
   public ColumnLayoutImageFactory(java.util.ArrayList<IImageFactory> children)
   {
-     this(children, null, 0);
+     this(children, null, 0, HorizontalAlignment.Center);
   }
-  public ColumnLayoutImageFactory(java.util.ArrayList<IImageFactory> children, ImageBackground background, int childrenSeparation)
+  public ColumnLayoutImageFactory(java.util.ArrayList<IImageFactory> children, ImageBackground background, int childrenSeparation, HorizontalAlignment childrenAlignment)
   {
      super(children, background);
      _childrenSeparation = childrenSeparation;
+     _childrenAlignment = childrenAlignment;
   
   }
 
+  public ColumnLayoutImageFactory(IImageFactory child0, IImageFactory child1, ImageBackground background, int childrenSeparation)
+  {
+     this(child0, child1, background, childrenSeparation, HorizontalAlignment.Center);
+  }
   public ColumnLayoutImageFactory(IImageFactory child0, IImageFactory child1, ImageBackground background)
   {
-     this(child0, child1, background, 0);
+     this(child0, child1, background, 0, HorizontalAlignment.Center);
   }
   public ColumnLayoutImageFactory(IImageFactory child0, IImageFactory child1)
   {
-     this(child0, child1, null, 0);
+     this(child0, child1, null, 0, HorizontalAlignment.Center);
   }
-  public ColumnLayoutImageFactory(IImageFactory child0, IImageFactory child1, ImageBackground background, int childrenSeparation)
+  public ColumnLayoutImageFactory(IImageFactory child0, IImageFactory child1, ImageBackground background, int childrenSeparation, HorizontalAlignment childrenAlignment)
   {
      super(child0, child1, background);
      _childrenSeparation = childrenSeparation;
+     _childrenAlignment = childrenAlignment;
   
   }
 
+  public ColumnLayoutImageFactory(IImageFactory child0, ImageBackground background, int childrenSeparation)
+  {
+     this(child0, background, childrenSeparation, HorizontalAlignment.Center);
+  }
   public ColumnLayoutImageFactory(IImageFactory child0, ImageBackground background)
   {
-     this(child0, background, 0);
+     this(child0, background, 0, HorizontalAlignment.Center);
   }
   public ColumnLayoutImageFactory(IImageFactory child0)
   {
-     this(child0, null, 0);
+     this(child0, null, 0, HorizontalAlignment.Center);
   }
-  public ColumnLayoutImageFactory(IImageFactory child0, ImageBackground background, int childrenSeparation)
+  public ColumnLayoutImageFactory(IImageFactory child0, ImageBackground background, int childrenSeparation, HorizontalAlignment childrenAlignment)
   {
      super(child0, background);
      _childrenSeparation = childrenSeparation;
+     _childrenAlignment = childrenAlignment;
   
   }
 

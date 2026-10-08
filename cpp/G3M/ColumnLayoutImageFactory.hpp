@@ -10,11 +10,13 @@
 #define __G3M__ColumnLayoutImageFactory__
 
 #include "LayoutImageFactory.hpp"
+#include "ICanvasUtils.hpp"
 
 
 class ColumnLayoutImageFactory : public LayoutImageFactory {
 private:
-  const int _childrenSeparation;
+  const int                 _childrenSeparation;
+  const HorizontalAlignment _childrenAlignment;
   
 protected:
   ~ColumnLayoutImageFactory() {
@@ -32,16 +34,19 @@ public:
   
   ColumnLayoutImageFactory(const std::vector<IImageFactory*>& children,
                            const ImageBackground*             background         = NULL,
-                           const int                          childrenSeparation = 0);
+                           const int                          childrenSeparation = 0,
+                           const HorizontalAlignment          childrenAlignment  = Center);
   
   ColumnLayoutImageFactory(IImageFactory*         child0,
                            IImageFactory*         child1,
                            const ImageBackground* background         = NULL,
-                           const int              childrenSeparation = 0);
+                           const int              childrenSeparation = 0,
+                           const HorizontalAlignment childrenAlignment = Center);
   
   ColumnLayoutImageFactory(IImageFactory*         child0,
                            const ImageBackground* background         = NULL,
-                           const int              childrenSeparation = 0);
+                           const int              childrenSeparation = 0,
+                           const HorizontalAlignment childrenAlignment = Center);
   
 };
 

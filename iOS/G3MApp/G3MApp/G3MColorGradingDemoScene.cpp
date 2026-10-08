@@ -141,7 +141,8 @@ Matrix44D* G3MColorGradingDemoScene::createEffectMatrix(const std::string& effec
 }
 
 // Fixed order, so each slider keeps its meaning whatever the others do
-Matrix44D* G3MColorGradingDemoScene::createCustomMatrix(double saturation,
+Matrix44D* G3MColorGradingDemoScene::createCustomMatrix(double temperature,
+                                                        double saturation,
                                                         const Angle& hue,
                                                         double contrast,
                                                         double brightness,
@@ -152,6 +153,7 @@ Matrix44D* G3MColorGradingDemoScene::createCustomMatrix(double saturation,
                                             (float) (1 - tintIntensity + tintIntensity * tint._blue),
                                             1);
   Matrix44D* steps[] = {
+    ColorMatrix::createWhiteBalance(temperature),
     ColorMatrix::createSaturation(saturation),
     ColorMatrix::createHueRotation(hue),
     ColorMatrix::createContrast(contrast),
@@ -170,29 +172,31 @@ Matrix44D* G3MColorGradingDemoScene::createCustomMatrix(double saturation,
   return result;
 }
 
-void G3MColorGradingDemoScene::setCustomGrade(double saturation,
+void G3MColorGradingDemoScene::setCustomGrade(double temperature,
+                                              double saturation,
                                               const Angle& hue,
                                               double contrast,
                                               double brightness,
                                               const Color& tint,
                                               double tintIntensity) {
-  Matrix44D* colorMatrix = createCustomMatrix(saturation, hue, contrast, brightness, tint, tintIntensity);
+  Matrix44D* colorMatrix = createCustomMatrix(temperature, saturation, hue, contrast, brightness, tint, tintIntensity);
   getModel()->getPlanetRenderer()->setColorMatrix(colorMatrix);
   colorMatrix->_release();
 }
 
-void G3MColorGradingDemoScene::logCustomGrade(double saturation,
+void G3MColorGradingDemoScene::logCustomGrade(double temperature,
+                                              double saturation,
                                               const Angle& hue,
                                               double contrast,
                                               double brightness,
                                               const Color& tint,
                                               double tintIntensity) const {
-  Matrix44D* m = createCustomMatrix(saturation, hue, contrast, brightness, tint, tintIntensity);
-  ILogger::instance()->logInfo("Custom color grade: saturation=%.3f hue=%.1f contrast=%.3f brightness=%.3f tint=(%d, %d, %d) tintIntensity=%.3f\n"
+  Matrix44D* m = createCustomMatrix(temperature, saturation, hue, contrast, brightness, tint, tintIntensity);
+  ILogger::instance()->logInfo("Custom color grade: temperature=%.0fK saturation=%.3f hue=%.1f contrast=%.3f brightness=%.3f tint=(%d, %d, %d) tintIntensity=%.3f\n"
                                "  | %.4f %.4f %.4f | + %.4f\n"
                                "  | %.4f %.4f %.4f | + %.4f\n"
                                "  | %.4f %.4f %.4f | + %.4f",
-                               saturation, hue._degrees, contrast, brightness,
+                               temperature, saturation, hue._degrees, contrast, brightness,
                                (int) (tint._red * 255 + 0.5), (int) (tint._green * 255 + 0.5), (int) (tint._blue * 255 + 0.5),
                                tintIntensity,
                                m->_m00, m->_m01, m->_m02, m->_m03,

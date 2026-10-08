@@ -16,6 +16,7 @@
 @implementation G3MColorGradingPanel {
   G3MColorGradingDemoScene* _scene;
 
+  UISlider*    _temperatureSlider;
   UISlider*    _saturationSlider;
   UISlider*    _hueSlider;
   UISlider*    _contrastSlider;
@@ -23,6 +24,7 @@
   UIColorWell* _tintWell;
   UISlider*    _tintIntensitySlider;
 
+  UILabel* _temperatureValue;
   UILabel* _saturationValue;
   UILabel* _hueValue;
   UILabel* _contrastValue;
@@ -53,7 +55,7 @@
   label.font = [UIFont monospacedDigitSystemFontOfSize: label.font.pointSize
                                                 weight: UIFontWeightRegular];
   label.textAlignment = NSTextAlignmentRight;
-  [label.widthAnchor constraintEqualToConstant: 44].active = YES;
+  [label.widthAnchor constraintEqualToConstant: 56].active = YES;
   return label;
 }
 
@@ -74,7 +76,7 @@
                          value:(UIView*) value
 {
   UILabel* nameLabel = [G3MColorGradingPanel createLabel: name];
-  [nameLabel.widthAnchor constraintEqualToConstant: 76].active = YES;
+  [nameLabel.widthAnchor constraintEqualToConstant: 84].active = YES;
 
   NSMutableArray<UIView*>* views = [NSMutableArray arrayWithObjects: nameLabel, control, nil];
   if (value != nil) {
@@ -120,6 +122,7 @@
     background.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview: background];
 
+    _temperatureSlider   = [self createSliderFrom: 2000 to: 10000];
     _saturationSlider    = [self createSliderFrom: 0    to: 2];
     _hueSlider           = [self createSliderFrom: -180 to: 180];
     _contrastSlider      = [self createSliderFrom: 0    to: 2];
@@ -133,6 +136,7 @@
                   action: @selector(onChange)
         forControlEvents: UIControlEventValueChanged];
 
+    _temperatureValue   = [G3MColorGradingPanel createValueLabel];
     _saturationValue    = [G3MColorGradingPanel createValueLabel];
     _hueValue           = [G3MColorGradingPanel createValueLabel];
     _contrastValue      = [G3MColorGradingPanel createValueLabel];
@@ -151,6 +155,7 @@
     buttons.spacing      = 8;
 
     UIStackView* rows = [[UIStackView alloc] initWithArrangedSubviews: @[
+      [G3MColorGradingPanel createRowNamed: @"Temperature" control: _temperatureSlider value: _temperatureValue],
       [G3MColorGradingPanel createRowNamed: @"Saturation" control: _saturationSlider    value: _saturationValue],
       [G3MColorGradingPanel createRowNamed: @"Hue"        control: _hueSlider           value: _hueValue],
       [G3MColorGradingPanel createRowNamed: @"Contrast"   control: _contrastSlider      value: _contrastValue],
@@ -181,6 +186,7 @@
 
 -(void) reset
 {
+  _temperatureSlider.value   = 6500;
   _saturationSlider.value    = 1;
   _hueSlider.value           = 0;
   _contrastSlider.value      = 1;
@@ -199,13 +205,15 @@
 
 -(void) onChange
 {
+  _temperatureValue.text   = [NSString stringWithFormat: @"%.0f K", _temperatureSlider.value];
   _saturationValue.text    = [NSString stringWithFormat: @"%.2f",  _saturationSlider.value];
   _hueValue.text           = [NSString stringWithFormat: @"%.0f°", _hueSlider.value];
   _contrastValue.text      = [NSString stringWithFormat: @"%.2f",  _contrastSlider.value];
   _brightnessValue.text    = [NSString stringWithFormat: @"%.2f",  _brightnessSlider.value];
   _tintIntensityValue.text = [NSString stringWithFormat: @"%.2f",  _tintIntensitySlider.value];
 
-  _scene->setCustomGrade(_saturationSlider.value,
+  _scene->setCustomGrade(_temperatureSlider.value,
+                         _saturationSlider.value,
                          Angle::fromDegrees(_hueSlider.value),
                          _contrastSlider.value,
                          _brightnessSlider.value,
@@ -215,7 +223,8 @@
 
 -(void) log
 {
-  _scene->logCustomGrade(_saturationSlider.value,
+  _scene->logCustomGrade(_temperatureSlider.value,
+                         _saturationSlider.value,
                          Angle::fromDegrees(_hueSlider.value),
                          _contrastSlider.value,
                          _brightnessSlider.value,

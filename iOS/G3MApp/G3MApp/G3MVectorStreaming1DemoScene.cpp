@@ -30,9 +30,10 @@
 
 class G3MVectorStreaming1DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+  void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
                            const VectorStreamingRenderer::Node* node,
-                           const GEO2DPointGeometry* geometry) const {
+                           const GEO2DPointGeometry* geometry,
+                           VectorStreamingRenderer::MarksCollector& collector) const {
     const GEOFeature* feature = geometry->getFeature();
 
     const JSONObject* properties = feature->getProperties();
@@ -91,19 +92,19 @@ public:
                           0 // minDistanceToCamera
                           );
 
-    return mark;
+    collector.add(mark);
   }
 
-  Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+  void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
                            const VectorStreamingRenderer::Node* node,
-                           const GEO3DPointGeometry* geometry) const {
-    return NULL;
+                           const GEO3DPointGeometry* geometry,
+                           VectorStreamingRenderer::MarksCollector& collector) const {
   }
 
-  Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
+  void createClusterMarks(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
-                          const VectorStreamingRenderer::Cluster* cluster) const {
-    return NULL;
+                          const VectorStreamingRenderer::Cluster* cluster,
+                          VectorStreamingRenderer::MarksCollector& collector) const {
   }
 
 };

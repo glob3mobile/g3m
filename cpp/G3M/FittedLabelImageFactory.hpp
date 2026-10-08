@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "LabelStyle.hpp"
+#include "ICanvasUtils.hpp"
 
 class ICanvas;
 class GFont;
@@ -32,6 +33,7 @@ private:
   const float       _maxWidth;
   const float       _minFontSizeFactor;
   const int         _lineSeparation;
+  const HorizontalAlignment _linesAlignment;
 
   float maxWidth(ICanvas* canvas) const;
   float minFontSize() const;
@@ -59,13 +61,15 @@ public:
                           const LabelStyle&  style,
                           const std::string& maxWidthText,
                           const float        minFontSizeFactor,
-                          const int          lineSeparation);
+                          const int          lineSeparation,
+                          const HorizontalAlignment linesAlignment = Center);
 
   FittedLabelImageFactory(const std::string& text,
                           const LabelStyle&  style,
                           const float        maxWidth,
                           const float        minFontSizeFactor,
-                          const int          lineSeparation);
+                          const int          lineSeparation,
+                          const HorizontalAlignment linesAlignment = Center);
 
   bool isMutable() const {
     return false;

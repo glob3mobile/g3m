@@ -32,6 +32,7 @@ public class FittedLabelImageFactory extends AbstractImageFactory
   private final float _maxWidth;
   private final float _minFontSizeFactor;
   private final int _lineSeparation;
+  private final HorizontalAlignment _linesAlignment;
 
   private float maxWidth(ICanvas canvas)
   {
@@ -119,7 +120,7 @@ public class FittedLabelImageFactory extends AbstractImageFactory
     }
   
     final LabelStyle lineStyle = style.copyWithoutBackground();
-    return new ColumnLayoutImageFactory(new LabelImageFactory(lines.get(0), lineStyle), new LabelImageFactory(lines.get(1), lineStyle), style.copyBackground(), _lineSeparation);
+    return new ColumnLayoutImageFactory(new LabelImageFactory(lines.get(0), lineStyle), new LabelImageFactory(lines.get(1), lineStyle), style.copyBackground(), _lineSeparation, _linesAlignment);
   }
 
   private IImageFactory createFitted(ICanvas canvas)
@@ -170,15 +171,24 @@ public class FittedLabelImageFactory extends AbstractImageFactory
   /** minFontSizeFactor in [0.1, 0.99] allows shrinking the font; any other value keeps its size */
   public FittedLabelImageFactory(String text, LabelStyle style, String maxWidthText, float minFontSizeFactor, int lineSeparation)
   {
+     this(text, style, maxWidthText, minFontSizeFactor, lineSeparation, HorizontalAlignment.Center);
+  }
+  public FittedLabelImageFactory(String text, LabelStyle style, String maxWidthText, float minFontSizeFactor, int lineSeparation, HorizontalAlignment linesAlignment)
+  {
      _text = text;
      _style = new LabelStyle(style);
      _maxWidthText = maxWidthText;
      _maxWidth = 0F;
      _minFontSizeFactor = minFontSizeFactor;
      _lineSeparation = lineSeparation;
+     _linesAlignment = linesAlignment;
   }
 
   public FittedLabelImageFactory(String text, LabelStyle style, float maxWidth, float minFontSizeFactor, int lineSeparation)
+  {
+     this(text, style, maxWidth, minFontSizeFactor, lineSeparation, HorizontalAlignment.Center);
+  }
+  public FittedLabelImageFactory(String text, LabelStyle style, float maxWidth, float minFontSizeFactor, int lineSeparation, HorizontalAlignment linesAlignment)
   {
      _text = text;
      _style = new LabelStyle(style);
@@ -186,6 +196,7 @@ public class FittedLabelImageFactory extends AbstractImageFactory
      _maxWidth = maxWidth;
      _minFontSizeFactor = minFontSizeFactor;
      _lineSeparation = lineSeparation;
+     _linesAlignment = linesAlignment;
   }
 
   public final boolean isMutable()

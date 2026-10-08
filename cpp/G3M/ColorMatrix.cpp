@@ -11,6 +11,7 @@
 #include "Color.hpp"
 #include "Angle.hpp"
 #include "IMathUtils.hpp"
+#include "Vector3D.hpp"
 
 
 // Rec. 709 luma weights
@@ -20,8 +21,8 @@ static const double BLUE_LUMA  = 0.0722;
 
 
 Matrix44D* ColorMatrix::createAffine(double m00, double m01, double m02, double offset0,
-                                        double m10, double m11, double m12, double offset1,
-                                        double m20, double m21, double m22, double offset2) {
+                                     double m10, double m11, double m12, double offset1,
+                                     double m20, double m21, double m22, double offset2) {
   return new Matrix44D(m00,     m10,     m20,     0,
                        m01,     m11,     m21,     0,
                        m02,     m12,     m22,     0,
@@ -63,6 +64,52 @@ Matrix44D* ColorMatrix::createHueRotation(const Angle& angle) {
                       0);
 }
 
+// Planckian locus chromaticity by Kim et al. (2002) cubic splines, Y = 1,
+// then XYZ to linear sRGB (IEC 61966-2-1)
+Vector3D ColorMatrix::linearRGBOfBlackBody(double kelvin) {
+  const double t  = kelvin;
+  const double t2 = t * t;
+  const double t3 = t2 * t;
+
+  const double x = (t <= 4000)
+  ? (-0.2661239e9 / t3) - (0.2343589e6 / t2) + (0.8776956e3 / t) + 0.179910
+  : (-3.0258469e9 / t3) + (2.1070379e6 / t2) + (0.2226347e3 / t) + 0.240390;
+
+  const double x2 = x * x;
+  const double x3 = x2 * x;
+  const double y = (t <= 2222)
+  ? (-1.1063814 * x3) - (1.34811020 * x2) + (2.18555832 * x) - 0.20219683
+  : (t <= 4000)
+  ? (-0.9549476 * x3) - (1.37418593 * x2) + (2.09137015 * x) - 0.16748867
+  : ( 3.0817580 * x3) - (5.87338670 * x2) + (3.75112997 * x) - 0.37001483;
+
+  const double X = x / y;
+  const double Y = 1;
+  const double Z = (1 - x - y) / y;
+
+  return Vector3D(( 3.2404542 * X) - (1.5371385 * Y) - (0.4985314 * Z),
+                  (-0.9692660 * X) + (1.8760108 * Y) + (0.0415560 * Z),
+                  ( 0.0556434 * X) - (0.2040259 * Y) + (1.0572252 * Z));
+}
+
+// Gains are computed in linear light keeping gray's luminance, then raised to 1/2.2
+// because the tiles hold gamma-encoded values
+Matrix44D* ColorMatrix::createWhiteBalance(double kelvin) {
+  const Vector3D white   = linearRGBOfBlackBody(kelvin);
+  const Vector3D neutral = linearRGBOfBlackBody(6500);
+
+  const double redGain   = white._x / neutral._x;
+  const double greenGain = white._y / neutral._y;
+  const double blueGain  = white._z / neutral._z;
+  const double grayGain  = (RED_LUMA * redGain) + (GREEN_LUMA * greenGain) + (BLUE_LUMA * blueGain);
+
+  const IMathUtils* mu = IMathUtils::instance();
+  const double encodingExponent = 1 / 2.2;
+  return createAffine(mu->pow(redGain / grayGain, encodingExponent), 0, 0, 0,
+                      0, mu->pow(greenGain / grayGain, encodingExponent), 0, 0,
+                      0, 0, mu->pow(blueGain / grayGain, encodingExponent), 0);
+}
+
 Matrix44D* ColorMatrix::createTint(const Color& tint) {
   return createAffine(tint._red, 0,           0,          0,
                       0,         tint._green, 0,          0,
@@ -82,7 +129,7 @@ Matrix44D* ColorMatrix::createInversion() {
 }
 
 Matrix44D* ColorMatrix::createDuotone(const Color& shadows,
-                                         const Color& highlights) {
+                                      const Color& highlights) {
   const double redRange   = highlights._red   - shadows._red;
   const double greenRange = highlights._green - shadows._green;
   const double blueRange  = highlights._blue  - shadows._blue;
@@ -92,6 +139,6 @@ Matrix44D* ColorMatrix::createDuotone(const Color& shadows,
 }
 
 Matrix44D* ColorMatrix::createSequence(const Matrix44D* first,
-                                          const Matrix44D* second) {
+                                       const Matrix44D* second) {
   return second->createMultiplication(*first);
 }

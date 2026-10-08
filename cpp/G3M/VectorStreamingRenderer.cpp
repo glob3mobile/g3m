@@ -1318,25 +1318,21 @@ void VectorStreamingRenderer::VectorSet::render(const G3MRenderContext* rc,
 
 int VectorStreamingRenderer::VectorSet::symbolizeClusters(const Node* node,
                                                           const std::vector<Cluster*>* clusters) const {
-  int counter = 0;
+  MarksCollector collector(getMarksRenderer(), node->getClusterToken());
   if (clusters != NULL) {
     const size_t clustersCount = clusters->size();
     for (size_t i = 0; i < clustersCount; i++) {
       const Cluster* cluster = clusters->at(i);
       if (cluster != NULL) {
-        Mark* mark = _symbolizer->createClusterMark(_metadata,
-                                                    node,
-                                                    cluster);
-        if (mark != NULL) {
-          mark->setToken( node->getClusterToken() );
-          getMarksRenderer()->addMark( mark );
-          counter++;
-        }
+        _symbolizer->createClusterMarks(_metadata,
+                                        node,
+                                        cluster,
+                                        collector);
       }
     }
   }
   
-  return counter;
+  return collector.getMarksCount();
 }
 
 int VectorStreamingRenderer::VectorSet::symbolizeMeshes(const Node* node,
@@ -1357,38 +1353,36 @@ int VectorStreamingRenderer::VectorSet::symbolizeMeshes(const Node* node,
 
 int VectorStreamingRenderer::VectorSet::symbolizeGeometry(const Node* node,
                                                           const GEO2DPointGeometry* geometry) const {
-  int count = 0;
-
-  {
-    Mark* mark = _symbolizer->createGeometryMark(_metadata,
-                                                 node,
-                                                 geometry);
-    if (mark != NULL) {
-      count++;
-      mark->setToken( node->getFeatureToken() );
-      getMarksRenderer()->addMark( mark );
-    }
-  }
-  
-  return count;
+  MarksCollector collector(getMarksRenderer(), node->getFeatureToken());
+  _symbolizer->createGeometryMarks(_metadata,
+                                   node,
+                                   geometry,
+                                   collector);
+  return collector.getMarksCount();
 }
 
 int VectorStreamingRenderer::VectorSet::symbolizeGeometry(const Node* node,
                                                           const GEO3DPointGeometry* geometry) const {
-  int count = 0;
+  MarksCollector collector(getMarksRenderer(), node->getFeatureToken());
+  _symbolizer->createGeometryMarks(_metadata,
+                                   node,
+                                   geometry,
+                                   collector);
+  return collector.getMarksCount();
+}
 
-  {
-    Mark* mark = _symbolizer->createGeometryMark(_metadata,
-                                                 node,
-                                                 geometry);
-    if (mark != NULL) {
-      count++;
-      mark->setToken( node->getFeatureToken() );
-      getMarksRenderer()->addMark( mark );
-    }
-  }
+VectorStreamingRenderer::MarksCollector::MarksCollector(MarksRenderer*     marksRenderer,
+                                                       const std::string& token) :
+_marksRenderer(marksRenderer),
+_token(token),
+_marksCount(0)
+{
+}
 
-  return count;
+void VectorStreamingRenderer::MarksCollector::add(Mark* mark) {
+  mark->setToken(_token);
+  _marksRenderer->addMark(mark);
+  _marksCount++;
 }
 
 VectorStreamingRenderer::VectorStreamingRenderer(MarksRenderer* marksRenderer,

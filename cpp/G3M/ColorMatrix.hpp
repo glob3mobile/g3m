@@ -11,6 +11,7 @@
 class Matrix44D;
 class Color;
 class Angle;
+class Vector3D;
 
 
 // Homogeneous color matrices for PlanetRenderer::setColorMatrix: color' = M * (r, g, b, 1)
@@ -19,6 +20,8 @@ private:
   static Matrix44D* createAffine(double m00, double m01, double m02, double offset0,
                                  double m10, double m11, double m12, double offset1,
                                  double m20, double m21, double m22, double offset2);
+
+  static Vector3D linearRGBOfBlackBody(double kelvin);
 
 public:
   static Matrix44D* createSaturation(double saturation);
@@ -30,6 +33,10 @@ public:
   static Matrix44D* createHueRotation(const Angle& angle);
 
   static Matrix44D* createTint(const Color& tint);
+
+  // Lit as by a black body of that temperature: lower is warmer, 6500 is neutral
+  // (valid 1900-25000: below ~1900 K the sRGB blue of the black body is negative)
+  static Matrix44D* createWhiteBalance(double kelvin);
 
   static Matrix44D* createInversion();
 

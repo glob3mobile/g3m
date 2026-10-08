@@ -21,7 +21,8 @@ private:
 
   static Matrix44D* createEffectMatrix(const std::string& effect);
 
-  static Matrix44D* createCustomMatrix(double saturation,
+  static Matrix44D* createCustomMatrix(double temperature,
+                                       double saturation,
                                        const Angle& hue,
                                        double contrast,
                                        double brightness,
@@ -43,14 +44,16 @@ protected:
 public:
   G3MColorGradingDemoScene(G3MDemoModel* model);
 
-  void setCustomGrade(double saturation,
+  void setCustomGrade(double temperature,
+                      double saturation,
                       const Angle& hue,
                       double contrast,
                       double brightness,
                       const Color& tint,
                       double tintIntensity);
 
-  void logCustomGrade(double saturation,
+  void logCustomGrade(double temperature,
+                      double saturation,
                       const Angle& hue,
                       double contrast,
                       double brightness,

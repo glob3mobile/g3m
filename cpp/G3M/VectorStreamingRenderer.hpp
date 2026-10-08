@@ -536,21 +536,42 @@ public:
   };
   
   
+  class MarksCollector {
+  private:
+    MarksRenderer*    _marksRenderer;
+    const std::string _token;
+    int               _marksCount;
+
+  public:
+    MarksCollector(MarksRenderer*     marksRenderer,
+                   const std::string& token);
+
+    void add(Mark* mark);
+
+    int getMarksCount() const {
+      return _marksCount;
+    }
+  };
+
+
   class VectorSetSymbolizer {
   public:
     virtual ~VectorSetSymbolizer() { }
     
-    virtual Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+    virtual void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
                                      const VectorStreamingRenderer::Node* node,
-                                     const GEO2DPointGeometry* geometry) const = 0;
+                                     const GEO2DPointGeometry* geometry,
+                                     VectorStreamingRenderer::MarksCollector& collector) const = 0;
     
-    virtual Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+    virtual void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
                                      const VectorStreamingRenderer::Node* node,
-                                     const GEO3DPointGeometry* geometry) const = 0;
+                                     const GEO3DPointGeometry* geometry,
+                                     VectorStreamingRenderer::MarksCollector& collector) const = 0;
     
-    virtual Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
+    virtual void createClusterMarks(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
-                                    const VectorStreamingRenderer::Cluster* cluster) const = 0;
+                                    const VectorStreamingRenderer::Cluster* cluster,
+                                    VectorStreamingRenderer::MarksCollector& collector) const = 0;
   };
   
   

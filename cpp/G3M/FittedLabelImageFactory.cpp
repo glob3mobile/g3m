@@ -55,13 +55,15 @@ FittedLabelImageFactory::FittedLabelImageFactory(const std::string& text,
                                                  const LabelStyle&  style,
                                                  const std::string& maxWidthText,
                                                  const float        minFontSizeFactor,
-                                                 const int          lineSeparation) :
+                                                 const int          lineSeparation,
+                                                 const HorizontalAlignment linesAlignment) :
 _text(text),
 _style(new LabelStyle(style)),
 _maxWidthText(maxWidthText),
 _maxWidth(0),
 _minFontSizeFactor(minFontSizeFactor),
-_lineSeparation(lineSeparation)
+_lineSeparation(lineSeparation),
+_linesAlignment(linesAlignment)
 {
 }
 
@@ -69,13 +71,15 @@ FittedLabelImageFactory::FittedLabelImageFactory(const std::string& text,
                                                  const LabelStyle&  style,
                                                  const float        maxWidth,
                                                  const float        minFontSizeFactor,
-                                                 const int          lineSeparation) :
+                                                 const int          lineSeparation,
+                                                 const HorizontalAlignment linesAlignment) :
 _text(text),
 _style(new LabelStyle(style)),
 _maxWidthText(""),
 _maxWidth(maxWidth),
 _minFontSizeFactor(minFontSizeFactor),
-_lineSeparation(lineSeparation)
+_lineSeparation(lineSeparation),
+_linesAlignment(linesAlignment)
 {
 }
 
@@ -166,7 +170,8 @@ IImageFactory* FittedLabelImageFactory::createLines(const std::vector<std::strin
   return new ColumnLayoutImageFactory(new LabelImageFactory(lines.at(0), lineStyle),
                                       new LabelImageFactory(lines.at(1), lineStyle),
                                       style.copyBackground(),
-                                      _lineSeparation);
+                                      _lineSeparation,
+                                      _linesAlignment);
 }
 
 IImageFactory* FittedLabelImageFactory::createFitted(ICanvas* canvas) const {
