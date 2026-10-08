@@ -94,10 +94,9 @@ public class Mark implements SurfaceElevationListener
   private float _textureWidthScale;
   private float _textureHeightScale;
   private boolean _textureSizeSetExternally;
-  private boolean _textureScaleSetExternally;
+  private float _effectScale; // owned by the zoom effects; the app owns _texture*Scale
   private String _imageID;
 
-  private boolean _hasTCTransformations;
   private float _translationTCX;
   private float _translationTCY;
   private float _scalingTCX;
@@ -111,7 +110,7 @@ public class Mark implements SurfaceElevationListener
   {
     _glState = new GLState();
   
-    _billboardGLF = new BillboardGLFeature(_textureWidth, _textureHeight, _anchorU, _anchorV);
+    _billboardGLF = new BillboardGLFeature(getScreenWidth(), getScreenHeight(), _anchorU, _anchorV);
   
     _glState.addGLFeature(_billboardGLF, false);
   
@@ -119,24 +118,29 @@ public class Mark implements SurfaceElevationListener
     final Vector3D position = getCartesianPosition(planet);
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(position);
   
-    ModelTransformGLFeature modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
-    _glState.addGLFeature(modelTransformGLF, false);
+    _modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
+    _glState.addGLFeature(_modelTransformGLF, false);
+    _glPositionOutdated = false;
   
   
     if (_textureID != null)
     {
   
-      if (_hasTCTransformations)
-      {
-        _textureGLF = new TextureGLFeature(_textureID.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
-      }
-      else
-      {
-        _textureGLF = new TextureGLFeature(_textureID.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
-      }
+      _textureGLF = new TextureGLFeature(_textureID.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
   
       _glState.addGLFeature(_textureGLF, false);
     }
+  }
+
+  private ModelTransformGLFeature _modelTransformGLF;
+  private boolean _glPositionOutdated;
+  private void updateGLPosition(Planet planet)
+  {
+    final Vector3D position = getCartesianPosition(planet);
+    final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(position);
+  
+    _modelTransformGLF.setMatrix(translation.asMatrix44D());
+    _glPositionOutdated = false;
   }
 
   private SurfaceElevationProvider _surfaceElevationProvider;
@@ -153,10 +157,137 @@ public class Mark implements SurfaceElevationListener
     {
       _glState._release();
       _glState = null;
+      // the features are owned by the GLState
+      _modelTransformGLF = null;
+      _billboardGLF = null;
+      _textureGLF = null;
+    }
+  }
+
+  private void updateBillboardSize()
+  {
+    if (_billboardGLF != null)
+    {
+      final IMathUtils mu = IMathUtils.instance();
+      _billboardGLF.changeSize(mu.round(getScreenWidth()), mu.round(getScreenHeight()));
     }
   }
 
   private MutableVector3D _markCameraVector = new MutableVector3D();
+
+  private boolean isRenderableByDistance()
+  {
+    final boolean hasMinDistanceToCamera = (_minDistanceToCamera > 0);
+    final boolean hasMaxDistanceToCamera = (_maxDistanceToCamera > 0);
+    if (!hasMinDistanceToCamera && !hasMaxDistanceToCamera)
+    {
+      return true;
+    }
+  
+    final double squaredDistanceToCamera = _markCameraVector.squaredLength();
+  
+    if (hasMinDistanceToCamera && (squaredDistanceToCamera > (_minDistanceToCamera * _minDistanceToCamera)))
+    {
+      return false;
+    }
+  
+    if (hasMaxDistanceToCamera && (squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera)))
+    {
+      return false;
+    }
+  
+    return true;
+  }
+
+  private boolean isOccludedByHorizon(Planet planet, MutableVector3D cameraPosition, double cameraHeight, Vector3D markPosition)
+  {
+    if (_position._height > cameraHeight)
+    {
+      final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition.x(), cameraPosition.y(), cameraPosition.z(), _markCameraVector.x(), _markCameraVector.y(), _markCameraVector.z());
+      if (dists.size() > 0)
+      {
+        final double dist = dists.get(0);
+        return (dist > 0.0 && dist < 1.0);
+      }
+      return false;
+    }
+  
+    // if camera position is upper than mark we can compute horizon culling in a much simpler way
+    if (_normalAtMarkPosition == null)
+    {
+      _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
+    }
+    return (Vector3D.angleInRadiansBetween(_normalAtMarkPosition, _markCameraVector) <= DefineConstants.HALF_PI);
+  }
+
+  private void ensureTexture(G3MRenderContext rc)
+  {
+    if ((_textureID == null) && (_textureImage != null))
+    {
+      _textureID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
+  
+      _textureImage = null;
+      _textureImage = null;
+    }
+  }
+
+  private void ensureGLState(Planet planet, IFloatBuffer billboardTexCoords, GLState parentGLState)
+  {
+    if (_glState == null)
+    {
+      createGLState(planet, billboardTexCoords); // If GLState was disposed due to elevation change
+    }
+    else if (_glPositionOutdated)
+    {
+      updateGLPosition(planet);
+    }
+    _glState.setParent(parentGLState);
+  }
+
+  private void startPendingEffects(G3MRenderContext rc, MarksRenderer renderer)
+  {
+    if (_firstRender)
+    {
+      _firstRender = false;
+      if (_zoomInAppears)
+      {
+        _effectsScheduler = rc.getEffectsScheduler();
+        _effectsScheduler.startEffect(new MarkZoomInEffect(this), getEffectTarget());
+      }
+    }
+  
+    if (_zoomOutDisappears && !_zoomOutDisappearsStarted)
+    {
+      _zoomOutDisappearsStarted = true;
+      if (_effectsScheduler != null)
+      {
+        _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
+      }
+      else
+      {
+        _effectsScheduler = rc.getEffectsScheduler();
+      }
+      _effectsScheduler.startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears), getEffectTarget());
+    }
+  }
+
+  private void draw(G3MRenderContext rc)
+  {
+    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
+  }
+
+  private void onTextureResolved(IImage image)
+  {
+    _textureSolved = true;
+  
+    _textureImage = image;
+  
+    if (!_textureSizeSetExternally)
+    {
+      _textureWidth = _textureImage.getWidth();
+      _textureHeight = _textureImage.getHeight();
+    }
+  }
 
   private float _anchorU;
   private float _anchorV;
@@ -258,16 +389,21 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
+     _modelTransformGLF = null;
+     _glPositionOutdated = false;
      _normalAtMarkPosition = null;
      _textureSizeSetExternally = false;
-     _hasTCTransformations = false;
+     _translationTCX = 0F;
+     _translationTCY = 0F;
+     _scalingTCX = 1F;
+     _scalingTCY = 1F;
      _textureGLF = null;
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
      _textureHeightScale = 1.0F;
      _textureWidthScale = 1.0F;
-     _textureScaleSetExternally = false;
+     _effectScale = 1F;
      _initialized = false;
      _zoomInAppears = true;
      _effectsScheduler = null;
@@ -345,16 +481,21 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
+     _modelTransformGLF = null;
+     _glPositionOutdated = false;
      _normalAtMarkPosition = null;
      _textureSizeSetExternally = false;
      _textureGLF = null;
-     _hasTCTransformations = false;
+     _translationTCX = 0F;
+     _translationTCY = 0F;
+     _scalingTCX = 1F;
+     _scalingTCY = 1F;
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
      _textureHeightScale = 1.0F;
      _textureWidthScale = 1.0F;
-     _textureScaleSetExternally = false;
+     _effectScale = 1F;
      _initialized = false;
      _zoomInAppears = true;
      _effectsScheduler = null;
@@ -420,16 +561,21 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
+     _modelTransformGLF = null;
+     _glPositionOutdated = false;
      _normalAtMarkPosition = null;
      _textureSizeSetExternally = false;
      _textureGLF = null;
-     _hasTCTransformations = false;
+     _translationTCX = 0F;
+     _translationTCY = 0F;
+     _scalingTCX = 1F;
+     _scalingTCY = 1F;
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
      _textureHeightScale = 1.0F;
      _textureWidthScale = 1.0F;
-     _textureScaleSetExternally = false;
+     _effectScale = 1F;
      _initialized = false;
      _zoomInAppears = true;
      _effectsScheduler = null;
@@ -495,13 +641,18 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
+     _modelTransformGLF = null;
+     _glPositionOutdated = false;
      _normalAtMarkPosition = null;
      _textureSizeSetExternally = false;
-     _hasTCTransformations = false;
+     _translationTCX = 0F;
+     _translationTCY = 0F;
+     _scalingTCX = 1F;
+     _scalingTCY = 1F;
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
-     _textureScaleSetExternally = false;
+     _effectScale = 1F;
      _textureHeightScale = 1.0F;
      _textureWidthScale = 1.0F;
      _initialized = false;
@@ -569,13 +720,18 @@ public class Mark implements SurfaceElevationListener
      _surfaceElevationProvider = null;
      _currentSurfaceElevation = 0.0;
      _glState = null;
+     _modelTransformGLF = null;
+     _glPositionOutdated = false;
      _normalAtMarkPosition = null;
      _textureSizeSetExternally = false;
-     _hasTCTransformations = false;
+     _translationTCX = 0F;
+     _translationTCY = 0F;
+     _scalingTCX = 1F;
+     _scalingTCY = 1F;
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
-     _textureScaleSetExternally = false;
+     _effectScale = 1F;
      _textureHeightScale = 1.0F;
      _textureWidthScale = 1.0F;
      _initialized = false;
@@ -595,6 +751,12 @@ public class Mark implements SurfaceElevationListener
 
   public void dispose()
   {
+    // the zoom-out effect deletes its mark itself: cancelling it from here would delete the mark again
+    if (!_zoomOutDisappearsStarted)
+    {
+      cancelEffects();
+    }
+  
     if (_imageFactoryListener != null)
     {
       _imageFactoryListener.forgetMark();
@@ -602,9 +764,6 @@ public class Mark implements SurfaceElevationListener
     if (_imageFactory != null)
        _imageFactory.dispose();
   
-    //  if (_effectsScheduler != NULL) {
-    //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-    //  }
     if (_effectTarget != null)
        _effectTarget.dispose();
   
@@ -738,69 +897,27 @@ public class Mark implements SurfaceElevationListener
 
   public final void onTextureDownload(IImage image)
   {
-    _textureSolved = true;
-  
     _labelFontColor = null;
     _labelFontColor = null;
     _labelShadowColor = null;
     _labelShadowColor = null;
   
-    _textureImage = image;
-  
-    if (!_textureSizeSetExternally)
-    {
-      _textureWidth = _textureImage.getWidth();
-      _textureHeight = _textureImage.getHeight();
-  
-      if (_textureScaleSetExternally)
-      {
-        _textureWidth *= _textureWidthScale;
-        _textureHeight *= _textureHeightScale;
-      }
-    }
-  
+    onTextureResolved(image);
   }
 
   public final void onImageCreated(IImage image, String imageName)
   {
-    _textureSolved = true;
     _imageID = imageName;
   
-    //  delete _labelFontColor;
-    //  _labelFontColor = NULL;
-    //  delete _labelShadowColor;
-    //  _labelShadowColor = NULL;
-  
-    //  delete _imageFactory;
-    //  _imageFactory = NULL;
     _imageFactoryListener = null;
   
-    _textureImage = image;
-  
-    if (!_textureSizeSetExternally)
-    {
-      _textureWidth = _textureImage.getWidth();
-      _textureHeight = _textureImage.getHeight();
-  
-      if (_textureScaleSetExternally)
-      {
-        _textureWidth *= _textureWidthScale;
-        _textureHeight *= _textureHeightScale;
-      }
-    }
+    onTextureResolved(image);
   }
 
   public final void onImageCreationError(String error)
   {
     _textureSolved = true;
   
-    //  delete _labelFontColor;
-    //  _labelFontColor = NULL;
-    //  delete _labelShadowColor;
-    //  _labelShadowColor = NULL;
-  
-    //  delete _imageFactory;
-    //  _imageFactory = NULL;
     _imageFactoryListener = null;
   
     ILogger.instance().logError("Can't create image for Mark: \"%s\"", error);
@@ -814,6 +931,17 @@ public class Mark implements SurfaceElevationListener
   public final float getTextureHeight()
   {
     return _textureHeight;
+  }
+
+  /** the size drawn on screen: the texture size times the app's and the effects' scales */
+  public final float getScreenWidth()
+  {
+    return _textureWidth * _textureWidthScale * _effectScale;
+  }
+
+  public final float getScreenHeight()
+  {
+    return _textureHeight * _textureHeightScale * _effectScale;
   }
 
   public final Vector2F getTextureExtent()
@@ -878,110 +1006,23 @@ public class Mark implements SurfaceElevationListener
 
   public final void render(G3MRenderContext rc, MarksRenderer renderer, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
   {
-  
     final Vector3D markPosition = getCartesianPosition(planet);
   
     _markCameraVector.set(markPosition._x - cameraPosition.x(), markPosition._y - cameraPosition.y(), markPosition._z - cameraPosition.z());
   
-    boolean renderableByDistance = true;
-    {
-      final boolean hasMinDistanceToCamera = (_minDistanceToCamera > 0);
-      final boolean hasMaxDistanceToCamera = (_maxDistanceToCamera > 0);
-      if (hasMinDistanceToCamera || hasMaxDistanceToCamera)
-      {
-        final double squaredDistanceToCamera = _markCameraVector.squaredLength();
-  
-        if (hasMinDistanceToCamera && (squaredDistanceToCamera > (_minDistanceToCamera * _minDistanceToCamera)))
-        {
-          renderableByDistance = false;
-        }
-  
-        if (hasMaxDistanceToCamera && (squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera)))
-        {
-          renderableByDistance = false;
-        }
-      }
-    }
-  
     _renderedMark = false;
   
-    if (renderableByDistance)
+    if (isRenderableByDistance() && !isOccludedByHorizon(planet, cameraPosition, cameraHeight, markPosition))
     {
-      boolean occludedByHorizon = false;
-  
-      if (_position._height > cameraHeight)
+      ensureTexture(rc);
+      if (_textureID != null)
       {
-        // Computing horizon culling
-        final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition.x(), cameraPosition.y(), cameraPosition.z(), _markCameraVector.x(), _markCameraVector.y(), _markCameraVector.z());
-        if (dists.size() > 0)
-        {
-          final double dist = dists.get(0);
-          if (dist > 0.0 && dist < 1.0)
-          {
-            occludedByHorizon = true;
-          }
-        }
-      }
-      else
-      {
-        // if camera position is upper than mark we can compute horizon culling in a much simpler way
-        if (_normalAtMarkPosition == null)
-        {
-          _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
-        }
-        //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
-        occludedByHorizon = (Vector3D.angleInRadiansBetween(_normalAtMarkPosition, _markCameraVector) <= DefineConstants.HALF_PI);
-      }
-  
-      if (!occludedByHorizon)
-      {
-        if ((_textureID == null) && (_textureImage != null))
-        {
-          _textureID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
-  
-          _textureImage = null;
-          _textureImage = null;
-        }
-  
-        if (_textureID != null)
-        {
-          if (_glState == null)
-          {
-            createGLState(planet, billboardTexCoords); // If GLState was disposed due to elevation change
-          }
-          _glState.setParent(parentGLState);
-  
-          if (_firstRender)
-          {
-            _firstRender = false;
-            if (_zoomInAppears)
-            {
-              _effectsScheduler = rc.getEffectsScheduler();
-              _effectsScheduler.startEffect(new MarkZoomInEffect(this), getEffectTarget());
-            }
-          }
-  
-          if (_zoomOutDisappears && !_zoomOutDisappearsStarted)
-          {
-            _zoomOutDisappearsStarted = true;
-            if (_effectsScheduler != null)
-            {
-              _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
-            }
-            else
-            {
-              _effectsScheduler = rc.getEffectsScheduler();
-            }
-            _effectsScheduler.startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears), getEffectTarget());
-          }
-  
-          rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
-  
-          _renderedMark = true;
-        }
+        ensureGLState(planet, billboardTexCoords, parentGLState);
+        startPendingEffects(rc, renderer);
+        draw(rc);
+        _renderedMark = true;
       }
     }
-  
   }
 
   public final void elevationChanged(Geodetic2D position, double rawElevation, double verticalExaggeration)
@@ -1022,7 +1063,11 @@ public class Mark implements SurfaceElevationListener
        _cartesianPosition.dispose();
     _cartesianPosition = null;
   
-    clearGLState();
+    if (_normalAtMarkPosition != null)
+       _normalAtMarkPosition.dispose();
+    _normalAtMarkPosition = null;
+  
+    _glPositionOutdated = true;
   }
 
   public final void setScreenSize(int width, int height)
@@ -1031,29 +1076,22 @@ public class Mark implements SurfaceElevationListener
     _textureHeight = height;
     _textureSizeSetExternally = true;
   
-    if (_glState != null)
-    {
-      BillboardGLFeature b = (BillboardGLFeature) _glState.getGLFeature(GLFeatureID.GLF_BILLBOARD);
-      if (b != null)
-      {
-        b.changeSize(IMathUtils.instance().round(_textureWidth), IMathUtils.instance().round(_textureHeight));
-      }
-    }
+    updateBillboardSize();
   }
   public final void setScreenSizeScale(float scaleWidth, float scaleHeight)
   {
     _textureWidthScale = scaleWidth;
     _textureHeightScale = scaleHeight;
-    _textureScaleSetExternally = true;
   
-    if (_glState != null)
-    {
-      BillboardGLFeature b = (BillboardGLFeature) _glState.getGLFeature(GLFeatureID.GLF_BILLBOARD);
-      if (b != null)
-      {
-        b.changeSize(IMathUtils.instance().round(_textureWidth * _textureWidthScale), IMathUtils.instance().round(_textureHeight * _textureHeightScale));
-      }
-    }
+    updateBillboardSize();
+  }
+
+  /** for the zoom effects only; the app scales with setScreenSizeScale */
+  public final void setEffectScale(float effectScale)
+  {
+    _effectScale = effectScale;
+  
+    updateBillboardSize();
   }
 
   public final void setTextureCoordinatesTransformation(Vector2F translation, Vector2F scaling)
@@ -1069,11 +1107,6 @@ public class Mark implements SurfaceElevationListener
   
     _scalingTCX = scalingX;
     _scalingTCY = scalingY;
-  
-    if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1)
-    {
-      _hasTCTransformations = true;
-    }
   
     if (_textureGLF != null)
     {

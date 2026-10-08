@@ -217,7 +217,8 @@ double SphericalPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
   const double pq = (coslatP * sinlonP * coslatQ * sinlonQ +
                      sinlatP * sinlatQ +
                      coslatP * coslonP * coslatQ * coslonQ);
-  return mu->acos(pq) * R;
+  // rounding pushes the cosine of identical points just above 1, and acos of that is NaN
+  return mu->acos(mu->clamp(pq, -1.0, 1.0)) * R;
 }
 
 

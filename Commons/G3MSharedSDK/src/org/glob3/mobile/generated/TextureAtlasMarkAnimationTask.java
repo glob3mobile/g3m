@@ -1,4 +1,22 @@
 package org.glob3.mobile.generated;
+//
+//  TextureAtlasMarkAnimationTask.cpp
+//  G3M
+//
+//  Extracted from Mark.hpp on 10/8/26.
+//
+
+//
+//  TextureAtlasMarkAnimationTask.hpp
+//  G3M
+//
+//  Extracted from Mark.hpp on 10/8/26.
+//
+
+
+
+
+
 public class TextureAtlasMarkAnimationTask extends PeriodicalTask
 {
 

@@ -37,6 +37,7 @@ class IImageFactory;
 class MarksRenderer;
 class MarkImageFactoryListener;
 class TouchEvent;
+class ModelTransformGLFeature;
 
 class MarkUserData {
 public:
@@ -160,10 +161,9 @@ private:
   float          _textureWidthScale;
   float          _textureHeightScale;
   bool           _textureSizeSetExternally;
-  bool           _textureScaleSetExternally;
+  float          _effectScale;   // owned by the zoom effects; the app owns _texture*Scale
   std::string    _imageID;
   
-  bool  _hasTCTransformations;
   float _translationTCX, _translationTCY;
   float _scalingTCX, _scalingTCY;
 
@@ -173,6 +173,10 @@ private:
   GLState* _glState;
   void createGLState(const Planet* planet,
                      IFloatBuffer* billboardTexCoords);
+
+  ModelTransformGLFeature* _modelTransformGLF;
+  bool                     _glPositionOutdated;
+  void updateGLPosition(const Planet* planet);
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _currentSurfaceElevation;
@@ -184,7 +188,29 @@ private:
   
   void clearGLState();
 
+  void updateBillboardSize();
+
   MutableVector3D _markCameraVector;
+
+  bool isRenderableByDistance() const;
+
+  bool isOccludedByHorizon(const Planet* planet,
+                           const MutableVector3D& cameraPosition,
+                           double cameraHeight,
+                           const Vector3D* markPosition);
+
+  void ensureTexture(const G3MRenderContext* rc);
+
+  void ensureGLState(const Planet* planet,
+                     IFloatBuffer* billboardTexCoords,
+                     const GLState* parentGLState);
+
+  void startPendingEffects(const G3MRenderContext* rc,
+                           MarksRenderer* renderer);
+
+  void draw(const G3MRenderContext* rc);
+
+  void onTextureResolved(const IImage* image);
   
   float _anchorU;
   float _anchorV;
@@ -317,6 +343,15 @@ public:
     return _textureHeight;
   }
 
+  /** the size drawn on screen: the texture size times the app's and the effects' scales */
+  float getScreenWidth() const {
+    return _textureWidth * _textureWidthScale * _effectScale;
+  }
+
+  float getScreenHeight() const {
+    return _textureHeight * _textureHeightScale * _effectScale;
+  }
+
   Vector2F getTextureExtent() const {
     return Vector2F(_textureWidth, _textureHeight);
   }
@@ -364,6 +399,9 @@ public:
   void setScreenSize(int width, int height);
   void setScreenSizeScale(float scaleWidth, float scaleHeight);
 
+  /** for the zoom effects only; the app scales with setScreenSizeScale */
+  void setEffectScale(float effectScale);
+
   void setTextureCoordinatesTransformation(const Vector2F& translation,
                                            const Vector2F& scaling);
   
@@ -405,65 +443,5 @@ public:
   void cancelEffects();
 
 };
-
-class TextureAtlasMarkAnimationTask: public PeriodicalTask{
-  
-  class TextureAtlasMarkAnimationGTask: public GTask{
-    Mark* _mark;
-
-    const int _cols;
-    const int _rows;
-    const int _nFrames;
-    const float _scaleX;
-    const float _scaleY;
-
-    int _currentFrame;
-    
-  public:
-    
-    ~TextureAtlasMarkAnimationGTask() {}
-    
-    TextureAtlasMarkAnimationGTask(Mark* mark,
-                                   int cols,
-                                   int rows,
-                                   int nFrames):
-    _mark(mark),
-    _cols(cols),
-    _rows(rows),
-    _nFrames(nFrames),
-    _scaleX(1.0f / cols),
-    _scaleY(1.0f / rows),
-    _currentFrame(0)
-    {
-      //    _mark->setOnScreenSize(Vector2F(100,100));
-    }
-    
-    
-    virtual void run(const G3MContext* context) {
-      const int row = _currentFrame / _cols;
-      const int col = _currentFrame % _cols;
-      
-      const float translationX = col * (1.0f / _cols);
-      const float translationY = row * (1.0f / _rows);
-
-      _mark->setTextureCoordinatesTransformation(translationX,
-                                                 translationY,
-                                                 _scaleX,
-                                                 _scaleY);
-      _currentFrame = (_currentFrame+1) % _nFrames;
-    }
-    
-  };
-  
-  
-public:
-  TextureAtlasMarkAnimationTask(Mark* mark, int nColumn, int nRows, int nFrames, const TimeInterval& frameTime):
-  PeriodicalTask(frameTime, new TextureAtlasMarkAnimationGTask(mark, nColumn, nRows, nFrames))
-  {
-  }
-};
-
-
-
 
 #endif

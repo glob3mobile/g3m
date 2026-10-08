@@ -317,7 +317,8 @@ public class EllipsoidalPlanet extends Planet
     final double coslonQ = Math.cos(lonQ);
     final double sinlonQ = Math.sin(lonQ);
     final double pq = (coslatP * sinlonP * coslatQ * sinlonQ + sinlatP * sinlatQ + coslatP * coslonP * coslatQ * coslonQ);
-    return mu.acos(pq) * R;
+    // rounding pushes the cosine of identical points just above 1, and acos of that is NaN
+    return mu.acos(mu.clamp(pq, -1.0, 1.0)) * R;
   }
 
 

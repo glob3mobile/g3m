@@ -51,7 +51,6 @@
 #include "G3MNonOverlappingMarksDemoScene.hpp"
 #include "G3MCanvas2DDemoScene.hpp"
 #include "G3MAugmentedRealityDemoScene.hpp"
-#include "G3MAnimatedMarksDemoScene.hpp"
 #include "G3MVectorStreaming1DemoScene.hpp"
 #include "G3MVectorStreaming2DemoScene.hpp"
 #include "G3MStereoDemoScene.hpp"
@@ -116,7 +115,6 @@ _context(NULL)
   _scenes.push_back(  new G3MHUDDemoScene(this)                 );
   _scenes.push_back(  new G3MNonOverlappingMarksDemoScene(this) );
   _scenes.push_back(  new G3MAugmentedRealityDemoScene(this)    );
-  _scenes.push_back(  new G3MAnimatedMarksDemoScene(this)       );
   _scenes.push_back(  new G3MCanvas2DDemoScene(this)            );
   _scenes.push_back(  new G3MVectorStreaming1DemoScene(this)    );
   _scenes.push_back(  new G3MVectorStreaming2DemoScene(this)    );

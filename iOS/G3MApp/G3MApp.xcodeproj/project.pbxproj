@@ -56,6 +56,8 @@
 		CFBD815219A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBD815019A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp */; };
 		CFBF9E852B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF9E822B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp */; };
 		CFBF9E872B8CD46500A22D85 /* mark-icon-1.png in Resources */ = {isa = PBXBuildFile; fileRef = CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */; };
+		CFC010363077A1B0003B788A /* G3MColorGradingDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC010353077A1B0003B788A /* G3MColorGradingDemoScene.cpp */; };
+		CFC010393077A1B0003B788A /* G3MColorGradingPanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC010383077A1B0003B788A /* G3MColorGradingPanel.mm */; };
 		CFC192D81A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */; };
 		CFC192DB1A8D3A7C00FA89B3 /* colorgrid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */; };
 		CFC59BAC176F68DB002806D6 /* full-earth-2048x1024.bil in Resources */ = {isa = PBXBuildFile; fileRef = CFC59BAB176F68DB002806D6 /* full-earth-2048x1024.bil */; };
@@ -93,11 +95,8 @@
 		CFFE65F5306CF45B004728AD /* G3MSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFE65F4306CF45B004728AD /* G3MSceneDelegate.m */; };
 		CFFE65FC306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE65FB306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp */; };
 		CFFE6602306D3A10004728AD /* G3MAtmosphereDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFE6601306D3A10004728AD /* G3MAtmosphereDemoScene.cpp */; };
-		CFC010393077A1B0003B788A /* G3MColorGradingPanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFC010383077A1B0003B788A /* G3MColorGradingPanel.mm */; };
-		CFC010363077A1B0003B788A /* G3MColorGradingDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC010353077A1B0003B788A /* G3MColorGradingDemoScene.cpp */; };
 		CFFED2EF30766FAD003B788A /* G3MNightSkyDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFED2EE30766FAD003B788A /* G3MNightSkyDemoScene.cpp */; };
 		D82CA3F01C64D837008FAAD2 /* G3MStereoDemoScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */; };
-		D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */; };
 		D871790E1AE500B500A9A14F /* radar-sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790D1AE500B500A9A14F /* radar-sprite.png */; };
 		D87179101AE501B100A9A14F /* pin.png in Resources */ = {isa = PBXBuildFile; fileRef = D871790F1AE501B100A9A14F /* pin.png */; };
 		E780A3CD16D29EA5000F0395 /* map-on-96x48.png in Resources */ = {isa = PBXBuildFile; fileRef = E780A3C716D29EA5000F0395 /* map-on-96x48.png */; };
@@ -216,6 +215,10 @@
 		CFBF9E822B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MTranslateScaleGizmoDemoScene.cpp; sourceTree = "<group>"; };
 		CFBF9E842B8CBD7700A22D85 /* G3MTranslateScaleGizmoDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MTranslateScaleGizmoDemoScene.hpp; sourceTree = "<group>"; };
 		CFBF9E862B8CD46500A22D85 /* mark-icon-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark-icon-1.png"; sourceTree = "<group>"; };
+		CFC010343077A1B0003B788A /* G3MColorGradingDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MColorGradingDemoScene.hpp; sourceTree = "<group>"; };
+		CFC010353077A1B0003B788A /* G3MColorGradingDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MColorGradingDemoScene.cpp; sourceTree = "<group>"; };
+		CFC010373077A1B0003B788A /* G3MColorGradingPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = G3MColorGradingPanel.h; sourceTree = "<group>"; };
+		CFC010383077A1B0003B788A /* G3MColorGradingPanel.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MColorGradingPanel.mm; sourceTree = "<group>"; };
 		CFC192D61A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCanvas2DDemoScene.cpp; sourceTree = "<group>"; };
 		CFC192D71A8D2E5F00FA89B3 /* G3MCanvas2DDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MCanvas2DDemoScene.hpp; sourceTree = "<group>"; };
 		CFC192DA1A8D3A7C00FA89B3 /* colorgrid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = colorgrid.jpg; sourceTree = "<group>"; };
@@ -269,16 +272,10 @@
 		CFFE65FB306D2190004728AD /* G3MCameraTransitionsDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MCameraTransitionsDemoScene.cpp; sourceTree = "<group>"; };
 		CFFE6600306D3A10004728AD /* G3MAtmosphereDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MAtmosphereDemoScene.hpp; sourceTree = "<group>"; };
 		CFFE6601306D3A10004728AD /* G3MAtmosphereDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MAtmosphereDemoScene.cpp; sourceTree = "<group>"; };
-		CFC010373077A1B0003B788A /* G3MColorGradingPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = G3MColorGradingPanel.h; sourceTree = "<group>"; };
-		CFC010383077A1B0003B788A /* G3MColorGradingPanel.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MColorGradingPanel.mm; sourceTree = "<group>"; };
-		CFC010343077A1B0003B788A /* G3MColorGradingDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MColorGradingDemoScene.hpp; sourceTree = "<group>"; };
-		CFC010353077A1B0003B788A /* G3MColorGradingDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MColorGradingDemoScene.cpp; sourceTree = "<group>"; };
 		CFFED2ED30766FAD003B788A /* G3MNightSkyDemoScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = G3MNightSkyDemoScene.hpp; sourceTree = "<group>"; };
 		CFFED2EE30766FAD003B788A /* G3MNightSkyDemoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = G3MNightSkyDemoScene.cpp; sourceTree = "<group>"; };
 		D82CA3EE1C64D837008FAAD2 /* G3MStereoDemoScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MStereoDemoScene.mm; sourceTree = "<group>"; };
 		D82CA3EF1C64D837008FAAD2 /* G3MStereoDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MStereoDemoScene.hpp; sourceTree = "<group>"; };
-		D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MAnimatedMarksDemoScene.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MAnimatedMarksDemoScene.hpp; sourceTree = "<group>"; };
 		D871790D1AE500B500A9A14F /* radar-sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar-sprite.png"; sourceTree = "<group>"; };
 		D871790F1AE501B100A9A14F /* pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin.png; sourceTree = "<group>"; };
 		E780A3C716D29EA5000F0395 /* map-on-96x48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-on-96x48.png"; sourceTree = "<group>"; };
@@ -364,8 +361,6 @@
 				CFE3B3D3183AD04A0078C796 /* G3M3DModelDemoScene.cpp */,
 				CFE3B3CA183ABAC70078C796 /* G3M3DSymbologyDemoScene.hpp */,
 				CFE3B3C9183ABAC70078C796 /* G3M3DSymbologyDemoScene.cpp */,
-				D871790A1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.hpp */,
-				D87179091AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp */,
 				CFFE6600306D3A10004728AD /* G3MAtmosphereDemoScene.hpp */,
 				CFFE6601306D3A10004728AD /* G3MAtmosphereDemoScene.cpp */,
 				CFB136CA1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.hpp */,
@@ -814,7 +809,6 @@
 				CFBD815219A3D9F600F1A8C4 /* G3MOLDPointCloud1DemoScene.cpp in Sources */,
 				CFD884D321AAF98F004379AF /* G3MSoccerMatchDemoScene.cpp in Sources */,
 				CF6920BA18392D51007409D8 /* G3MDemoContext.cpp in Sources */,
-				D871790B1AE4FCCA00A9A14F /* G3MAnimatedMarksDemoScene.cpp in Sources */,
 				CF8B1A581837DC69004D3902 /* G3MDemoListener.cpp in Sources */,
 				CF371AD31DA3EBCA006F2BC6 /* G3M3DLandDemoScene.cpp in Sources */,
 				CFB136CB1AA74FA00013EDE1 /* G3MAugmentedRealityDemoScene.mm in Sources */,

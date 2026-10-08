@@ -93,23 +93,23 @@ public:
   _mark(mark),
   _initialSize(initialSize)
   {
-    _mark->setScreenSizeScale(_initialSize, _initialSize);
+    _mark->setEffectScale(_initialSize);
   }
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     const double alpha = getAlpha(when);
     const float  s     = (float) (((1.0 - _initialSize) * alpha) + _initialSize);
-    _mark->setScreenSizeScale(s, s);
+    _mark->setEffectScale(s);
   }
 
   void stop(const G3MRenderContext* rc,
             const TimeInterval& when) {
-    _mark->setScreenSizeScale(1, 1);
+    _mark->setEffectScale(1);
   }
 
   void cancel(const TimeInterval& when) {
-    _mark->setScreenSizeScale(1, 1);
+    _mark->setEffectScale(1);
   }
 
 };
@@ -133,7 +133,7 @@ public:
   _deleteMarkOnDisappears(deleteMarkOnDisappears),
   _finalSize(finalSize)
   {
-    _mark->setScreenSizeScale(1, 1);
+    _mark->setEffectScale(1);
   }
 
   ~MarkZoomOutAndRemoveEffect() {
@@ -154,7 +154,7 @@ public:
     if (_mark != NULL) {
       const double alpha = getAlpha(when);
       const float  s     = 1.0f - (float) (((1.0 - _finalSize) * alpha) + _finalSize);
-      _mark->setScreenSizeScale(s, s);
+      _mark->setEffectScale(s);
     }
   }
 
@@ -329,16 +329,21 @@ _imageID( iconURL._path + "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
+_modelTransformGLF(NULL),
+_glPositionOutdated(false),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
-_hasTCTransformations(false),
+_translationTCX(0),
+_translationTCY(0),
+_scalingTCX(1),
+_scalingTCY(1),
 _textureGLF(NULL),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
 _textureHeightScale(1.0),
 _textureWidthScale(1.0),
-_textureScaleSetExternally(false),
+_effectScale(1),
 _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
@@ -391,16 +396,21 @@ _imageID( "_" + label ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
+_modelTransformGLF(NULL),
+_glPositionOutdated(false),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
 _textureGLF(NULL),
-_hasTCTransformations(false),
+_translationTCX(0),
+_translationTCY(0),
+_scalingTCX(1),
+_scalingTCY(1),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
 _textureHeightScale(1.0),
 _textureWidthScale(1.0),
-_textureScaleSetExternally(false),
+_effectScale(1),
 _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
@@ -450,16 +460,21 @@ _imageID( iconURL._path + "_" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
+_modelTransformGLF(NULL),
+_glPositionOutdated(false),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
 _textureGLF(NULL),
-_hasTCTransformations(false),
+_translationTCX(0),
+_translationTCY(0),
+_scalingTCX(1),
+_scalingTCY(1),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
 _textureHeightScale(1.0),
 _textureWidthScale(1.0),
-_textureScaleSetExternally(false),
+_effectScale(1),
 _initialized(false),
 _zoomInAppears(true),
 _effectsScheduler(NULL),
@@ -510,13 +525,18 @@ _imageID( imageID ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
+_modelTransformGLF(NULL),
+_glPositionOutdated(false),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
-_hasTCTransformations(false),
+_translationTCX(0),
+_translationTCY(0),
+_scalingTCX(1),
+_scalingTCY(1),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
-_textureScaleSetExternally(false),
+_effectScale(1),
 _textureHeightScale(1.0),
 _textureWidthScale(1.0),
 _initialized(false),
@@ -568,13 +588,18 @@ _imageID( "" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
+_modelTransformGLF(NULL),
+_glPositionOutdated(false),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
-_hasTCTransformations(false),
+_translationTCX(0),
+_translationTCY(0),
+_scalingTCX(1),
+_scalingTCY(1),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
-_textureScaleSetExternally(false),
+_effectScale(1),
 _textureHeightScale(1.0),
 _textureWidthScale(1.0),
 _initialized(false),
@@ -663,25 +688,23 @@ void Mark::onTextureDownloadError() {
 }
 
 void Mark::onTextureDownload(const IImage* image) {
-  _textureSolved = true;
-
   delete _labelFontColor;
   _labelFontColor = NULL;
   delete _labelShadowColor;
   _labelShadowColor = NULL;
 
+  onTextureResolved(image);
+}
+
+void Mark::onTextureResolved(const IImage* image) {
+  _textureSolved = true;
+
   _textureImage = image;
 
   if (!_textureSizeSetExternally) {
-    _textureWidth = _textureImage->getWidth();
+    _textureWidth  = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
-
-    if (_textureScaleSetExternally) {
-      _textureWidth  *= _textureWidthScale;
-      _textureHeight *= _textureHeightScale;
-    }
   }
-
 }
 
 bool Mark::isReady() const {
@@ -689,14 +712,16 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
+  // the zoom-out effect deletes its mark itself: cancelling it from here would delete the mark again
+  if (!_zoomOutDisappearsStarted) {
+    cancelEffects();
+  }
+
   if (_imageFactoryListener) {
     _imageFactoryListener->forgetMark();
   }
   delete _imageFactory;
 
-  //  if (_effectsScheduler != NULL) {
-  //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-  //  }
   delete _effectTarget;
 
   delete _labelFontColor;
@@ -776,8 +801,8 @@ void Mark::createGLState(const Planet* planet,
                          IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
 
-  _billboardGLF = new BillboardGLFeature(_textureWidth,
-                                         _textureHeight,
+  _billboardGLF = new BillboardGLFeature(getScreenWidth(),
+                                         getScreenHeight(),
                                          _anchorU, _anchorV);
 
   _glState->addGLFeature(_billboardGLF,
@@ -787,48 +812,29 @@ void Mark::createGLState(const Planet* planet,
   const Vector3D* position = getCartesianPosition(planet);
   const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(*position);
 
-  ModelTransformGLFeature* modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
-  _glState->addGLFeature(modelTransformGLF, false);
+  _modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
+  _glState->addGLFeature(_modelTransformGLF, false);
+  _glPositionOutdated = false;
 
 
   if (_textureID != NULL) {
 
-    if (_hasTCTransformations) {
-      _textureGLF = new TextureGLFeature(_textureID->getID(),
-                                         billboardTexCoords,
-                                         2,
-                                         0,
-                                         false,
-                                         0,
-                                         true,
-                                         _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
-                                         GLBlendFactor::oneMinusSrcAlpha(),
-                                         _translationTCX,
-                                         _translationTCY,
-                                         _scalingTCX,
-                                         _scalingTCY,
-                                         0.0f,
-                                         0.0f,
-                                         0.0f);
-    }
-    else {
-      _textureGLF = new TextureGLFeature(_textureID->getID(),
-                                         billboardTexCoords,
-                                         2,
-                                         0,
-                                         false,
-                                         0,
-                                         true,
-                                         _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
-                                         GLBlendFactor::oneMinusSrcAlpha(),
-                                         0.0f,
-                                         0.0f,
-                                         1.0f,
-                                         1.0f,
-                                         0.0f,
-                                         0.0f,
-                                         0.0f);
-    }
+    _textureGLF = new TextureGLFeature(_textureID->getID(),
+                                       billboardTexCoords,
+                                       2,
+                                       0,
+                                       false,
+                                       0,
+                                       true,
+                                       _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                       GLBlendFactor::oneMinusSrcAlpha(),
+                                       _translationTCX,
+                                       _translationTCY,
+                                       _scalingTCX,
+                                       _scalingTCY,
+                                       0.0f,
+                                       0.0f,
+                                       0.0f);
 
     _glState->addGLFeature(_textureGLF,
                            false);
@@ -843,112 +849,137 @@ void Mark::render(const G3MRenderContext* rc,
                   const Planet* planet,
                   GL* gl,
                   IFloatBuffer* billboardTexCoords) {
-
   const Vector3D* markPosition = getCartesianPosition(planet);
 
   _markCameraVector.set(markPosition->_x - cameraPosition.x(),
                         markPosition->_y - cameraPosition.y(),
                         markPosition->_z - cameraPosition.z());
 
-  bool renderableByDistance = true;
-  {
-    const bool hasMinDistanceToCamera = (_minDistanceToCamera > 0);
-    const bool hasMaxDistanceToCamera = (_maxDistanceToCamera > 0);
-    if (hasMinDistanceToCamera || hasMaxDistanceToCamera) {
-      const double squaredDistanceToCamera = _markCameraVector.squaredLength();
-
-      if (hasMinDistanceToCamera &&
-          (squaredDistanceToCamera > (_minDistanceToCamera * _minDistanceToCamera))) {
-        renderableByDistance = false;
-      }
-
-      if (hasMaxDistanceToCamera &&
-          ( squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera))) {
-        renderableByDistance = false;
-      }
-    }
-  }
-
   _renderedMark = false;
 
-  if (renderableByDistance) {
-    bool occludedByHorizon = false;
-
-    if (_position->_height > cameraHeight) {
-      // Computing horizon culling
-      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
-                                                                       cameraPosition.y(),
-                                                                       cameraPosition.z(),
-                                                                       _markCameraVector.x(),
-                                                                       _markCameraVector.y(),
-                                                                       _markCameraVector.z());
-      if (dists.size() > 0) {
-        const double dist = dists[0];
-        if (dist > 0.0 && dist < 1.0) {
-          occludedByHorizon = true;
-        }
-      }
+  if (isRenderableByDistance() &&
+      !isOccludedByHorizon(planet, cameraPosition, cameraHeight, markPosition)) {
+    ensureTexture(rc);
+    if (_textureID != NULL) {
+      ensureGLState(planet, billboardTexCoords, parentGLState);
+      startPendingEffects(rc, renderer);
+      draw(rc);
+      _renderedMark = true;
     }
-    else {
-      // if camera position is upper than mark we can compute horizon culling in a much simpler way
-      if (_normalAtMarkPosition == NULL) {
-        _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
-      }
-      //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
-      occludedByHorizon = (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector) <= HALF_PI);
+  }
+}
+
+bool Mark::isRenderableByDistance() const {
+  const bool hasMinDistanceToCamera = (_minDistanceToCamera > 0);
+  const bool hasMaxDistanceToCamera = (_maxDistanceToCamera > 0);
+  if (!hasMinDistanceToCamera && !hasMaxDistanceToCamera) {
+    return true;
+  }
+
+  const double squaredDistanceToCamera = _markCameraVector.squaredLength();
+
+  if (hasMinDistanceToCamera &&
+      (squaredDistanceToCamera > (_minDistanceToCamera * _minDistanceToCamera))) {
+    return false;
+  }
+
+  if (hasMaxDistanceToCamera &&
+      (squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera))) {
+    return false;
+  }
+
+  return true;
+}
+
+bool Mark::isOccludedByHorizon(const Planet* planet,
+                               const MutableVector3D& cameraPosition,
+                               double cameraHeight,
+                               const Vector3D* markPosition) {
+  if (_position->_height > cameraHeight) {
+    const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
+                                                                     cameraPosition.y(),
+                                                                     cameraPosition.z(),
+                                                                     _markCameraVector.x(),
+                                                                     _markCameraVector.y(),
+                                                                     _markCameraVector.z());
+    if (dists.size() > 0) {
+      const double dist = dists[0];
+      return (dist > 0.0 && dist < 1.0);
     }
+    return false;
+  }
 
-    if (!occludedByHorizon) {
-      if ((_textureID == NULL) && (_textureImage != NULL)) {
-        _textureID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                     GLFormat::rgba(),
-                                                                     _imageID,
-                                                                     false,
-                                                                     GLTextureParameterValue::clampToEdge(),
-                                                                     GLTextureParameterValue::clampToEdge());
+  // if camera position is upper than mark we can compute horizon culling in a much simpler way
+  if (_normalAtMarkPosition == NULL) {
+    _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
+  }
+  return (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector) <= HALF_PI);
+}
 
-        delete _textureImage;
-        _textureImage = NULL;
-      }
+void Mark::ensureTexture(const G3MRenderContext* rc) {
+  if ((_textureID == NULL) && (_textureImage != NULL)) {
+    _textureID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+                                                                 GLFormat::rgba(),
+                                                                 _imageID,
+                                                                 false,
+                                                                 GLTextureParameterValue::clampToEdge(),
+                                                                 GLTextureParameterValue::clampToEdge());
 
-      if (_textureID != NULL) {
-        if (_glState == NULL) {
-          createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
-        }
-        _glState->setParent(parentGLState);
+    delete _textureImage;
+    _textureImage = NULL;
+  }
+}
 
-        if (_firstRender) {
-          _firstRender = false;
-          if (_zoomInAppears) {
-            _effectsScheduler = rc->getEffectsScheduler();
-            _effectsScheduler->startEffect(new MarkZoomInEffect(this),
-                                           getEffectTarget());
-          }
-        }
+void Mark::ensureGLState(const Planet* planet,
+                         IFloatBuffer* billboardTexCoords,
+                         const GLState* parentGLState) {
+  if (_glState == NULL) {
+    createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
+  }
+  else if (_glPositionOutdated) {
+    updateGLPosition(planet);
+  }
+  _glState->setParent(parentGLState);
+}
 
-        if (_zoomOutDisappears && !_zoomOutDisappearsStarted) {
-          _zoomOutDisappearsStarted = true;
-          if (_effectsScheduler != NULL) {
-            _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-          }
-          else {
-            _effectsScheduler = rc->getEffectsScheduler();
-          }
-          _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears),
-                                         getEffectTarget());
-        }
+void Mark::updateGLPosition(const Planet* planet) {
+  const Vector3D* position = getCartesianPosition(planet);
+  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(*position);
 
-        rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
-                                0,
-                                4,
-                                _glState,
-                                *rc->getGPUProgramManager());
+  _modelTransformGLF->setMatrix(translation.asMatrix44D());
+  _glPositionOutdated = false;
+}
 
-        _renderedMark = true;
-      }
+void Mark::startPendingEffects(const G3MRenderContext* rc,
+                               MarksRenderer* renderer) {
+  if (_firstRender) {
+    _firstRender = false;
+    if (_zoomInAppears) {
+      _effectsScheduler = rc->getEffectsScheduler();
+      _effectsScheduler->startEffect(new MarkZoomInEffect(this),
+                                     getEffectTarget());
     }
   }
 
+  if (_zoomOutDisappears && !_zoomOutDisappearsStarted) {
+    _zoomOutDisappearsStarted = true;
+    if (_effectsScheduler != NULL) {
+      _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+    }
+    else {
+      _effectsScheduler = rc->getEffectsScheduler();
+    }
+    _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears),
+                                   getEffectTarget());
+  }
+}
+
+void Mark::draw(const G3MRenderContext* rc) {
+  rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
+                          0,
+                          4,
+                          _glState,
+                          *rc->getGPUProgramManager());
 }
 
 void Mark::animatedRemove(bool deleteMark) {
@@ -983,6 +1014,10 @@ void Mark::clearGLState() {
   if (_glState != NULL) {
     _glState->_release();
     _glState = NULL;
+    // the features are owned by the GLState
+    _modelTransformGLF = NULL;
+    _billboardGLF      = NULL;
+    _textureGLF        = NULL;
   }
 }
 
@@ -1002,7 +1037,10 @@ void Mark::setPosition(const Geodetic3D& position) {
   delete _cartesianPosition;
   _cartesianPosition = NULL;
 
-  clearGLState();
+  delete _normalAtMarkPosition;
+  _normalAtMarkPosition = NULL;
+
+  _glPositionOutdated = true;
 }
 
 void Mark::setScreenSize(int width, int height) {
@@ -1010,26 +1048,27 @@ void Mark::setScreenSize(int width, int height) {
   _textureHeight = height;
   _textureSizeSetExternally = true;
 
-  if (_glState != NULL) {
-    BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
-    if (b != NULL) {
-      b->changeSize(IMathUtils::instance()->round(_textureWidth),
-                    IMathUtils::instance()->round(_textureHeight));
-    }
-  }
+  updateBillboardSize();
 }
 
 void Mark::setScreenSizeScale(float scaleWidth, float scaleHeight) {
   _textureWidthScale  = scaleWidth;
   _textureHeightScale = scaleHeight;
-  _textureScaleSetExternally = true;
 
-  if (_glState != NULL) {
-    BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
-    if (b != NULL) {
-      b->changeSize(IMathUtils::instance()->round(_textureWidth  * _textureWidthScale),
-                    IMathUtils::instance()->round(_textureHeight * _textureHeightScale));
-    }
+  updateBillboardSize();
+}
+
+void Mark::setEffectScale(float effectScale) {
+  _effectScale = effectScale;
+
+  updateBillboardSize();
+}
+
+void Mark::updateBillboardSize() {
+  if (_billboardGLF != NULL) {
+    const IMathUtils* mu = IMathUtils::instance();
+    _billboardGLF->changeSize(mu->round(getScreenWidth()),
+                              mu->round(getScreenHeight()));
   }
 }
 
@@ -1051,10 +1090,6 @@ void Mark::setTextureCoordinatesTransformation(const float translationX,
 
   _scalingTCX = scalingX;
   _scalingTCY = scalingY;
-
-  if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1) {
-    _hasTCTransformations = true;
-  }
 
   if (_textureGLF != NULL) {
 
@@ -1090,13 +1125,6 @@ float Mark::getMarkAnchorV() const {
 void Mark::onImageCreationError(const std::string& error) {
   _textureSolved = true;
 
-  //  delete _labelFontColor;
-  //  _labelFontColor = NULL;
-  //  delete _labelShadowColor;
-  //  _labelShadowColor = NULL;
-
-  //  delete _imageFactory;
-  //  _imageFactory = NULL;
   _imageFactoryListener = NULL;
 
   ILogger::instance()->logError("Can't create image for Mark: \"%s\"",
@@ -1105,27 +1133,9 @@ void Mark::onImageCreationError(const std::string& error) {
 
 void Mark::onImageCreated(const IImage* image,
                           const std::string& imageName) {
-  _textureSolved = true;
   _imageID = imageName;
 
-  //  delete _labelFontColor;
-  //  _labelFontColor = NULL;
-  //  delete _labelShadowColor;
-  //  _labelShadowColor = NULL;
-
-  //  delete _imageFactory;
-  //  _imageFactory = NULL;
   _imageFactoryListener = NULL;
 
-  _textureImage = image;
-
-  if (!_textureSizeSetExternally) {
-    _textureWidth  = _textureImage->getWidth();
-    _textureHeight = _textureImage->getHeight();
-
-    if (_textureScaleSetExternally) {
-      _textureWidth  *= _textureWidthScale;
-      _textureHeight *= _textureHeightScale;
-    }
-  }
+  onTextureResolved(image);
 }

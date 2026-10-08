@@ -10,23 +10,37 @@
 
 #include "G3MDemoScene.hpp"
 
+class Geodetic3D;
+class Angle;
 
+
+/** every Mark feature in one scene: each option of the Feature menu shows one */
 class G3MMarksDemoScene : public G3MDemoScene {
 private:
+  void removeFeature();
+
+  void animateCameraTo(const Geodetic3D& position,
+                       const Angle& heading,
+                       const Angle& pitch);
+
+  void showBasicMark();
+  void showAnimatedMarks();
+  void showMovingMark();
 
 protected:
   void rawActivate(const G3MContext* context);
 
   void rawSelectOption(const std::string& option,
-                       int optionIndex) {
-    // do nothing
-  }
+                       int optionIndex);
 
 public:
 
   G3MMarksDemoScene(G3MDemoModel* model) :
-  G3MDemoScene(model, "Marks", "", -1)
+  G3MDemoScene(model, "Marks", "Feature", "<select feature>", 0)
   {
+    addOption("Basic");
+    addOption("Animated");
+    addOption("Moving");
   }
 
   void deactivate(const G3MContext* context);

@@ -293,13 +293,13 @@ public class MarksRenderer extends DefaultRenderer
             continue;
           }
   
-          final float markWidth = mark.getTextureWidth();
+          final float markWidth = mark.getScreenWidth();
           if (markWidth <= 0)
           {
             continue;
           }
   
-          final float markHeight = mark.getTextureHeight();
+          final float markHeight = mark.getScreenHeight();
           if (markHeight <= 0)
           {
             continue;
