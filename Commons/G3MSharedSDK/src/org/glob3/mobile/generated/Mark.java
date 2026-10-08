@@ -14,6 +14,29 @@ public class Mark implements SurfaceElevationListener
   private float _transitionScale;
   private long _lastTransitionMS;
 
+  // how high the camera is seen from the mark, above its horizon (NAND: unknown); the mark shrinks as it sinks
+  private double _grazingAngle;
+  private float _horizonScale;
+
+  // the band is the mark's own apparent height: a big mark starts shrinking earlier than a small one
+  private void updateHorizonScale(double radiansPerPixel)
+  {
+    float horizonScale = 1F;
+    if ((radiansPerPixel > 0) && !(_grazingAngle != _grazingAngle))
+    {
+      final double apparentAngle = _textureHeight * _textureHeightScale * radiansPerPixel;
+      if ((apparentAngle > 0) && (_grazingAngle < apparentAngle))
+      {
+        horizonScale = (float)(_grazingAngle / apparentAngle);
+      }
+    }
+    if (horizonScale != _horizonScale)
+    {
+      _horizonScale = horizonScale;
+      updateBillboardSize();
+    }
+  }
+
   private void applyOutfitAnchor(MarkOutfitImage outfitImage)
   {
     if (outfitImage._hasAnchor)
@@ -195,6 +218,7 @@ public class Mark implements SurfaceElevationListener
   {
     if (_position._height > cameraHeight)
     {
+      _grazingAngle = Double.NaN;
       final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition.x(), cameraPosition.y(), cameraPosition.z(), _markCameraVector.x(), _markCameraVector.y(), _markCameraVector.z());
       if (dists.size() > 0)
       {
@@ -209,7 +233,9 @@ public class Mark implements SurfaceElevationListener
     {
       _normalAtMarkPosition = new Vector3D(planet.geodeticSurfaceNormal(markPosition));
     }
-    return (Vector3D.angleInRadiansBetween(_normalAtMarkPosition, _markCameraVector) <= DefineConstants.HALF_PI);
+    final double angle = Vector3D.angleInRadiansBetween(_normalAtMarkPosition, _markCameraVector);
+    _grazingAngle = angle - DefineConstants.HALF_PI;
+    return (angle <= DefineConstants.HALF_PI);
   }
 
   private void ensureTexture(G3MRenderContext rc)
@@ -320,6 +346,8 @@ public class Mark implements SurfaceElevationListener
      _declutterTarget = 0;
      _transitionScale = 1F;
      _lastTransitionMS = -1;
+     _grazingAngle = Double.NaN;
+     _horizonScale = 1F;
      _position = new Geodetic3D(position);
      _altitudeMode = altitudeMode;
      _textureID = null;
@@ -741,12 +769,12 @@ public class Mark implements SurfaceElevationListener
   /** the size drawn on screen: the texture size times the app's and the effects' scales */
   public final float getScreenWidth()
   {
-    return _textureWidth * _textureWidthScale * _effectScale * _transitionScale;
+    return _textureWidth * _textureWidthScale * _effectScale * _transitionScale * _horizonScale;
   }
 
   public final float getScreenHeight()
   {
-    return _textureHeight * _textureHeightScale * _effectScale * _transitionScale;
+    return _textureHeight * _textureHeightScale * _effectScale * _transitionScale * _horizonScale;
   }
 
   public final Vector2F getTextureExtent()
@@ -809,12 +837,14 @@ public class Mark implements SurfaceElevationListener
     return _cartesianPosition;
   }
 
-  public final void render(G3MRenderContext rc, MarksRenderer renderer, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords)
+  /** horizonBandRadiansPerPixel: the camera's angle per screen pixel, so the mark shrinks while it sinks its own apparent height behind the horizon; 0: no band */
+  public final void render(G3MRenderContext rc, MarksRenderer renderer, MutableVector3D cameraPosition, double cameraHeight, GLState parentGLState, Planet planet, GL gl, IFloatBuffer billboardTexCoords, double horizonBandRadiansPerPixel)
   {
     _renderedMark = false;
   
     if (!_declutterHidden && isVisibleFrom(planet, cameraPosition, cameraHeight))
     {
+      updateHorizonScale(horizonBandRadiansPerPixel);
       ensureTexture(rc);
       if (_textureID != null)
       {

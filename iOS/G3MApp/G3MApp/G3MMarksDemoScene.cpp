@@ -268,6 +268,9 @@ void G3MMarksDemoScene::rawSelectGroupOption(size_t groupIndex,
   if (groupIndex == 0) {
     rawSelectOption(option, optionIndex);
   }
+  else if (groupIndex == 3) {
+    getModel()->getMarksRenderer()->setHorizonBand(option == "Band");
+  }
   else if (getOptionGroup(0)->isSelectedOption("London - declutter")) {
     if (groupIndex == 1) {
       moveLondonCamera(option);
@@ -295,7 +298,8 @@ void G3MMarksDemoScene::applyLondonDeclutter(const std::string& declutterOption)
 }
 
 bool G3MMarksDemoScene::isOptionGroupVisible(size_t groupIndex) const {
-  return (groupIndex == 0) || getOptionGroup(0)->isSelectedOption("London - declutter");
+  // the horizon applies to every feature; the camera and declutter groups only to London
+  return (groupIndex == 0) || (groupIndex == 3) || getOptionGroup(0)->isSelectedOption("London - declutter");
 }
 
 // the periodical tasks animate the marks: they go with them
@@ -621,6 +625,7 @@ void G3MMarksDemoScene::addLondonMarks(const JSONArray* articles) {
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {
   removeFeature();
+  getModel()->getMarksRenderer()->setHorizonBand(true); // g3m's default, for the other scenes
 
   G3MDemoScene::deactivate(context);
 }

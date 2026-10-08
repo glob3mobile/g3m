@@ -70,6 +70,10 @@ public:
     addOption(declutterGroup, "Off");
     addOption(declutterGroup, "By magnitude");
     addOption(declutterGroup, "By drawing order");
+
+    const size_t horizonGroup = addOptionGroup("Horizon", "<horizon>", 1); // Band
+    addOption(horizonGroup, "Cut");
+    addOption(horizonGroup, "Band");
   }
 
   void deactivate(const G3MContext* context);

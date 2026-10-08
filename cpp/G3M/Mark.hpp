@@ -64,6 +64,11 @@ private:
   float     _transitionScale;
   long long _lastTransitionMS;
 
+  // how high the camera is seen from the mark, above its horizon (NAND: unknown); the mark shrinks as it sinks
+  double _grazingAngle;
+  float  _horizonScale;
+  void updateHorizonScale(double radiansPerPixel);
+
   void applyOutfitAnchor(const MarkOutfitImage* outfitImage);
 
   bool _hasHint; // the last outfit is a hint: drawn when nothing else fits, not touchable
@@ -316,11 +321,11 @@ public:
 
   /** the size drawn on screen: the texture size times the app's and the effects' scales */
   float getScreenWidth() const {
-    return _textureWidth * _textureWidthScale * _effectScale * _transitionScale;
+    return _textureWidth * _textureWidthScale * _effectScale * _transitionScale * _horizonScale;
   }
 
   float getScreenHeight() const {
-    return _textureHeight * _textureHeightScale * _effectScale * _transitionScale;
+    return _textureHeight * _textureHeightScale * _effectScale * _transitionScale * _horizonScale;
   }
 
   Vector2F getTextureExtent() const {
@@ -348,6 +353,7 @@ public:
 
   const Vector3D* getCartesianPosition(const Planet* planet);
 
+  /** horizonBandRadiansPerPixel: the camera's angle per screen pixel, so the mark shrinks while it sinks its own apparent height behind the horizon; 0: no band */
   void render(const G3MRenderContext* rc,
               MarksRenderer* renderer,
               const MutableVector3D& cameraPosition,
@@ -355,7 +361,8 @@ public:
               const GLState* parentGLState,
               const Planet* planet,
               GL* gl,
-              IFloatBuffer* billboardTexCoords);
+              IFloatBuffer* billboardTexCoords,
+              double horizonBandRadiansPerPixel);
 
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration

@@ -83,6 +83,7 @@ public class MarksRenderer extends DefaultRenderer
   private ITimer _initializationTimer;
 
   private boolean _declutter;
+  private boolean _horizonBand;
   private float _declutterMargin;
   private long _growMS;
   private long _shrinkMS;
@@ -240,6 +241,7 @@ public class MarksRenderer extends DefaultRenderer
      _renderInReverse = renderInReverse;
      _progressiveInitialization = progressiveInitialization;
      _declutter = false;
+     _horizonBand = true;
      _declutterMargin = 2F;
      _growMS = 500;
      _shrinkMS = 300;
@@ -319,6 +321,17 @@ public class MarksRenderer extends DefaultRenderer
     {
       attachHint(_marks.get(i));
     }
+  }
+
+  /** the marks shrink while they sink behind the horizon, over their own apparent height, instead of vanishing at once; on by default */
+  public final void setHorizonBand(boolean horizonBand)
+  {
+    _horizonBand = horizonBand;
+  }
+
+  public final boolean getHorizonBand()
+  {
+    return _horizonBand;
   }
 
   /** how long an outfit takes to grow in and to shrink away; by default those of the marks' zoom effects */
@@ -451,13 +464,15 @@ public class MarksRenderer extends DefaultRenderer
         }
       }
   
+      final double horizonBandRadiansPerPixel = _horizonBand ? (camera.getVerticalFOV()._radians / camera.getViewPortHeight()) : 0;
+  
       for (int i = 0; i < marksSize; i++)
       {
         final int ii = _renderInReverse ? (marksSize-1-i) : i;
         Mark mark = _marks.get(ii);
         if (mark.isReady())
         {
-          mark.render(rc, this, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord);
+          mark.render(rc, this, cameraPosition, cameraHeight, _glState, planet, gl, billboardTexCoord, horizonBandRadiansPerPixel);
         }
       }
     }

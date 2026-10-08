@@ -87,6 +87,7 @@ _readyWhenMarksReady(readyWhenMarksReady),
 _renderInReverse(renderInReverse),
 _progressiveInitialization(progressiveInitialization),
 _declutter(false),
+_horizonBand(true),
 _declutterMargin(2),
 _growMS(500),
 _shrinkMS(300),
@@ -320,6 +321,8 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
       }
     }
 
+    const double horizonBandRadiansPerPixel = _horizonBand ? (camera->getVerticalFOV()._radians / camera->getViewPortHeight()) : 0;
+
     for (size_t i = 0; i < marksSize; i++) {
       const size_t ii = _renderInReverse ? (marksSize-1-i) : i;
       Mark* mark = _marks[ii];
@@ -331,7 +334,8 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                      _glState,
                      planet,
                      gl,
-                     billboardTexCoord);
+                     billboardTexCoord,
+                     horizonBandRadiansPerPixel);
       }
     }
   }

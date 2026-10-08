@@ -53,6 +53,7 @@ private:
   ITimer* _initializationTimer;
 
   bool      _declutter;
+  bool      _horizonBand;
   float     _declutterMargin;
   long long _growMS;
   long long _shrinkMS;
@@ -117,6 +118,15 @@ public:
 
   void onHintImageCreated(const IImage* image,
                           const std::string& imageName);
+
+  /** the marks shrink while they sink behind the horizon, over their own apparent height, instead of vanishing at once; on by default */
+  void setHorizonBand(bool horizonBand) {
+    _horizonBand = horizonBand;
+  }
+
+  bool getHorizonBand() const {
+    return _horizonBand;
+  }
 
   /** how long an outfit takes to grow in and to shrink away; by default those of the marks' zoom effects */
   void setDeclutterTransitionDurations(const TimeInterval& grow,

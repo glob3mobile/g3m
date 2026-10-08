@@ -261,6 +261,8 @@ _declutterHidden(false),
 _declutterTarget(0),
 _transitionScale(1),
 _lastTransitionMS(-1),
+_grazingAngle(NAND),
+_horizonScale(1),
 _position(new Geodetic3D(position)),
 _altitudeMode(altitudeMode),
 _textureID(NULL),
@@ -501,11 +503,13 @@ void Mark::render(const G3MRenderContext* rc,
                   const GLState* parentGLState,
                   const Planet* planet,
                   GL* gl,
-                  IFloatBuffer* billboardTexCoords) {
+                  IFloatBuffer* billboardTexCoords,
+                  double horizonBandRadiansPerPixel) {
   _renderedMark = false;
 
   if (!_declutterHidden &&
       isVisibleFrom(planet, cameraPosition, cameraHeight)) {
+    updateHorizonScale(horizonBandRadiansPerPixel);
     ensureTexture(rc);
     if (_textureID != NULL) {
       ensureGLState(planet, billboardTexCoords, parentGLState);
@@ -579,6 +583,7 @@ bool Mark::isOccludedByHorizon(const Planet* planet,
                                double cameraHeight,
                                const Vector3D* markPosition) {
   if (_position->_height > cameraHeight) {
+    _grazingAngle = NAND;
     const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
                                                                      cameraPosition.y(),
                                                                      cameraPosition.z(),
@@ -596,7 +601,24 @@ bool Mark::isOccludedByHorizon(const Planet* planet,
   if (_normalAtMarkPosition == NULL) {
     _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
   }
-  return (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector) <= HALF_PI);
+  const double angle = Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector);
+  _grazingAngle = angle - HALF_PI;
+  return (angle <= HALF_PI);
+}
+
+// the band is the mark's own apparent height: a big mark starts shrinking earlier than a small one
+void Mark::updateHorizonScale(double radiansPerPixel) {
+  float horizonScale = 1;
+  if ((radiansPerPixel > 0) && !ISNAN(_grazingAngle)) {
+    const double apparentAngle = _textureHeight * _textureHeightScale * radiansPerPixel;
+    if ((apparentAngle > 0) && (_grazingAngle < apparentAngle)) {
+      horizonScale = (float) (_grazingAngle / apparentAngle);
+    }
+  }
+  if (horizonScale != _horizonScale) {
+    _horizonScale = horizonScale;
+    updateBillboardSize();
+  }
 }
 
 void Mark::ensureTexture(const G3MRenderContext* rc) {
@@ -644,7 +666,7 @@ void Mark::startPendingEffects(const G3MRenderContext* rc,
     }
   }
 
-  if (_zoomOutDisappears && !_zoomOutDisappearsStarted) {
+  if (_zoomOutDisappears && !_zoomOutDisappearsStarted) { 
     _zoomOutDisappearsStarted = true;
     if (_effectsScheduler != NULL) {
       _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
