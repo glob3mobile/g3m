@@ -12,11 +12,7 @@
 #include "TexturesHandler.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IGLTextureID.hpp"
-#include "IDownloader.hpp"
-#include "IImageDownloadListener.hpp"
 #include "MarkTouchListener.hpp"
-#include "ITextUtils.hpp"
-#include "IImageListener.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "GLFeature.hpp"
 #include "Vector2D.hpp"
@@ -29,6 +25,8 @@
 #include "Planet.hpp"
 #include "MarksRenderer.hpp"
 #include "IImageFactoryListener.hpp"
+#include "MarkOutfit.hpp"
+#include "MarkAnchor.hpp"
 
 
 class MarkImageFactoryListener : public IImageFactoryListener {
@@ -176,109 +174,6 @@ public:
 };
 
 
-class MarkLabelImageListener : public IImageListener {
-private:
-  IImage* _iconImage;
-  Mark*   _mark;
-
-public:
-  MarkLabelImageListener(IImage* iconImage,
-                         Mark* mark) :
-  _iconImage(iconImage),
-  _mark(mark)
-  {
-
-  }
-
-  void imageCreated(const IImage* image) {
-    delete _iconImage;
-    _iconImage = NULL;
-
-    if (image == NULL) {
-      _mark->onTextureDownloadError();
-    }
-    else {
-      _mark->onTextureDownload(image);
-    }
-  }
-};
-
-
-
-class IconDownloadListener : public IImageDownloadListener {
-private:
-  Mark*              _mark;
-  const std::string  _label;
-  const bool         _labelBottom;
-  const float        _labelFontSize;
-  const Color*       _labelFontColor;
-  const Color*       _labelShadowColor;
-  const int          _labelGapSize;
-
-public:
-  IconDownloadListener(Mark* mark,
-                       const std::string& label,
-                       bool  labelBottom,
-                       const float labelFontSize,
-                       const Color* labelFontColor,
-                       const Color* labelShadowColor,
-                       const int labelGapSize) :
-  _mark(mark),
-  _label(label),
-  _labelBottom(labelBottom),
-  _labelFontSize(labelFontSize),
-  _labelFontColor(labelFontColor),
-  _labelShadowColor(labelShadowColor),
-  _labelGapSize(labelGapSize)
-  {
-
-  }
-
-  void onDownload(const URL& url,
-                  IImage* image,
-                  bool expired) {
-    const bool hasLabel = ( _label.length() != 0 );
-
-    if (hasLabel) {
-#ifdef C_CODE
-      LabelPosition labelPosition = _labelBottom ? Bottom : Right;
-#endif
-#ifdef JAVA_CODE
-      LabelPosition labelPosition = _labelBottom ? LabelPosition.Bottom : LabelPosition.Right;
-#endif
-
-      ITextUtils::instance()->labelImage(image,
-                                         _label,
-                                         labelPosition,
-                                         _labelGapSize,
-                                         _labelFontSize,
-                                         _labelFontColor,
-                                         _labelShadowColor,
-                                         new MarkLabelImageListener(image, _mark),
-                                         true);
-    }
-    else {
-      _mark->onTextureDownload(image);
-    }
-  }
-
-  void onError(const URL& url) {
-    ILogger::instance()->logError("Error trying to download image \"%s\"", url._path.c_str());
-    _mark->onTextureDownloadError();
-  }
-
-  void onCancel(const URL& url) {
-    // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
-    _mark->onTextureDownloadError();
-  }
-
-  void onCanceledDownload(const URL& url,
-                          IImage* image,
-                          bool expired) {
-    // do nothing
-  }
-};
-
 EffectTarget* Mark::getEffectTarget() {
   if (_effectTarget == NULL) {
     _effectTarget = new MarkEffectTarget();
@@ -287,31 +182,20 @@ EffectTarget* Mark::getEffectTarget() {
 }
 
 
-Mark::Mark(const std::string& label,
-           const URL&         iconURL,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           const bool         labelBottom,
-           const float        labelFontSize,
-           const Color*       labelFontColor,
-           const Color*       labelShadowColor,
-           const int          labelGapSize,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageFactory(NULL),
+Mark::Mark(const std::vector<MarkOutfit*>& outfits,
+           const Geodetic3D&               position,
+           AltitudeMode                    altitudeMode,
+           double                          minDistanceToCamera,
+           double                          maxDistanceToCamera,
+           MarkUserData*                   userData,
+           bool                            autoDeleteUserData,
+           MarkTouchListener*              listener,
+           bool                            autoDeleteListener,
+           bool                            zoomInAppears) :
+_imageFactory(outfits[0]->takeImageFactory()),
 _imageFactoryListener(NULL),
-_label(label),
-_iconURL(iconURL),
 _position(new Geodetic3D(position)),
 _altitudeMode(altitudeMode),
-_labelBottom(labelBottom),
-_labelFontSize(labelFontSize),
-_labelFontColor(labelFontColor),
-_labelShadowColor(labelShadowColor),
-_labelGapSize(labelGapSize),
 _textureID(NULL),
 _cartesianPosition(NULL),
 _textureSolved(false),
@@ -322,266 +206,7 @@ _textureHeight(0),
 _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( iconURL._path + "_" + label ),
-_surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
-_glState(NULL),
-_modelTransformGLF(NULL),
-_glPositionOutdated(false),
-_normalAtMarkPosition(NULL),
-_textureSizeSetExternally(false),
-_translationTCX(0),
-_translationTCY(0),
-_scalingTCX(1),
-_scalingTCY(1),
-_textureGLF(NULL),
-_anchorU(0.5),
-_anchorV(0.5),
-_billboardGLF(NULL),
-_textureHeightScale(1.0),
-_textureWidthScale(1.0),
-_effectScale(1),
-_initialized(false),
-_zoomInAppears(true),
-_effectsScheduler(NULL),
-_firstRender(true),
-_effectTarget(NULL),
-_zoomOutDisappears(false),
-_deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false),
-_token("")
-{
-
-}
-
-Mark::Mark(const std::string& label,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           const float        labelFontSize,
-           const Color*       labelFontColor,
-           const Color*       labelShadowColor,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageFactory(NULL),
-_imageFactoryListener(NULL),
-_label(label),
-_labelBottom(true),
-_iconURL("", false),
-_position(new Geodetic3D(position)),
-_altitudeMode(altitudeMode),
-_labelFontSize(labelFontSize),
-_labelFontColor(labelFontColor),
-_labelShadowColor(labelShadowColor),
-_labelGapSize(2),
-_textureID(NULL),
-_cartesianPosition(NULL),
-_textureSolved(false),
-_textureImage(NULL),
-_renderedMark(false),
-_textureWidth(0),
-_textureHeight(0),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( "_" + label ),
-_surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
-_glState(NULL),
-_modelTransformGLF(NULL),
-_glPositionOutdated(false),
-_normalAtMarkPosition(NULL),
-_textureSizeSetExternally(false),
-_textureGLF(NULL),
-_translationTCX(0),
-_translationTCY(0),
-_scalingTCX(1),
-_scalingTCY(1),
-_anchorU(0.5),
-_anchorV(0.5),
-_billboardGLF(NULL),
-_textureHeightScale(1.0),
-_textureWidthScale(1.0),
-_effectScale(1),
-_initialized(false),
-_zoomInAppears(true),
-_effectsScheduler(NULL),
-_firstRender(true),
-_effectTarget(NULL),
-_zoomOutDisappears(false),
-_deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false),
-_token("")
-{
-
-}
-
-Mark::Mark(const URL&         iconURL,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageFactory(NULL),
-_imageFactoryListener(NULL),
-_label(""),
-_labelBottom(true),
-_iconURL(iconURL),
-_position(new Geodetic3D(position)),
-_altitudeMode(altitudeMode),
-_labelFontSize(20),
-_labelFontColor(Color::newFromRGBA(1, 1, 1, 1)),
-_labelShadowColor(Color::newFromRGBA(0, 0, 0, 1)),
-_labelGapSize(2),
-_textureID(NULL),
-_cartesianPosition(NULL),
-_textureSolved(false),
-_textureImage(NULL),
-_renderedMark(false),
-_textureWidth(0),
-_textureHeight(0),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( iconURL._path + "_" ),
-_surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
-_glState(NULL),
-_modelTransformGLF(NULL),
-_glPositionOutdated(false),
-_normalAtMarkPosition(NULL),
-_textureSizeSetExternally(false),
-_textureGLF(NULL),
-_translationTCX(0),
-_translationTCY(0),
-_scalingTCX(1),
-_scalingTCY(1),
-_anchorU(0.5),
-_anchorV(0.5),
-_billboardGLF(NULL),
-_textureHeightScale(1.0),
-_textureWidthScale(1.0),
-_effectScale(1),
-_initialized(false),
-_zoomInAppears(true),
-_effectsScheduler(NULL),
-_firstRender(true),
-_effectTarget(NULL),
-_zoomOutDisappears(false),
-_deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false),
-_token("")
-{
-
-}
-
-Mark::Mark(const IImage*      image,
-           const std::string& imageID,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageFactory(NULL),
-_imageFactoryListener(NULL),
-_label(""),
-_labelBottom(true),
-_iconURL(URL("", false)),
-_position(new Geodetic3D(position)),
-_altitudeMode(altitudeMode),
-_labelFontSize(20),
-_labelFontColor(NULL),
-_labelShadowColor(NULL),
-_labelGapSize(2),
-_textureID(NULL),
-_cartesianPosition(NULL),
-_textureSolved(true),
-_textureImage(image),
-_renderedMark(false),
-_textureWidth(image->getWidth()),
-_textureHeight(image->getHeight()),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( imageID ),
-_surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
-_glState(NULL),
-_modelTransformGLF(NULL),
-_glPositionOutdated(false),
-_normalAtMarkPosition(NULL),
-_textureSizeSetExternally(false),
-_translationTCX(0),
-_translationTCY(0),
-_scalingTCX(1),
-_scalingTCY(1),
-_anchorU(0.5),
-_anchorV(0.5),
-_billboardGLF(NULL),
-_effectScale(1),
-_textureHeightScale(1.0),
-_textureWidthScale(1.0),
-_initialized(false),
-_zoomInAppears(true),
-_effectsScheduler(NULL),
-_firstRender(true),
-_effectTarget(NULL),
-_zoomOutDisappears(false),
-_deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false),
-_token("")
-{
-
-}
-
-Mark::Mark(IImageFactory*     imageFactory,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageFactory(imageFactory),
-_imageFactoryListener(NULL),
-_label(""),
-_labelBottom(true),
-_iconURL(URL("", false)),
-_position(new Geodetic3D(position)),
-_altitudeMode(altitudeMode),
-_labelFontSize(20),
-_labelFontColor(NULL),
-_labelShadowColor(NULL),
-_labelGapSize(2),
-_textureID(NULL),
-_cartesianPosition(NULL),
-_textureSolved(false),
-_textureImage(NULL),
-_renderedMark(false),
-_textureWidth(0),
-_textureHeight(0),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
+_maxDistanceToCamera(maxDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( "" ),
@@ -599,11 +224,12 @@ _scalingTCY(1),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
+_textureGLF(NULL),
 _effectScale(1),
 _textureHeightScale(1.0),
 _textureWidthScale(1.0),
 _initialized(false),
-_zoomInAppears(true),
+_zoomInAppears(zoomInAppears),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
@@ -612,6 +238,11 @@ _deleteMarkOnDisappears(false),
 _zoomOutDisappearsStarted(false),
 _token("")
 {
+  // element by element: in Java an assignment would share the caller's list
+  for (size_t i = 0; i < outfits.size(); i++) {
+    _outfits.push_back(outfits[i]);
+  }
+
   if (_imageFactory->isMutable()) {
     ILogger::instance()->logError("Marks doesn't support mutable image factories");
   }
@@ -630,70 +261,13 @@ void Mark::initialize(const G3MContext* context,
     }
   }
 
-  if (!_textureSolved) {
-    if (_imageFactory != NULL) {
-      _imageFactoryListener = new MarkImageFactoryListener(_imageFactory, this);
-      _imageFactory->create(context,
-                           _imageFactoryListener,
-                           true);
-      _imageFactory = NULL; // ownership moved to MarkImageFactoryListener
-    }
-    else {
-      const bool hasIconURL = ( _iconURL._path.length() != 0 );
-      if (hasIconURL) {
-        IDownloader* downloader = context->getDownloader();
-
-        downloader->requestImage(_iconURL,
-                                 downloadPriority,
-                                 TimeInterval::fromDays(30),
-                                 true,
-                                 new IconDownloadListener(this,
-                                                          _label,
-                                                          _labelBottom,
-                                                          _labelFontSize,
-                                                          _labelFontColor,
-                                                          _labelShadowColor,
-                                                          _labelGapSize),
-                                 true);
-      }
-      else {
-        const bool hasLabel = ( _label.length() != 0 );
-        if (hasLabel) {
-          ITextUtils::instance()->createLabelImage(_label,
-                                                   _labelFontSize,
-                                                   _labelFontColor,
-                                                   _labelShadowColor,
-                                                   new MarkLabelImageListener(NULL, this),
-                                                   true);
-        }
-        else {
-          ILogger::instance()->logWarning("Mark created without label nor icon");
-        }
-      }
-    }
+  if (!_textureSolved && (_imageFactory != NULL)) {
+    _imageFactoryListener = new MarkImageFactoryListener(_imageFactory, this);
+    _imageFactory->create(context,
+                          _imageFactoryListener,
+                          true);
+    _imageFactory = NULL; // ownership moved to MarkImageFactoryListener
   }
-}
-
-void Mark::onTextureDownloadError() {
-  _textureSolved = true;
-
-  delete _labelFontColor;
-  _labelFontColor = NULL;
-  delete _labelShadowColor;
-  _labelShadowColor = NULL;
-
-  ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
-                                _iconURL._path.c_str(),
-                                _label.c_str());
-}
-
-void Mark::onTextureDownload(const IImage* image) {
-  delete _labelFontColor;
-  _labelFontColor = NULL;
-  delete _labelShadowColor;
-  _labelShadowColor = NULL;
-
-  onTextureResolved(image);
 }
 
 void Mark::onTextureResolved(const IImage* image) {
@@ -724,8 +298,9 @@ Mark::~Mark() {
 
   delete _effectTarget;
 
-  delete _labelFontColor;
-  delete _labelShadowColor;
+  for (size_t i = 0; i < _outfits.size(); i++) {
+    delete _outfits[i];
+  }
 
   delete _position;
 
@@ -1136,6 +711,12 @@ void Mark::onImageCreated(const IImage* image,
   _imageID = imageName;
 
   _imageFactoryListener = NULL;
+
+  const MarkAnchor* anchor = _outfits[0]->getAnchor();
+  if (anchor != NULL) {
+    const Vector2F anchorUV = anchor->getAnchor(image);
+    setMarkAnchor(anchorUV._x, anchorUV._y);
+  }
 
   onTextureResolved(image);
 }

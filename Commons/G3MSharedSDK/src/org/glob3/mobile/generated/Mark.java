@@ -5,50 +5,8 @@ public class Mark implements SurfaceElevationListener
   private IImageFactory _imageFactory;
   private MarkImageFactoryListener _imageFactoryListener;
 
-  /**
-   * The text the mark displays.
-   * Useless if the mark does not have label.
-   */
-  private final String _label;
-  /**
-   * Flag to know if the label will be located under the icon (if TRUE) or on its right (if FALSE).
-   * Useless if the mark does not have label or icon.
-   * Default value: TRUE
-   */
-  private final boolean _labelBottom;
-  /**
-   * The font size of the text.
-   * Useless if the mark does not have label.
-   * Default value: 20
-   */
-  private final float _labelFontSize;
+  private java.util.ArrayList<MarkOutfit> _outfits = new java.util.ArrayList<MarkOutfit>();
 
-
-  /**
-   * The color of the text.
-   * Useless if the mark does not have label.
-   * Default value: white
-   */
-  private Color     _labelFontColor;
-
-  /**
-   * The color of the text shadow.
-   * Useless if the mark does not have label.
-   * Default value: black
-   */
-  private Color     _labelShadowColor;
-
-  /**
-   * The number of pixels between the icon and the text.
-   * Useless if the mark does not have label or icon.
-   * Default value: 2
-   */
-  private final int _labelGapSize;
-  /**
-   * The URL to get the image file.
-   * Useless if the mark does not have icon.
-   */
-  private final URL _iconURL;
   /**
    * The point where the mark will be geo-located.
    */
@@ -316,62 +274,13 @@ public class Mark implements SurfaceElevationListener
 
 
 
-  /**
-   * Creates a mark with icon and label
-   */
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
+  /** outfits: largest first, at least one; the mark keeps a copy of the vector and owns the outfits. MarkBuilder fills them */
+  public Mark(java.util.ArrayList<MarkOutfit> outfits, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, double maxDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener, boolean zoomInAppears)
   {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, listener, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData)
-  {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, autoDeleteUserData, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData)
-  {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, userData, true, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize)
-  {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, labelGapSize, null, true, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor)
-  {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, labelShadowColor, 2, null, true, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor)
-  {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize)
-  {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom)
-  {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, labelBottom, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
-  {
-     this(label, iconURL, position, altitudeMode, minDistanceToCamera, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode)
-  {
-     this(label, iconURL, position, altitudeMode, 4.5e+06, true, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), 2, null, true, null, false);
-  }
-  public Mark(String label, URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, boolean labelBottom, float labelFontSize, Color labelFontColor, Color labelShadowColor, int labelGapSize, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
-  {
-     _imageFactory = null;
+     _imageFactory = outfits.get(0).takeImageFactory();
      _imageFactoryListener = null;
-     _label = label;
-     _iconURL = iconURL;
      _position = new Geodetic3D(position);
      _altitudeMode = altitudeMode;
-     _labelBottom = labelBottom;
-     _labelFontSize = labelFontSize;
-     _labelFontColor = labelFontColor;
-     _labelShadowColor = labelShadowColor;
-     _labelGapSize = labelGapSize;
      _textureID = null;
      _cartesianPosition = null;
      _textureSolved = false;
@@ -382,338 +291,7 @@ public class Mark implements SurfaceElevationListener
      _userData = userData;
      _autoDeleteUserData = autoDeleteUserData;
      _minDistanceToCamera = minDistanceToCamera;
-     _maxDistanceToCamera = 0;
-     _listener = listener;
-     _autoDeleteListener = autoDeleteListener;
-     _imageID = iconURL._path + "_" + label;
-     _surfaceElevationProvider = null;
-     _currentSurfaceElevation = 0.0;
-     _glState = null;
-     _modelTransformGLF = null;
-     _glPositionOutdated = false;
-     _normalAtMarkPosition = null;
-     _textureSizeSetExternally = false;
-     _translationTCX = 0F;
-     _translationTCY = 0F;
-     _scalingTCX = 1F;
-     _scalingTCY = 1F;
-     _textureGLF = null;
-     _anchorU = 0.5F;
-     _anchorV = 0.5F;
-     _billboardGLF = null;
-     _textureHeightScale = 1.0F;
-     _textureWidthScale = 1.0F;
-     _effectScale = 1F;
-     _initialized = false;
-     _zoomInAppears = true;
-     _effectsScheduler = null;
-     _firstRender = true;
-     _effectTarget = null;
-     _zoomOutDisappears = false;
-     _deleteMarkOnDisappears = false;
-     _zoomOutDisappearsStarted = false;
-     _token = "";
-  
-  }
-
-  /**
-   * Creates a mark just with label, without icon
-   */
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
-  {
-     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, listener, false);
-  }
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData)
-  {
-     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, autoDeleteUserData, null, false);
-  }
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData)
-  {
-     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, userData, true, null, false);
-  }
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor)
-  {
-     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, labelShadowColor, null, true, null, false);
-  }
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor)
-  {
-     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, labelFontColor, Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
-  }
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize)
-  {
-     this(label, position, altitudeMode, minDistanceToCamera, labelFontSize, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
-  }
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
-  {
-     this(label, position, altitudeMode, minDistanceToCamera, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
-  }
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode)
-  {
-     this(label, position, altitudeMode, 4.5e+06, 20, Color.newFromRGBA(1, 1, 1, 1), Color.newFromRGBA(0, 0, 0, 1), null, true, null, false);
-  }
-  public Mark(String label, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, float labelFontSize, Color labelFontColor, Color labelShadowColor, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
-  {
-     _imageFactory = null;
-     _imageFactoryListener = null;
-     _label = label;
-     _labelBottom = true;
-     _iconURL = new URL("", false);
-     _position = new Geodetic3D(position);
-     _altitudeMode = altitudeMode;
-     _labelFontSize = labelFontSize;
-     _labelFontColor = labelFontColor;
-     _labelShadowColor = labelShadowColor;
-     _labelGapSize = 2;
-     _textureID = null;
-     _cartesianPosition = null;
-     _textureSolved = false;
-     _textureImage = null;
-     _renderedMark = false;
-     _textureWidth = 0F;
-     _textureHeight = 0F;
-     _userData = userData;
-     _autoDeleteUserData = autoDeleteUserData;
-     _minDistanceToCamera = minDistanceToCamera;
-     _maxDistanceToCamera = 0;
-     _listener = listener;
-     _autoDeleteListener = autoDeleteListener;
-     _imageID = "_" + label;
-     _surfaceElevationProvider = null;
-     _currentSurfaceElevation = 0.0;
-     _glState = null;
-     _modelTransformGLF = null;
-     _glPositionOutdated = false;
-     _normalAtMarkPosition = null;
-     _textureSizeSetExternally = false;
-     _textureGLF = null;
-     _translationTCX = 0F;
-     _translationTCY = 0F;
-     _scalingTCX = 1F;
-     _scalingTCY = 1F;
-     _anchorU = 0.5F;
-     _anchorV = 0.5F;
-     _billboardGLF = null;
-     _textureHeightScale = 1.0F;
-     _textureWidthScale = 1.0F;
-     _effectScale = 1F;
-     _initialized = false;
-     _zoomInAppears = true;
-     _effectsScheduler = null;
-     _firstRender = true;
-     _effectTarget = null;
-     _zoomOutDisappears = false;
-     _deleteMarkOnDisappears = false;
-     _zoomOutDisappearsStarted = false;
-     _token = "";
-  
-  }
-
-  /**
-   * Creates a mark just with icon, without label
-   */
-  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
-  {
-     this(iconURL, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
-  }
-  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
-  {
-     this(iconURL, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, null, false);
-  }
-  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData)
-  {
-     this(iconURL, position, altitudeMode, minDistanceToCamera, userData, true, null, false);
-  }
-  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
-  {
-     this(iconURL, position, altitudeMode, minDistanceToCamera, null, true, null, false);
-  }
-  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode)
-  {
-     this(iconURL, position, altitudeMode, 4.5e+06, null, true, null, false);
-  }
-  public Mark(URL iconURL, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
-  {
-     _imageFactory = null;
-     _imageFactoryListener = null;
-     _label = "";
-     _labelBottom = true;
-     _iconURL = iconURL;
-     _position = new Geodetic3D(position);
-     _altitudeMode = altitudeMode;
-     _labelFontSize = 20F;
-     _labelFontColor = Color.newFromRGBA(1, 1, 1, 1);
-     _labelShadowColor = Color.newFromRGBA(0, 0, 0, 1);
-     _labelGapSize = 2;
-     _textureID = null;
-     _cartesianPosition = null;
-     _textureSolved = false;
-     _textureImage = null;
-     _renderedMark = false;
-     _textureWidth = 0F;
-     _textureHeight = 0F;
-     _userData = userData;
-     _autoDeleteUserData = autoDeleteUserData;
-     _minDistanceToCamera = minDistanceToCamera;
-     _maxDistanceToCamera = 0;
-     _listener = listener;
-     _autoDeleteListener = autoDeleteListener;
-     _imageID = iconURL._path + "_";
-     _surfaceElevationProvider = null;
-     _currentSurfaceElevation = 0.0;
-     _glState = null;
-     _modelTransformGLF = null;
-     _glPositionOutdated = false;
-     _normalAtMarkPosition = null;
-     _textureSizeSetExternally = false;
-     _textureGLF = null;
-     _translationTCX = 0F;
-     _translationTCY = 0F;
-     _scalingTCX = 1F;
-     _scalingTCY = 1F;
-     _anchorU = 0.5F;
-     _anchorV = 0.5F;
-     _billboardGLF = null;
-     _textureHeightScale = 1.0F;
-     _textureWidthScale = 1.0F;
-     _effectScale = 1F;
-     _initialized = false;
-     _zoomInAppears = true;
-     _effectsScheduler = null;
-     _firstRender = true;
-     _effectTarget = null;
-     _zoomOutDisappears = false;
-     _deleteMarkOnDisappears = false;
-     _zoomOutDisappearsStarted = false;
-     _token = "";
-  
-  }
-
-  /**
-   * Creates a mark whith a given pre-renderer IImage
-   */
-  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
-  {
-     this(image, imageID, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
-  }
-  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
-  {
-     this(image, imageID, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, null, false);
-  }
-  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData)
-  {
-     this(image, imageID, position, altitudeMode, minDistanceToCamera, userData, true, null, false);
-  }
-  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
-  {
-     this(image, imageID, position, altitudeMode, minDistanceToCamera, null, true, null, false);
-  }
-  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode)
-  {
-     this(image, imageID, position, altitudeMode, 4.5e+06, null, true, null, false);
-  }
-  public Mark(IImage image, String imageID, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
-  {
-     _imageFactory = null;
-     _imageFactoryListener = null;
-     _label = "";
-     _labelBottom = true;
-     _iconURL = new URL(new URL("", false));
-     _position = new Geodetic3D(position);
-     _altitudeMode = altitudeMode;
-     _labelFontSize = 20F;
-     _labelFontColor = null;
-     _labelShadowColor = null;
-     _labelGapSize = 2;
-     _textureID = null;
-     _cartesianPosition = null;
-     _textureSolved = true;
-     _textureImage = image;
-     _renderedMark = false;
-     _textureWidth = image.getWidth();
-     _textureHeight = image.getHeight();
-     _userData = userData;
-     _autoDeleteUserData = autoDeleteUserData;
-     _minDistanceToCamera = minDistanceToCamera;
-     _maxDistanceToCamera = 0;
-     _listener = listener;
-     _autoDeleteListener = autoDeleteListener;
-     _imageID = imageID;
-     _surfaceElevationProvider = null;
-     _currentSurfaceElevation = 0.0;
-     _glState = null;
-     _modelTransformGLF = null;
-     _glPositionOutdated = false;
-     _normalAtMarkPosition = null;
-     _textureSizeSetExternally = false;
-     _translationTCX = 0F;
-     _translationTCY = 0F;
-     _scalingTCX = 1F;
-     _scalingTCY = 1F;
-     _anchorU = 0.5F;
-     _anchorV = 0.5F;
-     _billboardGLF = null;
-     _effectScale = 1F;
-     _textureHeightScale = 1.0F;
-     _textureWidthScale = 1.0F;
-     _initialized = false;
-     _zoomInAppears = true;
-     _effectsScheduler = null;
-     _firstRender = true;
-     _effectTarget = null;
-     _zoomOutDisappears = false;
-     _deleteMarkOnDisappears = false;
-     _zoomOutDisappearsStarted = false;
-     _token = "";
-  
-  }
-
-  /**
-   * Creates a mark whith a IImageFactory, in future versions it'll be the only constructor
-   */
-  public Mark(IImageFactory imageFactory, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener)
-  {
-     this(imageFactory, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, listener, false);
-  }
-  public Mark(IImageFactory imageFactory, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData)
-  {
-     this(imageFactory, position, altitudeMode, minDistanceToCamera, userData, autoDeleteUserData, null, false);
-  }
-  public Mark(IImageFactory imageFactory, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData)
-  {
-     this(imageFactory, position, altitudeMode, minDistanceToCamera, userData, true, null, false);
-  }
-  public Mark(IImageFactory imageFactory, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera)
-  {
-     this(imageFactory, position, altitudeMode, minDistanceToCamera, null, true, null, false);
-  }
-  public Mark(IImageFactory imageFactory, Geodetic3D position, AltitudeMode altitudeMode)
-  {
-     this(imageFactory, position, altitudeMode, 4.5e+06, null, true, null, false);
-  }
-  public Mark(IImageFactory imageFactory, Geodetic3D position, AltitudeMode altitudeMode, double minDistanceToCamera, MarkUserData userData, boolean autoDeleteUserData, MarkTouchListener listener, boolean autoDeleteListener)
-  {
-     _imageFactory = imageFactory;
-     _imageFactoryListener = null;
-     _label = "";
-     _labelBottom = true;
-     _iconURL = new URL(new URL("", false));
-     _position = new Geodetic3D(position);
-     _altitudeMode = altitudeMode;
-     _labelFontSize = 20F;
-     _labelFontColor = null;
-     _labelShadowColor = null;
-     _labelGapSize = 2;
-     _textureID = null;
-     _cartesianPosition = null;
-     _textureSolved = false;
-     _textureImage = null;
-     _renderedMark = false;
-     _textureWidth = 0F;
-     _textureHeight = 0F;
-     _userData = userData;
-     _autoDeleteUserData = autoDeleteUserData;
-     _minDistanceToCamera = minDistanceToCamera;
-     _maxDistanceToCamera = 0;
+     _maxDistanceToCamera = maxDistanceToCamera;
      _listener = listener;
      _autoDeleteListener = autoDeleteListener;
      _imageID = "";
@@ -731,11 +309,12 @@ public class Mark implements SurfaceElevationListener
      _anchorU = 0.5F;
      _anchorV = 0.5F;
      _billboardGLF = null;
+     _textureGLF = null;
      _effectScale = 1F;
      _textureHeightScale = 1.0F;
      _textureWidthScale = 1.0F;
      _initialized = false;
-     _zoomInAppears = true;
+     _zoomInAppears = zoomInAppears;
      _effectsScheduler = null;
      _firstRender = true;
      _effectTarget = null;
@@ -743,6 +322,12 @@ public class Mark implements SurfaceElevationListener
      _deleteMarkOnDisappears = false;
      _zoomOutDisappearsStarted = false;
      _token = "";
+    // element by element: in Java an assignment would share the caller's list
+    for (int i = 0; i < outfits.size(); i++)
+    {
+      _outfits.add(outfits.get(i));
+    }
+  
     if (_imageFactory.isMutable())
     {
       ILogger.instance().logError("Marks doesn't support mutable image factories");
@@ -767,8 +352,11 @@ public class Mark implements SurfaceElevationListener
     if (_effectTarget != null)
        _effectTarget.dispose();
   
-    _labelFontColor = null;
-    _labelShadowColor = null;
+    for (int i = 0; i < _outfits.size(); i++)
+    {
+      if (_outfits.get(i) != null)
+         _outfits.get(i).dispose();
+    }
   
     if (_position != null)
        _position.dispose();
@@ -818,11 +406,6 @@ public class Mark implements SurfaceElevationListener
     return _initialized;
   }
 
-  public final String getLabel()
-  {
-    return _label;
-  }
-
   public final Geodetic3D getPosition()
   {
     return _position;
@@ -840,36 +423,11 @@ public class Mark implements SurfaceElevationListener
       }
     }
   
-    if (!_textureSolved)
+    if (!_textureSolved && (_imageFactory != null))
     {
-      if (_imageFactory != null)
-      {
-        _imageFactoryListener = new MarkImageFactoryListener(_imageFactory, this);
-        _imageFactory.create(context, _imageFactoryListener, true);
-        _imageFactory = null; // ownership moved to MarkImageFactoryListener
-      }
-      else
-      {
-        final boolean hasIconURL = (_iconURL._path.length() != 0);
-        if (hasIconURL)
-        {
-          IDownloader downloader = context.getDownloader();
-  
-          downloader.requestImage(_iconURL, downloadPriority, TimeInterval.fromDays(30), true, new IconDownloadListener(this, _label, _labelBottom, _labelFontSize, _labelFontColor, _labelShadowColor, _labelGapSize), true);
-        }
-        else
-        {
-          final boolean hasLabel = (_label.length() != 0);
-          if (hasLabel)
-          {
-            ITextUtils.instance().createLabelImage(_label, _labelFontSize, _labelFontColor, _labelShadowColor, new MarkLabelImageListener(null, this), true);
-          }
-          else
-          {
-            ILogger.instance().logWarning("Mark created without label nor icon");
-          }
-        }
-      }
+      _imageFactoryListener = new MarkImageFactoryListener(_imageFactory, this);
+      _imageFactory.create(context, _imageFactoryListener, true);
+      _imageFactory = null; // ownership moved to MarkImageFactoryListener
     }
   }
 
@@ -883,33 +441,18 @@ public class Mark implements SurfaceElevationListener
     return _renderedMark;
   }
 
-  public final void onTextureDownloadError()
-  {
-    _textureSolved = true;
-  
-    _labelFontColor = null;
-    _labelFontColor = null;
-    _labelShadowColor = null;
-    _labelShadowColor = null;
-  
-    ILogger.instance().logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")", _iconURL._path, _label);
-  }
-
-  public final void onTextureDownload(IImage image)
-  {
-    _labelFontColor = null;
-    _labelFontColor = null;
-    _labelShadowColor = null;
-    _labelShadowColor = null;
-  
-    onTextureResolved(image);
-  }
-
   public final void onImageCreated(IImage image, String imageName)
   {
     _imageID = imageName;
   
     _imageFactoryListener = null;
+  
+    final MarkAnchor anchor = _outfits.get(0).getAnchor();
+    if (anchor != null)
+    {
+      final Vector2F anchorUV = anchor.getAnchor(image);
+      setMarkAnchor(anchorUV._x, anchorUV._y);
+    }
   
     onTextureResolved(image);
   }

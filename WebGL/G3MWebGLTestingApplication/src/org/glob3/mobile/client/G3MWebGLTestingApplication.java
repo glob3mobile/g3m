@@ -7,6 +7,8 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkBuilder;
+import org.glob3.mobile.generated.DownloaderImageFactory;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Sector;
@@ -93,13 +95,10 @@ public class G3MWebGLTestingApplication
                }, //
                true);
 
-      final Mark mark = new Mark( //
-               new URL("g3m-marker.png"), //
-               Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 0), //
-               AltitudeMode.ABSOLUTE, //
-               0 // minDistanceToCamera
-      );
-      marksRenderer.addMark(mark);
+      final MarkBuilder builder = new MarkBuilder();
+      builder.setPosition(Geodetic3D.fromDegrees(28.034468668529083146, -15.904092315837871752, 0));
+      builder.addOutfit(new DownloaderImageFactory(new URL("g3m-marker.png")));
+      marksRenderer.addMark(builder.build());
 
       return marksRenderer;
    }

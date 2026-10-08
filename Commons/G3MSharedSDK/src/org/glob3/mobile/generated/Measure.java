@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class Measure_VertexShape;
 //class MeasureHandler;
 //class Geodetic3D;
+//class Mark;
 
 
 public class Measure
@@ -135,8 +136,7 @@ public class Measure
   
     final Geodetic3D position = Geodetic3D.linearInterpolation(from.getScaledGeodetic(_verticalExaggeration, _deltaHeight), to.getScaledGeodetic(_verticalExaggeration, _deltaHeight), 0.5);
   
-    Mark mark = new Mark(label, new Geodetic3D(position._latitude, position._longitude, position._height + _vertexSphereRadius), AltitudeMode.ABSOLUTE);
-    mark.setZoomInAppears(false);
+    Mark mark = createLabelMark(label, new Geodetic3D(position._latitude, position._longitude, position._height + _vertexSphereRadius));
   
     mark.setToken(_instanceID);
   
@@ -170,6 +170,18 @@ public class Measure
     {
       createDistanceLabel(verticesCount - 1, 0);
     }
+  }
+
+
+  // white on a black shadow, as the label marks drew before LabelStyle
+  private Mark createLabelMark(String label, Geodetic3D position)
+  {
+    MarkBuilder builder = new MarkBuilder();
+    builder.setMinDistanceToCamera(4.5e+06);
+    builder.setZoomInAppears(false);
+    builder.setPosition(position);
+    builder.addOutfit(new LabelImageFactory(label, LabelStyle.shadowed(GFont.sansSerif(20), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2))));
+    return builder.build();
   }
   private void createVertexAngleLabels()
   {
@@ -206,8 +218,7 @@ public class Measure
   
       final Geodetic3D currentGeodetic = current.getScaledGeodetic(_verticalExaggeration, _deltaHeight);
   
-      Mark mark = new Mark(label, new Geodetic3D(currentGeodetic._latitude, currentGeodetic._longitude, currentGeodetic._height + _vertexSphereRadius *2), AltitudeMode.ABSOLUTE);
-      mark.setZoomInAppears(false);
+      Mark mark = createLabelMark(label, new Geodetic3D(currentGeodetic._latitude, currentGeodetic._longitude, currentGeodetic._height + _vertexSphereRadius *2));
   
       mark.setToken(_instanceID);
   

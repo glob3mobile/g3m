@@ -19,6 +19,10 @@
 #include <G3M/GEOFeature.hpp>
 #include <G3M/BoxShape.hpp>
 #include <G3M/Mark.hpp>
+#include <G3M/MarkBuilder.hpp>
+#include <G3M/LabelImageFactory.hpp>
+#include <G3M/LabelStyle.hpp>
+#include <G3M/GFont.hpp>
 #include <G3M/GEOShapeSymbol.hpp>
 #include <G3M/GEOMarkSymbol.hpp>
 #include <G3M/PlanetRenderer.hpp>
@@ -52,11 +56,18 @@ public:
 
 
     const std::string label = IStringUtils::instance()->toString( IMathUtils::instance()->round(popMax / 1000) );
-    Mark* mark = new Mark(label,
-                          Geodetic3D(geometry->getPosition(),
-                                     height / 5),
-                          RELATIVE_TO_GROUND);
-    result->push_back(new GEOMarkSymbol(mark));
+    MarkBuilder builder;
+    builder.setAltitudeMode(RELATIVE_TO_GROUND);
+    builder.setMinDistanceToCamera(4.5e+06);
+    builder.setPosition(Geodetic3D(geometry->getPosition(),
+                                   height / 5));
+    builder.addOutfit(new LabelImageFactory(label,
+                                          LabelStyle::shadowed(GFont::sansSerif(20),
+                                                               Color::WHITE,
+                                                               Color::BLACK,
+                                                               1,
+                                                               Vector2F(2, 2))));
+    result->push_back(new GEOMarkSymbol(builder.build()));
 
     return result;
   }

@@ -18,6 +18,10 @@
 #include <G3M/Camera.hpp>
 #include <G3M/CameraPose.hpp>
 #include <G3M/Mark.hpp>
+#include <G3M/MarkBuilder.hpp>
+#include <G3M/LabelImageFactory.hpp>
+#include <G3M/LabelStyle.hpp>
+#include <G3M/GFont.hpp>
 #include <G3M/MarksRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -43,7 +47,16 @@ static void addCityLabel(MarksRenderer*     marksRenderer,
                          const std::string& name,
                          const Geodetic3D&  city) {
   const double visibleFromAnyDistance = 1e9;
-  marksRenderer->addMark( new Mark(name, city, ABSOLUTE, visibleFromAnyDistance) );
+  MarkBuilder builder;
+  builder.setMinDistanceToCamera(visibleFromAnyDistance);
+  builder.setPosition(city);
+  builder.addOutfit(new LabelImageFactory(name,
+                                          LabelStyle::shadowed(GFont::sansSerif(20),
+                                                               Color::WHITE,
+                                                               Color::BLACK,
+                                                               1,
+                                                               Vector2F(2, 2))));
+  marksRenderer->addMark( builder.build() );
 }
 
 

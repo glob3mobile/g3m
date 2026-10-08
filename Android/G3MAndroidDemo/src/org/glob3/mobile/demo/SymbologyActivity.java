@@ -26,6 +26,8 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkBuilder;
+import org.glob3.mobile.generated.DownloaderImageFactory;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SingleBILElevationDataProvider;
@@ -192,15 +194,13 @@ public class SymbologyActivity
                                      }
                                   };
 
-                                  final Mark mark = new Mark( //
-                                           new URL("file:///restaurant-24@2x.png"), //
-                                           new Geodetic3D(geometry.getPosition(), 0), //
-                                           AltitudeMode.RELATIVE_TO_GROUND, //
-                                           5000, //
-                                           null, //
-                                           false, //
-                                           markListener, //
-                                           true);
+                                  final MarkBuilder builder = new MarkBuilder();
+                                  builder.setAltitudeMode(AltitudeMode.RELATIVE_TO_GROUND);
+                                  builder.setMinDistanceToCamera(5000);
+                                  builder.setPosition(new Geodetic3D(geometry.getPosition(), 0));
+                                  builder.addOutfit(new DownloaderImageFactory(new URL("file:///restaurant-24@2x.png")));
+                                  builder.setTouchListener(markListener, true);
+                                  final Mark mark = builder.build();
 
 
                                   result.add(new GEOMarkSymbol(mark));

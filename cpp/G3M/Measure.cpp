@@ -16,6 +16,11 @@
 #include "EllipsoidShape.hpp"
 #include "DirectMesh.hpp"
 #include "Mark.hpp"
+#include "MarkBuilder.hpp"
+#include "LabelImageFactory.hpp"
+#include "LabelStyle.hpp"
+#include "GFont.hpp"
+#include "Color.hpp"
 #include "MeasureHandler.hpp"
 #include "ShapesRenderer.hpp"
 #include "MeshRenderer.hpp"
@@ -344,16 +349,30 @@ void Measure::createDistanceLabel(const size_t vertexIndexFrom,
                                                               to->getScaledGeodetic(_verticalExaggeration, _deltaHeight),
                                                               0.5);
 
-  Mark* mark = new Mark(label,
-                        Geodetic3D(position._latitude,
-                                   position._longitude,
-                                   position._height + _vertexSphereRadius),
-                        ABSOLUTE);
-  mark->setZoomInAppears(false);
+  Mark* mark = createLabelMark(label,
+                               Geodetic3D(position._latitude,
+                                          position._longitude,
+                                          position._height + _vertexSphereRadius));
 
   mark->setToken(_instanceID);
 
   _marksRenderer->addMark(mark);
+}
+
+// white on a black shadow, as the label marks drew before LabelStyle
+Mark* Measure::createLabelMark(const std::string& label,
+                               const Geodetic3D&  position) const {
+  MarkBuilder builder;
+  builder.setMinDistanceToCamera(4.5e+06);
+  builder.setZoomInAppears(false);
+  builder.setPosition(position);
+  builder.addOutfit(new LabelImageFactory(label,
+                                          LabelStyle::shadowed(GFont::sansSerif(20),
+                                                               Color::WHITE,
+                                                               Color::BLACK,
+                                                               1,
+                                                               Vector2F(2, 2))));
+  return builder.build();
 }
 
 void Measure::createEdgeDistanceLabels() {
@@ -411,12 +430,10 @@ void Measure::createVertexAngleLabels() {
 
     const Geodetic3D currentGeodetic = current->getScaledGeodetic(_verticalExaggeration, _deltaHeight);
 
-    Mark* mark = new Mark(label,
-                          Geodetic3D(currentGeodetic._latitude,
-                                     currentGeodetic._longitude,
-                                     currentGeodetic._height + _vertexSphereRadius*2),
-                          ABSOLUTE);
-    mark->setZoomInAppears(false);
+    Mark* mark = createLabelMark(label,
+                                 Geodetic3D(currentGeodetic._latitude,
+                                            currentGeodetic._longitude,
+                                            currentGeodetic._height + _vertexSphereRadius*2));
 
     mark->setToken(_instanceID);
 

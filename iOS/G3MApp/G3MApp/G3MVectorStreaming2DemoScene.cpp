@@ -16,6 +16,7 @@
 #include <G3M/GEO2DPointGeometry.hpp>
 #include <G3M/GEOFeature.hpp>
 #include <G3M/Mark.hpp>
+#include <G3M/MarkBuilder.hpp>
 #include <G3M/JSONObject.hpp>
 #include <G3M/JSONString.hpp>
 #include <G3M/JSONNumber.hpp>
@@ -86,13 +87,11 @@ public:
 
     int pointSize = 12;
 
-    Mark* mark = new Mark(new CircleImageFactory(featureColor, pointSize),
-                          position,
-                          ABSOLUTE,
-                          0 // minDistanceToCamera
-                          );
+    MarkBuilder builder;
+    builder.setPosition(position);
+    builder.addOutfit(new CircleImageFactory(featureColor, pointSize));
 
-    collector.add(mark);
+    collector.add(builder.build());
   }
 
   void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
@@ -124,21 +123,19 @@ public:
     const double area = (15000.0 * clusterPercent);
     const int radius = 12 + mu->round((float) mu->sqrt(area / PI));
 
-    Mark* mark = new Mark(new StackLayoutImageFactory(new CircleImageFactory(Color::WHITE,
-                                                                             radius),
-                                                      new LabelImageFactory(label,
-                                                                            LabelStyle::shadowed(GFont::sansSerif(labelFontSize, true),
-                                                                                                 Color::BLACK,   /* color        */
-                                                                                                 Color::WHITE,   /* shadowColor  */
-                                                                                                 5.0f,           /* shadowBlur   */
-                                                                                                 Vector2F(0, 0)) /* shadowOffset */)
-                                                      ),
-                          position,
-                          ABSOLUTE,
-                          0 // minDistanceToCamera
-                          );
+    MarkBuilder builder;
+    builder.setPosition(position);
+    builder.addOutfit(new StackLayoutImageFactory(new CircleImageFactory(Color::WHITE,
+                                                                         radius),
+                                                  new LabelImageFactory(label,
+                                                                        LabelStyle::shadowed(GFont::sansSerif(labelFontSize, true),
+                                                                                             Color::BLACK,   /* color        */
+                                                                                             Color::WHITE,   /* shadowColor  */
+                                                                                             5.0f,           /* shadowBlur   */
+                                                                                             Vector2F(0, 0)) /* shadowOffset */)
+                                                  ));
 
-    collector.add(mark);
+    collector.add(builder.build());
   }
 
 };

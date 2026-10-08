@@ -19,7 +19,13 @@ import org.glob3.mobile.generated.JSONArray;
 import org.glob3.mobile.generated.JSONBaseObject;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkBuilder;
+import org.glob3.mobile.generated.ColumnLayoutImageFactory;
+import org.glob3.mobile.generated.DownloaderImageFactory;
+import org.glob3.mobile.generated.LabelImageFactory;
+import org.glob3.mobile.generated.LabelStyle;
+import org.glob3.mobile.generated.GFont;
+import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.TimeInterval;
@@ -119,13 +125,16 @@ public class G3MShowMarkersActivity
                      }
 
 
-                     _weatherMarkers.addMark(new Mark( //
-                              city.getAsString("name", ""), //
-                              new URL("http://openweathermap.org/img/w/" + icon, false), //
-                              new Geodetic3D(position, 0), //
-                              AltitudeMode.RELATIVE_TO_GROUND, 0, //
-                              true, //
-                              14));
+                     final MarkBuilder builder = new MarkBuilder();
+                     builder.setAltitudeMode(AltitudeMode.RELATIVE_TO_GROUND);
+                     builder.setPosition(new Geodetic3D(position, 0));
+                     builder.addOutfit(new ColumnLayoutImageFactory( //
+                              new DownloaderImageFactory(new URL("http://openweathermap.org/img/w/" + icon, false)), //
+                              new LabelImageFactory(city.getAsString("name", ""), //
+                                       LabelStyle.shadowed(GFont.sansSerif(14), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2))), //
+                              null, //
+                              2));
+                     _weatherMarkers.addMark(builder.build());
 
                   }
 

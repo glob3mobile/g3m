@@ -30,6 +30,7 @@ package org.glob3.mobile.generated;
 //class MarkImageFactoryListener;
 //class TouchEvent;
 //class ModelTransformGLFeature;
+//class MarkOutfit;
 
 public class MarkUserData
 {

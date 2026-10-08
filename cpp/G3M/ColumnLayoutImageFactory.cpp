@@ -86,7 +86,19 @@ void ColumnLayoutImageFactory::doLayout(const G3MContext* context,
 {
   bool anyError = false;
   std::string error = "";
-  std::string imageName = "Col";
+  // the textures are cached by image name: each alignment needs its own
+  std::string imageName;
+  switch (_childrenAlignment) {
+    case Left:
+      imageName = "ColLeft";
+      break;
+    case Right:
+      imageName = "ColRight";
+      break;
+    default:
+      imageName = "Col";
+      break;
+  }
 
   int maxWidth = 0;
   int accumulatedHeight = 0;

@@ -9,6 +9,7 @@
 #define G3M_Mark
 
 #include <string>
+#include <vector>
 
 #include "Geodetic3D.hpp"
 #include "G3MContext.hpp"
@@ -38,6 +39,7 @@ class MarksRenderer;
 class MarkImageFactoryListener;
 class TouchEvent;
 class ModelTransformGLFeature;
+class MarkOutfit;
 
 class MarkUserData {
 public:
@@ -52,60 +54,8 @@ private:
   IImageFactory* _imageFactory;
   MarkImageFactoryListener* _imageFactoryListener;
 
-  /**
-   * The text the mark displays.
-   * Useless if the mark does not have label.
-   */
-  const std::string _label;
-  /**
-   * Flag to know if the label will be located under the icon (if TRUE) or on its right (if FALSE).
-   * Useless if the mark does not have label or icon.
-   * Default value: TRUE
-   */
-  const bool        _labelBottom;
-  /**
-   * The font size of the text.
-   * Useless if the mark does not have label.
-   * Default value: 20
-   */
-  const float       _labelFontSize;
+  std::vector<MarkOutfit*> _outfits;
 
-
-  /**
-   * The color of the text.
-   * Useless if the mark does not have label.
-   * Default value: white
-   */
-#ifdef C_CODE
-  const Color*      _labelFontColor;
-#endif
-#ifdef JAVA_CODE
-  private Color     _labelFontColor;
-#endif
-
-  /**
-   * The color of the text shadow.
-   * Useless if the mark does not have label.
-   * Default value: black
-   */
-#ifdef C_CODE
-  const Color*      _labelShadowColor;
-#endif
-#ifdef JAVA_CODE
-  private Color     _labelShadowColor;
-#endif
-
-  /**
-   * The number of pixels between the icon and the text.
-   * Useless if the mark does not have label or icon.
-   * Default value: 2
-   */
-  const int         _labelGapSize;
-  /**
-   * The URL to get the image file.
-   * Useless if the mark does not have icon.
-   */
-  const URL         _iconURL;
   /**
    * The point where the mark will be geo-located.
    */
@@ -233,84 +183,22 @@ private:
 public:
   
   
-  /**
-   * Creates a mark with icon and label
-   */
-  Mark(const std::string& label,
-       const URL&         iconURL,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       const bool         labelBottom=true,
-       const float        labelFontSize=20,
-       const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-       const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-       const int          labelGapSize=2,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a mark just with label, without icon
-   */
-  Mark(const std::string& label,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       const float        labelFontSize=20,
-       const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-       const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a mark just with icon, without label
-   */
-  Mark(const URL&         iconURL,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a mark whith a given pre-renderer IImage
-   */
-  Mark(const IImage*      image,
-       const std::string& imageID,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a mark whith a IImageFactory, in future versions it'll be the only constructor
-   */
-  Mark(IImageFactory*     imageFactory,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
+  /** outfits: largest first, at least one; the mark keeps a copy of the vector and owns the outfits. MarkBuilder fills them */
+  Mark(const std::vector<MarkOutfit*>& outfits,
+       const Geodetic3D&               position,
+       AltitudeMode                    altitudeMode,
+       double                          minDistanceToCamera,
+       double                          maxDistanceToCamera,
+       MarkUserData*                   userData,
+       bool                            autoDeleteUserData,
+       MarkTouchListener*              listener,
+       bool                            autoDeleteListener,
+       bool                            zoomInAppears);
 
   ~Mark();
 
   bool isInitialized() const {
     return _initialized;
-  }
-
-  const std::string getLabel() const {
-    return _label;
   }
 
   const Geodetic3D getPosition() const {
@@ -325,10 +213,6 @@ public:
   bool isRendered() const {
     return _renderedMark;
   }
-
-  void onTextureDownloadError();
-
-  void onTextureDownload(const IImage* image);
 
   void onImageCreated(const IImage* image,
                       const std::string& imageName);

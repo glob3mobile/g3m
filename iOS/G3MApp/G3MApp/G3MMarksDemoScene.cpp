@@ -15,6 +15,22 @@
 #include <G3M/Geodetic3D.hpp>
 #include <G3M/Geodetic2D.hpp>
 #include <G3M/Mark.hpp>
+#include <G3M/MarkBuilder.hpp>
+#include <G3M/FixedMarkAnchor.hpp>
+#include <G3M/DownloaderImageFactory.hpp>
+#include <G3M/LabelImageFactory.hpp>
+#include <G3M/LabelStyle.hpp>
+#include <G3M/GFont.hpp>
+#include <G3M/FittedLabelImageFactory.hpp>
+#include <G3M/RowLayoutImageFactory.hpp>
+#include <G3M/BoxImageBackground.hpp>
+#include <G3M/ResizerImageFactory.hpp>
+#include <G3M/AbsoluteImageSizer.hpp>
+#include <G3M/CircleImageFactory.hpp>
+#include <G3M/MarkAnchor.hpp>
+#include <G3M/IImage.hpp>
+#include <G3M/IFactory.hpp>
+#include <G3M/IDeviceInfo.hpp>
 #include <G3M/MarksRenderer.hpp>
 #include <G3M/MarkTouchListener.hpp>
 #include <G3M/TouchEvent.hpp>
@@ -123,6 +139,23 @@ public:
 };
 
 
+/** the anchor on the centre of an icon drawn at the left of the image; the image width is known only once it exists */
+class G3MMarksDemoScene_IconCenterMarkAnchor : public MarkAnchor {
+private:
+  const float _iconCenterX; // pixels from the image's left edge
+
+public:
+  G3MMarksDemoScene_IconCenterMarkAnchor(const float iconCenterX) :
+  _iconCenterX(iconCenterX)
+  {
+  }
+
+  Vector2F getAnchor(const IImage* image) const {
+    return Vector2F(_iconCenterX / image->getWidth(), 0.5f);
+  }
+};
+
+
 void G3MMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model = getModel();
 
@@ -142,6 +175,9 @@ void G3MMarksDemoScene::rawSelectOption(const std::string& option,
   }
   else if (option == "Moving") {
     showMovingMark();
+  }
+  else if (option == "Labels") {
+    showLabels();
   }
 }
 
@@ -165,19 +201,13 @@ void G3MMarksDemoScene::removeFeature() {
 void G3MMarksDemoScene::showBasicMark() {
   G3MDemoModel* model = getModel();
 
-  Mark* mark = new Mark(URL("file:///mark-icon-1.png"),                                            // iconURL
-                        Geodetic3D::fromDegrees(21.580896830714426216, -71.930032768589384773, 0), // position
-                        ABSOLUTE,                                                                  // altitudeMode
-                        4500000,                                                                   // minDistanceToCamera=4.5e+06
-                        NULL,                                                                      // userData=NULL
-                        true,                                                                      // autoDeleteUserData=true
-                        new G3MMarksDemoScene_MarkTouchListener(),                                 // MarkTouchListener* listener=NULL
-                        true                                                                       // autoDeleteListener=false
-                        );
-
-//  mark->setMarkAnchor(1, 0.5);
-  mark->setMarkAnchor(0.5, 1);
-//  mark->setMarkAnchor(1, 1);
+  MarkBuilder builder;
+  builder.setMinDistanceToCamera(4.5e+06);
+  builder.setPosition(Geodetic3D::fromDegrees(21.580896830714426216, -71.930032768589384773, 0));
+  builder.addOutfit(new DownloaderImageFactory(URL("file:///mark-icon-1.png")),
+                    new FixedMarkAnchor(0.5, 1)); // the bottom centre sits on the position
+  builder.setTouchListener(new G3MMarksDemoScene_MarkTouchListener(), true);
+  Mark* mark = builder.build();
 
 //  mark->setScreenSizeScale(2, 0.5);
   mark->setScreenSizeScale(0.5, 1.5);
@@ -194,32 +224,25 @@ void G3MMarksDemoScene::showAnimatedMarks() {
   G3MWidget*     g3mWidget     = model->getG3MWidget();
   MarksRenderer* marksRenderer = model->getMarksRenderer();
 
+  MarkBuilder builder;
+  builder.setMinDistanceToCamera(4.5e+06);
+
   {
-    Mark* animMark = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
-                              Geodetic3D::fromDegrees( 26.099999998178312, -15.41699999885168, 0),
-                              ABSOLUTE,
-                              4.5e+06,
-                              NULL,
-                              true,
-                              NULL,
-                              false);
+    builder.setPosition(Geodetic3D::fromDegrees( 26.099999998178312, -15.41699999885168, 0));
+    builder.addOutfit(new DownloaderImageFactory(URL(URL::FILE_PROTOCOL + "radar-sprite.png")));
+    Mark* animMark = builder.build();
     animMark->setScreenSizeScale(0.05, 0.1);
     g3mWidget->addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
     marksRenderer->addMark(animMark);
   }
 
   {
-    Mark* animMark2 = new Mark(URL(URL::FILE_PROTOCOL + "radar-sprite.png"),
-                               Geodetic3D::fromDegrees( 25.428140, -17.016841, 0),
-                               ABSOLUTE,
-                               4.5e+06,
-                               NULL,
-                               true,
-                               NULL,
-                               false);
+    builder.setPosition(Geodetic3D::fromDegrees( 25.428140, -17.016841, 0));
+    builder.addOutfit(new DownloaderImageFactory(URL(URL::FILE_PROTOCOL + "radar-sprite.png")),
+                      new FixedMarkAnchor(0.5, 1));
+    Mark* animMark2 = builder.build();
 
     animMark2->setScreenSize(100,100);
-    animMark2->setMarkAnchor(0.5, 1.0);
     marksRenderer->addMark(animMark2);
     g3mWidget->addPeriodicalTask(new TextureAtlasMarkAnimationTask(animMark2, 4, 2, 7, TimeInterval::fromMilliseconds(100)));
   }
@@ -235,25 +258,24 @@ void G3MMarksDemoScene::showAnimatedMarks() {
   };
 
   for (int i = 0; i < 7; i++) {
-    Mark* pinMark = new Mark(URL(URL::FILE_PROTOCOL + "pin.png"),
-                             canarias[i],
-                             ABSOLUTE,
-                             4.5e+06,
-                             NULL,
-                             true,
-                             NULL,
-                             false);
+    builder.setPosition(canarias[i]);
+    builder.addOutfit(new DownloaderImageFactory(URL(URL::FILE_PROTOCOL + "pin.png")),
+                      new FixedMarkAnchor(0.5, 1));
+    Mark* pinMark = builder.build();
 
-    pinMark->setMarkAnchor(0.5, 1.0);
     marksRenderer->addMark(pinMark);
     g3mWidget->addPeriodicalTask(new G3MMarksDemoScene_RescaleMarkTask(pinMark, TimeInterval::fromMilliseconds(100)));
   }
 
   {
-    Mark* regMark = new Mark("HELLO ANIMATED MARKS!",
-                             Geodetic3D::fromDegrees( 27.599999998178312, -15.41699999885168, 0),
-                             ABSOLUTE);
-    marksRenderer->addMark(regMark);
+    builder.setPosition(Geodetic3D::fromDegrees( 27.599999998178312, -15.41699999885168, 0));
+    builder.addOutfit(new LabelImageFactory("HELLO ANIMATED MARKS!",
+                                            LabelStyle::shadowed(GFont::sansSerif(20),
+                                                                 Color::WHITE,
+                                                                 Color::BLACK,
+                                                                 1,
+                                                                 Vector2F(2, 2))));
+    marksRenderer->addMark(builder.build());
   }
 
   animateCameraTo(Geodetic3D::fromDegrees(16.978838148049202772, -16.774575794632177406, 770825.79245571023785),
@@ -266,15 +288,13 @@ void G3MMarksDemoScene::showMovingMark() {
 
   const Geodetic2D southernmost = Geodetic2D::fromDegrees(40, -3.7);
 
-  Mark* mark = new Mark(URL(URL::FILE_PROTOCOL + "pin.png"),
-                        Geodetic3D(southernmost, 0),
-                        ABSOLUTE,
-                        0,     // minDistanceToCamera: visible at any distance, only the horizon hides it
-                        NULL,
-                        true,
-                        new G3MMarksDemoScene_MarkTouchListener(),
-                        true);
-  mark->setMarkAnchor(0.5, 1.0);
+  // no distance limit: only the horizon hides it
+  MarkBuilder builder;
+  builder.setPosition(Geodetic3D(southernmost, 0));
+  builder.addOutfit(new DownloaderImageFactory(URL(URL::FILE_PROTOCOL + "pin.png")),
+                    new FixedMarkAnchor(0.5, 1));
+  builder.setTouchListener(new G3MMarksDemoScene_MarkTouchListener(), true);
+  Mark* mark = builder.build();
   model->getMarksRenderer()->addMark(mark);
 
   // from Madrid to beyond the camera's horizon and back
@@ -287,6 +307,73 @@ void G3MMarksDemoScene::showMovingMark() {
   animateCameraTo(Geodetic3D::fromDegrees(23.492082217034354841, -7.2163600884566534432, 3060044.582639911212),
                   Angle::fromDegrees(-3.743394),
                   Angle::fromDegrees(-58.954799));
+}
+
+void G3MMarksDemoScene::showLabels() {
+  MarksRenderer* marksRenderer = getModel()->getMarksRenderer();
+
+  const LabelStyle boxedStyle = LabelStyle::boxed(GFont::sansSerif(16),
+                                                  Color::WHITE,
+                                                  Vector2F(6, 4),               /* padding         */
+                                                  Color::fromRGBA(0, 0, 0, 0.6f), /* backgroundColor */
+                                                  6                             /* cornerRadius    */);
+
+  MarkBuilder builder;
+
+  // a long name, split in two lines by FittedLabelImageFactory, with each alignment
+  const std::string longName = "Bibliothèque nationale de France";
+  const HorizontalAlignment alignments[] = { Left, Center, Right };
+  for (int i = 0; i < 3; i++) {
+    builder.setPosition(Geodetic3D::fromDegrees(48.86, 2.20 + (i * 0.15), 0));
+    builder.addOutfit(new FittedLabelImageFactory(longName,
+                                                  boxedStyle,
+                                                  "Washington, D.C.", /* maxWidthText      */
+                                                  1,                  /* minFontSizeFactor: keep the size */
+                                                  2,                  /* lineSeparation    */
+                                                  alignments[i]));
+    marksRenderer->addMark(builder.build());
+  }
+
+  // an icon and a label in one box, anchored on the icon's centre by a MarkAnchor computed from the image
+  {
+    const float pixelRatio = IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
+    const int   iconPoints = 24;
+    const float padding    = 8; // pixels: the row layout draws on a plain canvas
+    const Geodetic3D position = Geodetic3D::fromDegrees(48.80, 2.35, 0);
+
+    IImageFactory* icon = new ResizerImageFactory(new DownloaderImageFactory(URL("file:///mark-icon-1.png")),
+                                                  new AbsoluteImageSizer(iconPoints),
+                                                  new AbsoluteImageSizer(iconPoints));
+    IImageFactory* label = new FittedLabelImageFactory(longName,
+                                                       LabelStyle::plain(GFont::sansSerif(16), Color::WHITE),
+                                                       "Washington, D.C.",
+                                                       1,
+                                                       2,
+                                                       Left);
+
+    builder.setPosition(position);
+    builder.addOutfit(new RowLayoutImageFactory(icon,
+                                                label,
+                                                new BoxImageBackground(Vector2F::ZERO,     /* margin      */
+                                                                       0,                  /* borderWidth */
+                                                                       Color::TRANSPARENT, /* borderColor */
+                                                                       Vector2F(padding, padding),
+                                                                       Color::fromRGBA(0, 0, 0, 0.6f),
+                                                                       12),
+                                                (int) (6 * pixelRatio)),
+                      // the resizer draws on a retina canvas: the icon is iconPoints times the pixel ratio
+                      new G3MMarksDemoScene_IconCenterMarkAnchor(padding + ((iconPoints * pixelRatio) / 2)));
+    marksRenderer->addMark(builder.build());
+
+    // a red dot on the same position shows where the anchor lands
+    builder.setPosition(position);
+    builder.addOutfit(new CircleImageFactory(Color::RED, 3));
+    marksRenderer->addMark(builder.build());
+  }
+
+  animateCameraTo(Geodetic3D::fromDegrees(48.55, 2.35, 45000),
+                  Angle::zero(),
+                  Angle::fromDegrees(-60));
 }
 
 void G3MMarksDemoScene::deactivate(const G3MContext* context) {

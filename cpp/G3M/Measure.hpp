@@ -21,6 +21,7 @@ class Planet;
 class Measure_VertexShape;
 class MeasureHandler;
 class Geodetic3D;
+class Mark;
 
 
 class Measure {
@@ -59,6 +60,9 @@ private:
                            const size_t vertexIndexTo);
 
   void createEdgeDistanceLabels();
+
+  Mark* createLabelMark(const std::string& label,
+                        const Geodetic3D&  position) const;
   void createVertexAngleLabels();
   
   int _selectedVertexIndex;

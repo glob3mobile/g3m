@@ -34,6 +34,14 @@
 		CF277C8923E2C5E7000B969C /* CanvasOwnerImageListenerWrapper.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF277C8723E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.hpp */; };
 		CF29562F3077E1FF00FC4904 /* TextureAtlasMarkAnimationTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF29562E3077E1FF00FC4904 /* TextureAtlasMarkAnimationTask.cpp */; };
 		CF2956303077E21400FC4904 /* TextureAtlasMarkAnimationTask.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF29562D3077E1FF00FC4904 /* TextureAtlasMarkAnimationTask.hpp */; };
+		CF29563A3077EA4A00FC4904 /* MarkAnchor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2956353077EA4A00FC4904 /* MarkAnchor.cpp */; };
+		CF29563B3077EA4A00FC4904 /* MarkBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2956373077EA4A00FC4904 /* MarkBuilder.cpp */; };
+		CF29563C3077EA4A00FC4904 /* FixedMarkAnchor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2956333077EA4A00FC4904 /* FixedMarkAnchor.cpp */; };
+		CF29563D3077EA4A00FC4904 /* MarkOutfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2956393077EA4A00FC4904 /* MarkOutfit.cpp */; };
+		CF29563E3077EA5C00FC4904 /* FixedMarkAnchor.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2956323077EA4A00FC4904 /* FixedMarkAnchor.hpp */; };
+		CF29563F3077EA5C00FC4904 /* MarkAnchor.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2956343077EA4A00FC4904 /* MarkAnchor.hpp */; };
+		CF2956403077EA5C00FC4904 /* MarkBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2956363077EA4A00FC4904 /* MarkBuilder.hpp */; };
+		CF2956413077EA5C00FC4904 /* MarkOutfit.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2956383077EA4A00FC4904 /* MarkOutfit.hpp */; };
 		CF32C66F25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF32C66D25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp */; };
 		CF32C67325D3EFB700F02D13 /* XPCHeightPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF32C66E25D3EF5100F02D13 /* XPCHeightPointColorizer.hpp */; };
 		CF32C67725D3F5ED00F02D13 /* MutableColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF32C67525D3F5ED00F02D13 /* MutableColor.cpp */; };
@@ -979,6 +987,10 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF29563E3077EA5C00FC4904 /* FixedMarkAnchor.hpp in CopyFiles */,
+				CF29563F3077EA5C00FC4904 /* MarkAnchor.hpp in CopyFiles */,
+				CF2956403077EA5C00FC4904 /* MarkBuilder.hpp in CopyFiles */,
+				CF2956413077EA5C00FC4904 /* MarkOutfit.hpp in CopyFiles */,
 				CF2956303077E21400FC4904 /* TextureAtlasMarkAnimationTask.hpp in CopyFiles */,
 				CFFED2EA307664BB003B788A /* YaleBrightStars.hpp in CopyFiles */,
 				CFFED2E63076637B003B788A /* StarsRenderer.hpp in CopyFiles */,
@@ -1530,6 +1542,14 @@
 		CF277C8723E2C2C9000B969C /* CanvasOwnerImageListenerWrapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasOwnerImageListenerWrapper.hpp; sourceTree = "<group>"; };
 		CF29562D3077E1FF00FC4904 /* TextureAtlasMarkAnimationTask.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TextureAtlasMarkAnimationTask.hpp; sourceTree = "<group>"; };
 		CF29562E3077E1FF00FC4904 /* TextureAtlasMarkAnimationTask.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextureAtlasMarkAnimationTask.cpp; sourceTree = "<group>"; };
+		CF2956323077EA4A00FC4904 /* FixedMarkAnchor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FixedMarkAnchor.hpp; sourceTree = "<group>"; };
+		CF2956333077EA4A00FC4904 /* FixedMarkAnchor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FixedMarkAnchor.cpp; sourceTree = "<group>"; };
+		CF2956343077EA4A00FC4904 /* MarkAnchor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MarkAnchor.hpp; sourceTree = "<group>"; };
+		CF2956353077EA4A00FC4904 /* MarkAnchor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MarkAnchor.cpp; sourceTree = "<group>"; };
+		CF2956363077EA4A00FC4904 /* MarkBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MarkBuilder.hpp; sourceTree = "<group>"; };
+		CF2956373077EA4A00FC4904 /* MarkBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MarkBuilder.cpp; sourceTree = "<group>"; };
+		CF2956383077EA4A00FC4904 /* MarkOutfit.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MarkOutfit.hpp; sourceTree = "<group>"; };
+		CF2956393077EA4A00FC4904 /* MarkOutfit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MarkOutfit.cpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
 		CF32C66D25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCHeightPointColorizer.cpp; sourceTree = "<group>"; };
 		CF32C66E25D3EF5100F02D13 /* XPCHeightPointColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCHeightPointColorizer.hpp; sourceTree = "<group>"; };
@@ -2880,6 +2900,8 @@
 				CF6602C223DF2DA600795C7F /* ErrorRenderer.cpp */,
 				CF8938183073B5190021D9AF /* FittedLabelImageFactory.hpp */,
 				CF8938193073B5190021D9AF /* FittedLabelImageFactory.cpp */,
+				CF2956323077EA4A00FC4904 /* FixedMarkAnchor.hpp */,
+				CF2956333077EA4A00FC4904 /* FixedMarkAnchor.cpp */,
 				CF66045123DF2DAA00795C7F /* FlatColorMesh.hpp */,
 				CF6601ED23DF2DA500795C7F /* FlatColorMesh.cpp */,
 				CF66032923DF2DA700795C7F /* FlatPlanet.hpp */,
@@ -3237,8 +3259,14 @@
 				CF66020F23DF2DA600795C7F /* MapzenTerrariumParser.cpp */,
 				CF6603F623DF2DA900795C7F /* Mark.hpp */,
 				CF66018223DF2DA500795C7F /* Mark.cpp */,
+				CF2956343077EA4A00FC4904 /* MarkAnchor.hpp */,
+				CF2956353077EA4A00FC4904 /* MarkAnchor.cpp */,
+				CF2956363077EA4A00FC4904 /* MarkBuilder.hpp */,
+				CF2956373077EA4A00FC4904 /* MarkBuilder.cpp */,
 				CF66038823DF2DA800795C7F /* MarkFilter.hpp */,
 				CF6602CE23DF2DA600795C7F /* MarkFilter.cpp */,
+				CF2956383077EA4A00FC4904 /* MarkOutfit.hpp */,
+				CF2956393077EA4A00FC4904 /* MarkOutfit.cpp */,
 				CF6601BC23DF2DA500795C7F /* MarksRenderer.hpp */,
 				CF66042C23DF2DAA00795C7F /* MarksRenderer.cpp */,
 				CF66040323DF2DA900795C7F /* MarkTouchListener.hpp */,
@@ -3803,6 +3831,10 @@
 				CF66082723DF330600795C7F /* Mesh.cpp in Sources */,
 				CF66082823DF330600795C7F /* GEO2DMultiLineStringGeometry.cpp in Sources */,
 				CF66082923DF330600795C7F /* GLGlobalState.cpp in Sources */,
+				CF29563A3077EA4A00FC4904 /* MarkAnchor.cpp in Sources */,
+				CF29563B3077EA4A00FC4904 /* MarkBuilder.cpp in Sources */,
+				CF29563C3077EA4A00FC4904 /* FixedMarkAnchor.cpp in Sources */,
+				CF29563D3077EA4A00FC4904 /* MarkOutfit.cpp in Sources */,
 				CF66082A23DF330600795C7F /* IStringBuilder.cpp in Sources */,
 				CF66082B23DF330600795C7F /* VectorStreamingRenderer.cpp in Sources */,
 				CF66082C23DF330600795C7F /* GEO2DPolygonGeometry.cpp in Sources */,

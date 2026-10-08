@@ -26,6 +26,7 @@ private:
   void showBasicMark();
   void showAnimatedMarks();
   void showMovingMark();
+  void showLabels();
 
 protected:
   void rawActivate(const G3MContext* context);
@@ -41,6 +42,7 @@ public:
     addOption("Basic");
     addOption("Animated");
     addOption("Moving");
+    addOption("Labels");
   }
 
   void deactivate(const G3MContext* context);

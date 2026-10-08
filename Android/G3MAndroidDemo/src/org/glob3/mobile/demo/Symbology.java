@@ -27,6 +27,11 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
 import org.glob3.mobile.generated.JSONString;
 import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkBuilder;
+import org.glob3.mobile.generated.LabelImageFactory;
+import org.glob3.mobile.generated.LabelStyle;
+import org.glob3.mobile.generated.GFont;
+import org.glob3.mobile.generated.Vector2F;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
 import org.glob3.mobile.generated.Vector3D;
@@ -324,8 +329,13 @@ public class Symbology {
 
 
                                                  final long popFormated = Math.round(popMax / 1000);
-                                                 final Mark m = new Mark("" + popFormated, new Geodetic3D(geometry.getPosition(),
-                                                          height / 5), AltitudeMode.RELATIVE_TO_GROUND);
+                                                 final MarkBuilder builder = new MarkBuilder();
+                                                 builder.setAltitudeMode(AltitudeMode.RELATIVE_TO_GROUND);
+                                                 builder.setMinDistanceToCamera(4.5e+06);
+                                                 builder.setPosition(new Geodetic3D(geometry.getPosition(), height / 5));
+                                                 builder.addOutfit(new LabelImageFactory("" + popFormated, //
+                                                          LabelStyle.shadowed(GFont.sansSerif(20), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2))));
+                                                 final Mark m = builder.build();
 
                                                  result.add(new GEOShapeSymbol(bs));
                                                  result.add(new GEOMarkSymbol(m));

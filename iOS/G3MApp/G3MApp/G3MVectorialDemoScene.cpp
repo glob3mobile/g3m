@@ -21,6 +21,8 @@
 #include <G3M/GEO2DPointGeometry.hpp>
 #include <G3M/GEOFeature.hpp>
 #include <G3M/Mark.hpp>
+#include <G3M/MarkBuilder.hpp>
+#include <G3M/DownloaderImageFactory.hpp>
 #include <G3M/GEOMarkSymbol.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/PlanetRenderer.hpp>
@@ -120,16 +122,14 @@ public:
     const JSONObject* properties = geometry->getFeature()->getProperties();
     const std::string name = properties->getAsString("name", "");
 
-    Mark* mark = new Mark(URL("file:///restaurant-48x48.png"),
-                          Geodetic3D(geometry->getPosition(), 0),
-                          RELATIVE_TO_GROUND,
-                          15000,
-                          NULL,
-                          false,
-                          new G3MVectorialDemoScene_RestaurantMarkTouchListener(_model, name), // markListener,
-                          true);
+    MarkBuilder builder;
+    builder.setAltitudeMode(RELATIVE_TO_GROUND);
+    builder.setMinDistanceToCamera(15000);
+    builder.setPosition(Geodetic3D(geometry->getPosition(), 0));
+    builder.addOutfit(new DownloaderImageFactory(URL("file:///restaurant-48x48.png")));
+    builder.setTouchListener(new G3MVectorialDemoScene_RestaurantMarkTouchListener(_model, name), true);
 
-    result->push_back(new GEOMarkSymbol(mark));
+    result->push_back(new GEOMarkSymbol(builder.build()));
     return result;
   }
 

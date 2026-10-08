@@ -16,6 +16,7 @@
 #include <G3M/GEO2DPointGeometry.hpp>
 #include <G3M/GEOFeature.hpp>
 #include <G3M/Mark.hpp>
+#include <G3M/MarkBuilder.hpp>
 #include <G3M/JSONObject.hpp>
 #include <G3M/JSONString.hpp>
 #include <G3M/JSONNumber.hpp>
@@ -86,13 +87,11 @@ public:
 
     int pointSize = 12;
 
-    Mark* mark = new Mark(new CircleImageFactory(featureColor, pointSize),
-                          position,
-                          ABSOLUTE,
-                          0 // minDistanceToCamera
-                          );
+    MarkBuilder builder;
+    builder.setPosition(position);
+    builder.addOutfit(new CircleImageFactory(featureColor, pointSize));
 
-    collector.add(mark);
+    collector.add(builder.build());
   }
 
   void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
