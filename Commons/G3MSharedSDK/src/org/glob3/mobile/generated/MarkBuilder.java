@@ -176,12 +176,18 @@ public class MarkBuilder
     _priority = priority;
   }
 
-  /** the mark's own hint, drawn when nothing else fits; without it, the renderer's; anchor NULL: centred */
+  /** the mark's own hint, drawn when nothing else fits; without it, the renderer's; anchor NULL: the mark keeps its own anchor, as in addOutfit */
   public final void setHint(IImageFactory imageFactory, MarkAnchor anchor)
   {
     if (_hint != null)
        _hint.dispose();
-    _hint = new MarkOutfit(imageFactory, (anchor == null) ? new FixedMarkAnchor(0.5f, 0.5f) : anchor);
+    _hint = new MarkOutfit(imageFactory, anchor);
+  }
+
+  /** a hint centred on the position */
+  public final void setHint(IImageFactory imageFactory)
+  {
+    setHint(imageFactory, new FixedMarkAnchor(0.5f, 0.5f));
   }
 
   /** needs a position and at least one outfit */

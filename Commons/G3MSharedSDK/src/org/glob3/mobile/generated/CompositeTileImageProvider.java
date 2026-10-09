@@ -318,6 +318,10 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           imageID.addString(destRect.id());
           imageID.addString("|");
     
+          // the partial contribution is drawn with alpha too, so it must be part of the name
+          imageID.addFloat(alpha);
+          imageID.addString("|");
+    
           canvas.drawImage(image, srcRect._x, srcRect._y, srcRect._width, srcRect._height, destRect._x, destRect._y, destRect._width, destRect._height, alpha);
                             //SRC RECT
                             //DEST RECT

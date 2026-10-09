@@ -38,7 +38,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
   {
     TextureIDReference texID = null;
   
-    texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture", false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
+    texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), "BusyQuadRenderer-Texture/" + IStringUtils.instance().toString(_instanceID), false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
   
     if (texID == null)
     {
@@ -85,6 +85,10 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
     _glState.addGLFeature(new ModelGLFeature(_modelviewMatrix.asMatrix44D()), false);
   }
 
+  // each instance draws its own image, so it needs its own texture name
+  private static long INSTANCE_COUNTER = 0;
+  private final long _instanceID;
+
 
   public BusyQuadRenderer(IImage image, Color backgroundColor, Vector2D size, boolean animated)
   {
@@ -96,6 +100,7 @@ public class BusyQuadRenderer implements ProtoRenderer, EffectTarget
      _size = size;
      _projectionMatrix = new MutableMatrix44D(MutableMatrix44D.invalid());
      _glState = new GLState();
+     _instanceID = INSTANCE_COUNTER++;
     createGLState();
   }
 

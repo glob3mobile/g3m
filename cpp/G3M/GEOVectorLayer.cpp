@@ -17,6 +17,9 @@
 #include "ILogger.hpp"
 
 
+long long GEOVectorLayer::INSTANCE_COUNTER = 0;
+
+
 GEOVectorLayer::GEOVectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
                                const float                                           transparency,
                                const LayerCondition*                                 condition,
@@ -25,7 +28,9 @@ VectorLayer(parametersVector,
             transparency,
             condition,
             layerInfo),
-_tileImageProvider(NULL)
+_tileImageProvider(NULL),
+_instanceID(INSTANCE_COUNTER++),
+_contentsRevision(0)
 {
 
 }
@@ -45,7 +50,9 @@ VectorLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFir
             transparency,
             condition,
             layerInfo),
-_tileImageProvider(NULL)
+_tileImageProvider(NULL),
+_instanceID(INSTANCE_COUNTER++),
+_contentsRevision(0)
 {
 
 }
@@ -69,6 +76,7 @@ const Sector GEOVectorLayer::getDataSector() const {
 
 void GEOVectorLayer::clear() {
   _quadTree.clear();
+  _contentsRevision++;
   notifyChanges();
 }
 
@@ -82,6 +90,7 @@ void GEOVectorLayer::addSymbol(const GEORasterSymbol* symbol) {
   else {
     const bool added = _quadTree.add(*sector, symbol);
     if (added) {
+      _contentsRevision++;
       notifyChanges();
     }
     else {

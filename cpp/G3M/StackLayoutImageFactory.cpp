@@ -10,6 +10,7 @@
 
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
+#include "IDeviceInfo.hpp"
 #include "ICanvas.hpp"
 #include "IImageListener.hpp"
 #include "ImageBackground.hpp"
@@ -68,8 +69,11 @@ void StackLayoutImageFactory::doLayout(const G3MContext* context,
   std::string error = "";
   std::string imageName = "Stack";
   
-  int maxWidth  = 0;
-  int maxHeight = 0;
+  // the children are measured in points, as the retina canvas below draws in points
+  const float pixelRatio = context->getFactory()->getDeviceInfo()->getDevicePixelRatio();
+
+  float maxWidth  = 0;
+  float maxHeight = 0;
   
   const size_t resultsSize = results.size();
   for (size_t i = 0; i < resultsSize; i++) {
@@ -81,11 +85,11 @@ void StackLayoutImageFactory::doLayout(const G3MContext* context,
       error += result->_error + " ";
     }
     else {
-      if (image->getWidth() > maxWidth) {
-        maxWidth = image->getWidth();
+      if ((image->getWidth() / pixelRatio) > maxWidth) {
+        maxWidth = image->getWidth() / pixelRatio;
       }
-      if (image->getHeight() > maxHeight) {
-        maxHeight = image->getHeight();
+      if ((image->getHeight() / pixelRatio) > maxHeight) {
+        maxHeight = image->getHeight() / pixelRatio;
       }
       imageName += result->_imageName + "/";
     }
@@ -105,7 +109,7 @@ void StackLayoutImageFactory::doLayout(const G3MContext* context,
     const float contentWidth  = maxWidth;
     const float contentHeight = maxHeight;
     
-    ICanvas* canvas = context->getFactory()->createCanvas(false);
+    ICanvas* canvas = context->getFactory()->createCanvas(true);
     const Vector2F contentPos = _background->initializeCanvas(canvas,
                                                               contentWidth,
                                                               contentHeight);
@@ -113,12 +117,12 @@ void StackLayoutImageFactory::doLayout(const G3MContext* context,
     for (int i = 0; i < resultsSize; i++) {
       ChildResult* result = results[i];
       const IImage* image = result->_image;
-      const int imageWidth  = image->getWidth();
-      const int imageHeight = image->getHeight();
+      const float imageWidth  = image->getWidth()  / pixelRatio;
+      const float imageHeight = image->getHeight() / pixelRatio;
       
       const float top  = contentPos._y + ((contentHeight - imageHeight) / 2.0f);
       const float left = contentPos._x + ((contentWidth  - imageWidth ) / 2.0f);
-      canvas->drawImage(image, left, top);
+      canvas->drawImage(image, left, top, imageWidth, imageHeight);
     }
 
     canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,

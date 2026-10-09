@@ -30,8 +30,11 @@ public class StackLayoutImageFactory extends LayoutImageFactory
     String error = "";
     String imageName = "Stack";
   
-    int maxWidth = 0;
-    int maxHeight = 0;
+    // the children are measured in points, as the retina canvas below draws in points
+    final float pixelRatio = context.getFactory().getDeviceInfo().getDevicePixelRatio();
+  
+    float maxWidth = 0F;
+    float maxHeight = 0F;
   
     final int resultsSize = results.size();
     for (int i = 0; i < resultsSize; i++)
@@ -46,13 +49,13 @@ public class StackLayoutImageFactory extends LayoutImageFactory
       }
       else
       {
-        if (image.getWidth() > maxWidth)
+        if ((image.getWidth() / pixelRatio) > maxWidth)
         {
-          maxWidth = image.getWidth();
+          maxWidth = image.getWidth() / pixelRatio;
         }
-        if (image.getHeight() > maxHeight)
+        if ((image.getHeight() / pixelRatio) > maxHeight)
         {
-          maxHeight = image.getHeight();
+          maxHeight = image.getHeight() / pixelRatio;
         }
         imageName += result._imageName + "/";
       }
@@ -77,19 +80,19 @@ public class StackLayoutImageFactory extends LayoutImageFactory
       final float contentWidth = maxWidth;
       final float contentHeight = maxHeight;
   
-      ICanvas canvas = context.getFactory().createCanvas(false);
+      ICanvas canvas = context.getFactory().createCanvas(true);
       final Vector2F contentPos = _background.initializeCanvas(canvas, contentWidth, contentHeight);
   
       for (int i = 0; i < resultsSize; i++)
       {
         ChildResult result = results.get(i);
         final IImage image = result._image;
-        final int imageWidth = image.getWidth();
-        final int imageHeight = image.getHeight();
+        final float imageWidth = image.getWidth() / pixelRatio;
+        final float imageHeight = image.getHeight() / pixelRatio;
   
         final float top = contentPos._y + ((contentHeight - imageHeight) / 2.0f);
         final float left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
-        canvas.drawImage(image, left, top);
+        canvas.drawImage(image, left, top, imageWidth, imageHeight);
       }
   
       canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new StackLayoutImageFactory_ImageListener(imageName, listener, deleteListener), true), true);

@@ -45,6 +45,13 @@ private:
 #endif
   mutable TiledVectorLayerTileImageProvider* _tileImageProvider;
 
+  static long long INSTANCE_COUNTER;
+
+  // identity and symbolizer revision feed the tile image names, so two layers (or two stylings
+  // of one layer) never share a texture
+  const long long _instanceID;
+  long long       _symbolizerRevision;
+
   TiledVectorLayer(const GEORasterSymbolizer*                            symbolizer,
                    const std::string&                                    urlTemplate,
                    const Sector&                                         dataSector,
@@ -120,6 +127,14 @@ public:
 
   void setSymbolizer(const GEORasterSymbolizer* symbolizer,
                      bool deletePrevious);
+
+  long long getInstanceID() const {
+    return _instanceID;
+  }
+
+  long long getSymbolizerRevision() const {
+    return _symbolizerRevision;
+  }
 
   const std::vector<URL*> getDownloadURLs(const Tile* tile) const;
 

@@ -73,6 +73,12 @@ bool CameraSingleDragHandler::onDown(const G3MEventContext* eventContext,
   camera->getModelViewMatrixInto(_cameraModelViewMatrix);
   camera->getViewPortInto(_cameraViewPort);
 
+  // a gesture that ended without onUp must not lend its positions to this one
+  delete _previousEventPosition0;
+  _previousEventPosition0 = NULL;
+  delete _previousEventPosition1;
+  _previousEventPosition1 = NULL;
+
   // dragging
   const Vector2F pixel      = touchEvent->getTouch(0)->getPos();
   const Vector3D initialRay = camera->pixel2Ray(pixel);
@@ -148,11 +154,11 @@ bool CameraSingleDragHandler::onUp(const G3MEventContext* eventContext,
     const Vector2F currentPosition = touch->getPos();
     const Vector2F* previousEventPosition = getPreviousEventPosition(currentPosition);
     if (previousEventPosition != NULL) {
-      const double desp = previousEventPosition->squaredDistanceTo(currentPosition);
+      const double squaredDesp = previousEventPosition->squaredDistanceTo(currentPosition);
 
 #warning method getPixelsInMM is not working fine in iOS devices
       const float delta = IFactory::instance()->getDeviceInfo()->getPixelsInMM(0.2f);
-      if (desp > delta) {
+      if (squaredDesp > (delta * delta)) {
         const Planet* planet = eventContext->getPlanet();
         Effect* effect = planet->createEffectFromLastSingleDrag();
         if (effect != NULL) {

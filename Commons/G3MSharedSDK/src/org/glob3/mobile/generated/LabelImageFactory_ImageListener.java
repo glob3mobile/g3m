@@ -26,8 +26,11 @@ public class LabelImageFactory_ImageListener extends IImageListener
 
   public void dispose()
   {
-    if (_listener != null)
-       _listener.dispose();
+    if (_deleteListener)
+    {
+      if (_listener != null)
+         _listener.dispose();
+    }
     super.dispose();
   }
 }

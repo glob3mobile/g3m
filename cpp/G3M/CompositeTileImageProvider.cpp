@@ -285,6 +285,10 @@ void CompositeTileImageProvider::Composer::mixResult() {
       imageID->addString(destRect->id());
       imageID->addString("|");
 
+      // the partial contribution is drawn with alpha too, so it must be part of the name
+      imageID->addFloat(alpha);
+      imageID->addString("|");
+
       canvas->drawImage(image,
                         //SRC RECT
                         srcRect->_x, srcRect->_y,

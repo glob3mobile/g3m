@@ -449,7 +449,7 @@ public:
     if (logLength > 0) {
       GLchar* log = (GLchar* ) malloc(logLength);
       glGetShaderInfoLog(shader, logLength, &logLength, log);
-      logger->logInfo("Shader Info Log: %s", log);
+      logger->logError("Shader Info Log: %s", log);
       free(log);
     }
   }
@@ -467,7 +467,7 @@ public:
     if (logLength > 0) {
       GLchar* log = (GLchar* ) malloc(logLength);
       glGetProgramInfoLog(program, logLength, &logLength, log);
-      logger->logInfo("Program Info Log: %s", log);
+      logger->logError("Program Info Log: %s", log);
       free(log);
     }
   }

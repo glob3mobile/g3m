@@ -22,6 +22,8 @@ private:
 
   IImage* _image;
 
+  const std::string getImageID() const;
+
 protected:
   ~ChessboardTileImageProvider();
 

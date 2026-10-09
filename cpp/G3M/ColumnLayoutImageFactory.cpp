@@ -12,8 +12,10 @@
 #include "ImageBackground.hpp"
 #include "G3MContext.hpp"
 #include "IFactory.hpp"
+#include "IDeviceInfo.hpp"
 #include "ICanvas.hpp"
 #include "CanvasOwnerImageListenerWrapper.hpp"
+#include "IStringUtils.hpp"
 
 
 ColumnLayoutImageFactory::ColumnLayoutImageFactory(const std::vector<IImageFactory*>& children,
@@ -100,8 +102,11 @@ void ColumnLayoutImageFactory::doLayout(const G3MContext* context,
       break;
   }
 
-  int maxWidth = 0;
-  int accumulatedHeight = 0;
+  // the children are measured in points, as the retina canvas below draws in points
+  const float pixelRatio = context->getFactory()->getDeviceInfo()->getDevicePixelRatio();
+
+  float maxWidth = 0;
+  float accumulatedHeight = 0;
 
   const size_t resultsSize = results.size();
   for (size_t i = 0; i < resultsSize; i++) {
@@ -113,14 +118,16 @@ void ColumnLayoutImageFactory::doLayout(const G3MContext* context,
       error += result->_error + " ";
     }
     else {
-      accumulatedHeight += image->getHeight();
-      if (image->getWidth() > maxWidth) {
-        maxWidth = image->getWidth();
+      accumulatedHeight += image->getHeight() / pixelRatio;
+      if ((image->getWidth() / pixelRatio) > maxWidth) {
+        maxWidth = image->getWidth() / pixelRatio;
       }
       imageName += result->_imageName + "/";
     }
   }
 
+  // the separation changes the pixels, so it must be part of the texture name
+  imageName += "sep=" + IStringUtils::instance()->toString(_childrenSeparation) + "/";
   imageName += _background->description();
 
   if (anyError) {
@@ -135,7 +142,7 @@ void ColumnLayoutImageFactory::doLayout(const G3MContext* context,
     const float contentWidth  = maxWidth;
     const float contentHeight = accumulatedHeight + ((resultsSize - 1) * _childrenSeparation);
 
-    ICanvas* canvas = context->getFactory()->createCanvas(false);
+    ICanvas* canvas = context->getFactory()->createCanvas(true);
 
     const Vector2F contentPos = _background->initializeCanvas(canvas,
                                                               contentWidth,
@@ -145,8 +152,8 @@ void ColumnLayoutImageFactory::doLayout(const G3MContext* context,
     for (int i = 0; i < resultsSize; i++) {
       ChildResult* result = results[i];
       const IImage* image = result->_image;
-      const int imageWidth  = image->getWidth();
-      const int imageHeight = image->getHeight();
+      const float imageWidth  = image->getWidth()  / pixelRatio;
+      const float imageHeight = image->getHeight() / pixelRatio;
       
       float left;
       switch (_childrenAlignment) {
@@ -160,7 +167,7 @@ void ColumnLayoutImageFactory::doLayout(const G3MContext* context,
           left = contentPos._x + ((contentWidth - imageWidth) / 2.0f);
           break;
       }
-      canvas->drawImage(image, left, cursorTop);
+      canvas->drawImage(image, left, cursorTop, imageWidth, imageHeight);
       cursorTop += imageHeight + _childrenSeparation;
     }
     

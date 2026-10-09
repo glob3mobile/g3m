@@ -37,6 +37,13 @@ public class TiledVectorLayer extends VectorLayer
   private IStringUtils _su;
   private TiledVectorLayerTileImageProvider _tileImageProvider;
 
+  private static long INSTANCE_COUNTER = 0;
+
+  // identity and symbolizer revision feed the tile image names, so two layers (or two stylings
+  // of one layer) never share a texture
+  private final long _instanceID;
+  private long _symbolizerRevision;
+
   private TiledVectorLayer(GEORasterSymbolizer symbolizer, String urlTemplate, Sector dataSector, java.util.ArrayList<LayerTilesRenderParameters> parametersVector, TimeInterval timeToCache, boolean readExpired, float transparency, LayerCondition condition, java.util.ArrayList<Info> layerInfo)
   {
      super(parametersVector, transparency, condition, layerInfo);
@@ -46,6 +53,8 @@ public class TiledVectorLayer extends VectorLayer
      _timeToCache = timeToCache;
      _readExpired = readExpired;
      _tileImageProvider = null;
+     _instanceID = INSTANCE_COUNTER++;
+     _symbolizerRevision = 0;
      _su = null;
      _mu = null;
   }
@@ -245,8 +254,19 @@ public class TiledVectorLayer extends VectorLayer
         _symbolizer = null;
       }
       _symbolizer = symbolizer;
+      _symbolizerRevision++;
       notifyChanges();
     }
+  }
+
+  public final long getInstanceID()
+  {
+    return _instanceID;
+  }
+
+  public final long getSymbolizerRevision()
+  {
+    return _symbolizerRevision;
   }
 
   public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)

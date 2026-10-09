@@ -28,11 +28,14 @@
 
 class G3MCanvas2DDemoScene_ImageListener : public IImageListener {
 private:
-  ShapesRenderer* _shapesRenderer;
+  ShapesRenderer*   _shapesRenderer;
+  const std::string _textureName;
 
 public:
-  G3MCanvas2DDemoScene_ImageListener(ShapesRenderer* shapesRenderer) :
-  _shapesRenderer(shapesRenderer)
+  G3MCanvas2DDemoScene_ImageListener(ShapesRenderer* shapesRenderer,
+                                     const std::string& textureName) :
+  _shapesRenderer(shapesRenderer),
+  _textureName(textureName)
   {
   }
 
@@ -42,6 +45,7 @@ public:
                                                    1000),
                                     ABSOLUTE,
                                     image,
+                                    _textureName,
                                     image->getWidth()  * 15.0f,
                                     image->getHeight() * 15.0f,
                                     true);
@@ -117,7 +121,8 @@ public:
                       0.5);
 
     canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
-                                                            new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer),
+                                                            new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer,
+                                                                                                   "G3MCanvas2DDemoScene/CanvasDrawingTest/" + url._path),
                                                             true),
                         true);
 

@@ -39,7 +39,11 @@ static const AtmosphereCameraPose POSES[] = {
   { "Below the 8 km cut-off, 7.5 km, pitch +10", 40.4719, -3.5626,  7500,  10 },
   { "Low, 2 km, pitch +5",                   40.4719,  -3.5626,     2000,   5 },
   { "Equator, 20 km, pitch +10",              0.0,     -3.5626,    20000,  10 },
-  { "Near the North Pole, 20 km, pitch +10", 89.0,     -3.5626,    20000,  10 }
+  { "Near the North Pole, 20 km, pitch +10", 89.0,     -3.5626,    20000,  10 },
+  // the same view at three latitudes: the haze over the ground must look the same
+  { "Haze, equator (Seychelles), 11 km, pitch -5", -4.6796, 55.4920,  11000,  -5 },
+  { "Haze, 45 deg (Turin), 11 km, pitch -5",       45.0000,  7.6869,  11000,  -5 },
+  { "Haze, Oslo, 11 km, pitch -5",                 59.9139, 10.7522,  11000,  -5 }
 };
 
 static const int POSES_COUNT = sizeof(POSES) / sizeof(POSES[0]);

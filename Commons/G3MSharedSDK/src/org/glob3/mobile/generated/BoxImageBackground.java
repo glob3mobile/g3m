@@ -106,10 +106,27 @@ public class BoxImageBackground extends ImageBackground
     return contentPosition;
   }
 
+
+  // IStringBuilder keeps every float digit; IStringUtils::toString(float) keeps only 6 on iOS
   public final String description()
   {
-    final IStringUtils su = IStringUtils.instance();
-    return ("Box/" + _margin.description() + "/" + su.toString(_borderWidth) + "/" + _borderColor.id() + "/" + _padding.description() + "/" + _backgroundColor.id() + "/" + su.toString(_cornerRadius));
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("Box/");
+    isb.addString(_margin.description());
+    isb.addString("/");
+    isb.addFloat(_borderWidth);
+    isb.addString("/");
+    isb.addString(_borderColor.id());
+    isb.addString("/");
+    isb.addString(_padding.description());
+    isb.addString("/");
+    isb.addString(_backgroundColor.id());
+    isb.addString("/");
+    isb.addFloat(_cornerRadius);
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
   public final BoxImageBackground copy()

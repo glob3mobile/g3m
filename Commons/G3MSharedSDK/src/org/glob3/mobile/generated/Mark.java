@@ -74,8 +74,8 @@ public class Mark implements SurfaceElevationListener
   }
   private void applyTransitionMode(MarkTransitionMode mode)
   {
-    final boolean scales = (mode != MarkTransitionMode.ALPHA);
-    final boolean fades = (mode != MarkTransitionMode.SCALE);
+    final boolean scales = (mode == MarkTransitionMode.SCALE) || (mode == MarkTransitionMode.SCALE_AND_ALPHA);
+    final boolean fades = (mode == MarkTransitionMode.ALPHA) || (mode == MarkTransitionMode.SCALE_AND_ALPHA);
   
     _transitionScale = scales ? _presence : 1;
     _transitionAlpha = fades ? _presence : 1;
@@ -495,6 +495,11 @@ public class Mark implements SurfaceElevationListener
      _zoomOutDisappearsStarted = false;
      _zoomOutEffect = null;
      _token = "";
+    if (outfits.isEmpty())
+    {
+      throw new RuntimeException("Mark: at least one outfit is needed");
+    }
+  
     // element by element: in Java an assignment would share the caller's list
     for (int i = 0; i < outfits.size(); i++)
     {
@@ -504,7 +509,7 @@ public class Mark implements SurfaceElevationListener
       IImageFactory imageFactory = outfit.takeImageFactory();
       if (imageFactory.isMutable())
       {
-        ILogger.instance().logError("Marks doesn't support mutable image factories");
+        throw new RuntimeException("Mark: mutable image factories are not supported");
       }
       _outfitImages.add(new MarkOutfitImage(imageFactory, outfit.getAnchor()));
     }
@@ -703,9 +708,13 @@ public class Mark implements SurfaceElevationListener
     clearGLState();
   }
 
-  /** the smallest outfit, after the others: a sign that there is more to see when zooming in; the mark owns it */
+  /** the smallest outfit, after the others: a sign that there is more to see when zooming in; the mark owns it; only one */
   public final void addHint(MarkOutfit hint)
   {
+    if (_hasHint)
+    {
+      throw new RuntimeException("Mark: the mark already has a hint");
+    }
     _outfits.add(hint);
     _outfitImages.add(new MarkOutfitImage(hint.takeImageFactory(), hint.getAnchor()));
     _hasHint = true;

@@ -525,7 +525,7 @@ void G3MMarksDemoScene::showLabels() {
   {
     const float pixelRatio = IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
     const int   iconPoints = 24;
-    const float padding    = 8; // pixels: the row layout draws on a plain canvas
+    const float padding    = 4; // points, as the rest of the layout
     const Geodetic3D position = Geodetic3D::fromDegrees(48.80, 2.35, 0);
 
     IImageFactory* icon = new ResizerImageFactory(new DownloaderImageFactory(URL("file:///mark-icon-1.png")),
@@ -546,10 +546,10 @@ void G3MMarksDemoScene::showLabels() {
                                                                        Color::TRANSPARENT, /* borderColor */
                                                                        Vector2F(padding, padding),
                                                                        Color::fromRGBA(0, 0, 0, 0.6f),
-                                                                       12),
-                                                (int) (6 * pixelRatio)),
-                      // the resizer draws on a retina canvas: the icon is iconPoints times the pixel ratio
-                      new G3MMarksDemoScene_IconCenterMarkAnchor(padding + ((iconPoints * pixelRatio) / 2)));
+                                                                       6),
+                                                6),
+                      // the anchor is in the image's pixels
+                      new G3MMarksDemoScene_IconCenterMarkAnchor((padding + (iconPoints / 2.0f)) * pixelRatio));
     marksRenderer->addMark(builder.build());
 
     // a red dot on the same position shows where the anchor lands
@@ -643,10 +643,10 @@ void G3MMarksDemoScene::addLondonMarks(const JSONArray* articles) {
   const float maxFontSize = 16;
 
   const float    pixelRatio      = IFactory::instance()->getDeviceInfo()->getDevicePixelRatio();
-  const Vector2F padding         = Vector2F(6, 4).times(pixelRatio); // pixels: the row layout draws on a plain canvas
-  const int      separation      = mu->round(5 * pixelRatio);
+  const Vector2F padding         = Vector2F(6, 4);
+  const int      separation      = 5;
   const Color    backgroundColor = Color::fromRGBA(0, 0, 0, 0.6f);
-  const float    cornerRadius    = 6 * pixelRatio;
+  const float    cornerRadius    = 6;
 
   MarksRenderer* marksRenderer = getModel()->getMarksRenderer();
   MarkBuilder builder;
@@ -669,9 +669,9 @@ void G3MMarksDemoScene::addLondonMarks(const JSONArray* articles) {
       builder.addOutfit(new FittedLabelImageFactory(title,
                                                     LabelStyle::boxed(GFont::sansSerif(fontSize),
                                                                       Color::WHITE,
-                                                                      padding.div(pixelRatio),
+                                                                      padding,
                                                                       backgroundColor,
-                                                                      cornerRadius / pixelRatio),
+                                                                      cornerRadius),
                                                     "Washington, D.C.",
                                                     0.7f,
                                                     2));
@@ -693,8 +693,8 @@ void G3MMarksDemoScene::addLondonMarks(const JSONArray* articles) {
                                                   new BoxImageBackground(Vector2F::ZERO, 0, Color::TRANSPARENT,
                                                                          padding, backgroundColor, cornerRadius),
                                                   separation),
-                        // the resizer draws on a retina canvas: the icon is iconPoints times the pixel ratio
-                        new G3MMarksDemoScene_IconCenterMarkAnchor(padding._x + ((iconPoints * pixelRatio) / 2)));
+                        // the anchor is in the image's pixels
+                        new G3MMarksDemoScene_IconCenterMarkAnchor((padding._x + (iconPoints / 2.0f)) * pixelRatio));
 
       builder.addOutfit(new RowLayoutImageFactory(new ResizerImageFactory(new DownloaderImageFactory(iconURL),
                                                                           new AbsoluteImageSizer(iconPoints),

@@ -44,7 +44,9 @@ public:
   }
   
   ~LabelImageFactory_ImageListener() {
-    delete _listener;
+    if (_deleteListener) {
+      delete _listener;
+    }
 #ifdef JAVA_CODE
     super.dispose();
 #endif

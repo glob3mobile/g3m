@@ -40,6 +40,14 @@ public class CameraSingleDragHandler extends CameraEventHandler
     camera.getModelViewMatrixInto(_cameraModelViewMatrix);
     camera.getViewPortInto(_cameraViewPort);
   
+    // a gesture that ended without onUp must not lend its positions to this one
+    if (_previousEventPosition0 != null)
+       _previousEventPosition0.dispose();
+    _previousEventPosition0 = null;
+    if (_previousEventPosition1 != null)
+       _previousEventPosition1.dispose();
+    _previousEventPosition1 = null;
+  
     // dragging
     final Vector2F pixel = touchEvent.getTouch(0).getPos();
     final Vector3D initialRay = camera.pixel2Ray(pixel);
@@ -96,12 +104,12 @@ public class CameraSingleDragHandler extends CameraEventHandler
       final Vector2F previousEventPosition = getPreviousEventPosition(currentPosition);
       if (previousEventPosition != null)
       {
-        final double desp = previousEventPosition.squaredDistanceTo(currentPosition);
+        final double squaredDesp = previousEventPosition.squaredDistanceTo(currentPosition);
   
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#warning method getPixelsInMM is ! working fine in iOS devices
         final float delta = IFactory.instance().getDeviceInfo().getPixelsInMM(0.2f);
-        if (desp > delta)
+        if (squaredDesp > (delta * delta))
         {
           final Planet planet = eventContext.getPlanet();
           Effect effect = planet.createEffectFromLastSingleDrag();

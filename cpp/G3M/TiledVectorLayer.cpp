@@ -21,6 +21,8 @@
 #include "IMathUtils.hpp"
 
 
+long long TiledVectorLayer::INSTANCE_COUNTER = 0;
+
 TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*                            symbolizer,
                                    const std::string&                                    urlTemplate,
                                    const Sector&                                         dataSector,
@@ -37,6 +39,8 @@ _dataSector(dataSector),
 _timeToCache(timeToCache),
 _readExpired(readExpired),
 _tileImageProvider(NULL),
+_instanceID(INSTANCE_COUNTER++),
+_symbolizerRevision(0),
 _su(NULL),
 _mu(NULL)
 {
@@ -60,6 +64,7 @@ void TiledVectorLayer::setSymbolizer(const GEORasterSymbolizer* symbolizer,
       delete _symbolizer;
     }
     _symbolizer = symbolizer;
+    _symbolizerRevision++;
     notifyChanges();
   }
 }

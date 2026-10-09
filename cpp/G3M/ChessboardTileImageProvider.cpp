@@ -19,6 +19,7 @@
 #include "TileImageContribution.hpp"
 #include "Vector2S.hpp"
 #include "CanvasOwnerImageListenerWrapper.hpp"
+#include "IStringBuilder.hpp"
 
 
 class ChessboardTileImageProvider_ImageListener : public IImageListener {
@@ -60,6 +61,20 @@ const TileImageContribution* ChessboardTileImageProvider::contribution(const Til
   return TileImageContribution::fullCoverageOpaque();
 }
 
+// every input that changes the pixels, so two chessboards with different styles don't share a texture
+const std::string ChessboardTileImageProvider::getImageID() const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("ChessboardTileImageProvider/");
+  isb->addString(_backgroundColor.id());
+  isb->addString("/");
+  isb->addString(_boxColor.id());
+  isb->addString("/");
+  isb->addInt(_splits);
+  const std::string imageID = isb->getString();
+  delete isb;
+  return imageID;
+}
+
 void ChessboardTileImageProvider::imageCreated(const IImage* image,
                                                const Tile* tile,
                                                TileImageListener* listener,
@@ -68,7 +83,7 @@ void ChessboardTileImageProvider::imageCreated(const IImage* image,
 
   listener->imageCreated(tile->_id,
                          image,
-                         "ChessboardTileImageProvider_image",
+                         getImageID(),
                          TileImageContribution::fullCoverageOpaque());
 
   if (deleteListener) {
@@ -131,7 +146,7 @@ void ChessboardTileImageProvider::create(const Tile* tile,
     IImage* image = _image->shallowCopy();
     listener->imageCreated(tile->_id,
                            image,
-                           "ChessboardTileImageProvider_image",
+                           getImageID(),
                            contribution);
     if (deleteListener) {
       delete listener;

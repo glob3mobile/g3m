@@ -8,7 +8,7 @@
 #include "ImageBackground.hpp"
 #include "NullImageBackground.hpp"
 #include "BoxImageBackground.hpp"
-#include "IStringUtils.hpp"
+#include "IStringBuilder.hpp"
 
 
 const ImageBackground* LabelStyle::backgroundOrNull(const ImageBackground* background) {
@@ -92,12 +92,21 @@ ImageBackground* LabelStyle::copyBackground() const {
   return _background->copy();
 }
 
+// IStringBuilder keeps every float digit; IStringUtils::toString(float) keeps only 6 on iOS
 const std::string LabelStyle::description() const {
-  const IStringUtils* su = IStringUtils::instance();
-  return (_font.description()         + "/" +
-          _color.id()                 + "/" +
-          _shadowColor.id()           + "/" +
-          su->toString(_shadowBlur)   + "/" +
-          _shadowOffset.description() + "/" +
-          _background->description());
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(_font.description());
+  isb->addString("/");
+  isb->addString(_color.id());
+  isb->addString("/");
+  isb->addString(_shadowColor.id());
+  isb->addString("/");
+  isb->addFloat(_shadowBlur);
+  isb->addString("/");
+  isb->addString(_shadowOffset.description());
+  isb->addString("/");
+  isb->addString(_background->description());
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

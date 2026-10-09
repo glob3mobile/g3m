@@ -31,8 +31,11 @@ public class RowLayoutImageFactory extends LayoutImageFactory
     String error = "";
     String imageName = "Row";
   
-    int maxHeight = 0;
-    int accumulatedWidth = 0;
+    // the children are measured in points, as the retina canvas below draws in points
+    final float pixelRatio = context.getFactory().getDeviceInfo().getDevicePixelRatio();
+  
+    float maxHeight = 0F;
+    float accumulatedWidth = 0F;
   
     final int resultsSize = results.size();
     for (int i = 0; i < resultsSize; i++)
@@ -47,15 +50,17 @@ public class RowLayoutImageFactory extends LayoutImageFactory
       }
       else
       {
-        accumulatedWidth += image.getWidth();
-        if (image.getHeight() > maxHeight)
+        accumulatedWidth += image.getWidth() / pixelRatio;
+        if ((image.getHeight() / pixelRatio) > maxHeight)
         {
-          maxHeight = image.getHeight();
+          maxHeight = image.getHeight() / pixelRatio;
         }
         imageName += result._imageName + "/";
       }
     }
   
+    // the separation changes the pixels, so it must be part of the texture name
+    imageName += "sep=" + IStringUtils.instance().toString(_childrenSeparation) + "/";
     imageName += _background.description();
   
     if (anyError)
@@ -75,7 +80,7 @@ public class RowLayoutImageFactory extends LayoutImageFactory
       final float contentWidth = accumulatedWidth + ((resultsSize - 1) * _childrenSeparation);
       final float contentHeight = maxHeight;
   
-      ICanvas canvas = context.getFactory().createCanvas(false);
+      ICanvas canvas = context.getFactory().createCanvas(true);
   
       final Vector2F contentPos = _background.initializeCanvas(canvas, contentWidth, contentHeight);
   
@@ -84,11 +89,11 @@ public class RowLayoutImageFactory extends LayoutImageFactory
       {
         ChildResult result = results.get(i);
         final IImage image = result._image;
-        final int imageWidth = image.getWidth();
-        final int imageHeight = image.getHeight();
+        final float imageWidth = image.getWidth() / pixelRatio;
+        final float imageHeight = image.getHeight() / pixelRatio;
   
         final float top = contentPos._y + ((contentHeight - imageHeight) / 2.0f);
-        canvas.drawImage(image, cursorLeft, top);
+        canvas.drawImage(image, cursorLeft, top, imageWidth, imageHeight);
         cursorLeft += imageWidth + _childrenSeparation;
       }
   

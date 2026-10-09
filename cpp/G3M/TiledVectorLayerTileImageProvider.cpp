@@ -21,6 +21,7 @@
 #include "ErrorHandling.hpp"
 #include "ILogger.hpp"
 #include "CanvasOwnerImageListenerWrapper.hpp"
+#include "IStringBuilder.hpp"
 
 
 TiledVectorLayerTileImageProvider::GEOJSONBufferRasterizer::~GEOJSONBufferRasterizer() {
@@ -154,7 +155,9 @@ _canceled(false),
 _downloadListener(NULL),
 _downloadRequestID(-1),
 _rasterizer(NULL),
-_symbolizer(NULL)
+_symbolizer(NULL),
+_layerInstanceID(-1),
+_symbolizerRevision(-1)
 {
 }
 
@@ -164,6 +167,10 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::start(const TiledVectorL
                                                               bool                    logDownloadActivity) {
   
   TiledVectorLayer::RequestGEOJSONBufferData* requestData = layer->getRequestGEOJSONBufferData(tile);
+
+  // captured with the symbolizer copy, so the image name matches the styling used to rasterize it
+  _layerInstanceID    = layer->getInstanceID();
+  _symbolizerRevision = layer->getSymbolizerRevision();
   
   const GEOObjectHolder* geoObjectHolder = _tileImageProvider->getGEOObjectFor(requestData->_url);
   if (geoObjectHolder == NULL) {
@@ -305,10 +312,27 @@ void TiledVectorLayerTileImageProvider::ImageAssembler::rasterizedGEOObject(cons
   else {
     canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
                                                             new TVLTIP_IImageListener(this,
-                                                                                      url._path),
+                                                                                      createImageID(url)),
                                                             true),
                         true);
   }
+}
+
+// Past the layer's maxLevel the parent's GEOJSON URL is rasterized into each descendant's sector,
+// and two layers may share a URL template with different symbolizers, so the URL alone doesn't
+// identify the pixels: the tile, the layer and its symbolizer revision are needed too.
+const std::string TiledVectorLayerTileImageProvider::ImageAssembler::createImageID(const URL& url) const {
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString(url._path);
+  isb->addString("|");
+  isb->addString(_tileID);
+  isb->addString("|");
+  isb->addLong(_layerInstanceID);
+  isb->addString("|");
+  isb->addLong(_symbolizerRevision);
+  const std::string imageID = isb->getString();
+  delete isb;
+  return imageID;
 }
 
 void TiledVectorLayerTileImageProvider::ImageAssembler::deletedRasterizer() {

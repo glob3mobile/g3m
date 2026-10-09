@@ -183,6 +183,11 @@ private:
     const bool   _tileIsMercator;
     const int    _tileLevel;
 
+    long long _layerInstanceID;
+    long long _symbolizerRevision;
+
+    const std::string createImageID(const URL& url) const;
+
   public:
     ImageAssembler(TiledVectorLayerTileImageProvider* tileImageProvider,
                    const Tile*                        tile,

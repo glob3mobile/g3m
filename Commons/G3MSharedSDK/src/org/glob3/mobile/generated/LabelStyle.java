@@ -130,10 +130,26 @@ public class LabelStyle
     return new LabelStyle(_font, _color, _shadowColor, _shadowBlur, _shadowOffset, null);
   }
 
+
+  // IStringBuilder keeps every float digit; IStringUtils::toString(float) keeps only 6 on iOS
   public final String description()
   {
-    final IStringUtils su = IStringUtils.instance();
-    return (_font.description() + "/" + _color.id() + "/" + _shadowColor.id() + "/" + su.toString(_shadowBlur) + "/" + _shadowOffset.description() + "/" + _background.description());
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString(_font.description());
+    isb.addString("/");
+    isb.addString(_color.id());
+    isb.addString("/");
+    isb.addString(_shadowColor.id());
+    isb.addString("/");
+    isb.addFloat(_shadowBlur);
+    isb.addString("/");
+    isb.addString(_shadowOffset.description());
+    isb.addString("/");
+    isb.addString(_background.description());
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
   @Override
   public String toString() {

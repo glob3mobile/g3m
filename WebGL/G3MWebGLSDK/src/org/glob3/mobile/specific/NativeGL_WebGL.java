@@ -503,12 +503,7 @@ public final class NativeGL_WebGL extends INativeGL {
 
     gl.linkProgram(jsoProgram);
 
-    var linkStatus = gl.getProgramParameter(jsoProgram, gl.LINK_STATUS);
-    if (!linkStatus) {
-      var info = gl.getProgramInfoLog(jsoProgram);
-      $wnd.console.error("Could not compile WebGL program.\n----------\n" + info + "\n----------");
-    }
-    return linkStatus;
+    return gl.getProgramParameter(jsoProgram, gl.LINK_STATUS);
    }-*/;
 
    private native String getProgramInfoLog(final int program) /*-{

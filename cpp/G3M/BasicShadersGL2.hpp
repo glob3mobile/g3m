@@ -788,8 +788,13 @@ public:
             "  vec3 dInUnitSphere = d / earthRadii;\n" +
             "  return -dot(oInUnitSphere, dInUnitSphere) / dot(dInUnitSphere, dInUnitSphere);\n" +
             "}\n" +
+            "float heightOverEllipsoid(vec3 point) {\n" +
+            "  float distanceToCenter = length(point);\n" +
+            "  float groundRadius = distanceToCenter / length(point / earthRadii);\n" +
+            "  return distanceToCenter - groundRadius;\n" +
+            "}\n" +
             "float airDensity(vec3 point, float scaleHeight) {\n" +
-            "  float heightInKm = (length(point) - earthRadius) / 1000.0;\n" +
+            "  float heightInKm = heightOverEllipsoid(point) / 1000.0;\n" +
             "  return exp(-heightInKm / scaleHeight);\n" +
             "}\n" +
             "float opticalDepthInAtmosphere(vec3 p1, vec3 p2, float scaleHeight) {\n" +

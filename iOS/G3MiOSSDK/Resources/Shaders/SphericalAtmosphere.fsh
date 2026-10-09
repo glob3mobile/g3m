@@ -79,8 +79,16 @@ float groundDistanceAlongRay(vec3 o, vec3 d) {
   return -dot(oInUnitSphere, dInUnitSphere) / dot(dInUnitSphere, dInUnitSphere);
 }
 
+// Height over the ellipsoid along the radius through the point; over the sphere of earthRadius the
+// ground would sit 11 km high at the equator and 11 km deep at the poles, and the air with it
+float heightOverEllipsoid(vec3 point) {
+  float distanceToCenter = length(point);
+  float groundRadius = distanceToCenter / length(point / earthRadii);
+  return distanceToCenter - groundRadius;
+}
+
 float airDensity(vec3 point, float scaleHeight) {
-  float heightInKm = (length(point) - earthRadius) / 1000.0;
+  float heightInKm = heightOverEllipsoid(point) / 1000.0;
   return exp(-heightInKm / scaleHeight);
 }
 

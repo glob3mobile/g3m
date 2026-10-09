@@ -19,6 +19,8 @@ class TextureIDReference;
 class QuadShape : public AbstractMeshShape {
 private:
   const URL    _textureURL;
+  // the TexturesHandler cache key: the URL path for downloaded textures, the caller's name for an IImage
+  const std::string _textureName;
   const float  _width;
   const float  _height;
   const Color* _color;
@@ -53,6 +55,7 @@ public:
   QuadShape(Geodetic3D* position,
             AltitudeMode altitudeMode,
             const IImage* textureImage,
+            const std::string& textureName,
             float width,
             float height,
             bool withNormals);
