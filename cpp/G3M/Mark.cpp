@@ -265,14 +265,20 @@ _hasHint(false),
 _appAnchorU(0.5),
 _appAnchorV(0.5),
 _declutterHidden(false),
+_leavingRenderer(false),
+_deleteWhenGone(false),
+_plannedTarget(0),
+_plannedSinceMS(-1),
 _declutterTarget(0),
 _presence(1),
-_transitionScale(1),
+_transitionWidthScale(1),
+_transitionHeightScale(1),
 _transitionAlpha(1),
 _lastTransitionMS(-1),
 _leavingOutfitIndex(-1),
 _leavingPresence(0),
-_leavingScale(1),
+_leavingWidthScale(1),
+_leavingHeightScale(1),
 _leavingAlpha(1),
 _leavingGLState(NULL),
 _leavingBillboardGLF(NULL),
@@ -338,6 +344,9 @@ _token("")
       THROW_EXCEPTION("Mark: mutable image factories are not supported");
     }
     _outfitImages.push_back(new MarkOutfitImage(imageFactory, outfit->getAnchor()));
+
+    // by order: the first outfit shows the most
+    _detailLevels.push_back(outfit->getDetailLevel((int) (outfits.size() - i)));
   }
 }
 
@@ -828,9 +837,9 @@ void Mark::updateBillboard() {
   }
   if (_leavingBillboardGLF != NULL) {
     const Vector2F leavingSize = getOutfitScreenSize(_leavingOutfitIndex);
-    const float leavingFactor = _effectScale * _leavingScale * _horizonScale;
-    _leavingBillboardGLF->changeSize(mu->round(leavingSize._x * leavingFactor),
-                                     mu->round(leavingSize._y * leavingFactor));
+    const float leavingFactor = _effectScale * _horizonScale;
+    _leavingBillboardGLF->changeSize(mu->round(leavingSize._x * leavingFactor * _leavingWidthScale),
+                                     mu->round(leavingSize._y * leavingFactor * _leavingHeightScale));
     _leavingBillboardGLF->changeAlpha(_leavingAlpha);
   }
 }
@@ -883,8 +892,15 @@ void Mark::addHint(MarkOutfit* hint) {
   if (_hasHint) {
     THROW_EXCEPTION("Mark: the mark already has a hint");
   }
+  int lowestLevel = _detailLevels[0];
+  for (size_t i = 1; i < _detailLevels.size(); i++) {
+    if (_detailLevels[i] < lowestLevel) {
+      lowestLevel = _detailLevels[i];
+    }
+  }
   _outfits.push_back(hint);
   _outfitImages.push_back(new MarkOutfitImage(hint->takeImageFactory(), hint->getAnchor()));
+  _detailLevels.push_back(lowestLevel - 1); // below every other outfit
   _hasHint = true;
 }
 
@@ -950,8 +966,19 @@ void Mark::applyOutfitAnchor(const MarkOutfitImage* outfitImage) {
 }
 
 void Mark::stepDeclutterTransition(long long nowMS,
+                                   long long delayMS,
                                    long long durationMS,
                                    MarkTransitionMode mode) {
+  // a plan that comes and goes within the delay never reaches the screen
+  if (_plannedTarget != _declutterTarget) {
+    if (_plannedSinceMS < 0) {
+      _plannedSinceMS = nowMS;
+    }
+    if ((nowMS - _plannedSinceMS) >= delayMS) {
+      _declutterTarget = _plannedTarget;
+    }
+  }
+
   const long long elapsedMS = (_lastTransitionMS < 0) ? 0 : (nowMS - _lastTransitionMS);
   _lastTransitionMS = nowMS;
   const float step = (durationMS <= 0) ? 1 : ((float) elapsedMS / durationMS);
@@ -1022,20 +1049,60 @@ void Mark::releaseLeavingOutfit() {
   _leavingPresence          = 0;
 }
 
-void Mark::applyTransitionMode(MarkTransitionMode mode) {
-  const bool scales = (mode == SCALE) || (mode == SCALE_AND_ALPHA);
-  const bool fades  = (mode == ALPHA) || (mode == SCALE_AND_ALPHA);
+bool Mark::scalesWidth(MarkTransitionMode mode) {
+  return (mode == SCALE) || (mode == SCALE_AND_ALPHA) || (mode == WIDTH) || (mode == WIDTH_AND_ALPHA);
+}
 
-  _transitionScale = scales ? _presence : 1;
-  _transitionAlpha = fades  ? _presence : 1;
-  _leavingScale    = scales ? _leavingPresence : 1;
-  _leavingAlpha    = fades  ? _leavingPresence : 1;
+bool Mark::scalesHeight(MarkTransitionMode mode) {
+  return (mode == SCALE) || (mode == SCALE_AND_ALPHA) || (mode == HEIGHT) || (mode == HEIGHT_AND_ALPHA);
+}
+
+bool Mark::fades(MarkTransitionMode mode) {
+  return (mode == ALPHA) || (mode == SCALE_AND_ALPHA) || (mode == WIDTH_AND_ALPHA) || (mode == HEIGHT_AND_ALPHA);
+}
+
+// each outfit comes in or goes away its own way: one may fold sideways while the other unfolds upwards
+void Mark::applyTransitionMode(MarkTransitionMode rendererMode) {
+  const MarkTransitionMode arrivingMode = _outfits[_outfitIndex]->getTransitionMode(rendererMode);
+  _transitionWidthScale  = scalesWidth(arrivingMode)  ? _presence : 1;
+  _transitionHeightScale = scalesHeight(arrivingMode) ? _presence : 1;
+  _transitionAlpha       = fades(arrivingMode)        ? _presence : 1;
+
+  const MarkTransitionMode leavingMode = (_leavingOutfitIndex < 0) ? rendererMode : _outfits[_leavingOutfitIndex]->getTransitionMode(rendererMode);
+  _leavingWidthScale  = scalesWidth(leavingMode)  ? _leavingPresence : 1;
+  _leavingHeightScale = scalesHeight(leavingMode) ? _leavingPresence : 1;
+  _leavingAlpha       = fades(leavingMode)        ? _leavingPresence : 1;
 
   updateBillboard();
 }
 
+void Mark::hideUntilDecluttered() {
+  releaseLeavingOutfit();
+  _plannedTarget    = -1;
+  _plannedSinceMS   = -1;
+  _declutterTarget  = -1;
+  _declutterHidden  = true;
+  _presence         = 0;
+  _lastTransitionMS = -1;
+  applyTransitionMode(SCALE_AND_ALPHA);
+}
+
+void Mark::startLeavingRenderer(bool deleteMark) {
+  _leavingRenderer = true;
+  _deleteWhenGone  = deleteMark;
+  _plannedTarget   = -1;
+  _plannedSinceMS  = -1;
+  _declutterTarget = -1; // no delay: it is gone already, the transition is for the eye
+}
+
+bool Mark::hasLeftRenderer() const {
+  return _leavingRenderer && _declutterHidden && (_leavingGLState == NULL);
+}
+
 void Mark::resetDeclutter() {
   releaseLeavingOutfit();
+  _plannedTarget    = 0;
+  _plannedSinceMS   = -1;
   _declutterTarget  = 0;
   _declutterHidden  = false;
   _presence         = 1;

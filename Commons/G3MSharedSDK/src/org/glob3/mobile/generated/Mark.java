@@ -5,21 +5,32 @@ public class Mark implements SurfaceElevationListener
   private java.util.ArrayList<MarkOutfit> _outfits = new java.util.ArrayList<MarkOutfit>();
   private java.util.ArrayList<MarkOutfitImage> _outfitImages = new java.util.ArrayList<MarkOutfitImage>(); // one per outfit: the image and texture of the outfits not on screen
   private int _outfitIndex;
+  private java.util.ArrayList<Integer> _detailLevels = new java.util.ArrayList<Integer>(); // one per outfit: the outfit's own, or by its order
 
   private double _priority; // NAND: none, the renderer's order decides
   private boolean _declutterHidden;
 
-  // the outfit the renderer wants on screen (-1: none); the one on screen goes away while the target comes in
+  // removed from a decluttering renderer: gone for touches and room at once, it fades out only for the eye
+  private boolean _leavingRenderer;
+  private boolean _deleteWhenGone;
+
+  // the outfit the renderer plans (-1: none), and since when; it becomes the target once the plan holds for the delay
+  private int _plannedTarget;
+  private long _plannedSinceMS;
+
+  // the outfit on its way to the screen (-1: none); the one on screen goes away while the target comes in
   private int _declutterTarget;
   private float _presence; // how far the outfit on screen has come in: 0 gone, 1 complete
-  private float _transitionScale;
+  private float _transitionWidthScale;
+  private float _transitionHeightScale;
   private float _transitionAlpha;
   private long _lastTransitionMS;
 
   // the outfit that was on screen before, drawn under the one coming in until it is gone (-1: none)
   private int _leavingOutfitIndex;
   private float _leavingPresence;
-  private float _leavingScale;
+  private float _leavingWidthScale;
+  private float _leavingHeightScale;
   private float _leavingAlpha;
   private GLState _leavingGLState;
   private BillboardGLFeature _leavingBillboardGLF;
@@ -72,17 +83,34 @@ public class Mark implements SurfaceElevationListener
     _leavingOutfitIndex = -1;
     _leavingPresence = 0F;
   }
-  private void applyTransitionMode(MarkTransitionMode mode)
+
+  // each outfit comes in or goes away its own way: one may fold sideways while the other unfolds upwards
+  private void applyTransitionMode(MarkTransitionMode rendererMode)
   {
-    final boolean scales = (mode == MarkTransitionMode.SCALE) || (mode == MarkTransitionMode.SCALE_AND_ALPHA);
-    final boolean fades = (mode == MarkTransitionMode.ALPHA) || (mode == MarkTransitionMode.SCALE_AND_ALPHA);
+    final MarkTransitionMode arrivingMode = _outfits.get(_outfitIndex).getTransitionMode(rendererMode);
+    _transitionWidthScale = scalesWidth(arrivingMode) ? _presence : 1;
+    _transitionHeightScale = scalesHeight(arrivingMode) ? _presence : 1;
+    _transitionAlpha = fades(arrivingMode) ? _presence : 1;
   
-    _transitionScale = scales ? _presence : 1;
-    _transitionAlpha = fades ? _presence : 1;
-    _leavingScale = scales ? _leavingPresence : 1;
-    _leavingAlpha = fades ? _leavingPresence : 1;
+    final MarkTransitionMode leavingMode = (_leavingOutfitIndex < 0) ? rendererMode : _outfits.get(_leavingOutfitIndex).getTransitionMode(rendererMode);
+    _leavingWidthScale = scalesWidth(leavingMode) ? _leavingPresence : 1;
+    _leavingHeightScale = scalesHeight(leavingMode) ? _leavingPresence : 1;
+    _leavingAlpha = fades(leavingMode) ? _leavingPresence : 1;
   
     updateBillboard();
+  }
+
+  private static boolean scalesWidth(MarkTransitionMode mode)
+  {
+    return (mode == MarkTransitionMode.SCALE) || (mode == MarkTransitionMode.SCALE_AND_ALPHA) || (mode == MarkTransitionMode.WIDTH) || (mode == MarkTransitionMode.WIDTH_AND_ALPHA);
+  }
+  private static boolean scalesHeight(MarkTransitionMode mode)
+  {
+    return (mode == MarkTransitionMode.SCALE) || (mode == MarkTransitionMode.SCALE_AND_ALPHA) || (mode == MarkTransitionMode.HEIGHT) || (mode == MarkTransitionMode.HEIGHT_AND_ALPHA);
+  }
+  private static boolean fades(MarkTransitionMode mode)
+  {
+    return (mode == MarkTransitionMode.ALPHA) || (mode == MarkTransitionMode.SCALE_AND_ALPHA) || (mode == MarkTransitionMode.WIDTH_AND_ALPHA) || (mode == MarkTransitionMode.HEIGHT_AND_ALPHA);
   }
   private void drawLeavingOutfit(G3MRenderContext rc, GLState parentGLState)
   {
@@ -277,8 +305,8 @@ public class Mark implements SurfaceElevationListener
     if (_leavingBillboardGLF != null)
     {
       final Vector2F leavingSize = getOutfitScreenSize(_leavingOutfitIndex);
-      final float leavingFactor = _effectScale * _leavingScale * _horizonScale;
-      _leavingBillboardGLF.changeSize(mu.round(leavingSize._x * leavingFactor), mu.round(leavingSize._y * leavingFactor));
+      final float leavingFactor = _effectScale * _horizonScale;
+      _leavingBillboardGLF.changeSize(mu.round(leavingSize._x * leavingFactor * _leavingWidthScale), mu.round(leavingSize._y * leavingFactor * _leavingHeightScale));
       _leavingBillboardGLF.changeAlpha(_leavingAlpha);
     }
   }
@@ -437,14 +465,20 @@ public class Mark implements SurfaceElevationListener
      _appAnchorU = 0.5F;
      _appAnchorV = 0.5F;
      _declutterHidden = false;
+     _leavingRenderer = false;
+     _deleteWhenGone = false;
+     _plannedTarget = 0;
+     _plannedSinceMS = -1;
      _declutterTarget = 0;
      _presence = 1F;
-     _transitionScale = 1F;
+     _transitionWidthScale = 1F;
+     _transitionHeightScale = 1F;
      _transitionAlpha = 1F;
      _lastTransitionMS = -1;
      _leavingOutfitIndex = -1;
      _leavingPresence = 0F;
-     _leavingScale = 1F;
+     _leavingWidthScale = 1F;
+     _leavingHeightScale = 1F;
      _leavingAlpha = 1F;
      _leavingGLState = null;
      _leavingBillboardGLF = null;
@@ -512,6 +546,9 @@ public class Mark implements SurfaceElevationListener
         throw new RuntimeException("Mark: mutable image factories are not supported");
       }
       _outfitImages.add(new MarkOutfitImage(imageFactory, outfit.getAnchor()));
+  
+      // by order: the first outfit shows the most
+      _detailLevels.add(outfit.getDetailLevel((int)(outfits.size() - i)));
     }
   }
 
@@ -669,6 +706,12 @@ public class Mark implements SurfaceElevationListener
     return _outfits.size();
   }
 
+  /** outfits with the same level are alternatives; a higher one shows more */
+  public final int getOutfitDetailLevel(int outfitIndex)
+  {
+    return _detailLevels.get(outfitIndex);
+  }
+
   public final int getOutfitIndex()
   {
     return _outfitIndex;
@@ -715,8 +758,17 @@ public class Mark implements SurfaceElevationListener
     {
       throw new RuntimeException("Mark: the mark already has a hint");
     }
+    int lowestLevel = _detailLevels.get(0);
+    for (int i = 1; i < _detailLevels.size(); i++)
+    {
+      if (_detailLevels.get(i) < lowestLevel)
+      {
+        lowestLevel = _detailLevels.get(i);
+      }
+    }
     _outfits.add(hint);
     _outfitImages.add(new MarkOutfitImage(hint.takeImageFactory(), hint.getAnchor()));
+    _detailLevels.add(lowestLevel - 1); // below every other outfit
     _hasHint = true;
   }
 
@@ -793,20 +845,42 @@ public class Mark implements SurfaceElevationListener
     return _declutterHidden;
   }
 
-  /** the outfit a decluttering renderer chose, -1 when none fits; the mark gets there through stepDeclutterTransition */
+  /** the outfit a decluttering renderer plans, -1 when none fits; the mark goes there through stepDeclutterTransition once the plan holds */
   public final void setDeclutterTarget(int outfitIndex)
   {
-    _declutterTarget = outfitIndex;
+    if (_leavingRenderer)
+    {
+      return;
+    }
+    if (outfitIndex != _plannedTarget)
+    {
+      _plannedTarget = outfitIndex;
+      _plannedSinceMS = -1;
+    }
   }
 
+  /** the outfit the renderer planned, maybe still waiting for the delay */
   public final int getDeclutterTarget()
   {
-    return _declutterTarget;
+    return _plannedTarget;
   }
 
-  /** the outfit on screen goes away while the target comes in, both at once and in durationMS; reversible halfway */
-  public final void stepDeclutterTransition(long nowMS, long durationMS, MarkTransitionMode mode)
+  /** a plan that holds for delayMS becomes the target; the outfit on screen goes away while the target comes in, both at once and in durationMS; reversible halfway */
+  public final void stepDeclutterTransition(long nowMS, long delayMS, long durationMS, MarkTransitionMode mode)
   {
+    // a plan that comes and goes within the delay never reaches the screen
+    if (_plannedTarget != _declutterTarget)
+    {
+      if (_plannedSinceMS < 0)
+      {
+        _plannedSinceMS = nowMS;
+      }
+      if ((nowMS - _plannedSinceMS) >= delayMS)
+      {
+        _declutterTarget = _plannedTarget;
+      }
+    }
+  
     final long elapsedMS = (_lastTransitionMS < 0) ? 0 : (nowMS - _lastTransitionMS);
     _lastTransitionMS = nowMS;
     final float step = (durationMS <= 0) ? 1 : ((float) elapsedMS / durationMS);
@@ -844,12 +918,53 @@ public class Mark implements SurfaceElevationListener
   public final void resetDeclutter()
   {
     releaseLeavingOutfit();
+    _plannedTarget = 0;
+    _plannedSinceMS = -1;
     _declutterTarget = 0;
     _declutterHidden = false;
     _presence = 1F;
     _lastTransitionMS = -1;
     setOutfit(0);
     applyTransitionMode(MarkTransitionMode.SCALE_AND_ALPHA);
+  }
+
+  /** off screen until a decluttering renderer finds it room, so a new mark does not flash in before it is placed */
+  public final void hideUntilDecluttered()
+  {
+    releaseLeavingOutfit();
+    _plannedTarget = -1;
+    _plannedSinceMS = -1;
+    _declutterTarget = -1;
+    _declutterHidden = true;
+    _presence = 0F;
+    _lastTransitionMS = -1;
+    applyTransitionMode(MarkTransitionMode.SCALE_AND_ALPHA);
+  }
+
+  /** a decluttering renderer removes the mark with its transition: from now on it takes no room and no touches; deleteMark: once gone */
+  public final void startLeavingRenderer(boolean deleteMark)
+  {
+    _leavingRenderer = true;
+    _deleteWhenGone = deleteMark;
+    _plannedTarget = -1;
+    _plannedSinceMS = -1;
+    _declutterTarget = -1; // no delay: it is gone already, the transition is for the eye
+  }
+
+  public final boolean isLeavingRenderer()
+  {
+    return _leavingRenderer;
+  }
+
+  /** the leaving mark is off the screen: the renderer can let it go */
+  public final boolean hasLeftRenderer()
+  {
+    return _leavingRenderer && _declutterHidden && (_leavingGLState == null);
+  }
+
+  public final boolean deletesWhenGone()
+  {
+    return _deleteWhenGone;
   }
 
   /** the order among the marks that compete for space: the higher, the earlier */
@@ -881,12 +996,12 @@ public class Mark implements SurfaceElevationListener
   /** the size drawn on screen: the texture size times the app's and the effects' scales */
   public final float getScreenWidth()
   {
-    return _textureWidth * _textureWidthScale * _effectScale * _transitionScale * _horizonScale;
+    return _textureWidth * _textureWidthScale * _effectScale * _transitionWidthScale * _horizonScale;
   }
 
   public final float getScreenHeight()
   {
-    return _textureHeight * _textureHeightScale * _effectScale * _transitionScale * _horizonScale;
+    return _textureHeight * _textureHeightScale * _effectScale * _transitionHeightScale * _horizonScale;
   }
 
   public final Vector2F getTextureExtent()

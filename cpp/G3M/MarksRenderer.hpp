@@ -24,6 +24,7 @@ class MarkTouchListener;
 class IFloatBuffer;
 class ITimer;
 class MarkFilter;
+class Vector2F;
 
 
 class MarksRenderer : public DefaultRenderer {
@@ -57,6 +58,7 @@ private:
   bool      _horizonBand;
   float     _declutterMargin;
   long long          _transitionMS;
+  long long          _delayMS;
   MarkTransitionMode _transitionMode;
 
   // the default hint: one image, shared by every mark without a hint of its own
@@ -86,6 +88,23 @@ private:
                  double cameraHeight);
 
   bool isFree(float left, float top, float right, float bottom) const;
+
+  void removeMarksThatLeft(bool evenLeaving);
+
+  bool hasOutfitImage(const Mark* mark,
+                      size_t outfitIndex) const;
+
+  bool outfitFits(const Mark* mark,
+                  const Vector2F& markPixel,
+                  size_t outfitIndex,
+                  float margin) const;
+
+  void takeOutfitSpace(const Mark* mark,
+                       const Vector2F& markPixel,
+                       size_t outfitIndex);
+
+  int chooseOutfit(const Mark* mark,
+                   const Vector2F& markPixel) const;
 
 public:
 
@@ -131,10 +150,13 @@ public:
     return _horizonBand;
   }
 
-  /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 500ms by default */
+  /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 250ms by default */
   void setDeclutterTransitionDuration(const TimeInterval& duration);
 
-  /** how outfits come in and go away: SCALE_AND_ALPHA by default */
+  /** how long a mark's new outfit must hold before the mark changes, so changes that come and go are not seen; marks may overlap meanwhile; 250ms by default */
+  void setDeclutterDelay(const TimeInterval& delay);
+
+  /** how outfits come in and go away: SCALE_AND_ALPHA by default; WIDTH suits outfits that move the label to the other side of the icon */
   void setDeclutterTransitionMode(MarkTransitionMode mode) {
     _transitionMode = mode;
   }

@@ -10,9 +10,16 @@
 
 #include "G3MDemoScene.hpp"
 
+#include <G3M/MarkTransitionMode.hpp>
+
 class Geodetic3D;
 class Angle;
 class JSONArray;
+class URL;
+class IImageFactory;
+class BoxImageBackground;
+class Vector2F;
+class Color;
 
 
 /** every Mark feature in one scene: each option of the Feature menu shows one */
@@ -22,6 +29,8 @@ private:
   int _featureGeneration;
 
   bool _londonPrioritized;
+  std::string _londonLabelSide; // where a label may go around its icon: an option of the London label group
+  std::string _londonTransition; // an option of the London transition group
   bool _showsTerrain;
 
   void removeFeature();
@@ -40,6 +49,17 @@ private:
   void orbitLondon();
   void applyLondonDeclutter(const std::string& declutterOption);
   void applyLondonTransition(const std::string& transitionOption);
+  void applyLondonLabelSide(const std::string& labelSideOption);
+  MarkTransitionMode londonSideLabelTransition() const;
+  MarkTransitionMode londonVerticalLabelTransition() const;
+  void loadLondonMarks();
+
+  static IImageFactory* createLondonIcon(const URL& iconURL,
+                                         const int  iconPoints);
+
+  static BoxImageBackground* createLondonBox(const Vector2F& padding,
+                                             const Color&    backgroundColor,
+                                             const float     cornerRadius);
 
 protected:
   void rawActivate(const G3MContext* context);
@@ -57,6 +77,8 @@ public:
   G3MDemoScene(model, "Marks", "Feature", "<select feature>", 0),
   _featureGeneration(0),
   _londonPrioritized(true),
+  _londonLabelSide("Any side"),
+  _londonTransition("Fold and alpha"),
   _showsTerrain(false)
   {
     addOption("Basic - icon, anchor, scale");
@@ -82,10 +104,20 @@ public:
     addOption(horizonGroup, "Cut");
     addOption(horizonGroup, "Band");
 
-    const size_t transitionGroup = addOptionGroup("London transition", "<transition>", 2); // Scale and alpha
-    addOption(transitionGroup, "Scale");
+    // Fold: a label at the side folds into its icon in width, above or below in height; icons and dots scale
+    const size_t transitionGroup = addOptionGroup("London transition", "<transition>", 4); // Fold and alpha
     addOption(transitionGroup, "Alpha");
+    addOption(transitionGroup, "Scale");
     addOption(transitionGroup, "Scale and alpha");
+    addOption(transitionGroup, "Fold");
+    addOption(transitionGroup, "Fold and alpha");
+
+    // a label that does not fit on the right tries the left before the mark shrinks to its icon
+    const size_t labelSideGroup = addOptionGroup("London label", "<label>", 3); // Any side
+    addOption(labelSideGroup, "Right");
+    addOption(labelSideGroup, "Right or left");
+    addOption(labelSideGroup, "Top or bottom");
+    addOption(labelSideGroup, "Any side");
   }
 
   void deactivate(const G3MContext* context);

@@ -137,10 +137,27 @@ public class MarkBuilder
     _position = new Geodetic3D(position);
   }
 
-  /** the first outfit added is the largest; anchor NULL: the mark keeps its own anchor */
+  /** in order of preference: a decluttering renderer gives the mark the first one that fits; anchor NULL: the mark keeps its own anchor */
   public final void addOutfit(IImageFactory imageFactory, MarkAnchor anchor)
   {
     _outfits.add(new MarkOutfit(imageFactory, anchor));
+  }
+
+  /** an outfit with its own way of coming in and going away, instead of the renderer's */
+  public final void addOutfit(IImageFactory imageFactory, MarkAnchor anchor, MarkTransitionMode transitionMode)
+  {
+    _outfits.add(new MarkOutfit(imageFactory, anchor, transitionMode));
+  }
+
+  /** detailLevel: outfits with the same level are alternatives (the label on one side or the other), a higher one shows more; without it, each outfit is a level of its own, from the first down */
+  public final void addOutfit(IImageFactory imageFactory, MarkAnchor anchor, int detailLevel)
+  {
+    _outfits.add(new MarkOutfit(imageFactory, anchor, detailLevel));
+  }
+
+  public final void addOutfit(IImageFactory imageFactory, MarkAnchor anchor, int detailLevel, MarkTransitionMode transitionMode)
+  {
+    _outfits.add(new MarkOutfit(imageFactory, anchor, detailLevel, transitionMode));
   }
 
   public final void addOutfit(IImageFactory imageFactory)

@@ -57,21 +57,32 @@ private:
   std::vector<MarkOutfit*>      _outfits;
   std::vector<MarkOutfitImage*> _outfitImages; // one per outfit: the image and texture of the outfits not on screen
   size_t                        _outfitIndex;
+  std::vector<int>              _detailLevels; // one per outfit: the outfit's own, or by its order
 
   double _priority; // NAND: none, the renderer's order decides
   bool   _declutterHidden;
 
-  // the outfit the renderer wants on screen (-1: none); the one on screen goes away while the target comes in
+  // removed from a decluttering renderer: gone for touches and room at once, it fades out only for the eye
+  bool _leavingRenderer;
+  bool _deleteWhenGone;
+
+  // the outfit the renderer plans (-1: none), and since when; it becomes the target once the plan holds for the delay
+  int       _plannedTarget;
+  long long _plannedSinceMS;
+
+  // the outfit on its way to the screen (-1: none); the one on screen goes away while the target comes in
   int       _declutterTarget;
   float     _presence; // how far the outfit on screen has come in: 0 gone, 1 complete
-  float     _transitionScale;
+  float     _transitionWidthScale;
+  float     _transitionHeightScale;
   float     _transitionAlpha;
   long long _lastTransitionMS;
 
   // the outfit that was on screen before, drawn under the one coming in until it is gone (-1: none)
   int                      _leavingOutfitIndex;
   float                    _leavingPresence;
-  float                    _leavingScale;
+  float                    _leavingWidthScale;
+  float                    _leavingHeightScale;
   float                    _leavingAlpha;
   GLState*                 _leavingGLState;
   BillboardGLFeature*      _leavingBillboardGLF;
@@ -80,7 +91,11 @@ private:
   void startOutfitTransition(size_t outfitIndex);
   void moveGLStateToLeaving();
   void releaseLeavingOutfit();
-  void applyTransitionMode(MarkTransitionMode mode);
+  void applyTransitionMode(MarkTransitionMode rendererMode);
+
+  static bool scalesWidth(MarkTransitionMode mode);
+  static bool scalesHeight(MarkTransitionMode mode);
+  static bool fades(MarkTransitionMode mode);
   void drawLeavingOutfit(const G3MRenderContext* rc,
                          const GLState* parentGLState);
 
@@ -269,6 +284,11 @@ public:
     return _outfits.size();
   }
 
+  /** outfits with the same level are alternatives; a higher one shows more */
+  int getOutfitDetailLevel(size_t outfitIndex) const {
+    return _detailLevels[outfitIndex];
+  }
+
   size_t getOutfitIndex() const {
     return _outfitIndex;
   }
@@ -305,22 +325,47 @@ public:
     return _declutterHidden;
   }
 
-  /** the outfit a decluttering renderer chose, -1 when none fits; the mark gets there through stepDeclutterTransition */
+  /** the outfit a decluttering renderer plans, -1 when none fits; the mark goes there through stepDeclutterTransition once the plan holds */
   void setDeclutterTarget(int outfitIndex) {
-    _declutterTarget = outfitIndex;
+    if (_leavingRenderer) {
+      return;
+    }
+    if (outfitIndex != _plannedTarget) {
+      _plannedTarget  = outfitIndex;
+      _plannedSinceMS = -1;
+    }
   }
 
+  /** the outfit the renderer planned, maybe still waiting for the delay */
   int getDeclutterTarget() const {
-    return _declutterTarget;
+    return _plannedTarget;
   }
 
-  /** the outfit on screen goes away while the target comes in, both at once and in durationMS; reversible halfway */
+  /** a plan that holds for delayMS becomes the target; the outfit on screen goes away while the target comes in, both at once and in durationMS; reversible halfway */
   void stepDeclutterTransition(long long nowMS,
+                               long long delayMS,
                                long long durationMS,
                                MarkTransitionMode mode);
 
   /** back to the first outfit, on screen and complete, with no transition */
   void resetDeclutter();
+
+  /** off screen until a decluttering renderer finds it room, so a new mark does not flash in before it is placed */
+  void hideUntilDecluttered();
+
+  /** a decluttering renderer removes the mark with its transition: from now on it takes no room and no touches; deleteMark: once gone */
+  void startLeavingRenderer(bool deleteMark);
+
+  bool isLeavingRenderer() const {
+    return _leavingRenderer;
+  }
+
+  /** the leaving mark is off the screen: the renderer can let it go */
+  bool hasLeftRenderer() const;
+
+  bool deletesWhenGone() const {
+    return _deleteWhenGone;
+  }
 
   /** the order among the marks that compete for space: the higher, the earlier */
   void setPriority(double priority) {
@@ -343,11 +388,11 @@ public:
 
   /** the size drawn on screen: the texture size times the app's and the effects' scales */
   float getScreenWidth() const {
-    return _textureWidth * _textureWidthScale * _effectScale * _transitionScale * _horizonScale;
+    return _textureWidth * _textureWidthScale * _effectScale * _transitionWidthScale * _horizonScale;
   }
 
   float getScreenHeight() const {
-    return _textureHeight * _textureHeightScale * _effectScale * _transitionScale * _horizonScale;
+    return _textureHeight * _textureHeightScale * _effectScale * _transitionHeightScale * _horizonScale;
   }
 
   Vector2F getTextureExtent() const {

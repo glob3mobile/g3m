@@ -27,6 +27,7 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //class ITimer;
 //class MarkFilter;
+//class Vector2F;
 
 
 public class MarksRenderer extends DefaultRenderer
@@ -86,6 +87,7 @@ public class MarksRenderer extends DefaultRenderer
   private boolean _horizonBand;
   private float _declutterMargin;
   private long _transitionMS;
+  private long _delayMS;
   private MarkTransitionMode _transitionMode;
 
   // the default hint: one image, shared by every mark without a hint of its own
@@ -137,7 +139,7 @@ public class MarksRenderer extends DefaultRenderer
     {
       final int ii = _renderInReverse ? i : (marksSize-1-i);
       Mark mark = _marks.get(ii);
-      if (mark.isReady() && mark.isVisibleFrom(planet, cameraPosition, cameraHeight))
+      if (mark.isReady() && !mark.isLeavingRenderer() && mark.isVisibleFrom(planet, cameraPosition, cameraHeight))
       {
         candidates.add(mark);
       }
@@ -178,37 +180,11 @@ public class MarksRenderer extends DefaultRenderer
       Mark mark = ordered.get(i);
       final Vector2F markPixel = camera.point2Pixel(mark.getCartesianPosition(planet));
   
-      boolean placed = false;
-      final int outfitsCount = mark.getOutfitsCount();
-      for (int outfitIndex = 0; (outfitIndex < outfitsCount) && !placed; outfitIndex++)
+      final int target = chooseOutfit(mark, markPixel);
+      mark.setDeclutterTarget(target);
+      if (target >= 0)
       {
-        final Vector2F size = mark.getOutfitScreenSize(outfitIndex);
-        if ((size._x <= 0) || (size._y <= 0))
-        {
-          continue; // its image does not exist yet
-        }
-        final Vector2F anchor = mark.getOutfitAnchor(outfitIndex);
-        final float left = markPixel._x - (size._x * anchor._x);
-        final float top = markPixel._y - (size._y * anchor._y);
-  
-        final int target = mark.getDeclutterTarget();
-        final boolean grows = (target < 0) || ((int) outfitIndex < target);
-        final float margin = grows ? _declutterMargin : 0;
-  
-        if (isFree(left - margin, top - margin, left + size._x + margin, top + size._y + margin))
-        {
-          mark.setDeclutterTarget((int) outfitIndex);
-          _takenLeft.add(left);
-          _takenTop.add(top);
-          _takenRight.add(left + size._x);
-          _takenBottom.add(top + size._y);
-          placed = true;
-        }
-      }
-  
-      if (!placed)
-      {
-        mark.setDeclutterTarget(-1);
+        takeOutfitSpace(mark, markPixel, target);
       }
     }
   }
@@ -227,6 +203,115 @@ public class MarksRenderer extends DefaultRenderer
   }
 
 
+  // evenLeaving: also the marks still fading out
+  private void removeMarksThatLeft(boolean evenLeaving)
+  {
+    java.util.ArrayList<Mark> survivingMarks = new java.util.ArrayList<Mark>();
+    boolean anyRemoved = false;
+    for (int i = 0; i < _marks.size(); i++)
+    {
+      Mark mark = _marks.get(i);
+      final boolean gone = evenLeaving ? mark.isLeavingRenderer() : mark.hasLeftRenderer();
+      if (gone)
+      {
+        anyRemoved = true;
+        if (mark.deletesWhenGone())
+        {
+          if (mark != null)
+             mark.dispose();
+        }
+      }
+      else
+      {
+        survivingMarks.add(mark);
+      }
+    }
+    if (anyRemoved)
+    {
+      _marks = survivingMarks;
+    }
+  }
+
+  private boolean hasOutfitImage(Mark mark, int outfitIndex)
+  {
+    final Vector2F size = mark.getOutfitScreenSize(outfitIndex);
+    return (size._x > 0) && (size._y > 0);
+  }
+
+  private boolean outfitFits(Mark mark, Vector2F markPixel, int outfitIndex, float margin)
+  {
+    final Vector2F size = mark.getOutfitScreenSize(outfitIndex);
+    final Vector2F anchor = mark.getOutfitAnchor(outfitIndex);
+    final float left = markPixel._x - (size._x * anchor._x);
+    final float top = markPixel._y - (size._y * anchor._y);
+    return isFree(left - margin, top - margin, left + size._x + margin, top + size._y + margin);
+  }
+
+  private void takeOutfitSpace(Mark mark, Vector2F markPixel, int outfitIndex)
+  {
+    final Vector2F size = mark.getOutfitScreenSize(outfitIndex);
+    final Vector2F anchor = mark.getOutfitAnchor(outfitIndex);
+    final float left = markPixel._x - (size._x * anchor._x);
+    final float top = markPixel._y - (size._y * anchor._y);
+    _takenLeft.add(left);
+    _takenTop.add(top);
+    _takenRight.add(left + size._x);
+    _takenBottom.add(top + size._y);
+  }
+
+
+  /**
+   * A mark keeps its outfit while nothing overlaps it, so alternatives of the
+   * same detail level (the label on one side or the other) do not swap back and
+   * forth. It grows to the first outfit of a higher level that fits with the
+   * margin; when its own no longer fits, it moves to an alternative of its level,
+   * then to a lower level, or hides.
+   */
+  private int chooseOutfit(Mark mark, Vector2F markPixel)
+  {
+    final int current = mark.getDeclutterTarget();
+    final int outfitsCount = mark.getOutfitsCount();
+  
+    for (int i = 0; i < outfitsCount; i++)
+    {
+      final boolean grows = (current < 0) || (mark.getOutfitDetailLevel(i) > mark.getOutfitDetailLevel(current));
+      if (grows && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, _declutterMargin))
+      {
+        return (int) i;
+      }
+    }
+  
+    if (current < 0)
+    {
+      return -1;
+    }
+  
+    final int currentLevel = mark.getOutfitDetailLevel(current);
+    if (hasOutfitImage(mark, current) && outfitFits(mark, markPixel, current, 0))
+    {
+      return current;
+    }
+  
+    for (int i = 0; i < outfitsCount; i++)
+    {
+      if ((mark.getOutfitDetailLevel(i) == currentLevel) && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, 0))
+      {
+        return (int) i;
+      }
+    }
+  
+    for (int i = 0; i < outfitsCount; i++)
+    {
+      if ((mark.getOutfitDetailLevel(i) < currentLevel) && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, 0))
+      {
+        return (int) i;
+      }
+    }
+  
+    return -1;
+  }
+
+
   public MarksRenderer(boolean readyWhenMarksReady, boolean renderInReverse)
   {
      this(readyWhenMarksReady, renderInReverse, true);
@@ -242,8 +327,9 @@ public class MarksRenderer extends DefaultRenderer
      _progressiveInitialization = progressiveInitialization;
      _declutter = false;
      _horizonBand = true;
-     _declutterMargin = 2F;
-     _transitionMS = 500;
+     _declutterMargin = 4F;
+     _transitionMS = 250;
+     _delayMS = 250;
      _transitionMode = MarkTransitionMode.SCALE_AND_ALPHA;
      _hintImageFactory = null;
      _hintListener = null;
@@ -275,6 +361,7 @@ public class MarksRenderer extends DefaultRenderer
     _declutter = declutter;
     if (!_declutter)
     {
+      removeMarksThatLeft(true); // without declutter nothing would finish their fade
       for (int i = 0; i < _marks.size(); i++)
       {
         _marks.get(i).resetDeclutter();
@@ -341,13 +428,19 @@ public class MarksRenderer extends DefaultRenderer
     return _horizonBand;
   }
 
-  /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 500ms by default */
+  /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 250ms by default */
   public final void setDeclutterTransitionDuration(TimeInterval duration)
   {
     _transitionMS = duration.milliseconds();
   }
 
-  /** how outfits come in and go away: SCALE_AND_ALPHA by default */
+  /** how long a mark's new outfit must hold before the mark changes, so changes that come and go are not seen; marks may overlap meanwhile; 250ms by default */
+  public final void setDeclutterDelay(TimeInterval delay)
+  {
+    _delayMS = delay.milliseconds();
+  }
+
+  /** how outfits come in and go away: SCALE_AND_ALPHA by default; WIDTH suits outfits that move the label to the other side of the icon */
   public final void setDeclutterTransitionMode(MarkTransitionMode mode)
   {
     _transitionMode = mode;
@@ -424,7 +517,7 @@ public class MarksRenderer extends DefaultRenderer
 
   public void render(G3MRenderContext rc, GLState glState)
   {
-    final int marksSize = _marks.size();
+    int marksSize = _marks.size();
   
     if (marksSize > 0)
     {
@@ -477,8 +570,11 @@ public class MarksRenderer extends DefaultRenderer
         final long nowMS = rc.getFrameStartTimer().nowInMilliseconds();
         for (int i = 0; i < marksSize; i++)
         {
-          _marks.get(i).stepDeclutterTransition(nowMS, _transitionMS, _transitionMode);
+          _marks.get(i).stepDeclutterTransition(nowMS, _delayMS, _transitionMS, _transitionMode);
         }
+  
+        removeMarksThatLeft(false);
+        marksSize = _marks.size();
       }
   
       final double horizonBandRadiansPerPixel = _horizonBand ? (camera.getVerticalFOV()._radians / camera.getViewPortHeight()) : 0;
@@ -503,6 +599,10 @@ public class MarksRenderer extends DefaultRenderer
   public final void addMark(Mark mark)
   {
     attachHint(mark);
+    if (_declutter)
+    {
+      mark.hideUntilDecluttered();
+    }
     _marks.add(mark);
     if ((_context != null) && !_progressiveInitialization)
     {
@@ -565,7 +665,7 @@ public class MarksRenderer extends DefaultRenderer
           {
             continue;
           }
-          if (!mark.isRendered() || mark.isShowingHint())
+          if (!mark.isRendered() || mark.isShowingHint() || mark.isLeavingRenderer())
           {
             continue;
           }
@@ -681,7 +781,19 @@ public class MarksRenderer extends DefaultRenderer
     int removed = 0;
     final int marksSize = _marks.size();
   
-    if (animated)
+    if (animated && _declutter)
+    {
+      for (int i = 0; i < marksSize; i++)
+      {
+        Mark mark = _marks.get(i);
+        if (!mark.isLeavingRenderer() && filter.test(mark))
+        {
+          mark.startLeavingRenderer(deleteMarks);
+          removed++;
+        }
+      }
+    }
+    else if (animated)
     {
       java.util.ArrayList<Mark> survivingMarks = new java.util.ArrayList<Mark>();
       for (int i = 0; i < marksSize; i++)
@@ -755,7 +867,7 @@ public class MarksRenderer extends DefaultRenderer
     for (int i = 0; i < marksSize; i++)
     {
       Mark mark = _marks.get(i);
-      if (filter.test(mark))
+      if (!mark.isLeavingRenderer() && filter.test(mark))
       {
         result.add(mark);
       }

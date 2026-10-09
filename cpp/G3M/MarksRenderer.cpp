@@ -91,8 +91,9 @@ _renderInReverse(renderInReverse),
 _progressiveInitialization(progressiveInitialization),
 _declutter(false),
 _horizonBand(true),
-_declutterMargin(2),
-_transitionMS(500),
+_declutterMargin(4),
+_transitionMS(250),
+_delayMS(250),
 _transitionMode(SCALE_AND_ALPHA),
 _hintImageFactory(NULL),
 _hintListener(NULL),
@@ -154,6 +155,9 @@ const bool MarksRenderer::hasMarks() const {
 
 void MarksRenderer::addMark(Mark* mark) {
   attachHint(mark);
+  if (_declutter) {
+    mark->hideUntilDecluttered();
+  }
   _marks.push_back(mark);
   if ((_context != NULL) && !_progressiveInitialization) {
     mark->initialize(_context, _downloadPriority);
@@ -205,7 +209,7 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
         if (!mark->isReady()) {
           continue;
         }
-        if (!mark->isRendered() || mark->isShowingHint()) {
+        if (!mark->isRendered() || mark->isShowingHint() || mark->isLeavingRenderer()) {
           continue;
         }
 
@@ -276,7 +280,7 @@ IFloatBuffer* MarksRenderer::getBillboardTexCoords() {
 }
 
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const size_t marksSize = _marks.size();
+  size_t marksSize = _marks.size();
 
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
@@ -320,8 +324,11 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
       const long long nowMS = rc->getFrameStartTimer()->nowInMilliseconds();
       for (size_t i = 0; i < marksSize; i++) {
-        _marks[i]->stepDeclutterTransition(nowMS, _transitionMS, _transitionMode);
+        _marks[i]->stepDeclutterTransition(nowMS, _delayMS, _transitionMS, _transitionMode);
       }
+
+      removeMarksThatLeft(false);
+      marksSize = _marks.size();
     }
 
     const double horizonBandRadiansPerPixel = _horizonBand ? (camera->getVerticalFOV()._radians / camera->getViewPortHeight()) : 0;
@@ -396,6 +403,10 @@ void MarksRenderer::attachHint(Mark* mark) {
   }
 }
 
+void MarksRenderer::setDeclutterDelay(const TimeInterval& delay) {
+  _delayMS = delay.milliseconds();
+}
+
 void MarksRenderer::setDeclutterTransitionDuration(const TimeInterval& duration) {
   _transitionMS = duration.milliseconds();
 }
@@ -403,9 +414,32 @@ void MarksRenderer::setDeclutterTransitionDuration(const TimeInterval& duration)
 void MarksRenderer::setDeclutter(bool declutter) {
   _declutter = declutter;
   if (!_declutter) {
+    removeMarksThatLeft(true); // without declutter nothing would finish their fade
     for (size_t i = 0; i < _marks.size(); i++) {
       _marks[i]->resetDeclutter();
     }
+  }
+}
+
+// evenLeaving: also the marks still fading out
+void MarksRenderer::removeMarksThatLeft(bool evenLeaving) {
+  std::vector<Mark*> survivingMarks;
+  bool anyRemoved = false;
+  for (size_t i = 0; i < _marks.size(); i++) {
+    Mark* mark = _marks[i];
+    const bool gone = evenLeaving ? mark->isLeavingRenderer() : mark->hasLeftRenderer();
+    if (gone) {
+      anyRemoved = true;
+      if (mark->deletesWhenGone()) {
+        delete mark;
+      }
+    }
+    else {
+      survivingMarks.push_back(mark);
+    }
+  }
+  if (anyRemoved) {
+    _marks = survivingMarks;
   }
 }
 
@@ -431,7 +465,7 @@ void MarksRenderer::declutter(const Camera* camera,
   for (size_t i = 0; i < marksSize; i++) {
     const size_t ii = _renderInReverse ? i : (marksSize-1-i);
     Mark* mark = _marks[ii];
-    if (mark->isReady() && mark->isVisibleFrom(planet, cameraPosition, cameraHeight)) {
+    if (mark->isReady() && !mark->isLeavingRenderer() && mark->isVisibleFrom(planet, cameraPosition, cameraHeight)) {
       candidates.push_back(mark);
     }
   }
@@ -470,35 +504,85 @@ void MarksRenderer::declutter(const Camera* camera,
     Mark* mark = ordered[i];
     const Vector2F markPixel = camera->point2Pixel(*mark->getCartesianPosition(planet));
 
-    bool placed = false;
-    const size_t outfitsCount = mark->getOutfitsCount();
-    for (size_t outfitIndex = 0; (outfitIndex < outfitsCount) && !placed; outfitIndex++) {
-      const Vector2F size = mark->getOutfitScreenSize(outfitIndex);
-      if ((size._x <= 0) || (size._y <= 0)) {
-        continue; // its image does not exist yet
-      }
-      const Vector2F anchor = mark->getOutfitAnchor(outfitIndex);
-      const float left = markPixel._x - (size._x * anchor._x);
-      const float top  = markPixel._y - (size._y * anchor._y);
-
-      const int   target = mark->getDeclutterTarget();
-      const bool  grows  = (target < 0) || ((int) outfitIndex < target);
-      const float margin = grows ? _declutterMargin : 0;
-
-      if (isFree(left - margin, top - margin, left + size._x + margin, top + size._y + margin)) {
-        mark->setDeclutterTarget((int) outfitIndex);
-        _takenLeft.push_back(left);
-        _takenTop.push_back(top);
-        _takenRight.push_back(left + size._x);
-        _takenBottom.push_back(top + size._y);
-        placed = true;
-      }
-    }
-
-    if (!placed) {
-      mark->setDeclutterTarget(-1);
+    const int target = chooseOutfit(mark, markPixel);
+    mark->setDeclutterTarget(target);
+    if (target >= 0) {
+      takeOutfitSpace(mark, markPixel, target);
     }
   }
+}
+
+bool MarksRenderer::hasOutfitImage(const Mark* mark,
+                                   size_t outfitIndex) const {
+  const Vector2F size = mark->getOutfitScreenSize(outfitIndex);
+  return (size._x > 0) && (size._y > 0);
+}
+
+bool MarksRenderer::outfitFits(const Mark* mark,
+                               const Vector2F& markPixel,
+                               size_t outfitIndex,
+                               float margin) const {
+  const Vector2F size   = mark->getOutfitScreenSize(outfitIndex);
+  const Vector2F anchor = mark->getOutfitAnchor(outfitIndex);
+  const float left = markPixel._x - (size._x * anchor._x);
+  const float top  = markPixel._y - (size._y * anchor._y);
+  return isFree(left - margin, top - margin, left + size._x + margin, top + size._y + margin);
+}
+
+void MarksRenderer::takeOutfitSpace(const Mark* mark,
+                                    const Vector2F& markPixel,
+                                    size_t outfitIndex) {
+  const Vector2F size   = mark->getOutfitScreenSize(outfitIndex);
+  const Vector2F anchor = mark->getOutfitAnchor(outfitIndex);
+  const float left = markPixel._x - (size._x * anchor._x);
+  const float top  = markPixel._y - (size._y * anchor._y);
+  _takenLeft.push_back(left);
+  _takenTop.push_back(top);
+  _takenRight.push_back(left + size._x);
+  _takenBottom.push_back(top + size._y);
+}
+
+/**
+ * A mark keeps its outfit while nothing overlaps it, so alternatives of the
+ * same detail level (the label on one side or the other) do not swap back and
+ * forth. It grows to the first outfit of a higher level that fits with the
+ * margin; when its own no longer fits, it moves to an alternative of its level,
+ * then to a lower level, or hides.
+ */
+int MarksRenderer::chooseOutfit(const Mark* mark,
+                                const Vector2F& markPixel) const {
+  const int    current      = mark->getDeclutterTarget();
+  const size_t outfitsCount = mark->getOutfitsCount();
+
+  for (size_t i = 0; i < outfitsCount; i++) {
+    const bool grows = (current < 0) || (mark->getOutfitDetailLevel(i) > mark->getOutfitDetailLevel(current));
+    if (grows && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, _declutterMargin)) {
+      return (int) i;
+    }
+  }
+
+  if (current < 0) {
+    return -1;
+  }
+
+  const int currentLevel = mark->getOutfitDetailLevel(current);
+  if (hasOutfitImage(mark, current) && outfitFits(mark, markPixel, current, 0)) {
+    return current;
+  }
+
+  for (size_t i = 0; i < outfitsCount; i++) {
+    if ((mark->getOutfitDetailLevel(i) == currentLevel) && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, 0)) {
+      return (int) i;
+    }
+  }
+
+  for (size_t i = 0; i < outfitsCount; i++) {
+    if ((mark->getOutfitDetailLevel(i) < currentLevel) && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, 0)) {
+      return (int) i;
+    }
+  }
+
+  return -1;
 }
 
 void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
@@ -539,7 +623,16 @@ size_t MarksRenderer::removeAllMarks(const MarkFilter& filter,
   size_t removed = 0;
   const size_t marksSize = _marks.size();
 
-  if (animated) {
+  if (animated && _declutter) {
+    for (size_t i = 0; i < marksSize; i++) {
+      Mark* mark = _marks[i];
+      if (!mark->isLeavingRenderer() && filter.test(mark)) {
+        mark->startLeavingRenderer(deleteMarks);
+        removed++;
+      }
+    }
+  }
+  else if (animated) {
     std::vector<Mark*> survivingMarks;
     for (size_t i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
@@ -596,7 +689,7 @@ const std::vector<Mark*> MarksRenderer::getAllMarks(const MarkFilter& filter) co
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    if (filter.test(mark)) {
+    if (!mark->isLeavingRenderer() && filter.test(mark)) {
       result.push_back( mark );
     }
   }

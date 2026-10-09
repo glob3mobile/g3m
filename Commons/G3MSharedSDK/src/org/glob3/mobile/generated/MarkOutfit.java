@@ -14,6 +14,7 @@ package org.glob3.mobile.generated;
 //
 
 
+
 //class IImageFactory;
 //class MarkAnchor;
 
@@ -23,12 +24,52 @@ public class MarkOutfit
 {
   private IImageFactory _imageFactory;
   private MarkAnchor _anchor;
+  private final boolean _hasTransitionMode;
+  private final MarkTransitionMode _transitionMode;
+  private final boolean _hasDetailLevel;
+  private final int _detailLevel;
 
-  /** anchor NULL: the mark keeps its own anchor (setMarkAnchor) */
+  /** anchor NULL: the mark keeps its own anchor (setMarkAnchor); the transition is the renderer's */
   public MarkOutfit(IImageFactory imageFactory, MarkAnchor anchor)
   {
      _imageFactory = imageFactory;
      _anchor = anchor;
+     _hasTransitionMode = false;
+     _transitionMode = MarkTransitionMode.SCALE_AND_ALPHA;
+     _hasDetailLevel = false;
+     _detailLevel = 0;
+  }
+
+  /** how this outfit comes in and goes away, whatever the renderer's mode */
+  public MarkOutfit(IImageFactory imageFactory, MarkAnchor anchor, MarkTransitionMode transitionMode)
+  {
+     _imageFactory = imageFactory;
+     _anchor = anchor;
+     _hasTransitionMode = true;
+     _transitionMode = transitionMode;
+     _hasDetailLevel = false;
+     _detailLevel = 0;
+  }
+
+  /** detailLevel: outfits of a mark with the same level are alternatives (the label on one side or the other), a higher one shows more */
+  public MarkOutfit(IImageFactory imageFactory, MarkAnchor anchor, int detailLevel)
+  {
+     _imageFactory = imageFactory;
+     _anchor = anchor;
+     _hasTransitionMode = false;
+     _transitionMode = MarkTransitionMode.SCALE_AND_ALPHA;
+     _hasDetailLevel = true;
+     _detailLevel = detailLevel;
+  }
+
+  public MarkOutfit(IImageFactory imageFactory, MarkAnchor anchor, int detailLevel, MarkTransitionMode transitionMode)
+  {
+     _imageFactory = imageFactory;
+     _anchor = anchor;
+     _hasTransitionMode = true;
+     _transitionMode = transitionMode;
+     _hasDetailLevel = true;
+     _detailLevel = detailLevel;
   }
 
   public void dispose()
@@ -50,6 +91,16 @@ public class MarkOutfit
   public final MarkAnchor getAnchor()
   {
     return _anchor;
+  }
+
+  public final MarkTransitionMode getTransitionMode(MarkTransitionMode rendererMode)
+  {
+    return _hasTransitionMode ? _transitionMode : rendererMode;
+  }
+
+  public final int getDetailLevel(int levelByOrder)
+  {
+    return _hasDetailLevel ? _detailLevel : levelByOrder;
   }
 
 }

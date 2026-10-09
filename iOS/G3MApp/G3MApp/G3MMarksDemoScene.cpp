@@ -23,6 +23,7 @@
 #include <G3M/GFont.hpp>
 #include <G3M/FittedLabelImageFactory.hpp>
 #include <G3M/RowLayoutImageFactory.hpp>
+#include <G3M/ColumnLayoutImageFactory.hpp>
 #include <G3M/BoxImageBackground.hpp>
 #include <G3M/ResizerImageFactory.hpp>
 #include <G3M/AbsoluteImageSizer.hpp>
@@ -170,6 +171,44 @@ public:
 };
 
 
+/** the same centre as G3MMarksDemoScene_IconCenterMarkAnchor, for the icon at the right of the label */
+class G3MMarksDemoScene_IconCenterFromRightMarkAnchor : public MarkAnchor {
+private:
+  const float _iconCenterFromRight; // pixels from the image's right edge
+
+public:
+  G3MMarksDemoScene_IconCenterFromRightMarkAnchor(const float iconCenterFromRight) :
+  _iconCenterFromRight(iconCenterFromRight)
+  {
+  }
+
+  Vector2F getAnchor(const IImage* image) const {
+    return Vector2F(1 - (_iconCenterFromRight / image->getWidth()), 0.5f);
+  }
+};
+
+
+/** the icon's centre for the label above or below it: icon centre in pixels from the top, or from the bottom */
+class G3MMarksDemoScene_IconCenterVerticalMarkAnchor : public MarkAnchor {
+private:
+  const float _iconCenterFromEdge;
+  const bool  _fromTop;
+
+public:
+  G3MMarksDemoScene_IconCenterVerticalMarkAnchor(const float iconCenterFromEdge,
+                                                 const bool  fromTop) :
+  _iconCenterFromEdge(iconCenterFromEdge),
+  _fromTop(fromTop)
+  {
+  }
+
+  Vector2F getAnchor(const IImage* image) const {
+    const float v = _iconCenterFromEdge / image->getHeight();
+    return Vector2F(0.5f, _fromTop ? v : (1 - v));
+  }
+};
+
+
 class G3MMarksDemoScene_MagnitudeUserData : public MarkUserData {
 public:
   const double _magnitude;
@@ -285,8 +324,11 @@ void G3MMarksDemoScene::rawSelectGroupOption(size_t groupIndex,
     else if (groupIndex == 2) {
       applyLondonDeclutter(option);
     }
-    else {
+    else if (groupIndex == 4) {
       applyLondonTransition(option);
+    }
+    else {
+      applyLondonLabelSide(option);
     }
   }
 }
@@ -307,19 +349,54 @@ void G3MMarksDemoScene::applyLondonDeclutter(const std::string& declutterOption)
   }
 }
 
+// the labels carry their transition in their outfits: changing it builds the marks again
 void G3MMarksDemoScene::applyLondonTransition(const std::string& transitionOption) {
   MarksRenderer* marksRenderer = getModel()->getMarksRenderer();
-  if (transitionOption == "Scale") {
-    marksRenderer->setDeclutterTransitionMode(SCALE);
-  }
-  else if (transitionOption == "Alpha") {
+  if (transitionOption == "Alpha") {
     marksRenderer->setDeclutterTransitionMode(ALPHA);
   }
-  else if (transitionOption == "Scale and alpha") {
+  else if ((transitionOption == "Scale") || (transitionOption == "Fold")) {
+    marksRenderer->setDeclutterTransitionMode(SCALE);
+  }
+  else if ((transitionOption == "Scale and alpha") || (transitionOption == "Fold and alpha")) {
     marksRenderer->setDeclutterTransitionMode(SCALE_AND_ALPHA);
   }
   else {
     ILogger::instance()->logError("Unknown transition option \"%s\"", transitionOption.c_str());
+    return;
+  }
+
+  if (transitionOption != _londonTransition) {
+    _londonTransition = transitionOption;
+    loadLondonMarks();
+  }
+}
+
+MarkTransitionMode G3MMarksDemoScene::londonSideLabelTransition() const {
+  if (_londonTransition == "Fold") {
+    return WIDTH;
+  }
+  if (_londonTransition == "Fold and alpha") {
+    return WIDTH_AND_ALPHA;
+  }
+  return getModel()->getMarksRenderer()->getDeclutterTransitionMode();
+}
+
+MarkTransitionMode G3MMarksDemoScene::londonVerticalLabelTransition() const {
+  if (_londonTransition == "Fold") {
+    return HEIGHT;
+  }
+  if (_londonTransition == "Fold and alpha") {
+    return HEIGHT_AND_ALPHA;
+  }
+  return getModel()->getMarksRenderer()->getDeclutterTransitionMode();
+}
+
+// the label sides are outfits, fixed when a mark is built: the marks are built again
+void G3MMarksDemoScene::applyLondonLabelSide(const std::string& labelSideOption) {
+  if (labelSideOption != _londonLabelSide) {
+    _londonLabelSide = labelSideOption;
+    loadLondonMarks();
   }
 }
 
@@ -564,22 +641,29 @@ void G3MMarksDemoScene::showLabels() {
 }
 
 void G3MMarksDemoScene::showLondon() {
-  G3MWidget* g3mWidget = getModel()->getG3MWidget();
-
-  // the third outfit of every mark: a dot that says there is more when zooming in
+  // the last outfit of every mark: a dot that says there is more when zooming in
   getModel()->getMarksRenderer()->setHint(new StackLayoutImageFactory(new CircleImageFactory(Color::fromRGBA(0, 0, 0, 0.6f), 4),
                                                                        new CircleImageFactory(Color::WHITE, 2)));
 
-  g3mWidget->getG3MContext()->getDownloader()->requestBuffer(URL("file:///London-Wikipedia.json"),
-                                                             100000,
-                                                             TimeInterval::zero(),
-                                                             false,
-                                                             new G3MMarksDemoScene_LondonDownloadListener(this),
-                                                             true);
+  _londonLabelSide  = getOptionGroup(5)->getTitle();
+  _londonTransition = getOptionGroup(4)->getTitle();
+  loadLondonMarks();
 
   moveLondonCamera(getOptionGroup(1)->getTitle());
   applyLondonDeclutter(getOptionGroup(2)->getTitle());
   applyLondonTransition(getOptionGroup(4)->getTitle());
+}
+
+// a download still on its way when the marks are loaded again is dropped
+void G3MMarksDemoScene::loadLondonMarks() {
+  _featureGeneration++;
+  getModel()->getMarksRenderer()->removeAllMarks();
+  getModel()->getG3MWidget()->getG3MContext()->getDownloader()->requestBuffer(URL("file:///London-Wikipedia.json"),
+                                                                              100000,
+                                                                              TimeInterval::zero(),
+                                                                              false,
+                                                                              new G3MMarksDemoScene_LondonDownloadListener(this),
+                                                                              true);
 }
 
 void G3MMarksDemoScene::moveLondonCamera(const std::string& cameraOption) {
@@ -624,6 +708,20 @@ void G3MMarksDemoScene::orbitLondon() {
  * with the icon on the left of the label, the font size from the magnitude.
  * Each mark also carries its icon-only outfit, for when space is short.
  */
+IImageFactory* G3MMarksDemoScene::createLondonIcon(const URL& iconURL,
+                                                  const int  iconPoints) {
+  return new ResizerImageFactory(new DownloaderImageFactory(iconURL),
+                                 new AbsoluteImageSizer(iconPoints),
+                                 new AbsoluteImageSizer(iconPoints));
+}
+
+BoxImageBackground* G3MMarksDemoScene::createLondonBox(const Vector2F& padding,
+                                                      const Color&    backgroundColor,
+                                                      const float     cornerRadius) {
+  return new BoxImageBackground(Vector2F::ZERO, 0, Color::TRANSPARENT,
+                                padding, backgroundColor, cornerRadius);
+}
+
 void G3MMarksDemoScene::addLondonMarks(const JSONArray* articles) {
   if (articles == NULL) {
     return;
@@ -681,27 +779,63 @@ void G3MMarksDemoScene::addLondonMarks(const JSONArray* articles) {
       // about one and a half W of its label, as in pythagoras (a sans-serif W is ~0.94 of the font size)
       const int iconPoints = mu->round(fontSize * 1.4f);
 
-      builder.addOutfit(new RowLayoutImageFactory(new ResizerImageFactory(new DownloaderImageFactory(iconURL),
-                                                                          new AbsoluteImageSizer(iconPoints),
-                                                                          new AbsoluteImageSizer(iconPoints)),
-                                                  new FittedLabelImageFactory(title,
-                                                                              LabelStyle::plain(GFont::sansSerif(fontSize), Color::WHITE),
-                                                                              "Washington, D.C.",
-                                                                              0.7f,
-                                                                              2,
-                                                                              Left),
-                                                  new BoxImageBackground(Vector2F::ZERO, 0, Color::TRANSPARENT,
-                                                                         padding, backgroundColor, cornerRadius),
-                                                  separation),
-                        // the anchor is in the image's pixels
-                        new G3MMarksDemoScene_IconCenterMarkAnchor((padding._x + (iconPoints / 2.0f)) * pixelRatio));
+      const LabelStyle labelStyle = LabelStyle::plain(GFont::sansSerif(fontSize), Color::WHITE);
+      // the anchors are in the image's pixels
+      const float iconCenterFromSide = (padding._x + (iconPoints / 2.0f)) * pixelRatio;
+      const float iconCenterFromEnd  = (padding._y + (iconPoints / 2.0f)) * pixelRatio;
 
-      builder.addOutfit(new RowLayoutImageFactory(new ResizerImageFactory(new DownloaderImageFactory(iconURL),
-                                                                          new AbsoluteImageSizer(iconPoints),
-                                                                          new AbsoluteImageSizer(iconPoints)),
-                                                  new BoxImageBackground(Vector2F::ZERO, 0, Color::TRANSPARENT,
-                                                                         padding, backgroundColor, cornerRadius),
-                                                  separation));
+      // the label on any side is the same detail: the mark keeps its side while nothing overlaps it
+      const int labelDetail = 2;
+      const int iconDetail  = 1;
+
+      const bool labelRight    = (_londonLabelSide != "Top or bottom");
+      const bool labelLeft     = (_londonLabelSide == "Right or left") || (_londonLabelSide == "Any side");
+      const bool labelVertical = (_londonLabelSide == "Top or bottom") || (_londonLabelSide == "Any side");
+
+      // sideways the label folds into its icon in width, above or below in height
+      if (labelRight) {
+        builder.addOutfit(new RowLayoutImageFactory(createLondonIcon(iconURL, iconPoints),
+                                                    new FittedLabelImageFactory(title, labelStyle, "Washington, D.C.", 0.7f, 2, Left),
+                                                    createLondonBox(padding, backgroundColor, cornerRadius),
+                                                    separation),
+                          new G3MMarksDemoScene_IconCenterMarkAnchor(iconCenterFromSide),
+                          labelDetail,
+                          londonSideLabelTransition());
+      }
+
+      if (labelLeft) {
+        builder.addOutfit(new RowLayoutImageFactory(new FittedLabelImageFactory(title, labelStyle, "Washington, D.C.", 0.7f, 2, Right),
+                                                    createLondonIcon(iconURL, iconPoints),
+                                                    createLondonBox(padding, backgroundColor, cornerRadius),
+                                                    separation),
+                          new G3MMarksDemoScene_IconCenterFromRightMarkAnchor(iconCenterFromSide),
+                          labelDetail,
+                          londonSideLabelTransition());
+      }
+
+      if (labelVertical) {
+        builder.addOutfit(new ColumnLayoutImageFactory(new FittedLabelImageFactory(title, labelStyle, "Washington, D.C.", 0.7f, 2, Center),
+                                                       createLondonIcon(iconURL, iconPoints),
+                                                       createLondonBox(padding, backgroundColor, cornerRadius),
+                                                       separation),
+                          new G3MMarksDemoScene_IconCenterVerticalMarkAnchor(iconCenterFromEnd, false),
+                          labelDetail,
+                          londonVerticalLabelTransition());
+
+        builder.addOutfit(new ColumnLayoutImageFactory(createLondonIcon(iconURL, iconPoints),
+                                                       new FittedLabelImageFactory(title, labelStyle, "Washington, D.C.", 0.7f, 2, Center),
+                                                       createLondonBox(padding, backgroundColor, cornerRadius),
+                                                       separation),
+                          new G3MMarksDemoScene_IconCenterVerticalMarkAnchor(iconCenterFromEnd, true),
+                          labelDetail,
+                          londonVerticalLabelTransition());
+      }
+
+      builder.addOutfit(new RowLayoutImageFactory(createLondonIcon(iconURL, iconPoints),
+                                                  createLondonBox(padding, backgroundColor, cornerRadius),
+                                                  separation),
+                        NULL,
+                        iconDetail);
     }
 
     builder.setUserData(new G3MMarksDemoScene_MagnitudeUserData(magnitude), true);

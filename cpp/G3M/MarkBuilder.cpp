@@ -73,6 +73,25 @@ void MarkBuilder::addOutfit(IImageFactory* imageFactory,
   _outfits.push_back(new MarkOutfit(imageFactory, anchor));
 }
 
+void MarkBuilder::addOutfit(IImageFactory*     imageFactory,
+                            MarkAnchor*        anchor,
+                            MarkTransitionMode transitionMode) {
+  _outfits.push_back(new MarkOutfit(imageFactory, anchor, transitionMode));
+}
+
+void MarkBuilder::addOutfit(IImageFactory* imageFactory,
+                            MarkAnchor*    anchor,
+                            int            detailLevel) {
+  _outfits.push_back(new MarkOutfit(imageFactory, anchor, detailLevel));
+}
+
+void MarkBuilder::addOutfit(IImageFactory*     imageFactory,
+                            MarkAnchor*        anchor,
+                            int                detailLevel,
+                            MarkTransitionMode transitionMode) {
+  _outfits.push_back(new MarkOutfit(imageFactory, anchor, detailLevel, transitionMode));
+}
+
 void MarkBuilder::addOutfit(IImageFactory* imageFactory) {
   addOutfit(imageFactory, NULL);
 }
