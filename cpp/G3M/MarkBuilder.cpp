@@ -102,8 +102,11 @@ void MarkBuilder::setPriority(double priority) {
 void MarkBuilder::setHint(IImageFactory* imageFactory,
                           MarkAnchor*    anchor) {
   delete _hint;
-  _hint = new MarkOutfit(imageFactory,
-                         (anchor == NULL) ? new FixedMarkAnchor(0.5f, 0.5f) : anchor);
+  _hint = new MarkOutfit(imageFactory, anchor);
+}
+
+void MarkBuilder::setHint(IImageFactory* imageFactory) {
+  setHint(imageFactory, new FixedMarkAnchor(0.5f, 0.5f));
 }
 
 // what belongs to the mark just built goes with it

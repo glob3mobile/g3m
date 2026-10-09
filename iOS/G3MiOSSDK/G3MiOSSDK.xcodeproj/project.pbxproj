@@ -42,6 +42,8 @@
 		CF29563F3077EA5C00FC4904 /* MarkAnchor.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2956343077EA4A00FC4904 /* MarkAnchor.hpp */; };
 		CF2956403077EA5C00FC4904 /* MarkBuilder.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2956363077EA4A00FC4904 /* MarkBuilder.hpp */; };
 		CF2956413077EA5C00FC4904 /* MarkOutfit.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2956383077EA4A00FC4904 /* MarkOutfit.hpp */; };
+		CF2956813078041C00FC4904 /* MarkTransitionMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2956803078041C00FC4904 /* MarkTransitionMode.cpp */; };
+		CF2956823078042B00FC4904 /* MarkTransitionMode.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF29567F3078041C00FC4904 /* MarkTransitionMode.hpp */; };
 		CF32C66F25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF32C66D25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp */; };
 		CF32C67325D3EFB700F02D13 /* XPCHeightPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF32C66E25D3EF5100F02D13 /* XPCHeightPointColorizer.hpp */; };
 		CF32C67725D3F5ED00F02D13 /* MutableColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF32C67525D3F5ED00F02D13 /* MutableColor.cpp */; };
@@ -987,6 +989,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF2956823078042B00FC4904 /* MarkTransitionMode.hpp in CopyFiles */,
 				CF29563E3077EA5C00FC4904 /* FixedMarkAnchor.hpp in CopyFiles */,
 				CF29563F3077EA5C00FC4904 /* MarkAnchor.hpp in CopyFiles */,
 				CF2956403077EA5C00FC4904 /* MarkBuilder.hpp in CopyFiles */,
@@ -1550,6 +1553,8 @@
 		CF2956373077EA4A00FC4904 /* MarkBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MarkBuilder.cpp; sourceTree = "<group>"; };
 		CF2956383077EA4A00FC4904 /* MarkOutfit.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MarkOutfit.hpp; sourceTree = "<group>"; };
 		CF2956393077EA4A00FC4904 /* MarkOutfit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MarkOutfit.cpp; sourceTree = "<group>"; };
+		CF29567F3078041C00FC4904 /* MarkTransitionMode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MarkTransitionMode.hpp; sourceTree = "<group>"; };
+		CF2956803078041C00FC4904 /* MarkTransitionMode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MarkTransitionMode.cpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
 		CF32C66D25D3EF5100F02D13 /* XPCHeightPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCHeightPointColorizer.cpp; sourceTree = "<group>"; };
 		CF32C66E25D3EF5100F02D13 /* XPCHeightPointColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCHeightPointColorizer.hpp; sourceTree = "<group>"; };
@@ -3270,6 +3275,8 @@
 				CF6601BC23DF2DA500795C7F /* MarksRenderer.hpp */,
 				CF66042C23DF2DAA00795C7F /* MarksRenderer.cpp */,
 				CF66040323DF2DA900795C7F /* MarkTouchListener.hpp */,
+				CF29567F3078041C00FC4904 /* MarkTransitionMode.hpp */,
+				CF2956803078041C00FC4904 /* MarkTransitionMode.cpp */,
 				CF6601BB23DF2DA500795C7F /* Matrix44D.hpp */,
 				CF66042D23DF2DAA00795C7F /* Matrix44D.cpp */,
 				CF6603FD23DF2DA900795C7F /* Matrix44DProvider.hpp */,
@@ -3787,6 +3794,7 @@
 				CF6607FB23DF330600795C7F /* MaxFrameTimeTileLODTester.cpp in Sources */,
 				CF6607FC23DF330600795C7F /* Effects.cpp in Sources */,
 				CF6607FD23DF330600795C7F /* Mark.cpp in Sources */,
+				CF2956813078041C00FC4904 /* MarkTransitionMode.cpp in Sources */,
 				CF6607FE23DF330600795C7F /* HUDSize.cpp in Sources */,
 				CF6607FF23DF330600795C7F /* ProjectedCornersDistanceTileLODTester.cpp in Sources */,
 				CF66080023DF330600795C7F /* IStringUtils.cpp in Sources */,

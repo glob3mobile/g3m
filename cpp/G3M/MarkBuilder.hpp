@@ -77,9 +77,12 @@ public:
   /** the order among the marks that compete for space: the higher, the earlier; without it, the renderer's order */
   void setPriority(double priority);
 
-  /** the mark's own hint, drawn when nothing else fits; without it, the renderer's; anchor NULL: centred */
+  /** the mark's own hint, drawn when nothing else fits; without it, the renderer's; anchor NULL: the mark keeps its own anchor, as in addOutfit */
   void setHint(IImageFactory* imageFactory,
                MarkAnchor*    anchor);
+
+  /** a hint centred on the position */
+  void setHint(IImageFactory* imageFactory);
 
   /** needs a position and at least one outfit */
   Mark* build();

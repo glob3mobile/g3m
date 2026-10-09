@@ -63,11 +63,15 @@ private:
 
   GPUUniformValueVec2FloatMutable* _size;
   GPUUniformValueVec2FloatMutable* _anchor;
+  GPUUniformValueVec4FloatMutable* _colorFactor;
+  const bool                       _premultipliedAlpha;
 
 public:
+  /** premultipliedAlpha: the texture's, so fading multiplies the color too, not only the alpha */
   BillboardGLFeature(float billboardWidth,
                      float billboardHeight,
-                     float anchorU, float anchorV);
+                     float anchorU, float anchorV,
+                     bool premultipliedAlpha);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 
@@ -78,6 +82,15 @@ public:
 
   void changeAnchor(float anchorU, float anchorV) {
     _anchor->changeValue(anchorU, anchorV);
+  }
+
+  void changeAlpha(float alpha) {
+    if (_premultipliedAlpha) {
+      _colorFactor->changeValue(alpha, alpha, alpha, alpha);
+    }
+    else {
+      _colorFactor->changeValue(1, 1, 1, alpha);
+    }
   }
 };
 

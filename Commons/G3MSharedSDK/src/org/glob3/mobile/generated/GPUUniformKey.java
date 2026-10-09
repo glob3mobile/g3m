@@ -46,7 +46,8 @@ public enum GPUUniformKey
   SPACE_COLOR(26),
   FULL_STAR_MAGNITUDE(27),
   STAR_SIZE_EXPONENT(28),
-  COLOR_MATRIX(29);
+  COLOR_MATRIX(29),
+  BILLBOARD_COLOR_FACTOR(30);
 
    private int intValue;
    private static java.util.HashMap<Integer, GPUUniformKey> mappings;

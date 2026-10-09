@@ -25,6 +25,7 @@
 #include "PeriodicalTask.hpp"
 #include "AltitudeMode.hpp"
 #include "Vector2F.hpp"
+#include "MarkTransitionMode.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -41,6 +42,7 @@ class TouchEvent;
 class ModelTransformGLFeature;
 class MarkOutfit;
 class MarkOutfitImage;
+class MarkZoomOutAndRemoveEffect;
 
 class MarkUserData {
 public:
@@ -59,10 +61,28 @@ private:
   double _priority; // NAND: none, the renderer's order decides
   bool   _declutterHidden;
 
-  // the outfit the renderer wants on screen (-1: none); the one on screen shrinks away before it grows in
+  // the outfit the renderer wants on screen (-1: none); the one on screen goes away while the target comes in
   int       _declutterTarget;
+  float     _presence; // how far the outfit on screen has come in: 0 gone, 1 complete
   float     _transitionScale;
+  float     _transitionAlpha;
   long long _lastTransitionMS;
+
+  // the outfit that was on screen before, drawn under the one coming in until it is gone (-1: none)
+  int                      _leavingOutfitIndex;
+  float                    _leavingPresence;
+  float                    _leavingScale;
+  float                    _leavingAlpha;
+  GLState*                 _leavingGLState;
+  BillboardGLFeature*      _leavingBillboardGLF;
+  ModelTransformGLFeature* _leavingModelTransformGLF;
+
+  void startOutfitTransition(size_t outfitIndex);
+  void moveGLStateToLeaving();
+  void releaseLeavingOutfit();
+  void applyTransitionMode(MarkTransitionMode mode);
+  void drawLeavingOutfit(const G3MRenderContext* rc,
+                         const GLState* parentGLState);
 
   // how high the camera is seen from the mark, above its horizon (NAND: unknown); the mark shrinks as it sinks
   double _grazingAngle;
@@ -160,7 +180,7 @@ private:
   
   void clearGLState();
 
-  void updateBillboardSize();
+  void updateBillboard();
 
   MutableVector3D _markCameraVector;
 
@@ -180,7 +200,8 @@ private:
   void startPendingEffects(const G3MRenderContext* rc,
                            MarksRenderer* renderer);
 
-  void draw(const G3MRenderContext* rc);
+  void draw(const G3MRenderContext* rc,
+            GLState* glState);
 
   void onTextureResolved(const IImage* image);
   
@@ -197,6 +218,7 @@ private:
   bool _zoomOutDisappears;
   bool _deleteMarkOnDisappears;
   bool _zoomOutDisappearsStarted;
+  MarkZoomOutAndRemoveEffect* _zoomOutEffect; // while it runs: whoever is deleted first unlinks the other
 
   EffectTarget* _effectTarget;
   EffectTarget* getEffectTarget();
@@ -254,7 +276,7 @@ public:
   /** the outfit drawn from now on; 0 is the largest */
   void setOutfit(size_t outfitIndex);
 
-  /** the smallest outfit, after the others: a sign that there is more to see when zooming in; the mark owns it */
+  /** the smallest outfit, after the others: a sign that there is more to see when zooming in; the mark owns it; only one */
   void addHint(MarkOutfit* hint);
 
   bool hasHint() const {
@@ -292,12 +314,12 @@ public:
     return _declutterTarget;
   }
 
-  /** shrinks the outfit on screen while it is not the target, then grows the target in; reversible halfway */
+  /** the outfit on screen goes away while the target comes in, both at once and in durationMS; reversible halfway */
   void stepDeclutterTransition(long long nowMS,
-                               long long growMS,
-                               long long shrinkMS);
+                               long long durationMS,
+                               MarkTransitionMode mode);
 
-  /** back to the first outfit, on screen and at full size, with no transition */
+  /** back to the first outfit, on screen and complete, with no transition */
   void resetDeclutter();
 
   /** the order among the marks that compete for space: the higher, the earlier */
@@ -419,6 +441,10 @@ public:
   }
 
   void cancelEffects();
+
+  void forgetZoomOutEffect() {
+    _zoomOutEffect = NULL;
+  }
 
 };
 

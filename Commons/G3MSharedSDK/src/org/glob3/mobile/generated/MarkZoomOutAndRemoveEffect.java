@@ -26,17 +26,25 @@ public class MarkZoomOutAndRemoveEffect extends EffectWithDuration
 
   public void dispose()
   {
-    if (_deleteMarkOnDisappears)
+    if (_mark != null)
     {
-      if (_mark != null)
+      Mark mark = _mark;
+      _mark = null;
+      mark.forgetZoomOutEffect();
+      if (_deleteMarkOnDisappears)
       {
-        Mark mark = _mark;
-        _mark = null;
         if (mark != null)
            mark.dispose();
       }
     }
     super.dispose();
+  }
+
+  // the mark was deleted by someone else: from now on the effect does nothing until it runs out
+  public final void forgetMark()
+  {
+    _mark = null;
+    _renderer = null;
   }
 
   public final void doStep(G3MRenderContext rc, TimeInterval when)

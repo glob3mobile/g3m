@@ -9,10 +9,89 @@ public class Mark implements SurfaceElevationListener
   private double _priority; // NAND: none, the renderer's order decides
   private boolean _declutterHidden;
 
-  // the outfit the renderer wants on screen (-1: none); the one on screen shrinks away before it grows in
+  // the outfit the renderer wants on screen (-1: none); the one on screen goes away while the target comes in
   private int _declutterTarget;
+  private float _presence; // how far the outfit on screen has come in: 0 gone, 1 complete
   private float _transitionScale;
+  private float _transitionAlpha;
   private long _lastTransitionMS;
+
+  // the outfit that was on screen before, drawn under the one coming in until it is gone (-1: none)
+  private int _leavingOutfitIndex;
+  private float _leavingPresence;
+  private float _leavingScale;
+  private float _leavingAlpha;
+  private GLState _leavingGLState;
+  private BillboardGLFeature _leavingBillboardGLF;
+  private ModelTransformGLFeature _leavingModelTransformGLF;
+
+
+  // coming back to the outfit that is leaving resumes it from where it was
+  private void startOutfitTransition(int outfitIndex)
+  {
+    float presence = 0F;
+    if (_leavingOutfitIndex == (int) outfitIndex)
+    {
+      presence = _leavingPresence;
+      releaseLeavingOutfit();
+    }
+  
+    if (!_declutterHidden && (_presence > 0) && (_glState != null))
+    {
+      releaseLeavingOutfit();
+      moveGLStateToLeaving();
+    }
+  
+    setOutfit(outfitIndex);
+    _presence = presence;
+  }
+
+  // the GL state on screen already holds the leaving outfit's texture, size and anchor
+  private void moveGLStateToLeaving()
+  {
+    _leavingOutfitIndex = (int) _outfitIndex;
+    _leavingPresence = _presence;
+    _leavingGLState = _glState;
+    _leavingBillboardGLF = _billboardGLF;
+    _leavingModelTransformGLF = _modelTransformGLF;
+  
+    _glState = null;
+    _billboardGLF = null;
+    _modelTransformGLF = null;
+    _textureGLF = null;
+  }
+  private void releaseLeavingOutfit()
+  {
+    if (_leavingGLState != null)
+    {
+      _leavingGLState._release();
+      _leavingGLState = null;
+    }
+    _leavingBillboardGLF = null;
+    _leavingModelTransformGLF = null;
+    _leavingOutfitIndex = -1;
+    _leavingPresence = 0F;
+  }
+  private void applyTransitionMode(MarkTransitionMode mode)
+  {
+    final boolean scales = (mode != MarkTransitionMode.ALPHA);
+    final boolean fades = (mode != MarkTransitionMode.SCALE);
+  
+    _transitionScale = scales ? _presence : 1;
+    _transitionAlpha = fades ? _presence : 1;
+    _leavingScale = scales ? _leavingPresence : 1;
+    _leavingAlpha = fades ? _leavingPresence : 1;
+  
+    updateBillboard();
+  }
+  private void drawLeavingOutfit(G3MRenderContext rc, GLState parentGLState)
+  {
+    if (_leavingGLState != null)
+    {
+      _leavingGLState.setParent(parentGLState);
+      draw(rc, _leavingGLState);
+    }
+  }
 
   // how high the camera is seen from the mark, above its horizon (NAND: unknown); the mark shrinks as it sinks
   private double _grazingAngle;
@@ -33,7 +112,7 @@ public class Mark implements SurfaceElevationListener
     if (horizonScale != _horizonScale)
     {
       _horizonScale = horizonScale;
-      updateBillboardSize();
+      updateBillboard();
     }
   }
 
@@ -125,7 +204,8 @@ public class Mark implements SurfaceElevationListener
   {
     _glState = new GLState();
   
-    _billboardGLF = new BillboardGLFeature(getScreenWidth(), getScreenHeight(), _anchorU, _anchorV);
+    _billboardGLF = new BillboardGLFeature(getScreenWidth(), getScreenHeight(), _anchorU, _anchorV, (_textureID == null) || _textureID.isPremultiplied());
+    _billboardGLF.changeAlpha(_transitionAlpha);
   
     _glState.addGLFeature(_billboardGLF, false);
   
@@ -154,7 +234,14 @@ public class Mark implements SurfaceElevationListener
     final Vector3D position = getCartesianPosition(planet);
     final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(position);
   
-    _modelTransformGLF.setMatrix(translation.asMatrix44D());
+    if (_modelTransformGLF != null)
+    {
+      _modelTransformGLF.setMatrix(translation.asMatrix44D());
+    }
+    if (_leavingModelTransformGLF != null)
+    {
+      _leavingModelTransformGLF.setMatrix(translation.asMatrix44D());
+    }
     _glPositionOutdated = false;
   }
 
@@ -179,12 +266,20 @@ public class Mark implements SurfaceElevationListener
     }
   }
 
-  private void updateBillboardSize()
+  private void updateBillboard()
   {
+    final IMathUtils mu = IMathUtils.instance();
     if (_billboardGLF != null)
     {
-      final IMathUtils mu = IMathUtils.instance();
       _billboardGLF.changeSize(mu.round(getScreenWidth()), mu.round(getScreenHeight()));
+      _billboardGLF.changeAlpha(_transitionAlpha);
+    }
+    if (_leavingBillboardGLF != null)
+    {
+      final Vector2F leavingSize = getOutfitScreenSize(_leavingOutfitIndex);
+      final float leavingFactor = _effectScale * _leavingScale * _horizonScale;
+      _leavingBillboardGLF.changeSize(mu.round(leavingSize._x * leavingFactor), mu.round(leavingSize._y * leavingFactor));
+      _leavingBillboardGLF.changeAlpha(_leavingAlpha);
     }
   }
 
@@ -216,7 +311,8 @@ public class Mark implements SurfaceElevationListener
 
   private boolean isOccludedByHorizon(Planet planet, MutableVector3D cameraPosition, double cameraHeight, Vector3D markPosition)
   {
-    if (_position._height > cameraHeight)
+    final double markHeight = (_altitudeMode == AltitudeMode.RELATIVE_TO_GROUND) ? (_position._height + _currentSurfaceElevation) : _position._height;
+    if (markHeight > cameraHeight)
     {
       _grazingAngle = Double.NaN;
       final java.util.ArrayList<Double> dists = planet.intersectionsDistances(cameraPosition.x(), cameraPosition.y(), cameraPosition.z(), _markCameraVector.x(), _markCameraVector.y(), _markCameraVector.z());
@@ -255,10 +351,6 @@ public class Mark implements SurfaceElevationListener
     {
       createGLState(planet, billboardTexCoords); // If GLState was disposed due to elevation change
     }
-    else if (_glPositionOutdated)
-    {
-      updateGLPosition(planet);
-    }
     _glState.setParent(parentGLState);
   }
 
@@ -285,13 +377,14 @@ public class Mark implements SurfaceElevationListener
       {
         _effectsScheduler = rc.getEffectsScheduler();
       }
-      _effectsScheduler.startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears), getEffectTarget());
+      _zoomOutEffect = new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears);
+      _effectsScheduler.startEffect(_zoomOutEffect, getEffectTarget());
     }
   }
 
-  private void draw(G3MRenderContext rc)
+  private void draw(G3MRenderContext rc, GLState glState)
   {
-    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, _glState, rc.getGPUProgramManager());
+    rc.getGL().drawArrays(GLPrimitive.triangleStrip(), 0, 4, glState, rc.getGPUProgramManager());
   }
 
   private void onTextureResolved(IImage image)
@@ -320,6 +413,7 @@ public class Mark implements SurfaceElevationListener
   private boolean _zoomOutDisappears;
   private boolean _deleteMarkOnDisappears;
   private boolean _zoomOutDisappearsStarted;
+  private MarkZoomOutAndRemoveEffect _zoomOutEffect; // while it runs: whoever is deleted first unlinks the other
 
   private EffectTarget _effectTarget;
   private EffectTarget getEffectTarget()
@@ -344,8 +438,17 @@ public class Mark implements SurfaceElevationListener
      _appAnchorV = 0.5F;
      _declutterHidden = false;
      _declutterTarget = 0;
+     _presence = 1F;
      _transitionScale = 1F;
+     _transitionAlpha = 1F;
      _lastTransitionMS = -1;
+     _leavingOutfitIndex = -1;
+     _leavingPresence = 0F;
+     _leavingScale = 1F;
+     _leavingAlpha = 1F;
+     _leavingGLState = null;
+     _leavingBillboardGLF = null;
+     _leavingModelTransformGLF = null;
      _grazingAngle = Double.NaN;
      _horizonScale = 1F;
      _position = new Geodetic3D(position);
@@ -390,6 +493,7 @@ public class Mark implements SurfaceElevationListener
      _zoomOutDisappears = false;
      _deleteMarkOnDisappears = false;
      _zoomOutDisappearsStarted = false;
+     _zoomOutEffect = null;
      _token = "";
     // element by element: in Java an assignment would share the caller's list
     for (int i = 0; i < outfits.size(); i++)
@@ -408,8 +512,13 @@ public class Mark implements SurfaceElevationListener
 
   public void dispose()
   {
-    // the zoom-out effect deletes its mark itself: cancelling it from here would delete the mark again
-    if (!_zoomOutDisappearsStarted)
+    // not cancelled: the effect may be the one deleting this mark, from inside the scheduler's loop
+    if (_zoomOutEffect != null)
+    {
+      _zoomOutEffect.forgetMark();
+      _zoomOutEffect = null;
+    }
+    else if (!_zoomOutDisappearsStarted)
     {
       cancelEffects();
     }
@@ -464,6 +573,7 @@ public class Mark implements SurfaceElevationListener
     {
       _glState._release();
     }
+    releaseLeavingOutfit();
   
     if (_textureID != null)
     {
@@ -685,59 +795,52 @@ public class Mark implements SurfaceElevationListener
     return _declutterTarget;
   }
 
-  /** shrinks the outfit on screen while it is not the target, then grows the target in; reversible halfway */
-  public final void stepDeclutterTransition(long nowMS, long growMS, long shrinkMS)
+  /** the outfit on screen goes away while the target comes in, both at once and in durationMS; reversible halfway */
+  public final void stepDeclutterTransition(long nowMS, long durationMS, MarkTransitionMode mode)
   {
     final long elapsedMS = (_lastTransitionMS < 0) ? 0 : (nowMS - _lastTransitionMS);
     _lastTransitionMS = nowMS;
+    final float step = (durationMS <= 0) ? 1 : ((float) elapsedMS / durationMS);
+    final IMathUtils mu = IMathUtils.instance();
   
-    final boolean targetOnScreen = !_declutterHidden && (_declutterTarget >= 0) && (_outfitIndex == (int) _declutterTarget);
-    if (targetOnScreen)
+    if ((_declutterTarget >= 0) && ((int) _declutterTarget != _outfitIndex))
     {
-      if (_transitionScale < 1)
-      {
-        _transitionScale = (growMS <= 0) ? 1 : IMathUtils.instance().min(1.0f, _transitionScale + ((float) elapsedMS / growMS));
-        updateBillboardSize();
-      }
-      return;
+      startOutfitTransition(_declutterTarget);
     }
   
-    if (_declutterHidden)
+    if (_declutterTarget >= 0)
     {
-      if (_declutterTarget >= 0)
-      {
-        setOutfit(_declutterTarget);
-        _declutterHidden = false;
-        _transitionScale = 0F;
-        updateBillboardSize();
-      }
-      return;
+      _declutterHidden = false;
+      _presence = mu.min(1.0f, _presence + step);
+    }
+    else if (!_declutterHidden)
+    {
+      _presence = mu.max(0.0f, _presence - step);
+      _declutterHidden = (_presence <= 0);
     }
   
-    _transitionScale = (shrinkMS <= 0) ? 0 : IMathUtils.instance().max(0.0f, _transitionScale - ((float) elapsedMS / shrinkMS));
-    if (_transitionScale <= 0)
+    if (_leavingOutfitIndex >= 0)
     {
-      if (_declutterTarget >= 0)
+      _leavingPresence = mu.max(0.0f, _leavingPresence - step);
+      if (_leavingPresence <= 0)
       {
-        setOutfit(_declutterTarget);
-      }
-      else
-      {
-        _declutterHidden = true;
+        releaseLeavingOutfit();
       }
     }
-    updateBillboardSize();
+  
+    applyTransitionMode(mode);
   }
 
-  /** back to the first outfit, on screen and at full size, with no transition */
+  /** back to the first outfit, on screen and complete, with no transition */
   public final void resetDeclutter()
   {
+    releaseLeavingOutfit();
     _declutterTarget = 0;
     _declutterHidden = false;
-    _transitionScale = 1F;
+    _presence = 1F;
     _lastTransitionMS = -1;
     setOutfit(0);
-    updateBillboardSize();
+    applyTransitionMode(MarkTransitionMode.SCALE_AND_ALPHA);
   }
 
   /** the order among the marks that compete for space: the higher, the earlier */
@@ -842,16 +945,26 @@ public class Mark implements SurfaceElevationListener
   {
     _renderedMark = false;
   
-    if (!_declutterHidden && isVisibleFrom(planet, cameraPosition, cameraHeight))
+    final boolean hasSomethingToDraw = !_declutterHidden || (_leavingGLState != null);
+    if (hasSomethingToDraw && isVisibleFrom(planet, cameraPosition, cameraHeight))
     {
       updateHorizonScale(horizonBandRadiansPerPixel);
-      ensureTexture(rc);
-      if (_textureID != null)
+      if (_glPositionOutdated)
       {
-        ensureGLState(planet, billboardTexCoords, parentGLState);
-        startPendingEffects(rc, renderer);
-        draw(rc);
-        _renderedMark = true;
+        updateGLPosition(planet);
+      }
+      drawLeavingOutfit(rc, parentGLState);
+  
+      if (!_declutterHidden)
+      {
+        ensureTexture(rc);
+        if (_textureID != null)
+        {
+          ensureGLState(planet, billboardTexCoords, parentGLState);
+          startPendingEffects(rc, renderer);
+          draw(rc, _glState);
+          _renderedMark = true;
+        }
       }
     }
   }
@@ -873,6 +986,7 @@ public class Mark implements SurfaceElevationListener
     _cartesianPosition = null;
   
     clearGLState();
+    releaseLeavingOutfit();
   }
 
   public final void elevationChanged(Sector position, ElevationData rawElevationData, double verticalExaggeration) //Without considering vertical exaggeration
@@ -907,14 +1021,14 @@ public class Mark implements SurfaceElevationListener
     _textureHeight = height;
     _textureSizeSetExternally = true;
   
-    updateBillboardSize();
+    updateBillboard();
   }
   public final void setScreenSizeScale(float scaleWidth, float scaleHeight)
   {
     _textureWidthScale = scaleWidth;
     _textureHeightScale = scaleHeight;
   
-    updateBillboardSize();
+    updateBillboard();
   }
 
   /** for the zoom effects only; the app scales with setScreenSizeScale */
@@ -922,7 +1036,7 @@ public class Mark implements SurfaceElevationListener
   {
     _effectScale = effectScale;
   
-    updateBillboardSize();
+    updateBillboard();
   }
 
   public final void setTextureCoordinatesTransformation(Vector2F translation, Vector2F scaling)
@@ -1011,6 +1125,11 @@ public class Mark implements SurfaceElevationListener
     {
       _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
     }
+  }
+
+  public final void forgetZoomOutEffect()
+  {
+    _zoomOutEffect = null;
   }
 
 }

@@ -343,8 +343,9 @@ public:
             "#endif\n" +
             "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
+            "uniform vec4 uBillboardColorFactor;\n" +
             "void main() {\n" +
-            "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
+            "  gl_FragColor = texture2D(Sampler, TextureCoordOut) * uBillboardColorFactor;\n" +
             "}\n");
          this->add(srcBillboard_TransformedTexCoor);
       }
@@ -996,8 +997,9 @@ public:
             "#endif\n" +
             "varying vec2 TextureCoordOut;\n" +
             "uniform sampler2D Sampler;\n" +
+            "uniform vec4 uBillboardColorFactor;\n" +
             "void main() {\n" +
-            "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
+            "  gl_FragColor = texture2D(Sampler, TextureCoordOut) * uBillboardColorFactor;\n" +
             "}\n");
          this->add(srcBillboard);
       }

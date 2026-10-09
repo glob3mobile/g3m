@@ -133,8 +133,10 @@ void ColorGradeGLFeature::changeColorMatrix(const Matrix44D* colorMatrix) {
 
 BillboardGLFeature::BillboardGLFeature(float billboardWidth,
                                        float billboardHeight,
-                                       float anchorU, float anchorV) :
-GLFeature(NO_GROUP, GLF_BILLBOARD)
+                                       float anchorU, float anchorV,
+                                       bool premultipliedAlpha) :
+GLFeature(NO_GROUP, GLF_BILLBOARD),
+_premultipliedAlpha(premultipliedAlpha)
 {
   
   _anchor = new GPUUniformValueVec2FloatMutable(anchorU, anchorV);
@@ -150,6 +152,11 @@ GLFeature(NO_GROUP, GLF_BILLBOARD)
 
   _values->addUniformValue(BILLBOARD_POSITION,
                            new GPUUniformValueVec4Float(0, 0, 0, 1),
+                           false);
+
+  _colorFactor = new GPUUniformValueVec4FloatMutable(1, 1, 1, 1);
+  _values->addUniformValue(BILLBOARD_COLOR_FACTOR,
+                           _colorFactor,
                            false);
 }
 

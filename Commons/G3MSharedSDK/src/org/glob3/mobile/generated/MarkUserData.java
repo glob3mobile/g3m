@@ -32,6 +32,7 @@ package org.glob3.mobile.generated;
 //class ModelTransformGLFeature;
 //class MarkOutfit;
 //class MarkOutfitImage;
+//class MarkZoomOutAndRemoveEffect;
 
 public class MarkUserData
 {

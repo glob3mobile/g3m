@@ -85,8 +85,8 @@ public class MarksRenderer extends DefaultRenderer
   private boolean _declutter;
   private boolean _horizonBand;
   private float _declutterMargin;
-  private long _growMS;
-  private long _shrinkMS;
+  private long _transitionMS;
+  private MarkTransitionMode _transitionMode;
 
   // the default hint: one image, shared by every mark without a hint of its own
   private IImageFactory _hintImageFactory;
@@ -243,8 +243,8 @@ public class MarksRenderer extends DefaultRenderer
      _declutter = false;
      _horizonBand = true;
      _declutterMargin = 2F;
-     _growMS = 500;
-     _shrinkMS = 300;
+     _transitionMS = 500;
+     _transitionMode = MarkTransitionMode.SCALE_AND_ALPHA;
      _hintImageFactory = null;
      _hintListener = null;
      _hintImage = null;
@@ -323,6 +323,13 @@ public class MarksRenderer extends DefaultRenderer
     }
   }
 
+
+  // the factory deletes the listener right after reporting the error
+  public final void onHintImageCreationError()
+  {
+    _hintListener = null;
+  }
+
   /** the marks shrink while they sink behind the horizon, over their own apparent height, instead of vanishing at once; on by default */
   public final void setHorizonBand(boolean horizonBand)
   {
@@ -334,11 +341,21 @@ public class MarksRenderer extends DefaultRenderer
     return _horizonBand;
   }
 
-  /** how long an outfit takes to grow in and to shrink away; by default those of the marks' zoom effects */
-  public final void setDeclutterTransitionDurations(TimeInterval grow, TimeInterval shrink)
+  /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 500ms by default */
+  public final void setDeclutterTransitionDuration(TimeInterval duration)
   {
-    _growMS = grow.milliseconds();
-    _shrinkMS = shrink.milliseconds();
+    _transitionMS = duration.milliseconds();
+  }
+
+  /** how outfits come in and go away: SCALE_AND_ALPHA by default */
+  public final void setDeclutterTransitionMode(MarkTransitionMode mode)
+  {
+    _transitionMode = mode;
+  }
+
+  public final MarkTransitionMode getDeclutterTransitionMode()
+  {
+    return _transitionMode;
   }
 
   public final boolean getRenderInReverse()
@@ -460,7 +477,7 @@ public class MarksRenderer extends DefaultRenderer
         final long nowMS = rc.getFrameStartTimer().nowInMilliseconds();
         for (int i = 0; i < marksSize; i++)
         {
-          _marks.get(i).stepDeclutterTransition(nowMS, _growMS, _shrinkMS);
+          _marks.get(i).stepDeclutterTransition(nowMS, _transitionMS, _transitionMode);
         }
       }
   

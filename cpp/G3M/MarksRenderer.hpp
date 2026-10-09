@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "DefaultRenderer.hpp"
+#include "MarkTransitionMode.hpp"
 
 class Mark;
 class Camera;
@@ -55,8 +56,8 @@ private:
   bool      _declutter;
   bool      _horizonBand;
   float     _declutterMargin;
-  long long _growMS;
-  long long _shrinkMS;
+  long long          _transitionMS;
+  MarkTransitionMode _transitionMode;
 
   // the default hint: one image, shared by every mark without a hint of its own
   IImageFactory*              _hintImageFactory;
@@ -119,6 +120,8 @@ public:
   void onHintImageCreated(const IImage* image,
                           const std::string& imageName);
 
+  void onHintImageCreationError();
+
   /** the marks shrink while they sink behind the horizon, over their own apparent height, instead of vanishing at once; on by default */
   void setHorizonBand(bool horizonBand) {
     _horizonBand = horizonBand;
@@ -128,9 +131,17 @@ public:
     return _horizonBand;
   }
 
-  /** how long an outfit takes to grow in and to shrink away; by default those of the marks' zoom effects */
-  void setDeclutterTransitionDurations(const TimeInterval& grow,
-                                       const TimeInterval& shrink);
+  /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 500ms by default */
+  void setDeclutterTransitionDuration(const TimeInterval& duration);
+
+  /** how outfits come in and go away: SCALE_AND_ALPHA by default */
+  void setDeclutterTransitionMode(MarkTransitionMode mode) {
+    _transitionMode = mode;
+  }
+
+  MarkTransitionMode getDeclutterTransitionMode() const {
+    return _transitionMode;
+  }
 
   bool getRenderInReverse() const {
     return _renderInReverse;

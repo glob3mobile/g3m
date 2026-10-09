@@ -136,6 +136,10 @@ public class GPUVariable
     {
       return GPUUniformKey.COLOR_MATRIX;
     }
+    else if (name.equals("uBillboardColorFactor"))
+    {
+      return GPUUniformKey.BILLBOARD_COLOR_FACTOR;
+    }
     else
     {
       return GPUUniformKey.UNRECOGNIZED_UNIFORM;

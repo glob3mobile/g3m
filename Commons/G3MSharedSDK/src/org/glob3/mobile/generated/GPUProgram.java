@@ -98,7 +98,11 @@ public class GPUProgram
     for (int i = 0; i < _nUniforms; i++)
     {
       GPUUniform u = gl.getActiveUniform(this, i);
-      if (u != null)
+      if ((u != null) && (u.getIndex() < 0))
+      {
+        ILogger.instance().logError("Program \"%s\": uniform \"%s\" unknown to GPUVariable, ignored", _name, u._name);
+      }
+      else if (u != null)
       {
         _uniforms[u.getIndex()] = u;
   
@@ -119,7 +123,11 @@ public class GPUProgram
     for (int i = 0; i < _nAttributes; i++)
     {
       GPUAttribute a = gl.getActiveAttribute(this, i);
-      if (a != null)
+      if ((a != null) && (a.getIndex() < 0))
+      {
+        ILogger.instance().logError("Program \"%s\": attribute \"%s\" unknown to GPUVariable, ignored", _name, a._name);
+      }
+      else if (a != null)
       {
         _attributes[a.getIndex()] = a;
   

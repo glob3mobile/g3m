@@ -326,7 +326,7 @@ public:
 
 
 class GPUUniformValueVec4Float : public GPUUniformValue {
-private:
+protected:
   virtual ~GPUUniformValueVec4Float() {
 #ifdef JAVA_CODE
     super.dispose();
@@ -334,7 +334,7 @@ private:
   }
 
 public:
-  const float _x, _y, _z, _w;
+  float _x, _y, _z, _w;
 
   GPUUniformValueVec4Float(const Color& color) :
   GPUUniformValue(GLType::glVec4Float()),
@@ -369,6 +369,28 @@ public:
     const std::string s = isb->getString();
     delete isb;
     return s;
+  }
+};
+
+
+class GPUUniformValueVec4FloatMutable : public GPUUniformValueVec4Float {
+private:
+  ~GPUUniformValueVec4FloatMutable() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+
+  GPUUniformValueVec4FloatMutable(float x, float y, float z, float w):
+  GPUUniformValueVec4Float(x, y, z, w) {}
+
+  void changeValue(float x, float y, float z, float w) {
+    _x = x;
+    _y = y;
+    _z = z;
+    _w = w;
   }
 };
 

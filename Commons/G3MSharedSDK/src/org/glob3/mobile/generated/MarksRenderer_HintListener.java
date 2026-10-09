@@ -38,5 +38,9 @@ public class MarksRenderer_HintListener implements IImageFactoryListener
   public final void onError(String error)
   {
     ILogger.instance().logError("Can't create the marks' hint image: \"%s\"", error);
+    if (_renderer != null)
+    {
+      _renderer.onHintImageCreationError();
+    }
   }
 }

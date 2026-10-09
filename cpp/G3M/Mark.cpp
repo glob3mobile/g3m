@@ -195,16 +195,23 @@ public:
   }
 
   ~MarkZoomOutAndRemoveEffect() {
-    if (_deleteMarkOnDisappears) {
-      if (_mark != NULL) {
-        Mark* mark = _mark;
-        _mark = NULL;
+    if (_mark != NULL) {
+      Mark* mark = _mark;
+      _mark = NULL;
+      mark->forgetZoomOutEffect();
+      if (_deleteMarkOnDisappears) {
         delete mark;
       }
     }
 #ifdef JAVA_CODE
     super.dispose();
 #endif
+  }
+
+  // the mark was deleted by someone else: from now on the effect does nothing until it runs out
+  void forgetMark() {
+    _mark     = NULL;
+    _renderer = NULL;
   }
 
   void doStep(const G3MRenderContext* rc,
@@ -259,8 +266,17 @@ _appAnchorU(0.5),
 _appAnchorV(0.5),
 _declutterHidden(false),
 _declutterTarget(0),
+_presence(1),
 _transitionScale(1),
+_transitionAlpha(1),
 _lastTransitionMS(-1),
+_leavingOutfitIndex(-1),
+_leavingPresence(0),
+_leavingScale(1),
+_leavingAlpha(1),
+_leavingGLState(NULL),
+_leavingBillboardGLF(NULL),
+_leavingModelTransformGLF(NULL),
 _grazingAngle(NAND),
 _horizonScale(1),
 _position(new Geodetic3D(position)),
@@ -305,8 +321,13 @@ _effectTarget(NULL),
 _zoomOutDisappears(false),
 _deleteMarkOnDisappears(false),
 _zoomOutDisappearsStarted(false),
+_zoomOutEffect(NULL),
 _token("")
 {
+  if (outfits.empty()) {
+    THROW_EXCEPTION("Mark: at least one outfit is needed");
+  }
+
   // element by element: in Java an assignment would share the caller's list
   for (size_t i = 0; i < outfits.size(); i++) {
     MarkOutfit* outfit = outfits[i];
@@ -314,7 +335,7 @@ _token("")
 
     IImageFactory* imageFactory = outfit->takeImageFactory();
     if (imageFactory->isMutable()) {
-      ILogger::instance()->logError("Marks doesn't support mutable image factories");
+      THROW_EXCEPTION("Mark: mutable image factories are not supported");
     }
     _outfitImages.push_back(new MarkOutfitImage(imageFactory, outfit->getAnchor()));
   }
@@ -367,8 +388,12 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
-  // the zoom-out effect deletes its mark itself: cancelling it from here would delete the mark again
-  if (!_zoomOutDisappearsStarted) {
+  // not cancelled: the effect may be the one deleting this mark, from inside the scheduler's loop
+  if (_zoomOutEffect != NULL) {
+    _zoomOutEffect->forgetMark();
+    _zoomOutEffect = NULL;
+  }
+  else if (!_zoomOutDisappearsStarted) {
     cancelEffects();
   }
 
@@ -407,6 +432,7 @@ Mark::~Mark() {
   if (_glState != NULL) {
     _glState->_release();
   }
+  releaseLeavingOutfit();
 
   if (_textureID != NULL) {
 #ifdef JAVA_CODE
@@ -458,7 +484,9 @@ void Mark::createGLState(const Planet* planet,
 
   _billboardGLF = new BillboardGLFeature(getScreenWidth(),
                                          getScreenHeight(),
-                                         _anchorU, _anchorV);
+                                         _anchorU, _anchorV,
+                                         (_textureID == NULL) || _textureID->isPremultiplied());
+  _billboardGLF->changeAlpha(_transitionAlpha);
 
   _glState->addGLFeature(_billboardGLF,
                          false);
@@ -507,16 +535,32 @@ void Mark::render(const G3MRenderContext* rc,
                   double horizonBandRadiansPerPixel) {
   _renderedMark = false;
 
-  if (!_declutterHidden &&
+  const bool hasSomethingToDraw = !_declutterHidden || (_leavingGLState != NULL);
+  if (hasSomethingToDraw &&
       isVisibleFrom(planet, cameraPosition, cameraHeight)) {
     updateHorizonScale(horizonBandRadiansPerPixel);
-    ensureTexture(rc);
-    if (_textureID != NULL) {
-      ensureGLState(planet, billboardTexCoords, parentGLState);
-      startPendingEffects(rc, renderer);
-      draw(rc);
-      _renderedMark = true;
+    if (_glPositionOutdated) {
+      updateGLPosition(planet);
     }
+    drawLeavingOutfit(rc, parentGLState);
+
+    if (!_declutterHidden) {
+      ensureTexture(rc);
+      if (_textureID != NULL) {
+        ensureGLState(planet, billboardTexCoords, parentGLState);
+        startPendingEffects(rc, renderer);
+        draw(rc, _glState);
+        _renderedMark = true;
+      }
+    }
+  }
+}
+
+void Mark::drawLeavingOutfit(const G3MRenderContext* rc,
+                             const GLState* parentGLState) {
+  if (_leavingGLState != NULL) {
+    _leavingGLState->setParent(parentGLState);
+    draw(rc, _leavingGLState);
   }
 }
 
@@ -582,7 +626,8 @@ bool Mark::isOccludedByHorizon(const Planet* planet,
                                const MutableVector3D& cameraPosition,
                                double cameraHeight,
                                const Vector3D* markPosition) {
-  if (_position->_height > cameraHeight) {
+  const double markHeight = (_altitudeMode == RELATIVE_TO_GROUND) ? (_position->_height + _currentSurfaceElevation) : _position->_height;
+  if (markHeight > cameraHeight) {
     _grazingAngle = NAND;
     const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
                                                                      cameraPosition.y(),
@@ -617,7 +662,7 @@ void Mark::updateHorizonScale(double radiansPerPixel) {
   }
   if (horizonScale != _horizonScale) {
     _horizonScale = horizonScale;
-    updateBillboardSize();
+    updateBillboard();
   }
 }
 
@@ -641,9 +686,6 @@ void Mark::ensureGLState(const Planet* planet,
   if (_glState == NULL) {
     createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
   }
-  else if (_glPositionOutdated) {
-    updateGLPosition(planet);
-  }
   _glState->setParent(parentGLState);
 }
 
@@ -651,7 +693,12 @@ void Mark::updateGLPosition(const Planet* planet) {
   const Vector3D* position = getCartesianPosition(planet);
   const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(*position);
 
-  _modelTransformGLF->setMatrix(translation.asMatrix44D());
+  if (_modelTransformGLF != NULL) {
+    _modelTransformGLF->setMatrix(translation.asMatrix44D());
+  }
+  if (_leavingModelTransformGLF != NULL) {
+    _leavingModelTransformGLF->setMatrix(translation.asMatrix44D());
+  }
   _glPositionOutdated = false;
 }
 
@@ -674,16 +721,18 @@ void Mark::startPendingEffects(const G3MRenderContext* rc,
     else {
       _effectsScheduler = rc->getEffectsScheduler();
     }
-    _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears),
+    _zoomOutEffect = new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears);
+    _effectsScheduler->startEffect(_zoomOutEffect,
                                    getEffectTarget());
   }
 }
 
-void Mark::draw(const G3MRenderContext* rc) {
+void Mark::draw(const G3MRenderContext* rc,
+                GLState* glState) {
   rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
                           0,
                           4,
-                          _glState,
+                          glState,
                           *rc->getGPUProgramManager());
 }
 
@@ -713,6 +762,7 @@ void Mark::elevationChanged(const Geodetic2D& position,
   _cartesianPosition = NULL;
 
   clearGLState();
+  releaseLeavingOutfit();
 }
 
 void Mark::clearGLState() {
@@ -753,27 +803,35 @@ void Mark::setScreenSize(int width, int height) {
   _textureHeight = height;
   _textureSizeSetExternally = true;
 
-  updateBillboardSize();
+  updateBillboard();
 }
 
 void Mark::setScreenSizeScale(float scaleWidth, float scaleHeight) {
   _textureWidthScale  = scaleWidth;
   _textureHeightScale = scaleHeight;
 
-  updateBillboardSize();
+  updateBillboard();
 }
 
 void Mark::setEffectScale(float effectScale) {
   _effectScale = effectScale;
 
-  updateBillboardSize();
+  updateBillboard();
 }
 
-void Mark::updateBillboardSize() {
+void Mark::updateBillboard() {
+  const IMathUtils* mu = IMathUtils::instance();
   if (_billboardGLF != NULL) {
-    const IMathUtils* mu = IMathUtils::instance();
     _billboardGLF->changeSize(mu->round(getScreenWidth()),
                               mu->round(getScreenHeight()));
+    _billboardGLF->changeAlpha(_transitionAlpha);
+  }
+  if (_leavingBillboardGLF != NULL) {
+    const Vector2F leavingSize = getOutfitScreenSize(_leavingOutfitIndex);
+    const float leavingFactor = _effectScale * _leavingScale * _horizonScale;
+    _leavingBillboardGLF->changeSize(mu->round(leavingSize._x * leavingFactor),
+                                     mu->round(leavingSize._y * leavingFactor));
+    _leavingBillboardGLF->changeAlpha(_leavingAlpha);
   }
 }
 
@@ -822,6 +880,9 @@ void Mark::changeAnchor(float anchorU, float anchorV) {
 }
 
 void Mark::addHint(MarkOutfit* hint) {
+  if (_hasHint) {
+    THROW_EXCEPTION("Mark: the mark already has a hint");
+  }
   _outfits.push_back(hint);
   _outfitImages.push_back(new MarkOutfitImage(hint->takeImageFactory(), hint->getAnchor()));
   _hasHint = true;
@@ -889,49 +950,98 @@ void Mark::applyOutfitAnchor(const MarkOutfitImage* outfitImage) {
 }
 
 void Mark::stepDeclutterTransition(long long nowMS,
-                                   long long growMS,
-                                   long long shrinkMS) {
+                                   long long durationMS,
+                                   MarkTransitionMode mode) {
   const long long elapsedMS = (_lastTransitionMS < 0) ? 0 : (nowMS - _lastTransitionMS);
   _lastTransitionMS = nowMS;
+  const float step = (durationMS <= 0) ? 1 : ((float) elapsedMS / durationMS);
+  const IMathUtils* mu = IMathUtils::instance();
 
-  const bool targetOnScreen = !_declutterHidden && (_declutterTarget >= 0) && (_outfitIndex == (size_t) _declutterTarget);
-  if (targetOnScreen) {
-    if (_transitionScale < 1) {
-      _transitionScale = (growMS <= 0) ? 1 : IMathUtils::instance()->min(1.0f, _transitionScale + ((float) elapsedMS / growMS));
-      updateBillboardSize();
-    }
-    return;
+  if ((_declutterTarget >= 0) && ((size_t) _declutterTarget != _outfitIndex)) {
+    startOutfitTransition(_declutterTarget);
   }
 
-  if (_declutterHidden) {
-    if (_declutterTarget >= 0) {
-      setOutfit(_declutterTarget);
-      _declutterHidden = false;
-      _transitionScale = 0;
-      updateBillboardSize();
-    }
-    return;
+  if (_declutterTarget >= 0) {
+    _declutterHidden = false;
+    _presence = mu->min(1.0f, _presence + step);
+  }
+  else if (!_declutterHidden) {
+    _presence = mu->max(0.0f, _presence - step);
+    _declutterHidden = (_presence <= 0);
   }
 
-  _transitionScale = (shrinkMS <= 0) ? 0 : IMathUtils::instance()->max(0.0f, _transitionScale - ((float) elapsedMS / shrinkMS));
-  if (_transitionScale <= 0) {
-    if (_declutterTarget >= 0) {
-      setOutfit(_declutterTarget);
-    }
-    else {
-      _declutterHidden = true;
+  if (_leavingOutfitIndex >= 0) {
+    _leavingPresence = mu->max(0.0f, _leavingPresence - step);
+    if (_leavingPresence <= 0) {
+      releaseLeavingOutfit();
     }
   }
-  updateBillboardSize();
+
+  applyTransitionMode(mode);
+}
+
+// coming back to the outfit that is leaving resumes it from where it was
+void Mark::startOutfitTransition(size_t outfitIndex) {
+  float presence = 0;
+  if (_leavingOutfitIndex == (int) outfitIndex) {
+    presence = _leavingPresence;
+    releaseLeavingOutfit();
+  }
+
+  if (!_declutterHidden && (_presence > 0) && (_glState != NULL)) {
+    releaseLeavingOutfit();
+    moveGLStateToLeaving();
+  }
+
+  setOutfit(outfitIndex);
+  _presence = presence;
+}
+
+// the GL state on screen already holds the leaving outfit's texture, size and anchor
+void Mark::moveGLStateToLeaving() {
+  _leavingOutfitIndex       = (int) _outfitIndex;
+  _leavingPresence          = _presence;
+  _leavingGLState           = _glState;
+  _leavingBillboardGLF      = _billboardGLF;
+  _leavingModelTransformGLF = _modelTransformGLF;
+
+  _glState           = NULL;
+  _billboardGLF      = NULL;
+  _modelTransformGLF = NULL;
+  _textureGLF        = NULL;
+}
+
+void Mark::releaseLeavingOutfit() {
+  if (_leavingGLState != NULL) {
+    _leavingGLState->_release();
+    _leavingGLState = NULL;
+  }
+  _leavingBillboardGLF      = NULL;
+  _leavingModelTransformGLF = NULL;
+  _leavingOutfitIndex       = -1;
+  _leavingPresence          = 0;
+}
+
+void Mark::applyTransitionMode(MarkTransitionMode mode) {
+  const bool scales = (mode == SCALE) || (mode == SCALE_AND_ALPHA);
+  const bool fades  = (mode == ALPHA) || (mode == SCALE_AND_ALPHA);
+
+  _transitionScale = scales ? _presence : 1;
+  _transitionAlpha = fades  ? _presence : 1;
+  _leavingScale    = scales ? _leavingPresence : 1;
+  _leavingAlpha    = fades  ? _leavingPresence : 1;
+
+  updateBillboard();
 }
 
 void Mark::resetDeclutter() {
+  releaseLeavingOutfit();
   _declutterTarget  = 0;
   _declutterHidden  = false;
-  _transitionScale  = 1;
+  _presence         = 1;
   _lastTransitionMS = -1;
   setOutfit(0);
-  updateBillboardSize();
+  applyTransitionMode(SCALE_AND_ALPHA);
 }
 
 bool Mark::hasPriority() const {

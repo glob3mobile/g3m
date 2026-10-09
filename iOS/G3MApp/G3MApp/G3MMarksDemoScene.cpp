@@ -47,6 +47,10 @@
 #include <G3M/PeriodicalTask.hpp>
 #include <G3M/TextureAtlasMarkAnimationTask.hpp>
 #include <G3M/Angle.hpp>
+#include <G3M/PlanetRenderer.hpp>
+#include <G3M/SingleBILElevationDataProvider.hpp>
+#include <G3M/Sector.hpp>
+#include <G3M/Vector2I.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -250,6 +254,9 @@ void G3MMarksDemoScene::rawSelectOption(const std::string& option,
   else if (option == "London - declutter") {
     showLondon();
   }
+  else if (option == "Terrain - relative to ground") {
+    showTerrain();
+  }
 }
 
 /** from wherever the camera is, as it is, to a pose that looks at the marks with the horizon in view */
@@ -275,8 +282,11 @@ void G3MMarksDemoScene::rawSelectGroupOption(size_t groupIndex,
     if (groupIndex == 1) {
       moveLondonCamera(option);
     }
-    else {
+    else if (groupIndex == 2) {
       applyLondonDeclutter(option);
+    }
+    else {
+      applyLondonTransition(option);
     }
   }
 }
@@ -297,8 +307,24 @@ void G3MMarksDemoScene::applyLondonDeclutter(const std::string& declutterOption)
   }
 }
 
+void G3MMarksDemoScene::applyLondonTransition(const std::string& transitionOption) {
+  MarksRenderer* marksRenderer = getModel()->getMarksRenderer();
+  if (transitionOption == "Scale") {
+    marksRenderer->setDeclutterTransitionMode(SCALE);
+  }
+  else if (transitionOption == "Alpha") {
+    marksRenderer->setDeclutterTransitionMode(ALPHA);
+  }
+  else if (transitionOption == "Scale and alpha") {
+    marksRenderer->setDeclutterTransitionMode(SCALE_AND_ALPHA);
+  }
+  else {
+    ILogger::instance()->logError("Unknown transition option \"%s\"", transitionOption.c_str());
+  }
+}
+
 bool G3MMarksDemoScene::isOptionGroupVisible(size_t groupIndex) const {
-  // the horizon applies to every feature; the camera and declutter groups only to London
+  // the horizon applies to every feature; the camera, declutter and transition groups only to London
   return (groupIndex == 0) || (groupIndex == 3) || getOptionGroup(0)->isSelectedOption("London - declutter");
 }
 
@@ -311,6 +337,52 @@ void G3MMarksDemoScene::removeFeature() {
   model->getMarksRenderer()->setHint(NULL);
   model->getG3MWidget()->removeAllPeriodicalTasks();
   model->getMarksRenderer()->removeAllMarks();
+
+  if (_showsTerrain) {
+    model->getPlanetRenderer()->setElevationDataProvider(NULL, true);
+    _showsTerrain = false;
+  }
+}
+
+/**
+ * Two marks on the summit of Teide, seen from below: one 10m above the
+ * ground, the other at the real summit's height, absolute. The camera is lower
+ * than both, so both should show.
+ */
+void G3MMarksDemoScene::showTerrain() {
+  G3MDemoModel* model = getModel();
+
+  // coarse (about 20km a pixel) but local: about 3000m on the summit
+  model->getPlanetRenderer()->setElevationDataProvider(new SingleBILElevationDataProvider(URL("file:///full-earth-2048x1024.bil"),
+                                                                                          Sector::fullSphere(),
+                                                                                          Vector2I(2048, 1024)),
+                                                       true);
+  _showsTerrain = true;
+
+  const LabelStyle style = LabelStyle::shadowed(GFont::sansSerif(20),
+                                                Color::WHITE,
+                                                Color::BLACK,
+                                                1,
+                                                Vector2F(2, 2));
+
+  MarkBuilder builder;
+
+  builder.setAltitudeMode(RELATIVE_TO_GROUND);
+  builder.setPosition(Geodetic3D::fromDegrees(28.2723, -16.6425, 10));
+  builder.addOutfit(new LabelImageFactory("Teide: 10m above the ground", style),
+                    new FixedMarkAnchor(0.5, 1)); // above the position
+  model->getMarksRenderer()->addMark(builder.build());
+
+  builder.setAltitudeMode(ABSOLUTE);
+  builder.setPosition(Geodetic3D::fromDegrees(28.2723, -16.6425, 3725));
+  builder.addOutfit(new LabelImageFactory("Teide: 3725m absolute", style),
+                    new FixedMarkAnchor(0.5, 0)); // below the position
+  model->getMarksRenderer()->addMark(builder.build());
+
+  // from the Orotava valley, 10km north and 1700m below the summit, looking south and a bit up
+  animateCameraTo(Geodetic3D::fromDegrees(28.36, -16.6425, 2000),
+                  Angle::fromDegrees(180),
+                  Angle::fromDegrees(5));
 }
 
 void G3MMarksDemoScene::showBasicMark() {
@@ -507,6 +579,7 @@ void G3MMarksDemoScene::showLondon() {
 
   moveLondonCamera(getOptionGroup(1)->getTitle());
   applyLondonDeclutter(getOptionGroup(2)->getTitle());
+  applyLondonTransition(getOptionGroup(4)->getTitle());
 }
 
 void G3MMarksDemoScene::moveLondonCamera(const std::string& cameraOption) {
@@ -515,10 +588,14 @@ void G3MMarksDemoScene::moveLondonCamera(const std::string& cameraOption) {
                     Angle::zero(),
                     Angle::fromDegrees(-40));
   }
-  else if (cameraOption == "Bloomsbury and the City") {
-    animateCameraTo(Geodetic3D::fromDegrees(51.495, -0.110, 3000),
-                    Angle::zero(),
+  else if (cameraOption == "From the City") {
+    // over the City, looking west at the crowded core around Charing Cross
+    animateCameraTo(Geodetic3D::fromDegrees(51.507, -0.0734, 3000),
+                    Angle::fromDegrees(90), // heading turns counterclockwise: 90 looks west
                     Angle::fromDegrees(-40));
+  }
+  else if (cameraOption == "Orbit") {
+    orbitLondon();
   }
   else {
     // from where only London itself fits down to the street level, to watch the marks unfold while zooming in
@@ -528,6 +605,18 @@ void G3MMarksDemoScene::moveLondonCamera(const std::string& cameraOption) {
                                                           Angle::zero(),            Angle::zero(),            /* heading */
                                                           Angle::fromDegrees(-90),  Angle::fromDegrees(-90)  /* pitch: looking straight down */);
   }
+}
+
+// as pythagoras' orbit view: a cut to straight down over the center, then one turn in 40s (9 degrees per second, the cabin comfort limit) closing in down to a bit of sky
+void G3MMarksDemoScene::orbitLondon() {
+  const Geodetic3D center = Geodetic3D::fromDegrees(51.507, -0.1275, 0);
+  getModel()->getG3MWidget()->setAnimatedCameraPointOfView(TimeInterval::fromSeconds(40),
+                                                           center,                   center,
+                                                           25000,                    3000,
+                                                           Angle::fromDegrees(180),  Angle::fromDegrees(540), /* azimuth */
+                                                           Angle::fromDegrees(90),   Angle::fromDegrees(15),  /* altitude */
+                                                           false,                    /* linearTiming */
+                                                           false                     /* linearDistance */);
 }
 
 /**

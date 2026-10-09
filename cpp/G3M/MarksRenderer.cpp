@@ -66,6 +66,9 @@ public:
 
   void onError(const std::string& error) {
     ILogger::instance()->logError("Can't create the marks' hint image: \"%s\"", error.c_str());
+    if (_renderer != NULL) {
+      _renderer->onHintImageCreationError();
+    }
   }
 };
 
@@ -89,8 +92,8 @@ _progressiveInitialization(progressiveInitialization),
 _declutter(false),
 _horizonBand(true),
 _declutterMargin(2),
-_growMS(500),
-_shrinkMS(300),
+_transitionMS(500),
+_transitionMode(SCALE_AND_ALPHA),
 _hintImageFactory(NULL),
 _hintListener(NULL),
 _hintImage(NULL),
@@ -317,7 +320,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
       const long long nowMS = rc->getFrameStartTimer()->nowInMilliseconds();
       for (size_t i = 0; i < marksSize; i++) {
-        _marks[i]->stepDeclutterTransition(nowMS, _growMS, _shrinkMS);
+        _marks[i]->stepDeclutterTransition(nowMS, _transitionMS, _transitionMode);
       }
     }
 
@@ -365,6 +368,11 @@ void MarksRenderer::startHintImage() {
   hintImageFactory->create(_context, _hintListener, true);
 }
 
+// the factory deletes the listener right after reporting the error
+void MarksRenderer::onHintImageCreationError() {
+  _hintListener = NULL;
+}
+
 void MarksRenderer::onHintImageCreated(const IImage* image,
                                        const std::string& imageName) {
   _hintListener  = NULL;
@@ -388,10 +396,8 @@ void MarksRenderer::attachHint(Mark* mark) {
   }
 }
 
-void MarksRenderer::setDeclutterTransitionDurations(const TimeInterval& grow,
-                                                    const TimeInterval& shrink) {
-  _growMS   = grow.milliseconds();
-  _shrinkMS = shrink.milliseconds();
+void MarksRenderer::setDeclutterTransitionDuration(const TimeInterval& duration) {
+  _transitionMS = duration.milliseconds();
 }
 
 void MarksRenderer::setDeclutter(bool declutter) {

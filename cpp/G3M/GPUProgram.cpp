@@ -146,7 +146,12 @@ void GPUProgram::getVariables(GL* gl) {
 
   for (int i = 0; i < _nUniforms; i++) {
     GPUUniform* u = gl->getActiveUniform(this, i);
-    if (u != NULL) {
+    if ((u != NULL) && (u->getIndex() < 0)) {
+      ILogger::instance()->logError("Program \"%s\": uniform \"%s\" unknown to GPUVariable, ignored",
+                                    _name.c_str(),
+                                    u->_name.c_str());
+    }
+    else if (u != NULL) {
       _uniforms[u->getIndex()] = u;
 
       const int code = GPUVariable::getUniformCode(u->_key);
@@ -165,7 +170,12 @@ void GPUProgram::getVariables(GL* gl) {
 
   for (int i = 0; i < _nAttributes; i++) {
     GPUAttribute* a = gl->getActiveAttribute(this, i);
-    if (a != NULL) {
+    if ((a != NULL) && (a->getIndex() < 0)) {
+      ILogger::instance()->logError("Program \"%s\": attribute \"%s\" unknown to GPUVariable, ignored",
+                                    _name.c_str(),
+                                    a->_name.c_str());
+    }
+    else if (a != NULL) {
       _attributes[a->getIndex()] = a;
 
       const int code = GPUVariable::getAttributeCode(a->_key);

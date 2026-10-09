@@ -6,7 +6,8 @@ precision mediump float;
 
 varying vec2 TextureCoordOut;
 uniform sampler2D Sampler;
+uniform vec4 uBillboardColorFactor;
 
 void main() {
-  gl_FragColor = texture2D(Sampler, TextureCoordOut);
+  gl_FragColor = texture2D(Sampler, TextureCoordOut) * uBillboardColorFactor;
 }
