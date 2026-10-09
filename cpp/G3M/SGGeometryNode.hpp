@@ -53,6 +53,11 @@ public:
     return "SGGeometryNode";
   }
   
+
+  void addToModelBounds(const MutableMatrix44D& transform,
+                        MutableVector3D& lower,
+                        MutableVector3D& upper) const;
+
 };
 
 #endif

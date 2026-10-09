@@ -7,6 +7,9 @@
 //
 
 #include "SGShape.hpp"
+#include "IMathUtils.hpp"
+#include "MutableVector3D.hpp"
+#include "Box.hpp"
 
 #include "SGNode.hpp"
 #include "GLState.hpp"
@@ -57,4 +60,15 @@ std::vector<double> SGShape::intersectionsDistances(const Planet* planet,
 #warning TODO
   std::vector<double> intersections;
   return intersections;
+}
+
+Box* SGShape::createModelBoundingBox(const G3MRenderContext* rc) {
+  const IMathUtils* mu = IMathUtils::instance();
+  MutableVector3D lower(mu->maxDouble(), mu->maxDouble(), mu->maxDouble());
+  MutableVector3D upper(-mu->maxDouble(), -mu->maxDouble(), -mu->maxDouble());
+  _node->addToModelBounds(MutableMatrix44D::identity(), lower, upper);
+  if (lower.x() > upper.x()) {
+    return NULL; // no vertices
+  }
+  return new Box(lower.asVector3D(), upper.asVector3D());
 }

@@ -29,6 +29,19 @@ public class SGShape extends Shape
 
   private GLState _glState;
 
+  protected final Box createModelBoundingBox(G3MRenderContext rc)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    MutableVector3D lower = new MutableVector3D(mu.maxDouble(), mu.maxDouble(), mu.maxDouble());
+    MutableVector3D upper = new MutableVector3D(-mu.maxDouble(), -mu.maxDouble(), -mu.maxDouble());
+    _node.addToModelBounds(MutableMatrix44D.identity(), lower, upper);
+    if (lower.x() > upper.x())
+    {
+      return null; // no vertices
+    }
+    return new Box(lower.asVector3D(), upper.asVector3D());
+  }
+
 
   public SGShape(SGNode node, String uriPrefix, boolean isTransparent, Geodetic3D position, AltitudeMode altitudeMode)
   {

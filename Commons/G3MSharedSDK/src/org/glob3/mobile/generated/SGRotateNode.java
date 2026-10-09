@@ -59,4 +59,10 @@ public class SGRotateNode extends SGNode
     return "SGRotateNode";
   }
 
+
+  public final void addToModelBounds(MutableMatrix44D transform, MutableVector3D lower, MutableVector3D upper)
+  {
+    super.addToModelBounds(transform.multiply(_rotationMatrix), lower, upper);
+  }
+
 }

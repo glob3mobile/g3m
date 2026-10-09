@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33CC749179ED506B32CBB9DA /* ColorLook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43943FCBCBC8C6C3219DF07E /* ColorLook.cpp */; };
 		44AFBB1F19D4271B00EB78E9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */; platformFilter = ios; };
 		44AFBB2119D4272F00EB78E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2019D4272F00EB78E9 /* UIKit.framework */; platformFilter = ios; };
 		44AFBB2319D4273A00EB78E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */; platformFilter = ios; };
 		44AFBB2719D4276000EB78E9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2619D4276000EB78E9 /* QuartzCore.framework */; platformFilter = ios; };
 		44AFBB2919D4286C00EB78E9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44AFBB2819D4286C00EB78E9 /* CoreData.framework */; platformFilter = ios; };
+		6E35E71273F8E372346C1F8B /* ColorLook.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 585C39F3FD9EB7D969E01D6A /* ColorLook.hpp */; };
 		CF05D55C25B82C1700220105 /* XPCRGBPointColorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */; };
 		CF05D55F25B82D9500220105 /* XPCRGBPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */; };
 		CF12DC8B25D4380B00240D6F /* MutableColor.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF32C67625D3F5ED00F02D13 /* MutableColor.hpp */; };
 		CF12DC8C25D4380B00240D6F /* XPCFixedAlphaPointColorizer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF32C67E25D436A600F02D13 /* XPCFixedAlphaPointColorizer.hpp */; };
+		CF1FE19F3079548600661098 /* DeclutterObstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF1FE19E3079548600661098 /* DeclutterObstacle.cpp */; };
+		CF1FE1A03079549600661098 /* DeclutterObstacle.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF1FE19D3079548600661098 /* DeclutterObstacle.hpp */; };
 		CF2744FF25B1AF450056304B /* XPCRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF2744FD25B1AF450056304B /* XPCRenderer.cpp */; };
 		CF27450125B1B0260056304B /* XPCRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF2744FE25B1AF450056304B /* XPCRenderer.hpp */; };
 		CF27451125B1D0120056304B /* XPCMetadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF27450F25B1D0120056304B /* XPCMetadata.cpp */; };
@@ -309,7 +313,6 @@
 		CF66072C23DF2FFD00795C7F /* MutableVector3D.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66033923DF2DA700795C7F /* MutableVector3D.hpp */; };
 		CF66072D23DF2FFD00795C7F /* FrameTask.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66033B23DF2DA700795C7F /* FrameTask.hpp */; };
 		CF66072E23DF2FFD00795C7F /* CameraGoToPositionEffect.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66033D23DF2DA700795C7F /* CameraGoToPositionEffect.hpp */; };
-		6E35E71273F8E372346C1F8B /* ColorLook.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 585C39F3FD9EB7D969E01D6A /* ColorLook.hpp */; };
 		CF66072F23DF2FFD00795C7F /* TiledVectorLayerTileImageProvider.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66033E23DF2DA700795C7F /* TiledVectorLayerTileImageProvider.hpp */; };
 		CF66073023DF2FFD00795C7F /* Vector2I.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66034123DF2DA700795C7F /* Vector2I.hpp */; };
 		CF66073123DF2FFD00795C7F /* Layer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66034323DF2DA700795C7F /* Layer.hpp */; };
@@ -621,7 +624,6 @@
 		CF66086B23DF330600795C7F /* TiledVectorLayerTileImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66027C23DF2DA600795C7F /* TiledVectorLayerTileImageProvider.cpp */; };
 		CF66086C23DF330600795C7F /* Vector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66027F23DF2DA600795C7F /* Vector2I.cpp */; };
 		CF66086D23DF330600795C7F /* CameraGoToPositionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028223DF2DA600795C7F /* CameraGoToPositionEffect.cpp */; };
-		33CC749179ED506B32CBB9DA /* ColorLook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43943FCBCBC8C6C3219DF07E /* ColorLook.cpp */; };
 		CF66086E23DF330600795C7F /* ResizerImageFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028723DF2DA600795C7F /* ResizerImageFactory.cpp */; };
 		CF66086F23DF330600795C7F /* CameraEventGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028923DF2DA600795C7F /* CameraEventGesture.cpp */; };
 		CF66087023DF330600795C7F /* CameraEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66028B23DF2DA600795C7F /* CameraEffects.cpp */; };
@@ -994,6 +996,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF1FE1A03079549600661098 /* DeclutterObstacle.hpp in CopyFiles */,
 				CF3DEFCD30792E3C009AA63D /* EffectListener.hpp in CopyFiles */,
 				CF3DEFCE30792E3C009AA63D /* EffectWithListener.hpp in CopyFiles */,
 				CF2956823078042B00FC4904 /* MarkTransitionMode.hpp in CopyFiles */,
@@ -1520,17 +1523,21 @@
 		383BD3811577EDDB0012AC53 /* ES2Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ES2Renderer.mm; path = Specific/Widget/ES2Renderer.mm; sourceTree = "<group>"; };
 		383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
 		383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = G3MWidget_iOS.mm; path = Specific/Widget/G3MWidget_iOS.mm; sourceTree = "<group>"; };
+		43943FCBCBC8C6C3219DF07E /* ColorLook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorLook.cpp; sourceTree = "<group>"; };
 		44AFBB1E19D4271B00EB78E9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		44AFBB2019D4272F00EB78E9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		44AFBB2219D4273A00EB78E9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		44AFBB2419D4275100EB78E9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		44AFBB2619D4276000EB78E9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		44AFBB2819D4286C00EB78E9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		585C39F3FD9EB7D969E01D6A /* ColorLook.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColorLook.hpp; sourceTree = "<group>"; };
 		A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = JSONParser_iOS.hpp; path = Specific/Derived/JSONParser_iOS.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		A70F560C161B5CD800340256 /* JSONParser_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JSONParser_iOS.mm; path = Specific/Derived/JSONParser_iOS.mm; sourceTree = "<group>"; };
 		CF05D55A25B82C1700220105 /* XPCRGBPointColorizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCRGBPointColorizer.cpp; sourceTree = "<group>"; };
 		CF05D55B25B82C1700220105 /* XPCRGBPointColorizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCRGBPointColorizer.hpp; sourceTree = "<group>"; };
 		CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ByteBuffer_iOS.cpp; path = Specific/Derived/ByteBuffer_iOS.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		CF1FE19D3079548600661098 /* DeclutterObstacle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DeclutterObstacle.hpp; sourceTree = "<group>"; };
+		CF1FE19E3079548600661098 /* DeclutterObstacle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeclutterObstacle.cpp; sourceTree = "<group>"; };
 		CF2744FD25B1AF450056304B /* XPCRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCRenderer.cpp; sourceTree = "<group>"; };
 		CF2744FE25B1AF450056304B /* XPCRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCRenderer.hpp; sourceTree = "<group>"; };
 		CF27450F25B1D0120056304B /* XPCMetadata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XPCMetadata.cpp; sourceTree = "<group>"; };
@@ -1878,8 +1885,6 @@
 		CF66028023DF2DA600795C7F /* GPUAttributeValueVec4Float.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeValueVec4Float.hpp; sourceTree = "<group>"; };
 		CF66028123DF2DA600795C7F /* ITileVisitor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ITileVisitor.hpp; sourceTree = "<group>"; };
 		CF66028223DF2DA600795C7F /* CameraGoToPositionEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraGoToPositionEffect.cpp; sourceTree = "<group>"; };
-		585C39F3FD9EB7D969E01D6A /* ColorLook.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColorLook.hpp; sourceTree = "<group>"; };
-		43943FCBCBC8C6C3219DF07E /* ColorLook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorLook.cpp; sourceTree = "<group>"; };
 		CF66028323DF2DA600795C7F /* SGTextureNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SGTextureNode.hpp; sourceTree = "<group>"; };
 		CF66028423DF2DA600795C7F /* GPUAttributeVec4Float.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUAttributeVec4Float.hpp; sourceTree = "<group>"; };
 		CF66028523DF2DA600795C7F /* TilesRenderParameters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TilesRenderParameters.hpp; sourceTree = "<group>"; };
@@ -2791,8 +2796,6 @@
 				CFFE6603306D456E004728AD /* CameraFlightArc.cpp */,
 				CF66033D23DF2DA700795C7F /* CameraGoToPositionEffect.hpp */,
 				CF66028223DF2DA600795C7F /* CameraGoToPositionEffect.cpp */,
-				585C39F3FD9EB7D969E01D6A /* ColorLook.hpp */,
-				43943FCBCBC8C6C3219DF07E /* ColorLook.cpp */,
 				D877330B25DC0A8D009C6B6E /* CameraMouseWheelHandler.hpp */,
 				D877330A25DC0A8D009C6B6E /* CameraMouseWheelHandler.cpp */,
 				CFFE65FE306D264A004728AD /* CameraPointOfViewEffect.hpp */,
@@ -2837,6 +2840,8 @@
 				CF66031223DF2DA700795C7F /* CircleShape.cpp */,
 				CF6603C523DF2DA800795C7F /* Color.hpp */,
 				CF6602F723DF2DA700795C7F /* Color.cpp */,
+				585C39F3FD9EB7D969E01D6A /* ColorLook.hpp */,
+				43943FCBCBC8C6C3219DF07E /* ColorLook.cpp */,
 				CFC010303077A1B0003B788A /* ColorMatrix.hpp */,
 				CFC010313077A1B0003B788A /* ColorMatrix.cpp */,
 				CF66030A23DF2DA700795C7F /* ColumnCanvasElement.hpp */,
@@ -2869,6 +2874,8 @@
 				CF66029523DF2DA600795C7F /* DecimatedDEMGrid.cpp */,
 				CF6603BE23DF2DA800795C7F /* DecimatedSubviewElevationData.hpp */,
 				CF66030023DF2DA700795C7F /* DecimatedSubviewElevationData.cpp */,
+				CF1FE19D3079548600661098 /* DeclutterObstacle.hpp */,
+				CF1FE19E3079548600661098 /* DeclutterObstacle.cpp */,
 				CF66021723DF2DA600795C7F /* DecoratorDEMGrid.hpp */,
 				CF66047423DF2DAB00795C7F /* DecoratorDEMGrid.cpp */,
 				CF6603AB23DF2DA800795C7F /* DecoratorTileLODTester.hpp */,
@@ -4084,6 +4091,7 @@
 				CF6608F023DF330700795C7F /* GEO3DPointGeometry.cpp in Sources */,
 				CF6608F123DF330700795C7F /* IJSONParser.cpp in Sources */,
 				CF6608F323DF330700795C7F /* EllipsoidalPlanet.cpp in Sources */,
+				CF1FE19F3079548600661098 /* DeclutterObstacle.cpp in Sources */,
 				CF6608F423DF330700795C7F /* ChangedListener.cpp in Sources */,
 				CF6608F523DF330700795C7F /* AndTileCondition.cpp in Sources */,
 				CF6608F623DF330700795C7F /* HUDRelativePosition.cpp in Sources */,

@@ -28,6 +28,8 @@ package org.glob3.mobile.generated;
 //class ITimer;
 //class MarkFilter;
 //class Vector2F;
+//class DeclutterObstacle;
+//class G3MRenderContext;
 
 
 public class MarksRenderer extends DefaultRenderer
@@ -130,7 +132,9 @@ public class MarksRenderer extends DefaultRenderer
   private java.util.ArrayList<Float> _takenRight = new java.util.ArrayList<Float>();
   private java.util.ArrayList<Float> _takenBottom = new java.util.ArrayList<Float>();
 
-  private void declutter(Camera camera, Planet planet, MutableVector3D cameraPosition, double cameraHeight)
+  private java.util.ArrayList<DeclutterObstacle> _declutterObstacles = new java.util.ArrayList<DeclutterObstacle>();
+
+  private void declutter(G3MRenderContext rc, Camera camera, Planet planet, MutableVector3D cameraPosition, double cameraHeight)
   {
     // the order the marks end up on top: the last drawn is the first one
     java.util.ArrayList<Mark> candidates = _declutterCandidates;
@@ -175,6 +179,20 @@ public class MarksRenderer extends DefaultRenderer
     _takenTop.clear();
     _takenRight.clear();
     _takenBottom.clear();
+  
+    for (int i = 0; i < _declutterObstacles.size(); i++)
+    {
+      RectangleF rectangle = _declutterObstacles.get(i).createScreenRectangle(rc);
+      if (rectangle != null)
+      {
+        _takenLeft.add(rectangle._x);
+        _takenTop.add(rectangle._y);
+        _takenRight.add(rectangle._x + rectangle._width);
+        _takenBottom.add(rectangle._y + rectangle._height);
+        if (rectangle != null)
+           rectangle.dispose();
+      }
+    }
   
     for (int i = 0; i < ordered.size(); i++)
     {
@@ -436,6 +454,22 @@ public class MarksRenderer extends DefaultRenderer
     _transitionMS = duration.milliseconds();
   }
 
+  /** its screen area is kept free of marks, as if taken by a mark placed before all; the renderer owns it */
+  public final void addDeclutterObstacle(DeclutterObstacle obstacle)
+  {
+    _declutterObstacles.add(obstacle);
+  }
+
+  public final void removeAllDeclutterObstacles()
+  {
+    for (int i = 0; i < _declutterObstacles.size(); i++)
+    {
+      if (_declutterObstacles.get(i) != null)
+         _declutterObstacles.get(i).dispose();
+    }
+    _declutterObstacles.clear();
+  }
+
   /** setEnable fades the marks out and in with their transition, instead of at once; off by default */
   public final void setAnimatedEnable(boolean animatedEnable)
   {
@@ -551,6 +585,12 @@ public class MarksRenderer extends DefaultRenderer
     if (_billboardTexCoords != null)
        _billboardTexCoords.dispose();
   
+    for (int i = 0; i < _declutterObstacles.size(); i++)
+    {
+      if (_declutterObstacles.get(i) != null)
+         _declutterObstacles.get(i).dispose();
+    }
+  
     super.dispose();
   }
 
@@ -619,7 +659,7 @@ public class MarksRenderer extends DefaultRenderer
       {
         if (_declutter && isEnable())
         {
-          declutter(camera, planet, cameraPosition, cameraHeight);
+          declutter(rc, camera, planet, cameraPosition, cameraHeight);
         }
   
         final long nowMS = rc.getFrameStartTimer().nowInMilliseconds();

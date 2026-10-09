@@ -15,6 +15,8 @@
 class G3MContext;
 class G3MRenderContext;
 class GLState;
+class MutableMatrix44D;
+class MutableVector3D;
 
 
 class SGNode {
@@ -66,6 +68,11 @@ public:
                                      const GLState* parentState) {
     return parentState;
   }
+
+  /** grows lower/upper to hold this node's vertices and its children's, in the shape's model space; transform: from this node to model space */
+  virtual void addToModelBounds(const MutableMatrix44D& transform,
+                                MutableVector3D& lower,
+                                MutableVector3D& upper) const;
 
   size_t getChildrenCount() const {
     return _children.size();

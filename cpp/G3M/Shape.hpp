@@ -20,6 +20,8 @@
 class ShapePendingEffect;
 class GLState;
 class G3MEventContext;
+class Box;
+class RectangleF;
 
 
 class Shape : public SurfaceElevationListener, EffectTarget {
@@ -57,8 +59,16 @@ private:
 
   std::string _token;
 
+  Box* _modelBoundingBox;
+  bool _modelBoundingBoxCreated;
+
 protected:
   virtual void cleanTransformMatrix();
+
+  /** the box around the shape's geometry in its model space, before the shape's own transform; NULL: unknown */
+  virtual Box* createModelBoundingBox(const G3MRenderContext* rc) {
+    return NULL;
+  }
 
   MutableMatrix44D* createTransformMatrix(const Planet* planet) const;
 
@@ -177,6 +187,12 @@ public:
   bool isEnable() const {
     return _enable;
   }
+
+  /** created once, on the first call; NULL when the shape cannot tell */
+  const Box* getModelBoundingBox(const G3MRenderContext* rc);
+
+  /** the screen rectangle around the shape's model bounding box; NULL when unknown or partly behind the camera */
+  RectangleF* createScreenRectangle(const G3MRenderContext* rc);
 
   void setEnable(bool enable) {
     _enable = enable;

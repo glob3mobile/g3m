@@ -25,6 +25,8 @@ class IFloatBuffer;
 class ITimer;
 class MarkFilter;
 class Vector2F;
+class DeclutterObstacle;
+class G3MRenderContext;
 
 
 class MarksRenderer : public DefaultRenderer {
@@ -83,7 +85,10 @@ private:
   std::vector<float> _takenRight;
   std::vector<float> _takenBottom;
 
-  void declutter(const Camera* camera,
+  std::vector<DeclutterObstacle*> _declutterObstacles;
+
+  void declutter(const G3MRenderContext* rc,
+                 const Camera* camera,
                  const Planet* planet,
                  const MutableVector3D& cameraPosition,
                  double cameraHeight);
@@ -153,6 +158,11 @@ public:
 
   /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 250ms by default */
   void setDeclutterTransitionDuration(const TimeInterval& duration);
+
+  /** its screen area is kept free of marks, as if taken by a mark placed before all; the renderer owns it */
+  void addDeclutterObstacle(DeclutterObstacle* obstacle);
+
+  void removeAllDeclutterObstacles();
 
   /** setEnable fades the marks out and in with their transition, instead of at once; off by default */
   void setAnimatedEnable(bool animatedEnable) {

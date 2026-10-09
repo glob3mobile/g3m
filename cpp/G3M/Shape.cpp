@@ -20,6 +20,10 @@
 #include "G3MContext.hpp"
 #include "G3MRenderContext.hpp"
 #include "CoordinateSystem.hpp"
+#include "Box.hpp"
+#include "RectangleF.hpp"
+#include "Vector2F.hpp"
+#include "IMathUtils.hpp"
 
 
 class ShapePendingEffect {
@@ -58,7 +62,9 @@ _enable(true),
 _surfaceElevation(0),
 _glState(new GLState()),
 _surfaceElevationProvider(NULL),
-_token("")
+_token(""),
+_modelBoundingBox(NULL),
+_modelBoundingBoxCreated(false)
 {
   _localTransform.setValid(false);
   if (position->isNan()) {
@@ -81,6 +87,8 @@ Shape::~Shape() {
 
   if (_transformMatrix) delete _transformMatrix;
 
+  delete _modelBoundingBox;
+
   _glState->_release();
 
   if (_surfaceElevationProvider != NULL) {
@@ -88,6 +96,52 @@ Shape::~Shape() {
       ILogger::instance()->logError("Couldn't remove shape as listener of Surface Elevation Provider.");
     }
   }
+}
+
+const Box* Shape::getModelBoundingBox(const G3MRenderContext* rc) {
+  if (!_modelBoundingBoxCreated) {
+    _modelBoundingBoxCreated = true;
+    _modelBoundingBox = createModelBoundingBox(rc);
+  }
+  return _modelBoundingBox;
+}
+
+RectangleF* Shape::createScreenRectangle(const G3MRenderContext* rc) {
+  const Box* box = getModelBoundingBox(rc);
+  if (box == NULL) {
+    return NULL;
+  }
+
+  const Camera* camera = rc->getCurrentCamera();
+  const Vector3D cameraPosition = camera->getCartesianPosition();
+  const Vector3D viewDirection  = camera->getViewDirection();
+  const MutableMatrix44D* transform = getTransformMatrix(rc->getPlanet());
+
+  const IMathUtils* mu = IMathUtils::instance();
+  float left   = mu->maxFloat();
+  float top    = mu->maxFloat();
+  float right  = -mu->maxFloat();
+  float bottom = -mu->maxFloat();
+
+  // Box::getCorners is inline in Box.cpp, out of reach from here
+  const Vector3D lower = box->getLower();
+  const Vector3D upper = box->getUpper();
+  for (int i = 0; i < 8; i++) {
+    const Vector3D corner = Vector3D(((i & 1) == 0) ? lower._x : upper._x,
+                                     ((i & 2) == 0) ? lower._y : upper._y,
+                                     ((i & 4) == 0) ? lower._z : upper._z).transformedBy(*transform, 1);
+    // point2Pixel folds a point behind the camera onto the screen
+    if (corner.sub(cameraPosition).dot(viewDirection) <= 0) {
+      return NULL;
+    }
+    const Vector2F pixel = camera->point2Pixel(corner);
+    left   = mu->min(left,   pixel._x);
+    top    = mu->min(top,    pixel._y);
+    right  = mu->max(right,  pixel._x);
+    bottom = mu->max(bottom, pixel._y);
+  }
+
+  return new RectangleF(left, top, right - left, bottom - top);
 }
 
 const Geodetic3D Shape::getPosition() const {

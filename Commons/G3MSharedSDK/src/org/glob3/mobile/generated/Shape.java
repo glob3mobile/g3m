@@ -22,6 +22,8 @@ package org.glob3.mobile.generated;
 //class ShapePendingEffect;
 //class GLState;
 //class G3MEventContext;
+//class Box;
+//class RectangleF;
 
 
 public abstract class Shape implements SurfaceElevationListener, EffectTarget
@@ -85,11 +87,20 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
 
   private String _token;
 
+  private Box _modelBoundingBox;
+  private boolean _modelBoundingBoxCreated;
+
   protected void cleanTransformMatrix()
   {
     if (_transformMatrix != null)
        _transformMatrix.dispose();
     _transformMatrix = null;
+  }
+
+  /** the box around the shape's geometry in its model space, before the shape's own transform; NULL: unknown */
+  protected Box createModelBoundingBox(G3MRenderContext rc)
+  {
+    return null;
   }
 
   protected final MutableMatrix44D createTransformMatrix(Planet planet)
@@ -126,6 +137,8 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
      _glState = new GLState();
      _surfaceElevationProvider = null;
      _token = "";
+     _modelBoundingBox = null;
+     _modelBoundingBoxCreated = false;
     _localTransform.setValid(false);
     if (position.isNan())
     {
@@ -159,6 +172,9 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     if (_transformMatrix != null)
        if (_transformMatrix != null)
           _transformMatrix.dispose();
+  
+    if (_modelBoundingBox != null)
+       _modelBoundingBox.dispose();
   
     _glState._release();
   
@@ -439,6 +455,58 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
   public final boolean isEnable()
   {
     return _enable;
+  }
+
+  /** created once, on the first call; NULL when the shape cannot tell */
+  public final Box getModelBoundingBox(G3MRenderContext rc)
+  {
+    if (!_modelBoundingBoxCreated)
+    {
+      _modelBoundingBoxCreated = true;
+      _modelBoundingBox = createModelBoundingBox(rc);
+    }
+    return _modelBoundingBox;
+  }
+
+  /** the screen rectangle around the shape's model bounding box; NULL when unknown or partly behind the camera */
+  public final RectangleF createScreenRectangle(G3MRenderContext rc)
+  {
+    final Box box = getModelBoundingBox(rc);
+    if (box == null)
+    {
+      return null;
+    }
+  
+    final Camera camera = rc.getCurrentCamera();
+    final Vector3D cameraPosition = camera.getCartesianPosition();
+    final Vector3D viewDirection = camera.getViewDirection();
+    final MutableMatrix44D transform = getTransformMatrix(rc.getPlanet());
+  
+    final IMathUtils mu = IMathUtils.instance();
+    float left = mu.maxFloat();
+    float top = mu.maxFloat();
+    float right = -mu.maxFloat();
+    float bottom = -mu.maxFloat();
+  
+    // Box::getCorners is inline in Box.cpp, out of reach from here
+    final Vector3D lower = box.getLower();
+    final Vector3D upper = box.getUpper();
+    for (int i = 0; i < 8; i++)
+    {
+      final Vector3D corner = new Vector3D(((i & 1) == 0) ? lower._x : upper._x, ((i & 2) == 0) ? lower._y : upper._y, ((i & 4) == 0) ? lower._z : upper._z).transformedBy(transform, 1);
+      // point2Pixel folds a point behind the camera onto the screen
+      if (corner.sub(cameraPosition).dot(viewDirection) <= 0)
+      {
+        return null;
+      }
+      final Vector2F pixel = camera.point2Pixel(corner);
+      left = mu.min(left, pixel._x);
+      top = mu.min(top, pixel._y);
+      right = mu.max(right, pixel._x);
+      bottom = mu.max(bottom, pixel._y);
+    }
+  
+    return new RectangleF(left, top, right - left, bottom - top);
   }
 
   public final void setEnable(boolean enable)

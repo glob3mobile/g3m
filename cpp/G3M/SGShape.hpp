@@ -24,6 +24,9 @@ private:
 
   GLState* _glState;
 
+protected:
+  Box* createModelBoundingBox(const G3MRenderContext* rc);
+
 public:
 
   SGShape(SGNode* node,

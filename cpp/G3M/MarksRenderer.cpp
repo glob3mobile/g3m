@@ -30,6 +30,7 @@
 #include "FixedMarkAnchor.hpp"
 #include "MarkOutfit.hpp"
 #include "ILogger.hpp"
+#include "DeclutterObstacle.hpp"
 
 
 // owns the factory while the image is created: the renderer may go first
@@ -134,6 +135,10 @@ MarksRenderer::~MarksRenderer() {
   _glState->_release();
 
   delete _billboardTexCoords;
+
+  for (size_t i = 0; i < _declutterObstacles.size(); i++) {
+    delete _declutterObstacles[i];
+  }
 
 #ifdef JAVA_CODE
   super.dispose();
@@ -327,7 +332,7 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
     // the transitions also run without declutter, for an animated enable
     if (_declutter || _animatedEnable) {
       if (_declutter && isEnable()) {
-        declutter(camera, planet, cameraPosition, cameraHeight);
+        declutter(rc, camera, planet, cameraPosition, cameraHeight);
       }
 
       const long long nowMS = rc->getFrameStartTimer()->nowInMilliseconds();
@@ -419,6 +424,17 @@ void MarksRenderer::setDeclutterTransitionDuration(const TimeInterval& duration)
   _transitionMS = duration.milliseconds();
 }
 
+void MarksRenderer::addDeclutterObstacle(DeclutterObstacle* obstacle) {
+  _declutterObstacles.push_back(obstacle);
+}
+
+void MarksRenderer::removeAllDeclutterObstacles() {
+  for (size_t i = 0; i < _declutterObstacles.size(); i++) {
+    delete _declutterObstacles[i];
+  }
+  _declutterObstacles.clear();
+}
+
 void MarksRenderer::setEnable(bool enable) {
   const bool changed = (enable != isEnable());
   DefaultRenderer::setEnable(enable);
@@ -494,7 +510,8 @@ bool MarksRenderer::isFree(float left, float top, float right, float bottom) con
   return true;
 }
 
-void MarksRenderer::declutter(const Camera* camera,
+void MarksRenderer::declutter(const G3MRenderContext* rc,
+                              const Camera* camera,
                               const Planet* planet,
                               const MutableVector3D& cameraPosition,
                               double cameraHeight) {
@@ -539,6 +556,17 @@ void MarksRenderer::declutter(const Camera* camera,
   _takenTop.clear();
   _takenRight.clear();
   _takenBottom.clear();
+
+  for (size_t i = 0; i < _declutterObstacles.size(); i++) {
+    RectangleF* rectangle = _declutterObstacles[i]->createScreenRectangle(rc);
+    if (rectangle != NULL) {
+      _takenLeft.push_back(rectangle->_x);
+      _takenTop.push_back(rectangle->_y);
+      _takenRight.push_back(rectangle->_x + rectangle->_width);
+      _takenBottom.push_back(rectangle->_y + rectangle->_height);
+      delete rectangle;
+    }
+  }
 
   for (size_t i = 0; i < ordered.size(); i++) {
     Mark* mark = ordered[i];
