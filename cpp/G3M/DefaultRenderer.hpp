@@ -71,6 +71,10 @@ public:
   }
 
   virtual void setEnable(bool enable);
+
+  virtual bool isRendering() const {
+    return _enable;
+  }
   
   virtual void initialize(const G3MContext* context) {
     _context = context;

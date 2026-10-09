@@ -868,6 +868,13 @@ public class Camera
     final double angleAtProbe = screenAngleOfSegment(cartesian1, cartesian2);
     final double azimuthSign = (signedAngleInRadians(angleAtProbe - angleAtZero) > 0) ? 1 : -1;
   
+    // seen from the wrong side of the center the segment shows reversed, where the turn step can't tell
+    // which way to go (e.g. a leg seen along its length); start from the other side instead
+    if (mu.abs(signedAngleInRadians(targetAngle - angleAtZero)) > (DefineConstants.PI / 2))
+    {
+      azimuthInRadians = DefineConstants.PI;
+    }
+  
     final int maxIterations = 50;
     double previousError = 0;
     int growingErrorCount = 0;

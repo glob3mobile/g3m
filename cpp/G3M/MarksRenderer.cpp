@@ -93,6 +93,7 @@ _declutter(false),
 _horizonBand(true),
 _declutterMargin(4),
 _transitionMS(250),
+_animatedEnable(false),
 _delayMS(250),
 _transitionMode(SCALE_AND_ALPHA),
 _hintImageFactory(NULL),
@@ -157,6 +158,10 @@ void MarksRenderer::addMark(Mark* mark) {
   attachHint(mark);
   if (_declutter) {
     mark->hideUntilDecluttered();
+  }
+  if (_animatedEnable && !isEnable()) {
+    mark->hideUntilDecluttered();
+    mark->startHiding();
   }
   _marks.push_back(mark);
   if ((_context != NULL) && !_progressiveInitialization) {
@@ -319,8 +324,11 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
       }
     }
 
-    if (_declutter) {
-      declutter(camera, planet, cameraPosition, cameraHeight);
+    // the transitions also run without declutter, for an animated enable
+    if (_declutter || _animatedEnable) {
+      if (_declutter && isEnable()) {
+        declutter(camera, planet, cameraPosition, cameraHeight);
+      }
 
       const long long nowMS = rc->getFrameStartTimer()->nowInMilliseconds();
       for (size_t i = 0; i < marksSize; i++) {
@@ -409,6 +417,38 @@ void MarksRenderer::setDeclutterDelay(const TimeInterval& delay) {
 
 void MarksRenderer::setDeclutterTransitionDuration(const TimeInterval& duration) {
   _transitionMS = duration.milliseconds();
+}
+
+void MarksRenderer::setEnable(bool enable) {
+  const bool changed = (enable != isEnable());
+  DefaultRenderer::setEnable(enable);
+  if (!changed || !_animatedEnable) {
+    return;
+  }
+
+  for (size_t i = 0; i < _marks.size(); i++) {
+    if (enable) {
+      _marks[i]->stopHiding(_declutter);
+    }
+    else {
+      _marks[i]->startHiding();
+    }
+  }
+}
+
+bool MarksRenderer::isRendering() const {
+  if (isEnable()) {
+    return true;
+  }
+  if (!_animatedEnable) {
+    return false;
+  }
+  for (size_t i = 0; i < _marks.size(); i++) {
+    if (!_marks[i]->isOffScreen()) {
+      return true;
+    }
+  }
+  return false;
 }
 
 void MarksRenderer::setDeclutter(bool declutter) {

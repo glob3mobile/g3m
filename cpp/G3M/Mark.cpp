@@ -267,6 +267,7 @@ _appAnchorV(0.5),
 _declutterHidden(false),
 _leavingRenderer(false),
 _deleteWhenGone(false),
+_hiding(false),
 _plannedTarget(0),
 _plannedSinceMS(-1),
 _declutterTarget(0),
@@ -1095,11 +1096,36 @@ void Mark::startLeavingRenderer(bool deleteMark) {
   _declutterTarget = -1; // no delay: it is gone already, the transition is for the eye
 }
 
+bool Mark::isOffScreen() const {
+  return _declutterHidden && (_leavingGLState == NULL);
+}
+
 bool Mark::hasLeftRenderer() const {
-  return _leavingRenderer && _declutterHidden && (_leavingGLState == NULL);
+  return _leavingRenderer && isOffScreen();
+}
+
+void Mark::startHiding() {
+  _hiding          = true;
+  _plannedTarget   = -1;
+  _plannedSinceMS  = -1;
+  _declutterTarget = -1;
+}
+
+void Mark::stopHiding(bool decluttered) {
+  _hiding = false;
+  if (!decluttered) {
+    _plannedTarget   = (int) _outfitIndex;
+    _plannedSinceMS  = -1;
+    _declutterTarget = (int) _outfitIndex;
+  }
 }
 
 void Mark::resetDeclutter() {
+  if (_hiding) {
+    hideUntilDecluttered(); // its renderer is disabled: it stays off screen
+    _hiding = true;
+    return;
+  }
   releaseLeavingOutfit();
   _plannedTarget    = 0;
   _plannedSinceMS   = -1;

@@ -80,6 +80,11 @@ public class WrapperNearFrustumRenderer extends NearFrustumRenderer
     _renderer.setEnable(enable);
   }
 
+  public final boolean isRendering()
+  {
+    return _renderer.isRendering();
+  }
+
   public final RenderState getRenderState(G3MRenderContext rc)
   {
     return _renderer.getRenderState(rc);

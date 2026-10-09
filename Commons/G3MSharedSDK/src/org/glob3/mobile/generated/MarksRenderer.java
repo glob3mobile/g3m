@@ -87,6 +87,7 @@ public class MarksRenderer extends DefaultRenderer
   private boolean _horizonBand;
   private float _declutterMargin;
   private long _transitionMS;
+  private boolean _animatedEnable;
   private long _delayMS;
   private MarkTransitionMode _transitionMode;
 
@@ -329,6 +330,7 @@ public class MarksRenderer extends DefaultRenderer
      _horizonBand = true;
      _declutterMargin = 4F;
      _transitionMS = 250;
+     _animatedEnable = false;
      _delayMS = 250;
      _transitionMode = MarkTransitionMode.SCALE_AND_ALPHA;
      _hintImageFactory = null;
@@ -432,6 +434,55 @@ public class MarksRenderer extends DefaultRenderer
   public final void setDeclutterTransitionDuration(TimeInterval duration)
   {
     _transitionMS = duration.milliseconds();
+  }
+
+  /** setEnable fades the marks out and in with their transition, instead of at once; off by default */
+  public final void setAnimatedEnable(boolean animatedEnable)
+  {
+    _animatedEnable = animatedEnable;
+  }
+
+  /** with animated enable, disabled at once for touches and room, while the marks fade out */
+  public final void setEnable(boolean enable)
+  {
+    final boolean changed = (enable != isEnable());
+    super.setEnable(enable);
+    if (!changed || !_animatedEnable)
+    {
+      return;
+    }
+  
+    for (int i = 0; i < _marks.size(); i++)
+    {
+      if (enable)
+      {
+        _marks.get(i).stopHiding(_declutter);
+      }
+      else
+      {
+        _marks.get(i).startHiding();
+      }
+    }
+  }
+
+  public final boolean isRendering()
+  {
+    if (isEnable())
+    {
+      return true;
+    }
+    if (!_animatedEnable)
+    {
+      return false;
+    }
+    for (int i = 0; i < _marks.size(); i++)
+    {
+      if (!_marks.get(i).isOffScreen())
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** how long a mark's new outfit must hold before the mark changes, so changes that come and go are not seen; marks may overlap meanwhile; 250ms by default */
@@ -563,9 +614,13 @@ public class MarksRenderer extends DefaultRenderer
         }
       }
   
-      if (_declutter)
+      // the transitions also run without declutter, for an animated enable
+      if (_declutter || _animatedEnable)
       {
-        declutter(camera, planet, cameraPosition, cameraHeight);
+        if (_declutter && isEnable())
+        {
+          declutter(camera, planet, cameraPosition, cameraHeight);
+        }
   
         final long nowMS = rc.getFrameStartTimer().nowInMilliseconds();
         for (int i = 0; i < marksSize; i++)
@@ -602,6 +657,11 @@ public class MarksRenderer extends DefaultRenderer
     if (_declutter)
     {
       mark.hideUntilDecluttered();
+    }
+    if (_animatedEnable && !isEnable())
+    {
+      mark.hideUntilDecluttered();
+      mark.startHiding();
     }
     _marks.add(mark);
     if ((_context != null) && !_progressiveInitialization)

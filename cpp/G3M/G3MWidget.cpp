@@ -577,7 +577,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 
       _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
 
-      if (_mainRenderer->isEnable()) {
+      if (_mainRenderer->isRendering()) {
         _mainRenderer->render(_renderContext, _rootState);
       }
 
@@ -610,7 +610,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 
   if (renderStateType == RENDER_READY) {
     if (_nearFrustumRenderer != NULL) {
-      if (_nearFrustumRenderer->isEnable()) {
+      if (_nearFrustumRenderer->isRendering()) {
         _nearFrustumRenderer->render(_currentCamera->getFrustumData(),
                                      this,
                                      _renderContext,
@@ -619,7 +619,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
     }
 
     if (_hudRenderer != NULL) {
-      if (_hudRenderer->isEnable()) {
+      if (_hudRenderer->isRendering()) {
         _hudRenderer->render(_renderContext, _rootState);
       }
     }

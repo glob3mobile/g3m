@@ -66,6 +66,9 @@ private:
   bool _leavingRenderer;
   bool _deleteWhenGone;
 
+  // its renderer was disabled: the mark fades out and waits, still in the renderer
+  bool _hiding;
+
   // the outfit the renderer plans (-1: none), and since when; it becomes the target once the plan holds for the delay
   int       _plannedTarget;
   long long _plannedSinceMS;
@@ -327,7 +330,7 @@ public:
 
   /** the outfit a decluttering renderer plans, -1 when none fits; the mark goes there through stepDeclutterTransition once the plan holds */
   void setDeclutterTarget(int outfitIndex) {
-    if (_leavingRenderer) {
+    if (_leavingRenderer || _hiding) {
       return;
     }
     if (outfitIndex != _plannedTarget) {
@@ -362,6 +365,15 @@ public:
 
   /** the leaving mark is off the screen: the renderer can let it go */
   bool hasLeftRenderer() const;
+
+  /** fades out with its transition, at once, and stays in the renderer: for a renderer being disabled */
+  void startHiding();
+
+  /** comes back from startHiding: decluttered, it waits for the renderer to find it room; otherwise it fades in its current outfit at once */
+  void stopHiding(bool decluttered);
+
+  /** nothing of it is drawn: not its outfit, not one fading out */
+  bool isOffScreen() const;
 
   bool deletesWhenGone() const {
     return _deleteWhenGone;

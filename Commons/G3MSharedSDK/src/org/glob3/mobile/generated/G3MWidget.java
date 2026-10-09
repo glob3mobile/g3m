@@ -1126,7 +1126,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
         _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
   
-        if (_mainRenderer.isEnable())
+        if (_mainRenderer.isRendering())
         {
           _mainRenderer.render(_renderContext, _rootState);
         }
@@ -1165,7 +1165,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     {
       if (_nearFrustumRenderer != null)
       {
-        if (_nearFrustumRenderer.isEnable())
+        if (_nearFrustumRenderer.isRendering())
         {
           _nearFrustumRenderer.render(_currentCamera.getFrustumData(), this, _renderContext, _rootState);
         }
@@ -1173,7 +1173,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
       if (_hudRenderer != null)
       {
-        if (_hudRenderer.isEnable())
+        if (_hudRenderer.isRendering())
         {
           _hudRenderer.render(_renderContext, _rootState);
         }

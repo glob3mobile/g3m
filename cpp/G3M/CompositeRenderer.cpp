@@ -75,7 +75,7 @@ void CompositeRenderer::render(const G3MRenderContext* rc, GLState* glState) {
 
   for (int i = 0; i < _renderersSize; i++) {
     Renderer* renderer = _renderers[i]->getRenderer();
-    if (renderer->isEnable()) {
+    if (renderer->isRendering()) {
       renderer->render(rc, glState);
     }
   }
@@ -185,6 +185,19 @@ bool CompositeRenderer::isEnable() const {
 
   for (int i = 0; i < _renderersSize; i++) {
     if (_renderers[i]->getRenderer()->isEnable()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool CompositeRenderer::isRendering() const {
+  if (!_enable) {
+    return false;
+  }
+
+  for (int i = 0; i < _renderersSize; i++) {
+    if (_renderers[i]->getRenderer()->isRendering()) {
       return true;
     }
   }

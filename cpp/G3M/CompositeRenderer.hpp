@@ -50,6 +50,8 @@ public:
 
   void setEnable(bool enable);
 
+  bool isRendering() const;
+
   void initialize(const G3MContext* context);
 
   RenderState getRenderState(const G3MRenderContext* rc);

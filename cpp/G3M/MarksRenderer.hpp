@@ -58,6 +58,7 @@ private:
   bool      _horizonBand;
   float     _declutterMargin;
   long long          _transitionMS;
+  bool               _animatedEnable;
   long long          _delayMS;
   MarkTransitionMode _transitionMode;
 
@@ -152,6 +153,16 @@ public:
 
   /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 250ms by default */
   void setDeclutterTransitionDuration(const TimeInterval& duration);
+
+  /** setEnable fades the marks out and in with their transition, instead of at once; off by default */
+  void setAnimatedEnable(bool animatedEnable) {
+    _animatedEnable = animatedEnable;
+  }
+
+  /** with animated enable, disabled at once for touches and room, while the marks fade out */
+  void setEnable(bool enable);
+
+  bool isRendering() const;
 
   /** how long a mark's new outfit must hold before the mark changes, so changes that come and go are not seen; marks may overlap meanwhile; 250ms by default */
   void setDeclutterDelay(const TimeInterval& delay);

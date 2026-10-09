@@ -31,6 +31,9 @@ public interface Renderer extends ProtoRenderer
 
   public abstract void setEnable(boolean enable);
 
+  /** true while enabled, and while a disabled renderer still fades out what it showed: it is drawn, but takes no touches */
+  public abstract boolean isRendering();
+
   public abstract RenderState getRenderState(G3MRenderContext rc);
 
   /**

@@ -14,6 +14,9 @@ public class Mark implements SurfaceElevationListener
   private boolean _leavingRenderer;
   private boolean _deleteWhenGone;
 
+  // its renderer was disabled: the mark fades out and waits, still in the renderer
+  private boolean _hiding;
+
   // the outfit the renderer plans (-1: none), and since when; it becomes the target once the plan holds for the delay
   private int _plannedTarget;
   private long _plannedSinceMS;
@@ -467,6 +470,7 @@ public class Mark implements SurfaceElevationListener
      _declutterHidden = false;
      _leavingRenderer = false;
      _deleteWhenGone = false;
+     _hiding = false;
      _plannedTarget = 0;
      _plannedSinceMS = -1;
      _declutterTarget = 0;
@@ -848,7 +852,7 @@ public class Mark implements SurfaceElevationListener
   /** the outfit a decluttering renderer plans, -1 when none fits; the mark goes there through stepDeclutterTransition once the plan holds */
   public final void setDeclutterTarget(int outfitIndex)
   {
-    if (_leavingRenderer)
+    if (_leavingRenderer || _hiding)
     {
       return;
     }
@@ -917,6 +921,12 @@ public class Mark implements SurfaceElevationListener
   /** back to the first outfit, on screen and complete, with no transition */
   public final void resetDeclutter()
   {
+    if (_hiding)
+    {
+      hideUntilDecluttered(); // its renderer is disabled: it stays off screen
+      _hiding = true;
+      return;
+    }
     releaseLeavingOutfit();
     _plannedTarget = 0;
     _plannedSinceMS = -1;
@@ -959,7 +969,34 @@ public class Mark implements SurfaceElevationListener
   /** the leaving mark is off the screen: the renderer can let it go */
   public final boolean hasLeftRenderer()
   {
-    return _leavingRenderer && _declutterHidden && (_leavingGLState == null);
+    return _leavingRenderer && isOffScreen();
+  }
+
+  /** fades out with its transition, at once, and stays in the renderer: for a renderer being disabled */
+  public final void startHiding()
+  {
+    _hiding = true;
+    _plannedTarget = -1;
+    _plannedSinceMS = -1;
+    _declutterTarget = -1;
+  }
+
+  /** comes back from startHiding: decluttered, it waits for the renderer to find it room; otherwise it fades in its current outfit at once */
+  public final void stopHiding(boolean decluttered)
+  {
+    _hiding = false;
+    if (!decluttered)
+    {
+      _plannedTarget = (int) _outfitIndex;
+      _plannedSinceMS = -1;
+      _declutterTarget = (int) _outfitIndex;
+    }
+  }
+
+  /** nothing of it is drawn: not its outfit, not one fading out */
+  public final boolean isOffScreen()
+  {
+    return _declutterHidden && (_leavingGLState == null);
   }
 
   public final boolean deletesWhenGone()
