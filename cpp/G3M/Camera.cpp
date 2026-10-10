@@ -719,9 +719,20 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
                                          const Vector3D& point1) const {
   _ray0.putSub(_position, point0);
   _ray1.putSub(_position, point1);
-  const double angleInRadians = MutableVector3D::angleInRadiansBetween(_ray1, _ray0);
+
+  const double crossX = (_ray0.y() * _ray1.z()) - (_ray0.z() * _ray1.y());
+  const double crossY = (_ray0.z() * _ray1.x()) - (_ray0.x() * _ray1.z());
+  const double crossZ = (_ray0.x() * _ray1.y()) - (_ray0.y() * _ray1.x());
+
+  const IMathUtils* mu = IMathUtils::instance();
+  const double crossLength = mu->sqrt((crossX * crossX) + (crossY * crossY) + (crossZ * crossZ));
+
+  // tan(angle/2) = |a x b| / (|a| |b| + a . b), the same value as tan(acos(...)/2) without the trigonometry
+  const double denominator = (_ray0.length() * _ray1.length()) + _ray0.dot(_ray1);
+  const double halfAngleTan = (denominator > 0) ? (crossLength / denominator) : mu->maxDouble();
+
   const FrustumData* frustumData = getFrustumData();
-  const double distanceInMeters = frustumData->_zNear * IMathUtils::instance()->tan(angleInRadians/2);
+  const double distanceInMeters = frustumData->_zNear * halfAngleTan;
   return distanceInMeters * _viewPortHeight / frustumData->_top;
 }
 

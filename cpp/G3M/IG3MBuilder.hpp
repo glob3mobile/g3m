@@ -78,6 +78,7 @@ private:
   StarsRenderer*                    _starsRenderer;
   FrustumPolicy*                    _frustumPolicy;
   bool                              _verboseCameraHandlers;
+  float                             _textureMaxAnisotropy;
 
   GL*                               getGL();
   ICameraActivityListener*          getCameraActivityListener();
@@ -147,6 +148,9 @@ public:
   void setStarsRenderer(StarsRenderer* starsRenderer);
 
   void setVerboseCameraHandlers(const bool verboseCameraHandlers);
+
+  // 1 (the default) turns anisotropic filtering off; the device maximum caps it
+  void setTextureMaxAnisotropy(const float textureMaxAnisotropy);
 
   void setGL(GL* gl);
 

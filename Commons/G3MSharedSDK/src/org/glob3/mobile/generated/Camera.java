@@ -624,9 +624,20 @@ public class Camera
   {
     _ray0.putSub(_position, point0);
     _ray1.putSub(_position, point1);
-    final double angleInRadians = MutableVector3D.angleInRadiansBetween(_ray1, _ray0);
+  
+    final double crossX = (_ray0.y() * _ray1.z()) - (_ray0.z() * _ray1.y());
+    final double crossY = (_ray0.z() * _ray1.x()) - (_ray0.x() * _ray1.z());
+    final double crossZ = (_ray0.x() * _ray1.y()) - (_ray0.y() * _ray1.x());
+  
+    final IMathUtils mu = IMathUtils.instance();
+    final double crossLength = mu.sqrt((crossX * crossX) + (crossY * crossY) + (crossZ * crossZ));
+  
+    // tan(angle/2) = |a x b| / (|a| |b| + a . b), the same value as tan(acos(...)/2) without the trigonometry
+    final double denominator = (_ray0.length() * _ray1.length()) + _ray0.dot(_ray1);
+    final double halfAngleTan = (denominator > 0) ? (crossLength / denominator) : mu.maxDouble();
+  
     final FrustumData frustumData = getFrustumData();
-    final double distanceInMeters = frustumData._zNear * IMathUtils.instance().tan(angleInRadians/2);
+    final double distanceInMeters = frustumData._zNear * halfAngleTan;
     return distanceInMeters * _viewPortHeight / frustumData._top;
   }
 

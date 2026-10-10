@@ -10,6 +10,10 @@ import android.opengl.*;
 
 public final class NativeGL2_Android extends INativeGL {
 
+   // from EXT_texture_filter_anisotropic; GLES20 doesn't define them
+   private static final int GL_TEXTURE_MAX_ANISOTROPY_EXT     = 0x84FE;
+   private static final int GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;
+
    private Thread _openGLThread = null;
 
    void setOpenGLThread(final Thread openGLThread) {
@@ -183,6 +187,24 @@ public final class NativeGL2_Android extends INativeGL {
    public void texParameteri(final int target, final int par, final int v) {
       checkOpenGLThread();
       GLES20.glTexParameteri(target, par, v);
+   }
+
+   @Override
+   public float getMaxTextureMaxAnisotropy() {
+      checkOpenGLThread();
+      final String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
+      if ((extensions == null) || !extensions.contains("GL_EXT_texture_filter_anisotropic")) {
+         return 0;
+      }
+      final float[] maxAnisotropy = new float[1];
+      GLES20.glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy, 0);
+      return maxAnisotropy[0];
+   }
+
+   @Override
+   public void setTextureMaxAnisotropy(final int target, final float maxAnisotropy) {
+      checkOpenGLThread();
+      GLES20.glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
    }
 
    @Override

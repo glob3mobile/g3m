@@ -39,6 +39,7 @@ public final class Downloader_Android_Handler {
    private final static String TAG = "Downloader_Android_Handler";
 
    private long                                         _priority;
+   private final long                                   _firstRequestID;
    private final URL                                    _g3mURL;
    private java.net.URL                                 _javaURL;
    private final List<Downloader_Android_ListenerEntry> _listeners = new ArrayList<>();
@@ -59,6 +60,7 @@ public final class Downloader_Android_Handler {
       _connectTimeout    = connectTimeout;
       _readTimeout       = readTimeout;
       _priority          = priority;
+      _firstRequestID    = requestID;
       _g3mURL            = url;
       _hasImageListeners = false;
       try {
@@ -91,6 +93,7 @@ public final class Downloader_Android_Handler {
       _connectTimeout    = connectTimeout;
       _readTimeout       = readTimeout;
       _priority          = priority;
+      _firstRequestID    = requestID;
       _g3mURL            = url;
       _hasImageListeners = true;
       try {
@@ -140,6 +143,10 @@ public final class Downloader_Android_Handler {
 
    synchronized long getPriority() {
       return _priority;
+   }
+
+   long getFirstRequestID() {
+      return _firstRequestID;
    }
 
    boolean cancelListenerForRequestId(final long requestID) {

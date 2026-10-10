@@ -32,6 +32,7 @@
 #include "TouchEvent.hpp"
 #include "GPUProgramManager.hpp"
 #include "GLGlobalState.hpp"
+#include "GTask.hpp"
 #include "ICameraActivityListener.hpp"
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
@@ -1085,6 +1086,29 @@ void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
 
 Color G3MWidget::getBackgroundColor() const {
   return *_backgroundColor;
+}
+
+class SetTextureMaxAnisotropyTask : public GTask {
+private:
+  TexturesHandler* _texturesHandler;
+  const float      _maxAnisotropy;
+
+public:
+  SetTextureMaxAnisotropyTask(TexturesHandler* texturesHandler,
+                              float maxAnisotropy) :
+  _texturesHandler(texturesHandler),
+  _maxAnisotropy(maxAnisotropy)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    _texturesHandler->setTextureMaxAnisotropy(_maxAnisotropy);
+  }
+};
+
+void G3MWidget::setTextureMaxAnisotropy(float maxAnisotropy) {
+  _context->getThreadUtils()->invokeInRendererThread(new SetTextureMaxAnisotropyTask(_texturesHandler, maxAnisotropy),
+                                                     true);
 }
 
 PlanetRenderer* G3MWidget::getPlanetRenderer() {

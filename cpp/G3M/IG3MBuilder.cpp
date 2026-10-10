@@ -75,7 +75,8 @@ _skyRenderer(NULL),
 _groundHazeRenderer(NULL),
 _starsRenderer(NULL),
 _frustumPolicy(NULL),
-_verboseCameraHandlers(false)
+_verboseCameraHandlers(false),
+_textureMaxAnisotropy(1)
 {
 }
 
@@ -812,6 +813,8 @@ G3MWidget* IG3MBuilder::create() {
 
   InitialCameraPositionProvider* icpp = new SimpleInitialCameraPositionProvider();
 
+  getGL()->setTextureMaxAnisotropy(_textureMaxAnisotropy);
+
   G3MWidget* g3mWidget = G3MWidget::create(getGL(),
                                            getStorage(),
                                            getDownloader(),
@@ -884,6 +887,10 @@ std::vector<ICameraConstrainer*>* IG3MBuilder::createDefaultCameraConstraints() 
 
 void IG3MBuilder::setVerboseCameraHandlers(const bool verboseCameraHandlers) {
   _verboseCameraHandlers = verboseCameraHandlers;
+}
+
+void IG3MBuilder::setTextureMaxAnisotropy(const float textureMaxAnisotropy) {
+  _textureMaxAnisotropy = textureMaxAnisotropy;
 }
 
 CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {

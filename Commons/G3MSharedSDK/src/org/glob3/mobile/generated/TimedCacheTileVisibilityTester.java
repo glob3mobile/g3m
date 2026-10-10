@@ -78,10 +78,6 @@ public class TimedCacheTileVisibilityTester extends DecoratorTileVisibilityTeste
         {
           data._timeoutTimeInMS = nowInMS + _timeoutInMS;
         }
-        else
-        {
-          tile.setData(data);
-        }
       }
     }
   

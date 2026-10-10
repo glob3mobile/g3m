@@ -149,10 +149,17 @@ void G3MDemoModel::setAtmosphereEnable(bool enable) {
   }
 }
 
+void G3MDemoModel::setGroundHazeEnable(bool enable) {
+  if (_groundHazeRenderer != NULL) {
+    _groundHazeRenderer->setEnable(enable);
+  }
+}
+
 void G3MDemoModel::reset() {
   getG3MWidget()->setViewMode(MONO);
   getG3MWidget()->cancelAllEffects();
   getG3MWidget()->setBackgroundColor( Color::black() );
+  getG3MWidget()->setTextureMaxAnisotropy(1);
   getG3MWidget()->setRenderedSector( Sector::fullSphere() );
   getG3MWidget()->removeAllPeriodicalTasks();
 

@@ -106,6 +106,12 @@ public:
                              int par,
                              int v) const = 0;
 
+  // 0 when the device lacks EXT_texture_filter_anisotropic
+  virtual float getMaxTextureMaxAnisotropy() const = 0;
+
+  virtual void setTextureMaxAnisotropy(int target,
+                                       float maxAnisotropy) const = 0;
+
   virtual void texImage2D(const IImage* image, int format) const = 0;
 
   virtual void generateMipmap(int target) const = 0;

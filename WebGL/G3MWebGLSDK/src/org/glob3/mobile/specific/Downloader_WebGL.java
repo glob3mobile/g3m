@@ -245,7 +245,10 @@ public final class Downloader_WebGL extends IDownloader {
             final Downloader_WebGL_Handler candidateHandler  = entry.getValue();
             final long                     candidatePriority = candidateHandler.getPriority();
 
-            if (candidatePriority > selectedPriority) {
+            // equal priorities go oldest request first; the HashMap order is arbitrary
+            if ((candidatePriority > selectedPriority) ||
+                ((candidatePriority == selectedPriority) && (selectedHandler != null) &&
+                 (candidateHandler.getFirstRequestID() < selectedHandler.getFirstRequestID()))) {
                final URL url = entry.getKey();
                selectedPriority = candidatePriority;
                selectedHandler  = candidateHandler;

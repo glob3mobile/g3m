@@ -70,6 +70,41 @@ public class GL
 
   private GLGlobalState _clearScreenState; //State used to clear screen with certain color
 
+  private float _requestedTextureMaxAnisotropy;
+  private float _deviceMaxTextureMaxAnisotropy;
+  private float _textureMaxAnisotropy;
+  private boolean _textureMaxAnisotropyResolved;
+
+  private void resolveTextureMaxAnisotropy()
+  {
+    _textureMaxAnisotropyResolved = true;
+  
+    final float deviceMaxAnisotropy = _nativeGL.getMaxTextureMaxAnisotropy();
+    _deviceMaxTextureMaxAnisotropy = deviceMaxAnisotropy;
+    if (deviceMaxAnisotropy <= 1)
+    {
+      _textureMaxAnisotropy = 1F;
+      if (_requestedTextureMaxAnisotropy > 1)
+      {
+        ILogger.instance().logWarning("Anisotropic texture filtering: OFF, requested %.1fx but the device doesn't support it", _requestedTextureMaxAnisotropy);
+      }
+      else
+      {
+        ILogger.instance().logInfo("Anisotropic texture filtering: OFF, not requested and not supported by the device");
+      }
+    }
+    else if (_requestedTextureMaxAnisotropy <= 1)
+    {
+      _textureMaxAnisotropy = 1F;
+      ILogger.instance().logInfo("Anisotropic texture filtering: OFF, not requested (device max %.1fx)", deviceMaxAnisotropy);
+    }
+    else
+    {
+      _textureMaxAnisotropy = (_requestedTextureMaxAnisotropy < deviceMaxAnisotropy) ? _requestedTextureMaxAnisotropy : deviceMaxAnisotropy;
+      ILogger.instance().logInfo("Anisotropic texture filtering: ON %.1fx (requested %.1fx, device max %.1fx)", _textureMaxAnisotropy, _requestedTextureMaxAnisotropy, deviceMaxAnisotropy);
+    }
+  }
+
   private static boolean isPowerOfTwo(int x)
   {
     return ((x >= 0) && ((x == 1) || (x == 2) || (x == 4) || (x == 8) || (x == 16) || (x == 32) || (x == 64) || (x == 128) || (x == 256) || (x == 512) || (x == 1024) || (x == 2048) || (x == 4096) || (x == 8192) || (x == 16384) || (x == 32768) || (x == 65536) || (x == 131072) || (x == 262144) || (x == 524288) || (x == 1048576) || (x == 2097152) || (x == 4194304) || (x == 8388608) || (x == 16777216) || (x == 33554432) || (x == 67108864) || (x == 134217728) || (x == 268435456) || (x == 536870912) || (x == 1073741824)));
@@ -84,6 +119,10 @@ public class GL
      _currentGPUProgram = null;
      _texturesIDAllocationCounter = 0;
      _clearScreenState = null;
+     _requestedTextureMaxAnisotropy = 1F;
+     _deviceMaxTextureMaxAnisotropy = 0F;
+     _textureMaxAnisotropy = 1F;
+     _textureMaxAnisotropyResolved = false;
     //Init Constants
     GLCullFace.init(_nativeGL);
     GLBufferType.init(_nativeGL);
@@ -137,6 +176,28 @@ public class GL
     return _nativeGL.getError();
   }
 
+  public final void setTextureMaxAnisotropy(float maxAnisotropy)
+  {
+    _requestedTextureMaxAnisotropy = maxAnisotropy;
+    _textureMaxAnisotropyResolved = false;
+  }
+
+  public final void applyTextureMaxAnisotropy(IGLTextureID textureID)
+  {
+    if (!_textureMaxAnisotropyResolved)
+    {
+      resolveTextureMaxAnisotropy();
+    }
+    if (_deviceMaxTextureMaxAnisotropy > 1)
+    {
+      GLGlobalState newState = new GLGlobalState();
+      newState.bindTexture(0, textureID);
+      newState.applyChanges(this, _currentGLGlobalState);
+  
+      _nativeGL.setTextureMaxAnisotropy(GLTextureType.texture2D(), _textureMaxAnisotropy);
+    }
+  }
+
   public final IGLTextureID uploadTexture(IImage image, int format, boolean generateMipmap, int wrapS, int wrapT)
   {
   
@@ -158,6 +219,15 @@ public class GL
         // Trilinear: blends between mipmap levels instead of snapping to the nearest one,
         // which removes the visible sharpness bands on terrain seen at grazing angles.
         _nativeGL.texParameteri(texture2D, GLTextureParameter.minFilter(), GLTextureParameterValue.linearMipmapLinear());
+  
+        if (!_textureMaxAnisotropyResolved)
+        {
+          resolveTextureMaxAnisotropy();
+        }
+        if (_textureMaxAnisotropy > 1)
+        {
+          _nativeGL.setTextureMaxAnisotropy(texture2D, _textureMaxAnisotropy);
+        }
       }
       else
       {

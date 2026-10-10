@@ -160,6 +160,11 @@ public:
                      int par,
                      int v) const;
 
+  float getMaxTextureMaxAnisotropy() const;
+
+  void setTextureMaxAnisotropy(int target,
+                               float maxAnisotropy) const;
+
   void texImage2D(const IImage* image, int format) const;
 
   void generateMipmap(int target) const;

@@ -654,6 +654,12 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     return _backgroundColor;
   }
 
+  // 1 turns it off; it is applied in the renderer thread, to the textures already in the GPU too
+  public final void setTextureMaxAnisotropy(float maxAnisotropy)
+  {
+    _context.getThreadUtils().invokeInRendererThread(new SetTextureMaxAnisotropyTask(_texturesHandler, maxAnisotropy), true);
+  }
+
   public final PlanetRenderer getPlanetRenderer()
   {
     return _mainRenderer.getPlanetRenderer();

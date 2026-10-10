@@ -191,6 +191,24 @@ public final class NativeGL_WebGL extends INativeGL {
    }-*/;
 
    @Override
+   public native float getMaxTextureMaxAnisotropy() /*-{
+    var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+    var ext = gl.getExtension("EXT_texture_filter_anisotropic") ||
+              gl.getExtension("WEBKIT_EXT_texture_filter_anisotropic") ||
+              gl.getExtension("MOZ_EXT_texture_filter_anisotropic");
+    if (!ext) {
+      return 0;
+    }
+    return gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+   }-*/;
+
+   // 0x84FE is TEXTURE_MAX_ANISOTROPY_EXT; getExtension() in getMaxTextureMaxAnisotropy() enables it
+   @Override
+   public native void setTextureMaxAnisotropy(final int target, final float maxAnisotropy) /*-{
+    this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameterf(target, 0x84FE, maxAnisotropy);
+   }-*/;
+
+   @Override
    public native void texImage2D(final IImage image, final int format) /*-{
     var img = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
     var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;

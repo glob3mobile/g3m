@@ -102,6 +102,49 @@ bool GL::isPowerOfTwo(int x) {
           );
 }
 
+void GL::resolveTextureMaxAnisotropy() {
+  _textureMaxAnisotropyResolved = true;
+
+  const float deviceMaxAnisotropy = _nativeGL->getMaxTextureMaxAnisotropy();
+  _deviceMaxTextureMaxAnisotropy = deviceMaxAnisotropy;
+  if (deviceMaxAnisotropy <= 1) {
+    _textureMaxAnisotropy = 1;
+    if (_requestedTextureMaxAnisotropy > 1) {
+      ILogger::instance()->logWarning("Anisotropic texture filtering: OFF, requested %.1fx but the device doesn't support it",
+                                      _requestedTextureMaxAnisotropy);
+    }
+    else {
+      ILogger::instance()->logInfo("Anisotropic texture filtering: OFF, not requested and not supported by the device");
+    }
+  }
+  else if (_requestedTextureMaxAnisotropy <= 1) {
+    _textureMaxAnisotropy = 1;
+    ILogger::instance()->logInfo("Anisotropic texture filtering: OFF, not requested (device max %.1fx)",
+                                 deviceMaxAnisotropy);
+  }
+  else {
+    _textureMaxAnisotropy = (_requestedTextureMaxAnisotropy < deviceMaxAnisotropy) ? _requestedTextureMaxAnisotropy : deviceMaxAnisotropy;
+    ILogger::instance()->logInfo("Anisotropic texture filtering: ON %.1fx (requested %.1fx, device max %.1fx)",
+                                 _textureMaxAnisotropy,
+                                 _requestedTextureMaxAnisotropy,
+                                 deviceMaxAnisotropy);
+  }
+}
+
+void GL::applyTextureMaxAnisotropy(const IGLTextureID* textureID) {
+  if (!_textureMaxAnisotropyResolved) {
+    resolveTextureMaxAnisotropy();
+  }
+  if (_deviceMaxTextureMaxAnisotropy > 1) {
+    GLGlobalState newState;
+    newState.bindTexture(0, textureID);
+    newState.applyChanges(this, *_currentGLGlobalState);
+
+    _nativeGL->setTextureMaxAnisotropy(GLTextureType::texture2D(),
+                                       _textureMaxAnisotropy);
+  }
+}
+
 const IGLTextureID* GL::uploadTexture(const IImage* image,
                                       int format,
                                       bool generateMipmap,
@@ -126,6 +169,14 @@ const IGLTextureID* GL::uploadTexture(const IImage* image,
       _nativeGL->texParameteri(texture2D,
                                GLTextureParameter::minFilter(),
                                GLTextureParameterValue::linearMipmapLinear());
+
+      if (!_textureMaxAnisotropyResolved) {
+        resolveTextureMaxAnisotropy();
+      }
+      if (_textureMaxAnisotropy > 1) {
+        _nativeGL->setTextureMaxAnisotropy(texture2D,
+                                           _textureMaxAnisotropy);
+      }
     }
     else {
       _nativeGL->texParameteri(texture2D,

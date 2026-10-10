@@ -37,6 +37,7 @@
 {
   NSMutableArray<ListenerEntry*>* _listeners;
   long long       _priority;
+  long long       _firstRequestID;
   NSURL*          _nsURL;
   URL*            _url;
   NSTimeInterval  _timeoutInterval;
@@ -65,6 +66,8 @@
 - (bool) hasListeners;
 
 - (long long) priority;
+
+- (long long) firstRequestID;
 
 - (void) runWithDownloader:(void*) downloaderV;
 

@@ -9,6 +9,8 @@
 #define G3MiOSSDK_NativeGL_iOS
 
 #include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#include <string.h>
 
 #include "G3M/INativeGL.hpp"
 #include "G3M/GPUProgram.hpp"
@@ -196,6 +198,22 @@ public:
                      int par,
                      int v) const {
     glTexParameteri(target, par, v);
+  }
+
+  float getMaxTextureMaxAnisotropy() const {
+    const char* extensions = (const char*) glGetString(GL_EXTENSIONS);
+    if ((extensions == NULL) ||
+        (strstr(extensions, "GL_EXT_texture_filter_anisotropic") == NULL)) {
+      return 0;
+    }
+    GLfloat maxAnisotropy = 0;
+    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+    return maxAnisotropy;
+  }
+
+  void setTextureMaxAnisotropy(int target,
+                               float maxAnisotropy) const {
+    glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
   }
 
   void texImage2D(const IImage* image,

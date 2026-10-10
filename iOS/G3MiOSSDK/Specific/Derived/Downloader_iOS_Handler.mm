@@ -76,6 +76,7 @@
     _nsURL     = nsURL;
     _url       = url;
     _priority  = priority;
+    _firstRequestID = requestID;
     _timeoutInterval = timeoutInterval;
 
     ListenerEntry* entry = [ListenerEntry entryWithListener:listener
@@ -112,6 +113,11 @@
   [_lock unlock];
 
   return result;
+}
+
+- (long long) firstRequestID
+{
+  return _firstRequestID;
 }
 
 - (bool) cancelListenerForRequestID:(long long) requestID

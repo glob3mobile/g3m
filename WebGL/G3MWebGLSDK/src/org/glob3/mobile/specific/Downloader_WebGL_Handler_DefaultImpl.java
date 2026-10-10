@@ -8,6 +8,7 @@ import com.google.gwt.core.client.*;
 public class Downloader_WebGL_Handler_DefaultImpl implements Downloader_WebGL_Handler {
 
    private long                _priority;
+   private long                _firstRequestID;
    private URL                 _url;
    private List<ListenerEntry> _listeners;
    private boolean             _isImageRequest;
@@ -20,9 +21,10 @@ public class Downloader_WebGL_Handler_DefaultImpl implements Downloader_WebGL_Ha
    @Override
    final public void init(final URL url, final IBufferDownloadListener bufferListener, final boolean deleteListener, final long priority,
                           final long requestID, final String tag) {
-      _priority  = priority;
-      _url       = url;
-      _listeners = new ArrayList<>();
+      _priority       = priority;
+      _firstRequestID = requestID;
+      _url            = url;
+      _listeners      = new ArrayList<>();
       _listeners.add(new ListenerEntry(bufferListener, null, deleteListener, requestID, tag));
       _isImageRequest = false;
    }
@@ -30,9 +32,10 @@ public class Downloader_WebGL_Handler_DefaultImpl implements Downloader_WebGL_Ha
    @Override
    final public void init(final URL url, final IImageDownloadListener imageListener, final boolean deleteListener, final long priority,
                           final long requestID, final String tag) {
-      _priority  = priority;
-      _url       = url;
-      _listeners = new ArrayList<>();
+      _priority       = priority;
+      _firstRequestID = requestID;
+      _url            = url;
+      _listeners      = new ArrayList<>();
       _listeners.add(new ListenerEntry(null, imageListener, deleteListener, requestID, tag));
       _isImageRequest = true;
    }
@@ -63,6 +66,11 @@ public class Downloader_WebGL_Handler_DefaultImpl implements Downloader_WebGL_Ha
    @Override
    final public long getPriority() {
       return _priority;
+   }
+
+   @Override
+   final public long getFirstRequestID() {
+      return _firstRequestID;
    }
 
    @Override

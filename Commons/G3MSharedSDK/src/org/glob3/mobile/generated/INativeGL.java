@@ -76,6 +76,11 @@ public abstract class INativeGL
 
   public abstract void texParameteri(int target, int par, int v);
 
+  // 0 when the device lacks EXT_texture_filter_anisotropic
+  public abstract float getMaxTextureMaxAnisotropy();
+
+  public abstract void setTextureMaxAnisotropy(int target, float maxAnisotropy);
+
   public abstract void texImage2D(IImage image, int format);
 
   public abstract void generateMipmap(int target);

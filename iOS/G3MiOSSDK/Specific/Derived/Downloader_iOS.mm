@@ -156,7 +156,9 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
                                                         BOOL *stop) {
     const long long priority = [handler priority];
 
-    if (priority > selectedPriority) {
+    // equal priorities go oldest request first; the dictionary order is arbitrary
+    if ((priority > selectedPriority) ||
+        ((priority == selectedPriority) && ([handler firstRequestID] < [selectedHandler firstRequestID]))) {
       selectedPriority = priority;
       selectedHandler  = handler;
       selectedNSURL    = nsURL;

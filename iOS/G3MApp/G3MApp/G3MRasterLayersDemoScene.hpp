@@ -19,6 +19,8 @@ class WMSFeatureInfoListener;
 class G3MRasterLayersDemoScene : public G3MDemoScene {
 private:
   WMSFeatureInfoListener* _featureInfoListener;
+  size_t                  _anisotropyGroupIndex;
+  size_t                  _atmosphereGroupIndex;
 
   Layer* createWMSLayer(const std::string& title,
                         const std::string& mapLayer,
@@ -38,6 +40,10 @@ protected:
 
   void rawSelectOption(const std::string& option,
                        int optionIndex);
+
+  void rawSelectGroupOption(size_t groupIndex,
+                            const std::string& option,
+                            int optionIndex);
 
 public:
   static Layer* createMercatorLayer(const std::string& title,
@@ -65,6 +71,16 @@ public:
     addOption("Chessboard");
     addOption("Chessboard + Debug tiles");
     addOption("Open Street Map + Debug tiles");
+
+    _anisotropyGroupIndex = addOptionGroup("Anisotropic filtering", "<select filtering>", 0);
+    addOption(_anisotropyGroupIndex, "Anisotropic off");
+    addOption(_anisotropyGroupIndex, "Anisotropic 8x");
+    addOption(_anisotropyGroupIndex, "Anisotropic 16x");
+
+    _atmosphereGroupIndex = addOptionGroup("Atmosphere", "<select atmosphere>", 0);
+    addOption(_atmosphereGroupIndex, "Atmosphere & haze");
+    addOption(_atmosphereGroupIndex, "Atmosphere");
+    addOption(_atmosphereGroupIndex, "No atmosphere");
   }
 
 };

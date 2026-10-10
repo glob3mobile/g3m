@@ -66,9 +66,7 @@ public:
                            const PlanetRenderContext* prc,
                            const Tile* tile) const;
 
-  void onTileHasChangedMesh(const Tile* tile) const {
-
-  }
+  void onTileHasChangedMesh(const Tile* tile) const;
 
   void onLayerTilesRenderParametersChanged(const LayerTilesRenderParameters* ltrp) {
 

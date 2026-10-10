@@ -21,6 +21,8 @@ public interface Downloader_WebGL_Handler {
 
    long getPriority();
 
+   long getFirstRequestID();
+
    boolean cancelListenerForRequestId(final long requestID);
 
    boolean removeListenerForRequestId(final long requestID);

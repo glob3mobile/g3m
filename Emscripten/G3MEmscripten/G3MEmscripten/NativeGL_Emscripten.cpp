@@ -289,6 +289,23 @@ void NativeGL_Emscripten::texParameteri(int target,
   _gl.call<void>("texParameteri", target, par, v);
 }
 
+float NativeGL_Emscripten::getMaxTextureMaxAnisotropy() const {
+  val extension = _gl.call<val>("getExtension", std::string("EXT_texture_filter_anisotropic"));
+  if (extension.isNull() || extension.isUndefined()) {
+    extension = _gl.call<val>("getExtension", std::string("WEBKIT_EXT_texture_filter_anisotropic"));
+  }
+  if (extension.isNull() || extension.isUndefined()) {
+    return 0;
+  }
+  return _gl.call<float>("getParameter", extension["MAX_TEXTURE_MAX_ANISOTROPY_EXT"]);
+}
+
+// 0x84FE is TEXTURE_MAX_ANISOTROPY_EXT; getExtension() in getMaxTextureMaxAnisotropy() enables it
+void NativeGL_Emscripten::setTextureMaxAnisotropy(int target,
+                                                  float maxAnisotropy) const {
+  _gl.call<void>("texParameterf", target, 0x84FE, maxAnisotropy);
+}
+
 void NativeGL_Emscripten::texImage2D(const IImage* image, int format) const {
   Image_Emscripten* imageEM = (Image_Emscripten*) image;
 

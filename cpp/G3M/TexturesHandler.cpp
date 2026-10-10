@@ -135,6 +135,18 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
                                 this);
 }
 
+void TexturesHandler::setTextureMaxAnisotropy(float maxAnisotropy) {
+  _gl->setTextureMaxAnisotropy(maxAnisotropy);
+
+  const size_t textureHoldersSize = _textureHolders.size();
+  for (size_t i = 0; i < textureHoldersSize; i++) {
+    const TextureHolder* holder = _textureHolders[i];
+    if (holder->_textureSpec._generateMipmap && (holder->_glTextureID != NULL)) {
+      _gl->applyTextureMaxAnisotropy(holder->_glTextureID);
+    }
+  }
+}
+
 void TexturesHandler::retainGLTextureID(const IGLTextureID* glTextureID) {
   if (glTextureID == NULL) {
     return;

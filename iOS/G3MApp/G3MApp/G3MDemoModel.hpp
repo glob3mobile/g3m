@@ -140,6 +140,8 @@ public:
   // the sky and the ground haze go on and off together; reset() turns them on
   void setAtmosphereEnable(bool enable);
 
+  void setGroundHazeEnable(bool enable);
+
   PlanetRenderer* getPlanetRenderer() const;
 
   size_t getScenesCount() const {

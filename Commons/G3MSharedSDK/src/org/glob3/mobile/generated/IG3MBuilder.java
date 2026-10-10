@@ -80,6 +80,7 @@ public abstract class IG3MBuilder
   private StarsRenderer _starsRenderer;
   private FrustumPolicy _frustumPolicy;
   private boolean _verboseCameraHandlers;
+  private float _textureMaxAnisotropy;
 
 
   /**
@@ -451,6 +452,8 @@ public abstract class IG3MBuilder
   
     InitialCameraPositionProvider icpp = new SimpleInitialCameraPositionProvider();
   
+    getGL().setTextureMaxAnisotropy(_textureMaxAnisotropy);
+  
     G3MWidget g3mWidget = G3MWidget.create(getGL(), getStorage(), getDownloader(), getThreadUtils(), getCameraActivityListener(), getPlanet(), getCameraConstraints(), getCameraRenderer(), mainRenderer, getBusyRenderer(), getErrorRenderer(), getHUDRenderer(), getNearFrustumRenderer(), getBackgroundColor(), getLogFPS(), getLogDownloaderStatistics(), getInitializationTask(), getAutoDeleteInitializationTask(), getPeriodicalTasks(), getGPUProgramManager(), getSceneLighting(), icpp, infoDisplay, ViewMode.MONO, getFrustumPolicy());
   
     g3mWidget.setUserData(getUserData());
@@ -526,6 +529,7 @@ public abstract class IG3MBuilder
      _starsRenderer = null;
      _frustumPolicy = null;
      _verboseCameraHandlers = false;
+     _textureMaxAnisotropy = 1F;
   }
 
   public void dispose()
@@ -698,6 +702,12 @@ public abstract class IG3MBuilder
   public final void setVerboseCameraHandlers(boolean verboseCameraHandlers)
   {
     _verboseCameraHandlers = verboseCameraHandlers;
+  }
+
+  // 1 (the default) turns anisotropic filtering off; the device maximum caps it
+  public final void setTextureMaxAnisotropy(float textureMaxAnisotropy)
+  {
+    _textureMaxAnisotropy = textureMaxAnisotropy;
   }
 
 

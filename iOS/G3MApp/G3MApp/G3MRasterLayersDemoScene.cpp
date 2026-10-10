@@ -22,6 +22,7 @@
 #include <G3M/G3MWidget.hpp>
 #include <G3M/Geodetic3D.hpp>
 #include <G3M/Geodetic2D.hpp>
+#include <G3M/Angle.hpp>
 #include <G3M/URL.hpp>
 #include <G3M/ChessboardLayer.hpp>
 #include <G3M/DebugTilesLayer.hpp>
@@ -284,6 +285,23 @@ void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   createLayerSet( getModel()->getLayerSet() );
 }
 
+void G3MRasterLayersDemoScene::rawSelectGroupOption(size_t groupIndex,
+                                                    const std::string& option,
+                                                    int optionIndex) {
+  if (groupIndex == _anisotropyGroupIndex) {
+    const float maxAnisotropy = (option == "Anisotropic 16x") ? 16 : (option == "Anisotropic 8x") ? 8 : 1;
+    getModel()->getG3MWidget()->setTextureMaxAnisotropy(maxAnisotropy);
+  }
+  else if (groupIndex == _atmosphereGroupIndex) {
+    G3MDemoModel* model = getModel();
+    model->setAtmosphereEnable(option != "No atmosphere");
+    model->setGroundHazeEnable(option == "Atmosphere & haze");
+  }
+  else {
+    rawSelectOption(option, optionIndex);
+  }
+}
+
 void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
                                                int optionIndex) {
   LayerSet* layerSet = getModel()->getLayerSet();
@@ -294,6 +312,15 @@ void G3MRasterLayersDemoScene::rawSelectOption(const std::string& option,
     layerSet->getLayerByTitle("Spain PNOA orthoimage (WMS)")->setEnable(true);
     layerSet->getLayerByTitle("Spain Catastro (WMS)")->setEnable(true);
     getModel()->getG3MWidget()->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.4168, -3.7038, 4000));
+    return;
+  }
+
+  if (option == "ESRI World Imagery") {
+    layerSet->getLayerByTitle("ESRI World Imagery")->setEnable(true);
+    // Manhattan's street grid at a grazing angle, where anisotropic filtering shows the most
+    getModel()->getG3MWidget()->setAnimatedCameraPosition(Geodetic3D::fromDegrees(40.7000, -74.0150, 1500),
+                                                          Angle::fromDegrees(29),
+                                                          Angle::fromDegrees(-8));
     return;
   }
 

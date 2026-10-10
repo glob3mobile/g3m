@@ -45,6 +45,13 @@ private:
 
   GLGlobalState *_clearScreenState; //State used to clear screen with certain color
 
+  float _requestedTextureMaxAnisotropy;
+  float _deviceMaxTextureMaxAnisotropy;
+  float _textureMaxAnisotropy;
+  bool  _textureMaxAnisotropyResolved;
+
+  void resolveTextureMaxAnisotropy();
+
   static bool isPowerOfTwo(int x);
 
 
@@ -55,7 +62,11 @@ public:
   _nativeGL(nativeGL),
   _currentGPUProgram(NULL),
   _texturesIDAllocationCounter(0),
-  _clearScreenState(NULL)
+  _clearScreenState(NULL),
+  _requestedTextureMaxAnisotropy(1),
+  _deviceMaxTextureMaxAnisotropy(0),
+  _textureMaxAnisotropy(1),
+  _textureMaxAnisotropyResolved(false)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -97,6 +108,13 @@ public:
                   GPUProgramManager& progManager);
 
   int getError();
+
+  void setTextureMaxAnisotropy(float maxAnisotropy) {
+    _requestedTextureMaxAnisotropy = maxAnisotropy;
+    _textureMaxAnisotropyResolved  = false;
+  }
+
+  void applyTextureMaxAnisotropy(const IGLTextureID* textureID);
 
   const IGLTextureID* uploadTexture(const IImage* image,
                                     int format,

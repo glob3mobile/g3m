@@ -63,6 +63,22 @@ public class TexturesHandler
   }
 
 
+  // also reapplies the value to the mipmapped textures already in the GPU; call it from the renderer thread
+  public final void setTextureMaxAnisotropy(float maxAnisotropy)
+  {
+    _gl.setTextureMaxAnisotropy(maxAnisotropy);
+  
+    final int textureHoldersSize = _textureHolders.size();
+    for (int i = 0; i < textureHoldersSize; i++)
+    {
+      final TextureHolder holder = _textureHolders.get(i);
+      if (holder._textureSpec._generateMipmap && (holder._glTextureID != null))
+      {
+        _gl.applyTextureMaxAnisotropy(holder._glTextureID);
+      }
+    }
+  }
+
   //This two methods are supposed to be accessed only by TextureIDReference class
   public final void releaseGLTextureID(IGLTextureID glTextureID)
   {

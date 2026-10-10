@@ -244,6 +244,9 @@ public:
   void setBackgroundColor(const Color& backgroundColor);
   Color getBackgroundColor() const;
 
+  // 1 turns it off; it is applied in the renderer thread, to the textures already in the GPU too
+  void setTextureMaxAnisotropy(float maxAnisotropy);
+
   PlanetRenderer* getPlanetRenderer();
 
   bool setRenderedSector(const Sector& sector);
