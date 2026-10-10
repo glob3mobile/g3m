@@ -165,6 +165,12 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   else if (name == "uBillboardColorFactor") {
     return BILLBOARD_COLOR_FACTOR;
   }
+  else if (name == "uHorizonColor") {
+    return HORIZON_COLOR;
+  }
+  else if (name == "uSkyRayleighScattering") {
+    return SKY_RAYLEIGH_SCATTERING;
+  }
   else {
     return UNRECOGNIZED_UNIFORM;
   }

@@ -9,6 +9,11 @@ uniform vec3 uCameraPosition;
 uniform float uGroundHazePass;
 // the background colour, painted where the sky is under the planet edge
 uniform vec3 uSpaceColor;
+// Scattered light tends to this colour instead of white on long paths (horizon, limb); the haze is this colour.
+// Set by AtmosphereRenderer (default: the horizon of Google Earth seen from the ground), tinted by its ColorLook
+uniform vec3 uHorizonColor;
+// Rayleigh scattering of the sky for red, green and blue, in 1e-3 / km; set by AtmosphereRenderer, greyed by its ColorLook
+uniform vec3 uSkyRayleighScattering;
 varying vec3 rayDirection;
 
 //ATM parameters
@@ -27,14 +32,11 @@ const float stratoHeight = 12.0 * skyScaleHeight * 1000.0;
 // the sky is drawn under the planet edge too, so no background shows where the tiles fall short of the ellipsoid
 const float atmUndergroundOffset = 100e3;
 
-// Rayleigh scattering coefficients at sea level for red, green and blue (680, 550, 440 nm), in 1e-6 / m, that is 1e-3 / km
+// Rayleigh scattering coefficients at sea level for red, green and blue (680, 550, 440 nm), in 1e-6 / m, that is 1e-3 / km;
+// the haze opacity only (the sky gets uSkyRayleighScattering, by default the same values)
 const vec3 rayleighScattering = vec3(5.802, 13.558, 33.1) * 1e-3;
 // Fitted so the zenith seen from the ground is the one of Google Earth, (59, 89, 138); the sky only
 const float skyRayleighScatteringScale = 1.78;
-
-// Scattered light tends to this colour instead of white on long paths (horizon, limb);
-// the horizon of Google Earth seen from the ground
-const vec3 horizonColor = vec3(201.0, 227.0, 242.0) / 255.0;
 
 const int opticalDepthSamples = 16;
 
@@ -108,7 +110,7 @@ float opticalDepthAbove(vec3 point, float scaleHeight) {
 }
 
 vec3 skyExtinction(float opticalDepth) {
-  return rayleighScattering * skyRayleighScatteringScale * opticalDepth;
+  return uSkyRayleighScattering * skyRayleighScatteringScale * opticalDepth;
 }
 
 vec3 hazeExtinction(float opticalDepth) {
@@ -119,9 +121,9 @@ vec3 transmittance(vec3 airExtinction) {
   return exp(-airExtinction);
 }
 
-// Same as 1 - transmittance for thin air, but saturates to horizonColor
+// Same as 1 - transmittance for thin air, but saturates to uHorizonColor
 vec3 scatteredLight(vec3 airExtinction) {
-  return horizonColor * (vec3(1.0) - exp(-airExtinction / horizonColor));
+  return uHorizonColor * (vec3(1.0) - exp(-airExtinction / uHorizonColor));
 }
 
 // Interleaved gradient noise (Jimenez 2014), uniform in [0, 1) and fixed on the screen
@@ -159,7 +161,7 @@ vec4 sky(vec3 o, vec3 d) {
   return vec4(light, 1.0 - transmittance(airExtinction).g);
 }
 
-// Grey fog towards horizonColor, blended with srcAlpha / oneMinusSrcAlpha: horizonColor * opacity + ground * (1 - opacity).
+// Grey fog towards uHorizonColor, blended with srcAlpha / oneMinusSrcAlpha: uHorizonColor * opacity + ground * (1 - opacity).
 // One alpha can only attenuate the three channels alike, so the fog uses the transmittance of green (550 nm)
 vec4 groundHaze(vec3 o, vec3 d) {
   float tAtmosphereIn, tAtmosphereOut;
@@ -180,7 +182,7 @@ vec4 groundHaze(vec3 o, vec3 d) {
   if (opacity <= 0.0) {
     return noAir;
   }
-  return vec4(horizonColor, opacity);
+  return vec4(uHorizonColor, opacity);
 }
 
 void main() {

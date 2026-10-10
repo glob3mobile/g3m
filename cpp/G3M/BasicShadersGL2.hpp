@@ -745,6 +745,8 @@ public:
             "uniform vec3 uCameraPosition;\n" +
             "uniform float uGroundHazePass;\n" +
             "uniform vec3 uSpaceColor;\n" +
+            "uniform vec3 uHorizonColor;\n" +
+            "uniform vec3 uSkyRayleighScattering;\n" +
             "varying vec3 rayDirection;\n" +
             "const float earthRadius = 6.36744e6;\n" +
             "const vec3 earthRadii = vec3(6378137.0, 6378137.0, 6356752.314245);\n" +
@@ -755,7 +757,6 @@ public:
             "const float atmUndergroundOffset = 100e3;\n" +
             "const vec3 rayleighScattering = vec3(5.802, 13.558, 33.1) * 1e-3;\n" +
             "const float skyRayleighScatteringScale = 1.78;\n" +
-            "const vec3 horizonColor = vec3(201.0, 227.0, 242.0) / 255.0;\n" +
             "const int opticalDepthSamples = 16;\n" +
             "const vec4 noAir = vec4(0.0, 0.0, 0.0, 0.0);\n" +
             "bool rayIntersectsSphere(vec3 o, vec3 d, float radius,\n" +
@@ -809,7 +810,7 @@ public:
             "  return scaleHeight * airDensity(point, scaleHeight);\n" +
             "}\n" +
             "vec3 skyExtinction(float opticalDepth) {\n" +
-            "  return rayleighScattering * skyRayleighScatteringScale * opticalDepth;\n" +
+            "  return uSkyRayleighScattering * skyRayleighScatteringScale * opticalDepth;\n" +
             "}\n" +
             "vec3 hazeExtinction(float opticalDepth) {\n" +
             "  return rayleighScattering * opticalDepth;\n" +
@@ -818,7 +819,7 @@ public:
             "  return exp(-airExtinction);\n" +
             "}\n" +
             "vec3 scatteredLight(vec3 airExtinction) {\n" +
-            "  return horizonColor * (vec3(1.0) - exp(-airExtinction / horizonColor));\n" +
+            "  return uHorizonColor * (vec3(1.0) - exp(-airExtinction / uHorizonColor));\n" +
             "}\n" +
             "float screenNoise() {\n" +
             "  return fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));\n" +
@@ -863,7 +864,7 @@ public:
             "  if (opacity <= 0.0) {\n" +
             "    return noAir;\n" +
             "  }\n" +
-            "  return vec4(horizonColor, opacity);\n" +
+            "  return vec4(uHorizonColor, opacity);\n" +
             "}\n" +
             "void main() {\n" +
             "  //Ray [O + tD = X]\n" +

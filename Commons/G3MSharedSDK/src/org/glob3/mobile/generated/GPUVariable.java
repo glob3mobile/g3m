@@ -142,6 +142,14 @@ public class GPUVariable
     {
       return GPUUniformKey.BILLBOARD_COLOR_FACTOR;
     }
+    else if (name.equals("uHorizonColor"))
+    {
+      return GPUUniformKey.HORIZON_COLOR;
+    }
+    else if (name.equals("uSkyRayleighScattering"))
+    {
+      return GPUUniformKey.SKY_RAYLEIGH_SCATTERING;
+    }
     else
     {
       return GPUUniformKey.UNRECOGNIZED_UNIFORM;

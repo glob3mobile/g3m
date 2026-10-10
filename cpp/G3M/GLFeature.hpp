@@ -18,6 +18,7 @@
 
 class Camera;
 class Color;
+class Vector3F;
 
 
 class GLFeature: public RCObject {
@@ -169,11 +170,15 @@ private:
   const bool _groundHazePass;
   GPUUniformValueVec3FloatMutable* _camPos;
   GPUUniformValueVec3FloatMutable* _spaceColor;
+  GPUUniformValueVec3FloatMutable* _horizonColor;
+  GPUUniformValueVec3FloatMutable* _skyRayleighScattering;
 
 public:
   CameraPositionGLFeature(const Camera* cam,
                           bool groundHazePass,
-                          const Color& spaceColor);
+                          const Color& spaceColor,
+                          const Color& horizonColor,
+                          const Vector3F& skyRayleighScattering);
 
   // The sky adds its light and dims what is behind it (the background, the stars) by its transmittance;
   // the haze is a fog colour faded in by its opacity
@@ -185,6 +190,9 @@ public:
 
   void update(const Camera* cam,
               const Color& spaceColor);
+
+  void changeAtmosphereColors(const Color& horizonColor,
+                              const Vector3F& skyRayleighScattering);
 };
 
 

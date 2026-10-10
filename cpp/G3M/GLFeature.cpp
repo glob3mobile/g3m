@@ -11,6 +11,7 @@
 #include "Camera.hpp"
 #include "Color.hpp"
 #include "Vector2F.hpp"
+#include "Vector3F.hpp"
 #include "ILogger.hpp"
 #include "GPUAttributeValueVec2Float.hpp"
 #include "GPUAttributeValueVec3Float.hpp"
@@ -79,7 +80,9 @@ GLFeature(NO_GROUP, GLF_RIBBON_SIDE)
 
 CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam,
                                                  bool groundHazePass,
-                                                 const Color& spaceColor):
+                                                 const Color& spaceColor,
+                                                 const Color& horizonColor,
+                                                 const Vector3F& skyRayleighScattering):
 GLFeature(NO_GROUP, GLF_CAMERA_POSITION),
 _groundHazePass(groundHazePass) {
   const Vector3D p = cam->getCartesianPosition();
@@ -94,6 +97,24 @@ _groundHazePass(groundHazePass) {
                                                     spaceColor._green,
                                                     spaceColor._blue);
   _values->addUniformValue(SPACE_COLOR, _spaceColor, false);
+  _horizonColor = new GPUUniformValueVec3FloatMutable(horizonColor._red,
+                                                      horizonColor._green,
+                                                      horizonColor._blue);
+  _values->addUniformValue(HORIZON_COLOR, _horizonColor, false);
+  _skyRayleighScattering = new GPUUniformValueVec3FloatMutable(skyRayleighScattering._x,
+                                                               skyRayleighScattering._y,
+                                                               skyRayleighScattering._z);
+  _values->addUniformValue(SKY_RAYLEIGH_SCATTERING, _skyRayleighScattering, false);
+}
+
+void CameraPositionGLFeature::changeAtmosphereColors(const Color& horizonColor,
+                                                     const Vector3F& skyRayleighScattering) {
+  _horizonColor->changeValue(horizonColor._red,
+                             horizonColor._green,
+                             horizonColor._blue);
+  _skyRayleighScattering->changeValue(skyRayleighScattering._x,
+                                      skyRayleighScattering._y,
+                                      skyRayleighScattering._z);
 }
 
 void CameraPositionGLFeature::update(const Camera* cam,
