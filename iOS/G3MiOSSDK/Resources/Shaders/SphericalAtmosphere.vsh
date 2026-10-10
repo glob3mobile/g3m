@@ -3,7 +3,6 @@ uniform mat4 uModelview; //Model + Projection
 
 uniform float uPointSize;
 
-uniform vec3 uCameraPosition;
 varying vec3 rayDirection;
 
 void main() {

@@ -727,7 +727,6 @@ public:
             "attribute vec4 aPosition; //Position of ZNear Frame corners relative to the camera\n" +
             "uniform mat4 uModelview; //Model + Projection\n" +
             "uniform float uPointSize;\n" +
-            "uniform vec3 uCameraPosition;\n" +
             "varying vec3 rayDirection;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
@@ -750,6 +749,7 @@ public:
             "varying vec3 rayDirection;\n" +
             "const float earthRadius = 6.36744e6;\n" +
             "const vec3 earthRadii = vec3(6378137.0, 6378137.0, 6356752.314245);\n" +
+            "const vec3 inverseEarthRadii = 1.0 / earthRadii;\n" +
             "const float realScaleHeight = 8.0;\n" +
             "const float atmosphereScale = 2.0;\n" +
             "const float skyScaleHeight = realScaleHeight * atmosphereScale;\n" +
@@ -778,21 +778,21 @@ public:
             "bool rayHitsGround(vec3 o, vec3 d, out float tGround) {\n" +
             "  // the ellipsoid is the unit sphere once the space is divided by its radii\n" +
             "  float tFar;\n" +
-            "  return rayIntersectsSphere(o / earthRadii, d / earthRadii, 1.0, tGround, tFar) && (tGround > 0.0);\n" +
+            "  return rayIntersectsSphere(o * inverseEarthRadii, d * inverseEarthRadii, 1.0, tGround, tFar) && (tGround > 0.0);\n" +
             "}\n" +
             "float groundDistanceAlongRay(vec3 o, vec3 d) {\n" +
             "  float tGround;\n" +
             "  if (rayHitsGround(o, d, tGround)) {\n" +
             "    return tGround;\n" +
             "  }\n" +
-            "  vec3 oInUnitSphere = o / earthRadii;\n" +
-            "  vec3 dInUnitSphere = d / earthRadii;\n" +
+            "  vec3 oInUnitSphere = o * inverseEarthRadii;\n" +
+            "  vec3 dInUnitSphere = d * inverseEarthRadii;\n" +
             "  return -dot(oInUnitSphere, dInUnitSphere) / dot(dInUnitSphere, dInUnitSphere);\n" +
             "}\n" +
             "float heightOverEllipsoid(vec3 point) {\n" +
             "  float distanceToCenter = length(point);\n" +
-            "  float groundRadius = distanceToCenter / length(point / earthRadii);\n" +
-            "  return distanceToCenter - groundRadius;\n" +
+            "  float groundRadiusOverDistance = 1.0 / length(point * inverseEarthRadii);\n" +
+            "  return distanceToCenter * (1.0 - groundRadiusOverDistance);\n" +
             "}\n" +
             "float airDensity(vec3 point, float scaleHeight) {\n" +
             "  float heightInKm = heightOverEllipsoid(point) / 1000.0;\n" +

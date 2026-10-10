@@ -20,6 +20,7 @@ varying vec3 rayDirection;
 const float earthRadius = 6.36744e6;
 // WGS84, as EllipsoidalPlanet::createEarth()
 const vec3 earthRadii = vec3(6378137.0, 6378137.0, 6356752.314245);
+const vec3 inverseEarthRadii = 1.0 / earthRadii;
 
 // Air density falls as exp(-height / scaleHeight); the real scale height is 8 km
 const float realScaleHeight = 8.0;
@@ -66,7 +67,7 @@ bool rayIntersectsSphere(vec3 o, vec3 d, float radius,
 bool rayHitsGround(vec3 o, vec3 d, out float tGround) {
   // the ellipsoid is the unit sphere once the space is divided by its radii
   float tFar;
-  return rayIntersectsSphere(o / earthRadii, d / earthRadii, 1.0, tGround, tFar) && (tGround > 0.0);
+  return rayIntersectsSphere(o * inverseEarthRadii, d * inverseEarthRadii, 1.0, tGround, tFar) && (tGround > 0.0);
 }
 
 // Where the ray hits the ground or, when it misses, where it passes closest to it:
@@ -76,8 +77,8 @@ float groundDistanceAlongRay(vec3 o, vec3 d) {
   if (rayHitsGround(o, d, tGround)) {
     return tGround;
   }
-  vec3 oInUnitSphere = o / earthRadii;
-  vec3 dInUnitSphere = d / earthRadii;
+  vec3 oInUnitSphere = o * inverseEarthRadii;
+  vec3 dInUnitSphere = d * inverseEarthRadii;
   return -dot(oInUnitSphere, dInUnitSphere) / dot(dInUnitSphere, dInUnitSphere);
 }
 
@@ -85,8 +86,8 @@ float groundDistanceAlongRay(vec3 o, vec3 d) {
 // ground would sit 11 km high at the equator and 11 km deep at the poles, and the air with it
 float heightOverEllipsoid(vec3 point) {
   float distanceToCenter = length(point);
-  float groundRadius = distanceToCenter / length(point / earthRadii);
-  return distanceToCenter - groundRadius;
+  float groundRadiusOverDistance = 1.0 / length(point * inverseEarthRadii);
+  return distanceToCenter * (1.0 - groundRadiusOverDistance);
 }
 
 float airDensity(vec3 point, float scaleHeight) {
