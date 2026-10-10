@@ -21,7 +21,7 @@ GPUProgramManager::~GPUProgramManager() {
 #endif
 }
 
-GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attributesCode) {
+GPUProgram* GPUProgramManager::getProgram(GL* gl, long long uniformsCode, int attributesCode) {
   GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
   if (p == NULL) {
     p = getNewProgram(gl, uniformsCode, attributesCode);
@@ -43,7 +43,7 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
   return p;
 }
 
-GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
+GPUProgram* GPUProgramManager::getNewProgram(GL* gl, long long uniformsCode, int attributesCode) {
 
   // checked first: a ribbon also carries VIEWPORT_EXTENT, which below means "billboard"
   if (GPUVariable::hasUniform(uniformsCode, RIBBON_WIDTH)) {
@@ -151,7 +151,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   return NULL;
 }
 
-GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode) {
+GPUProgram* GPUProgramManager::getCompiledProgram(long long uniformsCode, int attributesCode) {
 #ifdef C_CODE
   for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
     //#warning GPUProgram getUniformsCode avoid call

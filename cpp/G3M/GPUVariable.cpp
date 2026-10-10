@@ -8,8 +8,9 @@
 
 #include "GPUVariable.hpp"
 #include "ILogger.hpp"
+#include "IMathUtils.hpp"
 
-bool GPUVariable::hasUniform(int code, GPUUniformKey u) {
+bool GPUVariable::hasUniform(long long code, GPUUniformKey u) {
   if (u == UNRECOGNIZED_UNIFORM) {
     return false;
   }
@@ -35,22 +36,22 @@ bool GPUVariable::hasAttribute(int code, GPUAttributeKey a) {
   return hasAttribute(code, index);
 }
 
-bool GPUVariable::hasUniform(int code, int u) {
-  return ((code >> u) & 0x00000001) != 0;
+bool GPUVariable::hasUniform(long long code, int u) {
+  return (code & IMathUtils::instance()->bit64(u)) != 0;
 }
 
 bool GPUVariable::hasAttribute(int code, int a) {
   return ((code >> a) & 0x00000001) != 0;
 }
 
-int GPUVariable::getUniformCode(int u) {
-  return 0x00000001 << u;
+long long GPUVariable::getUniformCode(int u) {
+  return IMathUtils::instance()->bit64(u);
 }
 int GPUVariable::getAttributeCode(int a) {
   return 0x00000001 << a;
 }
 
-int GPUVariable::getUniformCode(GPUUniformKey u) {
+long long GPUVariable::getUniformCode(GPUUniformKey u) {
   if (u == UNRECOGNIZED_UNIFORM) {
     return 0;
   }
@@ -73,7 +74,7 @@ int GPUVariable::getAttributeCode(GPUAttributeKey a) {
 #ifdef JAVA_CODE
   final int index = a.getValue();
 #endif
-  return getUniformCode(index);
+  return getAttributeCode(index);
 }
 
 GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {

@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class GPUUniform;
 //class GPUAttribute;
 //class GL;
@@ -37,7 +38,7 @@ public class GPUProgram
 {
   private int _programID;
 
-  private GPUUniform[] _uniforms = new GPUUniform[32];
+  private GPUUniform[] _uniforms = new GPUUniform[GPUVariable.MAX_UNIFORM_KEYS];
   private GPUAttribute[] _attributes = new GPUAttribute[32];
   private int _nAttributes;
   private int _nUniforms;
@@ -45,7 +46,7 @@ public class GPUProgram
   private GPUUniform[] _createdUniforms;
   private GPUAttribute[] _createdAttributes;
 
-  private int _uniformsCode;
+  private long _uniformsCode;
   private int _attributesCode;
 
   private String _name;
@@ -82,9 +83,12 @@ public class GPUProgram
 
   private void getVariables(GL gl)
   {
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < GPUVariable.MAX_UNIFORM_KEYS; i++)
     {
       _uniforms[i] = null;
+    }
+    for (int i = 0; i < 32; i++)
+    {
       _attributes[i] = null;
     }
   
@@ -106,7 +110,7 @@ public class GPUProgram
       {
         _uniforms[u.getIndex()] = u;
   
-        final int code = GPUVariable.getUniformCode(u._key);
+        final long code = GPUVariable.getUniformCode(u._key);
         _uniformsCode = _uniformsCode | code;
       }
   
@@ -494,7 +498,7 @@ public class GPUProgram
   {
      return _attributesCode;
   }
-  public final int getUniformsCode()
+  public final long getUniformsCode()
   {
      return _uniformsCode;
   }

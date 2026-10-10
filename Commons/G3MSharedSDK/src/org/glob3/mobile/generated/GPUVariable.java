@@ -21,6 +21,8 @@ package org.glob3.mobile.generated;
 
 public class GPUVariable
 {
+  // uniform codes are 64-bit masks, one bit per GPUUniformKey
+  public static final int MAX_UNIFORM_KEYS = 64;
 
   public static GPUUniformKey getUniformKey(String name)
   {
@@ -185,7 +187,7 @@ public class GPUVariable
     }
   }
 
-  public static int getUniformCode(GPUUniformKey u)
+  public static long getUniformCode(GPUUniformKey u)
   {
     if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
     {
@@ -201,28 +203,28 @@ public class GPUVariable
       return 0;
     }
     final int index = a.getValue();
-    return getUniformCode(index);
+    return getAttributeCode(index);
   }
 
-  public static int getUniformCode(int u)
+  public static long getUniformCode(int u)
   {
-    return 0x00000001 << u;
+    return IMathUtils.instance().bit64(u);
   }
   public static int getAttributeCode(int a)
   {
     return 0x00000001 << a;
   }
 
-  public static boolean hasUniform(int code, int u)
+  public static boolean hasUniform(long code, int u)
   {
-    return ((code >> u) & 0x00000001) != 0;
+    return (code & IMathUtils.instance().bit64(u)) != 0;
   }
   public static boolean hasAttribute(int code, int a)
   {
     return ((code >> a) & 0x00000001) != 0;
   }
 
-  public static boolean hasUniform(int code, GPUUniformKey u)
+  public static boolean hasUniform(long code, GPUUniformKey u)
   {
     if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
     {

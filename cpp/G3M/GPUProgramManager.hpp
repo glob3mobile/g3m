@@ -26,16 +26,16 @@ class GPUProgramManager {
 
   GPUProgram* compileProgramWithName(GL* gl, const std::string& name);
 
-  GPUProgram* getNewProgram(GL* gl, int uniformsCode, int attributesCode);
+  GPUProgram* getNewProgram(GL* gl, long long uniformsCode, int attributesCode);
 
-  GPUProgram* getCompiledProgram(int uniformsCode, int attributesCode);
+  GPUProgram* getCompiledProgram(long long uniformsCode, int attributesCode);
 public:
 
   GPUProgramManager(GPUProgramFactory *factory):_factory(factory) {}
 
   ~GPUProgramManager();
 
-  GPUProgram* getProgram(GL* gl, int uniformsCode, int attributesCode);
+  GPUProgram* getProgram(GL* gl, long long uniformsCode, int attributesCode);
 
   void removeUnused(GL* gl);
 };

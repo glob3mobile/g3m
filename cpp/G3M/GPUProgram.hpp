@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "GPUVariable.hpp"
+
 class GPUUniform;
 class GPUAttribute;
 class GL;
@@ -30,7 +32,7 @@ class GPUAttributeValue;
 class GPUProgram {
   int _programID;
 
-  GPUUniform* _uniforms[32];
+  GPUUniform* _uniforms[GPUVariable::MAX_UNIFORM_KEYS];
   GPUAttribute* _attributes[32];
   int _nAttributes;
   int _nUniforms;
@@ -38,7 +40,7 @@ class GPUProgram {
   GPUUniform** _createdUniforms;
   GPUAttribute** _createdAttributes;
 
-  int _uniformsCode;
+  long long _uniformsCode;
   int _attributesCode;
 
   std::string _name;
@@ -109,7 +111,7 @@ public:
   GPUAttribute* getGPUAttributeVecXFloat(int key, int x) const;
 
   int getAttributesCode() const { return _attributesCode; }
-  int getUniformsCode() const { return _uniformsCode; }
+  long long getUniformsCode() const { return _uniformsCode; }
 
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);

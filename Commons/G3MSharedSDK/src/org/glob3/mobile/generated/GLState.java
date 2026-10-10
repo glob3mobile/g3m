@@ -170,7 +170,7 @@ public class GLState extends RCObject
   
       GLFeatureGroup.applyToAllGroups(accumulatedFeatures, _valuesSet, _globalState);
   
-      final int uniformsCode = _valuesSet.getUniformsCode();
+      final long uniformsCode = _valuesSet.getUniformsCode();
       final int attributesCode = _valuesSet.getAttributesCode();
   
       _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE

@@ -18,20 +18,22 @@
 
 class GPUVariable {
 public:
+  // uniform codes are 64-bit masks, one bit per GPUUniformKey
+  static const int MAX_UNIFORM_KEYS = 64;
 
   static GPUUniformKey getUniformKey(const std::string& name);
   static GPUAttributeKey getAttributeKey(const std::string& name);
 
-  static int getUniformCode(GPUUniformKey u);
+  static long long getUniformCode(GPUUniformKey u);
   static int getAttributeCode(GPUAttributeKey a);
 
-  static int getUniformCode(int u);
+  static long long getUniformCode(int u);
   static int getAttributeCode(int a);
 
-  static bool hasUniform(int code, int u);
+  static bool hasUniform(long long code, int u);
   static bool hasAttribute(int code, int a);
 
-  static bool hasUniform(int code, GPUUniformKey u);
+  static bool hasUniform(long long code, GPUUniformKey u);
   static bool hasAttribute(int code, GPUAttributeKey a);
 
   virtual ~GPUVariable() {}

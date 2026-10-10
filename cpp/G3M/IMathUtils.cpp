@@ -8,6 +8,7 @@
 #include "IMathUtils.hpp"
 #include "Angle.hpp"
 #include "Geodetic2D.hpp"
+#include "ILogger.hpp"
 
 
 IMathUtils* IMathUtils::_instance = NULL;
@@ -53,4 +54,13 @@ const int IMathUtils::toUInt16(const unsigned char b1,
   return (((short) (b1 & 0xFF)) |
           ((short) (b2 & 0xFF) << 8));
 #endif
+}
+
+long long IMathUtils::bit64(int index) const {
+  if ((index < 0) || (index > 63)) {
+    ILogger::instance()->logError("IMathUtils::bit64: index %d out of 0..63", index);
+    return 0;
+  }
+  // the cast (not a literal suffix) is what cpp2java turns into Java's long
+  return ((long long) 1) << index;
 }

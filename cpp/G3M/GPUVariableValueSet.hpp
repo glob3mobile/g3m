@@ -15,17 +15,18 @@ class GPUProgram;
 
 #include "GPUUniformKey.hpp"
 #include "GPUAttributeKey.hpp"
+#include "GPUVariable.hpp"
 
 
 class GPUVariableValueSet {
 private:
-  GPUUniformValue*   _uniformValues[32];
+  GPUUniformValue*   _uniformValues[GPUVariable::MAX_UNIFORM_KEYS];
   GPUAttributeValue* _attributeValues[32];
 
   int _highestUniformKey;
   int _highestAttributeKey;
 
-  mutable int _uniformsCode;
+  mutable long long _uniformsCode;
   mutable int _attributeCode;
 
   GPUVariableValueSet(const GPUVariableValueSet& that);
@@ -63,7 +64,7 @@ public:
 
   void applyValuesToProgram(GPUProgram* prog) const;
 
-  int getUniformsCode() const;
+  long long getUniformsCode() const;
 
   int getAttributesCode() const;
   

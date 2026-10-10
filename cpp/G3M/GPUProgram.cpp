@@ -132,8 +132,10 @@ bool GPUProgram::compileShader(GL* gl, int shader, const std::string& source) co
 }
 
 void GPUProgram::getVariables(GL* gl) {
-  for (int i = 0; i < 32; i++) {
+  for (int i = 0; i < GPUVariable::MAX_UNIFORM_KEYS; i++) {
     _uniforms[i] = NULL;
+  }
+  for (int i = 0; i < 32; i++) {
     _attributes[i] = NULL;
   }
 
@@ -154,7 +156,7 @@ void GPUProgram::getVariables(GL* gl) {
     else if (u != NULL) {
       _uniforms[u->getIndex()] = u;
 
-      const int code = GPUVariable::getUniformCode(u->_key);
+      const long long code = GPUVariable::getUniformCode(u->_key);
       _uniformsCode = _uniformsCode | code;
     }
 

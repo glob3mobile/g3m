@@ -309,6 +309,18 @@ public abstract class IMathUtils
     return new Geodetic2D(Angle.fromRadians(latRad), Angle.fromRadians(lngRad));
   }
 
+  // 1 shifted left by index as a 64-bit value; index must be in 0..63 (C++ leaves larger shifts undefined, Java wraps them modulo 64)
+  public long bit64(int index)
+  {
+    if ((index < 0) || (index > 63))
+    {
+      ILogger.instance().logError("IMathUtils::bit64: index %d out of 0..63", index);
+      return 0;
+    }
+    // the cast (not a literal suffix) is what cpp2java turns into Java's long
+    return ((long) 1) << index;
+  }
+
   public int gcd(int a, int b)
   {
     return (b == 0) ? a : gcd(b, a % b);

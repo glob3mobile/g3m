@@ -292,6 +292,9 @@ public:
                                           const Angle& toLon,
                                           const double alpha) const;
 
+  // 1 shifted left by index as a 64-bit value; index must be in 0..63 (C++ leaves larger shifts undefined, Java wraps them modulo 64)
+  virtual long long bit64(int index) const;
+
   virtual int gcd(int a, int b) const {
     return (b == 0) ? a : gcd(b, a % b);
   }

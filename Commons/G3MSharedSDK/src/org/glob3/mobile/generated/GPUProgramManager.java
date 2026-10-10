@@ -60,7 +60,7 @@ public class GPUProgramManager
     return prog;
   }
 
-  private GPUProgram getNewProgram(GL gl, int uniformsCode, int attributesCode)
+  private GPUProgram getNewProgram(GL gl, long uniformsCode, int attributesCode)
   {
   
     // checked first: a ribbon also carries VIEWPORT_EXTENT, which below means "billboard"
@@ -189,7 +189,7 @@ public class GPUProgramManager
     return null;
   }
 
-  private GPUProgram getCompiledProgram(int uniformsCode, int attributesCode)
+  private GPUProgram getCompiledProgram(long uniformsCode, int attributesCode)
   {
     for (final GPUProgram p : _programs.values()) {
       if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
@@ -208,7 +208,7 @@ public class GPUProgramManager
   {
   }
 
-  public final GPUProgram getProgram(GL gl, int uniformsCode, int attributesCode)
+  public final GPUProgram getProgram(GL gl, long uniformsCode, int attributesCode)
   {
     GPUProgram p = getCompiledProgram(uniformsCode, attributesCode);
     if (p == null)
