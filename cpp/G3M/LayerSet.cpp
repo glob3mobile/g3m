@@ -292,6 +292,7 @@ private:
   int     _topSectorSplitsByLongitude;
   int     _firstLevel;
   int     _maxLevel;
+  int     _maxLevelForPoles;
   short   _tileTextureWidth;
   short   _tileTextureHeight;
   short   _tileMeshWidth;
@@ -305,6 +306,7 @@ public:
   _topSectorSplitsByLongitude(0),
   _firstLevel(0),
   _maxLevel(0),
+  _maxLevelForPoles(0),
   _tileTextureWidth(0),
   _tileTextureHeight(0),
   _tileMeshWidth(0),
@@ -325,6 +327,7 @@ public:
       _topSectorSplitsByLongitude = parameters->_topSectorSplitsByLongitude;
       _firstLevel                 = parameters->_firstLevel;
       _maxLevel                   = parameters->_maxLevel;
+      _maxLevelForPoles           = parameters->_maxLevelForPoles;
       _tileTextureWidth           = parameters->_tileTextureResolution._x;
       _tileTextureHeight          = parameters->_tileTextureResolution._y;
       _tileMeshWidth              = parameters->_tileMeshResolution._x;
@@ -370,6 +373,10 @@ public:
                                       _maxLevel,
                                       parameters->_maxLevel);
       _maxLevel = parameters->_maxLevel;
+    }
+
+    if ( _maxLevelForPoles < parameters->_maxLevelForPoles ) {
+      _maxLevelForPoles = parameters->_maxLevelForPoles;
     }
 
     if ( _firstLevel < parameters->_firstLevel ) {
@@ -420,6 +427,7 @@ public:
                                           _topSectorSplitsByLongitude,
                                           _firstLevel,
                                           _maxLevel,
+                                          _maxLevelForPoles,
                                           Vector2S(_tileTextureWidth, _tileTextureHeight),
                                           Vector2S(_tileMeshWidth,    _tileMeshHeight),
                                           _mercator);

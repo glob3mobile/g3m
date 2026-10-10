@@ -84,6 +84,7 @@ LayerTilesRenderParameters* LayerTilesRenderParameters::copy() const {
                                         _topSectorSplitsByLongitude,
                                         _firstLevel,
                                         _maxLevel,
+                                        _maxLevelForPoles,
                                         _tileTextureResolution,
                                         _tileMeshResolution,
                                         _mercator);

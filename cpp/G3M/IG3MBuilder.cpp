@@ -76,7 +76,7 @@ _groundHazeRenderer(NULL),
 _starsRenderer(NULL),
 _frustumPolicy(NULL),
 _verboseCameraHandlers(false),
-_textureMaxAnisotropy(1)
+_textureMaxAnisotropy(8)
 {
 }
 

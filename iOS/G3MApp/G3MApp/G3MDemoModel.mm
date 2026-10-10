@@ -16,6 +16,8 @@
 #include <G3M/ErrorHandling.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/PlanetRenderer.hpp>
+#include <G3M/PlanetRendererBuilder.hpp>
+#include <G3M/ProjectedCornersDistanceTileLODTester.hpp>
 #include <G3M/GEOVectorLayer.hpp>
 #include <G3M/OLDPointCloudsRenderer.hpp>
 #include <G3M/XPCRenderer.hpp>
@@ -159,7 +161,7 @@ void G3MDemoModel::reset() {
   getG3MWidget()->setViewMode(MONO);
   getG3MWidget()->cancelAllEffects();
   getG3MWidget()->setBackgroundColor( Color::black() );
-  getG3MWidget()->setTextureMaxAnisotropy(1);
+  getG3MWidget()->setTextureMaxAnisotropy(8);
   getG3MWidget()->setRenderedSector( Sector::fullSphere() );
   getG3MWidget()->removeAllPeriodicalTasks();
 
@@ -168,6 +170,7 @@ void G3MDemoModel::reset() {
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setShowStatistics(false);
   planetRenderer->setIncrementalTileQuality(false);
+  planetRenderer->setTileLODTester( PlanetRendererBuilder::createDefaultTileLODTesterChain(new ProjectedCornersDistanceTileLODTester()) );
   planetRenderer->removeColorMatrix();
   hideColorGradingPanel();
   // reset DEM

@@ -72,6 +72,21 @@ public class LayerTilesRenderParameters
 
   }
 
+  // tiles touching the poles stop refining at maxLevelForPoles (4 in the other constructor)
+  public LayerTilesRenderParameters(Sector topSector, int topSectorSplitsByLatitude, int topSectorSplitsByLongitude, int firstLevel, int maxLevel, int maxLevelForPoles, Vector2S tileTextureResolution, Vector2S tileMeshResolution, boolean mercator)
+  {
+     _topSector = new Sector(topSector);
+     _topSectorSplitsByLatitude = topSectorSplitsByLatitude;
+     _topSectorSplitsByLongitude = topSectorSplitsByLongitude;
+     _firstLevel = firstLevel;
+     _maxLevel = maxLevel;
+     _maxLevelForPoles = maxLevelForPoles;
+     _tileTextureResolution = tileTextureResolution;
+     _tileMeshResolution = tileMeshResolution;
+     _mercator = mercator;
+
+  }
+
   public static Vector2S defaultTileMeshResolution()
   {
     //return Vector2S((short)16, (short)16);
@@ -202,7 +217,7 @@ public class LayerTilesRenderParameters
 
   public final LayerTilesRenderParameters copy()
   {
-    return new LayerTilesRenderParameters(_topSector, _topSectorSplitsByLatitude, _topSectorSplitsByLongitude, _firstLevel, _maxLevel, _tileTextureResolution, _tileMeshResolution, _mercator);
+    return new LayerTilesRenderParameters(_topSector, _topSectorSplitsByLatitude, _topSectorSplitsByLongitude, _firstLevel, _maxLevel, _maxLevelForPoles, _tileTextureResolution, _tileMeshResolution, _mercator);
   }
 
 }

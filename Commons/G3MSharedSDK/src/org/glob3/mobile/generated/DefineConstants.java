@@ -10,4 +10,5 @@ final class DefineConstants
    public static final int TimedCacheTVTDataID = 0;
    public static final int TimedCacheTLTDataID = 1;
    public static final int ProjectedCornersDistanceTLTDataID = 2;
+   public static final int ProjectedGridTLTDataID = 3;
 }

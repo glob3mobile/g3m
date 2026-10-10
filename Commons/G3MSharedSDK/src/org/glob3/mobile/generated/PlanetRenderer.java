@@ -438,6 +438,59 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     _tilesRenderParameters._incrementalTileQuality = incrementalTileQuality;
   }
 
+  // the swap happens in the renderer thread and recreates the tiles; the renderer owns the tester
+  public final void setTileLODTester(TileLODTester tileLODTester)
+  {
+    if (tileLODTester == null)
+    {
+      throw new RuntimeException("TileLODTester can't be NULL");
+    }
+  
+    if (_context == null)
+    {
+      if (_tileLODTester != null)
+         _tileLODTester.dispose();
+      _tileLODTester = tileLODTester;
+    }
+    else
+    {
+      _context.getThreadUtils().invokeInRendererThread(new ReplaceTileLODTesterTask(this, tileLODTester), true);
+    }
+  }
+
+  public final void replaceTileLODTester(TileLODTester tileLODTester)
+  {
+    if (tileLODTester != _tileLODTester)
+    {
+      if (_tileLODTester != null)
+         _tileLODTester.dispose();
+      _tileLODTester = tileLODTester;
+  
+      recreateTiles();
+    }
+  }
+
+  // the app calls it after a camera cut: the timed visibility and LOD caches forget the previous view,
+  // so its tiles are pruned and their downloads canceled in the next frame
+  public final void onCameraCut()
+  {
+    if (_context != null)
+    {
+      _context.getThreadUtils().invokeInRendererThread(new ClearTimedCachesTask(this), true);
+    }
+  }
+
+  public final void clearTimedCaches()
+  {
+    final int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++)
+    {
+      final Tile tile = _firstLevelTiles.get(i);
+      tile.clearDataWithIDInSubtree(DefineConstants.TimedCacheTVTDataID);
+      tile.clearDataWithIDInSubtree(DefineConstants.TimedCacheTLTDataID);
+    }
+  }
+
   public final void initialize(G3MContext context)
   {
     _context = context;

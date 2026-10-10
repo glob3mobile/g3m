@@ -23,6 +23,10 @@
 #include <G3M/Geodetic3D.hpp>
 #include <G3M/Geodetic2D.hpp>
 #include <G3M/Angle.hpp>
+#include <G3M/PlanetRenderer.hpp>
+#include <G3M/PlanetRendererBuilder.hpp>
+#include <G3M/ProjectedCornersDistanceTileLODTester.hpp>
+#include <G3M/ProjectedGridTileLODTester.hpp>
 #include <G3M/URL.hpp>
 #include <G3M/ChessboardLayer.hpp>
 #include <G3M/DebugTilesLayer.hpp>
@@ -283,6 +287,7 @@ Layer* G3MRasterLayersDemoScene::createWMSLayer(const std::string& title,
 
 void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   createLayerSet( getModel()->getLayerSet() );
+  getModel()->getPlanetRenderer()->setShowStatistics(true);
 }
 
 void G3MRasterLayersDemoScene::rawSelectGroupOption(size_t groupIndex,
@@ -296,6 +301,25 @@ void G3MRasterLayersDemoScene::rawSelectGroupOption(size_t groupIndex,
     G3MDemoModel* model = getModel();
     model->setAtmosphereEnable(option != "No atmosphere");
     model->setGroundHazeEnable(option == "Atmosphere & haze");
+  }
+  else if (groupIndex == _lodGroupIndex) {
+    TileLODTester* projectedSizeTester;
+    if (option == "LOD: grid") {
+      projectedSizeTester = new ProjectedGridTileLODTester(1);
+    }
+    else if (option == "LOD: grid x1.15") {
+      projectedSizeTester = new ProjectedGridTileLODTester(1.15);
+    }
+    else if (option == "LOD: grid x1.2") {
+      projectedSizeTester = new ProjectedGridTileLODTester(1.2);
+    }
+    else if (option == "LOD: grid x1.3") {
+      projectedSizeTester = new ProjectedGridTileLODTester(1.3);
+    }
+    else {
+      projectedSizeTester = new ProjectedCornersDistanceTileLODTester();
+    }
+    getModel()->getPlanetRenderer()->setTileLODTester( PlanetRendererBuilder::createDefaultTileLODTesterChain(projectedSizeTester) );
   }
   else {
     rawSelectOption(option, optionIndex);

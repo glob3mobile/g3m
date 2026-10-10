@@ -529,7 +529,7 @@ public abstract class IG3MBuilder
      _starsRenderer = null;
      _frustumPolicy = null;
      _verboseCameraHandlers = false;
-     _textureMaxAnisotropy = 1F;
+     _textureMaxAnisotropy = 8F;
   }
 
   public void dispose()
@@ -704,7 +704,7 @@ public abstract class IG3MBuilder
     _verboseCameraHandlers = verboseCameraHandlers;
   }
 
-  // 1 (the default) turns anisotropic filtering off; the device maximum caps it
+  // 8 by default; 1 turns anisotropic filtering off; the device maximum caps it
   public final void setTextureMaxAnisotropy(float textureMaxAnisotropy)
   {
     _textureMaxAnisotropy = textureMaxAnisotropy;

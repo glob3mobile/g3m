@@ -19,6 +19,7 @@
 #include <G3M/GLConstants.hpp>
 
 #include "G3MDemoModel.hpp"
+#include "G3MRasterLayersDemoScene.hpp"
 
 class G3MCameraDemoSceneShapeLoadListener : public ShapeLoadListener {
 protected:
@@ -86,7 +87,12 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   //  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   //  planetRenderer->setVerticalExaggeration(0);
 
-  Layer* layer = model->createRasterLayer();
+  Layer* layer = G3MRasterLayersDemoScene::createMercatorLayer("ESRI World Imagery",
+                                                               "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                                                               18,
+                                                               false,
+                                                               "Esri, Maxar, Earthstar Geographics, and the GIS User Community");
+  layer->setEnable(true);
   model->getLayerSet()->addLayer(layer);
 
 //  shapesRenderer->loadJSONSceneJS(URL("file:///nucleoUrbano.json"),

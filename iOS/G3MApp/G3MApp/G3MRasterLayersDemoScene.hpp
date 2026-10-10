@@ -21,6 +21,7 @@ private:
   WMSFeatureInfoListener* _featureInfoListener;
   size_t                  _anisotropyGroupIndex;
   size_t                  _atmosphereGroupIndex;
+  size_t                  _lodGroupIndex;
 
   Layer* createWMSLayer(const std::string& title,
                         const std::string& mapLayer,
@@ -72,7 +73,7 @@ public:
     addOption("Chessboard + Debug tiles");
     addOption("Open Street Map + Debug tiles");
 
-    _anisotropyGroupIndex = addOptionGroup("Anisotropic filtering", "<select filtering>", 0);
+    _anisotropyGroupIndex = addOptionGroup("Anisotropic filtering", "<select filtering>", 1);
     addOption(_anisotropyGroupIndex, "Anisotropic off");
     addOption(_anisotropyGroupIndex, "Anisotropic 8x");
     addOption(_anisotropyGroupIndex, "Anisotropic 16x");
@@ -81,6 +82,13 @@ public:
     addOption(_atmosphereGroupIndex, "Atmosphere & haze");
     addOption(_atmosphereGroupIndex, "Atmosphere");
     addOption(_atmosphereGroupIndex, "No atmosphere");
+
+    _lodGroupIndex = addOptionGroup("Tile LOD", "<select LOD>", 0);
+    addOption(_lodGroupIndex, "LOD: corners");
+    addOption(_lodGroupIndex, "LOD: grid");
+    addOption(_lodGroupIndex, "LOD: grid x1.15");
+    addOption(_lodGroupIndex, "LOD: grid x1.2");
+    addOption(_lodGroupIndex, "LOD: grid x1.3");
   }
 
 };

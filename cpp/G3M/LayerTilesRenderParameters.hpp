@@ -49,6 +49,29 @@ public:
 
   }
 
+  // tiles touching the poles stop refining at maxLevelForPoles (4 in the other constructor)
+  LayerTilesRenderParameters(const Sector&   topSector,
+                             const int       topSectorSplitsByLatitude,
+                             const int       topSectorSplitsByLongitude,
+                             const int       firstLevel,
+                             const int       maxLevel,
+                             const int       maxLevelForPoles,
+                             const Vector2S& tileTextureResolution,
+                             const Vector2S& tileMeshResolution,
+                             const bool      mercator) :
+  _topSector(topSector),
+  _topSectorSplitsByLatitude(topSectorSplitsByLatitude),
+  _topSectorSplitsByLongitude(topSectorSplitsByLongitude),
+  _firstLevel(firstLevel),
+  _maxLevel(maxLevel),
+  _maxLevelForPoles(maxLevelForPoles),
+  _tileTextureResolution(tileTextureResolution),
+  _tileMeshResolution(tileMeshResolution),
+  _mercator(mercator)
+  {
+
+  }
+
   static const Vector2S defaultTileMeshResolution() {
     //return Vector2S((short)16, (short)16);
     return Vector2S((short)32, (short)32);

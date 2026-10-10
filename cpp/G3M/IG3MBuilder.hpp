@@ -149,7 +149,7 @@ public:
 
   void setVerboseCameraHandlers(const bool verboseCameraHandlers);
 
-  // 1 (the default) turns anisotropic filtering off; the device maximum caps it
+  // 8 by default; 1 turns anisotropic filtering off; the device maximum caps it
   void setTextureMaxAnisotropy(const float textureMaxAnisotropy);
 
   void setGL(GL* gl);

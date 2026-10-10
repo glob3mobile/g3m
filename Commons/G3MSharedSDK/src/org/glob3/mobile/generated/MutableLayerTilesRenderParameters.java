@@ -6,6 +6,7 @@ public class MutableLayerTilesRenderParameters
   private int _topSectorSplitsByLongitude;
   private int _firstLevel;
   private int _maxLevel;
+  private int _maxLevelForPoles;
   private short _tileTextureWidth;
   private short _tileTextureHeight;
   private short _tileMeshWidth;
@@ -19,6 +20,7 @@ public class MutableLayerTilesRenderParameters
      _topSectorSplitsByLongitude = 0;
      _firstLevel = 0;
      _maxLevel = 0;
+     _maxLevelForPoles = 0;
      _tileTextureWidth = 0;
      _tileTextureHeight = 0;
      _tileMeshWidth = 0;
@@ -41,6 +43,7 @@ public class MutableLayerTilesRenderParameters
       _topSectorSplitsByLongitude = parameters._topSectorSplitsByLongitude;
       _firstLevel = parameters._firstLevel;
       _maxLevel = parameters._maxLevel;
+      _maxLevelForPoles = parameters._maxLevelForPoles;
       _tileTextureWidth = parameters._tileTextureResolution._x;
       _tileTextureHeight = parameters._tileTextureResolution._y;
       _tileMeshWidth = parameters._tileMeshResolution._x;
@@ -91,6 +94,11 @@ public class MutableLayerTilesRenderParameters
       _maxLevel = parameters._maxLevel;
     }
 
+    if (_maxLevelForPoles < parameters._maxLevelForPoles)
+    {
+      _maxLevelForPoles = parameters._maxLevelForPoles;
+    }
+
     if (_firstLevel < parameters._firstLevel)
     {
       ILogger.instance().logWarning("Inconsistency in Layer's Parameters: firstLevel (upgrading from %d to %d)", _firstLevel, parameters._firstLevel);
@@ -139,6 +147,6 @@ public class MutableLayerTilesRenderParameters
       return null;
     }
 
-    return new LayerTilesRenderParameters(_topSector, _topSectorSplitsByLatitude, _topSectorSplitsByLongitude, _firstLevel, _maxLevel, new Vector2S(_tileTextureWidth, _tileTextureHeight), new Vector2S(_tileMeshWidth, _tileMeshHeight), _mercator);
+    return new LayerTilesRenderParameters(_topSector, _topSectorSplitsByLatitude, _topSectorSplitsByLongitude, _firstLevel, _maxLevel, _maxLevelForPoles, new Vector2S(_tileTextureWidth, _tileTextureHeight), new Vector2S(_tileMeshWidth, _tileMeshHeight), _mercator);
   }
 }

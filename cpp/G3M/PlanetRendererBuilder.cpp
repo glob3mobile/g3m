@@ -429,10 +429,12 @@ void PlanetRendererBuilder::setTileLODTester(TileLODTester* tlt) {
 }
 
 TileLODTester* PlanetRendererBuilder::createDefaultTileLODTester() const {
-  TileLODTester* proj = new ProjectedCornersDistanceTileLODTester();
+  return createDefaultTileLODTesterChain( new ProjectedCornersDistanceTileLODTester() );
+}
 
+TileLODTester* PlanetRendererBuilder::createDefaultTileLODTesterChain(TileLODTester* projectedSizeTester) {
   TileLODTester* timed = new TimedCacheTileLODTester(TimeInterval::fromMilliseconds(500),
-                                                     proj);
+                                                     projectedSizeTester);
 
   TileLODTester* maxLevel = new MaxLevelTileLODTester();
 

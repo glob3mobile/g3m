@@ -147,7 +147,10 @@ public:
   void setDefaultTileBackgroundImage(IImageFactory* defaultTileBackgroundImage);
   
   void setTileLODTester(TileLODTester* tlt);
-  
+
+  // the default caching, gradual splits, max level and max frame time around the given projected-size tester
+  static TileLODTester* createDefaultTileLODTesterChain(TileLODTester* projectedSizeTester);
+
   TileLODTester* getTileLODTester() const;
 
   TileVisibilityTester* getTileVisibilityTester() const;

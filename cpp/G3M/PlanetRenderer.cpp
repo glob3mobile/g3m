@@ -43,6 +43,7 @@
 #include "GLState.hpp"
 #include "FrustumData.hpp"
 #include "Planet.hpp"
+#include "TileData.hpp"
 
 
 class VisibleSectorListenerEntry {
@@ -1044,4 +1045,77 @@ void PlanetRenderer::onTileHasChangedMesh(const Tile *tile) const {
 
 void PlanetRenderer::setIncrementalTileQuality(bool incrementalTileQuality) {
   _tilesRenderParameters->_incrementalTileQuality = incrementalTileQuality;
+}
+
+class ReplaceTileLODTesterTask : public GTask {
+private:
+  PlanetRenderer* _planetRenderer;
+  TileLODTester*  _tileLODTester;
+
+public:
+  ReplaceTileLODTesterTask(PlanetRenderer* planetRenderer,
+                           TileLODTester*  tileLODTester) :
+  _planetRenderer(planetRenderer),
+  _tileLODTester(tileLODTester)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    _planetRenderer->replaceTileLODTester(_tileLODTester);
+  }
+};
+
+void PlanetRenderer::setTileLODTester(TileLODTester* tileLODTester) {
+  if (tileLODTester == NULL) {
+    THROW_EXCEPTION("TileLODTester can't be NULL");
+  }
+
+  if (_context == NULL) {
+    delete _tileLODTester;
+    _tileLODTester = tileLODTester;
+  }
+  else {
+    _context->getThreadUtils()->invokeInRendererThread(new ReplaceTileLODTesterTask(this, tileLODTester),
+                                                       true);
+  }
+}
+
+class ClearTimedCachesTask : public GTask {
+private:
+  PlanetRenderer* _planetRenderer;
+
+public:
+  ClearTimedCachesTask(PlanetRenderer* planetRenderer) :
+  _planetRenderer(planetRenderer)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    _planetRenderer->clearTimedCaches();
+  }
+};
+
+void PlanetRenderer::onCameraCut() {
+  if (_context != NULL) {
+    _context->getThreadUtils()->invokeInRendererThread(new ClearTimedCachesTask(this),
+                                                       true);
+  }
+}
+
+void PlanetRenderer::clearTimedCaches() {
+  const size_t firstLevelTilesCount = _firstLevelTiles.size();
+  for (size_t i = 0; i < firstLevelTilesCount; i++) {
+    const Tile* tile = _firstLevelTiles[i];
+    tile->clearDataWithIDInSubtree(TimedCacheTVTDataID);
+    tile->clearDataWithIDInSubtree(TimedCacheTLTDataID);
+  }
+}
+
+void PlanetRenderer::replaceTileLODTester(TileLODTester* tileLODTester) {
+  if (tileLODTester != _tileLODTester) {
+    delete _tileLODTester;
+    _tileLODTester = tileLODTester;
+
+    recreateTiles();
+  }
 }
