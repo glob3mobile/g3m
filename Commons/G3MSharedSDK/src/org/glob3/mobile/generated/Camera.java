@@ -126,7 +126,7 @@ public class Camera
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
-      ILogger.instance().logWarning("Pixel to Ray return NaN");
+      ILogger.instance().logError("Pixel to Ray return NaN");
       return obj;
     }
   
@@ -141,7 +141,7 @@ public class Camera
     final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _viewPortWidth, _viewPortHeight);
     if (obj.isNan())
     {
-      ILogger.instance().logWarning("Pixel to Ray return NaN");
+      ILogger.instance().logError("Pixel to Ray return NaN");
       return obj;
     }
   

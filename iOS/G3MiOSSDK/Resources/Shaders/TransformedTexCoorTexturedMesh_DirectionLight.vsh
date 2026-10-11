@@ -12,7 +12,7 @@ varying vec2 TextureCoordOut;
 uniform vec2 uTranslationTexCoord;
 uniform vec2 uScaleTexCoord;
 
-uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED
+uniform vec3 uDiffuseLightDirection; // normalized by DirectionLightGLFeature
 
 uniform vec3 uAmbientLightColor;
 uniform vec3 uDiffuseLightColor;
@@ -22,9 +22,7 @@ varying vec3 lightColor;
 void main() {
   vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));
 
-  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );
-
-  float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);
+  float diffuseLightIntensity = max(dot(normalInModel, uDiffuseLightDirection), 0.0);
 
   gl_Position = uModelview * aPosition;
 

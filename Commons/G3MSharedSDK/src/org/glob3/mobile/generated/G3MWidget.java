@@ -292,7 +292,6 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     {
       if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent))
       {
-        //ILogger::instance()->logInfo("** Discarded duplicated event %s", touchEvent->description().c_str());
         return;
       }
     }

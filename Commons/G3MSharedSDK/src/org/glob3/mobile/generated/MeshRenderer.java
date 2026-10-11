@@ -48,7 +48,7 @@ public class MeshRenderer extends DefaultRenderer
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
     }
     else
     {

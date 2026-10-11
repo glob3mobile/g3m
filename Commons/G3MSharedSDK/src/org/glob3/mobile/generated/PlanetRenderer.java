@@ -45,7 +45,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
     if (parameters == null)
     {
-      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
       return;
     }
   
@@ -188,7 +187,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
       if (parameters == null)
       {
-        //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+        ILogger.instance().logError("PlanetRenderer: can't visit tiles, the layer parameters are not ready");
         return;
       }
   
@@ -276,7 +275,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
     }
     else
     {
@@ -301,9 +300,13 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _errors.clear();
       _layerTilesRenderParameters = null;
       _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
-      if (_layerTilesRenderParameters == null)
+      // without errors, a NULL means the layers are not ready yet: reported as busy by getRenderState()
+      if ((_layerTilesRenderParameters == null) && !_errors.isEmpty())
       {
-        //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+        for (int i = 0; i < _errors.size(); i++)
+        {
+          ILogger.instance().logError("PlanetRenderer: can't create LayerTilesRenderParameters: %s", _errors.get(i));
+        }
       }
       _layerTilesRenderParametersDirty = false;
   

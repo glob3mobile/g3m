@@ -56,7 +56,10 @@ Vector3F AtmosphereRenderer::defaultSkyRayleighScattering() {
 AtmosphereRenderer::~AtmosphereRenderer() {
   delete _colorLook;
   delete _directMesh;
-  _glState->_release();
+  // NULL when the renderer is deleted before start()
+  if (_glState != NULL) {
+    _glState->_release();
+  }
 }
 
 void AtmosphereRenderer::start(const G3MRenderContext* rc) {
@@ -154,7 +157,7 @@ void AtmosphereRenderer::updateGLState(const Camera* camera,
                                        const Color& spaceColor) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());

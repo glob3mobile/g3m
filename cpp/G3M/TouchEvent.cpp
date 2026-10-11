@@ -8,7 +8,6 @@
 #include "TouchEvent.hpp"
 
 #include "IStringBuilder.hpp"
-//#include "ILogger.hpp"
 
 
 TouchEvent::TouchEvent(const TouchEventType& type,
@@ -18,10 +17,6 @@ _type(type),
 _touchs(touchs),
 _wheelDelta(wheelDelta)
 {
-  //  ILogger* logger = ILogger::instance();
-  //  if (logger != NULL) {
-  //    logger->logInfo(description());
-  //  }
 }
 
 

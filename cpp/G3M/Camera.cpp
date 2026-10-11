@@ -231,7 +231,7 @@ const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
                                                       0, 0,
                                                       _viewPortWidth, _viewPortHeight);
   if (obj.isNan()) {
-    ILogger::instance()->logWarning("Pixel to Ray return NaN");
+    ILogger::instance()->logError("Pixel to Ray return NaN");
     return obj;
   }
 
@@ -284,7 +284,7 @@ const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
                                                       0, 0,
                                                       _viewPortWidth, _viewPortHeight);
   if (obj.isNan()) {
-    ILogger::instance()->logWarning("Pixel to Ray return NaN");
+    ILogger::instance()->logError("Pixel to Ray return NaN");
     return obj;
   }
 

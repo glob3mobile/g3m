@@ -186,9 +186,21 @@ vec4 groundHaze(vec3 o, vec3 d) {
   return vec4(uHorizonColor, opacity);
 }
 
+// Inside the ellipsoid (land under sea level, as the Dead Sea) every ray misses the ground and the haze looking down
+// would cross the whole planet; just over it the float noise of the ground test flickers. The air is seen from this height
+const float minimumCameraHeight = 10.0;
+
+vec3 cameraOverGround(vec3 cameraPosition) {
+  float height = heightOverEllipsoid(cameraPosition);
+  if (height >= minimumCameraHeight) {
+    return cameraPosition;
+  }
+  return cameraPosition * (1.0 + (minimumCameraHeight - height) / length(cameraPosition));
+}
+
 void main() {
   //Ray [O + tD = X]
-  vec3 o = uCameraPosition;
+  vec3 o = cameraOverGround(uCameraPosition);
   vec3 d = normalize(rayDirection);
 
   if (uGroundHazePass > 0.5) {

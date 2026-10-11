@@ -417,7 +417,6 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
   if (_previousTouchEvent != NULL) {
     if ( isDuplicatedTouchEvent(touchEvent, _previousTouchEvent) ) {
-      //ILogger::instance()->logInfo("** Discarded duplicated event %s", touchEvent->description().c_str());
       return;
     }
   }

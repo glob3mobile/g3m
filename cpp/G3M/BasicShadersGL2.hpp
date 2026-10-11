@@ -20,36 +20,25 @@ public:
       final String emptyString = "";
 #endif
 
-// RibbonMesh
+// Billboard
       {
-         GPUProgramSources srcRibbonMesh(
-            "RibbonMesh",
+         GPUProgramSources srcBillboard(
+            "Billboard",
             emptyString +
-            "attribute vec4 aPosition;   // ribbon center line\n" +
-            "attribute vec3 aRibbonSide; // unit side vector, +1/-1 per ribbon edge\n" +
+            "attribute vec2 aTextureCoord;\n" +
             "uniform mat4 uModelview;\n" +
-            "uniform float uPointSize;\n" +
+            "uniform vec4 uBillboardPosition;\n" +
+            "uniform vec2 uBillboardAnchor; // Anchor in UV (texture-like) coordinates\n" +
+            "uniform vec2 uTextureExtent;\n" +
             "uniform vec2 uViewPortExtent;\n" +
-            "uniform vec2 uRibbonWidth; // x = width in meters, y = minimum width in pixels\n" +
+            "varying vec2 TextureCoordOut;\n" +
             "void main() {\n" +
-            "  vec4 center = uModelview * aPosition;\n" +
-            "  vec4 side   = uModelview * (aPosition + vec4(aRibbonSide * (uRibbonWidth.x * 0.5), 0.0));\n" +
-            "  if ((center.w <= 0.0) || (side.w <= 0.0)) {\n" +
-            "    // behind the camera: perspective division is meaningless, keep the plain meters offset\n" +
-            "    gl_Position = side;\n" +
-            "  }\n" +
-            "  else {\n" +
-            "    vec2 halfViewport = uViewPortExtent * 0.5;\n" +
-            "    vec2 dirPx = (side.xy / side.w - center.xy / center.w) * halfViewport;\n" +
-            "    float metersPx = length(dirPx);\n" +
-            "    gl_Position = center;\n" +
-            "    if (metersPx > 0.0) {\n" +
-            "      float halfPx = max(metersPx, uRibbonWidth.y * 0.5);\n" +
-            "      vec2 offsetNDC = (dirPx / metersPx) * halfPx / halfViewport;\n" +
-            "      gl_Position.xy += offsetNDC * center.w;\n" +
-            "    }\n" +
-            "  }\n" +
-            "  gl_PointSize = uPointSize;\n" +
+            "  gl_Position = uModelview * uBillboardPosition;\n" +
+            "  float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;\n" +
+            "  float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;\n" +
+            "  gl_Position.x += (aTextureCoord.x - uBillboardAnchor.x) * fx;\n" +
+            "  gl_Position.y -= (aTextureCoord.y - uBillboardAnchor.y) * fy;\n" +
+            "  TextureCoordOut = aTextureCoord;\n" +
             "}\n",
             emptyString +
             "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
@@ -57,11 +46,51 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "uniform vec4 uFlatColor;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "uniform vec4 uBillboardColorFactor;\n" +
             "void main() {\n" +
-            "  gl_FragColor = uFlatColor;\n" +
+            "  gl_FragColor = texture2D(Sampler, TextureCoordOut) * uBillboardColorFactor;\n" +
             "}\n");
-         this->add(srcRibbonMesh);
+         this->add(srcBillboard);
+      }
+
+// Billboard_TransformedTexCoor
+      {
+         GPUProgramSources srcBillboard_TransformedTexCoor(
+            "Billboard_TransformedTexCoor",
+            emptyString +
+            "attribute vec2 aTextureCoord;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform vec4 uBillboardPosition;\n" +
+            "uniform vec2 uBillboardAnchor; // Anchor in UV (texture-like) coordinates\n" +
+            "uniform vec2 uTextureExtent;\n" +
+            "uniform vec2 uViewPortExtent;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * uBillboardPosition;\n" +
+            "  float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;\n" +
+            "  float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;\n" +
+            "  gl_Position.x += (aTextureCoord.x - uBillboardAnchor.x) * fx;\n" +
+            "  gl_Position.y -= (aTextureCoord.y - uBillboardAnchor.y) * fy;\n" +
+            "  //Transformed Tex Coords applied to Billboard\n" +
+            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "uniform vec4 uBillboardColorFactor;\n" +
+            "void main() {\n" +
+            "  gl_FragColor = texture2D(Sampler, TextureCoordOut) * uBillboardColorFactor;\n" +
+            "}\n");
+         this->add(srcBillboard_TransformedTexCoor);
       }
 
 // ColorMesh
@@ -92,21 +121,22 @@ public:
          this->add(srcColorMesh);
       }
 
-// TransformedTexCoorTexturedMesh_ColorGrade
+// FlatColor2DMesh
       {
-         GPUProgramSources srcTransformedTexCoorTexturedMesh_ColorGrade(
-            "TransformedTexCoorTexturedMesh_ColorGrade",
+         GPUProgramSources srcFlatColor2DMesh(
+            "FlatColor2DMesh",
             emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
-            "uniform vec2 uTranslationTexCoord;\n" +
-            "uniform vec2 uScaleTexCoord;\n" +
-            "uniform mat4 uModelview;\n" +
+            "attribute vec2 aPosition2D;\n" +
             "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
+            "uniform vec2 uTranslation2D;\n" +
+            "uniform vec2 uViewPortExtent;\n" +
             "void main() {\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "  vec2 pixel = aPosition2D;\n" +
+            "  pixel.x -= uViewPortExtent.x / 2.0;\n" +
+            "  pixel.y += uViewPortExtent.y / 2.0;\n" +
+            "  gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0),\n" +
+            "                     (pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0),\n" +
+            "                     0, 1);\n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
@@ -115,15 +145,74 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "uniform mat4 uColorMatrix;\n" +
+            "uniform vec4 uFlatColor;\n" +
             "void main() {\n" +
-            "  vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
-            "  vec3 gradedColor = (uColorMatrix * vec4(color.rgb, 1.0)).rgb;\n" +
-            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, 1.0), color.a);\n" +
+            "  gl_FragColor = uFlatColor;\n" +
             "}\n");
-         this->add(srcTransformedTexCoorTexturedMesh_ColorGrade);
+         this->add(srcFlatColor2DMesh);
+      }
+
+// FlatColorMesh
+      {
+         GPUProgramSources srcFlatColorMesh(
+            "FlatColorMesh",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform float uPointSize;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "uniform vec4 uFlatColor;\n" +
+            "void main() {\n" +
+            "  gl_FragColor = uFlatColor;\n" +
+            "}\n");
+         this->add(srcFlatColorMesh);
+      }
+
+// FlatColorMesh_DirectionLight
+      {
+         GPUProgramSources srcFlatColorMesh_DirectionLight(
+            "FlatColorMesh_DirectionLight",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec3 aNormal;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform mat4 uModel;\n" +
+            "uniform float uPointSize;\n" +
+            "uniform vec3 uAmbientLightColor;\n" +
+            "uniform vec3 uDiffuseLightColor;\n" +
+            "uniform vec3 uDiffuseLightDirection; // normalized by DirectionLightGLFeature\n" +
+            "varying vec3 lightColor;\n" +
+            "void main() {\n" +
+            "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+            "  float diffuseLightIntensity = max(dot(normalInModel, uDiffuseLightDirection), 0.0);\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "  //Computing Total Light in Vertex\n" +
+            "  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+            "  lightColor = clamp(lightColor, 0.0, 1.0);\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "uniform vec4 uFlatColor;\n" +
+            "varying vec3 lightColor;\n" +
+            "void main() {\n" +
+            "  gl_FragColor.rgb = uFlatColor.rgb * lightColor.rgb;\n" +
+            "  gl_FragColor.a   = uFlatColor.a;\n" +
+            "}\n");
+         this->add(srcFlatColorMesh_DirectionLight);
       }
 
 // FullTransformedTexCoorMultiTexturedMesh
@@ -174,250 +263,6 @@ public:
          this->add(srcFullTransformedTexCoorMultiTexturedMesh);
       }
 
-// TransformedTexCoorTexturedMesh
-      {
-         GPUProgramSources srcTransformedTexCoorTexturedMesh(
-            "TransformedTexCoorTexturedMesh",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
-            "uniform vec2 uTranslationTexCoord;\n" +
-            "uniform vec2 uScaleTexCoord;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "void main() {\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "void main() {\n" +
-            "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "}\n");
-         this->add(srcTransformedTexCoorTexturedMesh);
-      }
-
-// FlatColorMesh_DirectionLight
-      {
-         GPUProgramSources srcFlatColorMesh_DirectionLight(
-            "FlatColorMesh_DirectionLight",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec3 aNormal;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform mat4 uModel;\n" +
-            "uniform float uPointSize;\n" +
-            "uniform vec3 uAmbientLightColor;\n" +
-            "uniform vec3 uDiffuseLightColor;\n" +
-            "uniform vec3 uDiffuseLightDirection; //We must normalize\n" +
-            "varying vec3 lightColor;\n" +
-            "void main() {\n" +
-            "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
-            "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
-            "  float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "  //Computing Total Light in Vertex\n" +
-            "  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
-            "  lightColor = clamp(lightColor, 0.0, 1.0);\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "uniform vec4 uFlatColor;\n" +
-            "varying vec3 lightColor;\n" +
-            "void main() {\n" +
-            "  gl_FragColor.rgb = uFlatColor.rgb * lightColor.rgb;\n" +
-            "  gl_FragColor.a   = uFlatColor.a;\n" +
-            "}\n");
-         this->add(srcFlatColorMesh_DirectionLight);
-      }
-
-// TransformedTexCoorMultiTexturedMesh
-      {
-         GPUProgramSources srcTransformedTexCoorMultiTexturedMesh(
-            "TransformedTexCoorMultiTexturedMesh",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
-            "attribute vec2 aTextureCoord2;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "varying vec2 TextureCoordOut2;\n" +
-            "uniform vec2 uTranslationTexCoord;\n" +
-            "uniform vec2 uScaleTexCoord;\n" +
-            "void main() {\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  //Transforming TextureCoordOut\n" +
-            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
-            "  TextureCoordOut2 = aTextureCoord2;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "varying vec2 TextureCoordOut2;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "uniform sampler2D Sampler2;\n" +
-            "void main() {\n" +
-            "  vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
-            "  vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
-            "  gl_FragColor = tex1 * tex2;\n" +
-            "}\n");
-         this->add(srcTransformedTexCoorMultiTexturedMesh);
-      }
-
-// TexturedMesh
-      {
-         GPUProgramSources srcTexturedMesh(
-            "TexturedMesh",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "void main() {\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  TextureCoordOut = aTextureCoord;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "void main() {\n" +
-            "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "}\n");
-         this->add(srcTexturedMesh);
-      }
-
-// Billboard_TransformedTexCoor
-      {
-         GPUProgramSources srcBillboard_TransformedTexCoor(
-            "Billboard_TransformedTexCoor",
-            emptyString +
-            "attribute vec2 aTextureCoord;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform vec4 uBillboardPosition;\n" +
-            "uniform vec2 uBillboardAnchor; // Anchor in UV (texture-like) coordinates\n" +
-            "uniform vec2 uTextureExtent;\n" +
-            "uniform vec2 uViewPortExtent;\n" +
-            "uniform vec2 uTranslationTexCoord;\n" +
-            "uniform vec2 uScaleTexCoord;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "void main() {\n" +
-            "  gl_Position = uModelview * uBillboardPosition;\n" +
-            "  float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;\n" +
-            "  float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;\n" +
-            "  gl_Position.x += (aTextureCoord.x - uBillboardAnchor.x) * fx;\n" +
-            "  gl_Position.y -= (aTextureCoord.y - uBillboardAnchor.y) * fy;\n" +
-            "  //Transformed Tex Coords applied to Billboard\n" +
-            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "uniform vec4 uBillboardColorFactor;\n" +
-            "void main() {\n" +
-            "  gl_FragColor = texture2D(Sampler, TextureCoordOut) * uBillboardColorFactor;\n" +
-            "}\n");
-         this->add(srcBillboard_TransformedTexCoor);
-      }
-
-// FlatColor2DMesh
-      {
-         GPUProgramSources srcFlatColor2DMesh(
-            "FlatColor2DMesh",
-            emptyString +
-            "attribute vec2 aPosition2D;\n" +
-            "uniform float uPointSize;\n" +
-            "uniform vec2 uTranslation2D;\n" +
-            "uniform vec2 uViewPortExtent;\n" +
-            "void main() {\n" +
-            "  vec2 pixel = aPosition2D;\n" +
-            "  pixel.x -= uViewPortExtent.x / 2.0;\n" +
-            "  pixel.y += uViewPortExtent.y / 2.0;\n" +
-            "  gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0),\n" +
-            "                     (pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0),\n" +
-            "                     0, 1);\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "uniform vec4 uFlatColor;\n" +
-            "void main() {\n" +
-            "  gl_FragColor = uFlatColor;\n" +
-            "}\n");
-         this->add(srcFlatColor2DMesh);
-      }
-
-// MultiTexturedMesh
-      {
-         GPUProgramSources srcMultiTexturedMesh(
-            "MultiTexturedMesh",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
-            "attribute vec2 aTextureCoord2;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "varying vec2 TextureCoordOut2;\n" +
-            "void main() {\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  TextureCoordOut = aTextureCoord;\n" +
-            "  TextureCoordOut2 = aTextureCoord2;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "varying vec2 TextureCoordOut2;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "uniform sampler2D Sampler2;\n" +
-            "void main() {\n" +
-            "  vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
-            "  vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
-            "  \n" +
-            "  gl_FragColor = tex1 * tex2;\n" +
-            "}\n");
-         this->add(srcMultiTexturedMesh);
-      }
-
 // FullTransformedTexCoorTexturedMesh
       {
          GPUProgramSources srcFullTransformedTexCoorTexturedMesh(
@@ -457,109 +302,22 @@ public:
          this->add(srcFullTransformedTexCoorTexturedMesh);
       }
 
-// TransformedTexCoorTexturedMesh_DirectionLight
+// MultiTexturedMesh
       {
-         GPUProgramSources srcTransformedTexCoorTexturedMesh_DirectionLight(
-            "TransformedTexCoorTexturedMesh_DirectionLight",
+         GPUProgramSources srcMultiTexturedMesh(
+            "MultiTexturedMesh",
             emptyString +
             "attribute vec4 aPosition;\n" +
             "attribute vec2 aTextureCoord;\n" +
-            "attribute vec3 aNormal;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform mat4 uModel;\n" +
-            "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform vec2 uTranslationTexCoord;\n" +
-            "uniform vec2 uScaleTexCoord;\n" +
-            "uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED\n" +
-            "uniform vec3 uAmbientLightColor;\n" +
-            "uniform vec3 uDiffuseLightColor;\n" +
-            "varying vec3 lightColor;\n" +
-            "void main() {\n" +
-            "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
-            "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
-            "  float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "  //Computing Total Light in Vertex\n" +
-            "  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
-            "  lightColor = clamp(lightColor, 0.0, 1.0);\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "varying vec3 lightColor;\n" +
-            "void main() {\n" +
-            "  vec4 texColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "  gl_FragColor.rgb = texColor.rgb * lightColor.rgb;\n" +
-            "  gl_FragColor.a   = texColor.a;\n" +
-            "}\n");
-         this->add(srcTransformedTexCoorTexturedMesh_DirectionLight);
-      }
-
-// TexturedMesh_DirectionLight
-      {
-         GPUProgramSources srcTexturedMesh_DirectionLight(
-            "TexturedMesh_DirectionLight",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
-            "attribute vec3 aNormal;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform mat4 uModel;\n" +
-            "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform vec3 uDiffuseLightDirection; //MUST BE NORMALIZED IN SHADER\n" +
-            "uniform vec3 uAmbientLightColor;\n" +
-            "uniform vec3 uDiffuseLightColor;\n" +
-            "varying vec3 lightColor;\n" +
-            "void main() {\n" +
-            "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
-            "  vec3 lightDirNormalized = normalize( uDiffuseLightDirection );\n" +
-            "  float diffuseLightIntensity = max(dot(normalInModel, lightDirNormalized), 0.0);\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  TextureCoordOut = aTextureCoord;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "  //Computing Total Light in Vertex\n" +
-            "  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
-            "  lightColor = clamp(lightColor, 0.0, 1.0);\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "varying vec3 lightColor;\n" +
-            "void main() {\n" +
-            "  vec4 texColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "  gl_FragColor.rgb = texColor.rgb * lightColor.rgb;\n" +
-            "  gl_FragColor.a   = texColor.a;\n" +
-            "}\n");
-         this->add(srcTexturedMesh_DirectionLight);
-      }
-
-// TexturedMesh_ColorGrade
-      {
-         GPUProgramSources srcTexturedMesh_ColorGrade(
-            "TexturedMesh_ColorGrade",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
+            "attribute vec2 aTextureCoord2;\n" +
             "uniform mat4 uModelview;\n" +
             "uniform float uPointSize;\n" +
             "varying vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut2;\n" +
             "void main() {\n" +
             "  gl_Position = uModelview * aPosition;\n" +
             "  TextureCoordOut = aTextureCoord;\n" +
+            "  TextureCoordOut2 = aTextureCoord2;\n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
@@ -569,92 +327,16 @@ public:
             "precision mediump float;\n" +
             "#endif\n" +
             "varying vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut2;\n" +
             "uniform sampler2D Sampler;\n" +
-            "uniform mat4 uColorMatrix;\n" +
+            "uniform sampler2D Sampler2;\n" +
             "void main() {\n" +
-            "  vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
-            "  vec3 gradedColor = (uColorMatrix * vec4(color.rgb, 1.0)).rgb;\n" +
-            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, 1.0), color.a);\n" +
+            "  vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
+            "  \n" +
+            "  gl_FragColor = tex1 * tex2;\n" +
             "}\n");
-         this->add(srcTexturedMesh_ColorGrade);
-      }
-
-// Shader
-      {
-         GPUProgramSources srcShader(
-            "Shader",
-            emptyString +
-            "attribute vec4 Position;\n" +
-            "attribute vec2 TextureCoord;\n" +
-            "attribute vec4 Color;\n" +
-            "uniform vec2 TranslationTexCoord;\n" +
-            "uniform vec2 ScaleTexCoord;\n" +
-            "uniform mat4 Projection;\n" +
-            "uniform mat4 Modelview;\n" +
-            "uniform bool BillBoard;\n" +
-            "uniform vec2 TextureExtent;\n" +
-            "uniform vec2 ViewPortExtent;\n" +
-            "uniform float PointSize;\n" +
-            "varying vec4 VertexColor;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "void main() {\n" +
-            "  gl_Position = Projection * Modelview * Position;\n" +
-            "  if (BillBoard) {\n" +
-            "    gl_Position.x += ((TextureCoord.x - 0.5) * 2.0 * TextureExtent.x / ViewPortExtent.x) * gl_Position.w;\n" +
-            "    gl_Position.y -= ((TextureCoord.y - 0.5) * 2.0 * TextureExtent.y / ViewPortExtent.y) * gl_Position.w;\n" +
-            "  }\n" +
-            "  TextureCoordOut = (TextureCoord * ScaleTexCoord) + TranslationTexCoord;\n" +
-            "  VertexColor = Color;\n" +
-            "  gl_PointSize = PointSize;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "varying vec4 VertexColor;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "uniform bool EnableTexture;\n" +
-            "uniform vec4 FlatColor;\n" +
-            "uniform bool EnableColorPerVertex;\n" +
-            "uniform bool EnableFlatColor;\n" +
-            "uniform float FlatColorIntensity;\n" +
-            "uniform float ColorPerVertexIntensity;\n" +
-            "void main() {\n" +
-            "  if (EnableTexture) {\n" +
-            "    gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "    if (EnableFlatColor || EnableColorPerVertex) {\n" +
-            "      lowp vec4 color;\n" +
-            "      if (EnableFlatColor) {\n" +
-            "        color = FlatColor;\n" +
-            "        if (EnableColorPerVertex) {\n" +
-            "          color = color * VertexColor;\n" +
-            "        }\n" +
-            "      }\n" +
-            "      else {\n" +
-            "        color = VertexColor;\n" +
-            "      }\n" +
-            "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;\n" +
-            "      gl_FragColor = mix(gl_FragColor,\n" +
-            "                         VertexColor,\n" +
-            "                         intensity);\n" +
-            "    }\n" +
-            "  }\n" +
-            "  else {\n" +
-            "    if (EnableColorPerVertex) {\n" +
-            "      gl_FragColor = VertexColor;\n" +
-            "      if (EnableFlatColor) {\n" +
-            "        gl_FragColor = gl_FragColor * FlatColor;\n" +
-            "      }\n" +
-            "    }\n" +
-            "    else {\n" +
-            "      gl_FragColor = FlatColor;\n" +
-            "    }\n" +
-            "  }\n" +
-            "}\n");
-         this->add(srcShader);
+         this->add(srcMultiTexturedMesh);
       }
 
 // NoColorMesh
@@ -681,28 +363,35 @@ public:
          this->add(srcNoColorMesh);
       }
 
-// Textured2DMesh
+// RibbonMesh
       {
-         GPUProgramSources srcTextured2DMesh(
-            "Textured2DMesh",
+         GPUProgramSources srcRibbonMesh(
+            "RibbonMesh",
             emptyString +
-            "attribute vec2 aPosition2D;\n" +
-            "attribute vec2 aTextureCoord;\n" +
+            "attribute vec4 aPosition;   // ribbon center line\n" +
+            "attribute vec3 aRibbonSide; // unit side vector, +1/-1 per ribbon edge\n" +
+            "uniform mat4 uModelview;\n" +
             "uniform float uPointSize;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform vec2 uTranslation2D;\n" +
             "uniform vec2 uViewPortExtent;\n" +
+            "uniform vec2 uRibbonWidth; // x = width in meters, y = minimum width in pixels\n" +
             "void main() {\n" +
-            "  vec2 pixel = aPosition2D;\n" +
-            "  pixel.x -= uViewPortExtent.x / 2.0;\n" +
-            "  pixel.y += uViewPortExtent.y / 2.0;\n" +
-            "  \n" +
-            "  gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0),\n" +
-            "                     (pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0),\n" +
-            "                     0, 1);\n" +
-            "  \n" +
-            "  TextureCoordOut = aTextureCoord;\n" +
-            "  \n" +
+            "  vec4 center = uModelview * aPosition;\n" +
+            "  vec4 side   = uModelview * (aPosition + vec4(aRibbonSide * (uRibbonWidth.x * 0.5), 0.0));\n" +
+            "  if ((center.w <= 0.0) || (side.w <= 0.0)) {\n" +
+            "    // behind the camera: perspective division is meaningless, keep the plain meters offset\n" +
+            "    gl_Position = side;\n" +
+            "  }\n" +
+            "  else {\n" +
+            "    vec2 halfViewport = uViewPortExtent * 0.5;\n" +
+            "    vec2 dirPx = (side.xy / side.w - center.xy / center.w) * halfViewport;\n" +
+            "    float metersPx = length(dirPx);\n" +
+            "    gl_Position = center;\n" +
+            "    if (metersPx > 0.0) {\n" +
+            "      float halfPx = max(metersPx, uRibbonWidth.y * 0.5);\n" +
+            "      vec2 offsetNDC = (dirPx / metersPx) * halfPx / halfViewport;\n" +
+            "      gl_Position.xy += offsetNDC * center.w;\n" +
+            "    }\n" +
+            "  }\n" +
             "  gl_PointSize = uPointSize;\n" +
             "}\n",
             emptyString +
@@ -711,12 +400,11 @@ public:
             "#else\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform sampler2D Sampler;\n" +
+            "uniform vec4 uFlatColor;\n" +
             "void main() {\n" +
-            "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
+            "  gl_FragColor = uFlatColor;\n" +
             "}\n");
-         this->add(srcTextured2DMesh);
+         this->add(srcRibbonMesh);
       }
 
 // SphericalAtmosphere
@@ -866,9 +554,17 @@ public:
             "  }\n" +
             "  return vec4(uHorizonColor, opacity);\n" +
             "}\n" +
+            "const float minimumCameraHeight = 10.0;\n" +
+            "vec3 cameraOverGround(vec3 cameraPosition) {\n" +
+            "  float height = heightOverEllipsoid(cameraPosition);\n" +
+            "  if (height >= minimumCameraHeight) {\n" +
+            "    return cameraPosition;\n" +
+            "  }\n" +
+            "  return cameraPosition * (1.0 + (minimumCameraHeight - height) / length(cameraPosition));\n" +
+            "}\n" +
             "void main() {\n" +
             "  //Ray [O + tD = X]\n" +
-            "  vec3 o = uCameraPosition;\n" +
+            "  vec3 o = cameraOverGround(uCameraPosition);\n" +
             "  vec3 d = normalize(rayDirection);\n" +
             "  if (uGroundHazePass > 0.5) {\n" +
             "    gl_FragColor = groundHaze(o, d);\n" +
@@ -878,136 +574,6 @@ public:
             "  }\n" +
             "}\n");
          this->add(srcSphericalAtmosphere);
-      }
-
-// FlatColorMesh
-      {
-         GPUProgramSources srcFlatColorMesh(
-            "FlatColorMesh",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform float uPointSize;\n" +
-            "void main() {\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "uniform vec4 uFlatColor;\n" +
-            "void main() {\n" +
-            "  gl_FragColor = uFlatColor;\n" +
-            "}\n");
-         this->add(srcFlatColorMesh);
-      }
-
-// Default
-      {
-         GPUProgramSources srcDefault(
-            "Default",
-            emptyString +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec2 aTextureCoord;\n" +
-            "attribute vec4 aColor;\n" +
-            "uniform vec2 uTranslationTexCoord;\n" +
-            "uniform vec2 uScaleTexCoord;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform float uPointSize;\n" +
-            "varying vec4 VertexColor;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "void main() {\n" +
-            "  gl_Position = uModelview * aPosition;\n" +
-            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
-            "  VertexColor = aColor;\n" +
-            "  gl_PointSize = uPointSize;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "varying vec4 VertexColor;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "uniform bool EnableTexture;\n" +
-            "uniform lowp vec4 uFlatColor;\n" +
-            "uniform bool EnableColorPerVertex;\n" +
-            "uniform bool EnableFlatColor;\n" +
-            "uniform float FlatColorIntensity;\n" +
-            "uniform float ColorPerVertexIntensity;\n" +
-            "void main() {\n" +
-            "  if (EnableTexture) {\n" +
-            "    gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
-            "    if (EnableFlatColor || EnableColorPerVertex) {\n" +
-            "      lowp vec4 color;\n" +
-            "      if (EnableFlatColor) {\n" +
-            "        color = uFlatColor;\n" +
-            "        if (EnableColorPerVertex) {\n" +
-            "          color = color * VertexColor;\n" +
-            "        }\n" +
-            "      }\n" +
-            "      else {\n" +
-            "        color = VertexColor;\n" +
-            "      }\n" +
-            "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;\n" +
-            "      gl_FragColor = mix(gl_FragColor,\n" +
-            "                         VertexColor,\n" +
-            "                         intensity);\n" +
-            "    }\n" +
-            "  }\n" +
-            "  else {\n" +
-            "    if (EnableColorPerVertex) {\n" +
-            "      gl_FragColor = VertexColor;\n" +
-            "      if (EnableFlatColor) {\n" +
-            "        gl_FragColor = gl_FragColor * uFlatColor;\n" +
-            "      }\n" +
-            "    }\n" +
-            "    else {\n" +
-            "      gl_FragColor = uFlatColor;\n" +
-            "    }\n" +
-            "  }\n" +
-            "}\n");
-         this->add(srcDefault);
-      }
-
-// Billboard
-      {
-         GPUProgramSources srcBillboard(
-            "Billboard",
-            emptyString +
-            "attribute vec2 aTextureCoord;\n" +
-            "uniform mat4 uModelview;\n" +
-            "uniform vec4 uBillboardPosition;\n" +
-            "uniform vec2 uBillboardAnchor; // Anchor in UV (texture-like) coordinates\n" +
-            "uniform vec2 uTextureExtent;\n" +
-            "uniform vec2 uViewPortExtent;\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "void main() {\n" +
-            "  gl_Position = uModelview * uBillboardPosition;\n" +
-            "  float fx = 2.0 * uTextureExtent.x / uViewPortExtent.x * gl_Position.w;\n" +
-            "  float fy = 2.0 * uTextureExtent.y / uViewPortExtent.y * gl_Position.w;\n" +
-            "  gl_Position.x += (aTextureCoord.x - uBillboardAnchor.x) * fx;\n" +
-            "  gl_Position.y -= (aTextureCoord.y - uBillboardAnchor.y) * fy;\n" +
-            "  TextureCoordOut = aTextureCoord;\n" +
-            "}\n",
-            emptyString +
-            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
-            "precision highp float;\n" +
-            "#else\n" +
-            "precision mediump float;\n" +
-            "#endif\n" +
-            "varying vec2 TextureCoordOut;\n" +
-            "uniform sampler2D Sampler;\n" +
-            "uniform vec4 uBillboardColorFactor;\n" +
-            "void main() {\n" +
-            "  gl_FragColor = texture2D(Sampler, TextureCoordOut) * uBillboardColorFactor;\n" +
-            "}\n");
-         this->add(srcBillboard);
       }
 
 // Stars
@@ -1052,6 +618,297 @@ public:
             "  gl_FragColor = vec4(StarColor.rgb, StarColor.a * coverage);\n" +
             "}\n");
          this->add(srcStars);
+      }
+
+// Textured2DMesh
+      {
+         GPUProgramSources srcTextured2DMesh(
+            "Textured2DMesh",
+            emptyString +
+            "attribute vec2 aPosition2D;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform vec2 uTranslation2D;\n" +
+            "uniform vec2 uViewPortExtent;\n" +
+            "void main() {\n" +
+            "  vec2 pixel = aPosition2D;\n" +
+            "  pixel.x -= uViewPortExtent.x / 2.0;\n" +
+            "  pixel.y += uViewPortExtent.y / 2.0;\n" +
+            "  \n" +
+            "  gl_Position = vec4((pixel.x + uTranslation2D.x) / (uViewPortExtent.x / 2.0),\n" +
+            "                     (pixel.y - uTranslation2D.y) / (uViewPortExtent.y / 2.0),\n" +
+            "                     0, 1);\n" +
+            "  \n" +
+            "  TextureCoordOut = aTextureCoord;\n" +
+            "  \n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "void main() {\n" +
+            "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
+            "}\n");
+         this->add(srcTextured2DMesh);
+      }
+
+// TexturedMesh
+      {
+         GPUProgramSources srcTexturedMesh(
+            "TexturedMesh",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  TextureCoordOut = aTextureCoord;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "void main() {\n" +
+            "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
+            "}\n");
+         this->add(srcTexturedMesh);
+      }
+
+// TexturedMesh_ColorGrade
+      {
+         GPUProgramSources srcTexturedMesh_ColorGrade(
+            "TexturedMesh_ColorGrade",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  TextureCoordOut = aTextureCoord;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "uniform mat4 uColorMatrix;\n" +
+            "void main() {\n" +
+            "  vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec3 gradedColor = (uColorMatrix * vec4(color.rgb, 1.0)).rgb;\n" +
+            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, 1.0), color.a);\n" +
+            "}\n");
+         this->add(srcTexturedMesh_ColorGrade);
+      }
+
+// TexturedMesh_DirectionLight
+      {
+         GPUProgramSources srcTexturedMesh_DirectionLight(
+            "TexturedMesh_DirectionLight",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "attribute vec3 aNormal;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform mat4 uModel;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform vec3 uDiffuseLightDirection; // normalized by DirectionLightGLFeature\n" +
+            "uniform vec3 uAmbientLightColor;\n" +
+            "uniform vec3 uDiffuseLightColor;\n" +
+            "varying vec3 lightColor;\n" +
+            "void main() {\n" +
+            "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+            "  float diffuseLightIntensity = max(dot(normalInModel, uDiffuseLightDirection), 0.0);\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  TextureCoordOut = aTextureCoord;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "  //Computing Total Light in Vertex\n" +
+            "  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+            "  lightColor = clamp(lightColor, 0.0, 1.0);\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "varying vec3 lightColor;\n" +
+            "void main() {\n" +
+            "  vec4 texColor = texture2D(Sampler, TextureCoordOut);\n" +
+            "  gl_FragColor.rgb = texColor.rgb * lightColor.rgb;\n" +
+            "  gl_FragColor.a   = texColor.a;\n" +
+            "}\n");
+         this->add(srcTexturedMesh_DirectionLight);
+      }
+
+// TransformedTexCoorMultiTexturedMesh
+      {
+         GPUProgramSources srcTransformedTexCoorMultiTexturedMesh(
+            "TransformedTexCoorMultiTexturedMesh",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "attribute vec2 aTextureCoord2;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut2;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  //Transforming TextureCoordOut\n" +
+            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "  TextureCoordOut2 = aTextureCoord2;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "varying vec2 TextureCoordOut2;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "uniform sampler2D Sampler2;\n" +
+            "void main() {\n" +
+            "  vec4 tex1 = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec4 tex2 = texture2D(Sampler2, TextureCoordOut2);\n" +
+            "  gl_FragColor = tex1 * tex2;\n" +
+            "}\n");
+         this->add(srcTransformedTexCoorMultiTexturedMesh);
+      }
+
+// TransformedTexCoorTexturedMesh
+      {
+         GPUProgramSources srcTransformedTexCoorTexturedMesh(
+            "TransformedTexCoorTexturedMesh",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "void main() {\n" +
+            "  gl_FragColor = texture2D(Sampler, TextureCoordOut);\n" +
+            "}\n");
+         this->add(srcTransformedTexCoorTexturedMesh);
+      }
+
+// TransformedTexCoorTexturedMesh_ColorGrade
+      {
+         GPUProgramSources srcTransformedTexCoorTexturedMesh_ColorGrade(
+            "TransformedTexCoorTexturedMesh_ColorGrade",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "void main() {\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "uniform mat4 uColorMatrix;\n" +
+            "void main() {\n" +
+            "  vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
+            "  vec3 gradedColor = (uColorMatrix * vec4(color.rgb, 1.0)).rgb;\n" +
+            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, 1.0), color.a);\n" +
+            "}\n");
+         this->add(srcTransformedTexCoorTexturedMesh_ColorGrade);
+      }
+
+// TransformedTexCoorTexturedMesh_DirectionLight
+      {
+         GPUProgramSources srcTransformedTexCoorTexturedMesh_DirectionLight(
+            "TransformedTexCoorTexturedMesh_DirectionLight",
+            emptyString +
+            "attribute vec4 aPosition;\n" +
+            "attribute vec2 aTextureCoord;\n" +
+            "attribute vec3 aNormal;\n" +
+            "uniform mat4 uModelview;\n" +
+            "uniform mat4 uModel;\n" +
+            "uniform float uPointSize;\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform vec2 uTranslationTexCoord;\n" +
+            "uniform vec2 uScaleTexCoord;\n" +
+            "uniform vec3 uDiffuseLightDirection; // normalized by DirectionLightGLFeature\n" +
+            "uniform vec3 uAmbientLightColor;\n" +
+            "uniform vec3 uDiffuseLightColor;\n" +
+            "varying vec3 lightColor;\n" +
+            "void main() {\n" +
+            "  vec3 normalInModel = normalize( vec3(uModel * vec4(aNormal, 0.0) ));\n" +
+            "  float diffuseLightIntensity = max(dot(normalInModel, uDiffuseLightDirection), 0.0);\n" +
+            "  gl_Position = uModelview * aPosition;\n" +
+            "  TextureCoordOut = (aTextureCoord * uScaleTexCoord) + uTranslationTexCoord;\n" +
+            "  gl_PointSize = uPointSize;\n" +
+            "  //Computing Total Light in Vertex\n" +
+            "  lightColor = uAmbientLightColor + uDiffuseLightColor * diffuseLightIntensity;\n" +
+            "  lightColor = clamp(lightColor, 0.0, 1.0);\n" +
+            "}\n",
+            emptyString +
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH\n" +
+            "precision highp float;\n" +
+            "#else\n" +
+            "precision mediump float;\n" +
+            "#endif\n" +
+            "varying vec2 TextureCoordOut;\n" +
+            "uniform sampler2D Sampler;\n" +
+            "varying vec3 lightColor;\n" +
+            "void main() {\n" +
+            "  vec4 texColor = texture2D(Sampler, TextureCoordOut);\n" +
+            "  gl_FragColor.rgb = texColor.rgb * lightColor.rgb;\n" +
+            "  gl_FragColor.a   = texColor.a;\n" +
+            "}\n");
+         this->add(srcTransformedTexCoorTexturedMesh_DirectionLight);
       }
 
   }

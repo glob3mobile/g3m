@@ -41,7 +41,7 @@ public class AtmosphereRenderer extends DefaultRenderer
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
     }
     else
     {
@@ -157,7 +157,11 @@ public class AtmosphereRenderer extends DefaultRenderer
        _colorLook.dispose();
     if (_directMesh != null)
        _directMesh.dispose();
-    _glState._release();
+    // NULL when the renderer is deleted before start()
+    if (_glState != null)
+    {
+      _glState._release();
+    }
   }
 
   public final void start(G3MRenderContext rc)

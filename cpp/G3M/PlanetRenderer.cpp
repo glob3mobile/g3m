@@ -440,8 +440,11 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
     _errors.clear();
     delete _layerTilesRenderParameters;
     _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_errors);
-    if (_layerTilesRenderParameters == NULL) {
-      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+    // without errors, a NULL means the layers are not ready yet: reported as busy by getRenderState()
+    if ((_layerTilesRenderParameters == NULL) && !_errors.empty()) {
+      for (size_t i = 0; i < _errors.size(); i++) {
+        ILogger::instance()->logError("PlanetRenderer: can't create LayerTilesRenderParameters: %s", _errors.at(i).c_str());
+      }
     }
     _layerTilesRenderParametersDirty = false;
 
@@ -455,7 +458,6 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
   if (parameters == NULL) {
-    //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
 
@@ -630,7 +632,7 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
   if (_tileVisitor != NULL) {
     const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
     if (parameters == NULL) {
-      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+      ILogger::instance()->logError("PlanetRenderer: can't visit tiles, the layer parameters are not ready");
       return;
     }
 
@@ -704,7 +706,7 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* camera = rc->getCurrentCamera();
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());

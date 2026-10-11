@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 public class Sphere extends BoundingVolume
 {
 
-  private Mesh _mesh; //TODO Check Leaking?
+  private Mesh _mesh;
 
 
   public final Mesh createWireframeMesh(Color color, short resolution)
@@ -168,6 +168,15 @@ public class Sphere extends BoundingVolume
      _radius = that._radius;
      _radiusSquared = that._radiusSquared;
      _mesh = null;
+  }
+
+  public void dispose()
+  {
+    if (_mesh != null)
+       _mesh.dispose();
+  
+    super.dispose();
+  
   }
 
   public final Vector3D getCenter()

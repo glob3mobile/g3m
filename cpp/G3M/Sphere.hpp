@@ -21,7 +21,7 @@ class Mesh;
 class Sphere : public BoundingVolume {
 private:
   
-  mutable Mesh* _mesh; //TODO Check Leaking?
+  mutable Mesh* _mesh;
 
 public:
   
@@ -52,6 +52,8 @@ public:
   _mesh(NULL)
   {
   }
+
+  ~Sphere();
   
   Vector3D getCenter() const {
     return _center;
