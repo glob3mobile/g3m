@@ -1380,6 +1380,9 @@ _marksCount(0)
 }
 
 void VectorStreamingRenderer::MarksCollector::add(Mark* mark) {
+  if (mark == NULL) {
+    THROW_EXCEPTION("MarksCollector: mark can't be NULL");
+  }
   mark->setToken(_token);
   _marksRenderer->addMark(mark);
   _marksCount++;

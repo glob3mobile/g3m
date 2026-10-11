@@ -149,7 +149,7 @@ public abstract class IG3MBuilder
   {
     if (_busyRenderer == null)
     {
-      _busyRenderer = new BusyMeshRenderer(Color.TRANSPARENT, Color.TRANSPARENT, Color.WHITE); // meshInnerColor -  meshOuterColor -  backgroundColor
+      _busyRenderer = new BusyMeshRenderer(null, Color.TRANSPARENT, Color.WHITE); // meshInnerColor -  meshOuterColor -  backgroundColor
     }
   
     return _busyRenderer;

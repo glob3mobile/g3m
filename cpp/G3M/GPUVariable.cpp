@@ -108,12 +108,6 @@ GPUUniformKey GPUVariable::getUniformKey(const std::string& name) {
   else if (name == "uDiffuseLightColor") {
     return DIFFUSE_LIGHT_COLOR;
   }
-  else if (name == "uProjection") {
-    return PROJECTION;
-  }
-  else if (name == "uCameraModel") {
-    return CAMERA_MODEL;
-  }
   else if (name == "uModel") {
     return MODEL;
   }

@@ -449,6 +449,87 @@ CameraPose Camera::computeCameraPose(const Geodetic3D& position1,
   return pose;
 }
 
+double Camera::pitchInRadiansPuttingHorizonAt(const CameraPose& pose,
+                                              const float       horizonOnScreen) const {
+  const IMathUtils* mu = IMathUtils::instance();
+
+  // the horizon is below the local horizontal by acos(R / (R + h))
+  const Geodetic3D ground(pose._position._latitude, pose._position._longitude, 0);
+  const double radius = _planet->toCartesian(ground).length();
+  const double dipInRadians = mu->acos(radius / (radius + pose._position._height));
+
+  // angle from the view direction up to the horizon's screen height
+  const double tanHalfVerticalFOV = mu->tan(getVerticalFOV()._radians / 2);
+  const double aboveCenterInRadians = mu->atan((1 - (2 * horizonOnScreen)) * tanHalfVerticalFOV);
+
+  const double downInRadians = dipInRadians + aboveCenterInRadians;
+  if (downInRadians >= (PI / 2)) {
+    return NAND;
+  }
+  return -downInRadians;
+}
+
+double Camera::nextHorizonPitchInRadians(const Geodetic3D& position1,
+                                         const Vector2F&   screenPosition1,
+                                         const Geodetic3D& position2,
+                                         const Vector2F&   screenPosition2,
+                                         const float       horizonOnScreen,
+                                         const double      pitchInRadians) const {
+  const CameraPose pose = computeCameraPose(position1, screenPosition1,
+                                            position2, screenPosition2,
+                                            Angle::fromRadians(pitchInRadians));
+  if (pose.isNan()) {
+    return NAND;
+  }
+  return pitchInRadiansPuttingHorizonAt(pose, horizonOnScreen);
+}
+
+// The pitch p must equal next(p), the pitch that puts the horizon in place for the camera solved
+// with p. Iterating p = next(p) overshoots back and forth, so the root of next(p) - p is bracketed
+// and bisected: straight down is always too steep (next(p) - p >= 0).
+CameraPose Camera::computeCameraPoseWithHorizon(const Geodetic3D& position1,
+                                                const Vector2F&   screenPosition1,
+                                                const Geodetic3D& position2,
+                                                const Vector2F&   screenPosition2,
+                                                const float       horizonOnScreen) const {
+  // as solvePointOfView: a bounded number of rounds, a tiny tolerance
+  const int    maxRounds               = 40;
+  const double pitchToleranceInRadians = 0.0001;
+
+  double steepInRadians   = -PI / 2;
+  double shallowInRadians = nextHorizonPitchInRadians(position1, screenPosition1, position2, screenPosition2, horizonOnScreen, steepInRadians);
+  bool   bracketed = false;
+  for (int i = 0; i < maxRounds; i++) {
+    if (ISNAN(shallowInRadians)) {
+      return CameraPose::nan();
+    }
+    if (IMathUtils::instance()->abs(shallowInRadians - steepInRadians) < pitchToleranceInRadians) {
+      return computeCameraPose(position1, screenPosition1,
+                               position2, screenPosition2,
+                               Angle::fromRadians(shallowInRadians));
+    }
+
+    const double candidateInRadians = bracketed ? ((steepInRadians + shallowInRadians) / 2) : shallowInRadians;
+    const double nextInRadians = nextHorizonPitchInRadians(position1, screenPosition1, position2, screenPosition2, horizonOnScreen, candidateInRadians);
+    if (ISNAN(nextInRadians)) {
+      return CameraPose::nan();
+    }
+
+    if (nextInRadians >= candidateInRadians) {
+      // still too steep
+      steepInRadians = candidateInRadians;
+      if (!bracketed) {
+        shallowInRadians = nextInRadians;
+      }
+    }
+    else {
+      shallowInRadians = candidateInRadians;
+      bracketed = true;
+    }
+  }
+  return CameraPose::nan();
+}
+
 double Camera::screenAngleOfSegment(const Vector3D& cartesian1,
                                     const Vector3D& cartesian2) const {
   const Vector2F delta = point2Pixel(cartesian2).sub(point2Pixel(cartesian1));

@@ -506,6 +506,63 @@ public class Camera
     return pose;
   }
 
+  /**
+   As computeCameraPose, with the pitch that puts the horizon at horizonOnScreen (fraction of the
+   viewport height from the top) instead of a given pitch. The higher the camera, the lower the horizon,
+   so the pitch is searched. Does not move this camera.
+
+   Returns CameraPose::nan() when computeCameraPose finds no camera at a pitch tried, when the camera
+   ends too high to put the horizon there, or when the pitch does not settle.
+   */
+
+  // The pitch p must equal next(p), the pitch that puts the horizon in place for the camera solved
+  // with p. Iterating p = next(p) overshoots back and forth, so the root of next(p) - p is bracketed
+  // and bisected: straight down is always too steep (next(p) - p >= 0).
+  public final CameraPose computeCameraPoseWithHorizon(Geodetic3D position1, Vector2F screenPosition1, Geodetic3D position2, Vector2F screenPosition2, float horizonOnScreen)
+  {
+    // as solvePointOfView: a bounded number of rounds, a tiny tolerance
+    final int maxRounds = 40;
+    final double pitchToleranceInRadians = 0.0001;
+  
+    double steepInRadians = -DefineConstants.PI / 2;
+    double shallowInRadians = nextHorizonPitchInRadians(position1, screenPosition1, position2, screenPosition2, horizonOnScreen, steepInRadians);
+    boolean bracketed = false;
+    for (int i = 0; i < maxRounds; i++)
+    {
+      if ((shallowInRadians != shallowInRadians))
+      {
+        return CameraPose.nan();
+      }
+      if (IMathUtils.instance().abs(shallowInRadians - steepInRadians) < pitchToleranceInRadians)
+      {
+        return computeCameraPose(position1, screenPosition1, position2, screenPosition2, Angle.fromRadians(shallowInRadians));
+      }
+  
+      final double candidateInRadians = bracketed ? ((steepInRadians + shallowInRadians) / 2) : shallowInRadians;
+      final double nextInRadians = nextHorizonPitchInRadians(position1, screenPosition1, position2, screenPosition2, horizonOnScreen, candidateInRadians);
+      if ((nextInRadians != nextInRadians))
+      {
+        return CameraPose.nan();
+      }
+  
+      if (nextInRadians >= candidateInRadians)
+      {
+        // still too steep
+        steepInRadians = candidateInRadians;
+        if (!bracketed)
+        {
+          shallowInRadians = nextInRadians;
+        }
+      }
+      else
+      {
+        shallowInRadians = candidateInRadians;
+        bracketed = true;
+      }
+    }
+    return CameraPose.nan();
+  }
+
   public final void forceMatrixCreation()
   {
     getGeodeticCenterOfView();
@@ -977,6 +1034,39 @@ public class Camera
       radians += 2 * DefineConstants.PI;
     }
     return radians;
+  }
+
+  // the pitch that puts the horizon at horizonOnScreen for a camera at the pose; NAND when it can't be there
+  private double pitchInRadiansPuttingHorizonAt(CameraPose pose, float horizonOnScreen)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+  
+    // the horizon is below the local horizontal by acos(R / (R + h))
+    final Geodetic3D ground = new Geodetic3D(pose._position._latitude, pose._position._longitude, 0);
+    final double radius = _planet.toCartesian(ground).length();
+    final double dipInRadians = mu.acos(radius / (radius + pose._position._height));
+  
+    // angle from the view direction up to the horizon's screen height
+    final double tanHalfVerticalFOV = mu.tan(getVerticalFOV()._radians / 2);
+    final double aboveCenterInRadians = mu.atan((1 - (2 * horizonOnScreen)) * tanHalfVerticalFOV);
+  
+    final double downInRadians = dipInRadians + aboveCenterInRadians;
+    if (downInRadians >= (DefineConstants.PI / 2))
+    {
+      return Double.NaN;
+    }
+    return -downInRadians;
+  }
+
+  // the pitch that puts the horizon in place for the camera solved with pitchInRadians; NAND when either fails
+  private double nextHorizonPitchInRadians(Geodetic3D position1, Vector2F screenPosition1, Geodetic3D position2, Vector2F screenPosition2, float horizonOnScreen, double pitchInRadians)
+  {
+    final CameraPose pose = computeCameraPose(position1, screenPosition1, position2, screenPosition2, Angle.fromRadians(pitchInRadians));
+    if (pose.isNan())
+    {
+      return Double.NaN;
+    }
+    return pitchInRadiansPuttingHorizonAt(pose, horizonOnScreen);
   }
 
   // how much the projected ground segment turns per unit of azimuth, for the heading step of solvePointOfView

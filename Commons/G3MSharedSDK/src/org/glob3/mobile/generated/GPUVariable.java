@@ -66,14 +66,6 @@ public class GPUVariable
     {
       return GPUUniformKey.DIFFUSE_LIGHT_COLOR;
     }
-    else if (name.equals("uProjection"))
-    {
-      return GPUUniformKey.PROJECTION;
-    }
-    else if (name.equals("uCameraModel"))
-    {
-      return GPUUniformKey.CAMERA_MODEL;
-    }
     else if (name.equals("uModel"))
     {
       return GPUUniformKey.MODEL;

@@ -98,8 +98,11 @@ void SimpleTextureMapping::modifyGLState(GLState& state) const {
     TextureGLFeature* tglf = (TextureGLFeature*) state.getGLFeature(GLF_TEXTURE);
 
     if ((tglf != NULL) && canUpdateInPlace(tglf)) {
-      tglf->setScale(_scaleU, _scaleV);
-      tglf->setTranslation(_translationU, _translationV);
+      // a feature without translate & scale serves only identity mappings: nothing to update
+      if (tglf->hasTranslateAndScale()) {
+        tglf->setScale(_scaleU, _scaleV);
+        tglf->setTranslation(_translationU, _translationV);
+      }
       tglf->setRotation(_rotationInRadians,
                         _rotationCenterU, _rotationCenterV);
     }

@@ -1531,6 +1531,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void add(Mark mark)
     {
+      if (mark == null)
+      {
+        throw new RuntimeException("MarksCollector: mark can't be NULL");
+      }
       mark.setToken(_token);
       _marksRenderer.addMark(mark);
       _marksCount++;

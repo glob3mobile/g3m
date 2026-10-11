@@ -73,7 +73,7 @@ void G3MDemoBuilder::build() {
   // Same color as the LaunchBackground color set (UILaunchScreen), so splash, busy wheel and sky don't flash
   const Color backgroundColor = Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
   builder->setBackgroundColor(new Color(backgroundColor));
-  builder->setBusyRenderer(new BusyMeshRenderer(backgroundColor,
+  builder->setBusyRenderer(new BusyMeshRenderer(NULL, /* backgroundColor: the widget's */
                                                 Color::TRANSPARENT, /* meshOuterColor */
                                                 Color::WHITE        /* meshInnerColor */));
 

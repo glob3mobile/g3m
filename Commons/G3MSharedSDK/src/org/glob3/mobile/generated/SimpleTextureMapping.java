@@ -117,8 +117,12 @@ public class SimpleTextureMapping extends TransformableTextureMapping
   
       if ((tglf != null) && canUpdateInPlace(tglf))
       {
-        tglf.setScale(_scaleU, _scaleV);
-        tglf.setTranslation(_translationU, _translationV);
+        // a feature without translate & scale serves only identity mappings: nothing to update
+        if (tglf.hasTranslateAndScale())
+        {
+          tglf.setScale(_scaleU, _scaleV);
+          tglf.setTranslation(_translationU, _translationV);
+        }
         tglf.setRotation(_rotationInRadians, _rotationCenterU, _rotationCenterV);
       }
       else

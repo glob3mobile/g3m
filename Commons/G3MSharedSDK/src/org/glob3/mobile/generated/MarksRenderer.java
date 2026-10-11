@@ -473,7 +473,31 @@ public class MarksRenderer extends DefaultRenderer
   /** setEnable fades the marks out and in with their transition, instead of at once; off by default */
   public final void setAnimatedEnable(boolean animatedEnable)
   {
+    final boolean changed = (animatedEnable != _animatedEnable);
     _animatedEnable = animatedEnable;
+    if (!changed || isEnable())
+    {
+      return;
+    }
+  
+    // disabled: the marks are already off screen, hidden by the renderer instead of by a fade
+    for (int i = 0; i < _marks.size(); i++)
+    {
+      Mark mark = _marks.get(i);
+      if (animatedEnable)
+      {
+        mark.hideUntilDecluttered();
+        mark.startHiding();
+      }
+      else
+      {
+        mark.stopHiding(_declutter);
+        if (!_declutter)
+        {
+          mark.resetDeclutter(); // nothing would step it back on screen
+        }
+      }
+    }
   }
 
   /** with animated enable, disabled at once for touches and room, while the marks fade out */
@@ -891,6 +915,10 @@ public class MarksRenderer extends DefaultRenderer
           mark.startLeavingRenderer(deleteMarks);
           removed++;
         }
+      }
+      if (!isRendering())
+      {
+        removeMarksThatLeft(true); // nobody would see their fade, nor step it
       }
     }
     else if (animated)

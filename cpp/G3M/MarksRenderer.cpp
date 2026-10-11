@@ -452,6 +452,29 @@ void MarksRenderer::setEnable(bool enable) {
   }
 }
 
+void MarksRenderer::setAnimatedEnable(bool animatedEnable) {
+  const bool changed = (animatedEnable != _animatedEnable);
+  _animatedEnable = animatedEnable;
+  if (!changed || isEnable()) {
+    return;
+  }
+
+  // disabled: the marks are already off screen, hidden by the renderer instead of by a fade
+  for (size_t i = 0; i < _marks.size(); i++) {
+    Mark* mark = _marks[i];
+    if (animatedEnable) {
+      mark->hideUntilDecluttered();
+      mark->startHiding();
+    }
+    else {
+      mark->stopHiding(_declutter);
+      if (!_declutter) {
+        mark->resetDeclutter(); // nothing would step it back on screen
+      }
+    }
+  }
+}
+
 bool MarksRenderer::isRendering() const {
   if (isEnable()) {
     return true;
@@ -698,6 +721,9 @@ size_t MarksRenderer::removeAllMarks(const MarkFilter& filter,
         mark->startLeavingRenderer(deleteMarks);
         removed++;
       }
+    }
+    if (!isRendering()) {
+      removeMarksThatLeft(true); // nobody would see their fade, nor step it
     }
   }
   else if (animated) {

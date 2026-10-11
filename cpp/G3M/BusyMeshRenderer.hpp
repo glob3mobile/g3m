@@ -19,7 +19,7 @@ class BusyMeshRenderer : public ProtoRenderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;
-  const Color _backgroundColor;
+  const Color* _backgroundColor;
   const Color _meshOuterColor;
   const Color _meshInnerColor;
 
@@ -39,7 +39,9 @@ private:
 
 
 public:
-  BusyMeshRenderer(const Color& backgroundColor,
+  // backgroundColor: NULL means no clear, the widget background shows.
+  // In stereo, a non-NULL backgroundColor clears the left eye when rendering the right one.
+  BusyMeshRenderer(const Color* backgroundColor,
                    const Color& meshOuterColor,
                    const Color& meshInnerColor):
   _degrees(0),
@@ -65,6 +67,7 @@ public:
 
   virtual ~BusyMeshRenderer() {
     delete _mesh;
+    delete _backgroundColor;
 
     _glState->_release();
   }

@@ -236,6 +236,20 @@ public:
                                const Vector2F&   screenPosition2,
                                const Angle&      pitch) const;
 
+  /**
+   As computeCameraPose, with the pitch that puts the horizon at horizonOnScreen (fraction of the
+   viewport height from the top) instead of a given pitch. The higher the camera, the lower the horizon,
+   so the pitch is searched. Does not move this camera.
+
+   Returns CameraPose::nan() when computeCameraPose finds no camera at a pitch tried, when the camera
+   ends too high to put the horizon there, or when the pitch does not settle.
+   */
+  CameraPose computeCameraPoseWithHorizon(const Geodetic3D& position1,
+                                          const Vector2F&   screenPosition1,
+                                          const Geodetic3D& position2,
+                                          const Vector2F&   screenPosition2,
+                                          const float       horizonOnScreen) const;
+
   void forceMatrixCreation() const;
 
   Matrix44D* getModelMatrix44D() const;
@@ -420,6 +434,18 @@ private:
   bool isAboveHorizonOf(const Vector3D& point) const;
 
   static double signedAngleInRadians(double radians); // wraps into (-PI, PI]
+
+  // the pitch that puts the horizon at horizonOnScreen for a camera at the pose; NAND when it can't be there
+  double pitchInRadiansPuttingHorizonAt(const CameraPose& pose,
+                                        const float       horizonOnScreen) const;
+
+  // the pitch that puts the horizon in place for the camera solved with pitchInRadians; NAND when either fails
+  double nextHorizonPitchInRadians(const Geodetic3D& position1,
+                                   const Vector2F&   screenPosition1,
+                                   const Geodetic3D& position2,
+                                   const Vector2F&   screenPosition2,
+                                   const float       horizonOnScreen,
+                                   const double      pitchInRadians) const;
 
   // how much the projected ground segment turns per unit of azimuth, for the heading step of solvePointOfView
   static double segmentTurnPerAzimuth(double screenAngleInRadians,

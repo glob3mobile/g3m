@@ -165,9 +165,7 @@ public:
   void removeAllDeclutterObstacles();
 
   /** setEnable fades the marks out and in with their transition, instead of at once; off by default */
-  void setAnimatedEnable(bool animatedEnable) {
-    _animatedEnable = animatedEnable;
-  }
+  void setAnimatedEnable(bool animatedEnable);
 
   /** with animated enable, disabled at once for touches and room, while the marks fade out */
   void setEnable(bool enable);
