@@ -385,6 +385,24 @@ public final class Canvas_WebGL extends ICanvas {
     context.globalAlpha = currentGlobalAlpha;
    }-*/;
 
+   // tinted in a canvas of its own: source-in on this one would also clear what is already drawn around the image
+   @Override
+   protected native void _drawImageTinted(IImage image, Color color, float left, float top, float width, float height) /*-{
+    var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+    var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
+
+    var tintCanvas = $doc.createElement("canvas");
+    tintCanvas.width = imageJS.width;
+    tintCanvas.height = imageJS.height;
+    var tintContext = tintCanvas.getContext("2d");
+    tintContext.drawImage(imageJS, 0, 0);
+    tintContext.globalCompositeOperation = "source-in";
+    tintContext.fillStyle = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
+    tintContext.fillRect(0, 0, tintCanvas.width, tintCanvas.height);
+
+    context.drawImage(tintCanvas, left, top, width, height);
+   }-*/;
+
    @Override
    protected native void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop,
                                     float destWidth, float destHeight) /*-{

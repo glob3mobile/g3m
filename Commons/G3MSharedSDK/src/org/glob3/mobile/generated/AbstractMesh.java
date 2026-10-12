@@ -268,3 +268,8 @@ public abstract class AbstractMesh extends TransformableMesh
   }
 
 }
+// Latent bug (Kent review G5): both getColor() overloads ignore _flatColor, so a mesh with a
+// flat colour and no per-vertex colours reports TRANSPARENT, and XPCNode::selectPoints() can't
+// pick points of flat-colour point clouds. Fix: return *_flatColor when _colors == NULL.
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#warning getColor() ignores _flatColor (Kent review G5)

@@ -432,6 +432,48 @@ void Canvas_iOS::_drawImage(const IImage* image,
                      cgImage);
 }
 
+void Canvas_iOS::_drawImageTinted(const IImage* image,
+                                  const Color& color,
+                                  float destLeft, float destTop, float destWidth, float destHeight) {
+  CGImage* cgImage = [((Image_iOS*) image)->getUIImage() CGImage];
+  const size_t width  = CGImageGetWidth(cgImage);
+  const size_t height = CGImageGetHeight(cgImage);
+
+  // tinted aside: source-in on _context would also clear what is already drawn around the image
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef tintContext = CGBitmapContextCreate(NULL,
+                                                   width,
+                                                   height,
+                                                   8,
+                                                   0,
+                                                   colorSpace,
+                                                   kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+  CGColorSpaceRelease(colorSpace);
+  if (tintContext == NULL) {
+    ILogger::instance()->logError("Can't create the CGContext to tint an image");
+    return;
+  }
+
+  const CGRect imageRect = CGRectMake(0, 0, width, height);
+  CGContextDrawImage(tintContext, imageRect, cgImage);
+  CGContextSetBlendMode(tintContext, kCGBlendModeSourceIn);
+  CGColorRef cgColor = createCGColor(color);
+  CGContextSetFillColorWithColor(tintContext, cgColor);
+  CGColorRelease(cgColor);
+  CGContextFillRect(tintContext, imageRect);
+
+  CGImageRef tintedImage = CGBitmapContextCreateImage(tintContext);
+  CGContextRelease(tintContext);
+
+  CGContextDrawImage(_context,
+                     CGRectMake(destLeft,
+                                _canvasHeight - (destTop + destHeight),
+                                destWidth,
+                                destHeight),
+                     tintedImage);
+  CGImageRelease(tintedImage);
+}
+
 void Canvas_iOS::_drawImage(const IImage* image,
                             float destLeft, float destTop, float destWidth, float destHeight,
                             float transparency) {

@@ -54,11 +54,13 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
 }
 
 RibbonWidthGLFeature::RibbonWidthGLFeature(float widthInMeters,
-                                           float minWidthInPixels) :
+                                           float minWidthInPixels,
+                                           float maxWidthInPixels) :
 GLFeature(NO_GROUP, GLF_RIBBON_WIDTH)
 {
-  _width = new GPUUniformValueVec2FloatMutable(widthInMeters,
-                                               minWidthInPixels);
+  _width = new GPUUniformValueVec3FloatMutable(widthInMeters,
+                                               minWidthInPixels,
+                                               maxWidthInPixels);
 
   _values->addUniformValue(RIBBON_WIDTH,
                            _width,
@@ -66,8 +68,9 @@ GLFeature(NO_GROUP, GLF_RIBBON_WIDTH)
 }
 
 void RibbonWidthGLFeature::changeWidth(float widthInMeters,
-                                       float minWidthInPixels) {
-  _width->changeValue(widthInMeters, minWidthInPixels);
+                                       float minWidthInPixels,
+                                       float maxWidthInPixels) {
+  _width->changeValue(widthInMeters, minWidthInPixels, maxWidthInPixels);
 }
 
 RibbonSideGLFeature::RibbonSideGLFeature(const IFloatBuffer* sides) :

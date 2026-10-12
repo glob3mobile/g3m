@@ -183,6 +183,7 @@ private:
   const Color  _color;
   const float  _ribbonWidth;
   const float  _minWidthPixels;
+  const float  _maxWidthPixels;
   const bool   _depthTest;
   const bool   _polygonOffsetFill;
   const float  _polygonOffsetFactor;
@@ -203,16 +204,18 @@ private:
 
 public:
   // minWidthPixels > 0 switches to the RibbonMesh program: the ribbon never gets thinner
-  // than that on screen, no matter how far the camera is. 0 keeps the plain fixed-width mesh.
+  // than minWidthPixels nor wider than maxWidthPixels on screen, no matter how far the camera is.
+  // 0 keeps the plain fixed-width mesh (maxWidthPixels is then ignored).
   Trail(const Color& color,
         const float  ribbonWidth,
         const bool   depthTest,
         const bool   polygonOffsetFill,
         const float  polygonOffsetFactor,
         const float  polygonOffsetUnits,
-        const double deltaHeight            = 0.0,
-        const int    maxPositionsPerSegment = 32,
-        const float  minWidthPixels         = 0);
+        const double deltaHeight,
+        const int    maxPositionsPerSegment,
+        const float  minWidthPixels,
+        const float  maxWidthPixels);
 
   ~Trail();
 

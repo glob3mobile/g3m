@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated;
-// Ribbon half-width is resolved in the vertex shader as max(widthInMeters, minWidthInPixels)
+// Ribbon half-width is resolved in the vertex shader as clamp(widthInMeters, minWidthInPixels, maxWidthInPixels)
 public class RibbonWidthGLFeature extends GLFeature
 {
   public void dispose()
@@ -7,12 +7,12 @@ public class RibbonWidthGLFeature extends GLFeature
     super.dispose();
   }
 
-  private GPUUniformValueVec2FloatMutable _width;
+  private GPUUniformValueVec3FloatMutable _width;
 
-  public RibbonWidthGLFeature(float widthInMeters, float minWidthInPixels)
+  public RibbonWidthGLFeature(float widthInMeters, float minWidthInPixels, float maxWidthInPixels)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_RIBBON_WIDTH);
-    _width = new GPUUniformValueVec2FloatMutable(widthInMeters, minWidthInPixels);
+    _width = new GPUUniformValueVec3FloatMutable(widthInMeters, minWidthInPixels, maxWidthInPixels);
   
     _values.addUniformValue(GPUUniformKey.RIBBON_WIDTH, _width, false);
   }
@@ -21,8 +21,8 @@ public class RibbonWidthGLFeature extends GLFeature
   {
   }
 
-  public final void changeWidth(float widthInMeters, float minWidthInPixels)
+  public final void changeWidth(float widthInMeters, float minWidthInPixels, float maxWidthInPixels)
   {
-    _width.changeValue(widthInMeters, minWidthInPixels);
+    _width.changeValue(widthInMeters, minWidthInPixels, maxWidthInPixels);
   }
 }

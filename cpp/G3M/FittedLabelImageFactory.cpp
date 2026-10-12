@@ -14,6 +14,7 @@
 #include "LabelImageFactory.hpp"
 #include "ColumnLayoutImageFactory.hpp"
 #include "ImageBackground.hpp"
+#include "ErrorHandling.hpp"
 
 
 class FittedLabelImageFactory_Listener : public IImageFactoryListener {
@@ -51,6 +52,12 @@ public:
 };
 
 
+void FittedLabelImageFactory::checkMinFontSizeFactor(const float minFontSizeFactor) {
+  if ((minFontSizeFactor <= 0) || (minFontSizeFactor > 1)) {
+    THROW_EXCEPTION("FittedLabelImageFactory: minFontSizeFactor must be in (0, 1]");
+  }
+}
+
 FittedLabelImageFactory::FittedLabelImageFactory(const std::string& text,
                                                  const LabelStyle&  style,
                                                  const std::string& maxWidthText,
@@ -65,6 +72,10 @@ _minFontSizeFactor(minFontSizeFactor),
 _lineSeparation(lineSeparation),
 _linesAlignment(linesAlignment)
 {
+  if (maxWidthText.empty()) {
+    THROW_EXCEPTION("FittedLabelImageFactory: maxWidthText can't be empty");
+  }
+  checkMinFontSizeFactor(minFontSizeFactor);
 }
 
 FittedLabelImageFactory::FittedLabelImageFactory(const std::string& text,
@@ -81,6 +92,10 @@ _minFontSizeFactor(minFontSizeFactor),
 _lineSeparation(lineSeparation),
 _linesAlignment(linesAlignment)
 {
+  if (maxWidth <= 0) {
+    THROW_EXCEPTION("FittedLabelImageFactory: maxWidth must be positive");
+  }
+  checkMinFontSizeFactor(minFontSizeFactor);
 }
 
 FittedLabelImageFactory::~FittedLabelImageFactory() {
@@ -105,9 +120,6 @@ float FittedLabelImageFactory::maxWidth(ICanvas* canvas) const {
 
 float FittedLabelImageFactory::minFontSize() const {
   const float fontSize = _style->getFont().getSize();
-  if ((_minFontSizeFactor < 0.1) || (_minFontSizeFactor > 0.99)) {
-    return fontSize;
-  }
   return IMathUtils::instance()->floor(fontSize * _minFontSizeFactor);
 }
 

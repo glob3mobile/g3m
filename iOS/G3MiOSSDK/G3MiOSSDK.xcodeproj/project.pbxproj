@@ -71,6 +71,8 @@
 		CF4E996E25D03DFD008EE532 /* ShapeFilter.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF7FB77D25C5A5500009313E /* ShapeFilter.hpp */; };
 		CF4E996F25D03DFD008EE532 /* XPCRenderingState.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4E996B25D03CAC008EE532 /* XPCRenderingState.hpp */; };
 		CF4F784C1804AE9800550409 /* DeviceInfo_iOS.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */; };
+		CF51D17C307BE09F0014455D /* UnderlinedBoxImageBackground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF51D17B307BE09F0014455D /* UnderlinedBoxImageBackground.cpp */; };
+		CF51D17D307BE0B30014455D /* UnderlinedBoxImageBackground.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF51D17A307BE09F0014455D /* UnderlinedBoxImageBackground.hpp */; };
 		CF563497306E704900B56019 /* DebugTilesLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF563496306E704900B56019 /* DebugTilesLayer.cpp */; };
 		CF563498306E706200B56019 /* DebugTilesLayer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF563495306E704900B56019 /* DebugTilesLayer.hpp */; };
 		CF63F646306C1F4600966F36 /* CameraPose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF63F645306C1F4600966F36 /* CameraPose.cpp */; };
@@ -998,6 +1000,7 @@
 			dstPath = include/G3M;
 			dstSubfolderSpec = 16;
 			files = (
+				CF51D17D307BE0B30014455D /* UnderlinedBoxImageBackground.hpp in CopyFiles */,
 				CFC4648F307A38E80069EA9E /* ProjectedGridTileLODTester.hpp in CopyFiles */,
 				CF1FE1A03079549600661098 /* DeclutterObstacle.hpp in CopyFiles */,
 				CF3DEFCD30792E3C009AA63D /* EffectListener.hpp in CopyFiles */,
@@ -1603,6 +1606,8 @@
 		CF4E996B25D03CAC008EE532 /* XPCRenderingState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XPCRenderingState.hpp; sourceTree = "<group>"; };
 		CF4F78481804ADFC00550409 /* DeviceInfo_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = DeviceInfo_iOS.mm; path = Specific/Derived/DeviceInfo_iOS.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CF4F78491804ADFC00550409 /* DeviceInfo_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DeviceInfo_iOS.hpp; path = Specific/Derived/DeviceInfo_iOS.hpp; sourceTree = "<group>"; };
+		CF51D17A307BE09F0014455D /* UnderlinedBoxImageBackground.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnderlinedBoxImageBackground.hpp; sourceTree = "<group>"; };
+		CF51D17B307BE09F0014455D /* UnderlinedBoxImageBackground.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnderlinedBoxImageBackground.cpp; sourceTree = "<group>"; };
 		CF563495306E704900B56019 /* DebugTilesLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugTilesLayer.hpp; sourceTree = "<group>"; };
 		CF563496306E704900B56019 /* DebugTilesLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebugTilesLayer.cpp; sourceTree = "<group>"; };
 		CF63F642306C056800966F36 /* RibbonMesh.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = RibbonMesh.fsh; sourceTree = "<group>"; };
@@ -2537,8 +2542,6 @@
 		D8C3BA2F1946174D003F6642 /* Billboard_TransformedTexCoor.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard_TransformedTexCoor.fsh; sourceTree = "<group>"; };
 		D8CA641C1A75282200B9EABC /* Textured2DMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Textured2DMesh.fsh; sourceTree = "<group>"; };
 		D8CA641D1A75282200B9EABC /* Textured2DMesh.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Textured2DMesh.vsh; sourceTree = "<group>"; };
-		D8CE5D32173BB5D800C7AAE6 /* Default.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.vsh; sourceTree = "<group>"; };
-		D8CE5D33173BB5D800C7AAE6 /* Default.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Default.fsh; sourceTree = "<group>"; };
 		D8CE5D36173BB68200C7AAE6 /* Billboard.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.fsh; sourceTree = "<group>"; };
 		D8CE5D37173BB68200C7AAE6 /* Billboard.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Billboard.vsh; sourceTree = "<group>"; };
 		D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FlatColorMesh.fsh; sourceTree = "<group>"; };
@@ -2556,8 +2559,6 @@
 		D8FFA4C2183D03CE004E4AF3 /* TransformedTexCoorTexturedMesh_DirectionLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TransformedTexCoorTexturedMesh_DirectionLight.vsh; sourceTree = "<group>"; };
 		E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
 		E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = G3MBuilder_iOS.mm; path = Specific/Derived/G3MBuilder_iOS.mm; sourceTree = "<group>"; };
-		E70B56E116D3CCCD00C5FFFB /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
-		E70B56E216D3CCCD00C5FFFB /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3565,6 +3566,8 @@
 				CF6602B823DF2DA600795C7F /* TransformableTextureMapping.cpp */,
 				D8AB49C525E15301002AB306 /* TranslateScaleGizmo.hpp */,
 				D8AB49C425E15301002AB306 /* TranslateScaleGizmo.cpp */,
+				CF51D17A307BE09F0014455D /* UnderlinedBoxImageBackground.hpp */,
+				CF51D17B307BE09F0014455D /* UnderlinedBoxImageBackground.cpp */,
 				CF66035B23DF2DA800795C7F /* URL.hpp */,
 				CF66029A23DF2DA600795C7F /* URL.cpp */,
 				CF66026523DF2DA600795C7F /* URLTemplateLayer.hpp */,
@@ -3678,8 +3681,6 @@
 				D8C3BA2E1946174D003F6642 /* Billboard_TransformedTexCoor.vsh */,
 				D84625DD177732A900FC4862 /* ColorMesh.fsh */,
 				D84625DE177732A900FC4862 /* ColorMesh.vsh */,
-				D8CE5D33173BB5D800C7AAE6 /* Default.fsh */,
-				D8CE5D32173BB5D800C7AAE6 /* Default.vsh */,
 				D80C8B4A1A77B94E00E67587 /* FlatColor2DMesh.fsh */,
 				D80C8B4B1A77B94E00E67587 /* FlatColor2DMesh.vsh */,
 				D8D0CDB51771C91300D25CB6 /* FlatColorMesh.fsh */,
@@ -3696,8 +3697,6 @@
 				D8769D8C17C394AC00CEF074 /* NoColorMesh.vsh */,
 				CF63F642306C056800966F36 /* RibbonMesh.fsh */,
 				CF63F643306C056800966F36 /* RibbonMesh.vsh */,
-				E70B56E116D3CCCD00C5FFFB /* Shader.fsh */,
-				E70B56E216D3CCCD00C5FFFB /* Shader.vsh */,
 				D8B50F821DABCBDA00FA96FA /* SphericalAtmosphere.fsh */,
 				D8B50F831DABCBDA00FA96FA /* SphericalAtmosphere.vsh */,
 				CFFED2EB30766F7D003B788A /* Stars.fsh */,
@@ -4037,6 +4036,7 @@
 				CF27452925B2047B0056304B /* XPCNode.cpp in Sources */,
 				CF6608B923DF330600795C7F /* GEO2DMultiPolygonGeometry.cpp in Sources */,
 				CF6608BA23DF330600795C7F /* CircleShape.cpp in Sources */,
+				CF51D17C307BE09F0014455D /* UnderlinedBoxImageBackground.cpp in Sources */,
 				CF6608BB23DF330600795C7F /* StaticImageFactory.cpp in Sources */,
 				CF6608BC23DF330600795C7F /* SGLayerNode.cpp in Sources */,
 				CF6608BD23DF330600795C7F /* GEO2DLineRasterStyle.cpp in Sources */,

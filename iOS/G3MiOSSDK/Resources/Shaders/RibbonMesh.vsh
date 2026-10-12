@@ -4,7 +4,7 @@ attribute vec3 aRibbonSide; // unit side vector, +1/-1 per ribbon edge
 uniform mat4 uModelview;
 uniform float uPointSize;
 uniform vec2 uViewPortExtent;
-uniform vec2 uRibbonWidth; // x = width in meters, y = minimum width in pixels
+uniform vec3 uRibbonWidth; // x = width in meters, y = minimum width in pixels, z = maximum width in pixels
 
 void main() {
   vec4 center = uModelview * aPosition;
@@ -21,7 +21,7 @@ void main() {
 
     gl_Position = center;
     if (metersPx > 0.0) {
-      float halfPx = max(metersPx, uRibbonWidth.y * 0.5);
+      float halfPx = clamp(metersPx, uRibbonWidth.y * 0.5, uRibbonWidth.z * 0.5);
       vec2 offsetNDC = (dirPx / metersPx) * halfPx / halfViewport;
       gl_Position.xy += offsetNDC * center.w;
     }

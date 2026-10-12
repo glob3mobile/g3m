@@ -34,6 +34,14 @@ public class FittedLabelImageFactory extends AbstractImageFactory
   private final int _lineSeparation;
   private final HorizontalAlignment _linesAlignment;
 
+  private static void checkMinFontSizeFactor(float minFontSizeFactor)
+  {
+    if ((minFontSizeFactor <= 0) || (minFontSizeFactor > 1))
+    {
+      throw new RuntimeException("FittedLabelImageFactory: minFontSizeFactor must be in (0, 1]");
+    }
+  }
+
   private float maxWidth(ICanvas canvas)
   {
     if (_maxWidthText.length() == 0)
@@ -46,10 +54,6 @@ public class FittedLabelImageFactory extends AbstractImageFactory
   private float minFontSize()
   {
     final float fontSize = _style.getFont().getSize();
-    if ((_minFontSizeFactor < 0.1) || (_minFontSizeFactor > 0.99))
-    {
-      return fontSize;
-    }
     return IMathUtils.instance().floor(fontSize * _minFontSizeFactor);
   }
 
@@ -168,7 +172,7 @@ public class FittedLabelImageFactory extends AbstractImageFactory
   }
 
 
-  /** minFontSizeFactor in [0.1, 0.99] allows shrinking the font; any other value keeps its size */
+  /** minFontSizeFactor in (0, 1]: the font can shrink down to that fraction of its size (1 keeps the size) */
   public FittedLabelImageFactory(String text, LabelStyle style, String maxWidthText, float minFontSizeFactor, int lineSeparation)
   {
      this(text, style, maxWidthText, minFontSizeFactor, lineSeparation, HorizontalAlignment.Center);
@@ -182,6 +186,11 @@ public class FittedLabelImageFactory extends AbstractImageFactory
      _minFontSizeFactor = minFontSizeFactor;
      _lineSeparation = lineSeparation;
      _linesAlignment = linesAlignment;
+    if (maxWidthText.length() == 0)
+    {
+      throw new RuntimeException("FittedLabelImageFactory: maxWidthText can't be empty");
+    }
+    checkMinFontSizeFactor(minFontSizeFactor);
   }
 
   public FittedLabelImageFactory(String text, LabelStyle style, float maxWidth, float minFontSizeFactor, int lineSeparation)
@@ -197,6 +206,11 @@ public class FittedLabelImageFactory extends AbstractImageFactory
      _minFontSizeFactor = minFontSizeFactor;
      _lineSeparation = lineSeparation;
      _linesAlignment = linesAlignment;
+    if (maxWidth <= 0)
+    {
+      throw new RuntimeException("FittedLabelImageFactory: maxWidth must be positive");
+    }
+    checkMinFontSizeFactor(minFontSizeFactor);
   }
 
   public final boolean isMutable()

@@ -1049,7 +1049,8 @@ void VectorStreamingRenderer::MetadataParserAsyncTask::runInBackground(const G3M
                                language,
                                nameFieldName,
                                urlFieldName,
-                               magnitudeMetadata);
+                               magnitudeMetadata,
+                               jsonObject->deepCopy());
 
       const JSONArray* rootNodesJSON = jsonObject->getAsArray("rootNodes");
       _rootNodes = new std::vector<Node*>();
@@ -1131,6 +1132,7 @@ VectorStreamingRenderer::Metadata::~Metadata() {
   delete _sector;
 #ifdef C_CODE
   delete _magnitudeMetadata;
+  delete _json;
 #endif
 }
 

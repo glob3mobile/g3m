@@ -138,6 +138,10 @@ const Vector3D AbstractMesh::getVertex(const size_t index) const {
                   _vertices->get(p+2) + _center._z);
 }
 
+// Latent bug (Kent review G5): both getColor() overloads ignore _flatColor, so a mesh with a
+// flat colour and no per-vertex colours reports TRANSPARENT, and XPCNode::selectPoints() can't
+// pick points of flat-colour point clouds. Fix: return *_flatColor when _colors == NULL.
+#warning getColor() ignores _flatColor (Kent review G5)
 Color AbstractMesh::getColor(const size_t index) const {
   if (_colors == NULL) {
     return Color::TRANSPARENT;

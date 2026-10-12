@@ -194,6 +194,13 @@ void ICanvas::drawImage(const IImage* image,
   _drawImage(image, destLeft, destTop, destWidth, destHeight);
 }
 
+void ICanvas::drawImageTinted(const IImage* image,
+                              const Color& color,
+                              float destLeft, float destTop, float destWidth, float destHeight) {
+  checkInitialized();
+  _drawImageTinted(image, color, destLeft, destTop, destWidth, destHeight);
+}
+
 void ICanvas::drawImage(const IImage* image,
                         float destLeft, float destTop, float destWidth, float destHeight,
                         float transparency)

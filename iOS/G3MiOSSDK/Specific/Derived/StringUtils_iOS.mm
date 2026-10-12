@@ -109,11 +109,10 @@ bool StringUtils_iOS::endsWith(const std::string& string,
   }
 }
 
+// NSString, not ::toupper byte by byte: "España" has to give "ESPAÑA"
 std::string StringUtils_iOS::toUpperCase(const std::string& string) const {
-  std::string result = string;
-  std::transform(result.begin(), result.end(), result.begin(), ::toupper);
-
-  return result;
+  NSString* nsString = [NSString stringWithCppString: string];
+  return std::string([[nsString uppercaseString] UTF8String]);
 }
 
 std::string StringUtils_iOS::toLowerCase(const std::string& string) const {

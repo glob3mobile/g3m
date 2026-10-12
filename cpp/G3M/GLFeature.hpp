@@ -120,7 +120,7 @@ public:
 };
 
 
-// Ribbon half-width is resolved in the vertex shader as max(widthInMeters, minWidthInPixels)
+// Ribbon half-width is resolved in the vertex shader as clamp(widthInMeters, minWidthInPixels, maxWidthInPixels)
 class RibbonWidthGLFeature: public GLFeature {
 private:
   ~RibbonWidthGLFeature() {
@@ -129,16 +129,18 @@ private:
 #endif
   }
 
-  GPUUniformValueVec2FloatMutable* _width;
+  GPUUniformValueVec3FloatMutable* _width;
 
 public:
   RibbonWidthGLFeature(float widthInMeters,
-                       float minWidthInPixels);
+                       float minWidthInPixels,
+                       float maxWidthInPixels);
 
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
 
   void changeWidth(float widthInMeters,
-                   float minWidthInPixels);
+                   float minWidthInPixels,
+                   float maxWidthInPixels);
 };
 
 

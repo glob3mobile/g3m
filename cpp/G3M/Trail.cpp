@@ -25,6 +25,7 @@
 #include "GLState.hpp"
 #include "GLFeature.hpp"
 #include "Camera.hpp"
+#include "ILogger.hpp"
 
 
 const int Trail::SEGMENT_ALPHA_STATUS_UNKNOWN       = 1;
@@ -430,11 +431,13 @@ Trail::Trail(const Color& color,
              const float  polygonOffsetUnits,
              const double deltaHeight,
              const int    maxPositionsPerSegment,
-             const float  minWidthPixels) :
+             const float  minWidthPixels,
+             const float  maxWidthPixels) :
 _visible(true),
 _color(color),
 _ribbonWidth(ribbonWidth),
 _minWidthPixels(minWidthPixels),
+_maxWidthPixels(maxWidthPixels),
 _depthTest(depthTest),
 _polygonOffsetFill(polygonOffsetFill),
 _polygonOffsetFactor(polygonOffsetFactor),
@@ -446,8 +449,13 @@ _ribbonGLState(NULL),
 _ribbonViewportExtent(NULL)
 {
   if (_minWidthPixels > 0) {
+    if (_maxWidthPixels < _minWidthPixels) {
+      ILogger::instance()->logError("Trail: maxWidthPixels (%f) is smaller than minWidthPixels (%f)",
+                                    _maxWidthPixels,
+                                    _minWidthPixels);
+    }
     _ribbonGLState = new GLState();
-    _ribbonGLState->addGLFeature(new RibbonWidthGLFeature(_ribbonWidth, _minWidthPixels),
+    _ribbonGLState->addGLFeature(new RibbonWidthGLFeature(_ribbonWidth, _minWidthPixels, _maxWidthPixels),
                                  false);
     _ribbonViewportExtent = new ViewportExtentGLFeature(0, 0); // real extent set on every render
     _ribbonGLState->addGLFeature(_ribbonViewportExtent, false);

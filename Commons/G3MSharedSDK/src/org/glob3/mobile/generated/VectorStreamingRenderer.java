@@ -1396,7 +1396,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final String urlFieldName = jsonObject.getAsString("urlFieldName", "");
           final MagnitudeMetadata magnitudeMetadata = MagnitudeMetadata.fromJSON(jsonObject.getAsObject("magnitude"));
     
-          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, urlFieldName, magnitudeMetadata);
+          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, urlFieldName, magnitudeMetadata, jsonObject.deepCopy());
     
           final JSONArray rootNodesJSON = jsonObject.getAsArray("rootNodes");
           _rootNodes = new java.util.ArrayList<Node>();
@@ -1573,8 +1573,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public final String _nameFieldName;
     public final String _urlFieldName;
     public final MagnitudeMetadata _magnitudeMetadata;
+    /** the whole metadata, for what a symbolizer reads beyond the fields above (the symbols of an application) */
+    public final JSONObject _json;
 
-    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, String urlFieldName, MagnitudeMetadata magnitudeMetadata)
+    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, String urlFieldName, MagnitudeMetadata magnitudeMetadata, JSONObject json)
     {
        _sector = sector;
        _clustersCount = clustersCount;
@@ -1586,6 +1588,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _nameFieldName = nameFieldName;
        _urlFieldName = urlFieldName;
        _magnitudeMetadata = magnitudeMetadata;
+       _json = json;
 
     }
 

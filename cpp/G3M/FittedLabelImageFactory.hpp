@@ -35,6 +35,8 @@ private:
   const int         _lineSeparation;
   const HorizontalAlignment _linesAlignment;
 
+  static void checkMinFontSizeFactor(const float minFontSizeFactor);
+
   float maxWidth(ICanvas* canvas) const;
   float minFontSize() const;
 
@@ -56,7 +58,7 @@ protected:
 
 public:
 
-  /** minFontSizeFactor in [0.1, 0.99] allows shrinking the font; any other value keeps its size */
+  /** minFontSizeFactor in (0, 1]: the font can shrink down to that fraction of its size (1 keeps the size) */
   FittedLabelImageFactory(const std::string& text,
                           const LabelStyle&  style,
                           const std::string& maxWidthText,

@@ -587,6 +587,8 @@ public:
     const std::string        _nameFieldName;
     const std::string        _urlFieldName;
     const MagnitudeMetadata* _magnitudeMetadata;
+    /** the whole metadata, for what a symbolizer reads beyond the fields above (the symbols of an application) */
+    const JSONObject*        _json;
     
     Metadata(const Sector*            sector,
              const long long          clustersCount,
@@ -597,7 +599,8 @@ public:
              const std::string&       language,
              const std::string&       nameFieldName,
              const std::string&       urlFieldName,
-             const MagnitudeMetadata* magnitudeMetadata) :
+             const MagnitudeMetadata* magnitudeMetadata,
+             const JSONObject*        json) :
     _sector(sector),
     _clustersCount(clustersCount),
     _featuresCount(featuresCount),
@@ -607,7 +610,8 @@ public:
     _language(language),
     _nameFieldName(nameFieldName),
     _urlFieldName(urlFieldName),
-    _magnitudeMetadata(magnitudeMetadata)
+    _magnitudeMetadata(magnitudeMetadata),
+    _json(json)
     {
       
     }

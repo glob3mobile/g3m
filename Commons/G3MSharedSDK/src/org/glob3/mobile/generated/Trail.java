@@ -467,6 +467,7 @@ public class Trail
   private final Color _color ;
   private final float _ribbonWidth;
   private final float _minWidthPixels;
+  private final float _maxWidthPixels;
   private final boolean _depthTest;
   private final boolean _polygonOffsetFill;
   private final float _polygonOffsetFactor;
@@ -502,25 +503,15 @@ public class Trail
   }
 
   // minWidthPixels > 0 switches to the RibbonMesh program: the ribbon never gets thinner
-  // than that on screen, no matter how far the camera is. 0 keeps the plain fixed-width mesh.
-  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight, int maxPositionsPerSegment)
-  {
-     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, deltaHeight, maxPositionsPerSegment, 0);
-  }
-  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight)
-  {
-     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, deltaHeight, 32, 0);
-  }
-  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits)
-  {
-     this(color, ribbonWidth, depthTest, polygonOffsetFill, polygonOffsetFactor, polygonOffsetUnits, 0.0, 32, 0);
-  }
-  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight, int maxPositionsPerSegment, float minWidthPixels)
+  // than minWidthPixels nor wider than maxWidthPixels on screen, no matter how far the camera is.
+  // 0 keeps the plain fixed-width mesh (maxWidthPixels is then ignored).
+  public Trail(Color color, float ribbonWidth, boolean depthTest, boolean polygonOffsetFill, float polygonOffsetFactor, float polygonOffsetUnits, double deltaHeight, int maxPositionsPerSegment, float minWidthPixels, float maxWidthPixels)
   {
      _visible = true;
      _color = color;
      _ribbonWidth = ribbonWidth;
      _minWidthPixels = minWidthPixels;
+     _maxWidthPixels = maxWidthPixels;
      _depthTest = depthTest;
      _polygonOffsetFill = polygonOffsetFill;
      _polygonOffsetFactor = polygonOffsetFactor;
@@ -532,8 +523,12 @@ public class Trail
      _ribbonViewportExtent = null;
     if (_minWidthPixels > 0)
     {
+      if (_maxWidthPixels < _minWidthPixels)
+      {
+        ILogger.instance().logError("Trail: maxWidthPixels (%f) is smaller than minWidthPixels (%f)", _maxWidthPixels, _minWidthPixels);
+      }
       _ribbonGLState = new GLState();
-      _ribbonGLState.addGLFeature(new RibbonWidthGLFeature(_ribbonWidth, _minWidthPixels), false);
+      _ribbonGLState.addGLFeature(new RibbonWidthGLFeature(_ribbonWidth, _minWidthPixels, _maxWidthPixels), false);
       _ribbonViewportExtent = new ViewportExtentGLFeature(0, 0); // real extent set on every render
       _ribbonGLState.addGLFeature(_ribbonViewportExtent, false);
     }

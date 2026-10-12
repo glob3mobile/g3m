@@ -373,7 +373,7 @@ public:
             "uniform mat4 uModelview;\n" +
             "uniform float uPointSize;\n" +
             "uniform vec2 uViewPortExtent;\n" +
-            "uniform vec2 uRibbonWidth; // x = width in meters, y = minimum width in pixels\n" +
+            "uniform vec3 uRibbonWidth; // x = width in meters, y = minimum width in pixels, z = maximum width in pixels\n" +
             "void main() {\n" +
             "  vec4 center = uModelview * aPosition;\n" +
             "  vec4 side   = uModelview * (aPosition + vec4(aRibbonSide * (uRibbonWidth.x * 0.5), 0.0));\n" +
@@ -387,7 +387,7 @@ public:
             "    float metersPx = length(dirPx);\n" +
             "    gl_Position = center;\n" +
             "    if (metersPx > 0.0) {\n" +
-            "      float halfPx = max(metersPx, uRibbonWidth.y * 0.5);\n" +
+            "      float halfPx = clamp(metersPx, uRibbonWidth.y * 0.5, uRibbonWidth.z * 0.5);\n" +
             "      vec2 offsetNDC = (dirPx / metersPx) * halfPx / halfViewport;\n" +
             "      gl_Position.xy += offsetNDC * center.w;\n" +
             "    }\n" +
