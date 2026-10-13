@@ -71,48 +71,35 @@ void GLFeatureSet::add(GLFeature* f) {
   }
 }
 
-void GLFeatureSet::clearFeatures(GLFeatureGroupName g) {
-  
-  for (int i = 0; i < _nFeatures; i++) {
-    const GLFeature* f = _features[i];
-    if (f->_group == g) {
-      f->_release();
-      
-      for (int j = i; j < _nFeatures; j++) {
-        if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
-          _features[j] = NULL;
-        }
-        else {
-          _features[j] = _features[j+1];
-        }
-      }
-      i--;
-      _nFeatures--;
+void GLFeatureSet::removeFeatureAt(int i) {
+  _features[i]->_release();
+  for (int j = i; j < _nFeatures; j++) {
+    if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
+      _features[j] = NULL;
+    }
+    else {
+      _features[j] = _features[j+1];
     }
   }
-  
+  _nFeatures--;
+}
+
+void GLFeatureSet::clearFeatures(GLFeatureGroupName g) {
+  for (int i = 0; i < _nFeatures; i++) {
+    if (_features[i]->_group == g) {
+      removeFeatureAt(i);
+      i--;
+    }
+  }
 }
 
 void GLFeatureSet::clearFeatures(GLFeatureID id) {
-  
   for (int i = 0; i < _nFeatures; i++) {
-    const GLFeature* f = _features[i];
-    if (f->_id == id) {
-      f->_release();
-      
-      for (int j = i; j < _nFeatures; j++) {
-        if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
-          _features[j] = NULL;
-        }
-        else {
-          _features[j] = _features[j+1];
-        }
-      }
+    if (_features[i]->_id == id) {
+      removeFeatureAt(i);
       i--;
-      _nFeatures--;
     }
   }
-  
 }
 
 void GLFeatureSet::clearFeatures() {

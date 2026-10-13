@@ -285,16 +285,12 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
 
   public final void onTouchEvent(TouchEvent touchEvent)
   {
+    if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent))
+    {
+      return;
+    }
   
     G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode, getCurrentCamera());
-  
-    if (_previousTouchEvent != null)
-    {
-      if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent))
-      {
-        return;
-      }
-    }
   
     // notify the original event
     notifyTouchEvent(ec, touchEvent);

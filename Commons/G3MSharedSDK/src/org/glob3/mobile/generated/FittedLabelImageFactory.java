@@ -120,11 +120,11 @@ public class FittedLabelImageFactory extends AbstractImageFactory
   {
     if (lines.size() == 1)
     {
-      return new LabelImageFactory(lines.get(0), style);
+      return new LabelImageFactory(lines.get(0), style, false); // mutable
     }
   
     final LabelStyle lineStyle = style.copyWithoutBackground();
-    return new ColumnLayoutImageFactory(new LabelImageFactory(lines.get(0), lineStyle), new LabelImageFactory(lines.get(1), lineStyle), style.copyBackground(), _lineSeparation, _linesAlignment);
+    return new ColumnLayoutImageFactory(new LabelImageFactory(lines.get(0), lineStyle, false), new LabelImageFactory(lines.get(1), lineStyle, false), style.copyBackground(), _lineSeparation, _linesAlignment); // mutable -  mutable
   }
 
   private IImageFactory createFitted(ICanvas canvas)

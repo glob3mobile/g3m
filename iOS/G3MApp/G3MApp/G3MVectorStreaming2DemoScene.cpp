@@ -132,7 +132,8 @@ public:
                                                                                              Color::BLACK,   /* color        */
                                                                                              Color::WHITE,   /* shadowColor  */
                                                                                              5.0f,           /* shadowBlur   */
-                                                                                             Vector2F(0, 0)) /* shadowOffset */)
+                                                                                             Vector2F(0, 0)) /* shadowOffset */,
+                                                                        false /* mutable */)
                                                   ));
 
     collector.add(builder.build());

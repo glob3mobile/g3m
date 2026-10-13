@@ -55,14 +55,6 @@ public:
 
 
 LabelImageFactory::LabelImageFactory(const std::string& text,
-                                     const LabelStyle&  style) :
-_text(text),
-_style(new LabelStyle(style)),
-_isMutable(false)
-{
-}
-
-LabelImageFactory::LabelImageFactory(const std::string& text,
                                      const LabelStyle&  style,
                                      const bool         isMutable) :
 _text(text),

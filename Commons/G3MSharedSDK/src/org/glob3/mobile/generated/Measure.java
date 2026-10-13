@@ -180,7 +180,7 @@ public class Measure
     builder.setMinDistanceToCamera(4.5e+06);
     builder.setZoomInAppears(false);
     builder.setPosition(position);
-    builder.addOutfit(new LabelImageFactory(label, LabelStyle.shadowed(GFont.sansSerif(20), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2))));
+    builder.addOutfit(new LabelImageFactory(label, LabelStyle.shadowed(GFont.sansSerif(20), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2)), false)); // mutable
     return builder.build();
   }
   private void createVertexAngleLabels()

@@ -78,7 +78,8 @@ public:
                                                                                   Color::BLACK,   /* color           */
                                                                                   Vector2F(4, 4), /* padding         */
                                                                                   Color::WHITE,   /* backgroundColor */
-                                                                                  4               /* cornerRadius    */));
+                                                                                  4               /* cornerRadius    */),
+                                                                false /* mutable */);
 
         NonOverlappingMark* mark;
         if (thumbnail == "") {

@@ -371,7 +371,8 @@ Mark* Measure::createLabelMark(const std::string& label,
                                                                Color::WHITE,
                                                                Color::BLACK,
                                                                1,
-                                                               Vector2F(2, 2))));
+                                                               Vector2F(2, 2)),
+                                          false /* mutable */));
   return builder.build();
 }
 

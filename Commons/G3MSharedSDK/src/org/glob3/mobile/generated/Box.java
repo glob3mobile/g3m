@@ -28,6 +28,27 @@ public class Box extends BoundingVolume
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Box(Box that);
 
+  private boolean contains(double x, double y, double z)
+  {
+    // absolute tolerance for floating-point rounding: intersectionWithRay tests points computed on the faces
+    final double margin = 1e-3;
+    if (x < _lower._x - margin)
+       return false;
+    if (x > _upper._x + margin)
+       return false;
+  
+    if (y < _lower._y - margin)
+       return false;
+    if (y > _upper._y + margin)
+       return false;
+  
+    if (z < _lower._z - margin)
+       return false;
+    if (z > _upper._z + margin)
+       return false;
+  
+    return true;
+  }
 
 
 
@@ -368,43 +389,11 @@ public class Box extends BoundingVolume
 
   public final boolean contains(Vector3D point)
   {
-    final double margin = 1e-3;
-    if (point._x < _lower._x - margin)
-       return false;
-    if (point._x > _upper._x + margin)
-       return false;
-  
-    if (point._y < _lower._y - margin)
-       return false;
-    if (point._y > _upper._y + margin)
-       return false;
-  
-    if (point._z < _lower._z - margin)
-       return false;
-    if (point._z > _upper._z + margin)
-       return false;
-  
-    return true;
+    return contains(point._x, point._y, point._z);
   }
   public final boolean contains(MutableVector3D point)
   {
-    final double margin = 1e-3;
-    if (point._x < _lower._x - margin)
-       return false;
-    if (point._x > _upper._x + margin)
-       return false;
-  
-    if (point._y < _lower._y - margin)
-       return false;
-    if (point._y > _upper._y + margin)
-       return false;
-  
-    if (point._z < _lower._z - margin)
-       return false;
-    if (point._z > _upper._z + margin)
-       return false;
-  
-    return true;
+    return contains(point._x, point._y, point._z);
   }
 
   public final boolean fullContains(BoundingVolume that)

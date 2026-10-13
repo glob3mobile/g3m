@@ -131,7 +131,8 @@ public class G3MShowMarkersActivity
                      builder.addOutfit(new ColumnLayoutImageFactory( //
                               new DownloaderImageFactory(new URL("http://openweathermap.org/img/w/" + icon, false)), //
                               new LabelImageFactory(city.getAsString("name", ""), //
-                                       LabelStyle.shadowed(GFont.sansSerif(14), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2))), //
+                                       LabelStyle.shadowed(GFont.sansSerif(14), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2)),
+                                       false /* mutable */), //
                               null, //
                               2));
                      _weatherMarkers.addMark(builder.build());

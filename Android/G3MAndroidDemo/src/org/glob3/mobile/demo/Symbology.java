@@ -334,7 +334,8 @@ public class Symbology {
                                                  builder.setMinDistanceToCamera(4.5e+06);
                                                  builder.setPosition(new Geodetic3D(geometry.getPosition(), height / 5));
                                                  builder.addOutfit(new LabelImageFactory("" + popFormated, //
-                                                          LabelStyle.shadowed(GFont.sansSerif(20), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2))));
+                                                          LabelStyle.shadowed(GFont.sansSerif(20), Color.WHITE, Color.BLACK, 1, new Vector2F(2, 2)),
+                                                          false /* mutable */));
                                                  final Mark m = builder.build();
 
                                                  result.add(new GEOShapeSymbol(bs));

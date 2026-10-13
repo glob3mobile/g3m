@@ -39,13 +39,6 @@ public class LabelImageFactory extends AbstractImageFactory
   }
 
 
-  public LabelImageFactory(String text, LabelStyle style)
-  {
-     _text = text;
-     _style = new LabelStyle(style);
-     _isMutable = false;
-  }
-
   /** a mutable label accepts setText() and notifies its change listener */
   public LabelImageFactory(String text, LabelStyle style, boolean isMutable)
   {

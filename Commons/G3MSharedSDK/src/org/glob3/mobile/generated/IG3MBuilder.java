@@ -287,7 +287,7 @@ public abstract class IG3MBuilder
   private CameraRenderer createDefaultCameraRenderer()
   {
     CameraRenderer cameraRenderer = new CameraRenderer(_verboseCameraHandlers);
-    IG3MBuilder.addDefaultCameraHandlers(cameraRenderer);
+    addDefaultCameraHandlers(cameraRenderer);
     return cameraRenderer;
   }
   private java.util.ArrayList<Renderer> createDefaultRenderers()

@@ -55,7 +55,8 @@ static void addCityLabel(MarksRenderer*     marksRenderer,
                                                                Color::WHITE,
                                                                Color::BLACK,
                                                                1,
-                                                               Vector2F(2, 2))));
+                                                               Vector2F(2, 2)),
+                                          false /* mutable */));
   marksRenderer->addMark( builder.build() );
 }
 

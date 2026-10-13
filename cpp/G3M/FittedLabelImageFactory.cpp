@@ -175,12 +175,12 @@ const std::vector<std::string> FittedLabelImageFactory::twoLines(ICanvas* canvas
 IImageFactory* FittedLabelImageFactory::createLines(const std::vector<std::string>& lines,
                                                     const LabelStyle& style) const {
   if (lines.size() == 1) {
-    return new LabelImageFactory(lines.at(0), style);
+    return new LabelImageFactory(lines.at(0), style, false /* mutable */);
   }
 
   const LabelStyle lineStyle = style.copyWithoutBackground();
-  return new ColumnLayoutImageFactory(new LabelImageFactory(lines.at(0), lineStyle),
-                                      new LabelImageFactory(lines.at(1), lineStyle),
+  return new ColumnLayoutImageFactory(new LabelImageFactory(lines.at(0), lineStyle, false /* mutable */),
+                                      new LabelImageFactory(lines.at(1), lineStyle, false /* mutable */),
                                       style.copyBackground(),
                                       _lineSeparation,
                                       _linesAlignment);

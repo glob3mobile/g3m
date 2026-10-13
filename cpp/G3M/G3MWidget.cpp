@@ -401,6 +401,9 @@ bool G3MWidget::isDuplicatedTouchEvent(const TouchEvent* touchEvent,
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
+  if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent)) {
+    return;
+  }
 
   G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
@@ -415,12 +418,6 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _surfaceElevationProvider,
                      _viewMode,
                      getCurrentCamera());
-
-  if (_previousTouchEvent != NULL) {
-    if ( isDuplicatedTouchEvent(touchEvent, _previousTouchEvent) ) {
-      return;
-    }
-  }
 
   // notify the original event
   notifyTouchEvent(ec, touchEvent);

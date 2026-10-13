@@ -895,7 +895,7 @@ void IG3MBuilder::setTextureMaxAnisotropy(const float textureMaxAnisotropy) {
 
 CameraRenderer* IG3MBuilder::createDefaultCameraRenderer() {
   CameraRenderer* cameraRenderer = new CameraRenderer(_verboseCameraHandlers);
-  IG3MBuilder::addDefaultCameraHandlers(cameraRenderer);
+  addDefaultCameraHandlers(cameraRenderer);
   return cameraRenderer;
 }
 

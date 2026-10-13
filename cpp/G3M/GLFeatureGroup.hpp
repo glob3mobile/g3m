@@ -61,6 +61,8 @@ protected:
   GLFeatureSet(const GLFeatureSet& that);
   GLFeatureSet& operator=(const GLFeatureSet& that);
 
+  void removeFeatureAt(int i);
+
 public:
 
   GLFeatureSet();

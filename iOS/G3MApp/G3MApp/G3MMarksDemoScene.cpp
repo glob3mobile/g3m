@@ -446,13 +446,13 @@ void G3MMarksDemoScene::showTerrain() {
 
   builder.setAltitudeMode(RELATIVE_TO_GROUND);
   builder.setPosition(Geodetic3D::fromDegrees(28.2723, -16.6425, 10));
-  builder.addOutfit(new LabelImageFactory("Teide: 10m above the ground", style),
+  builder.addOutfit(new LabelImageFactory("Teide: 10m above the ground", style, false /* mutable */),
                     new FixedMarkAnchor(0.5, 1)); // above the position
   model->getMarksRenderer()->addMark(builder.build());
 
   builder.setAltitudeMode(ABSOLUTE);
   builder.setPosition(Geodetic3D::fromDegrees(28.2723, -16.6425, 3725));
-  builder.addOutfit(new LabelImageFactory("Teide: 3725m absolute", style),
+  builder.addOutfit(new LabelImageFactory("Teide: 3725m absolute", style, false /* mutable */),
                     new FixedMarkAnchor(0.5, 0)); // below the position
   model->getMarksRenderer()->addMark(builder.build());
 
@@ -538,7 +538,8 @@ void G3MMarksDemoScene::showAnimatedMarks() {
                                                                  Color::WHITE,
                                                                  Color::BLACK,
                                                                  1,
-                                                                 Vector2F(2, 2))));
+                                                                 Vector2F(2, 2)),
+                                            false /* mutable */));
     marksRenderer->addMark(builder.build());
   }
 

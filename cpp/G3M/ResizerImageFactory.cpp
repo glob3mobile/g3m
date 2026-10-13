@@ -23,7 +23,7 @@ class ResizerImageFactory_ImageFactoryListener : public IImageFactoryListener {
 private:
   const G3MContext* _context;
 
-  ResizerImageFactory* _builder;
+  ResizerImageFactory* _resizer;
 
   IImageFactoryListener* _listener;
   const bool             _deleteListener;
@@ -31,11 +31,11 @@ private:
 public:
 
   ResizerImageFactory_ImageFactoryListener(const G3MContext* context,
-                                           ResizerImageFactory* builder,
+                                           ResizerImageFactory* resizer,
                                            IImageFactoryListener* listener,
                                            bool deleteListener) :
   _context(context),
-  _builder(builder),
+  _resizer(resizer),
   _listener(listener),
   _deleteListener(deleteListener)
   {
@@ -50,19 +50,19 @@ public:
 
   void imageCreated(const IImage*      image,
                     const std::string& imageName) {
-    _builder->imageCreated(image,
+    _resizer->imageCreated(image,
                            imageName,
                            _context,
                            _listener,
                            _deleteListener);
-    _listener = NULL; // 'listener' ownership went to _builder
+    _listener = NULL; // 'listener' ownership went to _resizer
   }
 
   void onError(const std::string& error) {
-    _builder->onError(error,
+    _resizer->onError(error,
                       _listener,
                       _deleteListener);
-    _listener = NULL; // 'listener' ownership went to _builder
+    _listener = NULL; // 'listener' ownership went to _resizer
   }
 
 };

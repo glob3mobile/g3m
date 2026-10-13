@@ -73,20 +73,25 @@ public class Ellipsoid
     return intersectionsDistances(origin._x, origin._y, origin._z, direction._x, direction._y, direction._z);
   }
 
-  public final java.util.ArrayList<Double> intersectionsDistances(double xoriginX, double xoriginY, double xoriginZ, double directionX, double directionY, double directionZ)
+  public final java.util.ArrayList<Double> intersectionsDistances(double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
   {
-    final double mX = xoriginX - _center._x;
-    final double mY = xoriginY - _center._y;
-    final double mZ = xoriginZ - _center._z;
+    return intersectionsDistances(_center, _oneOverRadiiSquared, originX, originY, originZ, directionX, directionY, directionZ);
+  }
+
+  public static java.util.ArrayList<Double> intersectionsDistances(Vector3D center, Vector3D oneOverRadiiSquared, double originX, double originY, double originZ, double directionX, double directionY, double directionZ)
+  {
+    final double mX = originX - center._x;
+    final double mY = originY - center._y;
+    final double mZ = originZ - center._z;
   
     java.util.ArrayList<Double> result = new java.util.ArrayList<Double>();
   
     // By laborious algebraic manipulation....
-    final double a = (directionX * directionX * _oneOverRadiiSquared._x + directionY * directionY * _oneOverRadiiSquared._y + directionZ * directionZ * _oneOverRadiiSquared._z);
+    final double a = (directionX * directionX * oneOverRadiiSquared._x + directionY * directionY * oneOverRadiiSquared._y + directionZ * directionZ * oneOverRadiiSquared._z);
   
-    final double b = 2.0 * (mX * directionX * _oneOverRadiiSquared._x + mY * directionY * _oneOverRadiiSquared._y + mZ * directionZ * _oneOverRadiiSquared._z);
+    final double b = 2.0 * (mX * directionX * oneOverRadiiSquared._x + mY * directionY * oneOverRadiiSquared._y + mZ * directionZ * oneOverRadiiSquared._z);
   
-    final double c = (mX * mX * _oneOverRadiiSquared._x + mY * mY * _oneOverRadiiSquared._y + mZ * mZ * _oneOverRadiiSquared._z - 1.0);
+    final double c = (mX * mX * oneOverRadiiSquared._x + mY * mY * oneOverRadiiSquared._y + mZ * mZ * oneOverRadiiSquared._z - 1.0);
   
     // Solve the quadratic equation: ax^2 + bx + c = 0.
     // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits

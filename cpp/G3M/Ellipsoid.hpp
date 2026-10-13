@@ -78,6 +78,15 @@ public:
                                              double directionX,
                                              double directionY,
                                              double directionZ) const;
+
+  static std::vector<double> intersectionsDistances(const Vector3D& center,
+                                                    const Vector3D& oneOverRadiiSquared,
+                                                    double originX,
+                                                    double originY,
+                                                    double originZ,
+                                                    double directionX,
+                                                    double directionY,
+                                                    double directionZ);
 };
 
 #endif

@@ -35,6 +35,7 @@ private:
   Box(const Box& that);
 #endif
 
+  bool contains(double x, double y, double z) const;
 
 public:
   

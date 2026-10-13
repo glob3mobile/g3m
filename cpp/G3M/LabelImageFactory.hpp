@@ -29,9 +29,6 @@ protected:
 
 public:
 
-  LabelImageFactory(const std::string& text,
-                    const LabelStyle&  style);
-
   /** a mutable label accepts setText() and notifies its change listener */
   LabelImageFactory(const std::string& text,
                     const LabelStyle&  style,

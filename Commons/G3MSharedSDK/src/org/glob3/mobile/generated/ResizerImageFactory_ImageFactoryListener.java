@@ -3,16 +3,16 @@ public class ResizerImageFactory_ImageFactoryListener implements IImageFactoryLi
 {
   private final G3MContext _context;
 
-  private ResizerImageFactory _builder;
+  private ResizerImageFactory _resizer;
 
   private IImageFactoryListener _listener;
   private final boolean _deleteListener;
 
 
-  public ResizerImageFactory_ImageFactoryListener(G3MContext context, ResizerImageFactory builder, IImageFactoryListener listener, boolean deleteListener)
+  public ResizerImageFactory_ImageFactoryListener(G3MContext context, ResizerImageFactory resizer, IImageFactoryListener listener, boolean deleteListener)
   {
      _context = context;
-     _builder = builder;
+     _resizer = resizer;
      _listener = listener;
      _deleteListener = deleteListener;
 
@@ -29,14 +29,14 @@ public class ResizerImageFactory_ImageFactoryListener implements IImageFactoryLi
 
   public final void imageCreated(IImage image, String imageName)
   {
-    _builder.imageCreated(image, imageName, _context, _listener, _deleteListener);
-    _listener = null; // 'listener' ownership went to _builder
+    _resizer.imageCreated(image, imageName, _context, _listener, _deleteListener);
+    _listener = null; // 'listener' ownership went to _resizer
   }
 
   public final void onError(String error)
   {
-    _builder.onError(error, _listener, _deleteListener);
-    _listener = null; // 'listener' ownership went to _builder
+    _resizer.onError(error, _listener, _deleteListener);
+    _listener = null; // 'listener' ownership went to _resizer
   }
 
 }

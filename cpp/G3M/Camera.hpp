@@ -227,8 +227,8 @@ public:
    and position2 at screenPosition2. Screen positions are viewport fractions: (0,0) top-left,
    (1,1) bottom-right, the same frame point2Pixel uses. Does not move this camera.
 
-   Returns CameraPose::nan() when no such camera exists: same screen spot for both, points too far
-   apart for a curved planet, or a target that would fall above the horizon.
+   Returns CameraPose::nan() when no such camera exists: same screen spot for both, a target that
+   would fall above the horizon, or the solver does not converge.
    */
   CameraPose computeCameraPose(const Geodetic3D& position1,
                                const Vector2F&   screenPosition1,
