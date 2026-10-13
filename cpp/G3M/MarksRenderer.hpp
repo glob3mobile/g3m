@@ -245,6 +245,9 @@ public:
 
   const std::vector<Mark*> getAllMarks(const MarkFilter& filter) const;
 
+  /** the first mark the filter accepts, leaving marks excluded as in getAllMarks; NULL when none */
+  Mark* findMark(const MarkFilter& filter) const;
+
 };
 
 #endif

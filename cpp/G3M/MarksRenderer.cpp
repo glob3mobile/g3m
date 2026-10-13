@@ -216,22 +216,12 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
       for (size_t i = 0; i < marksSize; i++) {
         Mark* mark = _marks[i];
 
-        if (!mark->isReady()) {
-          continue;
-        }
-        if (!mark->isRendered() || mark->isShowingHint() || mark->isLeavingRenderer()) {
+        if (!mark->isTouchable()) {
           continue;
         }
 
-        const float markWidth = mark->getScreenWidth();
-        if (markWidth <= 0) {
-          continue;
-        }
-
+        const float markWidth  = mark->getScreenWidth();
         const float markHeight = mark->getScreenHeight();
-        if (markHeight <= 0) {
-          continue;
-        }
 
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
@@ -776,6 +766,17 @@ size_t MarksRenderer::removeAllMarks(const MarkFilter& filter,
   return removed;
 }
 
+
+Mark* MarksRenderer::findMark(const MarkFilter& filter) const {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
+    Mark* mark = _marks[i];
+    if (!mark->isLeavingRenderer() && filter.test(mark)) {
+      return mark;
+    }
+  }
+  return NULL;
+}
 
 const std::vector<Mark*> MarksRenderer::getAllMarks(const MarkFilter& filter) const {
   std::vector<Mark*> result;

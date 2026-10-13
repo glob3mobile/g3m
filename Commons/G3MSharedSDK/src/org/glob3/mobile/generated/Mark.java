@@ -966,6 +966,12 @@ public class Mark implements SurfaceElevationListener
     return _leavingRenderer;
   }
 
+  /** a touch can reach it: ready, drawn in the last frame with its own outfit (not the hint), not leaving, with a size on screen */
+  public final boolean isTouchable()
+  {
+    return (isReady() && isRendered() && !isShowingHint() && !isLeavingRenderer() && (getScreenWidth() > 0) && (getScreenHeight() > 0));
+  }
+
   /** the leaving mark is off the screen: the renderer can let it go */
   public final boolean hasLeftRenderer()
   {

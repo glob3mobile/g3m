@@ -563,6 +563,13 @@ public class Camera
     return CameraPose.nan();
   }
 
+  // point2Pixel projects points hidden behind the planet too; this tells them apart
+  public final boolean isAboveHorizonOf(Vector3D point)
+  {
+    final Vector3D toCamera = _position.asVector3D().sub(point);
+    return _planet.geodeticSurfaceNormal(point).dot(toCamera) > 0;
+  }
+
   public final void forceMatrixCreation()
   {
     getGeodeticCenterOfView();
@@ -1014,13 +1021,6 @@ public class Camera
   {
     final Vector2F delta = point2Pixel(cartesian2).sub(point2Pixel(cartesian1));
     return IMathUtils.instance().atan2((double) delta._y, (double) delta._x);
-  }
-
-  // point2Pixel projects points hidden behind the planet too; this tells them apart
-  private boolean isAboveHorizonOf(Vector3D point)
-  {
-    final Vector3D toCamera = _position.asVector3D().sub(point);
-    return _planet.geodeticSurfaceNormal(point).dot(toCamera) > 0;
   }
 
   private static double signedAngleInRadians(double radians)

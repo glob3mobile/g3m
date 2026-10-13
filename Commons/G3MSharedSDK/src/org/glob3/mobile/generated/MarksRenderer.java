@@ -785,26 +785,13 @@ public class MarksRenderer extends DefaultRenderer
         {
           Mark mark = _marks.get(i);
   
-          if (!mark.isReady())
-          {
-            continue;
-          }
-          if (!mark.isRendered() || mark.isShowingHint() || mark.isLeavingRenderer())
+          if (!mark.isTouchable())
           {
             continue;
           }
   
           final float markWidth = mark.getScreenWidth();
-          if (markWidth <= 0)
-          {
-            continue;
-          }
-  
           final float markHeight = mark.getScreenHeight();
-          if (markHeight <= 0)
-          {
-            continue;
-          }
   
           final Vector3D cartesianMarkPosition = mark.getCartesianPosition(planet);
           final Vector2F markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
@@ -1002,6 +989,21 @@ public class MarksRenderer extends DefaultRenderer
     }
   
     return result;
+  }
+
+  /** the first mark the filter accepts, leaving marks excluded as in getAllMarks; NULL when none */
+  public final Mark findMark(MarkFilter filter)
+  {
+    final int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++)
+    {
+      Mark mark = _marks.get(i);
+      if (!mark.isLeavingRenderer() && filter.test(mark))
+      {
+        return mark;
+      }
+    }
+    return null;
   }
 
 }

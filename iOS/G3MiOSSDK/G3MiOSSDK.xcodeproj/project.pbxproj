@@ -101,6 +101,8 @@
 		CF66065123DF2FFD00795C7F /* ProtoRenderer.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66019723DF2DA500795C7F /* ProtoRenderer.hpp */; };
 		CF66065223DF2FFD00795C7F /* GEO3DCoordinatesData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66019823DF2DA500795C7F /* GEO3DCoordinatesData.hpp */; };
 		CF66065323DF2FFD00795C7F /* HUDQuadWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF66019D23DF2DA500795C7F /* HUDQuadWidget.hpp */; };
+		09D0C5E29AE96B4F148FAA87 /* HUDWidgetImage.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6A989117A1BF5127B1F0C3C3 /* HUDWidgetImage.hpp */; };
+		A404D4857616DBDE70A17EDB /* HUDBillboardWidget.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6F73DB443B1BE40C3E696BC8 /* HUDBillboardWidget.hpp */; };
 		CF66065423DF2FFD00795C7F /* ILocationModifier.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6601A123DF2DA500795C7F /* ILocationModifier.hpp */; };
 		CF66065523DF2FFD00795C7F /* IndexedGeometryMesh.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6601A223DF2DA500795C7F /* IndexedGeometryMesh.hpp */; };
 		CF66065623DF2FFD00795C7F /* SceneJSNodeParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6601A323DF2DA500795C7F /* SceneJSNodeParser.hpp */; };
@@ -808,6 +810,8 @@
 		CF66092623DF330700795C7F /* BufferDEMGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6603F823DF2DA900795C7F /* BufferDEMGrid.cpp */; };
 		CF66092723DF330700795C7F /* AbstractMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6603FB23DF2DA900795C7F /* AbstractMesh.cpp */; };
 		CF66092823DF330700795C7F /* HUDQuadWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66040223DF2DA900795C7F /* HUDQuadWidget.cpp */; };
+		0B7B6F6E7ADB783D4A2F7195 /* HUDWidgetImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C8F00EBDD16EE9301CFC0B1 /* HUDWidgetImage.cpp */; };
+		D8CC36B8CEFE2623E4D91C8F /* HUDBillboardWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C1FA6064C9CE9D9FAFA59C3 /* HUDBillboardWidget.cpp */; };
 		CF66092923DF330700795C7F /* GEO3DCoordinatesData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66040623DF2DA900795C7F /* GEO3DCoordinatesData.cpp */; };
 		CF66092A23DF330700795C7F /* ProtoRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66040823DF2DA900795C7F /* ProtoRenderer.cpp */; };
 		CF66092B23DF330700795C7F /* QuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66040923DF2DA900795C7F /* QuadTree.cpp */; };
@@ -1070,6 +1074,8 @@
 				CF66065123DF2FFD00795C7F /* ProtoRenderer.hpp in CopyFiles */,
 				CF66065223DF2FFD00795C7F /* GEO3DCoordinatesData.hpp in CopyFiles */,
 				CF66065323DF2FFD00795C7F /* HUDQuadWidget.hpp in CopyFiles */,
+				09D0C5E29AE96B4F148FAA87 /* HUDWidgetImage.hpp in CopyFiles */,
+				A404D4857616DBDE70A17EDB /* HUDBillboardWidget.hpp in CopyFiles */,
 				CF66065423DF2FFD00795C7F /* ILocationModifier.hpp in CopyFiles */,
 				CF66065523DF2FFD00795C7F /* IndexedGeometryMesh.hpp in CopyFiles */,
 				CF66065623DF2FFD00795C7F /* SceneJSNodeParser.hpp in CopyFiles */,
@@ -1667,6 +1673,8 @@
 		CF66019B23DF2DA500795C7F /* MeshBoundingVolumeTileVisibilityTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBoundingVolumeTileVisibilityTester.cpp; sourceTree = "<group>"; };
 		CF66019C23DF2DA500795C7F /* WrapperNearFrustumRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WrapperNearFrustumRenderer.cpp; sourceTree = "<group>"; };
 		CF66019D23DF2DA500795C7F /* HUDQuadWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDQuadWidget.hpp; sourceTree = "<group>"; };
+		6A989117A1BF5127B1F0C3C3 /* HUDWidgetImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDWidgetImage.hpp; sourceTree = "<group>"; };
+		6F73DB443B1BE40C3E696BC8 /* HUDBillboardWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDBillboardWidget.hpp; sourceTree = "<group>"; };
 		CF66019F23DF2DA500795C7F /* AtmosphereRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AtmosphereRenderer.cpp; sourceTree = "<group>"; };
 		CF6601A023DF2DA500795C7F /* DeviceAttitudeCameraHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceAttitudeCameraHandler.cpp; sourceTree = "<group>"; };
 		CF6601A123DF2DA500795C7F /* ILocationModifier.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ILocationModifier.hpp; sourceTree = "<group>"; };
@@ -2266,6 +2274,8 @@
 		CF6603FF23DF2DA900795C7F /* AtmosphereRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AtmosphereRenderer.hpp; sourceTree = "<group>"; };
 		CF66040023DF2DA900795C7F /* WrapperNearFrustumRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WrapperNearFrustumRenderer.hpp; sourceTree = "<group>"; };
 		CF66040223DF2DA900795C7F /* HUDQuadWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDQuadWidget.cpp; sourceTree = "<group>"; };
+		3C8F00EBDD16EE9301CFC0B1 /* HUDWidgetImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDWidgetImage.cpp; sourceTree = "<group>"; };
+		7C1FA6064C9CE9D9FAFA59C3 /* HUDBillboardWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDBillboardWidget.cpp; sourceTree = "<group>"; };
 		CF66040323DF2DA900795C7F /* MarkTouchListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MarkTouchListener.hpp; sourceTree = "<group>"; };
 		CF66040423DF2DA900795C7F /* DEMSubscription.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DEMSubscription.hpp; sourceTree = "<group>"; };
 		CF66040523DF2DA900795C7F /* TiledVectorLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TiledVectorLayer.hpp; sourceTree = "<group>"; };
@@ -3147,7 +3157,11 @@
 				CF66041C23DF2DAA00795C7F /* HUDPosition.hpp */,
 				CF6601B423DF2DA500795C7F /* HUDPosition.cpp */,
 				CF66019D23DF2DA500795C7F /* HUDQuadWidget.hpp */,
+				6A989117A1BF5127B1F0C3C3 /* HUDWidgetImage.hpp */,
+				6F73DB443B1BE40C3E696BC8 /* HUDBillboardWidget.hpp */,
 				CF66040223DF2DA900795C7F /* HUDQuadWidget.cpp */,
+				3C8F00EBDD16EE9301CFC0B1 /* HUDWidgetImage.cpp */,
+				7C1FA6064C9CE9D9FAFA59C3 /* HUDBillboardWidget.cpp */,
 				CF6602BA23DF2DA600795C7F /* HUDRelativePosition.hpp */,
 				CF66038023DF2DA800795C7F /* HUDRelativePosition.cpp */,
 				CF6603D823DF2DA900795C7F /* HUDRelativeSize.hpp */,
@@ -4155,6 +4169,8 @@
 				CF42264525BED63D003CF0A3 /* Measure.cpp in Sources */,
 				CF66092723DF330700795C7F /* AbstractMesh.cpp in Sources */,
 				CF66092823DF330700795C7F /* HUDQuadWidget.cpp in Sources */,
+				0B7B6F6E7ADB783D4A2F7195 /* HUDWidgetImage.cpp in Sources */,
+				D8CC36B8CEFE2623E4D91C8F /* HUDBillboardWidget.cpp in Sources */,
 				CF64ADEF25BDC6C500815620 /* XPCPointSelectionListener.cpp in Sources */,
 				CF66092923DF330700795C7F /* GEO3DCoordinatesData.cpp in Sources */,
 				CF66092A23DF330700795C7F /* ProtoRenderer.cpp in Sources */,

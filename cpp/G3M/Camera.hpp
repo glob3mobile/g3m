@@ -250,6 +250,9 @@ public:
                                           const Vector2F&   screenPosition2,
                                           const float       horizonOnScreen) const;
 
+  // point2Pixel projects points hidden behind the planet too; this tells them apart
+  bool isAboveHorizonOf(const Vector3D& point) const;
+
   void forceMatrixCreation() const;
 
   Matrix44D* getModelMatrix44D() const;
@@ -429,9 +432,6 @@ private:
 
   double screenAngleOfSegment(const Vector3D& cartesian1,
                               const Vector3D& cartesian2) const;
-
-  // point2Pixel projects points hidden behind the planet too; this tells them apart
-  bool isAboveHorizonOf(const Vector3D& point) const;
 
   static double signedAngleInRadians(double radians); // wraps into (-PI, PI]
 

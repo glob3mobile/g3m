@@ -363,6 +363,9 @@ public:
     return _leavingRenderer;
   }
 
+  /** a touch can reach it: ready, drawn in the last frame with its own outfit (not the hint), not leaving, with a size on screen */
+  bool isTouchable() const;
+
   /** the leaving mark is off the screen: the renderer can let it go */
   bool hasLeftRenderer() const;
 
