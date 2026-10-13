@@ -90,7 +90,7 @@ public class MapzenTerrariumParser
 
   public static FloatBufferDEMGrid parse(IImage image, Sector sector, double deltaHeight)
   {
-    MutableColor255 pixel = new MutableColor255((byte) 0, (byte) 0, (byte) 0, (byte) 0);
+    MutableColor255 pixel = new MutableColor255(0, 0, 0, 0);
   
     final int width = image.getWidth();
     final int height = image.getHeight();

@@ -713,8 +713,9 @@ public:
             "uniform mat4 uColorMatrix;\n" +
             "void main() {\n" +
             "  vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
-            "  vec3 gradedColor = (uColorMatrix * vec4(color.rgb, 1.0)).rgb;\n" +
-            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, 1.0), color.a);\n" +
+            "  // Texels are premultiplied on every platform: the matrix offset scales with alpha and the result stays a valid premultiplied colour.\n" +
+            "  vec3 gradedColor = (uColorMatrix * color).rgb;\n" +
+            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, color.a), color.a);\n" +
             "}\n");
          this->add(srcTexturedMesh_ColorGrade);
       }
@@ -860,8 +861,9 @@ public:
             "uniform mat4 uColorMatrix;\n" +
             "void main() {\n" +
             "  vec4 color = texture2D(Sampler, TextureCoordOut);\n" +
-            "  vec3 gradedColor = (uColorMatrix * vec4(color.rgb, 1.0)).rgb;\n" +
-            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, 1.0), color.a);\n" +
+            "  // Texels are premultiplied on every platform: the matrix offset scales with alpha and the result stays a valid premultiplied colour.\n" +
+            "  vec3 gradedColor = (uColorMatrix * color).rgb;\n" +
+            "  gl_FragColor = vec4(clamp(gradedColor, 0.0, color.a), color.a);\n" +
             "}\n");
          this->add(srcTransformedTexCoorTexturedMesh_ColorGrade);
       }

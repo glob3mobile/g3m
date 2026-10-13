@@ -57,10 +57,7 @@ void MapzenTerrariumParser::ParserTask::onPostExecute(const G3MContext* context)
 FloatBufferDEMGrid* MapzenTerrariumParser::parse(const IImage* image,
                                                  const Sector& sector,
                                                  double deltaHeight) {
-  MutableColor255 pixel((unsigned char) 0,
-                        (unsigned char) 0,
-                        (unsigned char) 0,
-                        (unsigned char) 0);
+  MutableColor255 pixel(0, 0, 0, 0);
 
   const int width  = image->getWidth();
   const int height = image->getHeight();

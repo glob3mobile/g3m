@@ -22,10 +22,11 @@ public class MutableColor255
 //  MutableColor255 operator =(MutableColor255 that);
 
 
-  public byte _red;
-  public byte _green;
-  public byte _blue;
-  public byte _alpha;
+  // Channels are 0-255 held in int: cpp2java turns unsigned char into Java's signed byte.
+  public int _red;
+  public int _green;
+  public int _blue;
+  public int _alpha;
 
   public MutableColor255(MutableColor255 that)
   {
@@ -35,7 +36,7 @@ public class MutableColor255
      _alpha = that._alpha;
   }
 
-  public MutableColor255(byte red, byte green, byte blue, byte alpha)
+  public MutableColor255(int red, int green, int blue, int alpha)
   {
      _red = red;
      _green = green;

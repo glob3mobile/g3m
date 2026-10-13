@@ -109,10 +109,9 @@ void TextUtils_Emscripten::createLabelImage(const std::string& label,
   context.set("textBaseline", "top");
   context.call<void>("fillText", label, 0, 0);
 
-  const std::string imageDataURL = canvas.call<std::string>("toDataURL");
-  Image_Emscripten::createFromURL(imageDataURL,
-                                  listener,
-                                  autodelete);
+  Image_Emscripten::createFromCanvas(canvas,
+                                     listener,
+                                     autodelete);
 }
 
 void TextUtils_Emscripten::nativeLabelImage(const IImage* image,
@@ -192,8 +191,7 @@ void TextUtils_Emscripten::nativeLabelImage(const IImage* image,
     context.call<void>("fillText", label, imageWidth + separation, (resultHeight - textHeight) / 2);
   }
 
-  const std::string imageDataURL = canvas.call<std::string>("toDataURL");
-  Image_Emscripten::createFromURL(imageDataURL,
-                                  listener,
-                                  autodelete);
+  Image_Emscripten::createFromCanvas(canvas,
+                                     listener,
+                                     autodelete);
 }

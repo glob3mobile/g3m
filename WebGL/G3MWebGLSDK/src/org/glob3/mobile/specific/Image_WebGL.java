@@ -6,7 +6,7 @@ import com.google.gwt.core.client.*;
 
 public final class Image_WebGL extends IImage {
 
-   private JavaScriptObject _imgObject;       //IMAGE JS
+   private JavaScriptObject _imgObject;       // HTMLImageElement or HTMLCanvasElement
    private JsArrayNumber    _imageData = null;
 
    public Image_WebGL(final JavaScriptObject data) {
@@ -49,7 +49,7 @@ public final class Image_WebGL extends IImage {
 
    @Override
    public boolean isPremultiplied() {
-      return false;
+      return true;
    }
 
    private static native JavaScriptObject createCanvas() /*-{
@@ -67,11 +67,11 @@ public final class Image_WebGL extends IImage {
          final JavaScriptObject domCanvasContext = getContext2D(domCanvas);
          _imageData = createImageData(domCanvas, domCanvasContext);
       }
-      final int i = (y * getWidth()) + x;
-      pixel._red   = (byte) _imageData.get(i);
-      pixel._green = (byte) _imageData.get(i + 1);
-      pixel._blue  = (byte) _imageData.get(i + 2);
-      pixel._alpha = (byte) _imageData.get(i + 3);
+      final int i = ((y * getWidth()) + x) * 4;
+      pixel._red   = (int) _imageData.get(i);
+      pixel._green = (int) _imageData.get(i + 1);
+      pixel._blue  = (int) _imageData.get(i + 2);
+      pixel._alpha = (int) _imageData.get(i + 3);
    }
 
    private native JsArrayNumber createImageData(final JavaScriptObject domCanvas, JavaScriptObject domCanvasContext)/*-{
@@ -84,7 +84,7 @@ public final class Image_WebGL extends IImage {
     domCanvasContext.drawImage(imageJS, 0, 0, w, h);
 
     var imgData = domCanvasContext.getImageData(0, 0, w, h);
-    return imgData;
+    return imgData.data;
    }-*/;
 
 }

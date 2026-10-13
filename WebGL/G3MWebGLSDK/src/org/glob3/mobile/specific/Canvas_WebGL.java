@@ -116,18 +116,13 @@ public final class Canvas_WebGL extends ICanvas {
 
    @Override
    protected native void _createImage(final IImageListener listener, final boolean autodelete) /*-{
-    var width = this.@org.glob3.mobile.specific.Canvas_WebGL::_width;
-    var height = this.@org.glob3.mobile.specific.Canvas_WebGL::_height;
-    var jsImage = new Image(width, height);
-    jsImage.onload = function() {
-      var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsImage);
-      listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
-      if (autodelete) {
-        listener.@org.glob3.mobile.generated.IImageListener::dispose()();
-      }
-    };
+    // The image takes over the canvas: every caller discards this ICanvas after createImage().
     var canvas = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvas;
-    jsImage.src = canvas.toDataURL();
+    var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(canvas);
+    listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
+    if (autodelete) {
+      listener.@org.glob3.mobile.generated.IImageListener::dispose()();
+    }
    }-*/;
 
    private static String createDOMColor(final Color color) {

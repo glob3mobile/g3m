@@ -9,8 +9,6 @@
 #include "G3M/IStringBuilder.hpp"
 #include "G3M/MutableColor255.hpp"
 
-#include "EMStorage.hpp"
-
 
 using namespace emscripten;
 
@@ -52,7 +50,7 @@ const std::string Image_Emscripten::description() const {
 }
 
 bool Image_Emscripten::isPremultiplied() const {
-  return false;
+  return true;
 }
 
 IImage* Image_Emscripten::shallowCopy() const {
@@ -80,45 +78,20 @@ void Image_Emscripten::getPixel(int x, int y,
   if (!_imageData.as<bool>()) {
     _imageData = createImageData();
   }
-  const int i = (y * getWidth()) + x;
+  const int i = ((y * getWidth()) + x) * 4;
   val data = _imageData["data"];
-  pixel._red   = data[i    ].as<unsigned char>();
-  pixel._green = data[i + 1].as<unsigned char>();
-  pixel._blue  = data[i + 2].as<unsigned char>();
-  pixel._alpha = data[i + 3].as<unsigned char>();
+  pixel._red   = data[i    ].as<int>();
+  pixel._green = data[i + 1].as<int>();
+  pixel._blue  = data[i + 2].as<int>();
+  pixel._alpha = data[i + 3].as<int>();
 }
 
 
-extern "C" {
-
-EMSCRIPTEN_KEEPALIVE
-void Image_Emscripten_imageCreated(int domImageID, void* voidListener, bool autodelete) {
-  IImageListener* listener = (IImageListener*) voidListener;
-  val domImage = EMStorage::take(domImageID);
-
-  IImage* image = new Image_Emscripten(domImage);
-  listener->imageCreated(image);
+void Image_Emscripten::createFromCanvas(const val& domCanvas,
+                                        IImageListener* listener,
+                                        bool autodelete) {
+  listener->imageCreated( new Image_Emscripten(domCanvas) );
   if (autodelete) {
     delete listener;
   }
-}
-};
-
-void Image_Emscripten::createFromURL(const std::string& url,
-                                     IImageListener* listener,
-                                     bool autodelete) {
-
-  const int urlID = EMStorage::put( val(url) );
-
-  EM_ASM({
-    var img = new Image();
-
-    img.onload = function() {
-      Module.ccall('Image_Emscripten_imageCreated', 'void', ['int', 'number', 'bool'], [ document.EMStorage.put(img), $1, $2 ]);
-    };
-
-    var url = document.EMStorage.take($0);
-    img.src = url;
-
-  }, urlID, listener, autodelete);
 }

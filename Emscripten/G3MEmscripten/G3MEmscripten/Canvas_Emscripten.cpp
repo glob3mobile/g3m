@@ -229,10 +229,10 @@ void Canvas_Emscripten::roundRect(float x, float y,
 
 void Canvas_Emscripten::_createImage(IImageListener* listener,
                                      bool autodelete) {
-  const std::string imageDataURL = _domCanvas.call<std::string>("toDataURL");
-  Image_Emscripten::createFromURL(imageDataURL,
-                                  listener,
-                                  autodelete);
+  // Every caller discards this ICanvas after createImage().
+  Image_Emscripten::createFromCanvas(_domCanvas,
+                                     listener,
+                                     autodelete);
 }
 
 const std::string createDOMFont(const GFont& font,

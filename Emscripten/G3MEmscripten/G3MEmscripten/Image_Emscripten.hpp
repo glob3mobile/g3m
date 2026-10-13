@@ -20,9 +20,10 @@ private:
 
 public:
 
-  static void createFromURL(const std::string& url,
-                            IImageListener* listener,
-                            bool autodelete);
+  // The image takes over the canvas: the caller must not draw on it afterwards.
+  static void createFromCanvas(const emscripten::val& domCanvas,
+                               IImageListener* listener,
+                               bool autodelete);
 
   Image_Emscripten(const emscripten::val& domImage);
 
