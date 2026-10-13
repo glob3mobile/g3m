@@ -12,11 +12,7 @@
 #include "TexturesHandler.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IGLTextureID.hpp"
-#include "IDownloader.hpp"
-#include "IImageDownloadListener.hpp"
 #include "MarkTouchListener.hpp"
-#include "ITextUtils.hpp"
-#include "IImageListener.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "GLFeature.hpp"
 #include "Vector2D.hpp"
@@ -24,29 +20,35 @@
 #include "TextureIDReference.hpp"
 #include "ErrorHandling.hpp"
 #include "Effects.hpp"
-#include "IImageBuilder.hpp"
+#include "IImageFactory.hpp"
 #include "G3MRenderContext.hpp"
 #include "Planet.hpp"
 #include "MarksRenderer.hpp"
-#include "IImageBuilderListener.hpp"
+#include "IImageFactoryListener.hpp"
+#include "MarkOutfit.hpp"
+#include "MarkAnchor.hpp"
+#include "IMathUtils.hpp"
 
 
-class MarkImageBuilderListener : public IImageBuilderListener {
+class MarkImageFactoryListener : public IImageFactoryListener {
 private:
-  IImageBuilder* _imageBuilder;
-  Mark* _mark;
+  IImageFactory* _imageFactory;
+  Mark*          _mark;
+  const size_t   _outfitIndex;
 
 public:
-  MarkImageBuilderListener(IImageBuilder* imageBuilder,
-                           Mark* mark) :
-  _imageBuilder(imageBuilder),
-  _mark(mark)
+  MarkImageFactoryListener(IImageFactory* imageFactory,
+                           Mark*          mark,
+                           const size_t   outfitIndex) :
+  _imageFactory(imageFactory),
+  _mark(mark),
+  _outfitIndex(outfitIndex)
   {
 
   }
 
-  ~MarkImageBuilderListener() {
-    delete _imageBuilder;
+  ~MarkImageFactoryListener() {
+    delete _imageFactory;
   }
 
   void forgetMark() {
@@ -56,16 +58,72 @@ public:
   void imageCreated(const IImage*      image,
                     const std::string& imageName) {
     if (_mark) {
-      _mark->onImageCreated(image, imageName);
+      _mark->onImageCreated(_outfitIndex, image, imageName);
     }
   }
 
   void onError(const std::string& error)  {
     if (_mark) {
-      _mark->onImageCreationError(error);
+      _mark->onImageCreationError(_outfitIndex, error);
     }
   }
 
+};
+
+
+/** an outfit's image and texture: the mark's own fields hold the outfit on screen, these the others */
+class MarkOutfitImage {
+public:
+  IImageFactory*            _imageFactory; // until the image is asked for
+  MarkImageFactoryListener* _listener;     // while the image is being created
+  bool                      _solved;
+#ifdef C_CODE
+  const IImage*             _image;
+  const TextureIDReference* _textureID;
+  const MarkAnchor*         _anchor;
+#endif
+#ifdef JAVA_CODE
+  public IImage             _image;
+  public TextureIDReference _textureID;
+  public MarkAnchor         _anchor;
+#endif
+  std::string               _imageID;
+  float                     _width;
+  float                     _height;
+  bool                      _hasAnchor; // the outfit's anchor, computed once its image exists
+  float                     _anchorU;
+  float                     _anchorV;
+
+  MarkOutfitImage(IImageFactory* imageFactory,
+                  const MarkAnchor* anchor) :
+  _imageFactory(imageFactory),
+  _listener(NULL),
+  _solved(false),
+  _image(NULL),
+  _textureID(NULL),
+  _anchor(anchor),
+  _imageID(""),
+  _width(0),
+  _height(0),
+  _hasAnchor(false),
+  _anchorU(0.5f),
+  _anchorV(0.5f)
+  {
+  }
+
+  ~MarkOutfitImage() {
+    if (_listener != NULL) {
+      _listener->forgetMark();
+    }
+    delete _imageFactory;
+    delete _image;
+    if (_textureID != NULL) {
+#ifdef JAVA_CODE
+      _textureID.dispose();
+#endif
+      delete _textureID;
+    }
+  }
 };
 
 
@@ -93,23 +151,23 @@ public:
   _mark(mark),
   _initialSize(initialSize)
   {
-    _mark->setScreenSizeScale(_initialSize, _initialSize);
+    _mark->setEffectScale(_initialSize);
   }
 
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     const double alpha = getAlpha(when);
     const float  s     = (float) (((1.0 - _initialSize) * alpha) + _initialSize);
-    _mark->setScreenSizeScale(s, s);
+    _mark->setEffectScale(s);
   }
 
   void stop(const G3MRenderContext* rc,
             const TimeInterval& when) {
-    _mark->setScreenSizeScale(1, 1);
+    _mark->setEffectScale(1);
   }
 
   void cancel(const TimeInterval& when) {
-    _mark->setScreenSizeScale(1, 1);
+    _mark->setEffectScale(1);
   }
 
 };
@@ -133,14 +191,15 @@ public:
   _deleteMarkOnDisappears(deleteMarkOnDisappears),
   _finalSize(finalSize)
   {
-    _mark->setScreenSizeScale(1, 1);
+    _mark->setEffectScale(1);
   }
 
   ~MarkZoomOutAndRemoveEffect() {
-    if (_deleteMarkOnDisappears) {
-      if (_mark != NULL) {
-        Mark* mark = _mark;
-        _mark = NULL;
+    if (_mark != NULL) {
+      Mark* mark = _mark;
+      _mark = NULL;
+      mark->forgetZoomOutEffect();
+      if (_deleteMarkOnDisappears) {
         delete mark;
       }
     }
@@ -149,12 +208,18 @@ public:
 #endif
   }
 
+  // the mark was deleted by someone else: from now on the effect does nothing until it runs out
+  void forgetMark() {
+    _mark     = NULL;
+    _renderer = NULL;
+  }
+
   void doStep(const G3MRenderContext* rc,
               const TimeInterval& when) {
     if (_mark != NULL) {
       const double alpha = getAlpha(when);
       const float  s     = 1.0f - (float) (((1.0 - _finalSize) * alpha) + _finalSize);
-      _mark->setScreenSizeScale(s, s);
+      _mark->setEffectScale(s);
     }
   }
 
@@ -176,109 +241,6 @@ public:
 };
 
 
-class MarkLabelImageListener : public IImageListener {
-private:
-  IImage* _iconImage;
-  Mark*   _mark;
-
-public:
-  MarkLabelImageListener(IImage* iconImage,
-                         Mark* mark) :
-  _iconImage(iconImage),
-  _mark(mark)
-  {
-
-  }
-
-  void imageCreated(const IImage* image) {
-    delete _iconImage;
-    _iconImage = NULL;
-
-    if (image == NULL) {
-      _mark->onTextureDownloadError();
-    }
-    else {
-      _mark->onTextureDownload(image);
-    }
-  }
-};
-
-
-
-class IconDownloadListener : public IImageDownloadListener {
-private:
-  Mark*              _mark;
-  const std::string  _label;
-  const bool         _labelBottom;
-  const float        _labelFontSize;
-  const Color*       _labelFontColor;
-  const Color*       _labelShadowColor;
-  const int          _labelGapSize;
-
-public:
-  IconDownloadListener(Mark* mark,
-                       const std::string& label,
-                       bool  labelBottom,
-                       const float labelFontSize,
-                       const Color* labelFontColor,
-                       const Color* labelShadowColor,
-                       const int labelGapSize) :
-  _mark(mark),
-  _label(label),
-  _labelBottom(labelBottom),
-  _labelFontSize(labelFontSize),
-  _labelFontColor(labelFontColor),
-  _labelShadowColor(labelShadowColor),
-  _labelGapSize(labelGapSize)
-  {
-
-  }
-
-  void onDownload(const URL& url,
-                  IImage* image,
-                  bool expired) {
-    const bool hasLabel = ( _label.length() != 0 );
-
-    if (hasLabel) {
-#ifdef C_CODE
-      LabelPosition labelPosition = _labelBottom ? Bottom : Right;
-#endif
-#ifdef JAVA_CODE
-      LabelPosition labelPosition = _labelBottom ? LabelPosition.Bottom : LabelPosition.Right;
-#endif
-
-      ITextUtils::instance()->labelImage(image,
-                                         _label,
-                                         labelPosition,
-                                         _labelGapSize,
-                                         _labelFontSize,
-                                         _labelFontColor,
-                                         _labelShadowColor,
-                                         new MarkLabelImageListener(image, _mark),
-                                         true);
-    }
-    else {
-      _mark->onTextureDownload(image);
-    }
-  }
-
-  void onError(const URL& url) {
-    ILogger::instance()->logError("Error trying to download image \"%s\"", url._path.c_str());
-    _mark->onTextureDownloadError();
-  }
-
-  void onCancel(const URL& url) {
-    // ILogger::instance()->logError("Download canceled for image \"%s\"", url._path.c_str());
-    _mark->onTextureDownloadError();
-  }
-
-  void onCanceledDownload(const URL& url,
-                          IImage* image,
-                          bool expired) {
-    // do nothing
-  }
-};
-
 EffectTarget* Mark::getEffectTarget() {
   if (_effectTarget == NULL) {
     _effectTarget = new MarkEffectTarget();
@@ -287,31 +249,45 @@ EffectTarget* Mark::getEffectTarget() {
 }
 
 
-Mark::Mark(const std::string& label,
-           const URL&         iconURL,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           const bool         labelBottom,
-           const float        labelFontSize,
-           const Color*       labelFontColor,
-           const Color*       labelShadowColor,
-           const int          labelGapSize,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageBuilder(NULL),
-_imageBuilderListener(NULL),
-_label(label),
-_iconURL(iconURL),
+Mark::Mark(const std::vector<MarkOutfit*>& outfits,
+           const Geodetic3D&               position,
+           AltitudeMode                    altitudeMode,
+           double                          minDistanceToCamera,
+           double                          maxDistanceToCamera,
+           MarkUserData*                   userData,
+           bool                            autoDeleteUserData,
+           MarkTouchListener*              listener,
+           bool                            autoDeleteListener,
+           bool                            zoomInAppears) :
+_outfitIndex(0),
+_priority(NAND),
+_hasHint(false),
+_appAnchorU(0.5),
+_appAnchorV(0.5),
+_declutterHidden(false),
+_leavingRenderer(false),
+_deleteWhenGone(false),
+_hiding(false),
+_plannedTarget(0),
+_plannedSinceMS(-1),
+_declutterTarget(0),
+_presence(1),
+_transitionWidthScale(1),
+_transitionHeightScale(1),
+_transitionAlpha(1),
+_lastTransitionMS(-1),
+_leavingOutfitIndex(-1),
+_leavingPresence(0),
+_leavingWidthScale(1),
+_leavingHeightScale(1),
+_leavingAlpha(1),
+_leavingGLState(NULL),
+_leavingBillboardGLF(NULL),
+_leavingModelTransformGLF(NULL),
+_grazingAngle(NAND),
+_horizonScale(1),
 _position(new Geodetic3D(position)),
 _altitudeMode(altitudeMode),
-_labelBottom(labelBottom),
-_labelFontSize(labelFontSize),
-_labelFontColor(labelFontColor),
-_labelShadowColor(labelShadowColor),
-_labelGapSize(labelGapSize),
 _textureID(NULL),
 _cartesianPosition(NULL),
 _textureSolved(false),
@@ -322,273 +298,56 @@ _textureHeight(0),
 _userData(userData),
 _autoDeleteUserData(autoDeleteUserData),
 _minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( iconURL._path + "_" + label ),
-_surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
-_glState(NULL),
-_normalAtMarkPosition(NULL),
-_textureSizeSetExternally(false),
-_hasTCTransformations(false),
-_textureGLF(NULL),
-_anchorU(0.5),
-_anchorV(0.5),
-_billboardGLF(NULL),
-_textureHeightScale(1.0),
-_textureWidthScale(1.0),
-_textureScaleSetExternally(false),
-_initialized(false),
-_zoomInAppears(true),
-_effectsScheduler(NULL),
-_firstRender(true),
-_effectTarget(NULL),
-_zoomOutDisappears(false),
-_deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false),
-_token("")
-{
-
-}
-
-Mark::Mark(const std::string& label,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           const float        labelFontSize,
-           const Color*       labelFontColor,
-           const Color*       labelShadowColor,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageBuilder(NULL),
-_imageBuilderListener(NULL),
-_label(label),
-_labelBottom(true),
-_iconURL("", false),
-_position(new Geodetic3D(position)),
-_altitudeMode(altitudeMode),
-_labelFontSize(labelFontSize),
-_labelFontColor(labelFontColor),
-_labelShadowColor(labelShadowColor),
-_labelGapSize(2),
-_textureID(NULL),
-_cartesianPosition(NULL),
-_textureSolved(false),
-_textureImage(NULL),
-_renderedMark(false),
-_textureWidth(0),
-_textureHeight(0),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( "_" + label ),
-_surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
-_glState(NULL),
-_normalAtMarkPosition(NULL),
-_textureSizeSetExternally(false),
-_textureGLF(NULL),
-_hasTCTransformations(false),
-_anchorU(0.5),
-_anchorV(0.5),
-_billboardGLF(NULL),
-_textureHeightScale(1.0),
-_textureWidthScale(1.0),
-_textureScaleSetExternally(false),
-_initialized(false),
-_zoomInAppears(true),
-_effectsScheduler(NULL),
-_firstRender(true),
-_effectTarget(NULL),
-_zoomOutDisappears(false),
-_deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false),
-_token("")
-{
-
-}
-
-Mark::Mark(const URL&         iconURL,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageBuilder(NULL),
-_imageBuilderListener(NULL),
-_label(""),
-_labelBottom(true),
-_iconURL(iconURL),
-_position(new Geodetic3D(position)),
-_altitudeMode(altitudeMode),
-_labelFontSize(20),
-_labelFontColor(Color::newFromRGBA(1, 1, 1, 1)),
-_labelShadowColor(Color::newFromRGBA(0, 0, 0, 1)),
-_labelGapSize(2),
-_textureID(NULL),
-_cartesianPosition(NULL),
-_textureSolved(false),
-_textureImage(NULL),
-_renderedMark(false),
-_textureWidth(0),
-_textureHeight(0),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( iconURL._path + "_" ),
-_surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
-_glState(NULL),
-_normalAtMarkPosition(NULL),
-_textureSizeSetExternally(false),
-_textureGLF(NULL),
-_hasTCTransformations(false),
-_anchorU(0.5),
-_anchorV(0.5),
-_billboardGLF(NULL),
-_textureHeightScale(1.0),
-_textureWidthScale(1.0),
-_textureScaleSetExternally(false),
-_initialized(false),
-_zoomInAppears(true),
-_effectsScheduler(NULL),
-_firstRender(true),
-_effectTarget(NULL),
-_zoomOutDisappears(false),
-_deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false),
-_token("")
-{
-
-}
-
-Mark::Mark(const IImage*      image,
-           const std::string& imageID,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageBuilder(NULL),
-_imageBuilderListener(NULL),
-_label(""),
-_labelBottom(true),
-_iconURL(URL("", false)),
-_position(new Geodetic3D(position)),
-_altitudeMode(altitudeMode),
-_labelFontSize(20),
-_labelFontColor(NULL),
-_labelShadowColor(NULL),
-_labelGapSize(2),
-_textureID(NULL),
-_cartesianPosition(NULL),
-_textureSolved(true),
-_textureImage(image),
-_renderedMark(false),
-_textureWidth(image->getWidth()),
-_textureHeight(image->getHeight()),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
-_listener(listener),
-_autoDeleteListener(autoDeleteListener),
-_imageID( imageID ),
-_surfaceElevationProvider(NULL),
-_currentSurfaceElevation(0.0),
-_glState(NULL),
-_normalAtMarkPosition(NULL),
-_textureSizeSetExternally(false),
-_hasTCTransformations(false),
-_anchorU(0.5),
-_anchorV(0.5),
-_billboardGLF(NULL),
-_textureScaleSetExternally(false),
-_textureHeightScale(1.0),
-_textureWidthScale(1.0),
-_initialized(false),
-_zoomInAppears(true),
-_effectsScheduler(NULL),
-_firstRender(true),
-_effectTarget(NULL),
-_zoomOutDisappears(false),
-_deleteMarkOnDisappears(false),
-_zoomOutDisappearsStarted(false),
-_token("")
-{
-
-}
-
-Mark::Mark(IImageBuilder*     imageBuilder,
-           const Geodetic3D&  position,
-           AltitudeMode       altitudeMode,
-           double             minDistanceToCamera,
-           MarkUserData*      userData,
-           bool               autoDeleteUserData,
-           MarkTouchListener* listener,
-           bool               autoDeleteListener) :
-_imageBuilder(imageBuilder),
-_imageBuilderListener(NULL),
-_label(""),
-_labelBottom(true),
-_iconURL(URL("", false)),
-_position(new Geodetic3D(position)),
-_altitudeMode(altitudeMode),
-_labelFontSize(20),
-_labelFontColor(NULL),
-_labelShadowColor(NULL),
-_labelGapSize(2),
-_textureID(NULL),
-_cartesianPosition(NULL),
-_textureSolved(false),
-_textureImage(NULL),
-_renderedMark(false),
-_textureWidth(0),
-_textureHeight(0),
-_userData(userData),
-_autoDeleteUserData(autoDeleteUserData),
-_minDistanceToCamera(minDistanceToCamera),
-_maxDistanceToCamera(0),
+_maxDistanceToCamera(maxDistanceToCamera),
 _listener(listener),
 _autoDeleteListener(autoDeleteListener),
 _imageID( "" ),
 _surfaceElevationProvider(NULL),
 _currentSurfaceElevation(0.0),
 _glState(NULL),
+_modelTransformGLF(NULL),
+_glPositionOutdated(false),
 _normalAtMarkPosition(NULL),
 _textureSizeSetExternally(false),
-_hasTCTransformations(false),
+_translationTCX(0),
+_translationTCY(0),
+_scalingTCX(1),
+_scalingTCY(1),
 _anchorU(0.5),
 _anchorV(0.5),
 _billboardGLF(NULL),
-_textureScaleSetExternally(false),
+_textureGLF(NULL),
+_effectScale(1),
 _textureHeightScale(1.0),
 _textureWidthScale(1.0),
 _initialized(false),
-_zoomInAppears(true),
+_zoomInAppears(zoomInAppears),
 _effectsScheduler(NULL),
 _firstRender(true),
 _effectTarget(NULL),
 _zoomOutDisappears(false),
 _deleteMarkOnDisappears(false),
 _zoomOutDisappearsStarted(false),
+_zoomOutEffect(NULL),
 _token("")
 {
-  if (_imageBuilder->isMutable()) {
-    ILogger::instance()->logError("Marks doesn't support mutable image builders");
+  if (outfits.empty()) {
+    THROW_EXCEPTION("Mark: at least one outfit is needed");
+  }
+
+  // element by element: in Java an assignment would share the caller's list
+  for (size_t i = 0; i < outfits.size(); i++) {
+    MarkOutfit* outfit = outfits[i];
+    _outfits.push_back(outfit);
+
+    IImageFactory* imageFactory = outfit->takeImageFactory();
+    if (imageFactory->isMutable()) {
+      THROW_EXCEPTION("Mark: mutable image factories are not supported");
+    }
+    _outfitImages.push_back(new MarkOutfitImage(imageFactory, outfit->getAnchor()));
+
+    // by order: the first outfit shows the most
+    _detailLevels.push_back(outfit->getDetailLevel((int) (outfits.size() - i)));
   }
 }
 
@@ -605,83 +364,33 @@ void Mark::initialize(const G3MContext* context,
     }
   }
 
-  if (!_textureSolved) {
-    if (_imageBuilder != NULL) {
-      _imageBuilderListener = new MarkImageBuilderListener(_imageBuilder, this);
-      _imageBuilder->build(context,
-                           _imageBuilderListener,
-                           true);
-      _imageBuilder = NULL; // ownership moved to MarkImageBuilderListener
-    }
-    else {
-      const bool hasIconURL = ( _iconURL._path.length() != 0 );
-      if (hasIconURL) {
-        IDownloader* downloader = context->getDownloader();
+  createPendingOutfitImages(context);
+}
 
-        downloader->requestImage(_iconURL,
-                                 downloadPriority,
-                                 TimeInterval::fromDays(30),
-                                 true,
-                                 new IconDownloadListener(this,
-                                                          _label,
-                                                          _labelBottom,
-                                                          _labelFontSize,
-                                                          _labelFontColor,
-                                                          _labelShadowColor,
-                                                          _labelGapSize),
-                                 true);
-      }
-      else {
-        const bool hasLabel = ( _label.length() != 0 );
-        if (hasLabel) {
-          ITextUtils::instance()->createLabelImage(_label,
-                                                   _labelFontSize,
-                                                   _labelFontColor,
-                                                   _labelShadowColor,
-                                                   new MarkLabelImageListener(NULL, this),
-                                                   true);
-        }
-        else {
-          ILogger::instance()->logWarning("Mark created without label nor icon");
-        }
-      }
+// every outfit at once: choosing between them needs their sizes
+void Mark::createPendingOutfitImages(const G3MContext* context) {
+  for (size_t i = 0; i < _outfitImages.size(); i++) {
+    MarkOutfitImage* outfitImage = _outfitImages[i];
+    if (outfitImage->_imageFactory != NULL) {
+      outfitImage->_listener = new MarkImageFactoryListener(outfitImage->_imageFactory, this, i);
+      IImageFactory* imageFactory = outfitImage->_imageFactory;
+      outfitImage->_imageFactory = NULL; // ownership moved to MarkImageFactoryListener
+      imageFactory->create(context,
+                           outfitImage->_listener,
+                           true);
     }
   }
 }
 
-void Mark::onTextureDownloadError() {
+void Mark::onTextureResolved(const IImage* image) {
   _textureSolved = true;
-
-  delete _labelFontColor;
-  _labelFontColor = NULL;
-  delete _labelShadowColor;
-  _labelShadowColor = NULL;
-
-  ILogger::instance()->logError("Can't create texture for Mark (iconURL=\"%s\", label=\"%s\")",
-                                _iconURL._path.c_str(),
-                                _label.c_str());
-}
-
-void Mark::onTextureDownload(const IImage* image) {
-  _textureSolved = true;
-
-  delete _labelFontColor;
-  _labelFontColor = NULL;
-  delete _labelShadowColor;
-  _labelShadowColor = NULL;
 
   _textureImage = image;
 
   if (!_textureSizeSetExternally) {
-    _textureWidth = _textureImage->getWidth();
+    _textureWidth  = _textureImage->getWidth();
     _textureHeight = _textureImage->getHeight();
-
-    if (_textureScaleSetExternally) {
-      _textureWidth  *= _textureWidthScale;
-      _textureHeight *= _textureHeightScale;
-    }
   }
-
 }
 
 bool Mark::isReady() const {
@@ -689,18 +398,24 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
-  if (_imageBuilderListener) {
-    _imageBuilderListener->forgetMark();
+  // not cancelled: the effect may be the one deleting this mark, from inside the scheduler's loop
+  if (_zoomOutEffect != NULL) {
+    _zoomOutEffect->forgetMark();
+    _zoomOutEffect = NULL;
   }
-  delete _imageBuilder;
+  else if (!_zoomOutDisappearsStarted) {
+    cancelEffects();
+  }
 
-  //  if (_effectsScheduler != NULL) {
-  //    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-  //  }
+  for (size_t i = 0; i < _outfitImages.size(); i++) {
+    delete _outfitImages[i];
+  }
+
   delete _effectTarget;
 
-  delete _labelFontColor;
-  delete _labelShadowColor;
+  for (size_t i = 0; i < _outfits.size(); i++) {
+    delete _outfits[i];
+  }
 
   delete _position;
 
@@ -727,6 +442,7 @@ Mark::~Mark() {
   if (_glState != NULL) {
     _glState->_release();
   }
+  releaseLeavingOutfit();
 
   if (_textureID != NULL) {
 #ifdef JAVA_CODE
@@ -750,6 +466,15 @@ const Vector3D* Mark::getCartesianPosition(const Planet* planet) {
     _cartesianPosition = new Vector3D( planet->toCartesian(positionWithSurfaceElevation) );
   }
   return _cartesianPosition;
+}
+
+bool Mark::isTouchable() const {
+  return (isReady() &&
+          isRendered() &&
+          !isShowingHint() &&
+          !isLeavingRenderer() &&
+          (getScreenWidth()  > 0) &&
+          (getScreenHeight() > 0));
 }
 
 bool Mark::touched(const TouchEvent* touchEvent) {
@@ -776,9 +501,11 @@ void Mark::createGLState(const Planet* planet,
                          IFloatBuffer* billboardTexCoords) {
   _glState = new GLState();
 
-  _billboardGLF = new BillboardGLFeature(_textureWidth,
-                                         _textureHeight,
-                                         _anchorU, _anchorV);
+  _billboardGLF = new BillboardGLFeature(getScreenWidth(),
+                                         getScreenHeight(),
+                                         _anchorU, _anchorV,
+                                         (_textureID == NULL) || _textureID->isPremultiplied());
+  _billboardGLF->changeAlpha(_transitionAlpha);
 
   _glState->addGLFeature(_billboardGLF,
                          false);
@@ -787,48 +514,29 @@ void Mark::createGLState(const Planet* planet,
   const Vector3D* position = getCartesianPosition(planet);
   const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(*position);
 
-  ModelTransformGLFeature* modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
-  _glState->addGLFeature(modelTransformGLF, false);
+  _modelTransformGLF = new ModelTransformGLFeature(translation.asMatrix44D());
+  _glState->addGLFeature(_modelTransformGLF, false);
+  _glPositionOutdated = false;
 
 
   if (_textureID != NULL) {
 
-    if (_hasTCTransformations) {
-      _textureGLF = new TextureGLFeature(_textureID->getID(),
-                                         billboardTexCoords,
-                                         2,
-                                         0,
-                                         false,
-                                         0,
-                                         true,
-                                         _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
-                                         GLBlendFactor::oneMinusSrcAlpha(),
-                                         _translationTCX,
-                                         _translationTCY,
-                                         _scalingTCX,
-                                         _scalingTCY,
-                                         0.0f,
-                                         0.0f,
-                                         0.0f);
-    }
-    else {
-      _textureGLF = new TextureGLFeature(_textureID->getID(),
-                                         billboardTexCoords,
-                                         2,
-                                         0,
-                                         false,
-                                         0,
-                                         true,
-                                         _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
-                                         GLBlendFactor::oneMinusSrcAlpha(),
-                                         0.0f,
-                                         0.0f,
-                                         1.0f,
-                                         1.0f,
-                                         0.0f,
-                                         0.0f,
-                                         0.0f);
-    }
+    _textureGLF = new TextureGLFeature(_textureID->getID(),
+                                       billboardTexCoords,
+                                       2,
+                                       0,
+                                       false,
+                                       0,
+                                       true,
+                                       _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                       GLBlendFactor::oneMinusSrcAlpha(),
+                                       _translationTCX,
+                                       _translationTCY,
+                                       _scalingTCX,
+                                       _scalingTCY,
+                                       0.0f,
+                                       0.0f,
+                                       0.0f);
 
     _glState->addGLFeature(_textureGLF,
                            false);
@@ -842,118 +550,220 @@ void Mark::render(const G3MRenderContext* rc,
                   const GLState* parentGLState,
                   const Planet* planet,
                   GL* gl,
-                  IFloatBuffer* billboardTexCoords) {
+                  IFloatBuffer* billboardTexCoords,
+                  double horizonBandRadiansPerPixel) {
+  _renderedMark = false;
 
+  const bool hasSomethingToDraw = !_declutterHidden || (_leavingGLState != NULL);
+  if (hasSomethingToDraw &&
+      isVisibleFrom(planet, cameraPosition, cameraHeight)) {
+    updateHorizonScale(horizonBandRadiansPerPixel);
+    if (_glPositionOutdated) {
+      updateGLPosition(planet);
+    }
+    drawLeavingOutfit(rc, parentGLState);
+
+    if (!_declutterHidden) {
+      ensureTexture(rc);
+      if (_textureID != NULL) {
+        ensureGLState(planet, billboardTexCoords, parentGLState);
+        startPendingEffects(rc, renderer);
+        draw(rc, _glState);
+        _renderedMark = true;
+      }
+    }
+  }
+}
+
+void Mark::drawLeavingOutfit(const G3MRenderContext* rc,
+                             const GLState* parentGLState) {
+  if (_leavingGLState != NULL) {
+    _leavingGLState->setParent(parentGLState);
+    draw(rc, _leavingGLState);
+  }
+}
+
+bool Mark::isVisibleFrom(const Planet* planet,
+                         const MutableVector3D& cameraPosition,
+                         double cameraHeight) {
   const Vector3D* markPosition = getCartesianPosition(planet);
 
   _markCameraVector.set(markPosition->_x - cameraPosition.x(),
                         markPosition->_y - cameraPosition.y(),
                         markPosition->_z - cameraPosition.z());
 
-  bool renderableByDistance = true;
-  {
-    const bool hasMinDistanceToCamera = (_minDistanceToCamera > 0);
-    const bool hasMaxDistanceToCamera = (_maxDistanceToCamera > 0);
-    if (hasMinDistanceToCamera || hasMaxDistanceToCamera) {
-      const double squaredDistanceToCamera = _markCameraVector.squaredLength();
+  return (isRenderableByDistance() &&
+          !isOccludedByHorizon(planet, cameraPosition, cameraHeight, markPosition));
+}
 
-      if (hasMinDistanceToCamera &&
-          (squaredDistanceToCamera > (_minDistanceToCamera * _minDistanceToCamera))) {
-        renderableByDistance = false;
-      }
+Vector2F Mark::getOutfitScreenSize(size_t outfitIndex) const {
+  float width;
+  float height;
+  if (_textureSizeSetExternally || (outfitIndex == _outfitIndex)) {
+    width  = _textureWidth;
+    height = _textureHeight;
+  }
+  else {
+    const MarkOutfitImage* outfitImage = _outfitImages[outfitIndex];
+    width  = outfitImage->_width;
+    height = outfitImage->_height;
+  }
+  return Vector2F(width * _textureWidthScale, height * _textureHeightScale);
+}
 
-      if (hasMaxDistanceToCamera &&
-          ( squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera))) {
-        renderableByDistance = false;
-      }
+Vector2F Mark::getOutfitAnchor(size_t outfitIndex) const {
+  const MarkOutfitImage* outfitImage = _outfitImages[outfitIndex];
+  if (outfitImage->_hasAnchor) {
+    return Vector2F(outfitImage->_anchorU, outfitImage->_anchorV);
+  }
+  return Vector2F(_appAnchorU, _appAnchorV);
+}
+
+bool Mark::isRenderableByDistance() const {
+  const bool hasMinDistanceToCamera = (_minDistanceToCamera > 0);
+  const bool hasMaxDistanceToCamera = (_maxDistanceToCamera > 0);
+  if (!hasMinDistanceToCamera && !hasMaxDistanceToCamera) {
+    return true;
+  }
+
+  const double squaredDistanceToCamera = _markCameraVector.squaredLength();
+
+  if (hasMinDistanceToCamera &&
+      (squaredDistanceToCamera > (_minDistanceToCamera * _minDistanceToCamera))) {
+    return false;
+  }
+
+  if (hasMaxDistanceToCamera &&
+      (squaredDistanceToCamera < (_maxDistanceToCamera * _maxDistanceToCamera))) {
+    return false;
+  }
+
+  return true;
+}
+
+bool Mark::isOccludedByHorizon(const Planet* planet,
+                               const MutableVector3D& cameraPosition,
+                               double cameraHeight,
+                               const Vector3D* markPosition) {
+  const double markHeight = (_altitudeMode == RELATIVE_TO_GROUND) ? (_position->_height + _currentSurfaceElevation) : _position->_height;
+  if (markHeight > cameraHeight) {
+    _grazingAngle = NAND;
+    const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
+                                                                     cameraPosition.y(),
+                                                                     cameraPosition.z(),
+                                                                     _markCameraVector.x(),
+                                                                     _markCameraVector.y(),
+                                                                     _markCameraVector.z());
+    if (dists.size() > 0) {
+      const double dist = dists[0];
+      return (dist > 0.0 && dist < 1.0);
+    }
+    return false;
+  }
+
+  // if camera position is upper than mark we can compute horizon culling in a much simpler way
+  if (_normalAtMarkPosition == NULL) {
+    _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
+  }
+  const double angle = Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector);
+  _grazingAngle = angle - HALF_PI;
+  return (angle <= HALF_PI);
+}
+
+// the band is the mark's own apparent height: a big mark starts shrinking earlier than a small one
+void Mark::updateHorizonScale(double radiansPerPixel) {
+  float horizonScale = 1;
+  if ((radiansPerPixel > 0) && !ISNAN(_grazingAngle)) {
+    const double apparentAngle = _textureHeight * _textureHeightScale * radiansPerPixel;
+    if ((apparentAngle > 0) && (_grazingAngle < apparentAngle)) {
+      horizonScale = (float) (_grazingAngle / apparentAngle);
+    }
+  }
+  if (horizonScale != _horizonScale) {
+    _horizonScale = horizonScale;
+    updateBillboard();
+  }
+}
+
+void Mark::ensureTexture(const G3MRenderContext* rc) {
+  if ((_textureID == NULL) && (_textureImage != NULL)) {
+    _textureID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
+                                                                 GLFormat::rgba(),
+                                                                 _imageID,
+                                                                 false,
+                                                                 GLTextureParameterValue::clampToEdge(),
+                                                                 GLTextureParameterValue::clampToEdge());
+
+    delete _textureImage;
+    _textureImage = NULL;
+  }
+}
+
+void Mark::ensureGLState(const Planet* planet,
+                         IFloatBuffer* billboardTexCoords,
+                         const GLState* parentGLState) {
+  if (_glState == NULL) {
+    createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
+  }
+  _glState->setParent(parentGLState);
+}
+
+void Mark::updateGLPosition(const Planet* planet) {
+  const Vector3D* position = getCartesianPosition(planet);
+  const MutableMatrix44D translation = MutableMatrix44D::createTranslationMatrix(*position);
+
+  if (_modelTransformGLF != NULL) {
+    _modelTransformGLF->setMatrix(translation.asMatrix44D());
+  }
+  if (_leavingModelTransformGLF != NULL) {
+    _leavingModelTransformGLF->setMatrix(translation.asMatrix44D());
+  }
+  _glPositionOutdated = false;
+}
+
+void Mark::startPendingEffects(const G3MRenderContext* rc,
+                               MarksRenderer* renderer) {
+  if (_firstRender) {
+    _firstRender = false;
+    if (_zoomInAppears) {
+      _effectsScheduler = rc->getEffectsScheduler();
+      _effectsScheduler->startEffect(new MarkZoomInEffect(this),
+                                     getEffectTarget());
     }
   }
 
-  _renderedMark = false;
-
-  if (renderableByDistance) {
-    bool occludedByHorizon = false;
-
-    if (_position->_height > cameraHeight) {
-      // Computing horizon culling
-      const std::vector<double> dists = planet->intersectionsDistances(cameraPosition.x(),
-                                                                       cameraPosition.y(),
-                                                                       cameraPosition.z(),
-                                                                       _markCameraVector.x(),
-                                                                       _markCameraVector.y(),
-                                                                       _markCameraVector.z());
-      if (dists.size() > 0) {
-        const double dist = dists[0];
-        if (dist > 0.0 && dist < 1.0) {
-          occludedByHorizon = true;
-        }
-      }
+  if (_zoomOutDisappears && !_zoomOutDisappearsStarted) { 
+    _zoomOutDisappearsStarted = true;
+    if (_effectsScheduler != NULL) {
+      _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
     }
     else {
-      // if camera position is upper than mark we can compute horizon culling in a much simpler way
-      if (_normalAtMarkPosition == NULL) {
-        _normalAtMarkPosition = new Vector3D( planet->geodeticSurfaceNormal(*markPosition) );
-      }
-      //      occludedByHorizon = (_normalAtMarkPosition->angleInRadiansBetween(markCameraVector) <= HALF_PI);
-      occludedByHorizon = (Vector3D::angleInRadiansBetween(*_normalAtMarkPosition, _markCameraVector) <= HALF_PI);
+      _effectsScheduler = rc->getEffectsScheduler();
     }
-
-    if (!occludedByHorizon) {
-      if ((_textureID == NULL) && (_textureImage != NULL)) {
-        _textureID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                     GLFormat::rgba(),
-                                                                     _imageID,
-                                                                     false,
-                                                                     GLTextureParameterValue::clampToEdge(),
-                                                                     GLTextureParameterValue::clampToEdge());
-
-        delete _textureImage;
-        _textureImage = NULL;
-      }
-
-      if (_textureID != NULL) {
-        if (_glState == NULL) {
-          createGLState(planet, billboardTexCoords);  // If GLState was disposed due to elevation change
-        }
-        _glState->setParent(parentGLState);
-
-        if (_firstRender) {
-          _firstRender = false;
-          if (_zoomInAppears) {
-            _effectsScheduler = rc->getEffectsScheduler();
-            _effectsScheduler->startEffect(new MarkZoomInEffect(this),
-                                           getEffectTarget());
-          }
-        }
-
-        if (_zoomOutDisappears && !_zoomOutDisappearsStarted) {
-          _zoomOutDisappearsStarted = true;
-          if (_effectsScheduler != NULL) {
-            _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-          }
-          else {
-            _effectsScheduler = rc->getEffectsScheduler();
-          }
-          _effectsScheduler->startEffect(new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears),
-                                         getEffectTarget());
-        }
-
-        rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
-                                0,
-                                4,
-                                _glState,
-                                *rc->getGPUProgramManager());
-
-        _renderedMark = true;
-      }
-    }
+    _zoomOutEffect = new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears);
+    _effectsScheduler->startEffect(_zoomOutEffect,
+                                   getEffectTarget());
   }
+}
 
+void Mark::draw(const G3MRenderContext* rc,
+                GLState* glState) {
+  rc->getGL()->drawArrays(GLPrimitive::triangleStrip(),
+                          0,
+                          4,
+                          glState,
+                          *rc->getGPUProgramManager());
 }
 
 void Mark::animatedRemove(bool deleteMark) {
   _zoomOutDisappears = true;
   _deleteMarkOnDisappears = deleteMark;
+}
+
+void Mark::cancelEffects() {
+  if (_effectsScheduler != NULL) {
+    _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
+  }
 }
 
 void Mark::elevationChanged(const Geodetic2D& position,
@@ -971,12 +781,17 @@ void Mark::elevationChanged(const Geodetic2D& position,
   _cartesianPosition = NULL;
 
   clearGLState();
+  releaseLeavingOutfit();
 }
 
 void Mark::clearGLState() {
   if (_glState != NULL) {
     _glState->_release();
     _glState = NULL;
+    // the features are owned by the GLState
+    _modelTransformGLF = NULL;
+    _billboardGLF      = NULL;
+    _textureGLF        = NULL;
   }
 }
 
@@ -996,7 +811,10 @@ void Mark::setPosition(const Geodetic3D& position) {
   delete _cartesianPosition;
   _cartesianPosition = NULL;
 
-  clearGLState();
+  delete _normalAtMarkPosition;
+  _normalAtMarkPosition = NULL;
+
+  _glPositionOutdated = true;
 }
 
 void Mark::setScreenSize(int width, int height) {
@@ -1004,26 +822,35 @@ void Mark::setScreenSize(int width, int height) {
   _textureHeight = height;
   _textureSizeSetExternally = true;
 
-  if (_glState != NULL) {
-    BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
-    if (b != NULL) {
-      b->changeSize(IMathUtils::instance()->round(_textureWidth),
-                    IMathUtils::instance()->round(_textureHeight));
-    }
-  }
+  updateBillboard();
 }
 
 void Mark::setScreenSizeScale(float scaleWidth, float scaleHeight) {
   _textureWidthScale  = scaleWidth;
   _textureHeightScale = scaleHeight;
-  _textureScaleSetExternally = true;
 
-  if (_glState != NULL) {
-    BillboardGLFeature* b = (BillboardGLFeature*) _glState->getGLFeature(GLF_BILLBOARD);
-    if (b != NULL) {
-      b->changeSize(IMathUtils::instance()->round(_textureWidth  * _textureWidthScale),
-                    IMathUtils::instance()->round(_textureHeight * _textureHeightScale));
-    }
+  updateBillboard();
+}
+
+void Mark::setEffectScale(float effectScale) {
+  _effectScale = effectScale;
+
+  updateBillboard();
+}
+
+void Mark::updateBillboard() {
+  const IMathUtils* mu = IMathUtils::instance();
+  if (_billboardGLF != NULL) {
+    _billboardGLF->changeSize(mu->round(getScreenWidth()),
+                              mu->round(getScreenHeight()));
+    _billboardGLF->changeAlpha(_transitionAlpha);
+  }
+  if (_leavingBillboardGLF != NULL) {
+    const Vector2F leavingSize = getOutfitScreenSize(_leavingOutfitIndex);
+    const float leavingFactor = _effectScale * _horizonScale;
+    _leavingBillboardGLF->changeSize(mu->round(leavingSize._x * leavingFactor * _leavingWidthScale),
+                                     mu->round(leavingSize._y * leavingFactor * _leavingHeightScale));
+    _leavingBillboardGLF->changeAlpha(_leavingAlpha);
   }
 }
 
@@ -1046,10 +873,6 @@ void Mark::setTextureCoordinatesTransformation(const float translationX,
   _scalingTCX = scalingX;
   _scalingTCY = scalingY;
 
-  if (_translationTCX != 0 || _translationTCY != 0 || _scalingTCX != 1 || _scalingTCY != 1) {
-    _hasTCTransformations = true;
-  }
-
   if (_textureGLF != NULL) {
 
     if (!_textureGLF->hasTranslateAndScale()) {
@@ -1062,11 +885,33 @@ void Mark::setTextureCoordinatesTransformation(const float translationX,
 }
 
 void Mark::setMarkAnchor(float anchorU, float anchorV) {
+  _appAnchorU = anchorU;
+  _appAnchorV = anchorV;
+  changeAnchor(anchorU, anchorV);
+}
+
+void Mark::changeAnchor(float anchorU, float anchorV) {
   if (_billboardGLF != NULL) {
     _billboardGLF->changeAnchor(anchorU, anchorV);
   }
   _anchorU = anchorU;
   _anchorV = anchorV;
+}
+
+void Mark::addHint(MarkOutfit* hint) {
+  if (_hasHint) {
+    THROW_EXCEPTION("Mark: the mark already has a hint");
+  }
+  int lowestLevel = _detailLevels[0];
+  for (size_t i = 1; i < _detailLevels.size(); i++) {
+    if (_detailLevels[i] < lowestLevel) {
+      lowestLevel = _detailLevels[i];
+    }
+  }
+  _outfits.push_back(hint);
+  _outfitImages.push_back(new MarkOutfitImage(hint->takeImageFactory(), hint->getAnchor()));
+  _detailLevels.push_back(lowestLevel - 1); // below every other outfit
+  _hasHint = true;
 }
 
 Vector2F Mark::getMarkAnchor() const {
@@ -1081,45 +926,256 @@ float Mark::getMarkAnchorV() const {
   return _anchorV;
 }
 
-void Mark::onImageCreationError(const std::string& error) {
-  _textureSolved = true;
+void Mark::onImageCreationError(size_t outfitIndex,
+                                const std::string& error) {
+  MarkOutfitImage* outfitImage = _outfitImages[outfitIndex];
+  outfitImage->_listener = NULL;
+  outfitImage->_solved   = true;
 
-  //  delete _labelFontColor;
-  //  _labelFontColor = NULL;
-  //  delete _labelShadowColor;
-  //  _labelShadowColor = NULL;
-
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
-  _imageBuilderListener = NULL;
+  if (outfitIndex == _outfitIndex) {
+    _textureSolved = true;
+  }
 
   ILogger::instance()->logError("Can't create image for Mark: \"%s\"",
                                 error.c_str());
 }
 
-void Mark::onImageCreated(const IImage* image,
+void Mark::onImageCreated(size_t outfitIndex,
+                          const IImage* image,
                           const std::string& imageName) {
-  _textureSolved = true;
-  _imageID = imageName;
+  MarkOutfitImage* outfitImage = _outfitImages[outfitIndex];
+  outfitImage->_listener = NULL;
+  outfitImage->_solved   = true;
+  outfitImage->_imageID  = imageName;
+  outfitImage->_width    = image->getWidth();
+  outfitImage->_height   = image->getHeight();
+  if (outfitImage->_anchor != NULL) {
+    const Vector2F anchorUV = outfitImage->_anchor->getAnchor(image);
+    outfitImage->_hasAnchor = true;
+    outfitImage->_anchorU   = anchorUV._x;
+    outfitImage->_anchorV   = anchorUV._y;
+  }
 
-  //  delete _labelFontColor;
-  //  _labelFontColor = NULL;
-  //  delete _labelShadowColor;
-  //  _labelShadowColor = NULL;
+  if (outfitIndex == _outfitIndex) {
+    _imageID = imageName;
+    applyOutfitAnchor(outfitImage);
+    onTextureResolved(image);
+  }
+  else {
+    outfitImage->_image = image;
+  }
+}
 
-  //  delete _imageBuilder;
-  //  _imageBuilder = NULL;
-  _imageBuilderListener = NULL;
+void Mark::applyOutfitAnchor(const MarkOutfitImage* outfitImage) {
+  if (outfitImage->_hasAnchor) {
+    changeAnchor(outfitImage->_anchorU, outfitImage->_anchorV);
+  }
+  else {
+    changeAnchor(_appAnchorU, _appAnchorV);
+  }
+}
 
-  _textureImage = image;
-
-  if (!_textureSizeSetExternally) {
-    _textureWidth  = _textureImage->getWidth();
-    _textureHeight = _textureImage->getHeight();
-
-    if (_textureScaleSetExternally) {
-      _textureWidth  *= _textureWidthScale;
-      _textureHeight *= _textureHeightScale;
+void Mark::stepDeclutterTransition(long long nowMS,
+                                   long long delayMS,
+                                   long long durationMS,
+                                   MarkTransitionMode mode) {
+  // a plan that comes and goes within the delay never reaches the screen
+  if (_plannedTarget != _declutterTarget) {
+    if (_plannedSinceMS < 0) {
+      _plannedSinceMS = nowMS;
+    }
+    if ((nowMS - _plannedSinceMS) >= delayMS) {
+      _declutterTarget = _plannedTarget;
     }
   }
+
+  const long long elapsedMS = (_lastTransitionMS < 0) ? 0 : (nowMS - _lastTransitionMS);
+  _lastTransitionMS = nowMS;
+  const float step = (durationMS <= 0) ? 1 : ((float) elapsedMS / durationMS);
+  const IMathUtils* mu = IMathUtils::instance();
+
+  if ((_declutterTarget >= 0) && ((size_t) _declutterTarget != _outfitIndex)) {
+    startOutfitTransition(_declutterTarget);
+  }
+
+  if (_declutterTarget >= 0) {
+    _declutterHidden = false;
+    _presence = mu->min(1.0f, _presence + step);
+  }
+  else if (!_declutterHidden) {
+    _presence = mu->max(0.0f, _presence - step);
+    _declutterHidden = (_presence <= 0);
+  }
+
+  if (_leavingOutfitIndex >= 0) {
+    _leavingPresence = mu->max(0.0f, _leavingPresence - step);
+    if (_leavingPresence <= 0) {
+      releaseLeavingOutfit();
+    }
+  }
+
+  applyTransitionMode(mode);
+}
+
+// coming back to the outfit that is leaving resumes it from where it was
+void Mark::startOutfitTransition(size_t outfitIndex) {
+  float presence = 0;
+  if (_leavingOutfitIndex == (int) outfitIndex) {
+    presence = _leavingPresence;
+    releaseLeavingOutfit();
+  }
+
+  if (!_declutterHidden && (_presence > 0) && (_glState != NULL)) {
+    releaseLeavingOutfit();
+    moveGLStateToLeaving();
+  }
+
+  setOutfit(outfitIndex);
+  _presence = presence;
+}
+
+// the GL state on screen already holds the leaving outfit's texture, size and anchor
+void Mark::moveGLStateToLeaving() {
+  _leavingOutfitIndex       = (int) _outfitIndex;
+  _leavingPresence          = _presence;
+  _leavingGLState           = _glState;
+  _leavingBillboardGLF      = _billboardGLF;
+  _leavingModelTransformGLF = _modelTransformGLF;
+
+  _glState           = NULL;
+  _billboardGLF      = NULL;
+  _modelTransformGLF = NULL;
+  _textureGLF        = NULL;
+}
+
+void Mark::releaseLeavingOutfit() {
+  if (_leavingGLState != NULL) {
+    _leavingGLState->_release();
+    _leavingGLState = NULL;
+  }
+  _leavingBillboardGLF      = NULL;
+  _leavingModelTransformGLF = NULL;
+  _leavingOutfitIndex       = -1;
+  _leavingPresence          = 0;
+}
+
+bool Mark::scalesWidth(MarkTransitionMode mode) {
+  return (mode == SCALE) || (mode == SCALE_AND_ALPHA) || (mode == WIDTH) || (mode == WIDTH_AND_ALPHA);
+}
+
+bool Mark::scalesHeight(MarkTransitionMode mode) {
+  return (mode == SCALE) || (mode == SCALE_AND_ALPHA) || (mode == HEIGHT) || (mode == HEIGHT_AND_ALPHA);
+}
+
+bool Mark::fades(MarkTransitionMode mode) {
+  return (mode == ALPHA) || (mode == SCALE_AND_ALPHA) || (mode == WIDTH_AND_ALPHA) || (mode == HEIGHT_AND_ALPHA);
+}
+
+// each outfit comes in or goes away its own way: one may fold sideways while the other unfolds upwards
+void Mark::applyTransitionMode(MarkTransitionMode rendererMode) {
+  const MarkTransitionMode arrivingMode = _outfits[_outfitIndex]->getTransitionMode(rendererMode);
+  _transitionWidthScale  = scalesWidth(arrivingMode)  ? _presence : 1;
+  _transitionHeightScale = scalesHeight(arrivingMode) ? _presence : 1;
+  _transitionAlpha       = fades(arrivingMode)        ? _presence : 1;
+
+  const MarkTransitionMode leavingMode = (_leavingOutfitIndex < 0) ? rendererMode : _outfits[_leavingOutfitIndex]->getTransitionMode(rendererMode);
+  _leavingWidthScale  = scalesWidth(leavingMode)  ? _leavingPresence : 1;
+  _leavingHeightScale = scalesHeight(leavingMode) ? _leavingPresence : 1;
+  _leavingAlpha       = fades(leavingMode)        ? _leavingPresence : 1;
+
+  updateBillboard();
+}
+
+void Mark::hideUntilDecluttered() {
+  releaseLeavingOutfit();
+  _plannedTarget    = -1;
+  _plannedSinceMS   = -1;
+  _declutterTarget  = -1;
+  _declutterHidden  = true;
+  _presence         = 0;
+  _lastTransitionMS = -1;
+  applyTransitionMode(SCALE_AND_ALPHA);
+}
+
+void Mark::startLeavingRenderer(bool deleteMark) {
+  _leavingRenderer = true;
+  _deleteWhenGone  = deleteMark;
+  _plannedTarget   = -1;
+  _plannedSinceMS  = -1;
+  _declutterTarget = -1; // no delay: it is gone already, the transition is for the eye
+}
+
+bool Mark::isOffScreen() const {
+  return _declutterHidden && (_leavingGLState == NULL);
+}
+
+bool Mark::hasLeftRenderer() const {
+  return _leavingRenderer && isOffScreen();
+}
+
+void Mark::startHiding() {
+  _hiding          = true;
+  _plannedTarget   = -1;
+  _plannedSinceMS  = -1;
+  _declutterTarget = -1;
+}
+
+void Mark::stopHiding(bool decluttered) {
+  _hiding = false;
+  if (!decluttered) {
+    _plannedTarget   = (int) _outfitIndex;
+    _plannedSinceMS  = -1;
+    _declutterTarget = (int) _outfitIndex;
+  }
+}
+
+void Mark::resetDeclutter() {
+  if (_hiding) {
+    hideUntilDecluttered(); // its renderer is disabled: it stays off screen
+    _hiding = true;
+    return;
+  }
+  releaseLeavingOutfit();
+  _plannedTarget    = 0;
+  _plannedSinceMS   = -1;
+  _declutterTarget  = 0;
+  _declutterHidden  = false;
+  _presence         = 1;
+  _lastTransitionMS = -1;
+  setOutfit(0);
+  applyTransitionMode(SCALE_AND_ALPHA);
+}
+
+bool Mark::hasPriority() const {
+  return !ISNAN(_priority);
+}
+
+void Mark::setOutfit(size_t outfitIndex) {
+  if (outfitIndex == _outfitIndex) {
+    return;
+  }
+
+  // the outfit leaving the screen keeps its image or texture
+  MarkOutfitImage* leaving = _outfitImages[_outfitIndex];
+  leaving->_textureID = _textureID;
+  leaving->_image     = _textureImage;
+  leaving->_imageID   = _imageID;
+
+  MarkOutfitImage* arriving = _outfitImages[outfitIndex];
+  _textureID     = arriving->_textureID;
+  _textureImage  = arriving->_image;
+  _imageID       = arriving->_imageID;
+  _textureSolved = arriving->_solved;
+  arriving->_textureID = NULL;
+  arriving->_image     = NULL;
+
+  if (!_textureSizeSetExternally) {
+    _textureWidth  = arriving->_width;
+    _textureHeight = arriving->_height;
+  }
+  applyOutfitAnchor(arriving);
+
+  _outfitIndex = outfitIndex;
+
+  clearGLState();
 }

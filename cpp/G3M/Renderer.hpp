@@ -29,6 +29,9 @@ public:
   virtual bool isEnable() const = 0;
   
   virtual void setEnable(bool enable) = 0;
+
+  /** true while enabled, and while a disabled renderer still fades out what it showed: it is drawn, but takes no touches */
+  virtual bool isRendering() const = 0;
   
   virtual RenderState getRenderState(const G3MRenderContext* rc) = 0;
   

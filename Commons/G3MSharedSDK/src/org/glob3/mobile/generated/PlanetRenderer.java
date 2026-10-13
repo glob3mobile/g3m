@@ -45,7 +45,6 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
     if (parameters == null)
     {
-      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
       return;
     }
   
@@ -188,7 +187,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       final LayerTilesRenderParameters parameters = getLayerTilesRenderParameters();
       if (parameters == null)
       {
-        //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+        ILogger.instance().logError("PlanetRenderer: can't visit tiles, the layer parameters are not ready");
         return;
       }
   
@@ -276,7 +275,7 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
     }
     else
     {
@@ -301,9 +300,13 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _errors.clear();
       _layerTilesRenderParameters = null;
       _layerTilesRenderParameters = _layerSet.createLayerTilesRenderParameters(_errors);
-      if (_layerTilesRenderParameters == null)
+      // without errors, a NULL means the layers are not ready yet: reported as busy by getRenderState()
+      if ((_layerTilesRenderParameters == null) && !_errors.isEmpty())
       {
-        //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+        for (int i = 0; i < _errors.size(); i++)
+        {
+          ILogger.instance().logError("PlanetRenderer: can't create LayerTilesRenderParameters: %s", _errors.get(i));
+        }
       }
       _layerTilesRenderParametersDirty = false;
   
@@ -436,6 +439,59 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
   public final void setIncrementalTileQuality(boolean incrementalTileQuality)
   {
     _tilesRenderParameters._incrementalTileQuality = incrementalTileQuality;
+  }
+
+  // the swap happens in the renderer thread and recreates the tiles; the renderer owns the tester
+  public final void setTileLODTester(TileLODTester tileLODTester)
+  {
+    if (tileLODTester == null)
+    {
+      throw new RuntimeException("TileLODTester can't be NULL");
+    }
+  
+    if (_context == null)
+    {
+      if (_tileLODTester != null)
+         _tileLODTester.dispose();
+      _tileLODTester = tileLODTester;
+    }
+    else
+    {
+      _context.getThreadUtils().invokeInRendererThread(new ReplaceTileLODTesterTask(this, tileLODTester), true);
+    }
+  }
+
+  public final void replaceTileLODTester(TileLODTester tileLODTester)
+  {
+    if (tileLODTester != _tileLODTester)
+    {
+      if (_tileLODTester != null)
+         _tileLODTester.dispose();
+      _tileLODTester = tileLODTester;
+  
+      recreateTiles();
+    }
+  }
+
+  // the app calls it after a camera cut: the timed visibility and LOD caches forget the previous view,
+  // so its tiles are pruned and their downloads canceled in the next frame
+  public final void onCameraCut()
+  {
+    if (_context != null)
+    {
+      _context.getThreadUtils().invokeInRendererThread(new ClearTimedCachesTask(this), true);
+    }
+  }
+
+  public final void clearTimedCaches()
+  {
+    final int firstLevelTilesCount = _firstLevelTiles.size();
+    for (int i = 0; i < firstLevelTilesCount; i++)
+    {
+      final Tile tile = _firstLevelTiles.get(i);
+      tile.clearDataWithIDInSubtree(DefineConstants.TimedCacheTVTDataID);
+      tile.clearDataWithIDInSubtree(DefineConstants.TimedCacheTLTDataID);
+    }
   }
 
   public final void initialize(G3MContext context)
@@ -1002,6 +1058,24 @@ public class PlanetRenderer extends DefaultRenderer implements ChangedListener, 
       _verticalExaggeration = verticalExaggeration;
       changed();
     }
+  }
+
+  public final void setColorMatrix(Matrix44D colorMatrix)
+  {
+    ColorGradeGLFeature colorGrade = (ColorGradeGLFeature) _glState.getGLFeature(GLFeatureID.GLF_COLOR_GRADE);
+    if (colorGrade == null)
+    {
+      _glState.addGLFeature(new ColorGradeGLFeature(colorMatrix), false);
+    }
+    else
+    {
+      colorGrade.changeColorMatrix(colorMatrix);
+    }
+  }
+
+  public final void removeColorMatrix()
+  {
+    _glState.clearGLFeatures(GLFeatureID.GLF_COLOR_GRADE);
   }
 
   public final ElevationDataProvider getElevationDataProvider()

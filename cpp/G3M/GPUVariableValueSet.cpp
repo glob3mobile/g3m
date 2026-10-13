@@ -18,8 +18,10 @@ _highestUniformKey(0),
 _uniformsCode(0),
 _attributeCode(0)
 {
+  for (int i = 0; i < GPUVariable::MAX_UNIFORM_KEYS; i++) {
+    _uniformValues[i] = NULL;
+  }
   for (int i = 0; i < 32; i++) {
-    _uniformValues[i]   = NULL;
     _attributeValues[i] = NULL;
   }
 }
@@ -119,7 +121,7 @@ GPUVariableValueSet::~GPUVariableValueSet() {
   }
 }
 
-int GPUVariableValueSet::getUniformsCode() const {
+long long GPUVariableValueSet::getUniformsCode() const {
   if (_uniformsCode == 0) {
     for (int i = 0; i <= _highestUniformKey; i++) {
       if (_uniformValues[i] != NULL) {
@@ -154,7 +156,7 @@ void GPUVariableValueSet::removeUniformValue(GPUUniformKey key) {
     _uniformValues[index] = NULL;
   }
 
-  for (int i = 0; i < 32; i++) {
+  for (int i = 0; i < GPUVariable::MAX_UNIFORM_KEYS; i++) {
     if (_uniformValues[i] != NULL) {
       _highestUniformKey = i;
     }

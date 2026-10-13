@@ -202,7 +202,13 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     }
     _planet.applyCameraConstrains(_currentCamera, _nextCamera);
   
-    _currentCamera.copyFrom(_nextCamera, false);
+    // the near-frustum renderer bumps _currentCamera's own timestamp every frame, so it can't be compared with _nextCamera's
+    final long nextCameraTimestamp = _nextCamera.getTimestamp();
+    if (nextCameraTimestamp != _lastCopiedNextCameraTimestamp)
+    {
+      _currentCamera.copyFrom(_nextCamera, true);
+      _lastCopiedNextCameraTimestamp = nextCameraTimestamp;
+    }
   
     _rendererState = calculateRendererState();
     final RenderState_Type renderStateType = _rendererState._type;
@@ -228,7 +234,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     //Removing unused programs
     if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0)
     {
-      _gpuProgramManager.removeUnused();
+      _gpuProgramManager.removeUnused(_gl);
     }
   
     final long elapsedTimeMS = _timer.elapsedTimeInMilliseconds();
@@ -279,17 +285,12 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
 
   public final void onTouchEvent(TouchEvent touchEvent)
   {
+    if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent))
+    {
+      return;
+    }
   
     G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage, _surfaceElevationProvider, _viewMode, getCurrentCamera());
-  
-    if (_previousTouchEvent != null)
-    {
-      if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent))
-      {
-        //ILogger::instance()->logInfo("** Discarded duplicated event %s", touchEvent->description().c_str());
-        return;
-      }
-    }
   
     // notify the original event
     notifyTouchEvent(ec, touchEvent);
@@ -581,38 +582,33 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
       return;
     }
   
-    double finalLatInDegrees = toPosition._latitude._degrees;
-    double finalLonInDegrees = toPosition._longitude._degrees;
-  
-    //Fixing final latitude
-    while (finalLatInDegrees > 90)
-    {
-      finalLatInDegrees -= 180;
-    }
-    while (finalLatInDegrees < -90)
-    {
-      finalLatInDegrees += 180;
-    }
-  
-    //Fixing final longitude
-    while (finalLonInDegrees > 360)
-    {
-      finalLonInDegrees -= 360;
-    }
-    while (finalLonInDegrees < 0)
-    {
-      finalLonInDegrees += 360;
-    }
-    if (Math.abs(finalLonInDegrees - fromPosition._longitude._degrees) > 180)
-    {
-      finalLonInDegrees -= 360;
-    }
-  
-    final Geodetic3D finalToPosition = Geodetic3D.fromDegrees(finalLatInDegrees, finalLonInDegrees, toPosition._height);
+    final Geodetic3D finalToPosition = nearestEquivalentPosition(fromPosition, toPosition);
   
     cancelCameraAnimation();
   
     _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, finalToPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
+  }
+
+  public final void setCameraPointOfView(Geodetic3D target, double distance, Angle azimuth, Angle altitude)
+  {
+    _nextCamera.setPointOfView(target, distance, azimuth, altitude);
+  }
+
+  public final void setAnimatedCameraPointOfView(TimeInterval interval, Geodetic3D fromTarget, Geodetic3D toTarget, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude, boolean linearTiming)
+  {
+     setAnimatedCameraPointOfView(interval, fromTarget, toTarget, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, linearTiming, false);
+  }
+  public final void setAnimatedCameraPointOfView(TimeInterval interval, Geodetic3D fromTarget, Geodetic3D toTarget, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude)
+  {
+     setAnimatedCameraPointOfView(interval, fromTarget, toTarget, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, false, false);
+  }
+  public final void setAnimatedCameraPointOfView(TimeInterval interval, Geodetic3D fromTarget, Geodetic3D toTarget, double fromDistance, double toDistance, Angle fromAzimuth, Angle toAzimuth, Angle fromAltitude, Angle toAltitude, boolean linearTiming, boolean linearDistance)
+  {
+    final Geodetic3D finalToTarget = nearestEquivalentPosition(fromTarget, toTarget);
+  
+    cancelCameraAnimation();
+  
+    _effectsScheduler.startEffect(new CameraPointOfViewEffect(interval, fromTarget, finalToTarget, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, linearTiming, linearDistance), _nextCamera.getEffectTarget());
   }
 
   public final void cancelCameraAnimation()
@@ -651,6 +647,12 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   public final Color getBackgroundColor()
   {
     return _backgroundColor;
+  }
+
+  // 1 turns it off; it is applied in the renderer thread, to the textures already in the GPU too
+  public final void setTextureMaxAnisotropy(float maxAnisotropy)
+  {
+    _context.getThreadUtils().invokeInRendererThread(new SetTextureMaxAnisotropyTask(_texturesHandler, maxAnisotropy), true);
   }
 
   public final PlanetRenderer getPlanetRenderer()
@@ -816,6 +818,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   private final FrustumPolicy _frustumPolicy;
   private Camera _currentCamera;
   private Camera _nextCamera;
+  private long _lastCopiedNextCameraTimestamp;
 
   private TexturesHandler _texturesHandler;
 
@@ -902,6 +905,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
      _frustumPolicy = frustumPolicy;
      _currentCamera = new Camera(1, frustumPolicy.copy());
      _nextCamera = new Camera(2, frustumPolicy.copy());
+     _lastCopiedNextCameraTimestamp = -1;
      _backgroundColor = backgroundColor;
      _timer = IFactory.instance().createTimer();
      _renderCounter = 0;
@@ -971,7 +975,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     {
       addPeriodicalTask(periodicalTasks.get(i));
     }
-    _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)this, -1);
+    _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)this, CompositeRenderer.NO_RENDERER_ID);
   
   
     _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider, _viewMode, this);
@@ -1123,7 +1127,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
         _sceneLighting.modifyGLState(_rootState, _renderContext); //Applying ilumination to rootState
   
-        if (_mainRenderer.isEnable())
+        if (_mainRenderer.isRendering())
         {
           _mainRenderer.render(_renderContext, _rootState);
         }
@@ -1162,7 +1166,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     {
       if (_nearFrustumRenderer != null)
       {
-        if (_nearFrustumRenderer.isEnable())
+        if (_nearFrustumRenderer.isRendering())
         {
           _nearFrustumRenderer.render(_currentCamera.getFrustumData(), this, _renderContext, _rootState);
         }
@@ -1170,13 +1174,39 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
       if (_hudRenderer != null)
       {
-        if (_hudRenderer.isEnable())
+        if (_hudRenderer.isRendering())
         {
           _hudRenderer.render(_renderContext, _rootState);
         }
       }
     }
   
+  }
+
+  private Geodetic3D nearestEquivalentPosition(Geodetic3D from, Geodetic3D to)
+  {
+    final double latInDegrees = to._latitude._degrees;
+    if ((latInDegrees < -90) || (latInDegrees > 90))
+    {
+      throw new RuntimeException("nearestEquivalentPosition: latitude must be in [-90, 90]");
+    }
+  
+    double lonInDegrees = to._longitude._degrees;
+  
+    while (lonInDegrees > 360)
+    {
+      lonInDegrees -= 360;
+    }
+    while (lonInDegrees < 0)
+    {
+      lonInDegrees += 360;
+    }
+    if (Math.abs(lonInDegrees - from._longitude._degrees) > 180)
+    {
+      lonInDegrees -= 360;
+    }
+  
+    return Geodetic3D.fromDegrees(latInDegrees, lonInDegrees, to._height);
   }
 
   private void rawRenderMono(RenderState_Type renderStateType)

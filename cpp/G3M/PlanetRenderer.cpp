@@ -43,6 +43,7 @@
 #include "GLState.hpp"
 #include "FrustumData.hpp"
 #include "Planet.hpp"
+#include "TileData.hpp"
 
 
 class VisibleSectorListenerEntry {
@@ -439,8 +440,11 @@ const LayerTilesRenderParameters* PlanetRenderer::getLayerTilesRenderParameters(
     _errors.clear();
     delete _layerTilesRenderParameters;
     _layerTilesRenderParameters = _layerSet->createLayerTilesRenderParameters(_errors);
-    if (_layerTilesRenderParameters == NULL) {
-      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't render planet");
+    // without errors, a NULL means the layers are not ready yet: reported as busy by getRenderState()
+    if ((_layerTilesRenderParameters == NULL) && !_errors.empty()) {
+      for (size_t i = 0; i < _errors.size(); i++) {
+        ILogger::instance()->logError("PlanetRenderer: can't create LayerTilesRenderParameters: %s", _errors.at(i).c_str());
+      }
     }
     _layerTilesRenderParametersDirty = false;
 
@@ -454,7 +458,6 @@ void PlanetRenderer::createFirstLevelTiles(const G3MContext* context) {
 
   const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
   if (parameters == NULL) {
-    //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
     return;
   }
 
@@ -629,7 +632,7 @@ void PlanetRenderer::visitTilesTouchesWith(const Sector& sector,
   if (_tileVisitor != NULL) {
     const LayerTilesRenderParameters* parameters = getLayerTilesRenderParameters();
     if (parameters == NULL) {
-      //ILogger::instance()->logError("LayerSet returned a NULL for LayerTilesRenderParameters, can't create first-level tiles");
+      ILogger::instance()->logError("PlanetRenderer: can't visit tiles, the layer parameters are not ready");
       return;
     }
 
@@ -703,7 +706,7 @@ void PlanetRenderer::updateGLState(const G3MRenderContext* rc) {
   const Camera* camera = rc->getCurrentCamera();
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());
@@ -1009,6 +1012,20 @@ void PlanetRenderer::setVerticalExaggeration(float verticalExaggeration) {
   }
 }
 
+void PlanetRenderer::setColorMatrix(const Matrix44D* colorMatrix) {
+  ColorGradeGLFeature* colorGrade = (ColorGradeGLFeature*) _glState->getGLFeature(GLF_COLOR_GRADE);
+  if (colorGrade == NULL) {
+    _glState->addGLFeature(new ColorGradeGLFeature(colorMatrix), false);
+  }
+  else {
+    colorGrade->changeColorMatrix(colorMatrix);
+  }
+}
+
+void PlanetRenderer::removeColorMatrix() {
+  _glState->clearGLFeatures(GLF_COLOR_GRADE);
+}
+
 void PlanetRenderer::setChangedRendererInfoListener(ChangedRendererInfoListener* changedInfoListener,
                                                     const size_t rendererID) {
   if (_changedInfoListener != NULL) {
@@ -1030,4 +1047,77 @@ void PlanetRenderer::onTileHasChangedMesh(const Tile *tile) const {
 
 void PlanetRenderer::setIncrementalTileQuality(bool incrementalTileQuality) {
   _tilesRenderParameters->_incrementalTileQuality = incrementalTileQuality;
+}
+
+class ReplaceTileLODTesterTask : public GTask {
+private:
+  PlanetRenderer* _planetRenderer;
+  TileLODTester*  _tileLODTester;
+
+public:
+  ReplaceTileLODTesterTask(PlanetRenderer* planetRenderer,
+                           TileLODTester*  tileLODTester) :
+  _planetRenderer(planetRenderer),
+  _tileLODTester(tileLODTester)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    _planetRenderer->replaceTileLODTester(_tileLODTester);
+  }
+};
+
+void PlanetRenderer::setTileLODTester(TileLODTester* tileLODTester) {
+  if (tileLODTester == NULL) {
+    THROW_EXCEPTION("TileLODTester can't be NULL");
+  }
+
+  if (_context == NULL) {
+    delete _tileLODTester;
+    _tileLODTester = tileLODTester;
+  }
+  else {
+    _context->getThreadUtils()->invokeInRendererThread(new ReplaceTileLODTesterTask(this, tileLODTester),
+                                                       true);
+  }
+}
+
+class ClearTimedCachesTask : public GTask {
+private:
+  PlanetRenderer* _planetRenderer;
+
+public:
+  ClearTimedCachesTask(PlanetRenderer* planetRenderer) :
+  _planetRenderer(planetRenderer)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    _planetRenderer->clearTimedCaches();
+  }
+};
+
+void PlanetRenderer::onCameraCut() {
+  if (_context != NULL) {
+    _context->getThreadUtils()->invokeInRendererThread(new ClearTimedCachesTask(this),
+                                                       true);
+  }
+}
+
+void PlanetRenderer::clearTimedCaches() {
+  const size_t firstLevelTilesCount = _firstLevelTiles.size();
+  for (size_t i = 0; i < firstLevelTilesCount; i++) {
+    const Tile* tile = _firstLevelTiles[i];
+    tile->clearDataWithIDInSubtree(TimedCacheTVTDataID);
+    tile->clearDataWithIDInSubtree(TimedCacheTLTDataID);
+  }
+}
+
+void PlanetRenderer::replaceTileLODTester(TileLODTester* tileLODTester) {
+  if (tileLODTester != _tileLODTester) {
+    delete _tileLODTester;
+    _tileLODTester = tileLODTester;
+
+    recreateTiles();
+  }
 }

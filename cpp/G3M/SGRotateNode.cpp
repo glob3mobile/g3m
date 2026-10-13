@@ -8,6 +8,8 @@
 
 #include "SGRotateNode.hpp"
 
+#include "MutableVector3D.hpp"
+
 #include "Angle.hpp"
 #include "Vector3D.hpp"
 #include "GLState.hpp"
@@ -41,4 +43,10 @@ const GLState* SGRotateNode::createState(const G3MRenderContext* rc,
                                          const GLState* parentState) {
   _glState->setParent(parentState);
   return _glState;
+}
+
+void SGRotateNode::addToModelBounds(const MutableMatrix44D& transform,
+                        MutableVector3D& lower,
+                        MutableVector3D& upper) const {
+  SGNode::addToModelBounds(transform.multiply(_rotationMatrix), lower, upper);
 }

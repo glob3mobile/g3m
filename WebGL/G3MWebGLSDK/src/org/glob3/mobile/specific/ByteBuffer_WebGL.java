@@ -122,6 +122,9 @@ public final class ByteBuffer_WebGL extends IByteBuffer {
 
    @Override
    public ByteBuffer_WebGL copy(final int from, final int length) {
+      if ((from + length) > size()) {
+         throw new RuntimeException("Buffer Overflow");
+      }
       return new ByteBuffer_WebGL(jsBufferSlice(from, length));
    }
 

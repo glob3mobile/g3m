@@ -6,10 +6,10 @@ public class GPUUniformValueVec4Float extends GPUUniformValue
     super.dispose();
   }
 
-  public final float _x;
-  public final float _y;
-  public final float _z;
-  public final float _w;
+  public float _x;
+  public float _y;
+  public float _z;
+  public float _w;
 
   public GPUUniformValueVec4Float(Color color)
   {

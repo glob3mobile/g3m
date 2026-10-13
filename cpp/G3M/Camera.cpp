@@ -231,7 +231,7 @@ const Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
                                                       0, 0,
                                                       _viewPortWidth, _viewPortHeight);
   if (obj.isNan()) {
-    ILogger::instance()->logWarning("Pixel to Ray return NaN");
+    ILogger::instance()->logError("Pixel to Ray return NaN");
     return obj;
   }
 
@@ -284,7 +284,7 @@ const Vector3D Camera::pixel2Ray(const Vector2F& pixel) const {
                                                       0, 0,
                                                       _viewPortWidth, _viewPortHeight);
   if (obj.isNan()) {
-    ILogger::instance()->logWarning("Pixel to Ray return NaN");
+    ILogger::instance()->logError("Pixel to Ray return NaN");
     return obj;
   }
 
@@ -403,6 +403,263 @@ void Camera::setPointOfView(const Geodetic3D& center,
   setCenter(cartesianCenter.asMutableVector3D());
   setUp(finalUp.asMutableVector3D());
   //  _dirtyFlags.setAllDirty();
+}
+
+CameraPose Camera::computeCameraPose(const Geodetic3D& position1,
+                                     const Vector2F&   screenPosition1,
+                                     const Geodetic3D& position2,
+                                     const Vector2F&   screenPosition2,
+                                     const Angle&      pitch) const {
+  if (position1.isNan() || position2.isNan() ||
+      screenPosition1.isNan() || screenPosition2.isNan() || pitch.isNan()) {
+    return CameraPose::nan();
+  }
+
+  const Vector2F target1(screenPosition1._x * _viewPortWidth, screenPosition1._y * _viewPortHeight);
+  const Vector2F target2(screenPosition2._x * _viewPortWidth, screenPosition2._y * _viewPortHeight);
+  if (target2.sub(target1).length() < 1) {
+    return CameraPose::nan();
+  }
+
+  const Vector3D cartesian1 = _planet->toCartesian(position1);
+  const Vector3D cartesian2 = _planet->toCartesian(position2);
+  const double chord = cartesian2.sub(cartesian1).length();
+  if (chord < 1) {
+    return CameraPose::nan();
+  }
+
+  const Geodetic3D initialCenter(_planet->getMidPoint(position1.asGeodetic2D(), position2.asGeodetic2D()),
+                                 (position1._height + position2._height) / 2);
+
+  Camera* workingCamera = new Camera(-1, _frustumPolicy->copy());
+  workingCamera->copyFrom(*this, true);
+
+  const bool solved = workingCamera->solvePointOfView(cartesian1, target1,
+                                                      cartesian2, target2,
+                                                      initialCenter,
+                                                      chord * 2,
+                                                      pitch);
+
+  const CameraPose pose = solved
+  ? CameraPose(workingCamera->getGeodeticPosition(), workingCamera->getHeading(), workingCamera->getPitch())
+  : CameraPose::nan();
+
+  delete workingCamera;
+
+  return pose;
+}
+
+double Camera::pitchInRadiansPuttingHorizonAt(const CameraPose& pose,
+                                              const float       horizonOnScreen) const {
+  const IMathUtils* mu = IMathUtils::instance();
+
+  // the horizon is below the local horizontal by acos(R / (R + h))
+  const Geodetic3D ground(pose._position._latitude, pose._position._longitude, 0);
+  const double radius = _planet->toCartesian(ground).length();
+  const double dipInRadians = mu->acos(radius / (radius + pose._position._height));
+
+  // angle from the view direction up to the horizon's screen height
+  const double tanHalfVerticalFOV = mu->tan(getVerticalFOV()._radians / 2);
+  const double aboveCenterInRadians = mu->atan((1 - (2 * horizonOnScreen)) * tanHalfVerticalFOV);
+
+  const double downInRadians = dipInRadians + aboveCenterInRadians;
+  if (downInRadians >= (PI / 2)) {
+    return NAND;
+  }
+  return -downInRadians;
+}
+
+double Camera::nextHorizonPitchInRadians(const Geodetic3D& position1,
+                                         const Vector2F&   screenPosition1,
+                                         const Geodetic3D& position2,
+                                         const Vector2F&   screenPosition2,
+                                         const float       horizonOnScreen,
+                                         const double      pitchInRadians) const {
+  const CameraPose pose = computeCameraPose(position1, screenPosition1,
+                                            position2, screenPosition2,
+                                            Angle::fromRadians(pitchInRadians));
+  if (pose.isNan()) {
+    return NAND;
+  }
+  return pitchInRadiansPuttingHorizonAt(pose, horizonOnScreen);
+}
+
+// The pitch p must equal next(p), the pitch that puts the horizon in place for the camera solved
+// with p. Iterating p = next(p) overshoots back and forth, so the root of next(p) - p is bracketed
+// and bisected: straight down is always too steep (next(p) - p >= 0).
+CameraPose Camera::computeCameraPoseWithHorizon(const Geodetic3D& position1,
+                                                const Vector2F&   screenPosition1,
+                                                const Geodetic3D& position2,
+                                                const Vector2F&   screenPosition2,
+                                                const float       horizonOnScreen) const {
+  // as solvePointOfView: a bounded number of rounds, a tiny tolerance
+  const int    maxRounds               = 40;
+  const double pitchToleranceInRadians = 0.0001;
+
+  double steepInRadians   = -PI / 2;
+  double shallowInRadians = nextHorizonPitchInRadians(position1, screenPosition1, position2, screenPosition2, horizonOnScreen, steepInRadians);
+  bool   bracketed = false;
+  for (int i = 0; i < maxRounds; i++) {
+    if (ISNAN(shallowInRadians)) {
+      return CameraPose::nan();
+    }
+    if (IMathUtils::instance()->abs(shallowInRadians - steepInRadians) < pitchToleranceInRadians) {
+      return computeCameraPose(position1, screenPosition1,
+                               position2, screenPosition2,
+                               Angle::fromRadians(shallowInRadians));
+    }
+
+    const double candidateInRadians = bracketed ? ((steepInRadians + shallowInRadians) / 2) : shallowInRadians;
+    const double nextInRadians = nextHorizonPitchInRadians(position1, screenPosition1, position2, screenPosition2, horizonOnScreen, candidateInRadians);
+    if (ISNAN(nextInRadians)) {
+      return CameraPose::nan();
+    }
+
+    if (nextInRadians >= candidateInRadians) {
+      // still too steep
+      steepInRadians = candidateInRadians;
+      if (!bracketed) {
+        shallowInRadians = nextInRadians;
+      }
+    }
+    else {
+      shallowInRadians = candidateInRadians;
+      bracketed = true;
+    }
+  }
+  return CameraPose::nan();
+}
+
+double Camera::screenAngleOfSegment(const Vector3D& cartesian1,
+                                    const Vector3D& cartesian2) const {
+  const Vector2F delta = point2Pixel(cartesian2).sub(point2Pixel(cartesian1));
+  return IMathUtils::instance()->atan2((double) delta._y, (double) delta._x);
+}
+
+bool Camera::isAboveHorizonOf(const Vector3D& point) const {
+  const Vector3D toCamera = _position.asVector3D().sub(point);
+  return _planet->geodeticSurfaceNormal(point).dot(toCamera) > 0;
+}
+
+double Camera::signedAngleInRadians(double radians) {
+  while (radians > PI) {
+    radians -= 2 * PI;
+  }
+  while (radians < -PI) {
+    radians += 2 * PI;
+  }
+  return radians;
+}
+
+// sin(e) when the segment lies across the view, 1/sin(e) when it lies along it, 1 looking straight down
+double Camera::segmentTurnPerAzimuth(double screenAngleInRadians,
+                                     double elevationInRadians) {
+  const IMathUtils* mu = IMathUtils::instance();
+  const double grazingLimit = 0.05;
+  const double sinElevation = mu->max(mu->sin(elevationInRadians), grazingLimit);
+  const double cosScreen = mu->cos(screenAngleInRadians);
+  const double sinScreen = mu->sin(screenAngleInRadians);
+  return ((sinElevation * sinElevation * cosScreen * cosScreen) + (sinScreen * sinScreen)) / sinElevation;
+}
+
+bool Camera::solvePointOfView(const Vector3D& cartesian1,
+                              const Vector2F& target1,
+                              const Vector3D& cartesian2,
+                              const Vector2F& target2,
+                              const Geodetic3D& initialCenter,
+                              const double initialDistance,
+                              const Angle& pitch) {
+  const IMathUtils* mu = IMathUtils::instance();
+
+  const Vector2F targetDelta  = target2.sub(target1);
+  const double   targetAngle  = mu->atan2((double) targetDelta._y, (double) targetDelta._x);
+  const double   targetLength = targetDelta.length();
+  const Vector2F targetMiddle = target1.add(target2).div(2);
+  const Vector2F viewportCenter(_viewPortWidth / 2.0f, _viewPortHeight / 2.0f);
+
+  const double centerHeight = initialCenter._height;
+  double centerLatitudeInRadians  = initialCenter._latitude._radians;
+  double centerLongitudeInRadians = initialCenter._longitude._radians;
+  double distance         = initialDistance;
+  double azimuthInRadians = 0;
+  // setPointOfView's altitude is the elevation over the horizon at the center (90 = straight down).
+  // On a curved planet that is not the camera's own pitch, so it gets corrected below.
+  double altitudeInRadians = -pitch._radians;
+
+  // the azimuth turns the on-screen segment one way or the other; measure which instead of assuming
+  setPointOfView(initialCenter, distance, Angle::fromRadians(0), Angle::fromRadians(altitudeInRadians));
+  const double angleAtZero = screenAngleOfSegment(cartesian1, cartesian2);
+  setPointOfView(initialCenter, distance, Angle::fromRadians(0.05), Angle::fromRadians(altitudeInRadians));
+  const double angleAtProbe = screenAngleOfSegment(cartesian1, cartesian2);
+  const double azimuthSign = (signedAngleInRadians(angleAtProbe - angleAtZero) > 0) ? 1 : -1;
+
+  // seen from the wrong side of the center the segment shows reversed, where the turn step can't tell
+  // which way to go (e.g. a leg seen along its length); start from the other side instead
+  if (mu->abs(signedAngleInRadians(targetAngle - angleAtZero)) > (PI / 2)) {
+    azimuthInRadians = PI;
+  }
+
+  const int maxIterations = 50;
+  double previousError = 0;
+  int growingErrorCount = 0;
+  for (int i = 0; i < maxIterations; i++) {
+    const Geodetic3D center(Angle::fromRadians(centerLatitudeInRadians),
+                            Angle::fromRadians(centerLongitudeInRadians),
+                            centerHeight);
+
+    // 1. pitch: the camera's own pitch must match the requested one
+    setPointOfView(center, distance, Angle::fromRadians(azimuthInRadians), Angle::fromRadians(altitudeInRadians));
+    const double pitchErrorInRadians = signedAngleInRadians(getPitch()._radians - pitch._radians);
+    altitudeInRadians += pitchErrorInRadians;
+    const Angle altitude = Angle::fromRadians(altitudeInRadians);
+
+    // 2. heading: turn until the segment has the target direction
+    setPointOfView(center, distance, Angle::fromRadians(azimuthInRadians), altitude);
+    const Vector2F pixel1 = point2Pixel(cartesian1);
+    const Vector2F pixel2 = point2Pixel(cartesian2);
+    if (pixel1.isNan() || pixel2.isNan()) {
+      return false;
+    }
+    const double error = mu->max(pixel1.sub(target1).length(),
+                                 pixel2.sub(target2).length());
+    if ((error < 0.5) && (mu->abs(pitchErrorInRadians) < 0.0001)) {
+      return isAboveHorizonOf(cartesian1) && isAboveHorizonOf(cartesian2);
+    }
+    growingErrorCount = (error > previousError) ? growingErrorCount + 1 : 0;
+    previousError = error;
+    if (growingErrorCount >= 5) {
+      return false;
+    }
+    const Vector2F delta = pixel2.sub(pixel1);
+    if (delta.length() < 0.001) {
+      return false;
+    }
+    const double screenAngle = mu->atan2((double) delta._y, (double) delta._x);
+    const double angleError  = signedAngleInRadians(targetAngle - screenAngle);
+    azimuthInRadians += azimuthSign * angleError / segmentTurnPerAzimuth(screenAngle, altitudeInRadians);
+
+    // 3. distance: move away or closer until the segment has the target length
+    setPointOfView(center, distance, Angle::fromRadians(azimuthInRadians), altitude);
+    const double currentLength = point2Pixel(cartesian2).sub(point2Pixel(cartesian1)).length();
+    if (currentLength < 0.001) {
+      return false;
+    }
+    distance *= currentLength / targetLength;
+
+    // 4. center: look at whatever is now under the pixel that must end up at the viewport center
+    setPointOfView(center, distance, Angle::fromRadians(azimuthInRadians), altitude);
+    const Vector2F currentMiddle = point2Pixel(cartesian1).add(point2Pixel(cartesian2)).div(2);
+    const Vector2F pixelForCenter = viewportCenter.add(currentMiddle).sub(targetMiddle);
+    const Vector3D newCenter = _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixelForCenter));
+    if (newCenter.isNan()) {
+      return false;
+    }
+    const Geodetic2D newCenter2D = _planet->toGeodetic2D(newCenter);
+    centerLatitudeInRadians  = newCenter2D._latitude._radians;
+    centerLongitudeInRadians = newCenter2D._longitude._radians;
+  }
+
+  return false;
 }
 
 FrustumData* Camera::calculateFrustumData() const {
@@ -543,9 +800,20 @@ double Camera::getEstimatedPixelDistance(const Vector3D& point0,
                                          const Vector3D& point1) const {
   _ray0.putSub(_position, point0);
   _ray1.putSub(_position, point1);
-  const double angleInRadians = MutableVector3D::angleInRadiansBetween(_ray1, _ray0);
+
+  const double crossX = (_ray0.y() * _ray1.z()) - (_ray0.z() * _ray1.y());
+  const double crossY = (_ray0.z() * _ray1.x()) - (_ray0.x() * _ray1.z());
+  const double crossZ = (_ray0.x() * _ray1.y()) - (_ray0.y() * _ray1.x());
+
+  const IMathUtils* mu = IMathUtils::instance();
+  const double crossLength = mu->sqrt((crossX * crossX) + (crossY * crossY) + (crossZ * crossZ));
+
+  // tan(angle/2) = |a x b| / (|a| |b| + a . b), the same value as tan(acos(...)/2) without the trigonometry
+  const double denominator = (_ray0.length() * _ray1.length()) + _ray0.dot(_ray1);
+  const double halfAngleTan = (denominator > 0) ? (crossLength / denominator) : mu->maxDouble();
+
   const FrustumData* frustumData = getFrustumData();
-  const double distanceInMeters = frustumData->_zNear * IMathUtils::instance()->tan(angleInRadians/2);
+  const double distanceInMeters = frustumData->_zNear * halfAngleTan;
   return distanceInMeters * _viewPortHeight / frustumData->_top;
 }
 

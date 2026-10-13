@@ -1396,7 +1396,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final String urlFieldName = jsonObject.getAsString("urlFieldName", "");
           final MagnitudeMetadata magnitudeMetadata = MagnitudeMetadata.fromJSON(jsonObject.getAsObject("magnitude"));
     
-          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, urlFieldName, magnitudeMetadata);
+          _metadata = new Metadata(sector, clustersCount, featuresCount, nodesCount, minNodeDepth, maxNodeDepth, language, nameFieldName, urlFieldName, magnitudeMetadata, jsonObject.deepCopy());
     
           final JSONArray rootNodesJSON = jsonObject.getAsArray("rootNodes");
           _rootNodes = new java.util.ArrayList<Node>();
@@ -1516,17 +1516,48 @@ public class VectorStreamingRenderer extends DefaultRenderer
   }
 
 
+  public static class MarksCollector
+  {
+    private MarksRenderer _marksRenderer;
+    private final String _token;
+    private int _marksCount;
+
+    public MarksCollector(MarksRenderer marksRenderer, String token)
+    {
+       _marksRenderer = marksRenderer;
+       _token = token;
+       _marksCount = 0;
+    }
+
+    public final void add(Mark mark)
+    {
+      if (mark == null)
+      {
+        throw new RuntimeException("MarksCollector: mark can't be NULL");
+      }
+      mark.setToken(_token);
+      _marksRenderer.addMark(mark);
+      _marksCount++;
+    }
+
+    public final int getMarksCount()
+    {
+      return _marksCount;
+    }
+  }
+
+
   public abstract static class VectorSetSymbolizer
   {
     public void dispose()
     {
     }
 
-    public abstract Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry);
+    public abstract void createGeometryMarks(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO2DPointGeometry geometry, VectorStreamingRenderer.MarksCollector collector);
 
-    public abstract Mark createGeometryMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry);
+    public abstract void createGeometryMarks(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, GEO3DPointGeometry geometry, VectorStreamingRenderer.MarksCollector collector);
 
-    public abstract Mark createClusterMark(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster);
+    public abstract void createClusterMarks(VectorStreamingRenderer.Metadata metadata, VectorStreamingRenderer.Node node, VectorStreamingRenderer.Cluster cluster, VectorStreamingRenderer.MarksCollector collector);
   }
 
 
@@ -1542,8 +1573,10 @@ public class VectorStreamingRenderer extends DefaultRenderer
     public final String _nameFieldName;
     public final String _urlFieldName;
     public final MagnitudeMetadata _magnitudeMetadata;
+    /** the whole metadata, for what a symbolizer reads beyond the fields above (the symbols of an application) */
+    public final JSONObject _json;
 
-    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, String urlFieldName, MagnitudeMetadata magnitudeMetadata)
+    public Metadata(Sector sector, long clustersCount, long featuresCount, int nodesCount, int minNodeDepth, int maxNodeDepth, String language, String nameFieldName, String urlFieldName, MagnitudeMetadata magnitudeMetadata, JSONObject json)
     {
        _sector = sector;
        _clustersCount = clustersCount;
@@ -1555,6 +1588,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
        _nameFieldName = nameFieldName;
        _urlFieldName = urlFieldName;
        _magnitudeMetadata = magnitudeMetadata;
+       _json = json;
 
     }
 
@@ -1819,41 +1853,21 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final int symbolizeGeometry(Node node, GEO2DPointGeometry geometry)
     {
-      int count = 0;
-    
-      {
-        Mark mark = _symbolizer.createGeometryMark(_metadata, node, geometry);
-        if (mark != null)
-        {
-          count++;
-          mark.setToken(node.getFeatureToken());
-          getMarksRenderer().addMark(mark);
-        }
-      }
-    
-      return count;
+      MarksCollector collector = new MarksCollector(getMarksRenderer(), node.getFeatureToken());
+      _symbolizer.createGeometryMarks(_metadata, node, geometry, collector);
+      return collector.getMarksCount();
     }
 
     public final int symbolizeGeometry(Node node, GEO3DPointGeometry geometry)
     {
-      int count = 0;
-    
-      {
-        Mark mark = _symbolizer.createGeometryMark(_metadata, node, geometry);
-        if (mark != null)
-        {
-          count++;
-          mark.setToken(node.getFeatureToken());
-          getMarksRenderer().addMark(mark);
-        }
-      }
-    
-      return count;
+      MarksCollector collector = new MarksCollector(getMarksRenderer(), node.getFeatureToken());
+      _symbolizer.createGeometryMarks(_metadata, node, geometry, collector);
+      return collector.getMarksCount();
     }
 
     public final int symbolizeClusters(Node node, java.util.ArrayList<Cluster> clusters)
     {
-      int counter = 0;
+      MarksCollector collector = new MarksCollector(getMarksRenderer(), node.getClusterToken());
       if (clusters != null)
       {
         final int clustersCount = clusters.size();
@@ -1862,18 +1876,12 @@ public class VectorStreamingRenderer extends DefaultRenderer
           final Cluster cluster = clusters.get(i);
           if (cluster != null)
           {
-            Mark mark = _symbolizer.createClusterMark(_metadata, node, cluster);
-            if (mark != null)
-            {
-              mark.setToken(node.getClusterToken());
-              getMarksRenderer().addMark(mark);
-              counter++;
-            }
+            _symbolizer.createClusterMarks(_metadata, node, cluster, collector);
           }
         }
       }
     
-      return counter;
+      return collector.getMarksCount();
     }
 
     public final int symbolizeMeshes(Node node, java.util.ArrayList<Mesh> meshes)
@@ -1935,7 +1943,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
     }
     else
     {

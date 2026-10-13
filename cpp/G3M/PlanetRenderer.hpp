@@ -33,6 +33,7 @@ class Layer;
 class TerrainTouchListener;
 class DEMProvider;
 class IStringBuilder;
+class Matrix44D;
 
 
 class TilesStatistics {
@@ -267,6 +268,17 @@ public:
 
   void setIncrementalTileQuality(bool incrementalTileQuality);
 
+  // the swap happens in the renderer thread and recreates the tiles; the renderer owns the tester
+  void setTileLODTester(TileLODTester* tileLODTester);
+
+  void replaceTileLODTester(TileLODTester* tileLODTester);
+
+  // the app calls it after a camera cut: the timed visibility and LOD caches forget the previous view,
+  // so its tiles are pruned and their downloads canceled in the next frame
+  void onCameraCut();
+
+  void clearTimedCaches();
+
   void initialize(const G3MContext* context);
 
   void render(const G3MRenderContext* rc, GLState* glState);
@@ -398,6 +410,10 @@ public:
   void setElevationDataProvider(ElevationDataProvider* elevationDataProvider,
                                 bool owned);
   void setVerticalExaggeration(float verticalExaggeration);
+
+  void setColorMatrix(const Matrix44D* colorMatrix);
+
+  void removeColorMatrix();
 
   ElevationDataProvider* getElevationDataProvider() const {
     return _elevationDataProvider;

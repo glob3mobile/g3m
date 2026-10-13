@@ -22,7 +22,7 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
-  private final Color _backgroundColor ;
+  private final Color _backgroundColor;
   private final Color _meshOuterColor ;
   private final Color _meshInnerColor ;
 
@@ -132,6 +132,8 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   }
 
 
+  // backgroundColor: NULL means no clear, the widget background shows.
+  // In stereo, a non-NULL backgroundColor clears the left eye when rendering the right one.
   public BusyMeshRenderer(Color backgroundColor, Color meshOuterColor, Color meshInnerColor)
   {
      _degrees = 0;
@@ -154,7 +156,10 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   {
     createGLState();
   
-    rc.getGL().clearScreen(_backgroundColor);
+    if (_backgroundColor != null)
+    {
+      rc.getGL().clearScreen(_backgroundColor);
+    }
   
     Mesh mesh = getMesh(rc);
     if (mesh != null)
@@ -183,6 +188,8 @@ public class BusyMeshRenderer implements ProtoRenderer, EffectTarget
   {
     if (_mesh != null)
        _mesh.dispose();
+    if (_backgroundColor != null)
+       _backgroundColor.dispose();
 
     _glState._release();
   }

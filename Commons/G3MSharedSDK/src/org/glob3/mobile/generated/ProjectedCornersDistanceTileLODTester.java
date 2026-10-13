@@ -154,7 +154,8 @@ public class ProjectedCornersDistanceTileLODTester extends TileLODTester
 
   public final void onTileHasChangedMesh(Tile tile)
   {
-
+    // the corners were placed at the average height of the previous mesh
+    tile.clearDataWithID(DefineConstants.ProjectedCornersDistanceTLTDataID);
   }
 
   public final void onLayerTilesRenderParametersChanged(LayerTilesRenderParameters ltrp)

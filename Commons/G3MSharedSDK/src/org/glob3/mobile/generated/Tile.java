@@ -843,6 +843,21 @@ public class Tile
     }
   }
 
+  public final void clearDataWithIDInSubtree(int id)
+  {
+    clearDataWithID(id);
+  
+    if (_subtiles != null)
+    {
+      final int subtilesSize = _subtiles.size();
+      for (int i = 0; i < subtilesSize; i++)
+      {
+        final Tile subtile = _subtiles.get(i);
+        subtile.clearDataWithIDInSubtree(id);
+      }
+    }
+  }
+
   public final TileTessellatorMeshData getTileTessellatorMeshData()
   {
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:

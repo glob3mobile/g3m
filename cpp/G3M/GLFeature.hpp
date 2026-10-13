@@ -17,26 +17,8 @@
 
 
 class Camera;
-
-
-enum GLFeatureID {
-  GLF_BILLBOARD,
-  GLF_VIEWPORT_EXTENT,
-  GLF_GEOMETRY,
-  GLF_MODEL,
-  GLF_PROJECTION,
-  GLF_MODEL_TRANSFORM,
-  GLF_TEXTURE,
-  GLF_COLOR,
-  GLF_FLATCOLOR,
-  GLF_TEXTURE_ID,
-  GLF_TEXTURE_COORDS,
-  GLF_DIRECTION_LIGTH,
-  GLF_VERTEX_NORMAL,
-  GLF_MODEL_VIEW,
-  GLF_BLENDING_MODE,
-  GLF_CAMERA_POSITION
-};
+class Color;
+class Vector3F;
 
 
 class GLFeature: public RCObject {
@@ -82,11 +64,15 @@ private:
 
   GPUUniformValueVec2FloatMutable* _size;
   GPUUniformValueVec2FloatMutable* _anchor;
+  GPUUniformValueVec4FloatMutable* _colorFactor;
+  const bool                       _premultipliedAlpha;
 
 public:
+  /** premultipliedAlpha: the texture's, so fading multiplies the color too, not only the alpha */
   BillboardGLFeature(float billboardWidth,
                      float billboardHeight,
-                     float anchorU, float anchorV);
+                     float anchorU, float anchorV,
+                     bool premultipliedAlpha);
 
   void applyOnGlobalGLState(GLGlobalState* state) const;
 
@@ -97,6 +83,15 @@ public:
 
   void changeAnchor(float anchorU, float anchorV) {
     _anchor->changeValue(anchorU, anchorV);
+  }
+
+  void changeAlpha(float alpha) {
+    if (_premultipliedAlpha) {
+      _colorFactor->changeValue(alpha, alpha, alpha, alpha);
+    }
+    else {
+      _colorFactor->changeValue(1, 1, 1, alpha);
+    }
   }
 };
 
@@ -125,6 +120,47 @@ public:
 };
 
 
+// Ribbon half-width is resolved in the vertex shader as clamp(widthInMeters, minWidthInPixels, maxWidthInPixels)
+class RibbonWidthGLFeature: public GLFeature {
+private:
+  ~RibbonWidthGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  GPUUniformValueVec3FloatMutable* _width;
+
+public:
+  RibbonWidthGLFeature(float widthInMeters,
+                       float minWidthInPixels,
+                       float maxWidthInPixels);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+
+  void changeWidth(float widthInMeters,
+                   float minWidthInPixels,
+                   float maxWidthInPixels);
+};
+
+
+// Per-vertex unit vector the RibbonMesh shader offsets along. Deliberately not the NORMAL
+// attribute: normals would drag the lighting path (MODEL uniform) into the GL state.
+class RibbonSideGLFeature: public GLFeature {
+private:
+  ~RibbonSideGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  RibbonSideGLFeature(const IFloatBuffer* sides);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+};
+
+
 class CameraPositionGLFeature: public GLFeature {
 private:
   ~CameraPositionGLFeature() {
@@ -133,19 +169,81 @@ private:
 #endif
   }
 
+  const bool _groundHazePass;
   GPUUniformValueVec3FloatMutable* _camPos;
+  GPUUniformValueVec3FloatMutable* _spaceColor;
+  GPUUniformValueVec3FloatMutable* _horizonColor;
+  GPUUniformValueVec3FloatMutable* _skyRayleighScattering;
 
 public:
-  CameraPositionGLFeature(const Camera* cam);
+  CameraPositionGLFeature(const Camera* cam,
+                          bool groundHazePass,
+                          const Color& spaceColor,
+                          const Color& horizonColor,
+                          const Vector3F& skyRayleighScattering);
 
+  // The sky adds its light and dims what is behind it (the background, the stars) by its transmittance;
+  // the haze is a fog colour faded in by its opacity
   void applyOnGlobalGLState(GLGlobalState* state)  const {
-    //Used for atmospheric blending
     state->enableBlend();
-    state->setBlendFactors(GLBlendFactor::srcAlpha(),
+    state->setBlendFactors(_groundHazePass ? GLBlendFactor::srcAlpha() : GLBlendFactor::one(),
                            GLBlendFactor::oneMinusSrcAlpha());
   }
 
-  void update(const Camera* cam);
+  void update(const Camera* cam,
+              const Color& spaceColor);
+
+  void changeAtmosphereColors(const Color& horizonColor,
+                              const Vector3F& skyRayleighScattering);
+};
+
+
+// Multiplies the brightness of every star of the Stars program
+class StarsGLFeature: public GLFeature {
+private:
+  ~StarsGLFeature() {
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+  GPUUniformValueFloatMutable* _fullStarMagnitude;
+
+public:
+  StarsGLFeature(float fullStarMagnitude,
+                 float starSizeExponent);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+
+  void changeFullStarMagnitude(float fullStarMagnitude);
+};
+
+
+// Tile color = (colorMatrix * (r, g, b, 1)).rgb, clamped; alpha is untouched.
+// The fourth column of the homogeneous matrix is the color offset.
+class ColorGradeGLFeature: public GLFeature {
+private:
+#ifdef C_CODE
+  Matrix44DHolder* _colorMatrixHolder;
+#endif
+#ifdef JAVA_CODE
+  private Matrix44DHolder _colorMatrixHolder;
+#endif
+
+  ~ColorGradeGLFeature() {
+    _colorMatrixHolder->_release();
+
+#ifdef JAVA_CODE
+    super.dispose();
+#endif
+  }
+
+public:
+  ColorGradeGLFeature(const Matrix44D* colorMatrix);
+
+  void applyOnGlobalGLState(GLGlobalState* state)  const {}
+
+  void changeColorMatrix(const Matrix44D* colorMatrix);
 };
 
 
@@ -454,6 +552,7 @@ public:
                    int target = 0);
 
   bool hasTranslateAndScale() const { return _translation != NULL && _scale != NULL;}
+  bool hasRotation() const { return _rotationAngle != NULL && _rotationCenter != NULL; }
 
   void setTranslation(float u, float v);
   void setScale(float u, float v);

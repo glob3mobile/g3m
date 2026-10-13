@@ -1,0 +1,234 @@
+package org.glob3.mobile.generated;
+//
+//  MarkBuilder.cpp
+//  G3M
+//
+//  Created by Diego Gomez Deck on 10/8/26.
+//
+
+//
+//  MarkBuilder.hpp
+//  G3M
+//
+//  Created by Diego Gomez Deck on 10/8/26.
+//
+
+
+
+
+//class Mark;
+//class MarkOutfit;
+//class MarkAnchor;
+//class IImageFactory;
+//class Geodetic3D;
+//class MarkUserData;
+//class MarkTouchListener;
+
+
+/**
+ * Builds Marks step by step. What belongs to one mark (position, outfits, user
+ * data, touch listener) is consumed by build(); the rest stays as the default
+ * for the next marks.
+ */
+public class MarkBuilder
+{
+  private AltitudeMode _altitudeMode;
+  private double _minDistanceToCamera;
+  private double _maxDistanceToCamera;
+  private boolean _zoomInAppears;
+
+  private Geodetic3D _position;
+  private java.util.ArrayList<MarkOutfit> _outfits = new java.util.ArrayList<MarkOutfit>();
+  private MarkUserData _userData;
+  private boolean _autoDeleteUserData;
+  private MarkTouchListener _touchListener;
+  private boolean _autoDeleteTouchListener;
+  private double _priority;
+  private MarkOutfit _hint;
+
+
+  // what belongs to the mark just built goes with it
+  private void clearMarkProperties()
+  {
+    if (_position != null)
+       _position.dispose();
+    _position = null;
+  
+    _outfits.clear();
+  
+    _userData = null;
+    _autoDeleteUserData = false;
+  
+    _touchListener = null;
+    _autoDeleteTouchListener = false;
+  
+    _priority = Double.NaN;
+  
+    _hint = null;
+  }
+
+  /** defaults: ABSOLUTE, no distance limits, zoom in on appearing */
+  public MarkBuilder()
+  {
+     _altitudeMode = AltitudeMode.ABSOLUTE;
+     _minDistanceToCamera = 0;
+     _maxDistanceToCamera = 0;
+     _zoomInAppears = true;
+     _position = null;
+     _userData = null;
+     _autoDeleteUserData = false;
+     _touchListener = null;
+     _autoDeleteTouchListener = false;
+     _priority = Double.NaN;
+     _hint = null;
+  }
+
+  public void dispose()
+  {
+    if (_position != null)
+       _position.dispose();
+    if (_hint != null)
+       _hint.dispose();
+  
+    for (int i = 0; i < _outfits.size(); i++)
+    {
+      if (_outfits.get(i) != null)
+         _outfits.get(i).dispose();
+    }
+  
+    if (_autoDeleteUserData)
+    {
+      if (_userData != null)
+         _userData.dispose();
+    }
+    if (_autoDeleteTouchListener)
+    {
+      if (_touchListener != null)
+         _touchListener.dispose();
+    }
+  }
+
+  public final void setAltitudeMode(AltitudeMode altitudeMode)
+  {
+    _altitudeMode = altitudeMode;
+  }
+
+  /** the mark is hidden farther than this; 0: no limit */
+  public final void setMinDistanceToCamera(double minDistanceToCamera)
+  {
+    _minDistanceToCamera = minDistanceToCamera;
+  }
+
+  /** the mark is hidden nearer than this; 0: no limit */
+  public final void setMaxDistanceToCamera(double maxDistanceToCamera)
+  {
+    _maxDistanceToCamera = maxDistanceToCamera;
+  }
+
+  public final void setZoomInAppears(boolean zoomInAppears)
+  {
+    _zoomInAppears = zoomInAppears;
+  }
+
+  public final void setPosition(Geodetic3D position)
+  {
+    if (_position != null)
+       _position.dispose();
+    _position = new Geodetic3D(position);
+  }
+
+  /** in order of preference: a decluttering renderer gives the mark the first one that fits; anchor NULL: the mark keeps its own anchor */
+  public final void addOutfit(IImageFactory imageFactory, MarkAnchor anchor)
+  {
+    _outfits.add(new MarkOutfit(imageFactory, anchor));
+  }
+
+  /** an outfit with its own way of coming in and going away, instead of the renderer's */
+  public final void addOutfit(IImageFactory imageFactory, MarkAnchor anchor, MarkTransitionMode transitionMode)
+  {
+    _outfits.add(new MarkOutfit(imageFactory, anchor, transitionMode));
+  }
+
+  /** detailLevel: outfits with the same level are alternatives (the label on one side or the other), a higher one shows more; without it, each outfit is a level of its own, from the first down */
+  public final void addOutfit(IImageFactory imageFactory, MarkAnchor anchor, int detailLevel)
+  {
+    _outfits.add(new MarkOutfit(imageFactory, anchor, detailLevel));
+  }
+
+  public final void addOutfit(IImageFactory imageFactory, MarkAnchor anchor, int detailLevel, MarkTransitionMode transitionMode)
+  {
+    _outfits.add(new MarkOutfit(imageFactory, anchor, detailLevel, transitionMode));
+  }
+
+  public final void addOutfit(IImageFactory imageFactory)
+  {
+    addOutfit(imageFactory, null);
+  }
+
+  public final void setUserData(MarkUserData userData, boolean autoDeleteUserData)
+  {
+    if (_autoDeleteUserData)
+    {
+      if (_userData != null)
+         _userData.dispose();
+    }
+    _userData = userData;
+    _autoDeleteUserData = autoDeleteUserData;
+  }
+
+  public final void setTouchListener(MarkTouchListener touchListener, boolean autoDeleteTouchListener)
+  {
+    if (_autoDeleteTouchListener)
+    {
+      if (_touchListener != null)
+         _touchListener.dispose();
+    }
+    _touchListener = touchListener;
+    _autoDeleteTouchListener = autoDeleteTouchListener;
+  }
+
+  /** the order among the marks that compete for space: the higher, the earlier; without it, the renderer's order */
+  public final void setPriority(double priority)
+  {
+    _priority = priority;
+  }
+
+  /** the mark's own hint, drawn when nothing else fits; without it, the renderer's; anchor NULL: the mark keeps its own anchor, as in addOutfit */
+  public final void setHint(IImageFactory imageFactory, MarkAnchor anchor)
+  {
+    if (_hint != null)
+       _hint.dispose();
+    _hint = new MarkOutfit(imageFactory, anchor);
+  }
+
+  /** a hint centred on the position */
+  public final void setHint(IImageFactory imageFactory)
+  {
+    setHint(imageFactory, new FixedMarkAnchor(0.5f, 0.5f));
+  }
+
+  /** needs a position and at least one outfit */
+  public final Mark build()
+  {
+    if (_position == null)
+    {
+      throw new RuntimeException("MarkBuilder: the mark has no position");
+    }
+    if (_outfits.isEmpty())
+    {
+      throw new RuntimeException("MarkBuilder: the mark has no outfit");
+    }
+  
+    Mark mark = new Mark(_outfits, _position, _altitudeMode, _minDistanceToCamera, _maxDistanceToCamera, _userData, _autoDeleteUserData, _touchListener, _autoDeleteTouchListener, _zoomInAppears);
+    mark.setPriority(_priority);
+    if (_hint != null)
+    {
+      mark.addHint(_hint);
+    }
+  
+    clearMarkProperties();
+  
+    return mark;
+  }
+
+}

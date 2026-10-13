@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MapBoo;
 import org.glob3.mobile.generated.MapBoo.MBHandler;
@@ -119,12 +120,8 @@ public class VectorStreamingActivity
 
    static private LayerSet createLayerSet() {
 
-      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
-      layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
-      //      final LayerSet layerSet = new LayerSet();
-      //      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
-
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(LayerBuilder.createSentinel2CloudlessLayer());
 
       return layerSet;
    }

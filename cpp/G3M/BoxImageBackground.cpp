@@ -10,7 +10,7 @@
 #include "Vector2I.hpp"
 #include "IMathUtils.hpp"
 #include "ICanvas.hpp"
-#include "IStringUtils.hpp"
+#include "IStringBuilder.hpp"
 
 
 BoxImageBackground::BoxImageBackground(const Vector2F& margin,
@@ -80,15 +80,24 @@ const Vector2F BoxImageBackground::initializeCanvas(ICanvas* canvas,
   return contentPosition;
 }
 
+// IStringBuilder keeps every float digit; IStringUtils::toString(float) keeps only 6 on iOS
 const std::string BoxImageBackground::description() const {
-  const IStringUtils* su = IStringUtils::instance();
-  return ("Box/"                           +
-          _margin.description()      + "/" +
-          su->toString(_borderWidth) + "/" +
-          _borderColor.id()          + "/" +
-          _padding.description()     + "/" +
-          _backgroundColor.id()      + "/" +
-          su->toString(_cornerRadius));
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("Box/");
+  isb->addString(_margin.description());
+  isb->addString("/");
+  isb->addFloat(_borderWidth);
+  isb->addString("/");
+  isb->addString(_borderColor.id());
+  isb->addString("/");
+  isb->addString(_padding.description());
+  isb->addString("/");
+  isb->addString(_backgroundColor.id());
+  isb->addString("/");
+  isb->addFloat(_cornerRadius);
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }
 
 BoxImageBackground* BoxImageBackground::copy() const {

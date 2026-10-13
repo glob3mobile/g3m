@@ -152,10 +152,9 @@ public final class NativeGL_WebGL extends INativeGL {
    }-*/;
 
    @Override
-   public native boolean deleteTexture(final IGLTextureID texture) /*-{
+   public native void deleteTexture(final IGLTextureID texture) /*-{
     var textureID = texture.@org.glob3.mobile.specific.GLTextureID_WebGL::getWebGLTexture()();
     this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteTexture(textureID);
-    return false;
    }-*/;
 
    @Override
@@ -189,6 +188,24 @@ public final class NativeGL_WebGL extends INativeGL {
    @Override
    public native void texParameteri(final int target, final int par, final int v) /*-{
     this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameteri(target, par, v);
+   }-*/;
+
+   @Override
+   public native float getMaxTextureMaxAnisotropy() /*-{
+    var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+    var ext = gl.getExtension("EXT_texture_filter_anisotropic") ||
+              gl.getExtension("WEBKIT_EXT_texture_filter_anisotropic") ||
+              gl.getExtension("MOZ_EXT_texture_filter_anisotropic");
+    if (!ext) {
+      return 0;
+    }
+    return gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+   }-*/;
+
+   // 0x84FE is TEXTURE_MAX_ANISOTROPY_EXT; getExtension() in getMaxTextureMaxAnisotropy() enables it
+   @Override
+   public native void setTextureMaxAnisotropy(final int target, final float maxAnisotropy) /*-{
+    this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.texParameterf(target, 0x84FE, maxAnisotropy);
    }-*/;
 
    @Override
@@ -416,13 +433,13 @@ public final class NativeGL_WebGL extends INativeGL {
    }-*/;
 
    @Override
-   public native boolean deleteProgram(final int program) /*-{
+   public native void deleteProgram(final int program) /*-{
     var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
     var jsoProgram = shaderList.@java.util.ArrayList::get(I)(program);
 
     this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.deleteProgram(jsoProgram);
-
-    return true;
+    // ids are list indices and are never reused, so only drop the reference to let the JS object be collected
+    shaderList.@java.util.ArrayList::set(ILjava/lang/Object;)(program, null);
    }-*/;
 
    @Override
@@ -471,13 +488,12 @@ public final class NativeGL_WebGL extends INativeGL {
    }-*/;
 
    @Override
-   public native boolean deleteShader(final int shader) /*-{
-    //TODO: IMPLEMENTATION FAILS
+   public native void deleteShader(final int shader) /*-{
     var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
     var shaderList = this.@org.glob3.mobile.specific.NativeGL_WebGL::_shaderList;
     var jsoShader = shaderList.@java.util.ArrayList::get(I)(shader);
-    return true;
-    //return gl.deleteShader(jsoShader);
+    gl.deleteShader(jsoShader);
+    shaderList.@java.util.ArrayList::set(ILjava/lang/Object;)(shader, null);
    }-*/;
 
    private native String getShaderInfoLog(final int shader) /*-{
@@ -505,12 +521,7 @@ public final class NativeGL_WebGL extends INativeGL {
 
     gl.linkProgram(jsoProgram);
 
-    var linkStatus = gl.getProgramParameter(jsoProgram, gl.LINK_STATUS);
-    if (!linkStatus) {
-      var info = gl.getProgramInfoLog(jsoProgram);
-      $wnd.console.error("Could not compile WebGL program.\n----------\n" + info + "\n----------");
-    }
-    return linkStatus;
+    return gl.getProgramParameter(jsoProgram, gl.LINK_STATUS);
    }-*/;
 
    private native String getProgramInfoLog(final int program) /*-{

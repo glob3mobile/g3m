@@ -37,14 +37,17 @@
 {
   NSMutableArray<ListenerEntry*>* _listeners;
   long long       _priority;
+  long long       _firstRequestID;
   NSURL*          _nsURL;
   URL*            _url;
+  NSTimeInterval  _timeoutInterval;
 
   NSLock*         _lock;                // synchronization helper
 }
 
 - (id) initWithNSURL:(NSURL*) nsURL
                  url:(URL*) url
+     timeoutInterval:(NSTimeInterval) timeoutInterval
             listener:(Downloader_iOS_Listener*) listener
             priority:(long long) priority
            requestID:(long long) requestID;
@@ -63,6 +66,8 @@
 - (bool) hasListeners;
 
 - (long long) priority;
+
+- (long long) firstRequestID;
 
 - (void) runWithDownloader:(void*) downloaderV;
 

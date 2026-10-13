@@ -5,6 +5,7 @@ package org.glob3.mobile.demo;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.ElevationDataProvider;
 import org.glob3.mobile.generated.FlatPlanet;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SingleBILElevationDataProvider;
@@ -35,13 +36,8 @@ public class FlatWorldActivity
 
       builder.setPlanet(FlatPlanet.createEarth());
 
-      //      final LayerSet layerSet = new LayerSet();
-      //      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
-      //      layerSet.addLayer(mboxTerrainLayer);
-
-      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
-      layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(LayerBuilder.createSentinel2CloudlessLayer());
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       builder.setBackgroundColor(Color.fromRGBA255(185, 221, 209, 255).muchDarker());

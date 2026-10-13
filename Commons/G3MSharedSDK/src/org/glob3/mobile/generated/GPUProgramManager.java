@@ -60,8 +60,19 @@ public class GPUProgramManager
     return prog;
   }
 
-  private GPUProgram getNewProgram(GL gl, int uniformsCode, int attributesCode)
+  private GPUProgram getNewProgram(GL gl, long uniformsCode, int attributesCode)
   {
+  
+    // checked first: a ribbon also carries VIEWPORT_EXTENT, which below means "billboard"
+    if (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.RIBBON_WIDTH))
+    {
+      return compileProgramWithName(gl, "RibbonMesh");
+    }
+  
+    if (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.FULL_STAR_MAGNITUDE))
+    {
+      return compileProgramWithName(gl, "Stars");
+    }
   
     final boolean texture = GPUVariable.hasAttribute(attributesCode, GPUAttributeKey.TEXTURE_COORDS);
     final boolean flatColor = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.FLAT_COLOR);
@@ -70,6 +81,7 @@ public class GPUProgramManager
     final boolean transformTC = (GPUVariable.hasUniform(uniformsCode, GPUUniformKey.TRANSLATION_TEXTURE_COORDS) || GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SCALE_TEXTURE_COORDS));
     final boolean rotationTC = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.ROTATION_ANGLE_TEXTURE_COORDS);
     final boolean hasLight = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.AMBIENT_LIGHT_COLOR);
+    final boolean colorGrade = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.COLOR_MATRIX);
   
     final boolean hasTexture2 = GPUVariable.hasUniform(uniformsCode, GPUUniformKey.SAMPLER2);
   //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
@@ -146,9 +158,17 @@ public class GPUProgramManager
         {
           return compileProgramWithName(gl, "FullTransformedTexCoorTexturedMesh");
         }
+        if (colorGrade)
+        {
+          return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_ColorGrade");
+        }
         return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
       }
   
+      if (colorGrade)
+      {
+        return compileProgramWithName(gl, "TexturedMesh_ColorGrade");
+      }
       return compileProgramWithName(gl, "TexturedMesh");
     }
   
@@ -169,7 +189,7 @@ public class GPUProgramManager
     return null;
   }
 
-  private GPUProgram getCompiledProgram(int uniformsCode, int attributesCode)
+  private GPUProgram getCompiledProgram(long uniformsCode, int attributesCode)
   {
     for (final GPUProgram p : _programs.values()) {
       if ((p.getUniformsCode() == uniformsCode) && (p.getAttributesCode() == attributesCode)) {
@@ -188,7 +208,7 @@ public class GPUProgramManager
   {
   }
 
-  public final GPUProgram getProgram(GL gl, int uniformsCode, int attributesCode)
+  public final GPUProgram getProgram(GL gl, long uniformsCode, int attributesCode)
   {
     GPUProgram p = getCompiledProgram(uniformsCode, attributesCode);
     if (p == null)
@@ -213,7 +233,7 @@ public class GPUProgramManager
     return p;
   }
 
-  public final void removeUnused()
+  public final void removeUnused(GL gl)
   {
     final java.util.Iterator<java.util.Map.Entry<String, GPUProgram>> iterator = _programs.entrySet().iterator();
     while (iterator.hasNext()) {
@@ -221,6 +241,8 @@ public class GPUProgramManager
       final GPUProgram program = entry.getValue();
       if (program.getNReferences() == 0) {
         ILogger.instance().logInfo("Deleting program %s", program.getName());
+        program.deleteGLProgram(gl);
+        program.dispose();
         iterator.remove();
       }
     }

@@ -45,6 +45,13 @@ private:
 
   GLGlobalState *_clearScreenState; //State used to clear screen with certain color
 
+  float _requestedTextureMaxAnisotropy;
+  float _deviceMaxTextureMaxAnisotropy;
+  float _textureMaxAnisotropy;
+  bool  _textureMaxAnisotropyResolved;
+
+  void resolveTextureMaxAnisotropy();
+
   static bool isPowerOfTwo(int x);
 
 
@@ -55,7 +62,11 @@ public:
   _nativeGL(nativeGL),
   _currentGPUProgram(NULL),
   _texturesIDAllocationCounter(0),
-  _clearScreenState(NULL)
+  _clearScreenState(NULL),
+  _requestedTextureMaxAnisotropy(1),
+  _deviceMaxTextureMaxAnisotropy(0),
+  _textureMaxAnisotropy(1),
+  _textureMaxAnisotropyResolved(false)
   {
     //Init Constants
     GLCullFace::init(_nativeGL);
@@ -98,6 +109,13 @@ public:
 
   int getError();
 
+  void setTextureMaxAnisotropy(float maxAnisotropy) {
+    _requestedTextureMaxAnisotropy = maxAnisotropy;
+    _textureMaxAnisotropyResolved  = false;
+  }
+
+  void applyTextureMaxAnisotropy(const IGLTextureID* textureID);
+
   const IGLTextureID* uploadTexture(const IImage* image,
                                     int format,
                                     bool generateMipmap,
@@ -135,8 +153,8 @@ public:
     return _nativeGL->compileShader(shader, source);
   }
 
-  bool deleteShader(int shader) const {
-    return _nativeGL->deleteShader(shader);
+  void deleteShader(int shader) const {
+    _nativeGL->deleteShader(shader);
   }
 
   void logShaderInfoLog(ILogger* logger, int shader) const {
@@ -151,9 +169,9 @@ public:
     _nativeGL->logProgramInfoLog(logger, program);
   }
 
-  bool deleteProgram(const GPUProgram* program) {
+  void deleteProgram(const GPUProgram* program) {
     if (program == NULL) {
-      return false;
+      return;
     }
 
     if (_currentGPUProgram == program) { //In case of deleting active program
@@ -161,7 +179,7 @@ public:
       _currentGPUProgram = NULL;
     }
 
-    return _nativeGL->deleteProgram(program->getProgramID());
+    _nativeGL->deleteProgram(program->getProgramID());
   }
 
   INativeGL* getNative() const {

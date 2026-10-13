@@ -39,6 +39,11 @@ ProjectedCornersDistanceTileLODTester::PvtData* ProjectedCornersDistanceTileLODT
   return data;
 }
 
+void ProjectedCornersDistanceTileLODTester::onTileHasChangedMesh(const Tile* tile) const {
+  // the corners were placed at the average height of the previous mesh
+  tile->clearDataWithID(ProjectedCornersDistanceTLTDataID);
+}
+
 bool ProjectedCornersDistanceTileLODTester::meetsRenderCriteria(const G3MRenderContext* rc,
                                                                 const PlanetRenderContext* prc,
                                                                 const Tile* tile) const {

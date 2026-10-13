@@ -121,6 +121,10 @@ protected:
                   float destLeft, float destTop, float destWidth, float destHeight,
                   float transparency);
 
+  void _drawImageTinted(const IImage* image,
+                        const Color& color,
+                        float destLeft, float destTop, float destWidth, float destHeight);
+
 
   void _beginPath();
 

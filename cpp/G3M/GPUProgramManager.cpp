@@ -21,7 +21,7 @@ GPUProgramManager::~GPUProgramManager() {
 #endif
 }
 
-GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attributesCode) {
+GPUProgram* GPUProgramManager::getProgram(GL* gl, long long uniformsCode, int attributesCode) {
   GPUProgram* p = getCompiledProgram(uniformsCode, attributesCode);
   if (p == NULL) {
     p = getNewProgram(gl, uniformsCode, attributesCode);
@@ -43,7 +43,16 @@ GPUProgram* GPUProgramManager::getProgram(GL* gl, int uniformsCode, int attribut
   return p;
 }
 
-GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attributesCode) {
+GPUProgram* GPUProgramManager::getNewProgram(GL* gl, long long uniformsCode, int attributesCode) {
+
+  // checked first: a ribbon also carries VIEWPORT_EXTENT, which below means "billboard"
+  if (GPUVariable::hasUniform(uniformsCode, RIBBON_WIDTH)) {
+    return compileProgramWithName(gl, "RibbonMesh");
+  }
+
+  if (GPUVariable::hasUniform(uniformsCode, FULL_STAR_MAGNITUDE)) {
+    return compileProgramWithName(gl, "Stars");
+  }
 
   const bool texture     = GPUVariable::hasAttribute(attributesCode, TEXTURE_COORDS);
   const bool flatColor   = GPUVariable::hasUniform(uniformsCode,     FLAT_COLOR);
@@ -53,6 +62,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
                             GPUVariable::hasUniform(uniformsCode,    SCALE_TEXTURE_COORDS));
   const bool rotationTC  = GPUVariable::hasUniform(uniformsCode,     ROTATION_ANGLE_TEXTURE_COORDS);
   const bool hasLight    = GPUVariable::hasUniform(uniformsCode,     AMBIENT_LIGHT_COLOR);
+  const bool colorGrade  = GPUVariable::hasUniform(uniformsCode,     COLOR_MATRIX);
 
   const bool hasTexture2 = GPUVariable::hasUniform(uniformsCode, SAMPLER2);
 //  const bool hasTexture3 = GPUVariable::hasUniform(uniformsCode, SAMPLER3);
@@ -115,9 +125,15 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
       if (rotationTC) {
         return compileProgramWithName(gl, "FullTransformedTexCoorTexturedMesh");
       }
+      if (colorGrade) {
+        return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh_ColorGrade");
+      }
       return compileProgramWithName(gl, "TransformedTexCoorTexturedMesh");
     }
 
+    if (colorGrade) {
+      return compileProgramWithName(gl, "TexturedMesh_ColorGrade");
+    }
     return compileProgramWithName(gl, "TexturedMesh");
   }
 
@@ -135,7 +151,7 @@ GPUProgram* GPUProgramManager::getNewProgram(GL* gl, int uniformsCode, int attri
   return NULL;
 }
 
-GPUProgram* GPUProgramManager::getCompiledProgram(int uniformsCode, int attributesCode) {
+GPUProgram* GPUProgramManager::getCompiledProgram(long long uniformsCode, int attributesCode) {
 #ifdef C_CODE
   for (std::map<std::string, GPUProgram*>::iterator it = _programs.begin(); it != _programs.end(); ++it) {
     //#warning GPUProgram getUniformsCode avoid call
@@ -199,13 +215,15 @@ GPUProgram* GPUProgramManager::getCompiledProgram(const std::string& name) {
 #endif
 }
 
-void GPUProgramManager::removeUnused() {
+void GPUProgramManager::removeUnused(GL* gl) {
 #ifdef C_CODE
   std::map<std::string, GPUProgram*>::iterator it = _programs.begin();
   while (it != _programs.end()) {
-    if (it->second->getNReferences() == 0) {
-      ILogger::instance()->logInfo("Deleting program %s", it->second->getName().c_str() );
-      delete it->second;
+    GPUProgram* program = it->second;
+    if (program->getNReferences() == 0) {
+      ILogger::instance()->logInfo("Deleting program %s", program->getName().c_str() );
+      program->deleteGLProgram(gl);
+      delete program;
       _programs.erase(it++);
     }
     else {
@@ -220,6 +238,8 @@ void GPUProgramManager::removeUnused() {
     final GPUProgram program = entry.getValue();
     if (program.getNReferences() == 0) {
       ILogger.instance().logInfo("Deleting program %s", program.getName());
+      program.deleteGLProgram(gl);
+      program.dispose();
       iterator.remove();
     }
   }

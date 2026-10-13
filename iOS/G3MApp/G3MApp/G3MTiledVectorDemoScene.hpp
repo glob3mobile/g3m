@@ -27,9 +27,9 @@ public:
   G3MDemoScene(model, "Vector Tiles", "", 0),
   _tiledVectorLayer(NULL)
   {
-    _options.push_back("Pinkish");
-    _options.push_back("Greenish");
-    _options.push_back("Rainbow");
+    addOption("Pinkish");
+    addOption("Greenish");
+    addOption("Rainbow");
   }
 
   void deactivate(const G3MContext* context);

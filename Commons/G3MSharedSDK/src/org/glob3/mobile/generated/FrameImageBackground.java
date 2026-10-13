@@ -83,10 +83,25 @@ public class FrameImageBackground extends ImageBackground
     return contentPosition;
   }
 
+
+  // IStringBuilder keeps every float digit; IStringUtils::toString(float) keeps only 6 on iOS
   public final String description()
   {
-    final IStringUtils su = IStringUtils.instance();
-    return ("Frame/" + su.toString(_topFrameHeight) + "/" + su.toString(_bottomFrameHeight) + "/" + su.toString(_leftFrameWidth) + "/" + su.toString(_rightFrameWidth) + "/" + _color.id());
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("Frame/");
+    isb.addFloat(_topFrameHeight);
+    isb.addString("/");
+    isb.addFloat(_bottomFrameHeight);
+    isb.addString("/");
+    isb.addFloat(_leftFrameWidth);
+    isb.addString("/");
+    isb.addFloat(_rightFrameWidth);
+    isb.addString("/");
+    isb.addString(_color.id());
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
   }
 
   public final FrameImageBackground copy()

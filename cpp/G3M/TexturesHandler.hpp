@@ -161,6 +161,9 @@ public:
                                                   int wrapT);
 
 
+  // also reapplies the value to the mipmapped textures already in the GPU; call it from the renderer thread
+  void setTextureMaxAnisotropy(float maxAnisotropy);
+
   //This two methods are supposed to be accessed only by TextureIDReference class
   void releaseGLTextureID(const IGLTextureID* glTextureID);
   void retainGLTextureID(const IGLTextureID* glTextureID);

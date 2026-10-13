@@ -10,13 +10,23 @@
 
 #include <vector>
 #include "DefaultRenderer.hpp"
+#include "MarkTransitionMode.hpp"
 
 class Mark;
 class Camera;
+class Planet;
+class TimeInterval;
+class IImageFactory;
+class IImage;
+class MarksRenderer_HintListener;
+class MutableVector3D;
 class MarkTouchListener;
 class IFloatBuffer;
 class ITimer;
 class MarkFilter;
+class Vector2F;
+class DeclutterObstacle;
+class G3MRenderContext;
 
 
 class MarksRenderer : public DefaultRenderer {
@@ -46,6 +56,62 @@ private:
   bool _progressiveInitialization;
   ITimer* _initializationTimer;
 
+  bool      _declutter;
+  bool      _horizonBand;
+  float     _declutterMargin;
+  long long          _transitionMS;
+  bool               _animatedEnable;
+  long long          _delayMS;
+  MarkTransitionMode _transitionMode;
+
+  // the default hint: one image, shared by every mark without a hint of its own
+  IImageFactory*              _hintImageFactory;
+  MarksRenderer_HintListener* _hintListener;
+#ifdef C_CODE
+  const IImage*               _hintImage;
+#endif
+#ifdef JAVA_CODE
+  private IImage              _hintImage;
+#endif
+  std::string                 _hintImageName;
+
+  void startHintImage();
+  void attachHint(Mark* mark);
+  // reused between frames: the marks in placing order and the screen rectangles taken
+  std::vector<Mark*> _declutterCandidates;
+  std::vector<Mark*> _declutterOrder;
+  std::vector<float> _takenLeft;
+  std::vector<float> _takenTop;
+  std::vector<float> _takenRight;
+  std::vector<float> _takenBottom;
+
+  std::vector<DeclutterObstacle*> _declutterObstacles;
+
+  void declutter(const G3MRenderContext* rc,
+                 const Camera* camera,
+                 const Planet* planet,
+                 const MutableVector3D& cameraPosition,
+                 double cameraHeight);
+
+  bool isFree(float left, float top, float right, float bottom) const;
+
+  void removeMarksThatLeft(bool evenLeaving);
+
+  bool hasOutfitImage(const Mark* mark,
+                      size_t outfitIndex) const;
+
+  bool outfitFits(const Mark* mark,
+                  const Vector2F& markPixel,
+                  size_t outfitIndex,
+                  float margin) const;
+
+  void takeOutfitSpace(const Mark* mark,
+                       const Vector2F& markPixel,
+                       size_t outfitIndex);
+
+  int chooseOutfit(const Mark* mark,
+                   const Vector2F& markPixel) const;
+
 public:
 
   MarksRenderer(bool readyWhenMarksReady,
@@ -54,6 +120,68 @@ public:
 
   void setRenderInReverse(bool renderInReverse) {
     _renderInReverse = renderInReverse;
+  }
+
+  /**
+   * Each frame, every visible mark takes its largest outfit that does not
+   * overlap the marks placed before it, or hides when none fits. Marks with
+   * priority go first, the highest first; the rest in the order they are drawn
+   * on top.
+   */
+  void setDeclutter(bool declutter);
+
+  bool getDeclutter() const {
+    return _declutter;
+  }
+
+  /** the free space a mark needs around it to grow or come back; it keeps its place with no margin, so it does not blink */
+  void setDeclutterMargin(float marginInPixels) {
+    _declutterMargin = marginInPixels;
+  }
+
+  /** the hint of the marks without their own: drawn centred on the position when nothing else fits; the renderer owns the factory; NULL: no hint for the marks added from now on */
+  void setHint(IImageFactory* hintImageFactory);
+
+  void onHintImageCreated(const IImage* image,
+                          const std::string& imageName);
+
+  void onHintImageCreationError();
+
+  /** the marks shrink while they sink behind the horizon, over their own apparent height, instead of vanishing at once; on by default */
+  void setHorizonBand(bool horizonBand) {
+    _horizonBand = horizonBand;
+  }
+
+  bool getHorizonBand() const {
+    return _horizonBand;
+  }
+
+  /** how long an outfit takes to come in, and the one it replaces to go away, both at once; 250ms by default */
+  void setDeclutterTransitionDuration(const TimeInterval& duration);
+
+  /** its screen area is kept free of marks, as if taken by a mark placed before all; the renderer owns it */
+  void addDeclutterObstacle(DeclutterObstacle* obstacle);
+
+  void removeAllDeclutterObstacles();
+
+  /** setEnable fades the marks out and in with their transition, instead of at once; off by default */
+  void setAnimatedEnable(bool animatedEnable);
+
+  /** with animated enable, disabled at once for touches and room, while the marks fade out */
+  void setEnable(bool enable);
+
+  bool isRendering() const;
+
+  /** how long a mark's new outfit must hold before the mark changes, so changes that come and go are not seen; marks may overlap meanwhile; 250ms by default */
+  void setDeclutterDelay(const TimeInterval& delay);
+
+  /** how outfits come in and go away: SCALE_AND_ALPHA by default; WIDTH suits outfits that move the label to the other side of the icon */
+  void setDeclutterTransitionMode(MarkTransitionMode mode) {
+    _transitionMode = mode;
+  }
+
+  MarkTransitionMode getDeclutterTransitionMode() const {
+    return _transitionMode;
   }
 
   bool getRenderInReverse() const {
@@ -116,6 +244,9 @@ public:
                         bool deleteMarks);
 
   const std::vector<Mark*> getAllMarks(const MarkFilter& filter) const;
+
+  /** the first mark the filter accepts, leaving marks excluded as in getAllMarks; NULL when none */
+  Mark* findMark(const MarkFilter& filter) const;
 
 };
 

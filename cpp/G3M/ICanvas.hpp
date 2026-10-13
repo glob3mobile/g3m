@@ -127,6 +127,10 @@ protected:
                           float destLeft, float destTop, float destWidth, float destHeight,
                           float transparency) = 0;
 
+  virtual void _drawImageTinted(const IImage* image,
+                                const Color& color,
+                                float destLeft, float destTop, float destWidth, float destHeight) = 0;
+
 
   virtual void _beginPath() = 0;
 
@@ -276,6 +280,11 @@ public:
                  float srcLeft, float srcTop, float srcWidth, float srcHeight,
                  float destLeft, float destTop, float destWidth, float destHeight,
                  float transparency);
+
+  /** the image's shape (its alpha) filled with the color: a white icon takes the color, the rest of the canvas is untouched */
+  void drawImageTinted(const IImage* image,
+                       const Color& color,
+                       float destLeft, float destTop, float destWidth, float destHeight);
 
   int getWidth() const {
     return _canvasWidth;

@@ -24,13 +24,13 @@ package org.glob3.mobile.generated;
 
 public class GPUVariableValueSet
 {
-  private GPUUniformValue[] _uniformValues = new GPUUniformValue[32];
+  private GPUUniformValue[] _uniformValues = new GPUUniformValue[GPUVariable.MAX_UNIFORM_KEYS];
   private GPUAttributeValue[] _attributeValues = new GPUAttributeValue[32];
 
   private int _highestUniformKey;
   private int _highestAttributeKey;
 
-  private int _uniformsCode;
+  private long _uniformsCode;
   private int _attributeCode;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
@@ -45,9 +45,12 @@ public class GPUVariableValueSet
      _highestUniformKey = 0;
      _uniformsCode = 0;
      _attributeCode = 0;
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < GPUVariable.MAX_UNIFORM_KEYS; i++)
     {
       _uniformValues[i] = null;
+    }
+    for (int i = 0; i < 32; i++)
+    {
       _attributeValues[i] = null;
     }
   }
@@ -112,7 +115,7 @@ public class GPUVariableValueSet
       _uniformValues[index] = null;
     }
   
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < GPUVariable.MAX_UNIFORM_KEYS; i++)
     {
       if (_uniformValues[i] != null)
       {
@@ -195,7 +198,7 @@ public class GPUVariableValueSet
     }
   }
 
-  public final int getUniformsCode()
+  public final long getUniformsCode()
   {
     if (_uniformsCode == 0)
     {

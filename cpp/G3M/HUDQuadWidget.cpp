@@ -19,8 +19,6 @@
 #include "HUDPosition.hpp"
 #include "HUDSize.hpp"
 #include "RenderState.hpp"
-#include "IImageBuilder.hpp"
-#include "IImageBuilderListener.hpp"
 #include "SimpleTextureMapping.hpp"
 #include "MultiTextureMapping.hpp"
 #include "TextureIDReference.hpp"
@@ -31,37 +29,7 @@
 #include "GLConstants.hpp"
 
 
-class HUDQuadWidget_ImageBuilderListener : public IImageBuilderListener {
-private:
-  HUDQuadWidget* _quadWidget;
-  const int      _imageRole;
-
-public:
-  HUDQuadWidget_ImageBuilderListener(HUDQuadWidget* quadWidget,
-                                     int            imageRole) :
-  _quadWidget(quadWidget),
-  _imageRole(imageRole)
-  {
-  }
-
-  ~HUDQuadWidget_ImageBuilderListener() {
-  }
-
-  void imageCreated(const IImage* image,
-                    const std::string& imageName) {
-    _quadWidget->imageCreated(image, imageName, _imageRole);
-  }
-
-  void onError(const std::string& error) {
-    _quadWidget->onImageBuildError(error, _imageRole);
-  }
-};
-
-
 HUDQuadWidget::~HUDQuadWidget() {
-  delete _imageBuilder;
-  delete _backgroundImageBuilder;
-
   delete _image;
   delete _backgroundImage;
 
@@ -75,21 +43,21 @@ HUDQuadWidget::~HUDQuadWidget() {
 }
 
 Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
-  if (_image == NULL) {
+  if (_image->getImage() == NULL) {
     return NULL;
   }
 
-  const bool hasBackground = (_backgroundImageBuilder != NULL);
+  const bool hasBackground = (_backgroundImage != NULL);
 
-  if (hasBackground && (_backgroundImage == NULL)) {
+  if (hasBackground && (_backgroundImage->getImage() == NULL)) {
     return NULL;
   }
 
   TexturesHandler* texturesHandler = rc->getTexturesHandler();
 
-  const TextureIDReference* textureID = texturesHandler->getTextureIDReference(_image,
+  const TextureIDReference* textureID = texturesHandler->getTextureIDReference(_image->getImage(),
                                                                                GLFormat::rgba(),
-                                                                               _imageName,
+                                                                               _image->getImageName(),
                                                                                false,
                                                                                GLTextureParameterValue::clampToEdge(),
                                                                                GLTextureParameterValue::clampToEdge());
@@ -105,9 +73,9 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   TextureIDReference backgroundTextureID = null;
 #endif
   if (hasBackground) {
-    backgroundTextureID = texturesHandler->getTextureIDReference(_backgroundImage,
+    backgroundTextureID = texturesHandler->getTextureIDReference(_backgroundImage->getImage(),
                                                                  GLFormat::rgba(),
-                                                                 _backgroundImageName,
+                                                                 _backgroundImage->getImageName(),
                                                                  false,
                                                                  GLTextureParameterValue::clampToEdge(),
                                                                  GLTextureParameterValue::clampToEdge());
@@ -126,8 +94,11 @@ Mesh* HUDQuadWidget::createMesh(const G3MRenderContext* rc) {
   }
   const int viewPortHeight = camera->getViewPortHeight();
 
-  const float width  = _widthSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
-  const float height = _heightSize->getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+  const int imageWidth  = _image->getImageWidth();
+  const int imageHeight = _image->getImageHeight();
+
+  const float width  = _widthSize->getSize(viewPortWidth, viewPortHeight, imageWidth, imageHeight);
+  const float height = _heightSize->getSize(viewPortWidth, viewPortHeight, imageWidth, imageHeight);
 
   const float x = _xPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
   const float y = _yPosition->getPosition(viewPortWidth, viewPortHeight, width, height);
@@ -218,26 +189,9 @@ void HUDQuadWidget::setTexCoordsRotation(float angleInRadians,
 void HUDQuadWidget::initialize(const G3MContext* context) {
   _context = context;
 
-  if (!_buildingImage && (_image == NULL)) {
-    _buildingImage = true;
-    _imageBuilder->build(context,
-                         new HUDQuadWidget_ImageBuilderListener(this, 0),
-                         true);
-    if (_imageBuilder->isMutable()) {
-      _imageBuilder->setChangeListener( this );
-    }
-  }
-
-  if (_backgroundImageBuilder != NULL) {
-    if (!_buildingBackgroundImage && (_backgroundImage == NULL)) {
-      _buildingBackgroundImage = true;
-      _backgroundImageBuilder->build(context,
-                                     new HUDQuadWidget_ImageBuilderListener(this, 1),
-                                     true);
-      if (_backgroundImageBuilder->isMutable()) {
-        _backgroundImageBuilder->setChangeListener( this );
-      }
-    }
+  _image->initialize(context, this);
+  if (_backgroundImage != NULL) {
+    _backgroundImage->initialize(context, this);
   }
 }
 
@@ -251,26 +205,16 @@ void HUDQuadWidget::cleanMesh() {
 void HUDQuadWidget::changed() {
   cleanMesh();
 
-  delete _image;
-  _image       = NULL;
-  _imageName   = "";
-  _imageWidth  = 0;
-  _imageHeight = 0;
+  _image->rebuild(_context);
+  if (_backgroundImage != NULL) {
+    _backgroundImage->rebuild(_context);
+  }
+}
 
-  _buildingImage = true;
-  _imageBuilder->build(_context,
-                       new HUDQuadWidget_ImageBuilderListener(this, 0),
-                       true);
-
-  delete _backgroundImage;
-  _backgroundImage = NULL;
-  _backgroundImageName = "";
-
-  if (_backgroundImageBuilder != NULL) {
-    _buildingBackgroundImage = true;
-    _backgroundImageBuilder->build(_context,
-                                   new HUDQuadWidget_ImageBuilderListener(this, 1),
-                                   true);
+void HUDQuadWidget::addErrors(const HUDWidgetImage* widgetImage) {
+  const std::vector<std::string> errors = widgetImage->getErrors();
+  for (size_t i = 0; i < errors.size(); i++) {
+    _errors.push_back("HUDQuadWidget: " + errors[i]);
   }
 }
 
@@ -280,33 +224,17 @@ void HUDQuadWidget::onResizeViewportEvent(const G3MEventContext* ec,
   cleanMesh();
 }
 
-void HUDQuadWidget::imageCreated(const IImage*      image,
-                                 const std::string& imageName,
-                                 int                imageRole) {
-  if (imageRole == 0) {
-    _buildingImage = false;
-    _image = image;
-    _imageName = imageName;
-    _imageWidth  = _image->getWidth();
-    _imageHeight = _image->getHeight();
-  }
-  else if (imageRole == 1) {
-    _buildingBackgroundImage = false;
-    _backgroundImage = image;
-    _backgroundImageName = imageName;
-  }
-}
-
-void HUDQuadWidget::onImageBuildError(const std::string& error,
-                                      int                imageRole) {
-  _errors.push_back("HUDQuadWidget: " + error);
-}
-
 RenderState HUDQuadWidget::getRenderState(const G3MRenderContext* rc) {
+  _errors.clear();
+  addErrors(_image);
+  if (_backgroundImage != NULL) {
+    addErrors(_backgroundImage);
+  }
+
   if (!_errors.empty()) {
     return RenderState::error(_errors);
   }
-  else if (_buildingImage || _buildingBackgroundImage) {
+  else if (_image->isBuilding() || ((_backgroundImage != NULL) && _backgroundImage->isBuilding())) {
     return RenderState::busy();
   }
   else {

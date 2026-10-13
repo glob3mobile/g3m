@@ -345,6 +345,29 @@ void Canvas_Emscripten::_drawImage(const IImage* image,
   _domCanvasContext.set("globalAlpha", val(currentGlobalAlpha));
 }
 
+void Canvas_Emscripten::_drawImageTinted(const IImage* image,
+                                         const Color& color,
+                                         float destLeft, float destTop, float destWidth, float destHeight) {
+  val domImage = ((Image_Emscripten*) image)->getDOMImage();
+
+  // tinted in a canvas of its own: source-in on this one would also clear what is already drawn around the image
+  val tintCanvas = val::global("document").call<val>("createElement", std::string("canvas"));
+  tintCanvas.set("width", domImage["width"]);
+  tintCanvas.set("height", domImage["height"]);
+  val tintContext = tintCanvas.call<val>("getContext", std::string("2d"));
+  tintContext.call<void>("drawImage", domImage, val(0), val(0));
+  tintContext.set("globalCompositeOperation", std::string("source-in"));
+  tintContext.set("fillStyle", createDOMColor(color));
+  tintContext.call<void>("fillRect", val(0), val(0), tintCanvas["width"], tintCanvas["height"]);
+
+  _domCanvasContext.call<void>("drawImage",
+                               tintCanvas,
+                               val(destLeft),
+                               val(destTop),
+                               val(destWidth),
+                               val(destHeight));
+}
+
 void Canvas_Emscripten::_drawImage(const IImage* image,
                                    float srcLeft, float srcTop, float srcWidth, float srcHeight,
                                    float destLeft, float destTop, float destWidth, float destHeight) {

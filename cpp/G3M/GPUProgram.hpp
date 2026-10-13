@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "GPUVariable.hpp"
+
 class GPUUniform;
 class GPUAttribute;
 class GL;
@@ -30,7 +32,7 @@ class GPUAttributeValue;
 class GPUProgram {
   int _programID;
 
-  GPUUniform* _uniforms[32];
+  GPUUniform* _uniforms[GPUVariable::MAX_UNIFORM_KEYS];
   GPUAttribute* _attributes[32];
   int _nAttributes;
   int _nUniforms;
@@ -38,19 +40,15 @@ class GPUProgram {
   GPUUniform** _createdUniforms;
   GPUAttribute** _createdAttributes;
 
-  int _uniformsCode;
+  long long _uniformsCode;
   int _attributesCode;
 
   std::string _name;
-
-  GL* _gl;
 
   int _nReferences; //Number of items that reference this Program
 
   bool compileShader(GL* gl, int shader, const std::string& source) const;
   bool linkProgram(GL* gl) const;
-  void deleteShader(GL* gl, int shader) const;
-  void deleteProgram(GL* gl, const GPUProgram* p);
 
   void getVariables(GL* gl);
 
@@ -61,7 +59,6 @@ class GPUProgram {
   _createdAttributes(NULL),
   _uniformsCode(0),
   _attributesCode(0),
-  _gl(NULL),
   _nReferences(0)
   {
   }
@@ -71,12 +68,15 @@ class GPUProgram {
 public:
 
 
+  // Only releases host memory. Call deleteGLProgram() first to release the GPU program.
   ~GPUProgram();
 
   static GPUProgram* createProgram(GL* gl,
                                    const std::string& name,
                                    const std::string& vertexSource,
                                    const std::string& fragmentSource);
+
+  void deleteGLProgram(GL* gl);
 
   const std::string getName() const { return _name; }
 
@@ -111,7 +111,7 @@ public:
   GPUAttribute* getGPUAttributeVecXFloat(int key, int x) const;
 
   int getAttributesCode() const { return _attributesCode; }
-  int getUniformsCode() const { return _uniformsCode; }
+  long long getUniformsCode() const { return _uniformsCode; }
 
   void setGPUUniformValue(int key, GPUUniformValue* v);
   void setGPUAttributeValue(int key, GPUAttributeValue* v);

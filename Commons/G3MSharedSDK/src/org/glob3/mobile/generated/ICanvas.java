@@ -82,6 +82,8 @@ public abstract class ICanvas
 
   protected abstract void _drawImage(IImage image, float srcLeft, float srcTop, float srcWidth, float srcHeight, float destLeft, float destTop, float destWidth, float destHeight, float transparency);
 
+  protected abstract void _drawImageTinted(IImage image, Color color, float destLeft, float destTop, float destWidth, float destHeight);
+
 
   protected abstract void _beginPath();
 
@@ -355,6 +357,13 @@ public abstract class ICanvas
     {
       _drawImage(image, srcLeft, srcTop, srcWidth, srcHeight, destLeft, destTop, destWidth, destHeight, transparency);
     }
+  }
+
+  /** the image's shape (its alpha) filled with the color: a white icon takes the color, the rest of the canvas is untouched */
+  public final void drawImageTinted(IImage image, Color color, float destLeft, float destTop, float destWidth, float destHeight)
+  {
+    checkInitialized();
+    _drawImageTinted(image, color, destLeft, destTop, destWidth, destHeight);
   }
 
   public final int getWidth()

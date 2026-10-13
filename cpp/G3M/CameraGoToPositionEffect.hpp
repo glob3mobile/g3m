@@ -13,6 +13,7 @@
 #include "Geodetic3D.hpp"
 
 class Planet;
+class CameraFlightArc;
 
 
 class CameraGoToPositionEffect : public EffectWithDuration {
@@ -27,9 +28,16 @@ private:
   const Angle _toPitch;
 
   const bool       _linearHeight;
-  double           _middleHeight;
+  CameraFlightArc* _arc;
 
-  double calculateMaxHeight(const Planet* planet);
+  double           _planetRadius;
+  double           _fromAngleBelowHorizonRadians;
+  double           _toAngleBelowHorizonRadians;
+
+  double horizonDepressionRadians(const double height) const;
+
+  double angleBelowHorizonRadians(const Angle& pitch,
+                                  const double height) const;
 
 public:
 
@@ -49,9 +57,15 @@ public:
   _toHeading(toHeading),
   _fromPitch(fromPitch),
   _toPitch(toPitch),
-  _linearHeight(linearHeight)
+  _linearHeight(linearHeight),
+  _arc(NULL),
+  _planetRadius(0),
+  _fromAngleBelowHorizonRadians(0),
+  _toAngleBelowHorizonRadians(0)
   {
   }
+
+  ~CameraGoToPositionEffect();
 
   void start(const G3MRenderContext* rc,
              const TimeInterval& when);

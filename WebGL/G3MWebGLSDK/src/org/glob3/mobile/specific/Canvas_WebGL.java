@@ -17,8 +17,7 @@ public final class Canvas_WebGL extends ICanvas {
    private int _width;
    private int _height;
 
-   Canvas_WebGL(final boolean retina,
-                final int maxSize) {
+   Canvas_WebGL(final boolean retina, final int maxSize) {
       super(retina);
 
       _maxSize = maxSize;
@@ -67,10 +66,8 @@ public final class Canvas_WebGL extends ICanvas {
     canvas.width = w;
     canvas.height = h;
 
-    //if ((widthPixelRatio != 1) || (heightPixelRatio != 1)) {
     var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
     context.scale(widthPixelRatio, heightPixelRatio);
-    //}
 
     this.@org.glob3.mobile.specific.Canvas_WebGL::tryToSetCurrentFontToContext()();
    }-*/;
@@ -242,20 +239,66 @@ public final class Canvas_WebGL extends ICanvas {
 		}
    }-*/;
 
+   private static JavaScriptObject _fontMetricsCache;
+
+   static native JavaScriptObject fontMetrics(final JavaScriptObject context, final float fontSize) /*-{
+    var cache = @org.glob3.mobile.specific.Canvas_WebGL::_fontMetricsCache;
+    if (!cache) {
+      cache = {};
+      @org.glob3.mobile.specific.Canvas_WebGL::_fontMetricsCache = cache;
+    }
+
+    var key = context.font;
+    var cached = cache[key];
+    if (cached) {
+      return cached;
+    }
+
+    context.textBaseline = "alphabetic";
+    var probe = String.fromCharCode(0xC1, 0xC9) + "gjpqy";
+    var m = context.measureText(probe);
+
+    var ascent;
+    var descent;
+    if ((typeof m.fontBoundingBoxAscent === "number") && (typeof m.fontBoundingBoxDescent === "number")) {
+      ascent = m.fontBoundingBoxAscent;
+      descent = m.fontBoundingBoxDescent;
+    }
+    else if ((typeof m.actualBoundingBoxAscent === "number") && (typeof m.actualBoundingBoxDescent === "number")) {
+      ascent = m.actualBoundingBoxAscent;
+      descent = m.actualBoundingBoxDescent;
+    }
+    else {
+      ascent = fontSize * 0.95;
+      descent = fontSize * 0.25;
+    }
+
+    var ceiledAscent = Math.ceil(ascent);
+    var metrics = {
+      ascent : ceiledAscent,
+      height : ceiledAscent + Math.ceil(descent)
+    };
+    cache[key] = metrics;
+    return metrics;
+   }-*/;
+
    @Override
    protected native void _fillText(final String text, final float left, final float top) /*-{
     var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-    context.textBaseline = "top";
-    context.fillText(text, left, top - 1);
+    var fontSize = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize;
+    var metrics = @org.glob3.mobile.specific.Canvas_WebGL::fontMetrics(Lcom/google/gwt/core/client/JavaScriptObject;F)(context, fontSize);
+    context.textBaseline = "alphabetic";
+    context.fillText(text, left, top + metrics.ascent);
    }-*/;
 
    @Override
    protected native Vector2F _textExtent(final String text) /*-{
     var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-    context.textBaseline = "top";
+    var fontSize = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize;
+    var metrics = @org.glob3.mobile.specific.Canvas_WebGL::fontMetrics(Lcom/google/gwt/core/client/JavaScriptObject;F)(context, fontSize);
+    context.textBaseline = "alphabetic";
     var width = Math.ceil(context.measureText(text).width);
-    var height = this.@org.glob3.mobile.specific.Canvas_WebGL::_currentFontSize;
-    return @org.glob3.mobile.generated.Vector2F::new(FF)(width, height);
+    return @org.glob3.mobile.generated.Vector2F::new(FF)(width, metrics.height);
    }-*/;
 
    private native void roundRect(final float x, final float y, final float width, final float height, final float radius, final boolean fill,
@@ -338,6 +381,24 @@ public final class Canvas_WebGL extends ICanvas {
     context.globalAlpha = transparency;
     context.drawImage(imageJS, left, top, width, height);
     context.globalAlpha = currentGlobalAlpha;
+   }-*/;
+
+   // tinted in a canvas of its own: source-in on this one would also clear what is already drawn around the image
+   @Override
+   protected native void _drawImageTinted(IImage image, Color color, float left, float top, float width, float height) /*-{
+    var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
+    var imageJS = image.@org.glob3.mobile.specific.Image_WebGL::getImage()();
+
+    var tintCanvas = $doc.createElement("canvas");
+    tintCanvas.width = imageJS.width;
+    tintCanvas.height = imageJS.height;
+    var tintContext = tintCanvas.getContext("2d");
+    tintContext.drawImage(imageJS, 0, 0);
+    tintContext.globalCompositeOperation = "source-in";
+    tintContext.fillStyle = @org.glob3.mobile.specific.Canvas_WebGL::createDOMColor(Lorg/glob3/mobile/generated/Color;)(color);
+    tintContext.fillRect(0, 0, tintCanvas.width, tintCanvas.height);
+
+    context.drawImage(tintCanvas, left, top, width, height);
    }-*/;
 
    @Override

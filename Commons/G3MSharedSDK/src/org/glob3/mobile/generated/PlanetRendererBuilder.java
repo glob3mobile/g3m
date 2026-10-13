@@ -28,7 +28,7 @@ package org.glob3.mobile.generated;
 //class DEMProvider;
 //class Sector;
 //class ChangedRendererInfoListener;
-//class IImageBuilder;
+//class IImageFactory;
 //class PlanetRenderer;
 
 
@@ -81,7 +81,7 @@ public class PlanetRendererBuilder
   {
     if (_texturizer == null)
     {
-      _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageBuilder(), getVerboseTileTexturizerErrors());
+      _texturizer = new DefaultTileTexturizer(getDefaultTileBackgroundImageFactory(), getVerboseTileTexturizerErrors());
     }
     return _texturizer;
   }
@@ -251,31 +251,21 @@ public class PlanetRendererBuilder
     return _touchEventTypeOfTerrainTouchListener;
   }
 
-  private IImageBuilder _defaultTileBackgroundImage;
+  private IImageFactory _defaultTileBackgroundImage;
 
-  private IImageBuilder getDefaultTileBackgroundImageBuilder()
+  private IImageFactory getDefaultTileBackgroundImageFactory()
   {
     if (_defaultTileBackgroundImage == null)
     {
-      // _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color::BLACK, Color::WHITE, 4);
-      _defaultTileBackgroundImage = new DefaultChessCanvasImageBuilder(256, 256, Color.WHITE, Color.TRANSPARENT, 4);
+      // _defaultTileBackgroundImage = new DefaultChessCanvasImageFactory(256, 256, Color::BLACK, Color::WHITE, 4);
+      _defaultTileBackgroundImage = new DefaultChessCanvasImageFactory(256, 256, Color.WHITE, Color.TRANSPARENT, 4);
     }
     return _defaultTileBackgroundImage;
   }
 
   private TileLODTester createDefaultTileLODTester()
   {
-    TileLODTester proj = new ProjectedCornersDistanceTileLODTester();
-  
-    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(500), proj);
-  
-    TileLODTester maxLevel = new MaxLevelTileLODTester();
-  
-    TileLODTester gradual = new GradualSplitsTileLODTester(TimeInterval.fromMilliseconds(10), timed);
-  
-    TileLODTester composite = new OrTileLODTester(maxLevel, gradual);
-  
-    return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(25), composite);
+    return createDefaultTileLODTesterChain(new ProjectedCornersDistanceTileLODTester());
   }
 
   private TileVisibilityTester createDefaultTileVisibilityTester()
@@ -520,7 +510,7 @@ public class PlanetRendererBuilder
     _touchEventTypeOfTerrainTouchListener = touchEventTypeOfTerrainTouchListener;
   }
 
-  public final void setDefaultTileBackgroundImage(IImageBuilder defaultTileBackgroundImage)
+  public final void setDefaultTileBackgroundImage(IImageFactory defaultTileBackgroundImage)
   {
     _defaultTileBackgroundImage = defaultTileBackgroundImage;
   }
@@ -528,6 +518,20 @@ public class PlanetRendererBuilder
   public final void setTileLODTester(TileLODTester tlt)
   {
     _tileLODTester = tlt;
+  }
+
+  // the default caching, gradual splits, max level and max frame time around the given projected-size tester
+  public static TileLODTester createDefaultTileLODTesterChain(TileLODTester projectedSizeTester)
+  {
+    TileLODTester timed = new TimedCacheTileLODTester(TimeInterval.fromMilliseconds(500), projectedSizeTester);
+  
+    TileLODTester maxLevel = new MaxLevelTileLODTester();
+  
+    TileLODTester gradual = new GradualSplitsTileLODTester(TimeInterval.fromMilliseconds(10), timed);
+  
+    TileLODTester composite = new OrTileLODTester(maxLevel, gradual);
+  
+    return new MaxFrameTimeTileLODTester(TimeInterval.fromMilliseconds(25), composite);
   }
 
   public final TileLODTester getTileLODTester()

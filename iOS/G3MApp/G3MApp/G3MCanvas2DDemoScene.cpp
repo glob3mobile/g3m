@@ -8,7 +8,7 @@
 #include "G3MCanvas2DDemoScene.hpp"
 
 #include <G3M/G3MWidget.hpp>
-#include <G3M/OSMLayer.hpp>
+#include <G3M/LayerBuilder.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/IFactory.hpp>
 #include <G3M/ICanvas.hpp>
@@ -28,11 +28,14 @@
 
 class G3MCanvas2DDemoScene_ImageListener : public IImageListener {
 private:
-  ShapesRenderer* _shapesRenderer;
+  ShapesRenderer*   _shapesRenderer;
+  const std::string _textureName;
 
 public:
-  G3MCanvas2DDemoScene_ImageListener(ShapesRenderer* shapesRenderer) :
-  _shapesRenderer(shapesRenderer)
+  G3MCanvas2DDemoScene_ImageListener(ShapesRenderer* shapesRenderer,
+                                     const std::string& textureName) :
+  _shapesRenderer(shapesRenderer),
+  _textureName(textureName)
   {
   }
 
@@ -42,6 +45,7 @@ public:
                                                    1000),
                                     ABSOLUTE,
                                     image,
+                                    _textureName,
                                     image->getWidth()  * 15.0f,
                                     image->getHeight() * 15.0f,
                                     true);
@@ -117,7 +121,8 @@ public:
                       0.5);
 
     canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
-                                                            new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer),
+                                                            new G3MCanvas2DDemoScene_ImageListener(_shapesRenderer,
+                                                                                                   "G3MCanvas2DDemoScene/CanvasDrawingTest/" + url._path),
                                                             true),
                         true);
 
@@ -145,8 +150,7 @@ void G3MCanvas2DDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
-  model->getLayerSet()->addLayer(layer);
+  model->getLayerSet()->addLayer( LayerBuilder::createOSMLayer() );
 
 
   context->getDownloader()->requestImage(//URL("file:///colorgrid.jpg"),

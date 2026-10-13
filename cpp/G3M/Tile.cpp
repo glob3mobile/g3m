@@ -774,6 +774,18 @@ void Tile::clearDataWithID(int id) const {
   }
 }
 
+void Tile::clearDataWithIDInSubtree(int id) const {
+  clearDataWithID(id);
+
+  if (_subtiles != NULL) {
+    const size_t subtilesSize = _subtiles->size();
+    for (size_t i = 0; i < subtilesSize; i++) {
+      const Tile* subtile = _subtiles->at(i);
+      subtile->clearDataWithIDInSubtree(id);
+    }
+  }
+}
+
 TileData* Tile::getData(int id) const {
   return (id >= _dataSize) ? NULL : _data[id];
 }

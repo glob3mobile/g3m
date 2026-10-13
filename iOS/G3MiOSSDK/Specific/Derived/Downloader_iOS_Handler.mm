@@ -64,6 +64,7 @@
 
 - (id) initWithNSURL:(NSURL*) nsURL
                  url:(URL*) url
+     timeoutInterval:(NSTimeInterval) timeoutInterval
             listener:(Downloader_iOS_Listener*) listener
             priority:(long long) priority
            requestID:(long long) requestID
@@ -75,6 +76,8 @@
     _nsURL     = nsURL;
     _url       = url;
     _priority  = priority;
+    _firstRequestID = requestID;
+    _timeoutInterval = timeoutInterval;
 
     ListenerEntry* entry = [ListenerEntry entryWithListener:listener
                                                   requestID:requestID];
@@ -110,6 +113,11 @@
   [_lock unlock];
 
   return result;
+}
+
+- (long long) firstRequestID
+{
+  return _firstRequestID;
 }
 
 - (bool) cancelListenerForRequestID:(long long) requestID
@@ -241,7 +249,7 @@
     else {
       NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:_nsURL
                                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
-                                                         timeoutInterval:60.0];
+                                                         timeoutInterval:10.0];
       [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
       NSURLResponse* urlResponse = nil;
@@ -296,12 +304,12 @@
           [entry.listener onErrorURL:url];
         }
       }
-      
+
       [self->_listeners removeAllObjects];
-      
+
       [self->_lock unlock];
     });
-    
+
   }
 }
 

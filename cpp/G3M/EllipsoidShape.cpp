@@ -28,6 +28,7 @@
 #include "TimeInterval.hpp"
 #include "IImage.hpp"
 #include "EllipsoidalPlanet.hpp"
+#include "Ellipsoid.hpp"
 #include "IMathUtils.hpp"
 #include "Geodetic3D.hpp"
 
@@ -389,49 +390,12 @@ Mesh* EllipsoidShape::createMesh(const G3MRenderContext* rc) {
 std::vector<double> EllipsoidShape::intersectionsDistances(const Planet* planet,
                                                            const Vector3D& origin,
                                                            const Vector3D& direction) const {
-  const Vector3D m = origin.sub( planet->toCartesian(getPosition()) );
-
-  std::vector<double> result;
-
-  // By laborious algebraic manipulation....
-  const double a = (direction._x * direction._x * _oneOverRadiiSquared._x +
-                    direction._y * direction._y * _oneOverRadiiSquared._y +
-                    direction._z * direction._z * _oneOverRadiiSquared._z);
-
-  const double b = 2.0 * (m._x * direction._x * _oneOverRadiiSquared._x +
-                          m._y * direction._y * _oneOverRadiiSquared._y +
-                          m._z * direction._z * _oneOverRadiiSquared._z);
-
-  const double c = (m._x * m._x * _oneOverRadiiSquared._x +
-                    m._y * m._y * _oneOverRadiiSquared._y +
-                    m._z * m._z * _oneOverRadiiSquared._z - 1.0);
-
-  // Solve the quadratic equation: ax^2 + bx + c = 0.
-  // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
-  // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-  const double discriminant = b * b - 4 * a * c;
-  if (discriminant < 0.0) {
-    // no intersections
-  }
-  else if (discriminant == 0.0) {
-    // one intersection at a tangent point
-    result.push_back(-0.5 * b / a);
-  }
-  else {
-    const double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * IMathUtils::instance()->sqrt(discriminant));
-    const double root1 = t / a;
-    const double root2 = c / t;
-
-    // Two intersections - return the smallest first.
-    if (root1 < root2) {
-      result.push_back(root1);
-      result.push_back(root2);
-    }
-    else {
-      result.push_back(root2);
-      result.push_back(root1);
-    }
-  }
-
-  return result;
+  return Ellipsoid::intersectionsDistances(planet->toCartesian(getPosition()),
+                                           _oneOverRadiiSquared,
+                                           origin._x,
+                                           origin._y,
+                                           origin._z,
+                                           direction._x,
+                                           direction._y,
+                                           direction._z);
 }

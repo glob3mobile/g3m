@@ -104,6 +104,11 @@ public abstract class DefaultRenderer implements Renderer
     }
   }
 
+  public boolean isRendering()
+  {
+    return _enable;
+  }
+
   public void initialize(G3MContext context)
   {
     _context = context;

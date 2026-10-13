@@ -7,7 +7,8 @@
 
 #include "G3MOLDPointCloud2DemoScene.hpp"
 
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
+#include <G3M/TimeInterval.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/OLDPointCloudsRenderer.hpp>
@@ -81,9 +82,7 @@ void G3MOLDPointCloud2DemoScene::rawActivate(const G3MContext *context) {
   //
   //  planetRenderer->setElevationDataProvider(elevationDataProvider, true);
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 
   //#warning TODO cache

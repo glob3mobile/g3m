@@ -536,21 +536,42 @@ public:
   };
   
   
+  class MarksCollector {
+  private:
+    MarksRenderer*    _marksRenderer;
+    const std::string _token;
+    int               _marksCount;
+
+  public:
+    MarksCollector(MarksRenderer*     marksRenderer,
+                   const std::string& token);
+
+    void add(Mark* mark);
+
+    int getMarksCount() const {
+      return _marksCount;
+    }
+  };
+
+
   class VectorSetSymbolizer {
   public:
     virtual ~VectorSetSymbolizer() { }
     
-    virtual Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+    virtual void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
                                      const VectorStreamingRenderer::Node* node,
-                                     const GEO2DPointGeometry* geometry) const = 0;
+                                     const GEO2DPointGeometry* geometry,
+                                     VectorStreamingRenderer::MarksCollector& collector) const = 0;
     
-    virtual Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+    virtual void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
                                      const VectorStreamingRenderer::Node* node,
-                                     const GEO3DPointGeometry* geometry) const = 0;
+                                     const GEO3DPointGeometry* geometry,
+                                     VectorStreamingRenderer::MarksCollector& collector) const = 0;
     
-    virtual Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
+    virtual void createClusterMarks(const VectorStreamingRenderer::Metadata* metadata,
                                     const VectorStreamingRenderer::Node* node,
-                                    const VectorStreamingRenderer::Cluster* cluster) const = 0;
+                                    const VectorStreamingRenderer::Cluster* cluster,
+                                    VectorStreamingRenderer::MarksCollector& collector) const = 0;
   };
   
   
@@ -566,6 +587,8 @@ public:
     const std::string        _nameFieldName;
     const std::string        _urlFieldName;
     const MagnitudeMetadata* _magnitudeMetadata;
+    /** the whole metadata, for what a symbolizer reads beyond the fields above (the symbols of an application) */
+    const JSONObject*        _json;
     
     Metadata(const Sector*            sector,
              const long long          clustersCount,
@@ -576,7 +599,8 @@ public:
              const std::string&       language,
              const std::string&       nameFieldName,
              const std::string&       urlFieldName,
-             const MagnitudeMetadata* magnitudeMetadata) :
+             const MagnitudeMetadata* magnitudeMetadata,
+             const JSONObject*        json) :
     _sector(sector),
     _clustersCount(clustersCount),
     _featuresCount(featuresCount),
@@ -586,7 +610,8 @@ public:
     _language(language),
     _nameFieldName(nameFieldName),
     _urlFieldName(urlFieldName),
-    _magnitudeMetadata(magnitudeMetadata)
+    _magnitudeMetadata(magnitudeMetadata),
+    _json(json)
     {
       
     }

@@ -10,7 +10,7 @@
 #include <G3M/G3MWidget.hpp>
 #include <G3M/DeviceAttitudeCameraHandler.hpp>
 #include <G3M/Camera.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/CameraRenderer.hpp>
 //#include <G3M/SingleBILElevationDataProvider.hpp>
@@ -47,9 +47,7 @@ void G3MAugmentedRealityDemoScene::rawActivate(const G3MContext* context) {
   _dac = new DeviceAttitudeCameraHandler(true);
   g3mWidget->getCameraRenderer()->addHandler(_dac);
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 
 }

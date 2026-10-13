@@ -8,19 +8,21 @@
 #include "G3MVectorStreaming2DemoScene.hpp"
 
 #include <G3M/G3MWidget.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
+#include <G3M/TimeInterval.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/DownloadPriority.hpp>
 #include <G3M/GEO2DPointGeometry.hpp>
 #include <G3M/GEOFeature.hpp>
 #include <G3M/Mark.hpp>
+#include <G3M/MarkBuilder.hpp>
 #include <G3M/JSONObject.hpp>
 #include <G3M/JSONString.hpp>
 #include <G3M/JSONNumber.hpp>
-#include <G3M/StackLayoutImageBuilder.hpp>
-#include <G3M/CircleImageBuilder.hpp>
-#include <G3M/LabelImageBuilder.hpp>
+#include <G3M/StackLayoutImageFactory.hpp>
+#include <G3M/CircleImageFactory.hpp>
+#include <G3M/LabelImageFactory.hpp>
 #include <G3M/MarksRenderer.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -29,9 +31,10 @@
 
 class G3MVectorStreaming2DemoScene_Symbolizer : public VectorStreamingRenderer::VectorSetSymbolizer {
 public:
-  Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+  void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
                            const VectorStreamingRenderer::Node* node,
-                           const GEO2DPointGeometry* geometry) const {
+                           const GEO2DPointGeometry* geometry,
+                           VectorStreamingRenderer::MarksCollector& collector) const {
     const GEOFeature* feature = geometry->getFeature();
 
     const JSONObject* properties = feature->getProperties();
@@ -84,24 +87,23 @@ public:
 
     int pointSize = 12;
 
-    Mark* mark = new Mark(new CircleImageBuilder(featureColor, pointSize),
-                          position,
-                          ABSOLUTE,
-                          0 // minDistanceToCamera
-                          );
+    MarkBuilder builder;
+    builder.setPosition(position);
+    builder.addOutfit(new CircleImageFactory(featureColor, pointSize));
 
-    return mark;
+    collector.add(builder.build());
   }
 
-  Mark* createGeometryMark(const VectorStreamingRenderer::Metadata* metadata,
+  void createGeometryMarks(const VectorStreamingRenderer::Metadata* metadata,
                            const VectorStreamingRenderer::Node* node,
-                           const GEO3DPointGeometry* geometry) const {
-    return NULL;
+                           const GEO3DPointGeometry* geometry,
+                           VectorStreamingRenderer::MarksCollector& collector) const {
   }
 
-  Mark* createClusterMark(const VectorStreamingRenderer::Metadata* metadata,
+  void createClusterMarks(const VectorStreamingRenderer::Metadata* metadata,
                           const VectorStreamingRenderer::Node* node,
-                          const VectorStreamingRenderer::Cluster* cluster) const {
+                          const VectorStreamingRenderer::Cluster* cluster,
+                          VectorStreamingRenderer::MarksCollector& collector) const {
     const Geodetic3D position(cluster->getPosition()->_latitude,
                               cluster->getPosition()->_longitude,
                               0);
@@ -121,22 +123,20 @@ public:
     const double area = (15000.0 * clusterPercent);
     const int radius = 12 + mu->round((float) mu->sqrt(area / PI));
 
-    Mark* mark = new Mark(new StackLayoutImageBuilder(new CircleImageBuilder(Color::WHITE,
-                                                                             radius),
-                                                      new LabelImageBuilder(label,
-                                                                            GFont::sansSerif(labelFontSize, true),
-                                                                            Color::BLACK,       // color
-                                                                            Color::WHITE,       // shadowColor
-                                                                            5.0f,               // shadowBlur
-                                                                            Vector2F(0, 0),     // shadowOffset
-                                                                            NULL)
-                                                      ),
-                          position,
-                          ABSOLUTE,
-                          0 // minDistanceToCamera
-                          );
+    MarkBuilder builder;
+    builder.setPosition(position);
+    builder.addOutfit(new StackLayoutImageFactory(new CircleImageFactory(Color::WHITE,
+                                                                         radius),
+                                                  new LabelImageFactory(label,
+                                                                        LabelStyle::shadowed(GFont::sansSerif(labelFontSize, true),
+                                                                                             Color::BLACK,   /* color        */
+                                                                                             Color::WHITE,   /* shadowColor  */
+                                                                                             5.0f,           /* shadowBlur   */
+                                                                                             Vector2F(0, 0)) /* shadowOffset */,
+                                                                        false /* mutable */)
+                                                  ));
 
-    return mark;
+    collector.add(builder.build());
   }
 
 };
@@ -145,9 +145,7 @@ public:
 void G3MVectorStreaming2DemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 
   model->getMarksRenderer()->setRenderInReverse(true);

@@ -257,6 +257,29 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     private final boolean _tileIsMercator;
     private final int _tileLevel;
 
+    private long _layerInstanceID;
+    private long _symbolizerRevision;
+
+
+    // Past the layer's maxLevel the parent's GEOJSON URL is rasterized into each descendant's sector,
+    // and two layers may share a URL template with different symbolizers, so the URL alone doesn't
+    // identify the pixels: the tile, the layer and its symbolizer revision are needed too.
+    private String createImageID(URL url)
+    {
+      IStringBuilder isb = IStringBuilder.newStringBuilder();
+      isb.addString(url._path);
+      isb.addString("|");
+      isb.addString(_tileID);
+      isb.addString("|");
+      isb.addLong(_layerInstanceID);
+      isb.addString("|");
+      isb.addLong(_symbolizerRevision);
+      final String imageID = isb.getString();
+      if (isb != null)
+         isb.dispose();
+      return imageID;
+    }
+
     public ImageAssembler(TiledVectorLayerTileImageProvider tileImageProvider, Tile tile, TileImageContribution contribution, TileImageListener listener, boolean deleteListener, Vector2S imageResolution, IDownloader downloader, IThreadUtils threadUtils)
     {
        _tileImageProvider = tileImageProvider;
@@ -276,6 +299,8 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
        _downloadRequestID = -1;
        _rasterizer = null;
        _symbolizer = null;
+       _layerInstanceID = -1;
+       _symbolizerRevision = -1;
     }
 
     public void dispose()
@@ -301,6 +326,10 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
     {
     
       TiledVectorLayer.RequestGEOJSONBufferData requestData = layer.getRequestGEOJSONBufferData(tile);
+    
+      // captured with the symbolizer copy, so the image name matches the styling used to rasterize it
+      _layerInstanceID = layer.getInstanceID();
+      _symbolizerRevision = layer.getSymbolizerRevision();
     
       final GEOObjectHolder geoObjectHolder = _tileImageProvider.getGEOObjectFor(requestData._url);
       if (geoObjectHolder == null)
@@ -394,7 +423,7 @@ public class TiledVectorLayerTileImageProvider extends TileImageProvider
       }
       else
       {
-        canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new TVLTIP_IImageListener(this, url._path), true), true);
+        canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new TVLTIP_IImageListener(this, createImageID(url)), true), true);
       }
     }
     public final void deletedRasterizer()

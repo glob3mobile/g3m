@@ -7,8 +7,8 @@ public class G3MBuilder_WebGL extends IG3MBuilder {
 
    private final G3MWidget_WebGL _nativeWidget;
 
-   public G3MBuilder_WebGL() {
-      this(new G3MWidget_WebGL());
+   public G3MBuilder_WebGL(final WebGLContextAttributes webGLContextAttributes) {
+      this(new G3MWidget_WebGL(webGLContextAttributes));
    }
 
    public G3MBuilder_WebGL(final G3MWidget_WebGL widget) {

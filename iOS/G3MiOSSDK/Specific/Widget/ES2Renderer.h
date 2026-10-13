@@ -31,6 +31,13 @@ class GL;
   GLuint _colorRenderbuffer;
   GLuint _depthRenderbuffer;
 
+  // MSAA: samples per pixel (1 = none); when > 1 the scene is drawn into the multisample framebuffer
+  // and resolved into the default one on every frame
+  GLint  _multisampleCount;
+  GLuint _multisampleFramebuffer;
+  GLuint _multisampleColorRenderbuffer;
+  GLuint _multisampleDepthRenderbuffer;
+
   BOOL _firstRender;
 
   GL* _gl;
@@ -41,6 +48,11 @@ class GL;
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
 
 - (GL*)getGL;
+
+// takes effect on the next resizeFromLayer:
+- (void)setMultisampleCount:(GLint)count;
+
+- (GLint)multisampleCount;
 
 @end
 

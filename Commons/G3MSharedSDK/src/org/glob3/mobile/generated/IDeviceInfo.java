@@ -17,4 +17,11 @@ public abstract class IDeviceInfo
 
   public abstract float getDevicePixelRatio();
 
+  // in the widget's pixels: what the notch, island, rounded corners and system bars cover on each
+  // edge; 0 where the platform reports nothing
+  public abstract float getSafeAreaInsetTop();
+  public abstract float getSafeAreaInsetRight();
+  public abstract float getSafeAreaInsetBottom();
+  public abstract float getSafeAreaInsetLeft();
+
 }

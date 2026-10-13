@@ -16,6 +16,8 @@
 #include <G3M/ErrorHandling.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/PlanetRenderer.hpp>
+#include <G3M/PlanetRendererBuilder.hpp>
+#include <G3M/ProjectedCornersDistanceTileLODTester.hpp>
 #include <G3M/GEOVectorLayer.hpp>
 #include <G3M/OLDPointCloudsRenderer.hpp>
 #include <G3M/XPCRenderer.hpp>
@@ -24,6 +26,9 @@
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/MeasureRenderer.hpp>
+#include <G3M/AtmosphereRenderer.hpp>
+#include <G3M/LayerBuilder.hpp>
+#include <G3M/Sector.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"
@@ -35,6 +40,10 @@
 #include "G3MXPointCloudDemoScene.hpp"
 #include "G3M3DModelDemoScene.hpp"
 #include "G3MCameraDemoScene.hpp"
+#include "G3MCameraTransitionsDemoScene.hpp"
+#include "G3MAtmosphereDemoScene.hpp"
+#include "G3MNightSkyDemoScene.hpp"
+#include "G3MColorGradingDemoScene.hpp"
 #include "G3MIsosurfaceDemoScene.hpp"
 #include "G3MScenarioDEMDemoScene.hpp"
 #include "G3MTiledVectorDemoScene.hpp"
@@ -44,7 +53,6 @@
 #include "G3MNonOverlappingMarksDemoScene.hpp"
 #include "G3MCanvas2DDemoScene.hpp"
 #include "G3MAugmentedRealityDemoScene.hpp"
-#include "G3MAnimatedMarksDemoScene.hpp"
 #include "G3MVectorStreaming1DemoScene.hpp"
 #include "G3MVectorStreaming2DemoScene.hpp"
 #include "G3MStereoDemoScene.hpp"
@@ -52,7 +60,6 @@
 #include "G3MExtrusionDemoScene.hpp"
 #include "G3MSoccerMatchDemoScene.hpp"
 #include "G3MTranslateScaleGizmoDemoScene.hpp"
-
 
 
 G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
@@ -67,7 +74,9 @@ G3MDemoModel::G3MDemoModel(G3MDemoListener*             listener,
                            NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
                            VectorStreamingRenderer*     vectorStreamingRenderer,
                            CompositeRenderer*           compositeRenderer,
-                           MeasureRenderer*             measureRenderer) :
+                           MeasureRenderer*             measureRenderer,
+                           AtmosphereRenderer*          skyRenderer,
+                           AtmosphereRenderer*          groundHazeRenderer) :
 _listener(listener),
 _g3mWidget(NULL),
 _layerSet(layerSet),
@@ -82,12 +91,14 @@ _nonOverlappingMarksRenderer(nonOverlappingMarksRenderer),
 _vectorStreamingRenderer(vectorStreamingRenderer),
 _compositeRenderer(compositeRenderer),
 _measureRenderer(measureRenderer),
+_skyRenderer(skyRenderer),
+_groundHazeRenderer(groundHazeRenderer),
 _selectedScene(NULL),
 _context(NULL)
 {
+  _scenes.push_back(  new G3MRasterLayersDemoScene(this)        );
   _scenes.push_back(  new G3MMarksDemoScene(this)               );
   _scenes.push_back(  new G3MXPointCloudDemoScene(this)         );
-  _scenes.push_back(  new G3MRasterLayersDemoScene(this)        );
   _scenes.push_back(  new G3MScenarioDEMDemoScene(this)         );
   _scenes.push_back(  new G3MOLDPointCloud1DemoScene(this)      );
   _scenes.push_back(  new G3MOLDPointCloud2DemoScene(this)      );
@@ -97,12 +108,15 @@ _context(NULL)
   _scenes.push_back(  new G3MStaticPointCloudDemoScene(this)    );
   _scenes.push_back(  new G3M3DModelDemoScene(this)             );
   _scenes.push_back(  new G3MCameraDemoScene(this)              );
+  _scenes.push_back(  new G3MCameraTransitionsDemoScene(this)   );
+  _scenes.push_back(  new G3MAtmosphereDemoScene(this)          );
+  _scenes.push_back(  new G3MNightSkyDemoScene(this)            );
+  _scenes.push_back(  new G3MColorGradingDemoScene(this)        );
   _scenes.push_back(  new G3MIsosurfaceDemoScene(this)          );
   _scenes.push_back(  new G3MTiledVectorDemoScene(this)         );
   _scenes.push_back(  new G3MHUDDemoScene(this)                 );
   _scenes.push_back(  new G3MNonOverlappingMarksDemoScene(this) );
   _scenes.push_back(  new G3MAugmentedRealityDemoScene(this)    );
-  _scenes.push_back(  new G3MAnimatedMarksDemoScene(this)       );
   _scenes.push_back(  new G3MCanvas2DDemoScene(this)            );
   _scenes.push_back(  new G3MVectorStreaming1DemoScene(this)    );
   _scenes.push_back(  new G3MVectorStreaming2DemoScene(this)    );
@@ -128,10 +142,26 @@ void G3MDemoModel::initializeG3MWidget(G3MWidget* g3mWidget) {
   _g3mWidget = g3mWidget;
 }
 
+void G3MDemoModel::setAtmosphereEnable(bool enable) {
+  if (_skyRenderer != NULL) {
+    _skyRenderer->setEnable(enable);
+  }
+  if (_groundHazeRenderer != NULL) {
+    _groundHazeRenderer->setEnable(enable);
+  }
+}
+
+void G3MDemoModel::setGroundHazeEnable(bool enable) {
+  if (_groundHazeRenderer != NULL) {
+    _groundHazeRenderer->setEnable(enable);
+  }
+}
+
 void G3MDemoModel::reset() {
   getG3MWidget()->setViewMode(MONO);
   getG3MWidget()->cancelAllEffects();
-  getG3MWidget()->setBackgroundColor( Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f) );
+  getG3MWidget()->setBackgroundColor( Color::black() );
+  getG3MWidget()->setTextureMaxAnisotropy(8);
   getG3MWidget()->setRenderedSector( Sector::fullSphere() );
   getG3MWidget()->removeAllPeriodicalTasks();
 
@@ -140,6 +170,9 @@ void G3MDemoModel::reset() {
   PlanetRenderer* planetRenderer = getPlanetRenderer();
   planetRenderer->setShowStatistics(false);
   planetRenderer->setIncrementalTileQuality(false);
+  planetRenderer->setTileLODTester( PlanetRendererBuilder::createDefaultTileLODTesterChain(new ProjectedCornersDistanceTileLODTester()) );
+  planetRenderer->removeColorMatrix();
+  hideColorGradingPanel();
   // reset DEM
   planetRenderer->setVerticalExaggeration(1);
   planetRenderer->setElevationDataProvider(NULL, true);
@@ -157,12 +190,17 @@ void G3MDemoModel::reset() {
   getVectorStreamingRenderer()->removeAllVectorSets();
   getCompositeRenderer()->removeAllRenderers();
   getMeasureRenderer()->removeAllMeasures();
+  setAtmosphereEnable(true);
 
   _layerSet->removeAllLayers(true);
 }
 
 PlanetRenderer* G3MDemoModel::getPlanetRenderer() const {
   return _g3mWidget->getPlanetRenderer();
+}
+
+Layer* G3MDemoModel::createRasterLayer() const {
+  return LayerBuilder::createSentinel2CloudlessLayer();
 }
 
 G3MDemoScene* G3MDemoModel::getSceneByName(const std::string& sceneName) const {
@@ -211,6 +249,7 @@ void G3MDemoModel::selectScene(G3MDemoScene* scene) {
 }
 
 void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
+                                       size_t groupIndex,
                                        const std::string& option,
                                        int optionIndex) {
   ILogger::instance()->logInfo("Selected option \"%s\" in scene \"%s\"",
@@ -218,7 +257,7 @@ void G3MDemoModel::onChangeSceneOption(G3MDemoScene* scene,
                                scene->getName().c_str());
 
   if (_listener != NULL) {
-    _listener->onChangeSceneOption(scene, option, optionIndex);
+    _listener->onChangeSceneOption(scene, groupIndex, option, optionIndex);
   }
 }
 
@@ -230,5 +269,17 @@ void G3MDemoModel::showDialog(const std::string& title,
 
   if (_listener != NULL) {
     _listener->showDialog(title, message);
+  }
+}
+
+void G3MDemoModel::showColorGradingPanel(G3MColorGradingDemoScene* scene) {
+  if (_listener != NULL) {
+    _listener->showColorGradingPanel(scene);
+  }
+}
+
+void G3MDemoModel::hideColorGradingPanel() {
+  if (_listener != NULL) {
+    _listener->hideColorGradingPanel();
   }
 }

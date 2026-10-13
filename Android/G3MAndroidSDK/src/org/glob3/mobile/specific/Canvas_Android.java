@@ -279,6 +279,23 @@ public final class Canvas_Android extends ICanvas {
    }
 
    @Override
+   protected void _drawImageTinted(final IImage image, final org.glob3.mobile.generated.Color color, final float left, final float top,
+                                   final float width, final float height) {
+      final Bitmap bitmap = ((Image_Android) image).getBitmap();
+
+      final RectF dst = _rectF;
+      dst.set(left, //
+              top, //
+              left + width, // Right
+              top + height); // Bottom
+
+      // the filter acts on the bitmap's own pixels: what is already on the canvas stays
+      final Paint paint = new Paint(PAINT_FLAGS);
+      paint.setColorFilter(new PorterDuffColorFilter(toAndroidColor(color), PorterDuff.Mode.SRC_IN));
+      _canvas.drawBitmap(bitmap, null, dst, paint);
+   }
+
+   @Override
    protected void _drawImage(final IImage image, final float srcLeft, final float srcTop, final float srcWidth, final float srcHeight, final float destLeft,
                              final float destTop, final float destWidth, final float destHeight) {
       final Bitmap bitmap = ((Image_Android) image).getBitmap();

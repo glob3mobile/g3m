@@ -12,13 +12,14 @@
 #include <G3M/TimeInterval.hpp>
 #include <G3M/ShapesRenderer.hpp>
 #include <G3M/SGShape.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/Geodetic3D.hpp>
 #include <G3M/GLConstants.hpp>
 
 #include "G3MDemoModel.hpp"
+#include "G3MRasterLayersDemoScene.hpp"
 
 class G3MCameraDemoSceneShapeLoadListener : public ShapeLoadListener {
 protected:
@@ -86,9 +87,12 @@ void G3MCameraDemoScene::rawActivate(const G3MContext* context) {
   //  PlanetRenderer* planetRenderer = model->getPlanetRenderer();
   //  planetRenderer->setVerticalExaggeration(0);
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = G3MRasterLayersDemoScene::createMercatorLayer("ESRI World Imagery",
+                                                               "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                                                               18,
+                                                               false,
+                                                               "Esri, Maxar, Earthstar Geographics, and the GIS User Community");
+  layer->setEnable(true);
   model->getLayerSet()->addLayer(layer);
 
 //  shapesRenderer->loadJSONSceneJS(URL("file:///nucleoUrbano.json"),

@@ -27,32 +27,23 @@ public class GEOVectorTileImageProvider extends TileImageProvider
   {
     private final TileImageContribution _contribution;
     private final String _tileID;
+    private final String _imageID;
 
     private TileImageListener _listener;
     private boolean _deleteListener;
 
-    private String getImageID(String tileID)
-    {
-      IStringBuilder isb = IStringBuilder.newStringBuilder();
-      isb.addString("GEOVectorTileImageProvider/");
-      isb.addString(tileID);
-      final String s = isb.getString();
-      if (isb != null)
-         isb.dispose();
-      return s;
-    }
-
-    public GEORasterizerImageListener(TileImageContribution contribution, String tileID, TileImageListener listener, boolean deleteListener)
+    public GEORasterizerImageListener(TileImageContribution contribution, String tileID, String imageID, TileImageListener listener, boolean deleteListener)
     {
        _contribution = contribution;
        _tileID = tileID;
+       _imageID = imageID;
        _listener = listener;
        _deleteListener = deleteListener;
     }
 
     public final void imageCreated(IImage image)
     {
-      _listener.imageCreated(_tileID, image, getImageID(_tileID), _contribution);
+      _listener.imageCreated(_tileID, image, _imageID, _contribution);
       if (_deleteListener)
       {
         if (_listener != null)
@@ -164,6 +155,24 @@ public class GEOVectorTileImageProvider extends TileImageProvider
   private final java.util.HashMap<String, GEORasterizerFrameTask> _rasterizers = new java.util.HashMap<String, GEORasterizerFrameTask>();
 
 
+  // The tile alone doesn't identify the pixels: they also depend on which layer is rasterized and on
+  // the symbols it holds at rasterization time.
+  private String createImageID(String tileID)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("GEOVectorTileImageProvider/");
+    isb.addString(tileID);
+    isb.addString("/");
+    isb.addLong(_layer.getInstanceID());
+    isb.addString("/");
+    isb.addLong(_layer.getContentsRevision());
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
+
+
   public GEOVectorTileImageProvider(GEOVectorLayer layer)
   {
      _layer = layer;
@@ -209,7 +218,7 @@ public class GEOVectorTileImageProvider extends TileImageProvider
     if (projection != null)
        projection.dispose();
   
-    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new GEORasterizerImageListener(contribution, tileID, listener, deleteListener), true), true);
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new GEORasterizerImageListener(contribution, tileID, createImageID(tileID), listener, deleteListener), true), true);
   }
 
   public final void layerDeleted(GEOVectorLayer layer)

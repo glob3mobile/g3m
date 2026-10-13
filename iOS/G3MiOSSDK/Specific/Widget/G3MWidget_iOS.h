@@ -71,4 +71,9 @@ class WidgetUserData;
 
 - (WidgetUserData*) userData;
 
+// MSAA, samples per pixel; 1 (the default) is none. Can be called any time: the buffers are rebuilt on the next layout
+- (void)setMultisampleCount: (NSInteger) count;
+
+- (NSInteger)multisampleCount;
+
 @end

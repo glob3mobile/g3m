@@ -24,10 +24,18 @@ public class ByteBufferIterator
   private final IByteBuffer _buffer;
   private int _cursor;
   private int _bufferTimestamp;
-  private int _bufferSize;
+  private final int _bufferSize;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  ByteBufferIterator(ByteBufferIterator that);
+
+  private void checkUnchanged()
+  {
+    if (_bufferTimestamp != _buffer.timestamp())
+    {
+      throw new RuntimeException("The buffer was changed after the iteration started");
+    }
+  }
 
   public ByteBufferIterator(IByteBuffer buffer)
   {
@@ -39,22 +47,14 @@ public class ByteBufferIterator
 
   public final boolean hasNext()
   {
-    if (_bufferTimestamp != _buffer.timestamp())
-    {
-      throw new RuntimeException("The buffer was changed after the iteration started");
-      // _bufferSize = _buffer->size();
-    }
+    checkUnchanged();
   
     return (_cursor < _bufferSize);
   }
 
   public final byte nextUInt8()
   {
-    if (_bufferTimestamp != _buffer.timestamp())
-    {
-      throw new RuntimeException("The buffer was changed after the iteration started");
-      //_bufferSize = _buffer->size();
-    }
+    checkUnchanged();
   
     if (_cursor >= _bufferSize)
     {
@@ -114,6 +114,8 @@ public class ByteBufferIterator
 
   public final IByteBuffer nextBuffer(int size)
   {
+    checkUnchanged();
+  
     if ((_cursor + size) > _bufferSize)
     {
       throw new RuntimeException("Iteration overflow");

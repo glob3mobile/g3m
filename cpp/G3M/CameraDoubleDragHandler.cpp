@@ -65,6 +65,14 @@ bool CameraDoubleDragHandler::onDown(const G3MEventContext* eventContext,
     return false;
   }
 
+  // a finger on the sky gives no point to drag: leave the gesture to the other handlers
+  const Planet*  planet         = eventContext->getPlanet();
+  const Vector3D cameraPosition = camera->getCartesianPosition();
+  if (planet->closestIntersection(cameraPosition, initialRay0).isNan() ||
+      planet->closestIntersection(cameraPosition, initialRay1).isNan()) {
+    return false;
+  }
+
   cameraContext->setCurrentGesture(DoubleDrag);
   eventContext->getPlanet()->beginDoubleDrag(camera->getCartesianPosition(),
                                              camera->getViewDirection(),
@@ -78,7 +86,6 @@ bool CameraDoubleDragHandler::onMove(const G3MEventContext* eventContext,
                                      const TouchEvent* touchEvent,
                                      CameraContext* cameraContext) {
   if (cameraContext->getCurrentGesture() != DoubleDrag) {
-    //ILogger::instance()->logError("** getCurrentGesture is not DoubleDrag");
     return false;
   }
 
@@ -92,14 +99,16 @@ bool CameraDoubleDragHandler::onMove(const G3MEventContext* eventContext,
                                                   _cameraViewPort, _cameraModelViewMatrix);
 
   if (initialRay0.isNan() || initialRay1.isNan() ) {
-    //ILogger::instance()->logError("** Invalid rays");
+    ILogger::instance()->logError("CameraDoubleDragHandler: invalid rays");
+    cameraContext->setCurrentGesture(None);
     return false;
   }
 
   MutableMatrix44D matrix = planet->doubleDrag(initialRay0,
                                                initialRay1);
   if (!matrix.isValid()) {
-    //ILogger::instance()->logError("** Invalid matrix");
+    ILogger::instance()->logError("CameraDoubleDragHandler: invalid matrix");
+    cameraContext->setCurrentGesture(None);
     return false;
   }
 

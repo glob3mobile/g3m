@@ -9,6 +9,7 @@
 #define G3M_MarkTouchListener
 
 class Mark;
+class TouchEvent;
 
 class MarkTouchListener {
 public:

@@ -25,8 +25,7 @@ public class G3MWidget_WebGL extends Composite {
       final IDeviceAttitude deviceAttitude = new DeviceAttitude_WebGL();
       final IDeviceLocation deviceLocation = new DeviceLocation_WebGL();
 
-      G3MWidget.initSingletons( //
-                               logger, //
+      G3MWidget.initSingletons(logger, //
                                factory, //
                                stringUtils, //
                                stringBuilder, //
@@ -50,7 +49,11 @@ public class G3MWidget_WebGL extends Composite {
 
    private boolean _running = true;
 
-   public G3MWidget_WebGL() {
+   //   public G3MWidget_WebGL() {
+   //      this(new WebGLContextAttributes());
+   //   }
+
+   public G3MWidget_WebGL(final WebGLContextAttributes webGLContextAttributes) {
       _canvas = Canvas.createIfSupported();
       if (_canvas == null) {
          initWidget(createUnsupportedMessage("Your browser does not support the HTML5 Canvas."));
@@ -58,7 +61,7 @@ public class G3MWidget_WebGL extends Composite {
       }
       _canvas.getCanvasElement().setId("_g3m_canvas");
 
-      _webGLContext = jsGetWebGLContext(_canvas.getCanvasElement());
+      _webGLContext = jsGetWebGLContext(_canvas.getCanvasElement(), webGLContextAttributes);
       if (_webGLContext == null) {
          initWidget(createUnsupportedMessage("Your browser does not support WebGL."));
          return;
@@ -246,7 +249,8 @@ public class G3MWidget_WebGL extends Composite {
     };
    }-*/;
 
-   private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas) /*-{
+   private native JavaScriptObject jsGetWebGLContext(JavaScriptObject jsCanvas, //
+                                                     final WebGLContextAttributes webGLContextAttributes) /*-{
 
     if (jsCanvas == null) {
       alert("No canvas available.");
@@ -257,13 +261,9 @@ public class G3MWidget_WebGL extends Composite {
     for ( var cn in contextNames) {
       var context = null;
       try {
-        context = jsCanvas.getContext(contextNames[cn], {
-            preserveDrawingBuffer : true,
-            alpha : false,
-            powerPreference : "low-power",
-            antialias : false
-        });
-      } catch (e) {
+        context = jsCanvas.getContext(contextNames[cn], webGLContextAttributes.@org.glob3.mobile.specific.WebGLContextAttributes::toJS()());
+      }
+      catch (e) {
         console.log(e);
       }
 
@@ -273,15 +273,11 @@ public class G3MWidget_WebGL extends Composite {
           console.log("WebGL context lost: ", event);
           if (event.statusMessage) {
             $wnd.alert("WebGL context lost: " + event.statusMessage + ".\n\nPlease try reloading the page.");
-          } else {
+          }
+          else {
             $wnd.alert("WebGL context lost.\n\nPlease try reloading the page.");
           }
         }, false);
-
-        //// simulate webglcontextlost
-        //$wnd.setTimeout(function() {
-        //  context.getExtension("WEBGL_lose_context").loseContext();
-        //}, 10000);
 
         var contextAttributes = context.getContextAttributes();
         console.log("WebGL Context Attributes: ", contextAttributes);

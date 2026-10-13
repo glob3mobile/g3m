@@ -124,7 +124,7 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const {
 
     GLFeatureGroup::applyToAllGroups(*accumulatedFeatures, *_valuesSet, *_globalState);
 
-    const int uniformsCode   = _valuesSet->getUniformsCode();
+    const long long uniformsCode = _valuesSet->getUniformsCode();
     const int attributesCode = _valuesSet->getAttributesCode();
 
     _linkedProgram = progManager.getProgram(gl, uniformsCode, attributesCode); //GET RETAINED REFERENCE
@@ -153,6 +153,11 @@ void GLState::applyOnGPU(GL* gl, GPUProgramManager& progManager) const {
 
 void GLState::clearGLFeatureGroup(GLFeatureGroupName g) {
   _features->clearFeatures(g);
+  hasChangedStructure();
+}
+
+void GLState::clearGLFeatures(GLFeatureID id) {
+  _features->clearFeatures(id);
   hasChangedStructure();
 }
 

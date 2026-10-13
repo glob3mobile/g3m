@@ -253,12 +253,10 @@ void NativeGL_Emscripten::bindTexture(int target,
   _gl.call<void>("bindTexture", target, textureID);
 }
 
-/* Delete Texture from GPU, and answer if the TextureID can be reused */
-bool NativeGL_Emscripten::deleteTexture(const IGLTextureID* texture) const {
+void NativeGL_Emscripten::deleteTexture(const IGLTextureID* texture) const {
   GLTextureID_Emscripten* textureEM = (GLTextureID_Emscripten*) texture;
   val textureID = textureEM->getWebGLTexture();
   _gl.call<void>("deleteTexture", textureID);
-  return false;
 }
 
 void NativeGL_Emscripten::enableVertexAttribArray(int location) const {
@@ -289,6 +287,23 @@ void NativeGL_Emscripten::texParameteri(int target,
                                         int par,
                                         int v) const {
   _gl.call<void>("texParameteri", target, par, v);
+}
+
+float NativeGL_Emscripten::getMaxTextureMaxAnisotropy() const {
+  val extension = _gl.call<val>("getExtension", std::string("EXT_texture_filter_anisotropic"));
+  if (extension.isNull() || extension.isUndefined()) {
+    extension = _gl.call<val>("getExtension", std::string("WEBKIT_EXT_texture_filter_anisotropic"));
+  }
+  if (extension.isNull() || extension.isUndefined()) {
+    return 0;
+  }
+  return _gl.call<float>("getParameter", extension["MAX_TEXTURE_MAX_ANISOTROPY_EXT"]);
+}
+
+// 0x84FE is TEXTURE_MAX_ANISOTROPY_EXT; getExtension() in getMaxTextureMaxAnisotropy() enables it
+void NativeGL_Emscripten::setTextureMaxAnisotropy(int target,
+                                                  float maxAnisotropy) const {
+  _gl.call<void>("texParameterf", target, 0x84FE, maxAnisotropy);
 }
 
 void NativeGL_Emscripten::texImage2D(const IImage* image, int format) const {
@@ -497,10 +512,11 @@ int NativeGL_Emscripten::createProgram() const {
   return id;
 }
 
-bool NativeGL_Emscripten::deleteProgram(int program) const {
+void NativeGL_Emscripten::deleteProgram(int program) const {
   const val jsoProgram = _shaderList[program];
   _gl.call<void>("deleteProgram", jsoProgram);
-  return true;
+  // ids are list indices and are never reused, so only drop the reference to let the JS object be collected
+  _shaderList[program] = val::null();
 }
 
 void NativeGL_Emscripten::attachShader(int program, int shader) const {
@@ -544,11 +560,10 @@ bool NativeGL_Emscripten::compileShader(int shader, const std::string& source) c
   return _gl.call<bool>("getShaderParameter", jsoShader, GL_COMPILE_STATUS);
 }
 
-bool NativeGL_Emscripten::deleteShader(int shader) const {
-#warning TODO: deleteShader(int shader) implementation fails
+void NativeGL_Emscripten::deleteShader(int shader) const {
   const val jsoShader = _shaderList[shader];
-  return true;
-  // return _gl.call<bool>("deleteShader", jsoShader);
+  _gl.call<void>("deleteShader", jsoShader);
+  _shaderList[shader] = val::null();
 }
 
 void NativeGL_Emscripten::printShaderInfoLog(int shader) const {

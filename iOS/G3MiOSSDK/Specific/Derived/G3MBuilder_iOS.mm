@@ -43,7 +43,8 @@ IStorage* G3MBuilder_iOS::createDefaultStorage() {
 
 IDownloader* G3MBuilder_iOS::createDefaultDownloader() {
   const bool saveInBackground = true;
-  return new CachedDownloader(new Downloader_iOS(8),
+  return new CachedDownloader(new Downloader_iOS(8,   /* maxConcurrentOperationCount */
+                                                 60.0 /* timeoutInterval             */),
                               getStorage(),
                               saveInBackground);
 }

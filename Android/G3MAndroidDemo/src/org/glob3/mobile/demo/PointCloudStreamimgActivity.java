@@ -5,6 +5,7 @@ package org.glob3.mobile.demo;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.DownloadPriority;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.PointCloudsRenderer;
 import org.glob3.mobile.generated.PointCloudsRenderer.ColorPolicy;
@@ -96,13 +97,8 @@ public class PointCloudStreamimgActivity
 
 
    static private LayerSet createLayerSet() {
-      //      final LayerSet layerSet = new LayerSet();
-      //
-      //      layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
-
-      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
-      layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(LayerBuilder.createSentinel2CloudlessLayer());
 
       return layerSet;
    }

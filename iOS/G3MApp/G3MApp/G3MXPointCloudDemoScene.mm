@@ -70,6 +70,7 @@ public:
                                                    10.000047160904266264+10),
                                     ABSOLUTE,
                                     image,
+                                    url._path,
                                     image->getWidth()  * 15.0f/1000,
                                     image->getHeight() * 10.0f/1000,
                                     true);

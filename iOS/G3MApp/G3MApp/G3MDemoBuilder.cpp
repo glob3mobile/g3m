@@ -23,9 +23,12 @@
 #include <G3M/NonOverlappingMarksRenderer.hpp>
 #include <G3M/VectorStreamingRenderer.hpp>
 #include <G3M/AtmosphereRenderer.hpp>
+#include <G3M/StarsRenderer.hpp>
 #include <G3M/WrapperNearFrustumRenderer.hpp>
 #include <G3M/CompositeRenderer.hpp>
 #include <G3M/MeasureRenderer.hpp>
+#include <G3M/BusyMeshRenderer.hpp>
+#include <G3M/Color.hpp>
 
 #include "G3MDemoModel.hpp"
 
@@ -67,7 +70,17 @@ void G3MDemoBuilder::build() {
 
   IG3MBuilder* builder = getG3MBuilder();
 
+  // Same color as the LaunchBackground color set (UILaunchScreen), so splash, busy wheel and sky don't flash
+  const Color backgroundColor = Color::fromRGBA(0.0f, 0.1f, 0.2f, 1.0f);
+  builder->setBackgroundColor(new Color(backgroundColor));
+  builder->setBusyRenderer(new BusyMeshRenderer(NULL, /* backgroundColor: the widget's */
+                                                Color::TRANSPARENT, /* meshOuterColor */
+                                                Color::WHITE        /* meshInnerColor */));
+
   builder->setAtmosphere(true);
+  builder->setStarsRenderer(new StarsRenderer(2   /* smallestStarDiameter */,
+                                              4   /* fullStarMagnitude    */,
+                                              0.3 /* starSizeExponent     */));
 
   LayerSet* layerSet = new LayerSet();
   builder->getPlanetRendererBuilder()->setLayerSet(layerSet);
@@ -130,7 +143,9 @@ void G3MDemoBuilder::build() {
                             nonOverlappingMarksRenderer,
                             vectorStreamingRenderer,
                             compositeRenderer,
-                            measureRenderer);
+                            measureRenderer,
+                            builder->getSkyRenderer(),
+                            builder->getGroundHazeRenderer());
 
   const double zNear = 0.1;
   Renderer* renderer = new MeshRenderer();

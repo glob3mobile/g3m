@@ -88,6 +88,10 @@ public class DTT_TileImageListener extends TileImageListener
         auxImageID.addString(destRect.id());
         auxImageID.addString("|");
   
+        // the partial contribution is drawn with alpha too, so it must be part of the name
+        auxImageID.addFloat(alpha);
+        auxImageID.addString("|");
+  
   
         //ILogger::instance()->logInfo("destRect " + destRect->description());
   

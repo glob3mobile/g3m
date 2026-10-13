@@ -176,7 +176,8 @@ private:
 public:
   const std::string _urlPath;
   const bool        _isImageRequest;
-  
+  const long long   _firstRequestID;
+
   Downloader_Emscripten_Handler(const std::string&       urlPath,
                                 IBufferDownloadListener* bufferListener,
                                 const bool               deleteListener,
@@ -186,7 +187,8 @@ public:
   _priority(priority),
   _downloader(NULL),
   _urlPath(urlPath),
-  _isImageRequest(false)
+  _isImageRequest(false),
+  _firstRequestID(requestID)
   {
     _listeners.push_back(new ListenerEntry(bufferListener, NULL, deleteListener, requestID, tag));
   }
@@ -200,7 +202,8 @@ public:
   _priority(priority),
   _downloader(NULL),
   _urlPath(urlPath),
-  _isImageRequest(true)
+  _isImageRequest(true),
+  _firstRequestID(requestID)
   {
     _listeners.push_back(new ListenerEntry(NULL, imageListener, deleteListener, requestID, tag));
   }
@@ -658,7 +661,10 @@ Downloader_Emscripten_Handler* Downloader_Emscripten::getHandlerToRun() {
     Downloader_Emscripten_Handler* candidateHandler  = element.second;
     const long long                candidatePriority = candidateHandler->getPriority();
 
-    if (candidatePriority > selectedPriority) {
+    // equal priorities go oldest request first; the map is ordered by URL
+    if ((candidatePriority > selectedPriority) ||
+        ((candidatePriority == selectedPriority) && (selectedHandler != NULL) &&
+         (candidateHandler->_firstRequestID < selectedHandler->_firstRequestID))) {
       const std::string urlPath = element.first;
       selectedPriority = candidatePriority;
       selectedHandler  = candidateHandler;

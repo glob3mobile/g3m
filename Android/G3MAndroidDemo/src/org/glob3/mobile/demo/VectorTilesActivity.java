@@ -23,6 +23,7 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.Info;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Sector;
@@ -86,19 +87,8 @@ public class VectorTilesActivity
 
 
    static private LayerSet createLayerSet() {
-      //   final LayerSet layerSet = new LayerSet();
-      //      layerSet.addLayer(MapQuestLayer.newOSM(TimeInterval.fromDays(30)));
-
-
-      //      layerSet.addLayer(new BingMapsLayer(BingMapType.AerialWithLabels(),
-      //               "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc", TimeInterval.fromDays(30)));
-
-
-      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
-      layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
-
-      //  layerSet.addLayer(new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2));
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(LayerBuilder.createSentinel2CloudlessLayer());
 
       //  final String urlTemplate = "http://192.168.1.15/vectorial/swiss-buildings/{level}/{x}/{y}.geojson";
       //final String urlTemplate = "http://glob3mobile.dyndns.org/vectorial/swiss-buildings-bson-new/{level}/{x}/{y}.bson";

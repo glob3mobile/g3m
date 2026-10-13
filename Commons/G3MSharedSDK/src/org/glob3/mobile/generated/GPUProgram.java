@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //class GPUUniform;
 //class GPUAttribute;
 //class GL;
@@ -37,7 +38,7 @@ public class GPUProgram
 {
   private int _programID;
 
-  private GPUUniform[] _uniforms = new GPUUniform[32];
+  private GPUUniform[] _uniforms = new GPUUniform[GPUVariable.MAX_UNIFORM_KEYS];
   private GPUAttribute[] _attributes = new GPUAttribute[32];
   private int _nAttributes;
   private int _nUniforms;
@@ -45,12 +46,10 @@ public class GPUProgram
   private GPUUniform[] _createdUniforms;
   private GPUAttribute[] _createdAttributes;
 
-  private int _uniformsCode;
+  private long _uniformsCode;
   private int _attributesCode;
 
   private String _name;
-
-  private GL _gl;
 
   private int _nReferences; //Number of items that reference this Program
 
@@ -65,11 +64,6 @@ public class GPUProgram
     if (result)
     {
       gl.attachShader(_programID, shader);
-    }
-    else
-    {
-      ILogger.instance().logError("GPUProgram %s: Problem encountered while compiling shader.", _name);
-      gl.logShaderInfoLog(ILogger.instance(), shader);
     }
   
     return result;
@@ -86,26 +80,15 @@ public class GPUProgram
     }
     return result;
   }
-  private void deleteShader(GL gl, int shader)
-  {
-    if (!gl.deleteShader(shader))
-    {
-      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting shader.", _name);
-    }
-  }
-  private void deleteProgram(GL gl, GPUProgram p)
-  {
-    if (!gl.deleteProgram(p))
-    {
-      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting program.", _name);
-    }
-  }
 
   private void getVariables(GL gl)
   {
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < GPUVariable.MAX_UNIFORM_KEYS; i++)
     {
       _uniforms[i] = null;
+    }
+    for (int i = 0; i < 32; i++)
+    {
       _attributes[i] = null;
     }
   
@@ -119,11 +102,18 @@ public class GPUProgram
     for (int i = 0; i < _nUniforms; i++)
     {
       GPUUniform u = gl.getActiveUniform(this, i);
-      if (u != null)
+      if ((u != null) && (u.getIndex() < 0))
+      {
+        ILogger.instance().logError("Program \"%s\": uniform \"%s\" unknown to GPUVariable, ignored", _name, u._name);
+        if (u != null)
+           u.dispose();
+        u = null;
+      }
+      else if (u != null)
       {
         _uniforms[u.getIndex()] = u;
   
-        final int code = GPUVariable.getUniformCode(u._key);
+        final long code = GPUVariable.getUniformCode(u._key);
         _uniformsCode = _uniformsCode | code;
       }
   
@@ -140,7 +130,14 @@ public class GPUProgram
     for (int i = 0; i < _nAttributes; i++)
     {
       GPUAttribute a = gl.getActiveAttribute(this, i);
-      if (a != null)
+      if ((a != null) && (a.getIndex() < 0))
+      {
+        ILogger.instance().logError("Program \"%s\": attribute \"%s\" unknown to GPUVariable, ignored", _name, a._name);
+        if (a != null)
+           a.dispose();
+        a = null;
+      }
+      else if (a != null)
       {
         _attributes[a.getIndex()] = a;
   
@@ -162,7 +159,6 @@ public class GPUProgram
      _createdAttributes = null;
      _uniformsCode = 0;
      _attributesCode = 0;
-     _gl = null;
      _nReferences = 0;
   }
 
@@ -171,6 +167,7 @@ public class GPUProgram
 
 
 
+  // Only releases host memory. Call deleteGLProgram() first to release the GPU program.
   public void dispose()
   {
     //ILogger::instance()->logInfo("Deleting program %s", _name.c_str());
@@ -184,20 +181,14 @@ public class GPUProgram
       if (_createdUniforms[i] != null)
          _createdUniforms[i].dispose();
     }
+    _createdUniforms = null;
   
     for (int i = 0; i < _nAttributes; i++)
     {
       if (_createdAttributes[i] != null)
          _createdAttributes[i].dispose();
     }
-  
     _createdAttributes = null;
-    _createdUniforms = null;
-  
-    if (!_gl.deleteProgram(this))
-    {
-      ILogger.instance().logError("GPUProgram %s: Problem encountered while deleting program.", _name);
-    }
   }
 
   public static GPUProgram createProgram(GL gl, String name, String vertexSource, String fragmentSource)
@@ -206,7 +197,6 @@ public class GPUProgram
   
     p._name = name;
     p._programID = gl.createProgram();
-    p._gl = gl;
   
     // compile vertex shader
     int vertexShader = gl.createShader(ShaderType.VERTEX_SHADER);
@@ -215,8 +205,10 @@ public class GPUProgram
       ILogger.instance().logError("GPUProgram %s: Error compiling vertex shader.", name);
       gl.logShaderInfoLog(ILogger.instance(), vertexShader);
   
-      p.deleteShader(gl, vertexShader);
-      p.deleteProgram(gl, p);
+      gl.deleteShader(vertexShader);
+      p.deleteGLProgram(gl);
+      if (p != null)
+         p.dispose();
       return null;
     }
   
@@ -229,8 +221,10 @@ public class GPUProgram
       ILogger.instance().logError("GPUProgram %s: Error compiling fragment shader.", name);
       gl.logShaderInfoLog(ILogger.instance(), fragmentShader);
   
-      p.deleteShader(gl, fragmentShader);
-      p.deleteProgram(gl, p);
+      gl.deleteShader(fragmentShader);
+      p.deleteGLProgram(gl);
+      if (p != null)
+         p.dispose();
       return null;
     }
   
@@ -242,15 +236,17 @@ public class GPUProgram
     if (!p.linkProgram(gl))
     {
       ILogger.instance().logError("GPUProgram %s: Error linking graphic program.", name);
-      p.deleteShader(gl, vertexShader);
-      p.deleteShader(gl, fragmentShader);
-      p.deleteProgram(gl, p);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
+      p.deleteGLProgram(gl);
+      if (p != null)
+         p.dispose();
       return null;
     }
   
     //Mark shaders for deleting when program is deleted
-    p.deleteShader(gl, vertexShader);
-    p.deleteShader(gl, fragmentShader);
+    gl.deleteShader(vertexShader);
+    gl.deleteShader(fragmentShader);
   
     p.getVariables(gl);
   
@@ -261,6 +257,12 @@ public class GPUProgram
     }
   
     return p;
+  }
+
+  public final void deleteGLProgram(GL gl)
+  {
+    gl.deleteProgram(this);
+    _programID = 0;
   }
 
   public final String getName()
@@ -502,7 +504,7 @@ public class GPUProgram
   {
      return _attributesCode;
   }
-  public final int getUniformsCode()
+  public final long getUniformsCode()
   {
      return _uniformsCode;
   }

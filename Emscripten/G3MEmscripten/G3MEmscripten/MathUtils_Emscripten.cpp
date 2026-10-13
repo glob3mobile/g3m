@@ -10,6 +10,8 @@ class MathAux {
 public:
   static inline double sin_  (double v)           { return sin(v);     }
   static inline double sinh_ (double v)           { return sinh(v);    }
+  static inline double cosh_ (double v)           { return cosh(v);    }
+  static inline double tanh_ (double v)           { return tanh(v);    }
   static inline double asin_ (double v)           { return asin(v);    }
   static inline double cos_  (double v)           { return cos(v);     }
   static inline double acos_ (double v)           { return acos(v);    }
@@ -34,6 +36,12 @@ float  MathUtils_Emscripten::sin(float v)  const { return sinf(v); }
 
 double MathUtils_Emscripten::sinh(double v) const { return MathAux::sinh_(v); }
 float  MathUtils_Emscripten::sinh(float v)  const { return sinhf(v); }
+
+double MathUtils_Emscripten::cosh(double v) const { return MathAux::cosh_(v); }
+float  MathUtils_Emscripten::cosh(float v)  const { return coshf(v); }
+
+double MathUtils_Emscripten::tanh(double v) const { return MathAux::tanh_(v); }
+float  MathUtils_Emscripten::tanh(float v)  const { return tanhf(v); }
 
 double MathUtils_Emscripten::asin(double v) const { return MathAux::asin_(v); }
 float  MathUtils_Emscripten::asin(float v)  const { return asinf(v); }

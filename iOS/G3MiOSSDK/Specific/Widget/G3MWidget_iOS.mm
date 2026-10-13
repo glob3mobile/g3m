@@ -340,6 +340,15 @@
   [self widget]->onTouchEvent(_lastTouchEvent);
 }
 
+- (void)setMultisampleCount: (NSInteger) count {
+  [_renderer setMultisampleCount: (GLint) count];
+  [self setNeedsLayout];
+}
+
+- (NSInteger)multisampleCount {
+  return [_renderer multisampleCount];
+}
+
 - (void) dealloc {
   delete _lastTouchEvent;
   [self setRenderer: nil];

@@ -13,7 +13,6 @@
 #include <G3M/LayerSet.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/Geodetic3D.hpp>
-#include <G3M/OSMLayer.hpp>
 #include <G3M/IBufferDownloadListener.hpp>
 #include <G3M/IJSONParser.hpp>
 #include <G3M/G3MMeshParser.hpp>
@@ -26,9 +25,7 @@
 #include <G3M/SingleBILElevationDataProvider.hpp>
 #include <G3M/LayerTilesRenderParameters.hpp>
 #include <G3M/URLTemplateLayer.hpp>
-#include <G3M/BingMapsLayer.hpp>
 #include <G3M/IMathUtils.hpp>
-#include <G3M/OSMLayer.hpp>
 
 
 void G3MExtrusionDemoScene::rawSelectOption(const std::string& option,
@@ -85,17 +82,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   LayerSet* layerSet = model->getLayerSet();
 
-//    OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-//    layerSet->addLayer(osmLayer);
-
-  BingMapsLayer* bingMapsAerialLayer = new BingMapsLayer(BingMapType::Aerial(),
-                                                         "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                         TimeInterval::fromDays(30));
-  layerSet->addLayer(bingMapsAerialLayer);
-//#error diego;
-
-//  OSMLayer* osmLayer = new OSMLayer(TimeInterval::fromDays(30));
-//  layerSet->addLayer(osmLayer);
+  layerSet->addLayer( model->createRasterLayer() );
 
   //  LayerTilesRenderParameters* parameters = LayerTilesRenderParameters::createDefaultWGS84(Sector::FULL_SPHERE,
   //                                                                                       1, // topSectorSplitsByLatitude

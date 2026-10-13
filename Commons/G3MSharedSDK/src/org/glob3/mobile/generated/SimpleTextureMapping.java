@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class TextureIDReference;
 //class IFloatBuffer;
 //class IGLTextureID;
+//class TextureGLFeature;
 
 public class SimpleTextureMapping extends TransformableTextureMapping
 {
@@ -42,6 +43,24 @@ public class SimpleTextureMapping extends TransformableTextureMapping
     {
       ILogger.instance().logError("Releasing invalid simple texture mapping");
     }
+  }
+
+  private TextureGLFeature createTextureFeature()
+  {
+    if (isIdentity())
+    {
+      return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+    }
+  
+    return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV);
+  }
+
+  private boolean canUpdateInPlace(TextureGLFeature tglf)
+  {
+    // GLState snapshots the feature's uniform pointers once; a uniform created later
+    // by setRotation/setTranslation/setScale would never reach the GPU program
+    final boolean needsRotation = (_rotationInRadians != 0);
+    return ((tglf.getTextureID() == _glTextureID.getID()) && (!needsRotation || tglf.hasRotation()) && (isIdentity() || tglf.hasTranslateAndScale()));
   }
 
 
@@ -95,35 +114,23 @@ public class SimpleTextureMapping extends TransformableTextureMapping
     else
     {
       TextureGLFeature tglf = (TextureGLFeature) state.getGLFeature(GLFeatureID.GLF_TEXTURE);
-      if ((tglf != null) && (tglf.getTextureID() == _glTextureID.getID()))
+  
+      if ((tglf != null) && canUpdateInPlace(tglf))
       {
-        tglf.setScale(_scaleU, _scaleV);
-        tglf.setTranslation(_translationU, _translationV);
+        // a feature without translate & scale serves only identity mappings: nothing to update
+        if (tglf.hasTranslateAndScale())
+        {
+          tglf.setScale(_scaleU, _scaleV);
+          tglf.setTranslation(_translationU, _translationV);
+        }
         tglf.setRotation(_rotationInRadians, _rotationCenterU, _rotationCenterV);
       }
       else
       {
         state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
-        //if ((_scaleU != 1) ||
-        //    (_scaleV != 1) ||
-        //    (_translationU != 0) ||
-        //    (_translationV != 0) ||
-        //    (_rotationInRadians != 0)) {
-        state.addGLFeature(new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
-        //}
-        //else {
-        //  state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
-        //                                          _texCoords,
-        //                                          2,
-        //                                          0,
-        //                                          false,
-        //                                          0,
-        //                                          _transparent,
-        //                                          _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
-        //                                          GLBlendFactor::oneMinusSrcAlpha()
-        //                                          ),
-        //                     false);
-        //}
+  
+        TextureGLFeature textureFeature = createTextureFeature();
+        state.addGLFeature(textureFeature, false);
       }
     }
   }

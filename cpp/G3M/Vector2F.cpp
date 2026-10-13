@@ -34,7 +34,10 @@ const double Vector2F::squaredDistanceTo(const Vector2I& that) const {
 }
 
 Vector2F Vector2F::clampLength(float min, float max) const {
-  float length = (float) this->length();
+  if (isZero()) {
+    return *this;
+  }
+  const float length = (float) this->length();
   if (length < min) {
     return times(min / length);
   }

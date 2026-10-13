@@ -38,6 +38,10 @@ private:
   
   GLState* _glState;
   void createGLState();
+
+  // each instance draws its own image, so it needs its own texture name
+  static long long INSTANCE_COUNTER;
+  const long long  _instanceID;
   
   
 public:
@@ -52,7 +56,8 @@ public:
   _animated(animated),
   _size(size),
   _projectionMatrix(MutableMatrix44D::invalid()),
-  _glState(new GLState())
+  _glState(new GLState()),
+  _instanceID(INSTANCE_COUNTER++)
   {
     createGLState();
   }

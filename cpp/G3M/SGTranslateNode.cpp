@@ -8,6 +8,8 @@
 
 #include "SGTranslateNode.hpp"
 
+#include "MutableVector3D.hpp"
+
 #include "GLState.hpp"
 
 
@@ -37,4 +39,10 @@ SGTranslateNode::~SGTranslateNode() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
+}
+
+void SGTranslateNode::addToModelBounds(const MutableMatrix44D& transform,
+                        MutableVector3D& lower,
+                        MutableVector3D& upper) const {
+  SGNode::addToModelBounds(transform.multiply(_translationMatrix), lower, upper);
 }

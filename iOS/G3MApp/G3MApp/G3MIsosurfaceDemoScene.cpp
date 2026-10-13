@@ -7,7 +7,7 @@
 
 #include "G3MIsosurfaceDemoScene.hpp"
 
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/MeshRenderer.hpp>
 #include <G3M/G3MWidget.hpp>
@@ -42,9 +42,7 @@ void G3MIsosurfaceDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::Aerial(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 
   MeshRenderer* meshRenderer = model->getMeshRenderer();

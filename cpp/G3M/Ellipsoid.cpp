@@ -11,30 +11,48 @@
 #include "IMathUtils.hpp"
 
 
-std::vector<double> Ellipsoid::intersectionsDistances(double xoriginX,
-                                                      double xoriginY,
-                                                      double xoriginZ,
+std::vector<double> Ellipsoid::intersectionsDistances(double originX,
+                                                      double originY,
+                                                      double originZ,
                                                       double directionX,
                                                       double directionY,
                                                       double directionZ) const {
-  const double mX = xoriginX - _center._x;
-  const double mY = xoriginY - _center._y;
-  const double mZ = xoriginZ - _center._z;
+  return intersectionsDistances(_center,
+                                _oneOverRadiiSquared,
+                                originX,
+                                originY,
+                                originZ,
+                                directionX,
+                                directionY,
+                                directionZ);
+}
+
+std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& center,
+                                                      const Vector3D& oneOverRadiiSquared,
+                                                      double originX,
+                                                      double originY,
+                                                      double originZ,
+                                                      double directionX,
+                                                      double directionY,
+                                                      double directionZ) {
+  const double mX = originX - center._x;
+  const double mY = originY - center._y;
+  const double mZ = originZ - center._z;
 
   std::vector<double> result;
 
   // By laborious algebraic manipulation....
-  const double a = (directionX * directionX * _oneOverRadiiSquared._x +
-                    directionY * directionY * _oneOverRadiiSquared._y +
-                    directionZ * directionZ * _oneOverRadiiSquared._z);
+  const double a = (directionX * directionX * oneOverRadiiSquared._x +
+                    directionY * directionY * oneOverRadiiSquared._y +
+                    directionZ * directionZ * oneOverRadiiSquared._z);
 
-  const double b = 2.0 * (mX * directionX * _oneOverRadiiSquared._x +
-                          mY * directionY * _oneOverRadiiSquared._y +
-                          mZ * directionZ * _oneOverRadiiSquared._z);
+  const double b = 2.0 * (mX * directionX * oneOverRadiiSquared._x +
+                          mY * directionY * oneOverRadiiSquared._y +
+                          mZ * directionZ * oneOverRadiiSquared._z);
 
-  const double c = (mX * mX * _oneOverRadiiSquared._x +
-                    mY * mY * _oneOverRadiiSquared._y +
-                    mZ * mZ * _oneOverRadiiSquared._z - 1.0);
+  const double c = (mX * mX * oneOverRadiiSquared._x +
+                    mY * mY * oneOverRadiiSquared._y +
+                    mZ * mZ * oneOverRadiiSquared._z - 1.0);
 
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits

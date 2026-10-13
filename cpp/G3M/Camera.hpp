@@ -15,6 +15,7 @@
 #include "Frustum.hpp"
 #include "MutableVector3D.hpp"
 #include "MutableMatrix44D.hpp"
+#include "CameraPose.hpp"
 
 class FrustumPolicy;
 class Vector3D;
@@ -221,6 +222,37 @@ public:
                       const Angle& azimuth,
                       const Angle& altitude);
 
+  /**
+   Finds where a camera with the given pitch must stand so that position1 shows up at screenPosition1
+   and position2 at screenPosition2. Screen positions are viewport fractions: (0,0) top-left,
+   (1,1) bottom-right, the same frame point2Pixel uses. Does not move this camera.
+
+   Returns CameraPose::nan() when no such camera exists: same screen spot for both, a target that
+   would fall above the horizon, or the solver does not converge.
+   */
+  CameraPose computeCameraPose(const Geodetic3D& position1,
+                               const Vector2F&   screenPosition1,
+                               const Geodetic3D& position2,
+                               const Vector2F&   screenPosition2,
+                               const Angle&      pitch) const;
+
+  /**
+   As computeCameraPose, with the pitch that puts the horizon at horizonOnScreen (fraction of the
+   viewport height from the top) instead of a given pitch. The higher the camera, the lower the horizon,
+   so the pitch is searched. Does not move this camera.
+
+   Returns CameraPose::nan() when computeCameraPose finds no camera at a pitch tried, when the camera
+   ends too high to put the horizon there, or when the pitch does not settle.
+   */
+  CameraPose computeCameraPoseWithHorizon(const Geodetic3D& position1,
+                                          const Vector2F&   screenPosition1,
+                                          const Geodetic3D& position2,
+                                          const Vector2F&   screenPosition2,
+                                          const float       horizonOnScreen) const;
+
+  // point2Pixel projects points hidden behind the planet too; this tells them apart
+  bool isAboveHorizonOf(const Vector3D& point) const;
+
   void forceMatrixCreation() const;
 
   Matrix44D* getModelMatrix44D() const;
@@ -388,6 +420,36 @@ private:
   CameraEffectTarget* _camEffectTarget;
 
   Vector3D centerOfViewOnPlanet() const;
+
+  // computeCameraPose() runs this on a working copy; on success the copy is left at the solution
+  bool solvePointOfView(const Vector3D& cartesian1,
+                        const Vector2F& target1,
+                        const Vector3D& cartesian2,
+                        const Vector2F& target2,
+                        const Geodetic3D& initialCenter,
+                        const double initialDistance,
+                        const Angle& pitch);
+
+  double screenAngleOfSegment(const Vector3D& cartesian1,
+                              const Vector3D& cartesian2) const;
+
+  static double signedAngleInRadians(double radians); // wraps into (-PI, PI]
+
+  // the pitch that puts the horizon at horizonOnScreen for a camera at the pose; NAND when it can't be there
+  double pitchInRadiansPuttingHorizonAt(const CameraPose& pose,
+                                        const float       horizonOnScreen) const;
+
+  // the pitch that puts the horizon in place for the camera solved with pitchInRadians; NAND when either fails
+  double nextHorizonPitchInRadians(const Geodetic3D& position1,
+                                   const Vector2F&   screenPosition1,
+                                   const Geodetic3D& position2,
+                                   const Vector2F&   screenPosition2,
+                                   const float       horizonOnScreen,
+                                   const double      pitchInRadians) const;
+
+  // how much the projected ground segment turns per unit of azimuth, for the heading step of solvePointOfView
+  static double segmentTurnPerAzimuth(double screenAngleInRadians,
+                                      double elevationInRadians);
 
   void setCenter(const MutableVector3D& v) {
     if (!v.equalTo(_center)) {

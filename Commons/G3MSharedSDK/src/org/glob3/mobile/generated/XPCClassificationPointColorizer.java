@@ -27,7 +27,7 @@ public class XPCClassificationPointColorizer extends XPCFixedAlphaPointColorizer
 
   private boolean _ok;
 
-  private final java.util.ArrayList<Color> _colors = new java.util.ArrayList<Color>();
+  private java.util.ArrayList<Color> _colors = new java.util.ArrayList<Color>();
 
   private static void initializeColors(java.util.ArrayList<Color> colors, float alpha)
   {

@@ -337,6 +337,10 @@ bool BingMapsLayer::rawIsEquals(const Layer* that) const {
     return false;
   }
 
+  if (_culture != t->_culture) {
+    return false;
+  }
+
   if (_key != t->_key) {
     return false;
   }

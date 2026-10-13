@@ -12,7 +12,9 @@
 #include <string>
 
 class G3MDemoListener;
+class G3MColorGradingDemoScene;
 class G3MDemoScene;
+class Layer;
 class LayerSet;
 class G3MWidget;
 class G3MContext;
@@ -29,6 +31,7 @@ class NonOverlappingMarksRenderer;
 class VectorStreamingRenderer;
 class CompositeRenderer;
 class MeasureRenderer;
+class AtmosphereRenderer;
 
 
 class G3MDemoModel {
@@ -49,6 +52,8 @@ private:
   VectorStreamingRenderer*     _vectorStreamingRenderer;
   CompositeRenderer*           _compositeRenderer;
   MeasureRenderer*             _measureRenderer;
+  AtmosphereRenderer*          _skyRenderer;
+  AtmosphereRenderer*          _groundHazeRenderer;
 
   G3MDemoScene*              _selectedScene;
   std::vector<G3MDemoScene*> _scenes;
@@ -69,7 +74,9 @@ public:
                NonOverlappingMarksRenderer* nonOverlappingMarksRenderer,
                VectorStreamingRenderer*     vectorStreamingRenderer,
                CompositeRenderer*           compositeRenderer,
-               MeasureRenderer*             measureRenderer);
+               MeasureRenderer*             measureRenderer,
+               AtmosphereRenderer*          skyRenderer,
+               AtmosphereRenderer*          groundHazeRenderer);
 
 
   void initializeG3MWidget(G3MWidget* g3mWidget);
@@ -83,6 +90,8 @@ public:
   LayerSet* getLayerSet() const {
     return _layerSet;
   }
+
+  Layer* createRasterLayer() const;
 
   GEORenderer* getGEORenderer() const {
     return _geoRenderer;
@@ -128,6 +137,11 @@ public:
     return _measureRenderer;
   }
 
+  // the sky and the ground haze go on and off together; reset() turns them on
+  void setAtmosphereEnable(bool enable);
+
+  void setGroundHazeEnable(bool enable);
+
   PlanetRenderer* getPlanetRenderer() const;
 
   size_t getScenesCount() const {
@@ -155,11 +169,16 @@ public:
   void reset();
 
   void onChangeSceneOption(G3MDemoScene* scene,
+                           size_t groupIndex,
                            const std::string& option,
                            int optionIndex);
 
   void showDialog(const std::string& title,
                   const std::string& message) const;
+
+  void showColorGradingPanel(G3MColorGradingDemoScene* scene);
+
+  void hideColorGradingPanel();
 
 };
 

@@ -18,11 +18,11 @@ import org.glob3.mobile.generated.GEORenderer;
 import org.glob3.mobile.generated.GEOSymbol;
 import org.glob3.mobile.generated.GEOSymbolizer;
 import org.glob3.mobile.generated.JSONObject;
+import org.glob3.mobile.generated.Layer;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.MapQuestLayer;
 import org.glob3.mobile.generated.StrokeCap;
 import org.glob3.mobile.generated.StrokeJoin;
-import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 
@@ -55,16 +55,15 @@ Activity {
       //The layerset is used to add raster layers to the map
       final LayerSet layerSet = new LayerSet();
 
-      //This is the mapquest layer definition.
-      //there are several contructors to add new raster layers, see:
-      //  https://github.com/glob3mobile/g3m/blob/purgatory/Android/G3MAndroidDemo/src/org/glob3/mobile/demo/SimpleRasterLayerBuilder.java
-      final MapQuestLayer mqOSM = MapQuestLayer.newOSM(TimeInterval.fromDays(30));
-      mqOSM.setEnable(true);
-      mqOSM.setTitle("MapQuest OSM");
+      //This is the OpenStreetMap layer definition.
+      //LayerBuilder has factories for other free raster layers, and URLTemplateLayer and WMSLayer cover the rest
+      final Layer osmLayer = LayerBuilder.createOSMLayer();
+      osmLayer.setEnable(true);
+      osmLayer.setTitle("Open Street Map");
 
 
       //Add the layer to the layerset
-      layerSet.addLayer(mqOSM);
+      layerSet.addLayer(osmLayer);
 
       //Add the layerset to the builder
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);

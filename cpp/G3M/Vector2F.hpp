@@ -61,6 +61,10 @@ public:
 
   bool isNan() const;
 
+  bool isZero() const {
+    return (_x == 0) && (_y == 0);
+  }
+
   Vector2F sub(const Vector2F& v) const {
     return Vector2F(_x - v._x,
                     _y - v._y);

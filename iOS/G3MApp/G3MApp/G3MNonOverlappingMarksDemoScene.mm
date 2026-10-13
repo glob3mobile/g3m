@@ -7,21 +7,19 @@
 
 #include "G3MNonOverlappingMarksDemoScene.hpp"
 
-//#include <G3M/URLTemplateLayer.hpp>
-#include <G3M/OSMLayer.hpp>
+#include <G3M/LayerBuilder.hpp>
 #include <G3M/LayerSet.hpp>
 #include <G3M/NonOverlappingMarksRenderer.hpp>
-#include <G3M/DownloaderImageBuilder.hpp>
+#include <G3M/DownloaderImageFactory.hpp>
 #include <G3M/G3MWidget.hpp>
-#include <G3M/LabelImageBuilder.hpp>
-#include <G3M/ColumnLayoutImageBuilder.hpp>
+#include <G3M/LabelImageFactory.hpp>
+#include <G3M/ColumnLayoutImageFactory.hpp>
 #include <G3M/G3MContext.hpp>
 #include <G3M/IDownloader.hpp>
 #include <G3M/IBufferDownloadListener.hpp>
 #include <G3M/IJSONParser.hpp>
 #include <G3M/JSONArray.hpp>
 #include <G3M/JSONObject.hpp>
-#include <G3M/BoxImageBackground.hpp>
 
 #import <G3MiOSSDK/NSString_CppAdditions.h>
 
@@ -75,34 +73,28 @@ public:
         const std::string urlS      = article->getAsString("url", "");
         const std::string thumbnail = article->getAsString("thumbnail", "");
 
-        LabelImageBuilder* titleBuilder = new LabelImageBuilder(title,                /* text         */
-                                                                GFont::sansSerif(10), /* font         */
-                                                                Color::BLACK,         /* color        */
-                                                                Color::TRANSPARENT,   /* shadowColor  */
-                                                                0,                    /* shadowBlur   */
-                                                                Vector2F(0, 0),       /* shadowOffset */
-                                                                new BoxImageBackground(Vector2F::zero(),   /* margin          */
-                                                                                       0,                  /* borderWidth     */
-                                                                                       Color::TRANSPARENT, /* borderColor     */
-                                                                                       Vector2F(4, 4),     /* padding         */
-                                                                                       Color::WHITE,       /* backgroundColor */
-                                                                                       4                   /* cornerRadius    */)
-                                                                );
+        LabelImageFactory* titleBuilder = new LabelImageFactory(title,
+                                                                LabelStyle::boxed(GFont::sansSerif(10),
+                                                                                  Color::BLACK,   /* color           */
+                                                                                  Vector2F(4, 4), /* padding         */
+                                                                                  Color::WHITE,   /* backgroundColor */
+                                                                                  4               /* cornerRadius    */),
+                                                                false /* mutable */);
 
         NonOverlappingMark* mark;
         if (thumbnail == "") {
           mark = new NonOverlappingMark(titleBuilder,
-                                        new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                        new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                         Geodetic3D::fromDegrees(lat, lon, 0));
         }
         else {
-          ColumnLayoutImageBuilder* columnBuilder = new ColumnLayoutImageBuilder(new DownloaderImageBuilder(URL(thumbnail)),
+          ColumnLayoutImageFactory* columnBuilder = new ColumnLayoutImageFactory(new DownloaderImageFactory(URL(thumbnail)),
                                                                                  titleBuilder,
                                                                                  NULL,
                                                                                  2 /* childrenSeparation */);
 
           mark = new NonOverlappingMark(columnBuilder,
-                                        new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+                                        new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                         Geodetic3D::fromDegrees(lat, lon, 0));
         }
 
@@ -135,23 +127,7 @@ void G3MNonOverlappingMarksDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-//#warning Testing infos
-  std::vector<const Info*>* layerInfo = new std::vector<const Info*>();
-//  layerInfo->push_back( new Info("(C) Stamen") );
-
-//  URLTemplateLayer* layer = URLTemplateLayer::newMercator("http://[abcd].tile.stamen.com/watercolor/{level}/{x}/{y}.png",
-//                                                          Sector::fullSphere(),
-//                                                          true,
-//                                                          1,
-//                                                          18,
-//                                                          TimeInterval::fromDays(30),
-//                                                          true,
-//                                                          1, // transparency
-//                                                          NULL, // condition
-//                                                          layerInfo);
-//  model->getLayerSet()->addLayer(layer);
-  OSMLayer* layer = new OSMLayer(TimeInterval::fromDays(30));
-  model->getLayerSet()->addLayer(layer);
+  model->getLayerSet()->addLayer( LayerBuilder::createOSMLayer() );
 
   NonOverlappingMarksRenderer* renderer = model->getNonOverlappingMarksRenderer();
 

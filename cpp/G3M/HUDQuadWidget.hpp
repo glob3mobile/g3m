@@ -17,17 +17,17 @@
 #include "Angle.hpp"
 class HUDPosition;
 class HUDSize;
-class IImage;
 class Mesh;
 class TransformableTextureMapping;
-class IImageBuilder;
+class IImageFactory;
 
 #include "ChangedListener.hpp"
+#include "HUDWidgetImage.hpp"
 
 class HUDQuadWidget : public HUDWidget, public ChangedListener {
 private:
-  IImageBuilder* _imageBuilder;
-  IImageBuilder* _backgroundImageBuilder;
+  HUDWidgetImage* _image;
+  HUDWidgetImage* _backgroundImage; // NULL when the widget has no background
 
   const HUDPosition* _xPosition;
   const HUDPosition* _yPosition;
@@ -43,23 +43,6 @@ private:
   float _texCoordsRotationCenterU;
   float _texCoordsRotationCenterV;
 
-#ifdef C_CODE
-  const IImage* _image;
-  const IImage* _backgroundImage;
-#endif
-#ifdef JAVA_CODE
-  private IImage _image;
-  private IImage _backgroundImage;
-#endif
-
-  std::string _imageName;
-  int _imageWidth;
-  int _imageHeight;
-
-  std::string _backgroundImageName;
-
-  bool _buildingImage;
-  bool _buildingBackgroundImage;
   std::vector<std::string> _errors;
 
   Mesh* _mesh;
@@ -68,6 +51,8 @@ private:
   Mesh* getMesh(const G3MRenderContext* rc);
 
   void cleanMesh();
+
+  void addErrors(const HUDWidgetImage* widgetImage);
 
 #ifdef C_CODE
   const G3MContext* _context;
@@ -81,26 +66,20 @@ protected:
                  GLState* glState);
 
 public:
-  HUDQuadWidget(IImageBuilder* imageBuilder,
+  HUDQuadWidget(IImageFactory* imageFactory,
                 HUDPosition* xPosition,
                 HUDPosition* yPosition,
                 HUDSize* widthSize,
                 HUDSize* heightSize,
-                IImageBuilder* backgroundImageBuilder = NULL) :
-  _imageBuilder(imageBuilder),
+                IImageFactory* backgroundImageFactory = NULL) :
+  _image(new HUDWidgetImage(imageFactory)),
+  _backgroundImage((backgroundImageFactory == NULL) ? NULL : new HUDWidgetImage(backgroundImageFactory)),
   _xPosition(xPosition),
   _yPosition(yPosition),
   _widthSize(widthSize),
   _heightSize(heightSize),
-  _backgroundImageBuilder(backgroundImageBuilder),
   _mesh(NULL),
   _textureMapping(NULL),
-  _image(NULL),
-  _imageWidth(0),
-  _imageHeight(0),
-  _buildingImage(false),
-  _backgroundImage(NULL),
-  _buildingBackgroundImage(false),
   _texCoordsTranslationU(0),
   _texCoordsTranslationV(0),
   _texCoordsScaleU(1),
@@ -137,15 +116,6 @@ public:
 
   RenderState getRenderState(const G3MRenderContext* rc);
 
-  /** private, do not call */
-  void imageCreated(const IImage*      image,
-                    const std::string& imageName,
-                    int                imageRole);
-
-  /** private, do not call */
-  void onImageBuildError(const std::string& error,
-                         int                imageRole);
-  
   void changed();
   
 };

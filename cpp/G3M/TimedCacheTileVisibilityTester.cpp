@@ -56,9 +56,6 @@ bool TimedCacheTileVisibilityTester::isVisible(const G3MRenderContext* rc,
       if (result) {
         data->_timeoutTimeInMS = nowInMS + _timeoutInMS;
       }
-      else {
-        tile->setData(data);
-      }
     }
   }
 

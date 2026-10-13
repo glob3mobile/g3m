@@ -50,6 +50,10 @@ void WrapperNearFrustumRenderer::onDestroy(const G3MContext* context) {
   _renderer->onDestroy(context);
 }
 
+bool WrapperNearFrustumRenderer::isRendering() const {
+  return _renderer->isRendering();
+}
+
 bool WrapperNearFrustumRenderer::isEnable() const {
   return _renderer->isEnable();
 }

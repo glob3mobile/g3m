@@ -21,6 +21,57 @@
 #include "G3MEventContext.hpp"
 #include "MarkFilter.hpp"
 #include "G3MRenderContext.hpp"
+#include "TimeInterval.hpp"
+#include "ITimer.hpp"
+#include "IImage.hpp"
+#include "IImageFactory.hpp"
+#include "IImageFactoryListener.hpp"
+#include "StaticImageFactory.hpp"
+#include "FixedMarkAnchor.hpp"
+#include "MarkOutfit.hpp"
+#include "ILogger.hpp"
+#include "DeclutterObstacle.hpp"
+
+
+// owns the factory while the image is created: the renderer may go first
+class MarksRenderer_HintListener : public IImageFactoryListener {
+private:
+  MarksRenderer* _renderer;
+  IImageFactory* _imageFactory;
+
+public:
+  MarksRenderer_HintListener(MarksRenderer* renderer,
+                             IImageFactory* imageFactory) :
+  _renderer(renderer),
+  _imageFactory(imageFactory)
+  {
+  }
+
+  ~MarksRenderer_HintListener() {
+    delete _imageFactory;
+  }
+
+  void forgetRenderer() {
+    _renderer = NULL;
+  }
+
+  void imageCreated(const IImage*      image,
+                    const std::string& imageName) {
+    if (_renderer == NULL) {
+      delete image;
+    }
+    else {
+      _renderer->onHintImageCreated(image, imageName);
+    }
+  }
+
+  void onError(const std::string& error) {
+    ILogger::instance()->logError("Can't create the marks' hint image: \"%s\"", error.c_str());
+    if (_renderer != NULL) {
+      _renderer->onHintImageCreationError();
+    }
+  }
+};
 
 
 void MarksRenderer::setMarkTouchListener(MarkTouchListener* markTouchListener,
@@ -39,6 +90,17 @@ MarksRenderer::MarksRenderer(bool readyWhenMarksReady,
 _readyWhenMarksReady(readyWhenMarksReady),
 _renderInReverse(renderInReverse),
 _progressiveInitialization(progressiveInitialization),
+_declutter(false),
+_horizonBand(true),
+_declutterMargin(4),
+_transitionMS(250),
+_animatedEnable(false),
+_delayMS(250),
+_transitionMode(SCALE_AND_ALPHA),
+_hintImageFactory(NULL),
+_hintListener(NULL),
+_hintImage(NULL),
+_hintImageName(""),
 _lastCamera(NULL),
 _markTouchListener(NULL),
 _autoDeleteMarkTouchListener(false),
@@ -54,6 +116,12 @@ _initializationTimer(NULL)
 MarksRenderer::~MarksRenderer() {
   delete _initializationTimer;
 
+  if (_hintListener != NULL) {
+    _hintListener->forgetRenderer();
+  }
+  delete _hintImageFactory; // only while it waits for a context
+  delete _hintImage;
+
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     delete _marks[i];
@@ -68,12 +136,18 @@ MarksRenderer::~MarksRenderer() {
 
   delete _billboardTexCoords;
 
+  for (size_t i = 0; i < _declutterObstacles.size(); i++) {
+    delete _declutterObstacles[i];
+  }
+
 #ifdef JAVA_CODE
   super.dispose();
 #endif
 }
 
 void MarksRenderer::onChangedContext() {
+  startHintImage();
+
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
@@ -86,6 +160,14 @@ const bool MarksRenderer::hasMarks() const {
 }
 
 void MarksRenderer::addMark(Mark* mark) {
+  attachHint(mark);
+  if (_declutter) {
+    mark->hideUntilDecluttered();
+  }
+  if (_animatedEnable && !isEnable()) {
+    mark->hideUntilDecluttered();
+    mark->startHiding();
+  }
   _marks.push_back(mark);
   if ((_context != NULL) && !_progressiveInitialization) {
     mark->initialize(_context, _downloadPriority);
@@ -134,22 +216,12 @@ bool MarksRenderer::onTouchEvent(const G3MEventContext* ec,
       for (size_t i = 0; i < marksSize; i++) {
         Mark* mark = _marks[i];
 
-        if (!mark->isReady()) {
-          continue;
-        }
-        if (!mark->isRendered()) {
+        if (!mark->isTouchable()) {
           continue;
         }
 
-        const float markWidth = mark->getTextureWidth();
-        if (markWidth <= 0) {
-          continue;
-        }
-
-        const float markHeight = mark->getTextureHeight();
-        if (markHeight <= 0) {
-          continue;
-        }
+        const float markWidth  = mark->getScreenWidth();
+        const float markHeight = mark->getScreenHeight();
 
         const Vector3D* cartesianMarkPosition = mark->getCartesianPosition(planet);
         const Vector2F markPixel = _lastCamera->point2Pixel(*cartesianMarkPosition);
@@ -208,7 +280,7 @@ IFloatBuffer* MarksRenderer::getBillboardTexCoords() {
 }
 
 void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
-  const size_t marksSize = _marks.size();
+  size_t marksSize = _marks.size();
 
   if (marksSize > 0) {
     const Camera* camera = rc->getCurrentCamera();
@@ -247,6 +319,23 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
       }
     }
 
+    // the transitions also run without declutter, for an animated enable
+    if (_declutter || _animatedEnable) {
+      if (_declutter && isEnable()) {
+        declutter(rc, camera, planet, cameraPosition, cameraHeight);
+      }
+
+      const long long nowMS = rc->getFrameStartTimer()->nowInMilliseconds();
+      for (size_t i = 0; i < marksSize; i++) {
+        _marks[i]->stepDeclutterTransition(nowMS, _delayMS, _transitionMS, _transitionMode);
+      }
+
+      removeMarksThatLeft(false);
+      marksSize = _marks.size();
+    }
+
+    const double horizonBandRadiansPerPixel = _horizonBand ? (camera->getVerticalFOV()._radians / camera->getViewPortHeight()) : 0;
+
     for (size_t i = 0; i < marksSize; i++) {
       const size_t ii = _renderInReverse ? (marksSize-1-i) : i;
       Mark* mark = _marks[ii];
@@ -258,10 +347,323 @@ void MarksRenderer::render(const G3MRenderContext* rc, GLState* glState) {
                      _glState,
                      planet,
                      gl,
-                     billboardTexCoord);
+                     billboardTexCoord,
+                     horizonBandRadiansPerPixel);
       }
     }
   }
+}
+
+void MarksRenderer::setHint(IImageFactory* hintImageFactory) {
+  if (_hintListener != NULL) {
+    _hintListener->forgetRenderer();
+    _hintListener = NULL;
+  }
+  delete _hintImageFactory;
+  delete _hintImage;
+  _hintImage     = NULL;
+  _hintImageName = "";
+
+  _hintImageFactory = hintImageFactory;
+  startHintImage();
+}
+
+void MarksRenderer::startHintImage() {
+  if ((_context == NULL) || (_hintImageFactory == NULL)) {
+    return;
+  }
+  IImageFactory* hintImageFactory = _hintImageFactory;
+  _hintImageFactory = NULL; // ownership moved to the listener
+  _hintListener = new MarksRenderer_HintListener(this, hintImageFactory);
+  hintImageFactory->create(_context, _hintListener, true);
+}
+
+// the factory deletes the listener right after reporting the error
+void MarksRenderer::onHintImageCreationError() {
+  _hintListener = NULL;
+}
+
+void MarksRenderer::onHintImageCreated(const IImage* image,
+                                       const std::string& imageName) {
+  _hintListener  = NULL;
+  _hintImage     = image;
+  _hintImageName = imageName;
+
+  for (size_t i = 0; i < _marks.size(); i++) {
+    attachHint(_marks[i]);
+  }
+}
+
+// every mark gets its own copy of the image; the same name shares the texture
+void MarksRenderer::attachHint(Mark* mark) {
+  if ((_hintImage == NULL) || mark->hasHint()) {
+    return;
+  }
+  mark->addHint(new MarkOutfit(new StaticImageFactory(_hintImage->shallowCopy(), _hintImageName),
+                               new FixedMarkAnchor(0.5f, 0.5f)));
+  if (mark->isInitialized()) {
+    mark->createPendingOutfitImages(_context);
+  }
+}
+
+void MarksRenderer::setDeclutterDelay(const TimeInterval& delay) {
+  _delayMS = delay.milliseconds();
+}
+
+void MarksRenderer::setDeclutterTransitionDuration(const TimeInterval& duration) {
+  _transitionMS = duration.milliseconds();
+}
+
+void MarksRenderer::addDeclutterObstacle(DeclutterObstacle* obstacle) {
+  _declutterObstacles.push_back(obstacle);
+}
+
+void MarksRenderer::removeAllDeclutterObstacles() {
+  for (size_t i = 0; i < _declutterObstacles.size(); i++) {
+    delete _declutterObstacles[i];
+  }
+  _declutterObstacles.clear();
+}
+
+void MarksRenderer::setEnable(bool enable) {
+  const bool changed = (enable != isEnable());
+  DefaultRenderer::setEnable(enable);
+  if (!changed || !_animatedEnable) {
+    return;
+  }
+
+  for (size_t i = 0; i < _marks.size(); i++) {
+    if (enable) {
+      _marks[i]->stopHiding(_declutter);
+    }
+    else {
+      _marks[i]->startHiding();
+    }
+  }
+}
+
+void MarksRenderer::setAnimatedEnable(bool animatedEnable) {
+  const bool changed = (animatedEnable != _animatedEnable);
+  _animatedEnable = animatedEnable;
+  if (!changed || isEnable()) {
+    return;
+  }
+
+  // disabled: the marks are already off screen, hidden by the renderer instead of by a fade
+  for (size_t i = 0; i < _marks.size(); i++) {
+    Mark* mark = _marks[i];
+    if (animatedEnable) {
+      mark->hideUntilDecluttered();
+      mark->startHiding();
+    }
+    else {
+      mark->stopHiding(_declutter);
+      if (!_declutter) {
+        mark->resetDeclutter(); // nothing would step it back on screen
+      }
+    }
+  }
+}
+
+bool MarksRenderer::isRendering() const {
+  if (isEnable()) {
+    return true;
+  }
+  if (!_animatedEnable) {
+    return false;
+  }
+  for (size_t i = 0; i < _marks.size(); i++) {
+    if (!_marks[i]->isOffScreen()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void MarksRenderer::setDeclutter(bool declutter) {
+  _declutter = declutter;
+  if (!_declutter) {
+    removeMarksThatLeft(true); // without declutter nothing would finish their fade
+    for (size_t i = 0; i < _marks.size(); i++) {
+      _marks[i]->resetDeclutter();
+    }
+  }
+}
+
+// evenLeaving: also the marks still fading out
+void MarksRenderer::removeMarksThatLeft(bool evenLeaving) {
+  std::vector<Mark*> survivingMarks;
+  bool anyRemoved = false;
+  for (size_t i = 0; i < _marks.size(); i++) {
+    Mark* mark = _marks[i];
+    const bool gone = evenLeaving ? mark->isLeavingRenderer() : mark->hasLeftRenderer();
+    if (gone) {
+      anyRemoved = true;
+      if (mark->deletesWhenGone()) {
+        delete mark;
+      }
+    }
+    else {
+      survivingMarks.push_back(mark);
+    }
+  }
+  if (anyRemoved) {
+    _marks = survivingMarks;
+  }
+}
+
+bool MarksRenderer::isFree(float left, float top, float right, float bottom) const {
+  const size_t takenSize = _takenLeft.size();
+  for (size_t i = 0; i < takenSize; i++) {
+    if ((left < _takenRight[i]) && (right > _takenLeft[i]) &&
+        (top < _takenBottom[i]) && (bottom > _takenTop[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+void MarksRenderer::declutter(const G3MRenderContext* rc,
+                              const Camera* camera,
+                              const Planet* planet,
+                              const MutableVector3D& cameraPosition,
+                              double cameraHeight) {
+  // the order the marks end up on top: the last drawn is the first one
+  std::vector<Mark*>& candidates = _declutterCandidates;
+  candidates.clear();
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
+    const size_t ii = _renderInReverse ? i : (marksSize-1-i);
+    Mark* mark = _marks[ii];
+    if (mark->isReady() && !mark->isLeavingRenderer() && mark->isVisibleFrom(planet, cameraPosition, cameraHeight)) {
+      candidates.push_back(mark);
+    }
+  }
+
+  // explicit priorities first, the highest first; a stable insertion keeps the drawing order for the rest
+  std::vector<Mark*>& ordered = _declutterOrder;
+  ordered.clear();
+  for (size_t i = 0; i < candidates.size(); i++) {
+    Mark* mark = candidates[i];
+    if (mark->hasPriority()) {
+      size_t position = 0;
+      while ((position < ordered.size()) && (ordered[position]->getPriority() >= mark->getPriority())) {
+        position++;
+      }
+#ifdef C_CODE
+      ordered.insert(ordered.begin() + position, mark);
+#endif
+#ifdef JAVA_CODE
+      ordered.add(position, mark);
+#endif
+    }
+  }
+  for (size_t i = 0; i < candidates.size(); i++) {
+    Mark* mark = candidates[i];
+    if (!mark->hasPriority()) {
+      ordered.push_back(mark);
+    }
+  }
+
+  _takenLeft.clear();
+  _takenTop.clear();
+  _takenRight.clear();
+  _takenBottom.clear();
+
+  for (size_t i = 0; i < _declutterObstacles.size(); i++) {
+    RectangleF* rectangle = _declutterObstacles[i]->createScreenRectangle(rc);
+    if (rectangle != NULL) {
+      _takenLeft.push_back(rectangle->_x);
+      _takenTop.push_back(rectangle->_y);
+      _takenRight.push_back(rectangle->_x + rectangle->_width);
+      _takenBottom.push_back(rectangle->_y + rectangle->_height);
+      delete rectangle;
+    }
+  }
+
+  for (size_t i = 0; i < ordered.size(); i++) {
+    Mark* mark = ordered[i];
+    const Vector2F markPixel = camera->point2Pixel(*mark->getCartesianPosition(planet));
+
+    const int target = chooseOutfit(mark, markPixel);
+    mark->setDeclutterTarget(target);
+    if (target >= 0) {
+      takeOutfitSpace(mark, markPixel, target);
+    }
+  }
+}
+
+bool MarksRenderer::hasOutfitImage(const Mark* mark,
+                                   size_t outfitIndex) const {
+  const Vector2F size = mark->getOutfitScreenSize(outfitIndex);
+  return (size._x > 0) && (size._y > 0);
+}
+
+bool MarksRenderer::outfitFits(const Mark* mark,
+                               const Vector2F& markPixel,
+                               size_t outfitIndex,
+                               float margin) const {
+  const Vector2F size   = mark->getOutfitScreenSize(outfitIndex);
+  const Vector2F anchor = mark->getOutfitAnchor(outfitIndex);
+  const float left = markPixel._x - (size._x * anchor._x);
+  const float top  = markPixel._y - (size._y * anchor._y);
+  return isFree(left - margin, top - margin, left + size._x + margin, top + size._y + margin);
+}
+
+void MarksRenderer::takeOutfitSpace(const Mark* mark,
+                                    const Vector2F& markPixel,
+                                    size_t outfitIndex) {
+  const Vector2F size   = mark->getOutfitScreenSize(outfitIndex);
+  const Vector2F anchor = mark->getOutfitAnchor(outfitIndex);
+  const float left = markPixel._x - (size._x * anchor._x);
+  const float top  = markPixel._y - (size._y * anchor._y);
+  _takenLeft.push_back(left);
+  _takenTop.push_back(top);
+  _takenRight.push_back(left + size._x);
+  _takenBottom.push_back(top + size._y);
+}
+
+/**
+ * A mark keeps its outfit while nothing overlaps it, so alternatives of the
+ * same detail level (the label on one side or the other) do not swap back and
+ * forth. It grows to the first outfit of a higher level that fits with the
+ * margin; when its own no longer fits, it moves to an alternative of its level,
+ * then to a lower level, or hides.
+ */
+int MarksRenderer::chooseOutfit(const Mark* mark,
+                                const Vector2F& markPixel) const {
+  const int    current      = mark->getDeclutterTarget();
+  const size_t outfitsCount = mark->getOutfitsCount();
+
+  for (size_t i = 0; i < outfitsCount; i++) {
+    const bool grows = (current < 0) || (mark->getOutfitDetailLevel(i) > mark->getOutfitDetailLevel(current));
+    if (grows && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, _declutterMargin)) {
+      return (int) i;
+    }
+  }
+
+  if (current < 0) {
+    return -1;
+  }
+
+  const int currentLevel = mark->getOutfitDetailLevel(current);
+  if (hasOutfitImage(mark, current) && outfitFits(mark, markPixel, current, 0)) {
+    return current;
+  }
+
+  for (size_t i = 0; i < outfitsCount; i++) {
+    if ((mark->getOutfitDetailLevel(i) == currentLevel) && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, 0)) {
+      return (int) i;
+    }
+  }
+
+  for (size_t i = 0; i < outfitsCount; i++) {
+    if ((mark->getOutfitDetailLevel(i) < currentLevel) && hasOutfitImage(mark, i) && outfitFits(mark, markPixel, i, 0)) {
+      return (int) i;
+    }
+  }
+
+  return -1;
 }
 
 void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
@@ -269,7 +671,7 @@ void MarksRenderer::updateGLState(const G3MRenderContext* rc) {
 
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());
@@ -302,12 +704,44 @@ size_t MarksRenderer::removeAllMarks(const MarkFilter& filter,
   size_t removed = 0;
   const size_t marksSize = _marks.size();
 
-  if (animated) {
+  if (animated && _declutter) {
+    for (size_t i = 0; i < marksSize; i++) {
+      Mark* mark = _marks[i];
+      if (!mark->isLeavingRenderer() && filter.test(mark)) {
+        mark->startLeavingRenderer(deleteMarks);
+        removed++;
+      }
+    }
+    if (!isRendering()) {
+      removeMarksThatLeft(true); // nobody would see their fade, nor step it
+    }
+  }
+  else if (animated) {
+    std::vector<Mark*> survivingMarks;
     for (size_t i = 0; i < marksSize; i++) {
       Mark* mark = _marks[i];
       if (filter.test(mark)) {
-        mark->animatedRemove(deleteMarks);
+        removed++;
+        const bool visible = isEnable() && mark->isRendered();
+        if (visible || mark->isDisappearing()) {
+          mark->animatedRemove(deleteMarks);
+          survivingMarks.push_back(mark); // the zoom-out effect removes it when done
+        }
+        else {
+          // nobody sees it, and the zoom-out only starts on render, which may never come
+          mark->cancelEffects();
+          if (deleteMarks) {
+            delete mark;
+          }
+        }
       }
+      else {
+        survivingMarks.push_back(mark);
+      }
+    }
+
+    if (removed > 0) {
+      _marks = survivingMarks;
     }
   }
   else {
@@ -333,13 +767,24 @@ size_t MarksRenderer::removeAllMarks(const MarkFilter& filter,
 }
 
 
+Mark* MarksRenderer::findMark(const MarkFilter& filter) const {
+  const size_t marksSize = _marks.size();
+  for (size_t i = 0; i < marksSize; i++) {
+    Mark* mark = _marks[i];
+    if (!mark->isLeavingRenderer() && filter.test(mark)) {
+      return mark;
+    }
+  }
+  return NULL;
+}
+
 const std::vector<Mark*> MarksRenderer::getAllMarks(const MarkFilter& filter) const {
   std::vector<Mark*> result;
 
   const size_t marksSize = _marks.size();
   for (size_t i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    if (filter.test(mark)) {
+    if (!mark->isLeavingRenderer() && filter.test(mark)) {
       result.push_back( mark );
     }
   }

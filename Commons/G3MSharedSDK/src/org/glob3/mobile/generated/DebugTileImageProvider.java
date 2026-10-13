@@ -26,25 +26,16 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   private static class ImageListener extends IImageListener
   {
     private final String _tileID;
+    private final String _imageID;
     private final TileImageContribution _contribution;
 
     private TileImageListener _listener;
     private boolean _deleteListener;
 
-    private static String getImageID(String tileID)
-    {
-      IStringBuilder isb = IStringBuilder.newStringBuilder();
-      isb.addString("DebugTileImageProvider/");
-      isb.addString(tileID);
-      final String s = isb.getString();
-      if (isb != null)
-         isb.dispose();
-      return s;
-    }
-
-    public ImageListener(String tileID, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
+    public ImageListener(String tileID, String imageID, TileImageContribution contribution, TileImageListener listener, boolean deleteListener)
     {
        _tileID = tileID;
+       _imageID = imageID;
        _contribution = contribution;
        _listener = listener;
        _deleteListener = deleteListener;
@@ -59,8 +50,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
 
     public final void imageCreated(IImage image)
     {
-      final String imageID = getImageID(_tileID);
-      _listener.imageCreated(_tileID, image, imageID, _contribution);
+      _listener.imageCreated(_tileID, image, _imageID, _contribution);
       if (_deleteListener)
       {
         if (_listener != null)
@@ -76,6 +66,29 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   private final boolean _showIDLabel;
   private final boolean _showSectorLabels;
   private final boolean _showTileBounds;
+
+
+  // the tile and every style input, so two debug providers with different styles don't share a texture
+  private String getImageID(String tileID)
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("DebugTileImageProvider/");
+    isb.addString(tileID);
+    isb.addString("/");
+    isb.addString(_font.description());
+    isb.addString("/");
+    isb.addString(_color.id());
+    isb.addString("/");
+    isb.addBool(_showIDLabel);
+    isb.addString("/");
+    isb.addBool(_showSectorLabels);
+    isb.addString("/");
+    isb.addBool(_showTileBounds);
+    final String s = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return s;
+  }
 
   private String getIDLabel(Tile tile)
   {
@@ -187,7 +200,7 @@ public class DebugTileImageProvider extends CanvasTileImageProvider
   
     //ILogger::instance()->logInfo(getIDLabel(tile));
   
-    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new DebugTileImageProvider.ImageListener(tile._id, contribution, listener, deleteListener), true), true);
+    canvas.createImage(new CanvasOwnerImageListenerWrapper(canvas, new DebugTileImageProvider.ImageListener(tile._id, getImageID(tile._id), contribution, listener, deleteListener), true), true);
   }
 
   public final void cancel(String tileID)

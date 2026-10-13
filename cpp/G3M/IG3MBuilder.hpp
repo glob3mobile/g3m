@@ -10,6 +10,8 @@
 #define __G3M__IG3MBuilder__
 
 #include <vector>
+class StarsRenderer;
+class AtmosphereRenderer;
 class GL;
 class IStorage;
 class IDownloader;
@@ -71,9 +73,12 @@ private:
   SceneLighting*                    _sceneLighting;
   Sector*                           _shownSector;
   InfoDisplay*                      _infoDisplay;
-  bool                              _atmosphere;
+  AtmosphereRenderer*               _skyRenderer;
+  AtmosphereRenderer*               _groundHazeRenderer;
+  StarsRenderer*                    _starsRenderer;
   FrustumPolicy*                    _frustumPolicy;
   bool                              _verboseCameraHandlers;
+  float                             _textureMaxAnisotropy;
 
   GL*                               getGL();
   ICameraActivityListener*          getCameraActivityListener();
@@ -133,7 +138,19 @@ public:
 
   void setAtmosphere(const bool atmosphere);
 
+  // NULL without atmosphere; drawn before the planet
+  AtmosphereRenderer* getSkyRenderer() const;
+
+  // NULL without atmosphere; drawn after the planet
+  AtmosphereRenderer* getGroundHazeRenderer() const;
+
+  // drawn behind everything, before the sky
+  void setStarsRenderer(StarsRenderer* starsRenderer);
+
   void setVerboseCameraHandlers(const bool verboseCameraHandlers);
+
+  // 8 by default; 1 turns anisotropic filtering off; the device maximum caps it
+  void setTextureMaxAnisotropy(const float textureMaxAnisotropy);
 
   void setGL(GL* gl);
 

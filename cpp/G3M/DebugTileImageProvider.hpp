@@ -23,15 +23,15 @@ private:
   class ImageListener : public IImageListener {
   private:
     const std::string           _tileID;
+    const std::string           _imageID;
     const TileImageContribution* _contribution;
 
     TileImageListener*          _listener;
     bool                        _deleteListener;
 
-    static const std::string getImageID(const std::string& tileID);
-
   public:
     ImageListener(const std::string&           tileID,
+                  const std::string&           imageID,
                   const TileImageContribution* contribution,
                   TileImageListener*           listener,
                   bool                         deleteListener);
@@ -49,6 +49,8 @@ private:
   const bool _showSectorLabels;
   const bool _showTileBounds;
   
+  const std::string getImageID(const std::string& tileID) const;
+
   const std::string getIDLabel(const Tile* tile) const;
   
   const std::string getSectorLabel1(const Sector& sector) const;

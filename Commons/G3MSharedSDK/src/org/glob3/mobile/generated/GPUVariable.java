@@ -21,6 +21,8 @@ package org.glob3.mobile.generated;
 
 public class GPUVariable
 {
+  // uniform codes are 64-bit masks, one bit per GPUUniformKey
+  public static final int MAX_UNIFORM_KEYS = 64;
 
   public static GPUUniformKey getUniformKey(String name)
   {
@@ -64,14 +66,6 @@ public class GPUVariable
     {
       return GPUUniformKey.DIFFUSE_LIGHT_COLOR;
     }
-    else if (name.equals("uProjection"))
-    {
-      return GPUUniformKey.PROJECTION;
-    }
-    else if (name.equals("uCameraModel"))
-    {
-      return GPUUniformKey.CAMERA_MODEL;
-    }
     else if (name.equals("uModel"))
     {
       return GPUUniformKey.MODEL;
@@ -112,6 +106,42 @@ public class GPUVariable
     {
       return GPUUniformKey.CAMERA_POSITION;
     }
+    else if (name.equals("uRibbonWidth"))
+    {
+      return GPUUniformKey.RIBBON_WIDTH;
+    }
+    else if (name.equals("uGroundHazePass"))
+    {
+      return GPUUniformKey.GROUND_HAZE_PASS;
+    }
+    else if (name.equals("uSpaceColor"))
+    {
+      return GPUUniformKey.SPACE_COLOR;
+    }
+    else if (name.equals("uFullStarMagnitude"))
+    {
+      return GPUUniformKey.FULL_STAR_MAGNITUDE;
+    }
+    else if (name.equals("uStarSizeExponent"))
+    {
+      return GPUUniformKey.STAR_SIZE_EXPONENT;
+    }
+    else if (name.equals("uColorMatrix"))
+    {
+      return GPUUniformKey.COLOR_MATRIX;
+    }
+    else if (name.equals("uBillboardColorFactor"))
+    {
+      return GPUUniformKey.BILLBOARD_COLOR_FACTOR;
+    }
+    else if (name.equals("uHorizonColor"))
+    {
+      return GPUUniformKey.HORIZON_COLOR;
+    }
+    else if (name.equals("uSkyRayleighScattering"))
+    {
+      return GPUUniformKey.SKY_RAYLEIGH_SCATTERING;
+    }
     else
     {
       return GPUUniformKey.UNRECOGNIZED_UNIFORM;
@@ -147,13 +177,17 @@ public class GPUVariable
     {
       return GPUAttributeKey.POSITION_2D;
     }
+    else if (name.equals("aRibbonSide"))
+    {
+      return GPUAttributeKey.RIBBON_SIDE;
+    }
     else
     {
       return GPUAttributeKey.UNRECOGNIZED_ATTRIBUTE;
     }
   }
 
-  public static int getUniformCode(GPUUniformKey u)
+  public static long getUniformCode(GPUUniformKey u)
   {
     if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
     {
@@ -169,28 +203,28 @@ public class GPUVariable
       return 0;
     }
     final int index = a.getValue();
-    return getUniformCode(index);
+    return getAttributeCode(index);
   }
 
-  public static int getUniformCode(int u)
+  public static long getUniformCode(int u)
   {
-    return 0x00000001 << u;
+    return IMathUtils.instance().bit64(u);
   }
   public static int getAttributeCode(int a)
   {
     return 0x00000001 << a;
   }
 
-  public static boolean hasUniform(int code, int u)
+  public static boolean hasUniform(long code, int u)
   {
-    return ((code >> u) & 0x00000001) != 0;
+    return (code & IMathUtils.instance().bit64(u)) != 0;
   }
   public static boolean hasAttribute(int code, int a)
   {
     return ((code >> a) & 0x00000001) != 0;
   }
 
-  public static boolean hasUniform(int code, GPUUniformKey u)
+  public static boolean hasUniform(long code, GPUUniformKey u)
   {
     if (u == GPUUniformKey.UNRECOGNIZED_UNIFORM)
     {

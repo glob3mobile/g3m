@@ -27,8 +27,9 @@ public class TextUtils_WebGL extends ITextUtils {
     var font = "" + Math.round(fontSize) + "px sans-serif";
     context.font = font;
 
+    var metrics = @org.glob3.mobile.specific.Canvas_WebGL::fontMetrics(Lcom/google/gwt/core/client/JavaScriptObject;F)(context, fontSize);
     var width = context.measureText(label).width;
-    var height = Math.ceil(fontSize);
+    var height = metrics.height;
     if (shadowColor) {
       width += 2;
       height += 2;
@@ -48,8 +49,8 @@ public class TextUtils_WebGL extends ITextUtils {
     }
 
     context.textAlign = "left";
-    context.textBaseline = "top";
-    context.fillText(label, 0, 0);
+    context.textBaseline = "alphabetic";
+    context.fillText(label, 0, metrics.ascent);
 
     var jsResult = new Image();
     jsResult.onload = function() {
@@ -96,8 +97,9 @@ public class TextUtils_WebGL extends ITextUtils {
     var font = "" + Math.round(fontSize) + "px sans-serif";
     context.font = font;
 
+    var metrics = @org.glob3.mobile.specific.Canvas_WebGL::fontMetrics(Lcom/google/gwt/core/client/JavaScriptObject;F)(context, fontSize);
     var textWidth = context.measureText(label).width;
-    var textHeight = Math.ceil(fontSize);
+    var textHeight = metrics.height;
     if (shadowColor) {
       textWidth += 2;
       textHeight += 2;
@@ -111,7 +113,8 @@ public class TextUtils_WebGL extends ITextUtils {
     if (labelBottom) {
       resultWidth = Math.max(textWidth, imageWidth);
       resultHeight = textHeight + separation + imageHeight;
-    } else {
+    }
+    else {
       resultWidth = textWidth + separation + imageWidth;
       resultHeight = Math.max(textHeight, imageHeight);
     }
@@ -127,7 +130,8 @@ public class TextUtils_WebGL extends ITextUtils {
 
     if (labelBottom) {
       context.drawImage(htmlImage, (resultWidth - imageWidth) / 2, 0);
-    } else {
+    }
+    else {
       context.drawImage(htmlImage, 0, (resultHeight - imageHeight) / 2);
     }
 
@@ -141,13 +145,14 @@ public class TextUtils_WebGL extends ITextUtils {
     }
 
     context.textAlign = "left";
-    context.textBaseline = "top";
+    context.textBaseline = "alphabetic";
     //context.fillText(label, 0, 0);
 
     if (labelBottom) {
-      context.fillText(label, (resultWidth - textWidth) / 2, imageHeight + separation);
-    } else {
-      context.fillText(label, imageWidth + separation, (resultHeight - textHeight) / 2);
+      context.fillText(label, (resultWidth - textWidth) / 2, imageHeight + separation + metrics.ascent);
+    }
+    else {
+      context.fillText(label, imageWidth + separation, ((resultHeight - textHeight) / 2) + metrics.ascent);
     }
 
     var jsResult = new Image();

@@ -83,10 +83,16 @@ void GEOVectorTileImageProvider::GEORasterizerQuadTreeVisitor::endVisit(bool abo
   
 }
 
-const std::string GEOVectorTileImageProvider::GEORasterizerImageListener::getImageID(const std::string& tileID) const {
+// The tile alone doesn't identify the pixels: they also depend on which layer is rasterized and on
+// the symbols it holds at rasterization time.
+const std::string GEOVectorTileImageProvider::createImageID(const std::string& tileID) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("GEOVectorTileImageProvider/");
   isb->addString(tileID);
+  isb->addString("/");
+  isb->addLong(_layer->getInstanceID());
+  isb->addString("/");
+  isb->addLong(_layer->getContentsRevision());
   const std::string s = isb->getString();
   delete isb;
   return s;
@@ -95,7 +101,7 @@ const std::string GEOVectorTileImageProvider::GEORasterizerImageListener::getIma
 void GEOVectorTileImageProvider::GEORasterizerImageListener::imageCreated(const IImage* image) {
   _listener->imageCreated(_tileID,
                           image,
-                          getImageID(_tileID),
+                          _imageID,
                           _contribution);
   if (_deleteListener) {
     delete _listener;
@@ -126,6 +132,7 @@ void GEOVectorTileImageProvider::rasterize(const TileImageContribution* contribu
   canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
                                                           new GEORasterizerImageListener(contribution,
                                                                                          tileID,
+                                                                                         createImageID(tileID),
                                                                                          listener,
                                                                                          deleteListener),
                                                           true),

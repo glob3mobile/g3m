@@ -58,4 +58,10 @@ public class SGTranslateNode extends SGNode
     super.dispose();
   }
 
+
+  public final void addToModelBounds(MutableMatrix44D transform, MutableVector3D lower, MutableVector3D upper)
+  {
+    super.addToModelBounds(transform.multiply(_translationMatrix), lower, upper);
+  }
+
 }

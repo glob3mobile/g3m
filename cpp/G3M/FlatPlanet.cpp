@@ -75,6 +75,18 @@ Geodetic2D FlatPlanet::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) 
   return Geodetic2D(P0._latitude.add(P1._latitude).times(0.5), P0._longitude.add(P1._longitude).times(0.5));
 }
 
+// the flat planet is still the Earth: the shortest path is the great circle, drawn curved on the flat map
+Geodetic2D FlatPlanet::getIntermediatePoint(const Geodetic2D& P0,
+                                            const Geodetic2D& P1,
+                                            const double alpha) const {
+  if (P0.isEquals(P1)) {
+    return P0;
+  }
+  return IMathUtils::instance()->greatCircleIntermediatePoint(P0._latitude, P0._longitude,
+                                                              P1._latitude, P1._longitude,
+                                                              alpha);
+}
+
 // compute distance from two points
 double FlatPlanet::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                 const Geodetic2D& g2) const {

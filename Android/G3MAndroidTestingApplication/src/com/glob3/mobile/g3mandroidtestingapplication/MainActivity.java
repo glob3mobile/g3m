@@ -5,9 +5,8 @@ package com.glob3.mobile.g3mandroidtestingapplication;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.DeviceAttitudeCameraHandler;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.OSMLayer;
-import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
@@ -55,8 +54,8 @@ public class MainActivity
    //      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
    //
    //      return new NonOverlappingMark( //
-   //               new DownloaderImageBuilder(markBitmapURL), //
-   //               new DownloaderImageBuilder(anchorBitmapURL), //
+   //               new DownloaderImageFactory(markBitmapURL), //
+   //               new DownloaderImageFactory(anchorBitmapURL), //
    //               position);
    //   }
 
@@ -66,14 +65,14 @@ public class MainActivity
    //      final URL markBitmapURL = new URL("file:///g3m-marker.png");
    //      final URL anchorBitmapURL = new URL("file:///anchorWidget.png");
    //
-   //      final ColumnLayoutImageBuilder imageBuilderWidget = new ColumnLayoutImageBuilder( //
-   //               new DownloaderImageBuilder(markBitmapURL), //
-   //               new LabelImageBuilder(label, GFont.monospaced()) //
+   //      final ColumnLayoutImageFactory imageFactoryWidget = new ColumnLayoutImageFactory( //
+   //               new DownloaderImageFactory(markBitmapURL), //
+   //               new LabelImageFactory(label, GFont.monospaced()) //
    //      );
    //
    //      return new NonOverlappingMark( //
-   //               imageBuilderWidget, //
-   //               new DownloaderImageBuilder(anchorBitmapURL), //
+   //               imageFactoryWidget, //
+   //               new DownloaderImageFactory(anchorBitmapURL), //
    //               position);
    //   }
 
@@ -82,7 +81,7 @@ public class MainActivity
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
 
       final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+      layerSet.addLayer(LayerBuilder.createOSMLayer());
       builder.getPlanetRendererBuilder().setLayerSet(layerSet);
 
       final CameraRenderer cr = new CameraRenderer(false);
@@ -97,7 +96,7 @@ public class MainActivity
    //      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
    //
    //      final LayerSet layerSet = new LayerSet();
-   //      layerSet.addLayer(new OSMLayer(TimeInterval.fromDays(30)));
+   //      layerSet.addLayer(LayerBuilder.createOSMLayer());
    //      builder.getPlanetRendererBuilder().setLayerSet(layerSet);
    //      builder.getPlanetRendererBuilder().setRenderDebug(true);
    //

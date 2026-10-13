@@ -40,6 +40,8 @@ public:
 
   void setEnable(bool enable);
 
+  bool isRendering() const;
+
   RenderState getRenderState(const G3MRenderContext* rc);
 
   void onResizeViewportEvent(const G3MEventContext* ec,

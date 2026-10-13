@@ -8,6 +8,7 @@ package org.glob3.mobile.generated;
 
 
 //class Mark;
+//class TouchEvent;
 
 public abstract class MarkTouchListener
 {

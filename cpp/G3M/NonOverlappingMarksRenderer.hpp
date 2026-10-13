@@ -13,11 +13,11 @@
 #include "Geodetic3D.hpp"
 #include "Vector2F.hpp"
 #include "Vector3D.hpp"
-#include "IImageBuilderListener.hpp"
+#include "IImageFactoryListener.hpp"
 #include "MutableVector2F.hpp"
 #include "ViewMode.hpp"
 
-class IImageBuilder;
+class IImageFactory;
 class Geodetic3D;
 class Vector2D;
 class Camera;
@@ -55,7 +55,7 @@ private:
 #ifdef JAVA_CODE
   private IImage _image;
 #endif
-  IImageBuilder* _imageBuilder;
+  IImageFactory* _imageFactory;
   TexturesHandler* _texHandler;
 
   IFloatBuffer*         _vertices;
@@ -68,7 +68,7 @@ private:
   float _x;
   float _y;
 
-  class WidgetImageListener: public IImageBuilderListener {
+  class WidgetImageListener: public IImageFactoryListener {
     MarkWidget* _widget;
   public:
     WidgetImageListener(MarkWidget* widget) :
@@ -90,7 +90,7 @@ private:
                      const std::string& imageName);
 
 public:
-  MarkWidget(IImageBuilder* imageBuilder);
+  MarkWidget(IImageFactory* imageFactory);
 
   ~MarkWidget();
 
@@ -157,8 +157,8 @@ private:
 
 public:
 
-  NonOverlappingMark(IImageBuilder* imageBuilderWidget,
-                     IImageBuilder* imageBuilderAnchor,
+  NonOverlappingMark(IImageFactory* imageFactoryWidget,
+                     IImageFactory* imageFactoryAnchor,
                      const Geodetic3D& position,
                      NonOverlappingMarkTouchListener* touchListener = NULL,
                      float springLengthInPixels = 100.0f,

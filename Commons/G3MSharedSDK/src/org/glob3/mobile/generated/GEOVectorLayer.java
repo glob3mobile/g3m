@@ -23,9 +23,16 @@ package org.glob3.mobile.generated;
 
 public class GEOVectorLayer extends VectorLayer
 {
+  private static long INSTANCE_COUNTER = 0;
+
   private QuadTree _quadTree = new QuadTree();
 
   private GEOVectorTileImageProvider _tileImageProvider;
+
+  // identity and contents revision feed the tile image names, so two layers (or two states of
+  // one layer) never share a texture
+  private final long _instanceID;
+  private long _contentsRevision;
 
 
   public GEOVectorLayer(java.util.ArrayList<LayerTilesRenderParameters> parametersVector, float transparency, LayerCondition condition)
@@ -44,6 +51,8 @@ public class GEOVectorLayer extends VectorLayer
   {
      super(parametersVector, transparency, condition, layerInfo);
      _tileImageProvider = null;
+     _instanceID = INSTANCE_COUNTER++;
+     _contentsRevision = 0;
   
   }
 
@@ -79,6 +88,8 @@ public class GEOVectorLayer extends VectorLayer
   {
      super(LayerTilesRenderParameters.createDefaultMultiProjection(mercatorFirstLevel, mercatorMaxLevel, wgs84firstLevel, wgs84maxLevel), transparency, condition, layerInfo);
      _tileImageProvider = null;
+     _instanceID = INSTANCE_COUNTER++;
+     _contentsRevision = 0;
   
   }
 
@@ -142,6 +153,7 @@ public class GEOVectorLayer extends VectorLayer
   public final void clear()
   {
     _quadTree.clear();
+    _contentsRevision++;
     notifyChanges();
   }
 
@@ -160,6 +172,7 @@ public class GEOVectorLayer extends VectorLayer
       final boolean added = _quadTree.add(sector, symbol);
       if (added)
       {
+        _contentsRevision++;
         notifyChanges();
       }
       else
@@ -182,6 +195,16 @@ public class GEOVectorLayer extends VectorLayer
   public final QuadTree getQuadTree()
   {
     return _quadTree;
+  }
+
+  public final long getInstanceID()
+  {
+    return _instanceID;
+  }
+
+  public final long getContentsRevision()
+  {
+    return _contentsRevision;
   }
 
   public final java.util.ArrayList<URL> getDownloadURLs(Tile tile)

@@ -159,32 +159,27 @@ double Box::projectedArea(const G3MRenderContext* rc) const {
   return width * height;
 }
 
-bool Box::contains(const Vector3D& point) const {
+bool Box::contains(double x, double y, double z) const {
+  // absolute tolerance for floating-point rounding: intersectionWithRay tests points computed on the faces
   const static double margin = 1e-3;
-  if (point._x < _lower._x - margin) return false;
-  if (point._x > _upper._x + margin) return false;
-  
-  if (point._y < _lower._y - margin) return false;
-  if (point._y > _upper._y + margin) return false;
-  
-  if (point._z < _lower._z - margin) return false;
-  if (point._z > _upper._z + margin) return false;
-  
+  if (x < _lower._x - margin) return false;
+  if (x > _upper._x + margin) return false;
+
+  if (y < _lower._y - margin) return false;
+  if (y > _upper._y + margin) return false;
+
+  if (z < _lower._z - margin) return false;
+  if (z > _upper._z + margin) return false;
+
   return true;
 }
 
+bool Box::contains(const Vector3D& point) const {
+  return contains(point._x, point._y, point._z);
+}
+
 bool Box::contains(const MutableVector3D& point) const {
-  const static double margin = 1e-3;
-  if (point._x < _lower._x - margin) return false;
-  if (point._x > _upper._x + margin) return false;
-
-  if (point._y < _lower._y - margin) return false;
-  if (point._y > _upper._y + margin) return false;
-
-  if (point._z < _lower._z - margin) return false;
-  if (point._z > _upper._z + margin) return false;
-
-  return true;
+  return contains(point._x, point._y, point._z);
 }
 
 Vector3D Box::intersectionWithRay(const Vector3D& origin,

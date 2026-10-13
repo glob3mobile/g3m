@@ -23,6 +23,8 @@ class Ray {
 private:
   mutable Mesh* _mesh;
 
+  Ray(const Ray& that);
+
 public:
   const Vector3D _origin;
   const Vector3D _direction;

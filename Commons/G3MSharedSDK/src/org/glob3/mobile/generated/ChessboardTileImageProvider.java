@@ -27,6 +27,23 @@ public class ChessboardTileImageProvider extends TileImageProvider
 
   private IImage _image;
 
+
+  // every input that changes the pixels, so two chessboards with different styles don't share a texture
+  private String getImageID()
+  {
+    IStringBuilder isb = IStringBuilder.newStringBuilder();
+    isb.addString("ChessboardTileImageProvider/");
+    isb.addString(_backgroundColor.id());
+    isb.addString("/");
+    isb.addString(_boxColor.id());
+    isb.addString("/");
+    isb.addInt(_splits);
+    final String imageID = isb.getString();
+    if (isb != null)
+       isb.dispose();
+    return imageID;
+  }
+
   public void dispose()
   {
     if (_image != null)
@@ -84,7 +101,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
     else
     {
       IImage image = _image.shallowCopy();
-      listener.imageCreated(tile._id, image, "ChessboardTileImageProvider_image", contribution);
+      listener.imageCreated(tile._id, image, getImageID(), contribution);
       if (deleteListener)
       {
         if (listener != null)
@@ -102,7 +119,7 @@ public class ChessboardTileImageProvider extends TileImageProvider
   {
     _image = image.shallowCopy();
   
-    listener.imageCreated(tile._id, image, "ChessboardTileImageProvider_image", TileImageContribution.fullCoverageOpaque());
+    listener.imageCreated(tile._id, image, getImageID(), TileImageContribution.fullCoverageOpaque());
   
     if (deleteListener)
     {

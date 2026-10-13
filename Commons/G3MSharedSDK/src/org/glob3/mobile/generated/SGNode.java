@@ -20,6 +20,8 @@ package org.glob3.mobile.generated;
 //class G3MContext;
 //class G3MRenderContext;
 //class GLState;
+//class MutableMatrix44D;
+//class MutableVector3D;
 
 
 public class SGNode
@@ -127,6 +129,16 @@ public class SGNode
   public GLState createState(G3MRenderContext rc, GLState parentState)
   {
     return parentState;
+  }
+
+  /** grows lower/upper to hold this node's vertices and its children's, in the shape's model space; transform: from this node to model space */
+  public void addToModelBounds(MutableMatrix44D transform, MutableVector3D lower, MutableVector3D upper)
+  {
+    final int childrenCount = _children.size();
+    for (int i = 0; i < childrenCount; i++)
+    {
+      _children.get(i).addToModelBounds(transform, lower, upper);
+    }
   }
 
   public final int getChildrenCount()

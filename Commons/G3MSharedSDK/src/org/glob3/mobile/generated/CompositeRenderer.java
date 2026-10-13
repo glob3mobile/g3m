@@ -44,6 +44,9 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     return _info;
   }
 
+  // rendererID of an info change that comes from no child renderer
+  public static final int NO_RENDERER_ID = -1;
+
   public CompositeRenderer()
   {
      _context = null;
@@ -82,6 +85,23 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
   public final void setEnable(boolean enable)
   {
     _enable = enable;
+  }
+
+  public final boolean isRendering()
+  {
+    if (!_enable)
+    {
+      return false;
+    }
+  
+    for (int i = 0; i < _renderersSize; i++)
+    {
+      if (_renderers.get(i).getRenderer().isRendering())
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   public final void initialize(G3MContext context)
@@ -144,7 +164,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
     for (int i = 0; i < _renderersSize; i++)
     {
       Renderer renderer = _renderers.get(i).getRenderer();
-      if (renderer.isEnable())
+      if (renderer.isRendering())
       {
         renderer.render(rc, glState);
       }
@@ -335,13 +355,13 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
   
     if(_changedInfoListener != null)
     {
-      _changedInfoListener.changedRendererInfo(-1, getInfo());
+      _changedInfoListener.changedRendererInfo(NO_RENDERER_ID, getInfo());
     }
   }
 
   public final void changedRendererInfo(int rendererID, java.util.ArrayList<Info> info)
   {
-    if (rendererID >= 0)
+    if (rendererID != NO_RENDERER_ID)
     {
       if (rendererID < _renderersSize)
       {
@@ -349,13 +369,13 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
       }
       else
       {
-        ILogger.instance().logWarning("Child Render not found: %d", rendererID);
+        ILogger.instance().logWarning("Child Render not found: %ld", rendererID);
       }
     }
   
     if (_changedInfoListener != null)
     {
-      _changedInfoListener.changedRendererInfo(-1, getInfo());
+      _changedInfoListener.changedRendererInfo(NO_RENDERER_ID, getInfo());
     }
   }
 

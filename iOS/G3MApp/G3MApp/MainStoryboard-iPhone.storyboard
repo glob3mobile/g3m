@@ -18,144 +18,16 @@
                     <view key="view" contentMode="scaleToFill" id="o4B-zM-MWe" customClass="G3MWidget_iOS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RJB-g1-FpQ">
-                                <rect key="frame" x="194" y="52" width="200" height="48"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" backgroundImage="selector-background.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="Ghe-vX-Xwj" kind="modal" identifier="changeDemo" id="mkb-UY-jP3"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDA-WF-gq2">
-                                <rect key="frame" x="194" y="794" width="200" height="48"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" backgroundImage="selector-background.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="wyi-Eg-2ji" kind="modal" identifier="changeOption" id="J70-iB-RIg"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="s6W-v9-H5m" firstAttribute="top" secondItem="UDA-WF-gq2" secondAttribute="bottom" constant="20" id="3Dg-TZ-yVS"/>
-                            <constraint firstItem="RJB-g1-FpQ" firstAttribute="top" secondItem="NPM-I3-bQK" secondAttribute="bottom" constant="8" id="H0w-ma-Tro"/>
-                            <constraint firstAttribute="trailing" secondItem="RJB-g1-FpQ" secondAttribute="trailing" constant="20" id="qVr-Vj-bWu"/>
-                            <constraint firstAttribute="trailing" secondItem="UDA-WF-gq2" secondAttribute="trailing" constant="20" id="qwI-Ho-iI2"/>
-                        </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
-                        <outlet property="demoSelector" destination="RJB-g1-FpQ" id="gsZ-AU-tzW"/>
                         <outlet property="g3mWidget" destination="o4B-zM-MWe" id="QSP-5Q-2w4"/>
-                        <outlet property="optionSelector" destination="UDA-WF-gq2" id="UBK-G6-bqO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BsH-9n-GWy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-624" y="-452.47376311844084"/>
         </scene>
-        <!--Select Demo Scene View Controller-->
-        <scene sceneID="HAZ-E3-tHq">
-            <objects>
-                <tableViewController id="Ghe-vX-Xwj" customClass="G3MSelectDemoSceneViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Ta9-3r-cQ1">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="q2D-I8-buu">
-                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="q2D-I8-buu" id="7eK-q6-UJa">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5R-pj-xNW">
-                                            <rect key="frame" x="5" y="7" width="404" height="33"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <state key="normal" title="                                   ">
-                                                <color key="titleColor" red="0.3333333432674408" green="0.3333333432674408" blue="0.3333333432674408" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="changeDemo:" destination="Ghe-vX-Xwj" eventType="touchUpInside" id="bZN-3E-hj8"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="Z5R-pj-xNW" firstAttribute="top" secondItem="7eK-q6-UJa" secondAttribute="top" constant="7" id="Io6-Yu-frw"/>
-                                        <constraint firstItem="Z5R-pj-xNW" firstAttribute="leading" secondItem="7eK-q6-UJa" secondAttribute="leading" constant="5" id="JZM-4G-kbO"/>
-                                        <constraint firstItem="Z5R-pj-xNW" firstAttribute="centerX" secondItem="7eK-q6-UJa" secondAttribute="centerX" id="K7g-VO-Kpe"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <sections/>
-                        <connections>
-                            <outlet property="dataSource" destination="Ghe-vX-Xwj" id="50t-BB-Gxf"/>
-                            <outlet property="delegate" destination="Ghe-vX-Xwj" id="v98-JE-CEI"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ouq-Ka-sFb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="219.19999999999999" y="-755.62218890554732"/>
-        </scene>
-        <!--Select Option View Controller-->
-        <scene sceneID="bnX-kG-0q5">
-            <objects>
-                <tableViewController id="wyi-Eg-2ji" customClass="G3MSelectOptionViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="wls-8T-zua">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="JAy-uy-TUw">
-                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JAy-uy-TUw" id="HIf-lj-tMN">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tPD-Gf-7JA">
-                                            <rect key="frame" x="5" y="7" width="404" height="33"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <state key="normal" title="                               ">
-                                                <color key="titleColor" red="0.3333333432674408" green="0.3333333432674408" blue="0.3333333432674408" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="changeOption:" destination="wyi-Eg-2ji" eventType="touchUpInside" id="L3d-yE-RCp"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="tPD-Gf-7JA" firstAttribute="centerX" secondItem="HIf-lj-tMN" secondAttribute="centerX" id="5ly-d7-XMO"/>
-                                        <constraint firstItem="tPD-Gf-7JA" firstAttribute="top" secondItem="HIf-lj-tMN" secondAttribute="top" constant="7" id="Wfr-JQ-iYb"/>
-                                        <constraint firstItem="tPD-Gf-7JA" firstAttribute="leading" secondItem="HIf-lj-tMN" secondAttribute="leading" constant="5" id="cGc-py-vzT"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="wyi-Eg-2ji" id="3Lm-SM-MYH"/>
-                            <outlet property="delegate" destination="wyi-Eg-2ji" id="gHL-1b-670"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7zg-GV-8RV" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="219.19999999999999" y="-150.22488755622189"/>
-        </scene>
     </scenes>
-    <resources>
-        <image name="selector-background.png" width="200" height="48"/>
-    </resources>
 </document>

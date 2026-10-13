@@ -9,6 +9,8 @@
 #define G3MiOSSDK_NativeGL_iOS
 
 #include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#include <string.h>
 
 #include "G3M/INativeGL.hpp"
 #include "G3M/GPUProgram.hpp"
@@ -156,14 +158,12 @@ public:
     }
   }
 
-  bool deleteTexture(const IGLTextureID* texture) const {
+  void deleteTexture(const IGLTextureID* texture) const {
     const unsigned int textures[] = {
       ((GLTextureID_iOS*) texture)->getGLTextureID()
     };
 
     glDeleteTextures(1, textures);
-
-    return false;
   }
 
   void enableVertexAttribArray(int location) const {
@@ -198,6 +198,22 @@ public:
                      int par,
                      int v) const {
     glTexParameteri(target, par, v);
+  }
+
+  float getMaxTextureMaxAnisotropy() const {
+    const char* extensions = (const char*) glGetString(GL_EXTENSIONS);
+    if ((extensions == NULL) ||
+        (strstr(extensions, "GL_EXT_texture_filter_anisotropic") == NULL)) {
+      return 0;
+    }
+    GLfloat maxAnisotropy = 0;
+    glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+    return maxAnisotropy;
+  }
+
+  void setTextureMaxAnisotropy(int target,
+                               float maxAnisotropy) const {
+    glTexParameterf(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
   }
 
   void texImage2D(const IImage* image,
@@ -414,18 +430,9 @@ public:
     return glCreateProgram();
   }
 
-  bool deleteProgram(int program) const {
+  void deleteProgram(int program) const {
     //ILogger::instance()->logInfo("Deleting program id = %d", program);
     glDeleteProgram(program);
-
-    if (glIsProgram(program) == GL_FALSE) {
-      return true;
-    }
-    else {
-      int markedToBeDeleted;
-      glGetProgramiv(program, GL_DELETE_STATUS, &markedToBeDeleted);
-      return (markedToBeDeleted == GL_TRUE);
-    }
   }
 
   void attachShader(int program, int shader) const {
@@ -450,11 +457,8 @@ public:
     return status;
   }
 
-  bool deleteShader(int shader) const {
+  void deleteShader(int shader) const {
     glDeleteShader(shader);
-    int ds;
-    glGetShaderiv(shader, GL_DELETE_STATUS, &ds);
-    return (ds == GL_TRUE);
   }
 
   void logShaderInfoLog(ILogger* logger, int shader) const {
@@ -463,7 +467,7 @@ public:
     if (logLength > 0) {
       GLchar* log = (GLchar* ) malloc(logLength);
       glGetShaderInfoLog(shader, logLength, &logLength, log);
-      logger->logInfo("Shader Info Log: %s", log);
+      logger->logError("Shader Info Log: %s", log);
       free(log);
     }
   }
@@ -481,7 +485,7 @@ public:
     if (logLength > 0) {
       GLchar* log = (GLchar* ) malloc(logLength);
       glGetProgramInfoLog(program, logLength, &logLength, log);
-      logger->logInfo("Program Info Log: %s", log);
+      logger->logError("Program Info Log: %s", log);
       free(log);
     }
   }
@@ -586,8 +590,6 @@ public:
   int getMaxTextureSize() const {
     GLint maxTextureSize = 0;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
-
-    NSLog(@"GL_MAX_TEXTURE_SIZE=%i", maxTextureSize);
     return maxTextureSize;
   }
 

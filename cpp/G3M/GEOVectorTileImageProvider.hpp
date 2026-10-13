@@ -26,19 +26,20 @@ public:
   private:
     const TileImageContribution* _contribution;
     const std::string            _tileID;
+    const std::string            _imageID;
 
     TileImageListener* _listener;
     bool               _deleteListener;
 
-    const std::string getImageID(const std::string& tileID) const;
-
   public:
     GEORasterizerImageListener(const TileImageContribution* contribution,
                                const std::string& tileID,
+                               const std::string& imageID,
                                TileImageListener* listener,
                                bool deleteListener) :
     _contribution(contribution),
     _tileID(tileID),
+    _imageID(imageID),
     _listener(listener),
     _deleteListener(deleteListener)
     {
@@ -135,6 +136,8 @@ private:
 #endif
 
   std::map<const std::string, GEORasterizerFrameTask*> _rasterizers;
+
+  const std::string createImageID(const std::string& tileID) const;
 
 public:
 

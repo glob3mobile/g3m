@@ -10,10 +10,30 @@
 
 #include "G3MDemoScene.hpp"
 
+class Layer;
 class LayerSet;
+class LayerCondition;
+class Sector;
+class WMSFeatureInfoListener;
 
 class G3MRasterLayersDemoScene : public G3MDemoScene {
 private:
+  WMSFeatureInfoListener* _featureInfoListener;
+  size_t                  _anisotropyGroupIndex;
+  size_t                  _atmosphereGroupIndex;
+  size_t                  _lodGroupIndex;
+
+  Layer* createWMSLayer(const std::string& title,
+                        const std::string& mapLayer,
+                        const std::string& serverURL,
+                        const Sector& dataSector,
+                        const std::string& format,
+                        const bool isTransparent,
+                        const LayerCondition* condition,
+                        const float transparency,
+                        const bool mercator,
+                        const std::string& attribution);
+
   void createLayerSet(LayerSet* layerSet);
 
 protected:
@@ -22,29 +42,55 @@ protected:
   void rawSelectOption(const std::string& option,
                        int optionIndex);
 
+  void rawSelectGroupOption(size_t groupIndex,
+                            const std::string& option,
+                            int optionIndex);
+
 public:
+  static Layer* createMercatorLayer(const std::string& title,
+                                    const std::string& urlTemplate,
+                                    const int maxLevel,
+                                    const bool isTransparent,
+                                    const std::string& attribution);
+
   G3MRasterLayersDemoScene(G3MDemoModel* model) :
-  G3MDemoScene(model, "Raster Layers", "", 0)
+  G3MDemoScene(model, "Raster Layers", "", 0),
+  _featureInfoListener(NULL)
   {
-    _options.push_back("Open Street Map");
+    addOption("Open Street Map");
+    addOption("Sentinel-2 cloudless");
+    addOption("Sentinel-2 cloudless + labels");
+    addOption("Blue Marble (EOX)");
+    addOption("Black Marble (EOX)");
+    addOption("Terrain Light (EOX)");
+    addOption("OpenTopoMap");
+    addOption("ESRI World Imagery");
+    addOption("Nasa Blue Marble (WMS)");
+    addOption("OpenStreetMap (WMS)");
+    addOption("Spain PNOA orthoimage (WMS)");
+    addOption("Spain Catastro over PNOA (WMS)");
+    addOption("Chessboard");
+    addOption("Chessboard + Debug tiles");
+    addOption("Open Street Map + Debug tiles");
 
-    _options.push_back("MapQuest OSM");
-    _options.push_back("MapQuest Aerial");
+    _anisotropyGroupIndex = addOptionGroup("Anisotropic filtering", "<select filtering>", 1);
+    addOption(_anisotropyGroupIndex, "Anisotropic off");
+    addOption(_anisotropyGroupIndex, "Anisotropic 8x");
+    addOption(_anisotropyGroupIndex, "Anisotropic 16x");
 
-    _options.push_back("MapBox OSM");
-    _options.push_back("MapBox Terrain");
-    _options.push_back("MapBox Aerial");
-    _options.push_back("CartoDB Meteorites");
-    _options.push_back("Nasa Blue Marble (WMS)");
+    _atmosphereGroupIndex = addOptionGroup("Atmosphere", "<select atmosphere>", 0);
+    addOption(_atmosphereGroupIndex, "Atmosphere & haze");
+    addOption(_atmosphereGroupIndex, "Atmosphere");
+    addOption(_atmosphereGroupIndex, "No atmosphere");
 
-    // _options.push_back("ESRI ArcGis Online");
-
-    _options.push_back("Bing Aerial");
-    _options.push_back("Bing Aerial with Labels");
-
-    _options.push_back("Uruguay (WMS)");
+    _lodGroupIndex = addOptionGroup("Tile LOD", "<select LOD>", 0);
+    addOption(_lodGroupIndex, "LOD: corners");
+    addOption(_lodGroupIndex, "LOD: grid");
+    addOption(_lodGroupIndex, "LOD: grid x1.15");
+    addOption(_lodGroupIndex, "LOD: grid x1.2");
+    addOption(_lodGroupIndex, "LOD: grid x1.3");
   }
-  
+
 };
 
 #endif

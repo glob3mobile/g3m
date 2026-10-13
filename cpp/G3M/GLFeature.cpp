@@ -9,7 +9,9 @@
 #include "GLFeature.hpp"
 
 #include "Camera.hpp"
+#include "Color.hpp"
 #include "Vector2F.hpp"
+#include "Vector3F.hpp"
 #include "ILogger.hpp"
 #include "GPUAttributeValueVec2Float.hpp"
 #include "GPUAttributeValueVec3Float.hpp"
@@ -51,26 +53,114 @@ void ViewportExtentGLFeature::changeExtent(int viewportWidth,
   _extent->changeValue(viewportWidth, viewportHeight);
 }
 
-CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam):
-GLFeature(NO_GROUP, GLF_CAMERA_POSITION) {
+RibbonWidthGLFeature::RibbonWidthGLFeature(float widthInMeters,
+                                           float minWidthInPixels,
+                                           float maxWidthInPixels) :
+GLFeature(NO_GROUP, GLF_RIBBON_WIDTH)
+{
+  _width = new GPUUniformValueVec3FloatMutable(widthInMeters,
+                                               minWidthInPixels,
+                                               maxWidthInPixels);
+
+  _values->addUniformValue(RIBBON_WIDTH,
+                           _width,
+                           false);
+}
+
+void RibbonWidthGLFeature::changeWidth(float widthInMeters,
+                                       float minWidthInPixels,
+                                       float maxWidthInPixels) {
+  _width->changeValue(widthInMeters, minWidthInPixels, maxWidthInPixels);
+}
+
+RibbonSideGLFeature::RibbonSideGLFeature(const IFloatBuffer* sides) :
+GLFeature(NO_GROUP, GLF_RIBBON_SIDE)
+{
+  _values->addAttributeValue(RIBBON_SIDE,
+                             new GPUAttributeValueVec3Float(sides, 3, 0, 0, false),
+                             false);
+}
+
+CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam,
+                                                 bool groundHazePass,
+                                                 const Color& spaceColor,
+                                                 const Color& horizonColor,
+                                                 const Vector3F& skyRayleighScattering):
+GLFeature(NO_GROUP, GLF_CAMERA_POSITION),
+_groundHazePass(groundHazePass) {
   const Vector3D p = cam->getCartesianPosition();
   _camPos = new GPUUniformValueVec3FloatMutable((float) p._x,
                                                 (float) p._y,
                                                 (float) p._z);
   _values->addUniformValue(CAMERA_POSITION, _camPos, false);
+  _values->addUniformValue(GROUND_HAZE_PASS,
+                           new GPUUniformValueFloat(groundHazePass ? 1.0f : 0.0f),
+                           false);
+  _spaceColor = new GPUUniformValueVec3FloatMutable(spaceColor._red,
+                                                    spaceColor._green,
+                                                    spaceColor._blue);
+  _values->addUniformValue(SPACE_COLOR, _spaceColor, false);
+  _horizonColor = new GPUUniformValueVec3FloatMutable(horizonColor._red,
+                                                      horizonColor._green,
+                                                      horizonColor._blue);
+  _values->addUniformValue(HORIZON_COLOR, _horizonColor, false);
+  _skyRayleighScattering = new GPUUniformValueVec3FloatMutable(skyRayleighScattering._x,
+                                                               skyRayleighScattering._y,
+                                                               skyRayleighScattering._z);
+  _values->addUniformValue(SKY_RAYLEIGH_SCATTERING, _skyRayleighScattering, false);
 }
 
-void CameraPositionGLFeature::update(const Camera* cam) {
+void CameraPositionGLFeature::changeAtmosphereColors(const Color& horizonColor,
+                                                     const Vector3F& skyRayleighScattering) {
+  _horizonColor->changeValue(horizonColor._red,
+                             horizonColor._green,
+                             horizonColor._blue);
+  _skyRayleighScattering->changeValue(skyRayleighScattering._x,
+                                      skyRayleighScattering._y,
+                                      skyRayleighScattering._z);
+}
+
+void CameraPositionGLFeature::update(const Camera* cam,
+                                     const Color& spaceColor) {
   const Vector3D p = cam->getCartesianPosition();
   _camPos->changeValue((float) p._x,
                        (float) p._y,
                        (float) p._z);
+  _spaceColor->changeValue(spaceColor._red,
+                           spaceColor._green,
+                           spaceColor._blue);
+}
+
+StarsGLFeature::StarsGLFeature(float fullStarMagnitude,
+                               float starSizeExponent) :
+GLFeature(NO_GROUP, GLF_STARS)
+{
+  _fullStarMagnitude = new GPUUniformValueFloatMutable(fullStarMagnitude);
+  _values->addUniformValue(FULL_STAR_MAGNITUDE, _fullStarMagnitude, false);
+  _values->addUniformValue(STAR_SIZE_EXPONENT, new GPUUniformValueFloat(starSizeExponent), false);
+}
+
+void StarsGLFeature::changeFullStarMagnitude(float fullStarMagnitude) {
+  _fullStarMagnitude->changeValue(fullStarMagnitude);
+}
+
+ColorGradeGLFeature::ColorGradeGLFeature(const Matrix44D* colorMatrix) :
+GLFeature(NO_GROUP, GLF_COLOR_GRADE),
+_colorMatrixHolder(new Matrix44DHolder(colorMatrix))
+{
+  _values->addUniformValue(COLOR_MATRIX, new GPUUniformValueMatrix4(_colorMatrixHolder), false);
+}
+
+void ColorGradeGLFeature::changeColorMatrix(const Matrix44D* colorMatrix) {
+  _colorMatrixHolder->setMatrix(colorMatrix);
 }
 
 BillboardGLFeature::BillboardGLFeature(float billboardWidth,
                                        float billboardHeight,
-                                       float anchorU, float anchorV) :
-GLFeature(NO_GROUP, GLF_BILLBOARD)
+                                       float anchorU, float anchorV,
+                                       bool premultipliedAlpha) :
+GLFeature(NO_GROUP, GLF_BILLBOARD),
+_premultipliedAlpha(premultipliedAlpha)
 {
   
   _anchor = new GPUUniformValueVec2FloatMutable(anchorU, anchorV);
@@ -86,6 +176,11 @@ GLFeature(NO_GROUP, GLF_BILLBOARD)
 
   _values->addUniformValue(BILLBOARD_POSITION,
                            new GPUUniformValueVec4Float(0, 0, 0, 1),
+                           false);
+
+  _colorFactor = new GPUUniformValueVec4FloatMutable(1, 1, 1, 1);
+  _values->addUniformValue(BILLBOARD_COLOR_FACTOR,
+                           _colorFactor,
                            false);
 }
 

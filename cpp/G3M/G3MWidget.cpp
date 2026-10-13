@@ -23,6 +23,7 @@
 #include "GLConstants.hpp"
 #include "PeriodicalTask.hpp"
 #include "CameraGoToPositionEffect.hpp"
+#include "CameraPointOfViewEffect.hpp"
 #include "CameraRenderer.hpp"
 #include "IStorage.hpp"
 #include "OrderedRenderable.hpp"
@@ -31,6 +32,7 @@
 #include "TouchEvent.hpp"
 #include "GPUProgramManager.hpp"
 #include "GLGlobalState.hpp"
+#include "GTask.hpp"
 #include "ICameraActivityListener.hpp"
 #include "SceneLighting.hpp"
 #include "PlanetRenderer.hpp"
@@ -45,6 +47,7 @@
 #include "GLState.hpp"
 #include "FrustumPolicy.hpp"
 #include "NearFrustumRenderer.hpp"
+#include "CompositeRenderer.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -118,6 +121,7 @@ _height(1),
 _frustumPolicy(frustumPolicy),
 _currentCamera(new Camera(1, frustumPolicy->copy())),
 _nextCamera(new Camera(2, frustumPolicy->copy())),
+_lastCopiedNextCameraTimestamp(-1),
 _backgroundColor( new Color(backgroundColor) ),
 _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
@@ -194,7 +198,7 @@ _previousTouchEvent(NULL)
   for (int i = 0; i < periodicalTasks.size(); i++) {
     addPeriodicalTask(periodicalTasks[i]);
   }
-  _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)this, -1);
+  _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)this, CompositeRenderer::NO_RENDERER_ID);
 
 
   _renderContext = new G3MRenderContext(_frameTasksExecutor,
@@ -397,6 +401,9 @@ bool G3MWidget::isDuplicatedTouchEvent(const TouchEvent* touchEvent,
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
+  if (isDuplicatedTouchEvent(touchEvent, _previousTouchEvent)) {
+    return;
+  }
 
   G3MEventContext ec(IFactory::instance(),
                      IStringUtils::instance(),
@@ -411,13 +418,6 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                      _surfaceElevationProvider,
                      _viewMode,
                      getCurrentCamera());
-
-  if (_previousTouchEvent != NULL) {
-    if ( isDuplicatedTouchEvent(touchEvent, _previousTouchEvent) ) {
-      //ILogger::instance()->logInfo("** Discarded duplicated event %s", touchEvent->description().c_str());
-      return;
-    }
-  }
 
   // notify the original event
   notifyTouchEvent(ec, touchEvent);
@@ -575,7 +575,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 
       _sceneLighting->modifyGLState(_rootState, _renderContext);  //Applying ilumination to rootState
 
-      if (_mainRenderer->isEnable()) {
+      if (_mainRenderer->isRendering()) {
         _mainRenderer->render(_renderContext, _rootState);
       }
 
@@ -608,7 +608,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
 
   if (renderStateType == RENDER_READY) {
     if (_nearFrustumRenderer != NULL) {
-      if (_nearFrustumRenderer->isEnable()) {
+      if (_nearFrustumRenderer->isRendering()) {
         _nearFrustumRenderer->render(_currentCamera->getFrustumData(),
                                      this,
                                      _renderContext,
@@ -617,7 +617,7 @@ void G3MWidget::rawRender(const RenderState_Type renderStateType) {
     }
 
     if (_hudRenderer != NULL) {
-      if (_hudRenderer->isEnable()) {
+      if (_hudRenderer->isRendering()) {
         _hudRenderer->render(_renderContext, _rootState);
       }
     }
@@ -774,7 +774,12 @@ void G3MWidget::render(int width, int height) {
   }
   _planet->applyCameraConstrains(_currentCamera, _nextCamera);
 
-  _currentCamera->copyFrom(*_nextCamera, false);
+  // the near-frustum renderer bumps _currentCamera's own timestamp every frame, so it can't be compared with _nextCamera's
+  const long long nextCameraTimestamp = _nextCamera->getTimestamp();
+  if (nextCameraTimestamp != _lastCopiedNextCameraTimestamp) {
+    _currentCamera->copyFrom(*_nextCamera, true);
+    _lastCopiedNextCameraTimestamp = nextCameraTimestamp;
+  }
 
 #ifdef C_CODE
   delete _rendererState;
@@ -804,7 +809,7 @@ void G3MWidget::render(int width, int height) {
 
   //Removing unused programs
   if (_renderCounter % _nFramesBeetweenProgramsCleanUp == 0) {
-    _gpuProgramManager->removeUnused();
+    _gpuProgramManager->removeUnused(_gl);
   }
 
   const long long elapsedTimeMS = _timer->elapsedTimeInMilliseconds();
@@ -991,31 +996,7 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
     return;
   }
 
-  double finalLatInDegrees = toPosition._latitude._degrees;
-  double finalLonInDegrees = toPosition._longitude._degrees;
-
-  //Fixing final latitude
-  while (finalLatInDegrees > 90) {
-    finalLatInDegrees -= 180;
-  }
-  while (finalLatInDegrees < -90) {
-    finalLatInDegrees += 180;
-  }
-
-  //Fixing final longitude
-  while (finalLonInDegrees > 360) {
-    finalLonInDegrees -= 360;
-  }
-  while (finalLonInDegrees < 0) {
-    finalLonInDegrees += 360;
-  }
-  if (fabs(finalLonInDegrees - fromPosition._longitude._degrees) > 180) {
-    finalLonInDegrees -= 360;
-  }
-
-  const Geodetic3D finalToPosition = Geodetic3D::fromDegrees(finalLatInDegrees,
-                                                             finalLonInDegrees,
-                                                             toPosition._height);
+  const Geodetic3D finalToPosition = nearestEquivalentPosition(fromPosition, toPosition);
 
   cancelCameraAnimation();
 
@@ -1025,6 +1006,60 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
                                                               fromPitch,    toPitch,
                                                               linearTiming,
                                                               linearHeight),
+                                 _nextCamera->getEffectTarget());
+}
+
+Geodetic3D G3MWidget::nearestEquivalentPosition(const Geodetic3D& from,
+                                                const Geodetic3D& to) const {
+  const double latInDegrees = to._latitude._degrees;
+  if ((latInDegrees < -90) || (latInDegrees > 90)) {
+    THROW_EXCEPTION("nearestEquivalentPosition: latitude must be in [-90, 90]");
+  }
+
+  double lonInDegrees = to._longitude._degrees;
+
+  while (lonInDegrees > 360) {
+    lonInDegrees -= 360;
+  }
+  while (lonInDegrees < 0) {
+    lonInDegrees += 360;
+  }
+  if (fabs(lonInDegrees - from._longitude._degrees) > 180) {
+    lonInDegrees -= 360;
+  }
+
+  return Geodetic3D::fromDegrees(latInDegrees, lonInDegrees, to._height);
+}
+
+void G3MWidget::setCameraPointOfView(const Geodetic3D& target,
+                                     const double distance,
+                                     const Angle& azimuth,
+                                     const Angle& altitude) {
+  _nextCamera->setPointOfView(target, distance, azimuth, altitude);
+}
+
+void G3MWidget::setAnimatedCameraPointOfView(const TimeInterval& interval,
+                                             const Geodetic3D& fromTarget,
+                                             const Geodetic3D& toTarget,
+                                             const double fromDistance,
+                                             const double toDistance,
+                                             const Angle& fromAzimuth,
+                                             const Angle& toAzimuth,
+                                             const Angle& fromAltitude,
+                                             const Angle& toAltitude,
+                                             const bool linearTiming,
+                                             const bool linearDistance) {
+  const Geodetic3D finalToTarget = nearestEquivalentPosition(fromTarget, toTarget);
+
+  cancelCameraAnimation();
+
+  _effectsScheduler->startEffect(new CameraPointOfViewEffect(interval,
+                                                             fromTarget,   finalToTarget,
+                                                             fromDistance, toDistance,
+                                                             fromAzimuth,  toAzimuth,
+                                                             fromAltitude, toAltitude,
+                                                             linearTiming,
+                                                             linearDistance),
                                  _nextCamera->getEffectTarget());
 }
 
@@ -1045,6 +1080,29 @@ void G3MWidget::setBackgroundColor(const Color& backgroundColor) {
 
 Color G3MWidget::getBackgroundColor() const {
   return *_backgroundColor;
+}
+
+class SetTextureMaxAnisotropyTask : public GTask {
+private:
+  TexturesHandler* _texturesHandler;
+  const float      _maxAnisotropy;
+
+public:
+  SetTextureMaxAnisotropyTask(TexturesHandler* texturesHandler,
+                              float maxAnisotropy) :
+  _texturesHandler(texturesHandler),
+  _maxAnisotropy(maxAnisotropy)
+  {
+  }
+
+  void run(const G3MContext* context) {
+    _texturesHandler->setTextureMaxAnisotropy(_maxAnisotropy);
+  }
+};
+
+void G3MWidget::setTextureMaxAnisotropy(float maxAnisotropy) {
+  _context->getThreadUtils()->invokeInRendererThread(new SetTextureMaxAnisotropyTask(_texturesHandler, maxAnisotropy),
+                                                     true);
 }
 
 PlanetRenderer* G3MWidget::getPlanetRenderer() {

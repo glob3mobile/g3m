@@ -101,9 +101,12 @@ public class Main {
 
       final ArrayList<Shader> shaders = new ArrayList<>();
 
-      for (final File fileEntry : folder.listFiles()) {
+      final File[] fileEntries = folder.listFiles();
+      Arrays.sort(fileEntries);
+
+      for (final File fileEntry : fileEntries) {
          if (fileEntry.isDirectory()) {
-            getShadersInFolder(fileEntry);
+            shaders.addAll(getShadersInFolder(fileEntry));
          }
          else {
             String name = fileEntry.getName();

@@ -94,7 +94,7 @@ RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
 void ShapesRenderer::updateGLState(const Camera* camera) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), true);
+    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());
@@ -102,7 +102,7 @@ void ShapesRenderer::updateGLState(const Camera* camera) {
 
   f = (ModelViewGLFeature*) _glStateTransparent->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glStateTransparent->addGLFeature(new ModelViewGLFeature(camera), true);
+    _glStateTransparent->addGLFeature(new ModelViewGLFeature(camera), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());
@@ -209,9 +209,11 @@ std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Planet* 
   std::vector<ShapeDistance> shapeDistances;
   for (int n=0; n<_shapes.size(); n++) {
     Shape* shape = _shapes[n];
-    std::vector<double> distances = shape->intersectionsDistances(planet, origin, direction);
-    for (int i=0; i<distances.size(); i++) {
-      shapeDistances.push_back(ShapeDistance(distances[i], shape));
+    if (shape->isEnable()) {
+      std::vector<double> distances = shape->intersectionsDistances(planet, origin, direction);
+      for (int i=0; i<distances.size(); i++) {
+        shapeDistances.push_back(ShapeDistance(distances[i], shape));
+      }
     }
   }
 

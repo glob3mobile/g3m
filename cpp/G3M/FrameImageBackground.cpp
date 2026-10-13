@@ -10,7 +10,7 @@
 //#include "Vector2I.hpp"
 #include "IMathUtils.hpp"
 #include "ICanvas.hpp"
-#include "IStringUtils.hpp"
+#include "IStringBuilder.hpp"
 
 
 FrameImageBackground::FrameImageBackground(const float topFrameHeight,
@@ -78,14 +78,22 @@ const Vector2F FrameImageBackground::initializeCanvas(ICanvas* canvas,
   return contentPosition;
 }
 
+// IStringBuilder keeps every float digit; IStringUtils::toString(float) keeps only 6 on iOS
 const std::string FrameImageBackground::description() const {
-  const IStringUtils* su = IStringUtils::instance();
-  return ("Frame/"                               +
-          su->toString(_topFrameHeight)    + "/" +
-          su->toString(_bottomFrameHeight) + "/" +
-          su->toString(_leftFrameWidth)    + "/" +
-          su->toString(_rightFrameWidth)   + "/" +
-          _color.id());
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->addString("Frame/");
+  isb->addFloat(_topFrameHeight);
+  isb->addString("/");
+  isb->addFloat(_bottomFrameHeight);
+  isb->addString("/");
+  isb->addFloat(_leftFrameWidth);
+  isb->addString("/");
+  isb->addFloat(_rightFrameWidth);
+  isb->addString("/");
+  isb->addString(_color.id());
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }
 
 FrameImageBackground* FrameImageBackground::copy() const {

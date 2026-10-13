@@ -208,6 +208,23 @@ public:
                                  const bool linearTiming  = false,
                                  const bool linearHeight  = false);
 
+  void setCameraPointOfView(const Geodetic3D& target,
+                            const double distance,
+                            const Angle& azimuth,
+                            const Angle& altitude);
+
+  void setAnimatedCameraPointOfView(const TimeInterval& interval,
+                                    const Geodetic3D& fromTarget,
+                                    const Geodetic3D& toTarget,
+                                    const double fromDistance,
+                                    const double toDistance,
+                                    const Angle& fromAzimuth,
+                                    const Angle& toAzimuth,
+                                    const Angle& fromAltitude,
+                                    const Angle& toAltitude,
+                                    const bool linearTiming   = false,
+                                    const bool linearDistance = false);
+
   void cancelCameraAnimation();
 
   void cancelAllEffects();
@@ -226,6 +243,9 @@ public:
 
   void setBackgroundColor(const Color& backgroundColor);
   Color getBackgroundColor() const;
+
+  // 1 turns it off; it is applied in the renderer thread, to the textures already in the GPU too
+  void setTextureMaxAnisotropy(float maxAnisotropy);
 
   PlanetRenderer* getPlanetRenderer();
 
@@ -285,6 +305,7 @@ private:
   const FrustumPolicy* _frustumPolicy;
   Camera*              _currentCamera;
   Camera*              _nextCamera;
+  long long            _lastCopiedNextCameraTimestamp;
 
   TexturesHandler* _texturesHandler;
 
@@ -387,6 +408,9 @@ private:
 
   void rawRender(const RenderState_Type renderStateType);
   
+  Geodetic3D nearestEquivalentPosition(const Geodetic3D& from,
+                                       const Geodetic3D& to) const;
+
   void rawRenderMono(const RenderState_Type renderStateType);
   
   void rawRenderStereoParallelAxis(const RenderState_Type renderStateType);

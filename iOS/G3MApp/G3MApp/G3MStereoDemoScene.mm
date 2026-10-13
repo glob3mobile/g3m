@@ -10,7 +10,8 @@
 
 #include <G3M/G3MWidget.hpp>
 #include <G3M/LayerSet.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
+#include <G3M/TimeInterval.hpp>
 #include <G3M/Geodetic3D.hpp>
 
 #include "G3MDemoModel.hpp"
@@ -25,9 +26,7 @@ void G3MStereoDemoScene::deactivate(const G3MContext* context) {
 void G3MStereoDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model = getModel();
 
-  BingMapsLayer* layer = new BingMapsLayer(BingMapType::AerialWithLabels(),
-                                           "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                           TimeInterval::fromDays(30));
+  Layer* layer = model->createRasterLayer();
   model->getLayerSet()->addLayer(layer);
 
   G3MWidget* g3mWidget = model->getG3MWidget();

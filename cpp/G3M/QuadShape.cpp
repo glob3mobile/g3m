@@ -32,6 +32,7 @@ QuadShape::QuadShape(Geodetic3D* position,
                      bool withNormals) :
 AbstractMeshShape(position, altitudeMode),
 _textureURL(textureURL),
+_textureName(textureURL._path),
 _width(width),
 _height(height),
 _textureRequested(false),
@@ -48,11 +49,13 @@ _culledFace(GLCullFace::back())
 QuadShape::QuadShape(Geodetic3D* position,
                      AltitudeMode altitudeMode,
                      const IImage* textureImage,
+                     const std::string& textureName,
                      float width,
                      float height,
                      bool withNormals) :
 AbstractMeshShape(position, altitudeMode),
 _textureURL(URL("", false)),
+_textureName(textureName),
 _width(width),
 _height(height),
 _textureRequested(true),
@@ -75,6 +78,7 @@ QuadShape::QuadShape(Geodetic3D* position,
                      bool withNormals) :
 AbstractMeshShape(position, altitudeMode),
 _textureURL(URL("", false)),
+_textureName(""),
 _width(width),
 _height(height),
 _textureRequested(false),
@@ -116,7 +120,7 @@ const TextureIDReference* QuadShape::getTextureID(const G3MRenderContext* rc) {
 
   const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
                                                                                     GLFormat::rgba(),
-                                                                                    _textureURL._path,
+                                                                                    _textureName,
                                                                                     false,
                                                                                     GLTextureParameterValue::clampToEdge(),
                                                                                     GLTextureParameterValue::clampToEdge());
@@ -125,7 +129,7 @@ const TextureIDReference* QuadShape::getTextureID(const G3MRenderContext* rc) {
   _textureImage = NULL;
 
   if (texID == NULL) {
-    rc->getLogger()->logError("Can't load texture %s", _textureURL._path.c_str());
+    rc->getLogger()->logError("Can't load texture %s", _textureName.c_str());
   }
 
   return texID;

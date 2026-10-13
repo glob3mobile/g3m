@@ -9,6 +9,7 @@
 #define G3M_Mark
 
 #include <string>
+#include <vector>
 
 #include "Geodetic3D.hpp"
 #include "G3MContext.hpp"
@@ -24,6 +25,7 @@
 #include "PeriodicalTask.hpp"
 #include "AltitudeMode.hpp"
 #include "Vector2F.hpp"
+#include "MarkTransitionMode.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -33,10 +35,14 @@ class GLGlobalState;
 class GPUProgramState;
 class TextureIDReference;
 class EffectTarget;
-class IImageBuilder;
+class IImageFactory;
 class MarksRenderer;
-class MarkImageBuilderListener;
+class MarkImageFactoryListener;
 class TouchEvent;
+class ModelTransformGLFeature;
+class MarkOutfit;
+class MarkOutfitImage;
+class MarkZoomOutAndRemoveEffect;
 
 class MarkUserData {
 public:
@@ -48,63 +54,68 @@ public:
 class Mark : public SurfaceElevationListener {
 private:
 
-  IImageBuilder* _imageBuilder;
-  MarkImageBuilderListener* _imageBuilderListener;
+  std::vector<MarkOutfit*>      _outfits;
+  std::vector<MarkOutfitImage*> _outfitImages; // one per outfit: the image and texture of the outfits not on screen
+  size_t                        _outfitIndex;
+  std::vector<int>              _detailLevels; // one per outfit: the outfit's own, or by its order
 
-  /**
-   * The text the mark displays.
-   * Useless if the mark does not have label.
-   */
-  const std::string _label;
-  /**
-   * Flag to know if the label will be located under the icon (if TRUE) or on its right (if FALSE).
-   * Useless if the mark does not have label or icon.
-   * Default value: TRUE
-   */
-  const bool        _labelBottom;
-  /**
-   * The font size of the text.
-   * Useless if the mark does not have label.
-   * Default value: 20
-   */
-  const float       _labelFontSize;
+  double _priority; // NAND: none, the renderer's order decides
+  bool   _declutterHidden;
 
+  // removed from a decluttering renderer: gone for touches and room at once, it fades out only for the eye
+  bool _leavingRenderer;
+  bool _deleteWhenGone;
 
-  /**
-   * The color of the text.
-   * Useless if the mark does not have label.
-   * Default value: white
-   */
-#ifdef C_CODE
-  const Color*      _labelFontColor;
-#endif
-#ifdef JAVA_CODE
-  private Color     _labelFontColor;
-#endif
+  // its renderer was disabled: the mark fades out and waits, still in the renderer
+  bool _hiding;
 
-  /**
-   * The color of the text shadow.
-   * Useless if the mark does not have label.
-   * Default value: black
-   */
-#ifdef C_CODE
-  const Color*      _labelShadowColor;
-#endif
-#ifdef JAVA_CODE
-  private Color     _labelShadowColor;
-#endif
+  // the outfit the renderer plans (-1: none), and since when; it becomes the target once the plan holds for the delay
+  int       _plannedTarget;
+  long long _plannedSinceMS;
 
-  /**
-   * The number of pixels between the icon and the text.
-   * Useless if the mark does not have label or icon.
-   * Default value: 2
-   */
-  const int         _labelGapSize;
-  /**
-   * The URL to get the image file.
-   * Useless if the mark does not have icon.
-   */
-  const URL         _iconURL;
+  // the outfit on its way to the screen (-1: none); the one on screen goes away while the target comes in
+  int       _declutterTarget;
+  float     _presence; // how far the outfit on screen has come in: 0 gone, 1 complete
+  float     _transitionWidthScale;
+  float     _transitionHeightScale;
+  float     _transitionAlpha;
+  long long _lastTransitionMS;
+
+  // the outfit that was on screen before, drawn under the one coming in until it is gone (-1: none)
+  int                      _leavingOutfitIndex;
+  float                    _leavingPresence;
+  float                    _leavingWidthScale;
+  float                    _leavingHeightScale;
+  float                    _leavingAlpha;
+  GLState*                 _leavingGLState;
+  BillboardGLFeature*      _leavingBillboardGLF;
+  ModelTransformGLFeature* _leavingModelTransformGLF;
+
+  void startOutfitTransition(size_t outfitIndex);
+  void moveGLStateToLeaving();
+  void releaseLeavingOutfit();
+  void applyTransitionMode(MarkTransitionMode rendererMode);
+
+  static bool scalesWidth(MarkTransitionMode mode);
+  static bool scalesHeight(MarkTransitionMode mode);
+  static bool fades(MarkTransitionMode mode);
+  void drawLeavingOutfit(const G3MRenderContext* rc,
+                         const GLState* parentGLState);
+
+  // how high the camera is seen from the mark, above its horizon (NAND: unknown); the mark shrinks as it sinks
+  double _grazingAngle;
+  float  _horizonScale;
+  void updateHorizonScale(double radiansPerPixel);
+
+  void applyOutfitAnchor(const MarkOutfitImage* outfitImage);
+
+  bool _hasHint; // the last outfit is a hint: drawn when nothing else fits, not touchable
+
+  // the anchor the app set: outfits without their own anchor use it
+  float _appAnchorU;
+  float _appAnchorV;
+  void changeAnchor(float anchorU, float anchorV);
+
   /**
    * The point where the mark will be geo-located.
    */
@@ -160,10 +171,9 @@ private:
   float          _textureWidthScale;
   float          _textureHeightScale;
   bool           _textureSizeSetExternally;
-  bool           _textureScaleSetExternally;
+  float          _effectScale;   // owned by the zoom effects; the app owns _texture*Scale
   std::string    _imageID;
   
-  bool  _hasTCTransformations;
   float _translationTCX, _translationTCY;
   float _scalingTCX, _scalingTCY;
 
@@ -173,6 +183,10 @@ private:
   GLState* _glState;
   void createGLState(const Planet* planet,
                      IFloatBuffer* billboardTexCoords);
+
+  ModelTransformGLFeature* _modelTransformGLF;
+  bool                     _glPositionOutdated;
+  void updateGLPosition(const Planet* planet);
 
   SurfaceElevationProvider* _surfaceElevationProvider;
   double _currentSurfaceElevation;
@@ -184,7 +198,30 @@ private:
   
   void clearGLState();
 
+  void updateBillboard();
+
   MutableVector3D _markCameraVector;
+
+  bool isRenderableByDistance() const;
+
+  bool isOccludedByHorizon(const Planet* planet,
+                           const MutableVector3D& cameraPosition,
+                           double cameraHeight,
+                           const Vector3D* markPosition);
+
+  void ensureTexture(const G3MRenderContext* rc);
+
+  void ensureGLState(const Planet* planet,
+                     IFloatBuffer* billboardTexCoords,
+                     const GLState* parentGLState);
+
+  void startPendingEffects(const G3MRenderContext* rc,
+                           MarksRenderer* renderer);
+
+  void draw(const G3MRenderContext* rc,
+            GLState* glState);
+
+  void onTextureResolved(const IImage* image);
   
   float _anchorU;
   float _anchorV;
@@ -199,6 +236,7 @@ private:
   bool _zoomOutDisappears;
   bool _deleteMarkOnDisappears;
   bool _zoomOutDisappearsStarted;
+  MarkZoomOutAndRemoveEffect* _zoomOutEffect; // while it runs: whoever is deleted first unlinks the other
 
   EffectTarget* _effectTarget;
   EffectTarget* getEffectTarget();
@@ -207,84 +245,22 @@ private:
 public:
   
   
-  /**
-   * Creates a mark with icon and label
-   */
-  Mark(const std::string& label,
-       const URL&         iconURL,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       const bool         labelBottom=true,
-       const float        labelFontSize=20,
-       const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-       const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-       const int          labelGapSize=2,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a mark just with label, without icon
-   */
-  Mark(const std::string& label,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       const float        labelFontSize=20,
-       const Color*       labelFontColor=Color::newFromRGBA(1, 1, 1, 1),
-       const Color*       labelShadowColor=Color::newFromRGBA(0, 0, 0, 1),
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a mark just with icon, without label
-   */
-  Mark(const URL&         iconURL,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a mark whith a given pre-renderer IImage
-   */
-  Mark(const IImage*      image,
-       const std::string& imageID,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
-
-  /**
-   * Creates a mark whith a IImageBuilder, in future versions it'll be the only constructor
-   */
-  Mark(IImageBuilder*     imageBuilder,
-       const Geodetic3D&  position,
-       AltitudeMode       altitudeMode,
-       double             minDistanceToCamera=4.5e+06,
-       MarkUserData*      userData=NULL,
-       bool               autoDeleteUserData=true,
-       MarkTouchListener* listener=NULL,
-       bool               autoDeleteListener=false);
+  /** outfits: largest first, at least one; the mark keeps a copy of the vector and owns the outfits. MarkBuilder fills them */
+  Mark(const std::vector<MarkOutfit*>& outfits,
+       const Geodetic3D&               position,
+       AltitudeMode                    altitudeMode,
+       double                          minDistanceToCamera,
+       double                          maxDistanceToCamera,
+       MarkUserData*                   userData,
+       bool                            autoDeleteUserData,
+       MarkTouchListener*              listener,
+       bool                            autoDeleteListener,
+       bool                            zoomInAppears);
 
   ~Mark();
 
   bool isInitialized() const {
     return _initialized;
-  }
-
-  const std::string getLabel() const {
-    return _label;
   }
 
   const Geodetic3D getPosition() const {
@@ -300,14 +276,122 @@ public:
     return _renderedMark;
   }
 
-  void onTextureDownloadError();
-
-  void onTextureDownload(const IImage* image);
-
-  void onImageCreated(const IImage* image,
+  void onImageCreated(size_t outfitIndex,
+                      const IImage* image,
                       const std::string& imageName);
 
-  void onImageCreationError(const std::string& error);
+  void onImageCreationError(size_t outfitIndex,
+                            const std::string& error);
+
+  size_t getOutfitsCount() const {
+    return _outfits.size();
+  }
+
+  /** outfits with the same level are alternatives; a higher one shows more */
+  int getOutfitDetailLevel(size_t outfitIndex) const {
+    return _detailLevels[outfitIndex];
+  }
+
+  size_t getOutfitIndex() const {
+    return _outfitIndex;
+  }
+
+  /** the outfit drawn from now on; 0 is the largest */
+  void setOutfit(size_t outfitIndex);
+
+  /** the smallest outfit, after the others: a sign that there is more to see when zooming in; the mark owns it; only one */
+  void addHint(MarkOutfit* hint);
+
+  bool hasHint() const {
+    return _hasHint;
+  }
+
+  bool isShowingHint() const {
+    return _hasHint && (_outfitIndex == (_outfits.size() - 1));
+  }
+
+  /** starts creating the images of the outfits that do not have one yet */
+  void createPendingOutfitImages(const G3MContext* context);
+
+  /** an outfit's size on screen (with the app's scale), or zero while its image does not exist */
+  Vector2F getOutfitScreenSize(size_t outfitIndex) const;
+
+  /** an outfit's anchor in UV: its own, or the mark's when the outfit has none */
+  Vector2F getOutfitAnchor(size_t outfitIndex) const;
+
+  /** true when the camera can see the position (distance limits and horizon); keeps the mark-camera vector */
+  bool isVisibleFrom(const Planet* planet,
+                     const MutableVector3D& cameraPosition,
+                     double cameraHeight);
+
+  bool isDeclutterHidden() const {
+    return _declutterHidden;
+  }
+
+  /** the outfit a decluttering renderer plans, -1 when none fits; the mark goes there through stepDeclutterTransition once the plan holds */
+  void setDeclutterTarget(int outfitIndex) {
+    if (_leavingRenderer || _hiding) {
+      return;
+    }
+    if (outfitIndex != _plannedTarget) {
+      _plannedTarget  = outfitIndex;
+      _plannedSinceMS = -1;
+    }
+  }
+
+  /** the outfit the renderer planned, maybe still waiting for the delay */
+  int getDeclutterTarget() const {
+    return _plannedTarget;
+  }
+
+  /** a plan that holds for delayMS becomes the target; the outfit on screen goes away while the target comes in, both at once and in durationMS; reversible halfway */
+  void stepDeclutterTransition(long long nowMS,
+                               long long delayMS,
+                               long long durationMS,
+                               MarkTransitionMode mode);
+
+  /** back to the first outfit, on screen and complete, with no transition */
+  void resetDeclutter();
+
+  /** off screen until a decluttering renderer finds it room, so a new mark does not flash in before it is placed */
+  void hideUntilDecluttered();
+
+  /** a decluttering renderer removes the mark with its transition: from now on it takes no room and no touches; deleteMark: once gone */
+  void startLeavingRenderer(bool deleteMark);
+
+  bool isLeavingRenderer() const {
+    return _leavingRenderer;
+  }
+
+  /** a touch can reach it: ready, drawn in the last frame with its own outfit (not the hint), not leaving, with a size on screen */
+  bool isTouchable() const;
+
+  /** the leaving mark is off the screen: the renderer can let it go */
+  bool hasLeftRenderer() const;
+
+  /** fades out with its transition, at once, and stays in the renderer: for a renderer being disabled */
+  void startHiding();
+
+  /** comes back from startHiding: decluttered, it waits for the renderer to find it room; otherwise it fades in its current outfit at once */
+  void stopHiding(bool decluttered);
+
+  /** nothing of it is drawn: not its outfit, not one fading out */
+  bool isOffScreen() const;
+
+  bool deletesWhenGone() const {
+    return _deleteWhenGone;
+  }
+
+  /** the order among the marks that compete for space: the higher, the earlier */
+  void setPriority(double priority) {
+    _priority = priority;
+  }
+
+  bool hasPriority() const;
+
+  double getPriority() const {
+    return _priority;
+  }
 
   float getTextureWidth() const {
     return _textureWidth;
@@ -315,6 +399,15 @@ public:
 
   float getTextureHeight() const {
     return _textureHeight;
+  }
+
+  /** the size drawn on screen: the texture size times the app's and the effects' scales */
+  float getScreenWidth() const {
+    return _textureWidth * _textureWidthScale * _effectScale * _transitionWidthScale * _horizonScale;
+  }
+
+  float getScreenHeight() const {
+    return _textureHeight * _textureHeightScale * _effectScale * _transitionHeightScale * _horizonScale;
   }
 
   Vector2F getTextureExtent() const {
@@ -342,6 +435,7 @@ public:
 
   const Vector3D* getCartesianPosition(const Planet* planet);
 
+  /** horizonBandRadiansPerPixel: the camera's angle per screen pixel, so the mark shrinks while it sinks its own apparent height behind the horizon; 0: no band */
   void render(const G3MRenderContext* rc,
               MarksRenderer* renderer,
               const MutableVector3D& cameraPosition,
@@ -349,7 +443,8 @@ public:
               const GLState* parentGLState,
               const Planet* planet,
               GL* gl,
-              IFloatBuffer* billboardTexCoords);
+              IFloatBuffer* billboardTexCoords,
+              double horizonBandRadiansPerPixel);
 
   void elevationChanged(const Geodetic2D& position,
                         double rawElevation,            //Without considering vertical exaggeration
@@ -363,6 +458,9 @@ public:
   
   void setScreenSize(int width, int height);
   void setScreenSizeScale(float scaleWidth, float scaleHeight);
+
+  /** for the zoom effects only; the app scales with setScreenSizeScale */
+  void setEffectScale(float effectScale);
 
   void setTextureCoordinatesTransformation(const Vector2F& translation,
                                            const Vector2F& scaling);
@@ -397,66 +495,17 @@ public:
 
   void animatedRemove(bool deleteMark);
 
-};
-
-class TextureAtlasMarkAnimationTask: public PeriodicalTask{
-  
-  class TextureAtlasMarkAnimationGTask: public GTask{
-    Mark* _mark;
-
-    const int _cols;
-    const int _rows;
-    const int _nFrames;
-    const float _scaleX;
-    const float _scaleY;
-
-    int _currentFrame;
-    
-  public:
-    
-    ~TextureAtlasMarkAnimationGTask() {}
-    
-    TextureAtlasMarkAnimationGTask(Mark* mark,
-                                   int cols,
-                                   int rows,
-                                   int nFrames):
-    _mark(mark),
-    _cols(cols),
-    _rows(rows),
-    _nFrames(nFrames),
-    _scaleX(1.0f / cols),
-    _scaleY(1.0f / rows),
-    _currentFrame(0)
-    {
-      //    _mark->setOnScreenSize(Vector2F(100,100));
-    }
-    
-    
-    virtual void run(const G3MContext* context) {
-      const int row = _currentFrame / _cols;
-      const int col = _currentFrame % _cols;
-      
-      const float translationX = col * (1.0f / _cols);
-      const float translationY = row * (1.0f / _rows);
-
-      _mark->setTextureCoordinatesTransformation(translationX,
-                                                 translationY,
-                                                 _scaleX,
-                                                 _scaleY);
-      _currentFrame = (_currentFrame+1) % _nFrames;
-    }
-    
-  };
-  
-  
-public:
-  TextureAtlasMarkAnimationTask(Mark* mark, int nColumn, int nRows, int nFrames, const TimeInterval& frameTime):
-  PeriodicalTask(frameTime, new TextureAtlasMarkAnimationGTask(mark, nColumn, nRows, nFrames))
-  {
+  // true once the zoom-out effect owns the mark and will delete it on its own
+  bool isDisappearing() const {
+    return _zoomOutDisappearsStarted;
   }
+
+  void cancelEffects();
+
+  void forgetZoomOutEffect() {
+    _zoomOutEffect = NULL;
+  }
+
 };
-
-
-
 
 #endif

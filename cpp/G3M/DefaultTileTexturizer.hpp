@@ -13,14 +13,14 @@
 
 class LeveledTexturedMesh;
 class TextureIDReference;
-class IImageBuilder;
+class IImageFactory;
 class IImage;
 
 
 class DefaultTileTexturizer : public TileTexturizer {
 private:
 
-  IImageBuilder* _defaultBackgroundImageBuilder;
+  IImageFactory* _defaultBackgroundImageFactory;
   bool _defaultBackgroundImageLoaded;
 #ifdef C_CODE
   const IImage* _defaultBackgroundImage;
@@ -39,7 +39,7 @@ public:
   std::vector<std::string> _errors;
 
 
-  DefaultTileTexturizer(IImageBuilder* defaultBackgroundImageBuilder,
+  DefaultTileTexturizer(IImageFactory* defaultBackgroundImageFactory,
                         const bool verboseErrors);
 
   virtual ~DefaultTileTexturizer() {
@@ -78,8 +78,8 @@ public:
                            const Tile* tile,
                            LayerSet* layerSet);
 
-  const IImageBuilder* getDefaultBackgroundImageBuilder() const {
-    return _defaultBackgroundImageBuilder;
+  const IImageFactory* getDefaultBackgroundImageFactory() const {
+    return _defaultBackgroundImageFactory;
   }
 
   const IImage* getDefaultBackgroundImage() const {

@@ -233,6 +233,8 @@ public:
 
   void clearDataWithID(int id) const;
 
+  void clearDataWithIDInSubtree(int id) const;
+
   const TileTessellatorMeshData* getTileTessellatorMeshData() const;
 
   Mesh* getTessellatorMesh(const G3MRenderContext* rc,

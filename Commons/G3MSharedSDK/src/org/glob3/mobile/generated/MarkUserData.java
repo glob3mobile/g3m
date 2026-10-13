@@ -25,10 +25,14 @@ package org.glob3.mobile.generated;
 //class GPUProgramState;
 //class TextureIDReference;
 //class EffectTarget;
-//class IImageBuilder;
+//class IImageFactory;
 //class MarksRenderer;
-//class MarkImageBuilderListener;
+//class MarkImageFactoryListener;
 //class TouchEvent;
+//class ModelTransformGLFeature;
+//class MarkOutfit;
+//class MarkOutfitImage;
+//class MarkZoomOutAndRemoveEffect;
 
 public class MarkUserData
 {

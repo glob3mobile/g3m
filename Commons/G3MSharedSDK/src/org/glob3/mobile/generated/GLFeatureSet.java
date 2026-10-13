@@ -10,6 +10,23 @@ public class GLFeatureSet
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  GLFeatureSet operator =(GLFeatureSet that);
 
+  protected final void removeFeatureAt(int i)
+  {
+    _features[i]._release();
+    for (int j = i; j < _nFeatures; j++)
+    {
+      if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP)
+      {
+        _features[j] = null;
+      }
+      else
+      {
+        _features[j] = _features[j+1];
+      }
+    }
+    _nFeatures--;
+  }
+
 
   public GLFeatureSet()
   {
@@ -64,30 +81,25 @@ public class GLFeatureSet
 
   public final void clearFeatures(GLFeatureGroupName g)
   {
-  
     for (int i = 0; i < _nFeatures; i++)
     {
-      final GLFeature f = _features[i];
-      if (f._group == g)
+      if (_features[i]._group == g)
       {
-        f._release();
-  
-        for (int j = i; j < _nFeatures; j++)
-        {
-          if (j+1 >= MAX_CONCURRENT_FEATURES_PER_GROUP)
-          {
-            _features[j] = null;
-          }
-          else
-          {
-            _features[j] = _features[j+1];
-          }
-        }
+        removeFeatureAt(i);
         i--;
-        _nFeatures--;
       }
     }
-  
+  }
+  public final void clearFeatures(GLFeatureID id)
+  {
+    for (int i = 0; i < _nFeatures; i++)
+    {
+      if (_features[i]._id == id)
+      {
+        removeFeatureAt(i);
+        i--;
+      }
+    }
   }
   public final void clearFeatures()
   {

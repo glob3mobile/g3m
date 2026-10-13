@@ -124,9 +124,9 @@
 #import <G3MiOSSDK/MultiTexturedHUDQuadWidget.hpp>
 #import <G3MiOSSDK/HUDAbsoluteSize.hpp>
 #import <G3MiOSSDK/HUDRelativeSize.hpp>
-#import <G3MiOSSDK/DownloaderImageBuilder.hpp>
-#import <G3MiOSSDK/LabelImageBuilder.hpp>
-#import <G3MiOSSDK/CanvasImageBuilder.hpp>
+#import <G3MiOSSDK/DownloaderImageFactory.hpp>
+#import <G3MiOSSDK/LabelImageFactory.hpp>
+#import <G3MiOSSDK/CanvasImageFactory.hpp>
 #import <G3MiOSSDK/TerrainTouchListener.hpp>
 #import <G3MiOSSDK/PlanetRenderer.hpp>
 #import <G3MiOSSDK/G3MMeshParser.hpp>
@@ -383,50 +383,50 @@ Mesh* createSectorMesh(const Planet* planet,
   Geodetic3D::fromDegrees(27.810709, -17.917639, 0)
   };
   
-  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                    new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+  NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageFactory(URL("file:///g3m-marker.png")),
+                                                    new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                                     Geodetic3D::fromDegrees(28.131817, -15.440219, 0),
                                                     new MyMarkWidgetTouchListener(),
                                                     10.0);
   nomr->addMark(mark);
   
-  NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+  NonOverlappingMark* mark2 = new NonOverlappingMark(new DownloaderImageFactory(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.947345, -13.523105, 0),
                                                      new MyMarkWidgetTouchListener(),
                                                      10.0);
   nomr->addMark(mark2);
   
-  NonOverlappingMark* mark3 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+  NonOverlappingMark* mark3 = new NonOverlappingMark(new DownloaderImageFactory(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.473802, -13.859360, 0),
                                                      new MyMarkWidgetTouchListener(),
                                                      10.0);
   nomr->addMark(mark3);
   
-  NonOverlappingMark* mark4 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+  NonOverlappingMark* mark4 = new NonOverlappingMark(new DownloaderImageFactory(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.467706, -16.251426, 0),
                                                      new MyMarkWidgetTouchListener(),
                                                      10.0);
   nomr->addMark(mark4);
   
-  NonOverlappingMark* mark5 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+  NonOverlappingMark* mark5 = new NonOverlappingMark(new DownloaderImageFactory(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.701819, -17.762003, 0),
                                                      new MyMarkWidgetTouchListener(),
                                                      10.0);
   nomr->addMark(mark5);
   
-  NonOverlappingMark* mark6 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+  NonOverlappingMark* mark6 = new NonOverlappingMark(new DownloaderImageFactory(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(28.086595, -17.105796, 0),
                                                      new MyMarkWidgetTouchListener(),
                                                      10.0);
   nomr->addMark(mark6);
   
-  NonOverlappingMark* mark7 = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                     new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+  NonOverlappingMark* mark7 = new NonOverlappingMark(new DownloaderImageFactory(URL("file:///g3m-marker.png")),
+                                                     new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                                      Geodetic3D::fromDegrees(27.810709, -17.917639, 0),
                                                      new MyMarkWidgetTouchListener(),
                                                      100.0);
@@ -437,8 +437,8 @@ Mesh* createSectorMesh(const Planet* planet,
     double lat = ((rand() % 18000) - 9000) / 100.0;
     double lon = ((rand() % 36000) - 18000) / 100.0;
     
-    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageBuilder(URL("file:///g3m-marker.png")),
-                                                      new DownloaderImageBuilder(URL("file:///anchorWidget.png")),
+    NonOverlappingMark* mark = new NonOverlappingMark(new DownloaderImageFactory(URL("file:///g3m-marker.png")),
+                                                      new DownloaderImageFactory(URL("file:///anchorWidget.png")),
                                                       Geodetic3D::fromDegrees(lat, lon, 0),
                                                       NULL,
                                                       100.0);
@@ -753,9 +753,9 @@ public:
   geoVectorLayer->addLayerTouchEventListener(new VectorLayerTouchEventListener(fcfc));
   
   
-  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
+  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageFactory(URL("http://www.freelogovectors.net/wp-content/uploads/2013/02/sheep-b.png")));
   
-  //  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageBuilder(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
+  //  builder.getPlanetRendererBuilder()->setDefaultTileBackGroundImage(new DownloaderImageFactory(URL("http://192.168.1.127:8080/web/img/tileNotFound.jpg")));
   //  const Sector sector = Sector::fromDegrees(40.1540143280790858, -5.8664874640814313,
   //                                            40.3423148480663158, -5.5116079822178570);
   //
@@ -1401,7 +1401,7 @@ public:
     builder.setHUDRenderer(hudRenderer);
     
     
-    class AltimeterCanvasImageBuilder : public CanvasImageBuilder {
+    class AltimeterCanvasImageFactory : public CanvasImageFactory {
     private:
       float _altitude = 38500;
       float _step     = 100;
@@ -1446,8 +1446,8 @@ public:
       }
       
     public:
-      AltimeterCanvasImageBuilder() :
-      CanvasImageBuilder(256, 256*3)
+      AltimeterCanvasImageFactory() :
+      CanvasImageFactory(256, 256*3)
       {
       }
       
@@ -1472,8 +1472,8 @@ public:
     };
     
     
-    AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder = new AltimeterCanvasImageBuilder();
-    HUDQuadWidget* test = new HUDQuadWidget(altimeterCanvasImageBuilder,
+    AltimeterCanvasImageFactory* altimeterCanvasImageFactory = new AltimeterCanvasImageFactory();
+    HUDQuadWidget* test = new HUDQuadWidget(altimeterCanvasImageFactory,
                                             new HUDRelativePosition(0,
                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
                                                                     HUDRelativePosition::RIGHT,
@@ -1489,7 +1489,7 @@ public:
     hudRenderer->addWidget(test);
     
     
-    LabelImageBuilder* labelBuilder = new LabelImageBuilder("glob3",               // text
+    LabelImageFactory* labelBuilder = new LabelImageFactory("glob3",               // text
                                                             GFont::monospaced(38), // font
                                                             6,                     // margin
                                                             Color::yellow(),       // color
@@ -1509,8 +1509,8 @@ public:
                                              new HUDRelativeSize(1, HUDRelativeSize::BITMAP_HEIGHT) );
     hudRenderer->addWidget(label);
     
-    HUDQuadWidget* compass2 = new HUDQuadWidget(//new DownloaderImageBuilder(URL("file:///Compass_rose_browns_00_transparent.png")),
-                                                new DownloaderImageBuilder(URL("file:///CompassHeadings.png")),
+    HUDQuadWidget* compass2 = new HUDQuadWidget(//new DownloaderImageFactory(URL("file:///Compass_rose_browns_00_transparent.png")),
+                                                new DownloaderImageFactory(URL("file:///CompassHeadings.png")),
                                                 new HUDRelativePosition(0.5,
                                                                         HUDRelativePosition::VIEWPORT_WIDTH,
                                                                         HUDRelativePosition::CENTER),
@@ -1527,7 +1527,7 @@ public:
     hudRenderer->addWidget(compass2);
     
     float visibleFactor = 3;
-    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altimeter-ruler-1536x113.png")),
+    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageFactory(URL("file:///altimeter-ruler-1536x113.png")),
                                              new HUDRelativePosition(1,
                                                                      HUDRelativePosition::VIEWPORT_WIDTH,
                                                                      HUDRelativePosition::LEFT,
@@ -1539,12 +1539,12 @@ public:
                                                                  HUDRelativeSize::VIEWPORT_MIN_AXIS),
                                              new HUDRelativeSize(2 / visibleFactor,
                                                                  HUDRelativeSize::VIEWPORT_MIN_AXIS),
-                                             new DownloaderImageBuilder(URL("file:///widget-background.png")));
+                                             new DownloaderImageFactory(URL("file:///widget-background.png")));
     ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
     hudRenderer->addWidget(ruler);
     
     //    float visibleFactor = 10; // 85x5100
-    //    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageBuilder(URL("file:///altitude_ladder.png")),
+    //    HUDQuadWidget* ruler = new HUDQuadWidget(new DownloaderImageFactory(URL("file:///altitude_ladder.png")),
     //                                             new HUDRelativePosition(1,
     //                                                                     HUDRelativePosition::VIEWPORT_WIDTH,
     //                                                                     HUDRelativePosition::LEFT,
@@ -1556,7 +1556,7 @@ public:
     //                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
     //                                             new HUDRelativeSize(8.0f / visibleFactor,
     //                                                                 HUDRelativeSize::VIEWPORT_MIN_AXIS),
-    //                                             new DownloaderImageBuilder(URL("file:///widget-background.png")));
+    //                                             new DownloaderImageFactory(URL("file:///widget-background.png")));
     //    ruler->setTexCoordsScale(1 , 1.0f / visibleFactor);
     //    hudRenderer->addWidget(ruler);
     
@@ -1566,8 +1566,8 @@ public:
       HUDQuadWidget*     _compass1;
       HUDQuadWidget*     _compass2;
       HUDQuadWidget*     _ruler;
-      LabelImageBuilder* _labelBuilder;
-      AltimeterCanvasImageBuilder* _altimeterCanvasImageBuilder;
+      LabelImageFactory* _labelBuilder;
+      AltimeterCanvasImageFactory* _altimeterCanvasImageFactory;
       
       double _angleInRadians;
       
@@ -1578,13 +1578,13 @@ public:
       AnimateHUDWidgetsTask(HUDQuadWidget* compass1,
                             HUDQuadWidget* compass2,
                             HUDQuadWidget* ruler,
-                            LabelImageBuilder* labelBuilder,
-                            AltimeterCanvasImageBuilder* altimeterCanvasImageBuilder) :
+                            LabelImageFactory* labelBuilder,
+                            AltimeterCanvasImageFactory* altimeterCanvasImageFactory) :
       _compass1(compass1),
       _compass2(compass2),
       _ruler(ruler),
       _labelBuilder(labelBuilder),
-      _altimeterCanvasImageBuilder(altimeterCanvasImageBuilder),
+      _altimeterCanvasImageFactory(altimeterCanvasImageFactory),
       _angleInRadians(0),
       _translationV(0),
       _translationStep(0.002)
@@ -1615,7 +1615,7 @@ public:
         _translationV += _translationStep;
         _ruler->setTexCoordsTranslation(0, _translationV);
         
-        _altimeterCanvasImageBuilder->step();
+        _altimeterCanvasImageFactory->step();
       }
     };
     
@@ -1624,7 +1624,7 @@ public:
                                                                            compass2,
                                                                            ruler,
                                                                            labelBuilder,
-                                                                           altimeterCanvasImageBuilder)));
+                                                                           altimeterCanvasImageFactory)));
     
     if (false){ //Changing FOV
       

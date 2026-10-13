@@ -20,9 +20,16 @@ class GEOVectorTileImageProvider;
 
 class GEOVectorLayer : public VectorLayer {
 private:
+  static long long INSTANCE_COUNTER;
+
   QuadTree _quadTree;
 
   mutable GEOVectorTileImageProvider* _tileImageProvider;
+
+  // identity and contents revision feed the tile image names, so two layers (or two states of
+  // one layer) never share a texture
+  const long long _instanceID;
+  long long       _contentsRevision;
 
 public:
 
@@ -73,6 +80,14 @@ public:
 
   const QuadTree& getQuadTree() const {
     return _quadTree;
+  }
+
+  long long getInstanceID() const {
+    return _instanceID;
+  }
+
+  long long getContentsRevision() const {
+    return _contentsRevision;
   }
 
   const std::vector<URL*> getDownloadURLs(const Tile* tile) const;

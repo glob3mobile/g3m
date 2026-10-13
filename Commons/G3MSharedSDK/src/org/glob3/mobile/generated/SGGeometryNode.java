@@ -98,4 +98,19 @@ public class SGGeometryNode extends SGNode
     return "SGGeometryNode";
   }
 
+
+  public final void addToModelBounds(MutableMatrix44D transform, MutableVector3D lower, MutableVector3D upper)
+  {
+    final IMathUtils mu = IMathUtils.instance();
+    final int verticesSize = _vertices.size();
+    for (int i = 0; i < verticesSize; i += 3)
+    {
+      final Vector3D vertex = new Vector3D(_vertices.get(i), _vertices.get(i + 1), _vertices.get(i + 2)).transformedBy(transform, 1);
+      lower.set(mu.min(lower.x(), vertex._x), mu.min(lower.y(), vertex._y), mu.min(lower.z(), vertex._z));
+      upper.set(mu.max(upper.x(), vertex._x), mu.max(upper.y(), vertex._y), mu.max(upper.z(), vertex._z));
+    }
+  
+    super.addToModelBounds(transform, lower, upper);
+  }
+
 }

@@ -19,14 +19,14 @@ package org.glob3.mobile.generated;
 
 //class LeveledTexturedMesh;
 //class TextureIDReference;
-//class IImageBuilder;
+//class IImageFactory;
 //class IImage;
 
 
 public class DefaultTileTexturizer extends TileTexturizer
 {
 
-  private IImageBuilder _defaultBackgroundImageBuilder;
+  private IImageFactory _defaultBackgroundImageFactory;
   private boolean _defaultBackgroundImageLoaded;
   private IImage _defaultBackgroundImage;
   private String _defaultBackgroundImageName;
@@ -43,9 +43,9 @@ public class DefaultTileTexturizer extends TileTexturizer
   public java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
 
-  public DefaultTileTexturizer(IImageBuilder defaultBackgroundImageBuilder, boolean verboseErrors)
+  public DefaultTileTexturizer(IImageFactory defaultBackgroundImageFactory, boolean verboseErrors)
   {
-     _defaultBackgroundImageBuilder = defaultBackgroundImageBuilder;
+     _defaultBackgroundImageFactory = defaultBackgroundImageFactory;
      _defaultBackgroundImageLoaded = false;
      _verboseErrors = verboseErrors;
     ILogger.instance().logInfo("Create texturizer...");
@@ -79,7 +79,7 @@ public class DefaultTileTexturizer extends TileTexturizer
   {
     ILogger.instance().logInfo("Initializing texturizer...");
   
-    _defaultBackgroundImageBuilder.build(context, new DTT_IImageBuilderListener(this), true);
+    _defaultBackgroundImageFactory.create(context, new DTT_IImageFactoryListener(this), true);
   
     // do nothing
   }
@@ -192,9 +192,9 @@ public class DefaultTileTexturizer extends TileTexturizer
     return (layerSet == null) ? false : layerSet.onTerrainTouchEvent(ec, position, tile);
   }
 
-  public final IImageBuilder getDefaultBackgroundImageBuilder()
+  public final IImageFactory getDefaultBackgroundImageFactory()
   {
-    return _defaultBackgroundImageBuilder;
+    return _defaultBackgroundImageFactory;
   }
 
   public final IImage getDefaultBackgroundImage()

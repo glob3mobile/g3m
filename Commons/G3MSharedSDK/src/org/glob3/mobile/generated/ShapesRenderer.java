@@ -53,7 +53,7 @@ public class ShapesRenderer extends DefaultRenderer
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), true);
+      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
     }
     else
     {
@@ -63,7 +63,7 @@ public class ShapesRenderer extends DefaultRenderer
     f = (ModelViewGLFeature) _glStateTransparent.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glStateTransparent.addGLFeature(new ModelViewGLFeature(camera), true);
+      _glStateTransparent.addGLFeature(new ModelViewGLFeature(camera), false);
     }
     else
     {
@@ -340,10 +340,13 @@ public class ShapesRenderer extends DefaultRenderer
     for (int n = 0; n<_shapes.size(); n++)
     {
       Shape shape = _shapes.get(n);
-      java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
-      for (int i = 0; i<distances.size(); i++)
+      if (shape.isEnable())
       {
-        shapeDistances.add(new ShapeDistance(distances.get(i), shape));
+        java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
+        for (int i = 0; i<distances.size(); i++)
+        {
+          shapeDistances.add(new ShapeDistance(distances.get(i), shape));
+        }
       }
     }
   

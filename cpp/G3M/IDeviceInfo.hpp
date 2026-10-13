@@ -29,6 +29,13 @@ public:
   virtual DeviceInfo_Platform getPlatform() const = 0;
 
   virtual float getDevicePixelRatio() const = 0;
+
+  // in the widget's pixels: what the notch, island, rounded corners and system bars cover on each
+  // edge; 0 where the platform reports nothing
+  virtual float getSafeAreaInsetTop() const = 0;
+  virtual float getSafeAreaInsetRight() const = 0;
+  virtual float getSafeAreaInsetBottom() const = 0;
+  virtual float getSafeAreaInsetLeft() const = 0;
   
 };
 

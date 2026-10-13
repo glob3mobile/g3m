@@ -87,6 +87,10 @@ public class TextureGLFeature extends GLColorGroupFeature
   {
      return _translation != null && _scale != null;
   }
+  public final boolean hasRotation()
+  {
+     return _rotationAngle != null && _rotationCenter != null;
+  }
 
   public final void setTranslation(float u, float v)
   {

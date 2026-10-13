@@ -67,6 +67,22 @@ public:
   virtual double sinh(double v) const = 0;
   virtual float  sinh(float v)  const = 0;
 
+  virtual double cosh(double v) const = 0;
+  virtual float  cosh(float v)  const = 0;
+
+  virtual double tanh(double v) const = 0;
+  virtual float  tanh(float v)  const = 0;
+
+  // Java's Math has no asinh; the log form is evaluated on |v| to stay stable for large magnitudes
+  virtual double asinh(double v) const {
+    const double magnitude = log(abs(v) + sqrt((v * v) + 1));
+    return (v < 0) ? -magnitude : magnitude;
+  }
+
+  virtual double acosh(double v) const {
+    return log(v + sqrt((v * v) - 1));
+  }
+
   virtual double asin(double v) const = 0;
   virtual float  asin(float v)  const = 0;
 
@@ -275,6 +291,9 @@ public:
                                           const Angle& toLat,
                                           const Angle& toLon,
                                           const double alpha) const;
+
+  // 1 shifted left by index as a 64-bit value; index must be in 0..63 (C++ leaves larger shifts undefined, Java wraps them modulo 64)
+  virtual long long bit64(int index) const;
 
   virtual int gcd(int a, int b) const {
     return (b == 0) ? a : gcd(b, a % b);

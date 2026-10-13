@@ -254,6 +254,26 @@ public final class MathUtils_Android extends IMathUtils {
    }
 
    @Override
+   public double cosh(final double v) {
+      return Math.cosh(v);
+   }
+
+   @Override
+   public float cosh(final float v) {
+      return (float) Math.cosh(v);
+   }
+
+   @Override
+   public double tanh(final double v) {
+      return Math.tanh(v);
+   }
+
+   @Override
+   public float tanh(final float v) {
+      return (float) Math.tanh(v);
+   }
+
+   @Override
    public double floor(final double d) {
       return Math.floor(d);
    }

@@ -64,6 +64,24 @@ public abstract class IMathUtils
   public abstract double sinh(double v);
   public abstract float sinh(float v);
 
+  public abstract double cosh(double v);
+  public abstract float cosh(float v);
+
+  public abstract double tanh(double v);
+  public abstract float tanh(float v);
+
+  // Java's Math has no asinh; the log form is evaluated on |v| to stay stable for large magnitudes
+  public double asinh(double v)
+  {
+    final double magnitude = Math.log(Math.abs(v) + Math.sqrt((v * v) + 1));
+    return (v < 0) ? -magnitude : magnitude;
+  }
+
+  public double acosh(double v)
+  {
+    return Math.log(v + Math.sqrt((v * v) - 1));
+  }
+
   public abstract double asin(double v);
   public abstract float asin(float v);
 
@@ -289,6 +307,18 @@ public abstract class IMathUtils
     final double lngRad = Math.atan2(y, x);
   
     return new Geodetic2D(Angle.fromRadians(latRad), Angle.fromRadians(lngRad));
+  }
+
+  // 1 shifted left by index as a 64-bit value; index must be in 0..63 (C++ leaves larger shifts undefined, Java wraps them modulo 64)
+  public long bit64(int index)
+  {
+    if ((index < 0) || (index > 63))
+    {
+      ILogger.instance().logError("IMathUtils::bit64: index %d out of 0..63", index);
+      return 0;
+    }
+    // the cast (not a literal suffix) is what cpp2java turns into Java's long
+    return ((long) 1) << index;
   }
 
   public int gcd(int a, int b)

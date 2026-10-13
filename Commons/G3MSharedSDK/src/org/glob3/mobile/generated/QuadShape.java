@@ -24,6 +24,8 @@ package org.glob3.mobile.generated;
 public class QuadShape extends AbstractMeshShape
 {
   private final URL _textureURL;
+  // the TexturesHandler cache key: the URL path for downloaded textures, the caller's name for an IImage
+  private final String _textureName;
   private final float _width;
   private final float _height;
   private final Color _color;
@@ -42,14 +44,14 @@ public class QuadShape extends AbstractMeshShape
       return null;
     }
   
-    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
   
     _textureImage = null;
     _textureImage = null;
   
     if (texID == null)
     {
-      rc.getLogger().logError("Can't load texture %s", _textureURL._path);
+      rc.getLogger().logError("Can't load texture %s", _textureName);
     }
   
     return texID;
@@ -126,6 +128,7 @@ public class QuadShape extends AbstractMeshShape
   {
      super(position, altitudeMode);
      _textureURL = textureURL;
+     _textureName = textureURL._path;
      _width = width;
      _height = height;
      _textureRequested = false;
@@ -138,10 +141,11 @@ public class QuadShape extends AbstractMeshShape
   
   }
 
-  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, IImage textureImage, float width, float height, boolean withNormals)
+  public QuadShape(Geodetic3D position, AltitudeMode altitudeMode, IImage textureImage, String textureName, float width, float height, boolean withNormals)
   {
      super(position, altitudeMode);
      _textureURL = new URL(new URL("", false));
+     _textureName = textureName;
      _width = width;
      _height = height;
      _textureRequested = true;
@@ -158,6 +162,7 @@ public class QuadShape extends AbstractMeshShape
   {
      super(position, altitudeMode);
      _textureURL = new URL(new URL("", false));
+     _textureName = "";
      _width = width;
      _height = height;
      _textureRequested = false;

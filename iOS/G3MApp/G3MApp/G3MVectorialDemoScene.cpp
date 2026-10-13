@@ -10,7 +10,7 @@
 #include "G3MDemoModel.hpp"
 
 #include <G3M/LayerSet.hpp>
-#include <G3M/BingMapsLayer.hpp>
+#include <G3M/Layer.hpp>
 #include <G3M/GEORenderer.hpp>
 #include <G3M/GEOSymbolizer.hpp>
 #include <G3M/GEOPolygonRasterSymbol.hpp>
@@ -21,6 +21,8 @@
 #include <G3M/GEO2DPointGeometry.hpp>
 #include <G3M/GEOFeature.hpp>
 #include <G3M/Mark.hpp>
+#include <G3M/MarkBuilder.hpp>
+#include <G3M/DownloaderImageFactory.hpp>
 #include <G3M/GEOMarkSymbol.hpp>
 #include <G3M/G3MWidget.hpp>
 #include <G3M/PlanetRenderer.hpp>
@@ -120,16 +122,14 @@ public:
     const JSONObject* properties = geometry->getFeature()->getProperties();
     const std::string name = properties->getAsString("name", "");
 
-    Mark* mark = new Mark(URL("file:///restaurant-48x48.png"),
-                          Geodetic3D(geometry->getPosition(), 0),
-                          RELATIVE_TO_GROUND,
-                          15000,
-                          NULL,
-                          false,
-                          new G3MVectorialDemoScene_RestaurantMarkTouchListener(_model, name), // markListener,
-                          true);
+    MarkBuilder builder;
+    builder.setAltitudeMode(RELATIVE_TO_GROUND);
+    builder.setMinDistanceToCamera(15000);
+    builder.setPosition(Geodetic3D(geometry->getPosition(), 0));
+    builder.addOutfit(new DownloaderImageFactory(URL("file:///restaurant-48x48.png")));
+    builder.setTouchListener(new G3MVectorialDemoScene_RestaurantMarkTouchListener(_model, name), true);
 
-    result->push_back(new GEOMarkSymbol(mark));
+    result->push_back(new GEOMarkSymbol(builder.build()));
     return result;
   }
 
@@ -171,19 +171,9 @@ void G3MVectorialDemoScene::rawActivate(const G3MContext* context) {
   G3MDemoModel* model     = getModel();
   G3MWidget*    g3mWidget = model->getG3MWidget();
 
-  g3mWidget->setBackgroundColor(Color::fromRGBA(0.19f, 0.23f, 0.21f, 1.0f));
+  g3mWidget->setBackgroundColor(Color::black());
 
-//  const std::string&    imagerySet,
-//  const std::string&    key,
-//  const TimeInterval&   timeToCache,
-//  const bool            readExpired    = true,
-//  const int             initialLevel   = 2,
-  BingMapsLayer* rasterLayer = new BingMapsLayer(BingMapType::Aerial(),
-                                                 "AnU5uta7s5ql_HTrRZcPLI4_zotvNefEeSxIClF1Jf7eS-mLig1jluUdCoecV7jc",
-                                                 TimeInterval::fromDays(30),
-                                                 true, // readExpired
-                                                 12    // initialLevel
-                                                 );
+  Layer* rasterLayer = model->createRasterLayer();
   model->getLayerSet()->addLayer(rasterLayer);
 
   GEOVectorLayer* vectorLayer = new GEOVectorLayer();

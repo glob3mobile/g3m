@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.SGShape;
 import org.glob3.mobile.generated.ShapeLoadListener;
@@ -41,9 +42,8 @@ public class CameraAnimation
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_camera_animation);
 
-      final LayerSet layerSet = SimpleRasterLayerBuilder.createLayerset();
-      layerSet.disableAllLayers();
-      layerSet.getLayerByTitle("Bing Aerial With Labels").setEnable(true);
+      final LayerSet layerSet = new LayerSet();
+      layerSet.addLayer(LayerBuilder.createSentinel2CloudlessLayer());
 
       _builder = new G3MBuilder_Android(this);
       _builder.setPlanet(SphericalPlanet.createEarth());

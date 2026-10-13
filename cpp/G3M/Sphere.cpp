@@ -15,8 +15,17 @@
 #include "G3MRenderContext.hpp"
 #include "Ray.hpp"
 #include "Ellipsoid.hpp"
-
 #include "FloatBufferBuilderFromCartesian3D.hpp"
+
+
+Sphere::~Sphere() {
+  delete _mesh;
+
+#ifdef JAVA_CODE
+  super.dispose();
+#endif
+
+}
 
 
 Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points,

@@ -26,10 +26,12 @@
 
 
 DebugTileImageProvider::ImageListener::ImageListener(const std::string&           tileID,
+                                                     const std::string&           imageID,
                                                      const TileImageContribution* contribution,
                                                      TileImageListener*           listener,
                                                      bool                         deleteListener) :
 _tileID(tileID),
+_imageID(imageID),
 _contribution(contribution),
 _listener(listener),
 _deleteListener(deleteListener)
@@ -44,20 +46,30 @@ DebugTileImageProvider::ImageListener::~ImageListener() {
 #endif
 }
 
-const std::string DebugTileImageProvider::ImageListener::getImageID(const std::string& tileID) {
+// the tile and every style input, so two debug providers with different styles don't share a texture
+const std::string DebugTileImageProvider::getImageID(const std::string& tileID) const {
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("DebugTileImageProvider/");
   isb->addString(tileID);
+  isb->addString("/");
+  isb->addString(_font.description());
+  isb->addString("/");
+  isb->addString(_color.id());
+  isb->addString("/");
+  isb->addBool(_showIDLabel);
+  isb->addString("/");
+  isb->addBool(_showSectorLabels);
+  isb->addString("/");
+  isb->addBool(_showTileBounds);
   const std::string s = isb->getString();
   delete isb;
   return s;
 }
 
 void DebugTileImageProvider::ImageListener::imageCreated(const IImage* image) {
-  const std::string imageID = getImageID(_tileID);
   _listener->imageCreated(_tileID,
                           image,
-                          imageID,
+                          _imageID,
                           _contribution);
   if (_deleteListener) {
     delete _listener;
@@ -176,6 +188,7 @@ void DebugTileImageProvider::create(const Tile* tile,
 
   canvas->createImage(new CanvasOwnerImageListenerWrapper(canvas,
                                                           new DebugTileImageProvider::ImageListener(tile->_id,
+                                                                                                    getImageID(tile->_id),
                                                                                                     contribution,
                                                                                                     listener,
                                                                                                     deleteListener),

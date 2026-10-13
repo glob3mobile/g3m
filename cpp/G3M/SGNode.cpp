@@ -8,6 +8,9 @@
 
 #include "SGNode.hpp"
 
+#include "MutableMatrix44D.hpp"
+#include "MutableVector3D.hpp"
+
 #include "ILogger.hpp"
 
 
@@ -75,5 +78,14 @@ void SGNode::render(const G3MRenderContext* rc, const GLState* parentGLState, bo
   }
   else {
     ILogger::instance()->logError("NO GLSTATE");
+  }
+}
+
+void SGNode::addToModelBounds(const MutableMatrix44D& transform,
+                              MutableVector3D& lower,
+                              MutableVector3D& upper) const {
+  const size_t childrenCount = _children.size();
+  for (size_t i = 0; i < childrenCount; i++) {
+    _children[i]->addToModelBounds(transform, lower, upper);
   }
 }

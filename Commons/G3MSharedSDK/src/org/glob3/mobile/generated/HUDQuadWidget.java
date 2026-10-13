@@ -20,16 +20,15 @@ package org.glob3.mobile.generated;
 ///#include "URL.hpp"
 //class HUDPosition;
 //class HUDSize;
-//class IImage;
 //class Mesh;
 //class TransformableTextureMapping;
-//class IImageBuilder;
+//class IImageFactory;
 
 
 public class HUDQuadWidget extends HUDWidget implements ChangedListener
 {
-  private IImageBuilder _imageBuilder;
-  private IImageBuilder _backgroundImageBuilder;
+  private HUDWidgetImage _image;
+  private HUDWidgetImage _backgroundImage; // NULL when the widget has no background
 
   private final HUDPosition _xPosition;
   private final HUDPosition _yPosition;
@@ -45,38 +44,27 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
   private float _texCoordsRotationCenterU;
   private float _texCoordsRotationCenterV;
 
-  private IImage _image;
-  private IImage _backgroundImage;
-
-  private String _imageName;
-  private int _imageWidth;
-  private int _imageHeight;
-
-  private String _backgroundImageName;
-
-  private boolean _buildingImage;
-  private boolean _buildingBackgroundImage;
   private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
 
   private Mesh _mesh;
   private TransformableTextureMapping _textureMapping;
   private Mesh createMesh(G3MRenderContext rc)
   {
-    if (_image == null)
+    if (_image.getImage() == null)
     {
       return null;
     }
   
-    final boolean hasBackground = (_backgroundImageBuilder != null);
+    final boolean hasBackground = (_backgroundImage != null);
   
-    if (hasBackground && (_backgroundImage == null))
+    if (hasBackground && (_backgroundImage.getImage() == null))
     {
       return null;
     }
   
     TexturesHandler texturesHandler = rc.getTexturesHandler();
   
-    final TextureIDReference textureID = texturesHandler.getTextureIDReference(_image, GLFormat.rgba(), _imageName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
+    final TextureIDReference textureID = texturesHandler.getTextureIDReference(_image.getImage(), GLFormat.rgba(), _image.getImageName(), false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
     if (textureID == null)
     {
       rc.getLogger().logError("Can't upload texture to GPU");
@@ -86,7 +74,7 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     TextureIDReference backgroundTextureID = null;
     if (hasBackground)
     {
-      backgroundTextureID = texturesHandler.getTextureIDReference(_backgroundImage, GLFormat.rgba(), _backgroundImageName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
+      backgroundTextureID = texturesHandler.getTextureIDReference(_backgroundImage.getImage(), GLFormat.rgba(), _backgroundImage.getImageName(), false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
   
       if (backgroundTextureID == null)
       {
@@ -105,8 +93,11 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     }
     final int viewPortHeight = camera.getViewPortHeight();
   
-    final float width = _widthSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
-    final float height = _heightSize.getSize(viewPortWidth, viewPortHeight, _imageWidth, _imageHeight);
+    final int imageWidth = _image.getImageWidth();
+    final int imageHeight = _image.getImageHeight();
+  
+    final float width = _widthSize.getSize(viewPortWidth, viewPortHeight, imageWidth, imageHeight);
+    final float height = _heightSize.getSize(viewPortWidth, viewPortHeight, imageWidth, imageHeight);
   
     final float x = _xPosition.getPosition(viewPortWidth, viewPortHeight, width, height);
     final float y = _yPosition.getPosition(viewPortWidth, viewPortHeight, width, height);
@@ -157,6 +148,15 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     _mesh = null;
   }
 
+  private void addErrors(HUDWidgetImage widgetImage)
+  {
+    final java.util.ArrayList<String> errors = widgetImage.getErrors();
+    for (int i = 0; i < errors.size(); i++)
+    {
+      _errors.add("HUDQuadWidget: " + errors.get(i));
+    }
+  }
+
   private G3MContext _context;
 
   protected final void rawRender(G3MRenderContext rc, GLState glState)
@@ -168,26 +168,20 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     }
   }
 
-  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
+  public HUDQuadWidget(IImageFactory imageFactory, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize)
   {
-     this(imageBuilder, xPosition, yPosition, widthSize, heightSize, null);
+     this(imageFactory, xPosition, yPosition, widthSize, heightSize, null);
   }
-  public HUDQuadWidget(IImageBuilder imageBuilder, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize, IImageBuilder backgroundImageBuilder)
+  public HUDQuadWidget(IImageFactory imageFactory, HUDPosition xPosition, HUDPosition yPosition, HUDSize widthSize, HUDSize heightSize, IImageFactory backgroundImageFactory)
   {
-     _imageBuilder = imageBuilder;
+     _image = new HUDWidgetImage(imageFactory);
+     _backgroundImage = (backgroundImageFactory == null) ? null : new HUDWidgetImage(backgroundImageFactory);
      _xPosition = xPosition;
      _yPosition = yPosition;
      _widthSize = widthSize;
      _heightSize = heightSize;
-     _backgroundImageBuilder = backgroundImageBuilder;
      _mesh = null;
      _textureMapping = null;
-     _image = null;
-     _imageWidth = 0;
-     _imageHeight = 0;
-     _buildingImage = false;
-     _backgroundImage = null;
-     _buildingBackgroundImage = false;
      _texCoordsTranslationU = 0F;
      _texCoordsTranslationV = 0F;
      _texCoordsScaleU = 1F;
@@ -239,13 +233,10 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
 
   public void dispose()
   {
-    if (_imageBuilder != null)
-       _imageBuilder.dispose();
-    if (_backgroundImageBuilder != null)
-       _backgroundImageBuilder.dispose();
-  
-    _image = null;
-    _backgroundImage = null;
+    if (_image != null)
+       _image.dispose();
+    if (_backgroundImage != null)
+       _backgroundImage.dispose();
   
     if (_mesh != null)
        _mesh.dispose();
@@ -265,27 +256,10 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
   {
     _context = context;
   
-    if (!_buildingImage && (_image == null))
+    _image.initialize(context, this);
+    if (_backgroundImage != null)
     {
-      _buildingImage = true;
-      _imageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this, 0), true);
-      if (_imageBuilder.isMutable())
-      {
-        _imageBuilder.setChangeListener(this);
-      }
-    }
-  
-    if (_backgroundImageBuilder != null)
-    {
-      if (!_buildingBackgroundImage && (_backgroundImage == null))
-      {
-        _buildingBackgroundImage = true;
-        _backgroundImageBuilder.build(context, new HUDQuadWidget_ImageBuilderListener(this, 1), true);
-        if (_backgroundImageBuilder.isMutable())
-        {
-          _backgroundImageBuilder.setChangeListener(this);
-        }
-      }
+      _backgroundImage.initialize(context, this);
     }
   }
 
@@ -296,11 +270,18 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
+    _errors.clear();
+    addErrors(_image);
+    if (_backgroundImage != null)
+    {
+      addErrors(_backgroundImage);
+    }
+  
     if (!_errors.isEmpty())
     {
       return RenderState.error(_errors);
     }
-    else if (_buildingImage || _buildingBackgroundImage)
+    else if (_image.isBuilding() || ((_backgroundImage != null) && _backgroundImage.isBuilding()))
     {
       return RenderState.busy();
     }
@@ -310,52 +291,14 @@ public class HUDQuadWidget extends HUDWidget implements ChangedListener
     }
   }
 
-  /** private, do not call */
-  public final void imageCreated(IImage image, String imageName, int imageRole)
-  {
-    if (imageRole == 0)
-    {
-      _buildingImage = false;
-      _image = image;
-      _imageName = imageName;
-      _imageWidth = _image.getWidth();
-      _imageHeight = _image.getHeight();
-    }
-    else if (imageRole == 1)
-    {
-      _buildingBackgroundImage = false;
-      _backgroundImage = image;
-      _backgroundImageName = imageName;
-    }
-  }
-
-  /** private, do not call */
-  public final void onImageBuildError(String error, int imageRole)
-  {
-    _errors.add("HUDQuadWidget: " + error);
-  }
-
   public final void changed()
   {
     cleanMesh();
   
-    _image = null;
-    _image = null;
-    _imageName = "";
-    _imageWidth = 0;
-    _imageHeight = 0;
-  
-    _buildingImage = true;
-    _imageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this, 0), true);
-  
-    _backgroundImage = null;
-    _backgroundImage = null;
-    _backgroundImageName = "";
-  
-    if (_backgroundImageBuilder != null)
+    _image.rebuild(_context);
+    if (_backgroundImage != null)
     {
-      _buildingBackgroundImage = true;
-      _backgroundImageBuilder.build(_context, new HUDQuadWidget_ImageBuilderListener(this, 1), true);
+      _backgroundImage.rebuild(_context);
     }
   }
 

@@ -25,7 +25,10 @@
 #include "DirectMesh.hpp"
 #include "G3MRenderContext.hpp"
 #include "ILogger.hpp"
+#include "IStringUtils.hpp"
 
+
+long long BusyQuadRenderer::INSTANCE_COUNTER = 0;
 
 void BusyQuadRenderer::start(const G3MRenderContext* rc) {
   if (_animated) {
@@ -54,7 +57,7 @@ bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
 
   texID = rc->getTexturesHandler()->getTextureIDReference(_image,
                                                           GLFormat::rgba(),
-                                                          "BusyQuadRenderer-Texture",
+                                                          "BusyQuadRenderer-Texture/" + IStringUtils::instance()->toString(_instanceID),
                                                           false,
                                                           GLTextureParameterValue::clampToEdge(),
                                                           GLTextureParameterValue::clampToEdge());

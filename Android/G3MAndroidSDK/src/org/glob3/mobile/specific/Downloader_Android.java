@@ -262,7 +262,9 @@ public final class Downloader_Android extends IDownloader {
             final Downloader_Android_Handler handler  = e.getValue();
             final long                       priority = handler.getPriority();
 
-            if (priority > selectedPriority) {
+            // equal priorities go oldest request first; the HashMap order is arbitrary
+            if ((priority > selectedPriority) ||
+                ((priority == selectedPriority) && (selectedHandler != null) && (handler.getFirstRequestID() < selectedHandler.getFirstRequestID()))) {
                selectedPriority = priority;
                selectedHandler  = handler;
                selectedURL      = url;

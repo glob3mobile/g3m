@@ -45,6 +45,10 @@ enum {
     NativeGL2_iOS* nGL = new NativeGL2_iOS();
     _gl = new GL(nGL);
     _firstRender = true;
+    _multisampleCount = 1;
+    _multisampleFramebuffer = 0;
+    _multisampleColorRenderbuffer = 0;
+    _multisampleDepthRenderbuffer = 0;
     _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
     if (!_context || ![EAGLContext setCurrentContext:_context]
@@ -82,14 +86,24 @@ enum {
       // This call is redundant, but needed if dealing with multiple contexts.
       [EAGLContext setCurrentContext:_context];
 
-      // This application only creates a single default framebuffer which is already bound at this point.
-      // This call is redundant, but needed if dealing with multiple framebuffers.
-      glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
       glViewport(0, 0, _width, _height);
     }
 
+    // every frame: the resolve below leaves the default framebuffer bound
+    glBindFramebuffer(GL_FRAMEBUFFER, (_multisampleFramebuffer != 0) ? _multisampleFramebuffer : _defaultFramebuffer);
+
     // Use shader program
     widget->render(_width, _height);
+
+    if (_multisampleFramebuffer != 0) {
+      glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, _multisampleFramebuffer);
+      glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _defaultFramebuffer);
+      glResolveMultisampleFramebufferAPPLE();
+      // the samples are not needed after the resolve, so the GPU need not write them back to memory
+      const GLenum discards[] = { GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT };
+      glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE, 2, discards);
+      glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
+    }
 
     if (_firstRender) {
       // This application only creates a single color renderbuffer which is already bound at this point.
@@ -124,6 +138,8 @@ enum {
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer {
   _firstRender = true;
 
+  glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
+
   // Allocate color buffer backing based on the current layer size
   glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
   [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
@@ -139,11 +155,72 @@ enum {
     return NO;
   }
 
+  [self resizeMultisampleBuffers];
+
   return YES;
+}
+
+- (void)setMultisampleCount:(GLint)count {
+  _multisampleCount = count;
+}
+
+- (GLint)multisampleCount {
+  return _multisampleCount;
+}
+
+- (void)deleteMultisampleBuffers {
+  if (_multisampleFramebuffer != 0) {
+    glDeleteFramebuffers(1, &_multisampleFramebuffer);
+    glDeleteRenderbuffers(1, &_multisampleColorRenderbuffer);
+    glDeleteRenderbuffers(1, &_multisampleDepthRenderbuffer);
+    _multisampleFramebuffer = 0;
+    _multisampleColorRenderbuffer = 0;
+    _multisampleDepthRenderbuffer = 0;
+  }
+}
+
+// MSAA smooths the edges of every mesh (trail, plane, planet limb); text is already antialiased by CoreGraphics
+- (void)resizeMultisampleBuffers {
+  [self deleteMultisampleBuffers];
+  if (_multisampleCount <= 1) {
+    return;
+  }
+
+  GLint maxSamples = 0;
+  glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples);
+  GLint samples = _multisampleCount;
+  if (samples > maxSamples) {
+    NSLog(@"ERROR: %d samples per pixel requested, the device supports up to %d; using %d", samples, maxSamples, maxSamples);
+    samples = maxSamples;
+  }
+
+  glGenFramebuffers(1, &_multisampleFramebuffer);
+  glBindFramebuffer(GL_FRAMEBUFFER, _multisampleFramebuffer);
+
+  glGenRenderbuffers(1, &_multisampleColorRenderbuffer);
+  glBindRenderbuffer(GL_RENDERBUFFER, _multisampleColorRenderbuffer);
+  glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_RGBA8_OES, _width, _height);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _multisampleColorRenderbuffer);
+
+  glGenRenderbuffers(1, &_multisampleDepthRenderbuffer);
+  glBindRenderbuffer(GL_RENDERBUFFER, _multisampleDepthRenderbuffer);
+  glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT16, _width, _height);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _multisampleDepthRenderbuffer);
+
+  const GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+  if (status != GL_FRAMEBUFFER_COMPLETE) {
+    NSLog(@"ERROR: failed to make complete multisample framebuffer object %x; drawing without MSAA", status);
+    [self deleteMultisampleBuffers];
+  }
+
+  glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
+  glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
 }
 
 - (void)dealloc {
   // Tear down GL
+  [self deleteMultisampleBuffers];
+
   if (_defaultFramebuffer) {
     glDeleteFramebuffers(1, &_defaultFramebuffer);
     _defaultFramebuffer = 0;

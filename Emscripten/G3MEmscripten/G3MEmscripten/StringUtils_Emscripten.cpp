@@ -3,6 +3,7 @@
 #include "StringUtils_Emscripten.hpp"
 
 #include <sstream>
+#include <emscripten/val.h>
 
 
 std::string StringUtils_Emscripten::createString(unsigned char* data,
@@ -98,11 +99,9 @@ bool StringUtils_Emscripten::endsWith(const std::string& string,
   }
 }
 
+// JavaScript's, not ::toupper byte by byte: "España" has to give "ESPAÑA"
 std::string StringUtils_Emscripten::toUpperCase(const std::string& string) const {
-  std::string result = string;
-  std::transform(result.begin(), result.end(), result.begin(), ::toupper);
-
-  return result;
+  return emscripten::val(string).call<std::string>("toUpperCase");
 }
 
 std::string StringUtils_Emscripten::toLowerCase(const std::string& string) const {
