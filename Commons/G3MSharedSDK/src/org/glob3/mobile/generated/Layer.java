@@ -294,7 +294,7 @@ public abstract class Layer
   
     for (int i = 0; i < infoSize; i++)
     {
-      if (_layerInfo.get(i) != that._layerInfo.get(i))
+      if (!_layerInfo.get(i).getText().equals(that._layerInfo.get(i).getText()))
       {
         return false;
       }

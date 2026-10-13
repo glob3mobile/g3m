@@ -152,6 +152,8 @@ void GPUProgram::getVariables(GL* gl) {
       ILogger::instance()->logError("Program \"%s\": uniform \"%s\" unknown to GPUVariable, ignored",
                                     _name.c_str(),
                                     u->_name.c_str());
+      delete u;
+      u = NULL;
     }
     else if (u != NULL) {
       _uniforms[u->getIndex()] = u;
@@ -176,6 +178,8 @@ void GPUProgram::getVariables(GL* gl) {
       ILogger::instance()->logError("Program \"%s\": attribute \"%s\" unknown to GPUVariable, ignored",
                                     _name.c_str(),
                                     a->_name.c_str());
+      delete a;
+      a = NULL;
     }
     else if (a != NULL) {
       _attributes[a->getIndex()] = a;

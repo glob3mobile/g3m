@@ -50,3 +50,33 @@ DeviceInfo_iOS::DeviceInfo_iOS() {
 float DeviceInfo_iOS::getDevicePixelRatio() const {
   return _devicePixelRatio;
 }
+
+// in points; the key window's, the one showing the widget
+static UIEdgeInsets currentSafeAreaInsets() {
+  for (UIScene* scene in [UIApplication sharedApplication].connectedScenes) {
+    if ([scene isKindOfClass:[UIWindowScene class]]) {
+      for (UIWindow* window in ((UIWindowScene*) scene).windows) {
+        if (window.isKeyWindow) {
+          return window.safeAreaInsets;
+        }
+      }
+    }
+  }
+  return UIEdgeInsetsZero;
+}
+
+float DeviceInfo_iOS::getSafeAreaInsetTop() const {
+  return (float) currentSafeAreaInsets().top * _devicePixelRatio;
+}
+
+float DeviceInfo_iOS::getSafeAreaInsetRight() const {
+  return (float) currentSafeAreaInsets().right * _devicePixelRatio;
+}
+
+float DeviceInfo_iOS::getSafeAreaInsetBottom() const {
+  return (float) currentSafeAreaInsets().bottom * _devicePixelRatio;
+}
+
+float DeviceInfo_iOS::getSafeAreaInsetLeft() const {
+  return (float) currentSafeAreaInsets().left * _devicePixelRatio;
+}

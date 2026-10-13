@@ -979,7 +979,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
     {
       addPeriodicalTask(periodicalTasks.get(i));
     }
-    _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)this, -1);
+    _mainRenderer.setChangedRendererInfoListener((ChangedRendererInfoListener)this, CompositeRenderer.NO_RENDERER_ID);
   
   
     _renderContext = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage, _gpuProgramManager, _surfaceElevationProvider, _viewMode, this);
@@ -1189,17 +1189,13 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
 
   private Geodetic3D nearestEquivalentPosition(Geodetic3D from, Geodetic3D to)
   {
-    double latInDegrees = to._latitude._degrees;
-    double lonInDegrees = to._longitude._degrees;
+    final double latInDegrees = to._latitude._degrees;
+    if ((latInDegrees < -90) || (latInDegrees > 90))
+    {
+      throw new RuntimeException("nearestEquivalentPosition: latitude must be in [-90, 90]");
+    }
   
-    while (latInDegrees > 90)
-    {
-      latInDegrees -= 180;
-    }
-    while (latInDegrees < -90)
-    {
-      latInDegrees += 180;
-    }
+    double lonInDegrees = to._longitude._degrees;
   
     while (lonInDegrees > 360)
     {

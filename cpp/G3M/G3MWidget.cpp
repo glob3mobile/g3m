@@ -47,6 +47,7 @@
 #include "GLState.hpp"
 #include "FrustumPolicy.hpp"
 #include "NearFrustumRenderer.hpp"
+#include "CompositeRenderer.hpp"
 
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -197,7 +198,7 @@ _previousTouchEvent(NULL)
   for (int i = 0; i < periodicalTasks.size(); i++) {
     addPeriodicalTask(periodicalTasks[i]);
   }
-  _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)this, -1);
+  _mainRenderer->setChangedRendererInfoListener((ChangedRendererInfoListener*)this, CompositeRenderer::NO_RENDERER_ID);
 
 
   _renderContext = new G3MRenderContext(_frameTasksExecutor,
@@ -1013,15 +1014,12 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
 
 Geodetic3D G3MWidget::nearestEquivalentPosition(const Geodetic3D& from,
                                                 const Geodetic3D& to) const {
-  double latInDegrees = to._latitude._degrees;
-  double lonInDegrees = to._longitude._degrees;
+  const double latInDegrees = to._latitude._degrees;
+  if ((latInDegrees < -90) || (latInDegrees > 90)) {
+    THROW_EXCEPTION("nearestEquivalentPosition: latitude must be in [-90, 90]");
+  }
 
-  while (latInDegrees > 90) {
-    latInDegrees -= 180;
-  }
-  while (latInDegrees < -90) {
-    latInDegrees += 180;
-  }
+  double lonInDegrees = to._longitude._degrees;
 
   while (lonInDegrees > 360) {
     lonInDegrees -= 360;

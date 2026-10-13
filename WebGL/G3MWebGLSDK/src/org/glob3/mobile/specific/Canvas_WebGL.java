@@ -66,10 +66,8 @@ public final class Canvas_WebGL extends ICanvas {
     canvas.width = w;
     canvas.height = h;
 
-    //if ((widthPixelRatio != 1) || (heightPixelRatio != 1)) {
     var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
     context.scale(widthPixelRatio, heightPixelRatio);
-    //}
 
     this.@org.glob3.mobile.specific.Canvas_WebGL::tryToSetCurrentFontToContext()();
    }-*/;

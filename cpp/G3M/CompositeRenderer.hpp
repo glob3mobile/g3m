@@ -35,6 +35,9 @@ private:
   const std::vector<const Info*> getInfo();
   
 public:
+  // rendererID of an info change that comes from no child renderer
+  static const size_t NO_RENDERER_ID;
+
   CompositeRenderer():
   _context(NULL),
   _enable(true),

@@ -247,6 +247,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     _heading  = heading;
     _pitch    = pitch;
     _roll     = roll;
+    _localTransform.setValid(false);
     cleanTransformMatrix();
   }
 
@@ -304,6 +305,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
       throw new RuntimeException("heading can't be NAN");
     }
     _heading = heading;
+    _localTransform.setValid(false);
     cleanTransformMatrix();
   }
   public final void setPitch(Angle pitch)
@@ -313,6 +315,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
       throw new RuntimeException("pitch can't be NAN");
     }
     _pitch = pitch;
+    _localTransform.setValid(false);
     cleanTransformMatrix();
   }
   public final void setRoll(Angle roll)
@@ -322,6 +325,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
       throw new RuntimeException("roll can't be NAN");
     }
     _roll = roll;
+    _localTransform.setValid(false);
     cleanTransformMatrix();
   }
 
@@ -342,6 +346,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
     _heading = heading;
     _pitch = pitch;
     _roll = roll;
+    _localTransform.setValid(false);
     cleanTransformMatrix();
   }
 
@@ -360,19 +365,10 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
       throw new RuntimeException("kappa can't be NAN");
     }
   
-    if (_heading != null)
-       _heading.dispose();
-    _heading = null;
-    if (_pitch != null)
-       _pitch.dispose();
-    _pitch = null;
-    if (_roll != null)
-       _roll.dispose();
-    _roll = null; //TODO WARNING reset this values for other methods to work properly
-  
-    cleanTransformMatrix();
-  
-  //  printf("O: %f, P: %f, K: %f\n", omega._degrees, phi._degrees, kappa._degrees);
+    // the local transform carries the orientation; heading, pitch and roll read as zero
+    _heading = Angle._ZERO;
+    _pitch = Angle._ZERO;
+    _roll = Angle._ZERO;
   
     // https://www.pcigeomatics.com/geomatica-help/COMMON/concepts/ExteriorOrientation_explainEO.html
     final MutableMatrix44D mLookDown = MutableMatrix44D.createRotationMatrix(Angle._HALF_PI, Vector3D.UP_X);

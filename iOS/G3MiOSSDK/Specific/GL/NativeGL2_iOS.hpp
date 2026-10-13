@@ -590,8 +590,6 @@ public:
   int getMaxTextureSize() const {
     GLint maxTextureSize = 0;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
-
-    NSLog(@"GL_MAX_TEXTURE_SIZE=%i", maxTextureSize);
     return maxTextureSize;
   }
 

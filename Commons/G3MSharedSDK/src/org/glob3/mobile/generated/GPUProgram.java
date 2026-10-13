@@ -105,6 +105,9 @@ public class GPUProgram
       if ((u != null) && (u.getIndex() < 0))
       {
         ILogger.instance().logError("Program \"%s\": uniform \"%s\" unknown to GPUVariable, ignored", _name, u._name);
+        if (u != null)
+           u.dispose();
+        u = null;
       }
       else if (u != null)
       {
@@ -130,6 +133,9 @@ public class GPUProgram
       if ((a != null) && (a.getIndex() < 0))
       {
         ILogger.instance().logError("Program \"%s\": attribute \"%s\" unknown to GPUVariable, ignored", _name, a._name);
+        if (a != null)
+           a.dispose();
+        a = null;
       }
       else if (a != null)
       {

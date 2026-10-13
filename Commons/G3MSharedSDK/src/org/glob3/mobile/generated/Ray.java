@@ -28,6 +28,9 @@ public class Ray
 {
   private Mesh _mesh;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Ray(Ray that);
+
   public final Vector3D _origin ;
   public final Vector3D _direction ;
 

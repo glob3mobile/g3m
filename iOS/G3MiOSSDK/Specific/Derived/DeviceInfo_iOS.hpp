@@ -30,6 +30,11 @@ public:
 
   float getDevicePixelRatio() const;
 
+  float getSafeAreaInsetTop() const;
+  float getSafeAreaInsetRight() const;
+  float getSafeAreaInsetBottom() const;
+  float getSafeAreaInsetLeft() const;
+
 };
 
 #endif

@@ -20,22 +20,22 @@ _cursor(0),
 _bufferTimestamp( buffer->timestamp() ),
 _bufferSize( buffer->size() )
 {
+} 
+
+void ByteBufferIterator::checkUnchanged() const {
+  if (_bufferTimestamp != _buffer->timestamp()) {
+    THROW_EXCEPTION("The buffer was changed after the iteration started");
+  }
 }
 
 bool ByteBufferIterator::hasNext() const {
-  if (_bufferTimestamp != _buffer->timestamp()) {
-    THROW_EXCEPTION("The buffer was changed after the iteration started");
-    // _bufferSize = _buffer->size();
-  }
+  checkUnchanged();
 
   return ( _cursor < _bufferSize );
 }
 
 unsigned char ByteBufferIterator::nextUInt8() {
-  if (_bufferTimestamp != _buffer->timestamp()) {
-    THROW_EXCEPTION("The buffer was changed after the iteration started");
-    //_bufferSize = _buffer->size();
-  }
+  checkUnchanged();
 
   if (_cursor >= _bufferSize) {
     THROW_EXCEPTION("Iteration overflow");
@@ -147,6 +147,8 @@ IByteBuffer* ByteBufferIterator::nextBufferUpTo(unsigned char sentinel) {
 }
 
 IByteBuffer* ByteBufferIterator::nextBuffer(const size_t size) {
+  checkUnchanged();
+
   if ((_cursor + size) > _bufferSize) {
     THROW_EXCEPTION("Iteration overflow");
   }

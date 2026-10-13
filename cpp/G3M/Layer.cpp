@@ -158,7 +158,7 @@ bool Layer::isEquals(const Layer* that) const {
   }
 
   for (size_t i = 0; i < infoSize; i++) {
-    if (_layerInfo->at(i) != that->_layerInfo->at(i)) {
+    if (_layerInfo->at(i)->getText() != that->_layerInfo->at(i)->getText()) {
       return false;
     }
   }

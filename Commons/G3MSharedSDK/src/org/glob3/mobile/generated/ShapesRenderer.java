@@ -340,10 +340,13 @@ public class ShapesRenderer extends DefaultRenderer
     for (int n = 0; n<_shapes.size(); n++)
     {
       Shape shape = _shapes.get(n);
-      java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
-      for (int i = 0; i<distances.size(); i++)
+      if (shape.isEnable())
       {
-        shapeDistances.add(new ShapeDistance(distances.get(i), shape));
+        java.util.ArrayList<Double> distances = shape.intersectionsDistances(planet, origin, direction);
+        for (int i = 0; i<distances.size(); i++)
+        {
+          shapeDistances.add(new ShapeDistance(distances.get(i), shape));
+        }
       }
     }
   

@@ -32,8 +32,15 @@ public:
 
 class CameraFocusSceneLighting: public SceneLighting {
 
-  Color _ambientColor;
-  Color _diffuseColor;
+#ifdef C_CODE
+  const Color* _ambientColor;
+  const Color* _diffuseColor;
+#endif
+#ifdef JAVA_CODE
+  private Color _ambientColor;
+  private Color _diffuseColor;
+#endif
+  bool         _colorsChanged;
 
   MeshRenderer* _meshRenderer;
 
@@ -47,7 +54,10 @@ public:
 
   CameraFocusSceneLighting(const Color& ambient, const Color& diffuse);
 
-  ~CameraFocusSceneLighting() {}
+  ~CameraFocusSceneLighting();
+
+  void setColors(const Color& ambient,
+                 const Color& diffuse);
 
   void modifyGLState(GLState* glState, const G3MRenderContext* rc);
 

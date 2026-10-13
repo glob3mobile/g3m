@@ -39,4 +39,25 @@ public class DeviceInfo_Android extends IDeviceInfo {
       return _dpi / 150.0f;
    }
 
+   // the cutout (API 28) and rounded corners (API 31) are not in compileSdkVersion 27: no safe area yet
+   @Override
+   public float getSafeAreaInsetTop() {
+      return 0;
+   }
+
+   @Override
+   public float getSafeAreaInsetRight() {
+      return 0;
+   }
+
+   @Override
+   public float getSafeAreaInsetBottom() {
+      return 0;
+   }
+
+   @Override
+   public float getSafeAreaInsetLeft() {
+      return 0;
+   }
+
 }

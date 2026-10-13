@@ -264,6 +264,7 @@
 		CF6606F423DF2FFD00795C7F /* AndTileCondition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6602B623DF2DA600795C7F /* AndTileCondition.hpp */; };
 		CF6606F623DF2FFD00795C7F /* CompositeElevationData.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6602B923DF2DA600795C7F /* CompositeElevationData.hpp */; };
 		CF6606F723DF2FFD00795C7F /* HUDRelativePosition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6602BA23DF2DA600795C7F /* HUDRelativePosition.hpp */; };
+		8E67274FAD5260E70C5E705D /* HUDSafeAreaPosition.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = D087B7ACB0D0A94B6F04C8CA /* HUDSafeAreaPosition.hpp */; };
 		CF6606F823DF2FFD00795C7F /* JSONArray.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6602BB23DF2DA600795C7F /* JSONArray.hpp */; };
 		CF6606F923DF2FFD00795C7F /* IJSONParser.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6602BD23DF2DA600795C7F /* IJSONParser.hpp */; };
 		CF6606FA23DF2FFD00795C7F /* TextureMapping.hpp in CopyFiles */ = {isa = PBXBuildFile; fileRef = CF6602BE23DF2DA600795C7F /* TextureMapping.hpp */; };
@@ -762,6 +763,7 @@
 		CF6608F423DF330700795C7F /* ChangedListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66037D23DF2DA800795C7F /* ChangedListener.cpp */; };
 		CF6608F523DF330700795C7F /* AndTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66037E23DF2DA800795C7F /* AndTileCondition.cpp */; };
 		CF6608F623DF330700795C7F /* HUDRelativePosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66038023DF2DA800795C7F /* HUDRelativePosition.cpp */; };
+		6D5559740C34B9151CB8D80B /* HUDSafeAreaPosition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C519046BAA3FC579967A5DAD /* HUDSafeAreaPosition.cpp */; };
 		CF6608F723DF330700795C7F /* JSONArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66038123DF2DA800795C7F /* JSONArray.cpp */; };
 		CF6608F823DF330700795C7F /* CompositeElevationData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66038323DF2DA800795C7F /* CompositeElevationData.cpp */; };
 		CF6608F923DF330700795C7F /* TouchEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF66038423DF2DA800795C7F /* TouchEvent.cpp */; };
@@ -1237,6 +1239,7 @@
 				CF6606F423DF2FFD00795C7F /* AndTileCondition.hpp in CopyFiles */,
 				CF6606F623DF2FFD00795C7F /* CompositeElevationData.hpp in CopyFiles */,
 				CF6606F723DF2FFD00795C7F /* HUDRelativePosition.hpp in CopyFiles */,
+				8E67274FAD5260E70C5E705D /* HUDSafeAreaPosition.hpp in CopyFiles */,
 				CF6606F823DF2FFD00795C7F /* JSONArray.hpp in CopyFiles */,
 				CF6606F923DF2FFD00795C7F /* IJSONParser.hpp in CopyFiles */,
 				CF6606FA23DF2FFD00795C7F /* TextureMapping.hpp in CopyFiles */,
@@ -1956,6 +1959,7 @@
 		CF6602B823DF2DA600795C7F /* TransformableTextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformableTextureMapping.cpp; sourceTree = "<group>"; };
 		CF6602B923DF2DA600795C7F /* CompositeElevationData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CompositeElevationData.hpp; sourceTree = "<group>"; };
 		CF6602BA23DF2DA600795C7F /* HUDRelativePosition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDRelativePosition.hpp; sourceTree = "<group>"; };
+		D087B7ACB0D0A94B6F04C8CA /* HUDSafeAreaPosition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HUDSafeAreaPosition.hpp; sourceTree = "<group>"; };
 		CF6602BB23DF2DA600795C7F /* JSONArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONArray.hpp; sourceTree = "<group>"; };
 		CF6602BC23DF2DA600795C7F /* GEOLineRasterSymbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOLineRasterSymbol.cpp; sourceTree = "<group>"; };
 		CF6602BD23DF2DA600795C7F /* IJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IJSONParser.hpp; sourceTree = "<group>"; };
@@ -2149,6 +2153,7 @@
 		CF66037E23DF2DA800795C7F /* AndTileCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AndTileCondition.cpp; sourceTree = "<group>"; };
 		CF66037F23DF2DA800795C7F /* G3MContext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = G3MContext.hpp; sourceTree = "<group>"; };
 		CF66038023DF2DA800795C7F /* HUDRelativePosition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDRelativePosition.cpp; sourceTree = "<group>"; };
+		C519046BAA3FC579967A5DAD /* HUDSafeAreaPosition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDSafeAreaPosition.cpp; sourceTree = "<group>"; };
 		CF66038123DF2DA800795C7F /* JSONArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONArray.cpp; sourceTree = "<group>"; };
 		CF66038223DF2DA800795C7F /* TransformableTextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransformableTextureMapping.hpp; sourceTree = "<group>"; };
 		CF66038323DF2DA800795C7F /* CompositeElevationData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeElevationData.cpp; sourceTree = "<group>"; };
@@ -3164,6 +3169,8 @@
 				7C1FA6064C9CE9D9FAFA59C3 /* HUDBillboardWidget.cpp */,
 				CF6602BA23DF2DA600795C7F /* HUDRelativePosition.hpp */,
 				CF66038023DF2DA800795C7F /* HUDRelativePosition.cpp */,
+				D087B7ACB0D0A94B6F04C8CA /* HUDSafeAreaPosition.hpp */,
+				C519046BAA3FC579967A5DAD /* HUDSafeAreaPosition.cpp */,
 				CF6603D823DF2DA900795C7F /* HUDRelativeSize.hpp */,
 				CF66017323DF2DA500795C7F /* HUDRelativeSize.cpp */,
 				CF66041823DF2DAA00795C7F /* HUDRenderer.hpp */,
@@ -4116,6 +4123,7 @@
 				CF6608F423DF330700795C7F /* ChangedListener.cpp in Sources */,
 				CF6608F523DF330700795C7F /* AndTileCondition.cpp in Sources */,
 				CF6608F623DF330700795C7F /* HUDRelativePosition.cpp in Sources */,
+				6D5559740C34B9151CB8D80B /* HUDSafeAreaPosition.cpp in Sources */,
 				CF6608F723DF330700795C7F /* JSONArray.cpp in Sources */,
 				CF6608F823DF330700795C7F /* CompositeElevationData.cpp in Sources */,
 				CF6608F923DF330700795C7F /* TouchEvent.cpp in Sources */,

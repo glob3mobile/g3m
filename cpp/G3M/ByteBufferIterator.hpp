@@ -16,11 +16,13 @@ class IByteBuffer;
 class ByteBufferIterator {
 private:
   const IByteBuffer* _buffer;
-  int                _cursor;
+  size_t             _cursor;
   int                _bufferTimestamp;
-  mutable size_t     _bufferSize;
+  const size_t       _bufferSize;
 
   ByteBufferIterator(const ByteBufferIterator& that);
+
+  void checkUnchanged() const;
 
 public:
   ByteBufferIterator(const IByteBuffer* buffer);

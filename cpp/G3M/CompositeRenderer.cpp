@@ -8,6 +8,8 @@
 #include "CompositeRenderer.hpp"
 #include "ILogger.hpp"
 
+const size_t CompositeRenderer::NO_RENDERER_ID = -1;
+
 CompositeRenderer::~CompositeRenderer() {
   for (int i = 0; i < _renderersSize; i++) {
     delete _renderers[i];
@@ -274,22 +276,22 @@ void CompositeRenderer::setChangedRendererInfoListener(ChangedRendererInfoListen
   _changedInfoListener = changedInfoListener;
 
   if(_changedInfoListener != NULL) {
-    _changedInfoListener->changedRendererInfo(-1, getInfo());
+    _changedInfoListener->changedRendererInfo(NO_RENDERER_ID, getInfo());
   }
 }
 
 void CompositeRenderer::changedRendererInfo(const size_t rendererID,
                                             const std::vector<const Info*>& info) {
-  if (rendererID >= 0) {
+  if (rendererID != NO_RENDERER_ID) {
     if (rendererID < _renderersSize) {
       _renderers[rendererID]->setInfo(info);
     }
     else {
-      ILogger::instance()->logWarning("Child Render not found: %d", rendererID);
+      ILogger::instance()->logWarning("Child Render not found: %ld", rendererID);
     }
   }
   
   if (_changedInfoListener != NULL) {
-    _changedInfoListener->changedRendererInfo(-1, getInfo());
+    _changedInfoListener->changedRendererInfo(NO_RENDERER_ID, getInfo());
   }
 }

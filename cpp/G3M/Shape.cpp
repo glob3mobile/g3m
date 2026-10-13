@@ -339,6 +339,7 @@ void Shape::setHeading(const Angle& heading) {
 #ifdef JAVA_CODE
   _heading = heading;
 #endif
+  _localTransform.setValid(false);
   cleanTransformMatrix();
 }
 
@@ -353,6 +354,7 @@ void Shape::setPitch(const Angle& pitch) {
 #ifdef JAVA_CODE
   _pitch = pitch;
 #endif
+  _localTransform.setValid(false);
   cleanTransformMatrix();
 }
 
@@ -367,6 +369,7 @@ void Shape::setRoll(const Angle& roll) {
 #ifdef JAVA_CODE
   _roll = roll;
 #endif
+  _localTransform.setValid(false);
   cleanTransformMatrix();
 }
 
@@ -395,6 +398,7 @@ void Shape::setHeadingPitchRoll(const Angle& heading,
   _pitch = pitch;
   _roll = roll;
 #endif
+  _localTransform.setValid(false);
   cleanTransformMatrix();
 }
 
@@ -412,17 +416,21 @@ void Shape::setOmegaPhiKappa(const Planet* planet,
     THROW_EXCEPTION("kappa can't be NAN");
   }
   
+  // the local transform carries the orientation; heading, pitch and roll read as zero
+#ifdef C_CODE
   delete _heading;
-  _heading = NULL;
+  _heading = new Angle(Angle::_ZERO);
   delete _pitch;
-  _pitch = NULL;
+  _pitch = new Angle(Angle::_ZERO);
   delete _roll;
-  _roll = NULL; //TODO WARNING reset this values for other methods to work properly
-  
-  cleanTransformMatrix();
-  
-//  printf("O: %f, P: %f, K: %f\n", omega._degrees, phi._degrees, kappa._degrees);
-  
+  _roll = new Angle(Angle::_ZERO);
+#endif
+#ifdef JAVA_CODE
+  _heading = Angle._ZERO;
+  _pitch = Angle._ZERO;
+  _roll = Angle._ZERO;
+#endif
+
   // https://www.pcigeomatics.com/geomatica-help/COMMON/concepts/ExteriorOrientation_explainEO.html
   const MutableMatrix44D mLookDown = MutableMatrix44D::createRotationMatrix(Angle::_HALF_PI,                Vector3D::UP_X);
   const MutableMatrix44D mOmega    = MutableMatrix44D::createRotationMatrix(omega,                          Vector3D::UP_X);
@@ -463,6 +471,7 @@ void Shape::setFullPosition(const Geodetic3D& position,
   _pitch    = pitch;
   _roll     = roll;
 #endif
+  _localTransform.setValid(false);
   cleanTransformMatrix();
 }
 

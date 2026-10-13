@@ -2,8 +2,9 @@ package org.glob3.mobile.generated;
 public class CameraFocusSceneLighting extends SceneLighting
 {
 
-  private Color _ambientColor ;
-  private Color _diffuseColor ;
+  private Color _ambientColor;
+  private Color _diffuseColor;
+  private boolean _colorsChanged;
 
   private MeshRenderer _meshRenderer;
 
@@ -22,6 +23,7 @@ public class CameraFocusSceneLighting extends SceneLighting
   {
      _ambientColor = ambient;
      _diffuseColor = diffuse;
+     _colorsChanged = false;
      _cameraDirX = 0;
      _cameraDirY = 0;
      _cameraDirZ = 0;
@@ -31,6 +33,17 @@ public class CameraFocusSceneLighting extends SceneLighting
 
   public void dispose()
   {
+    _ambientColor = null;
+    _diffuseColor = null;
+  }
+
+  public final void setColors(Color ambient, Color diffuse)
+  {
+    _ambientColor = null;
+    _diffuseColor = null;
+    _ambientColor = ambient;
+    _diffuseColor = diffuse;
+    _colorsChanged = true;
   }
 
   public final void modifyGLState(GLState glState, G3MRenderContext rc)
@@ -40,7 +53,7 @@ public class CameraFocusSceneLighting extends SceneLighting
     camera.getViewDirectionInto(_camDir);
     camera.getUpMutable(_up);
   
-    if ((_cameraDirX == _camDir.x()) && (_cameraDirY == _camDir.y()) && (_cameraDirZ == _camDir.z()) && (_upX == _up.x()) && (_upY == _up.y()) && (_upZ == _up.z()))
+    if (!_colorsChanged && (_cameraDirX == _camDir.x()) && (_cameraDirY == _camDir.y()) && (_cameraDirZ == _camDir.z()) && (_upX == _up.x()) && (_upY == _up.y()) && (_upZ == _up.z()))
     {
       return;
     }
@@ -51,11 +64,16 @@ public class CameraFocusSceneLighting extends SceneLighting
     final MutableVector3D rotationLightDirAxis = _up.cross(cameraVector);
     final MutableVector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis, Angle.fromDegrees(45.0));
   
-    DirectionLightGLFeature f = (DirectionLightGLFeature) glState.getGLFeature(GLFeatureID.GLF_DIRECTION_LIGTH);
+    // the feature's colours are immutable: new colours replace the whole feature
+    DirectionLightGLFeature f = _colorsChanged ? null : (DirectionLightGLFeature) glState.getGLFeature(GLFeatureID.GLF_DIRECTION_LIGTH);
+    _colorsChanged = false;
     if (f == null)
     {
       glState.clearGLFeatureGroup(GLFeatureGroupName.LIGHTING_GROUP);
-      glState.addGLFeature(new DirectionLightGLFeature(lightDir.asVector3D(), _diffuseColor, _ambientColor), false);
+      glState.addGLFeature(new DirectionLightGLFeature(lightDir.asVector3D(),
+                                                       _diffuseColor,
+                                                       _ambientColor),
+                           false);
     }
     else
     {

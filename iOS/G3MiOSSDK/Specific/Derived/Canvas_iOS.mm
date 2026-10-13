@@ -83,9 +83,7 @@ void Canvas_iOS::_initialize(int width, int height) {
     return;
   }
 
-//  if ((widthPixelRatio != 1) || (heightPixelRatio != 1)) {
   CGContextScaleCTM(_context, widthPixelRatio, heightPixelRatio);
-//  }
 
   CGColorSpaceRelease( colorSpace );
 

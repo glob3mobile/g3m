@@ -50,8 +50,9 @@ void FixedFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCon
 }
 
 CameraFocusSceneLighting::CameraFocusSceneLighting(const Color& ambient, const Color& diffuse):
-_ambientColor(ambient),
-_diffuseColor(diffuse),
+_ambientColor(new Color(ambient)),
+_diffuseColor(new Color(diffuse)),
+_colorsChanged(false),
 _cameraDirX(0),
 _cameraDirY(0),
 _cameraDirZ(0),
@@ -60,13 +61,28 @@ _meshRenderer(NULL)
 
 }
 
+CameraFocusSceneLighting::~CameraFocusSceneLighting() {
+  delete _ambientColor;
+  delete _diffuseColor;
+}
+
+void CameraFocusSceneLighting::setColors(const Color& ambient,
+                                         const Color& diffuse) {
+  delete _ambientColor;
+  delete _diffuseColor;
+  _ambientColor = new Color(ambient);
+  _diffuseColor = new Color(diffuse);
+  _colorsChanged = true;
+}
+
 void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderContext* rc) {
   const Camera* camera = rc->getCurrentCamera();
 
   camera->getViewDirectionInto(_camDir);
   camera->getUpMutable(_up);
 
-  if ((_cameraDirX == _camDir.x()) &&
+  if (!_colorsChanged &&
+      (_cameraDirX == _camDir.x()) &&
       (_cameraDirY == _camDir.y()) &&
       (_cameraDirZ == _camDir.z()) &&
       (_upX == _up.x()) &&
@@ -82,13 +98,23 @@ void CameraFocusSceneLighting::modifyGLState(GLState* glState, const G3MRenderCo
   const MutableVector3D lightDir = cameraVector.rotateAroundAxis(rotationLightDirAxis,
                                                                  Angle::fromDegrees(45.0));
 
-  DirectionLightGLFeature* f = (DirectionLightGLFeature*) glState->getGLFeature(GLF_DIRECTION_LIGTH);
+  // the feature's colours are immutable: new colours replace the whole feature
+  DirectionLightGLFeature* f = _colorsChanged ? NULL : (DirectionLightGLFeature*) glState->getGLFeature(GLF_DIRECTION_LIGTH);
+  _colorsChanged = false;
   if (f == NULL) {
     glState->clearGLFeatureGroup(LIGHTING_GROUP);
+#ifdef C_CODE
     glState->addGLFeature(new DirectionLightGLFeature(lightDir.asVector3D(),
-                                                      _diffuseColor,
-                                                      _ambientColor),
+                                                      *_diffuseColor,
+                                                      *_ambientColor),
                           false);
+#endif
+#ifdef JAVA_CODE
+    glState.addGLFeature(new DirectionLightGLFeature(lightDir.asVector3D(),
+                                                     _diffuseColor,
+                                                     _ambientColor),
+                         false);
+#endif
   }
   else {
     f->setLightDirection(lightDir.asVector3D());

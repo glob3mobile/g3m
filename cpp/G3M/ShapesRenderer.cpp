@@ -209,9 +209,11 @@ std::vector<ShapeDistance> ShapesRenderer::intersectionsDistances(const Planet* 
   std::vector<ShapeDistance> shapeDistances;
   for (int n=0; n<_shapes.size(); n++) {
     Shape* shape = _shapes[n];
-    std::vector<double> distances = shape->intersectionsDistances(planet, origin, direction);
-    for (int i=0; i<distances.size(); i++) {
-      shapeDistances.push_back(ShapeDistance(distances[i], shape));
+    if (shape->isEnable()) {
+      std::vector<double> distances = shape->intersectionsDistances(planet, origin, direction);
+      for (int i=0; i<distances.size(); i++) {
+        shapeDistances.push_back(ShapeDistance(distances[i], shape));
+      }
     }
   }
 
