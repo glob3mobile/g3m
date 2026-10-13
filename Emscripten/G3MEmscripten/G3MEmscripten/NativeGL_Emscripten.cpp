@@ -311,6 +311,8 @@ void NativeGL_Emscripten::texImage2D(const IImage* image, int format) const {
 
   val domImage = imageEM->getDOMImage();
 
+  // Image_Emscripten::isPremultiplied() is true: the GPU must hold premultiplied texels, as on iOS and Android.
+  _gl.call<void>("pixelStorei", _gl["UNPACK_PREMULTIPLY_ALPHA_WEBGL"], true);
   _gl.call<void>("texImage2D", GL_TEXTURE_2D, 0, format, format, GL_UNSIGNED_BYTE, domImage);
 }
 

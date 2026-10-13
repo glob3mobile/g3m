@@ -52,12 +52,8 @@ public class TextUtils_WebGL extends ITextUtils {
     context.textBaseline = "alphabetic";
     context.fillText(label, 0, metrics.ascent);
 
-    var jsResult = new Image();
-    jsResult.onload = function() {
-      var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
-      listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
-    };
-    jsResult.src = canvas.toDataURL();
+    var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(canvas);
+    listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
 
    }-*/;
 
@@ -155,12 +151,8 @@ public class TextUtils_WebGL extends ITextUtils {
       context.fillText(label, imageWidth + separation, ((resultHeight - textHeight) / 2) + metrics.ascent);
     }
 
-    var jsResult = new Image();
-    jsResult.onload = function() {
-      var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(jsResult);
-      listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
-    };
-    jsResult.src = canvas.toDataURL();
+    var result = @org.glob3.mobile.specific.Image_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(canvas);
+    listener.@org.glob3.mobile.generated.IImageListener::imageCreated(Lorg/glob3/mobile/generated/IImage;)(result);
 
    }-*/;
 

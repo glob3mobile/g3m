@@ -186,10 +186,10 @@ public final class Image_Android extends IImage {
    @Override
    public void getPixel(final int x, final int y, final MutableColor255 pixel) {
       final int androidPixel = _bitmapHolder._bitmap.getPixel(x, y);
-      pixel._red   = (byte) android.graphics.Color.red(androidPixel);
-      pixel._green = (byte) android.graphics.Color.green(androidPixel);
-      pixel._blue  = (byte) android.graphics.Color.blue(androidPixel);
-      pixel._alpha = (byte) android.graphics.Color.alpha(androidPixel);
+      pixel._red   = android.graphics.Color.red(androidPixel);
+      pixel._green = android.graphics.Color.green(androidPixel);
+      pixel._blue  = android.graphics.Color.blue(androidPixel);
+      pixel._alpha = android.graphics.Color.alpha(androidPixel);
    }
 
    //   @Override

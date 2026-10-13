@@ -215,6 +215,8 @@ public final class NativeGL_WebGL extends INativeGL {
     var TEXTURE_2D = gl.TEXTURE_2D;
     var UNSIGNED_BYTE = gl.UNSIGNED_BYTE;
 
+    // Image_WebGL.isPremultiplied() is true: the GPU must hold premultiplied texels, as on iOS and Android.
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     gl.texImage2D(TEXTURE_2D, 0, format, format, UNSIGNED_BYTE, img);
    }-*/;
 

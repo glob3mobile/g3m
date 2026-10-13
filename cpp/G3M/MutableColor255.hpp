@@ -15,10 +15,11 @@ private:
 
 
 public:
-  unsigned char _red;
-  unsigned char _green;
-  unsigned char _blue;
-  unsigned char _alpha;
+  // Channels are 0-255 held in int: cpp2java turns unsigned char into Java's signed byte.
+  int _red;
+  int _green;
+  int _blue;
+  int _alpha;
 
   MutableColor255(const MutableColor255& that):
   _red(that._red),
@@ -28,10 +29,10 @@ public:
   {
   }
 
-  MutableColor255(unsigned char red,
-                  unsigned char green,
-                  unsigned char blue,
-                  unsigned char alpha):
+  MutableColor255(int red,
+                  int green,
+                  int blue,
+                  int alpha):
   _red(red),
   _green(green),
   _blue(blue),
