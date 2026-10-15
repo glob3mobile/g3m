@@ -20,8 +20,8 @@ package org.glob3.mobile.generated;
 
 public class Vector2S
 {
-  public short _x;
-  public short _y;
+  public final short _x;
+  public final short _y;
 
   public Vector2S(short x, short y)
   {
@@ -43,6 +43,5 @@ public class Vector2S
   {
     return _x * _x + _y * _y;
   }
-
 
 }
