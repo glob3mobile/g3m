@@ -10,6 +10,7 @@
 #define __G3M__VisibleSectorListener__
 
 #include "Sector.hpp"
+class Geodetic3D;
 
 class VisibleSectorListener {
 public:

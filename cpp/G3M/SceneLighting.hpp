@@ -11,7 +11,6 @@
 
 class GLState;
 class G3MRenderContext;
-class Vector3D;
 class MeshRenderer;
 #include "Color.hpp"
 #include "MutableVector3D.hpp"

@@ -9,6 +9,7 @@ package org.glob3.mobile.generated;
 
 
 //class IImage;
+//class TileImageContribution;
 
 public abstract class TileImageListener
 {

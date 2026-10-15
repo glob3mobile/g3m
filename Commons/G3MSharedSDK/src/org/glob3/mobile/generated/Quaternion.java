@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 //class MutableMatrix44D;
-//class TaitBryanAngles;
 //class MutableVector3D;
 //class MutableAngle;
 

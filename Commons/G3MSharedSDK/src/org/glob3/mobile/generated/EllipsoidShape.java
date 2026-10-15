@@ -22,7 +22,6 @@ package org.glob3.mobile.generated;
 //class FloatBufferBuilderFromCartesian2D;
 //class FloatBufferBuilderFromCartesian3D;
 //class TextureIDReference;
-//class G3MEventContext;
 
 
 public class EllipsoidShape extends AbstractMeshShape

@@ -14,8 +14,6 @@
 #include "TimeInterval.hpp"
 #include "URL.hpp"
 class TileImageContribution;
-class IDownloader;
-class IBufferDownloadListener;
 class IMathUtils;
 class IStringUtils;
 class GEORasterSymbolizer;

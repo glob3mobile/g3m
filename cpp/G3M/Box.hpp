@@ -15,7 +15,6 @@
 
 #include "GLState.hpp"
 
-class Vector2D;
 class Mesh;
 class Color;
 

@@ -17,7 +17,6 @@
 
 #include "ElevationData.hpp"
 
-class CompositeElevationData;
 
 class CompositeElevationDataProvider: public ElevationDataProvider {
 private:

@@ -22,7 +22,6 @@ package org.glob3.mobile.generated;
 //class JSONString;
 //class JSONArray;
 //class JSONNumber;
-//class JSONDouble;
 //class JSONInteger;
 //class JSONLong;
 //class JSONBoolean;

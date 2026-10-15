@@ -52,6 +52,11 @@ private:
       _array[_size++] = element;
     }
 
+    // babel translates std::vector push_back to add; push_back stays for cpp2java
+    public void add(final short element) {
+      push_back(element);
+    }
+
     private void ensureCapacity(final int mincap) {
       if (mincap > _array.length) {
         final int newcap = ((_array.length * 3) >> 1) + 1;

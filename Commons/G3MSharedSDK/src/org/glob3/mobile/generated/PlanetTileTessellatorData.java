@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class IShortBuffer;
 //class Sector;
 //class FloatBufferBuilderFromGeodetic;
 //class ShortBufferBuilder;

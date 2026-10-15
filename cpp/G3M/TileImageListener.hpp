@@ -10,6 +10,7 @@
 #define __G3M__TileImageListener__
 
 class IImage;
+class TileImageContribution;
 #include <string>
 
 class TileImageListener {

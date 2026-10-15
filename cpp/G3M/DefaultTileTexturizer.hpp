@@ -12,7 +12,6 @@
 #include "TileTexturizer.hpp"
 
 class LeveledTexturedMesh;
-class TextureIDReference;
 class IImageFactory;
 class IImage;
 

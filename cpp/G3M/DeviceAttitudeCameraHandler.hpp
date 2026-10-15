@@ -14,7 +14,6 @@
 #include "CameraEventHandler.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Geodetic3D.hpp"
-class MeshRenderer;
 class Camera;
 
 

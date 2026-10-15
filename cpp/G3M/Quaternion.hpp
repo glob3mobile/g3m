@@ -10,7 +10,6 @@
 #define QuaternionF_hpp
 
 class MutableMatrix44D;
-class TaitBryanAngles;
 class MutableVector3D;
 class MutableAngle;
 

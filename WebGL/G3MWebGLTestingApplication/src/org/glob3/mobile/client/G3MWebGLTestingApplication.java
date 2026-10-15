@@ -64,7 +64,7 @@ public class G3MWebGLTestingApplication
                13);
 
       final URLTemplateLayer layer = new URLTemplateLayer( //
-               "http://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg", //
+               "https://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg", //
                Sector.FULL_SPHERE, //
                false, //
                TimeInterval.fromDays(30), //

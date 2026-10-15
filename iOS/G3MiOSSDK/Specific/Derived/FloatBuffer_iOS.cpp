@@ -12,7 +12,6 @@
 
 
 long long FloatBuffer_iOS::_nextID = 0;
-GLuint FloatBuffer_iOS::_boundVertexBuffer = -1;
 
 long long FloatBuffer_iOS::_newCounter    = 0;
 long long FloatBuffer_iOS::_deleteCounter = 0;
@@ -59,10 +58,7 @@ void FloatBuffer_iOS::bindAsVBOToGPU() const {
     _vertexBufferCreated = true;
   }
 
-  if (_vertexBuffer != _boundVertexBuffer) {
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    _boundVertexBuffer = _vertexBuffer;
-  }
+  glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
 
   if (_vertexBufferTimestamp != _timestamp) {
     _vertexBufferTimestamp = _timestamp;
@@ -84,10 +80,6 @@ FloatBuffer_iOS::~FloatBuffer_iOS() {
 //    if (GL_NO_ERROR != glGetError()) {
 //      THROW_EXCEPTION("Problem deleting VBO");
 //    }
-
-    if (_vertexBuffer == _boundVertexBuffer) {
-      _boundVertexBuffer = -1;
-    }
   }
 
   delete [] _values;

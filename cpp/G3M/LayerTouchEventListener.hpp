@@ -11,6 +11,7 @@
 #include "Geodetic3D.hpp"
 #include "Sector.hpp"
 class Layer;
+class G3MEventContext;
 
 class LayerTouchEvent {
 private:

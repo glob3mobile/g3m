@@ -10,9 +10,6 @@
 #define __G3M__OrderedRenderable__
 
 class G3MRenderContext;
-class GLGlobalState;
-class GPUProgramState;
-class GLState;
 
 class OrderedRenderable {
 public:

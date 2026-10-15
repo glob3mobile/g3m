@@ -21,7 +21,6 @@ package org.glob3.mobile.generated;
 
 //class IGLUniformID;
 //class GPUProgramManager;
-//class GPUProgramState;
 //class GLState;
 
 

@@ -15,7 +15,6 @@ class JSONBaseObject;
 class JSONString;
 class JSONArray;
 class JSONNumber;
-class JSONDouble;
 class JSONInteger;
 class JSONLong;
 class JSONBoolean;

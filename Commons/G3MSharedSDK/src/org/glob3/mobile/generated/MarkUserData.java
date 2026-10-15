@@ -19,15 +19,10 @@ package org.glob3.mobile.generated;
 
 //class IImage;
 //class IFloatBuffer;
-//class IGLTextureID;
 //class MarkTouchListener;
-//class GLGlobalState;
-//class GPUProgramState;
 //class TextureIDReference;
 //class EffectTarget;
-//class IImageFactory;
 //class MarksRenderer;
-//class MarkImageFactoryListener;
 //class TouchEvent;
 //class ModelTransformGLFeature;
 //class MarkOutfit;

@@ -349,6 +349,10 @@
   return [_renderer multisampleCount];
 }
 
+- (void)captureNextFrame:(void (^)(UIImage* frame))handler {
+  [_renderer captureNextFrame:handler];
+}
+
 - (void) dealloc {
   delete _lastTouchEvent;
   [self setRenderer: nil];

@@ -16,11 +16,9 @@ package org.glob3.mobile.generated;
 //
 
 
-//class ChangedInfoListener;
 
 
 
-//class GPUProgramState;
 
 public abstract class DefaultRenderer implements Renderer
 {

@@ -17,9 +17,6 @@ package org.glob3.mobile.generated;
 
 
 //class G3MRenderContext;
-//class GLGlobalState;
-//class GPUProgramState;
-//class GLState;
 
 public abstract class OrderedRenderable
 {

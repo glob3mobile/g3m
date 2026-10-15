@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 //class HUDPosition;
 //class IImage;
 //class Mesh;
-//class SimpleTextureMapping;
 
 public class MultiTexturedHUDQuadWidget extends HUDWidget
 {

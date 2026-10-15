@@ -79,7 +79,7 @@ void G3MDemoBuilder::build() {
 
   builder->setAtmosphere(true);
   builder->setStarsRenderer(new StarsRenderer(2   /* smallestStarDiameter */,
-                                              4   /* fullStarMagnitude    */,
+                                              4.5 /* fullStarMagnitude    */,
                                               0.3 /* starSizeExponent     */));
 
   LayerSet* layerSet = new LayerSet();

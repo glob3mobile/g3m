@@ -8,6 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 
+//class Geodetic3D;
 
 public abstract class VisibleSectorListener
 {

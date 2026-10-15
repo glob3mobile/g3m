@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class IDownloader;
 //class Sector;
 //class Frustum;
 //class DirectMesh;

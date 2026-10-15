@@ -11,6 +11,7 @@
 
 #include "G3M/G3MWidget.hpp"
 #include "G3M/GL.hpp"
+#include "G3M/ILogger.hpp"
 
 #import "NativeGL2_iOS.hpp"
 
@@ -112,8 +113,65 @@ enum {
       _firstRender = false;
 
     }
+    if (_frameCaptureHandlers.count > 0) {
+      NSArray<void (^)(UIImage* frame)>* handlers = [_frameCaptureHandlers copy];
+      [_frameCaptureHandlers removeAllObjects];
+      UIImage* frame = [self readFrame];
+      for (void (^handler)(UIImage* frame) in handlers) {
+        handler(frame);
+      }
+    }
+
     [_context presentRenderbuffer:GL_RENDERBUFFER];
   }
+}
+
+// requests made before the next frame is drawn share it
+- (void)captureNextFrame:(void (^)(UIImage* frame))handler {
+  if (_frameCaptureHandlers == nil) {
+    _frameCaptureHandlers = [NSMutableArray array];
+  }
+  [_frameCaptureHandlers addObject:[handler copy]];
+}
+
+// the resolved frame in the default framebuffer; GL rows go bottom-up, image rows top-down
+- (UIImage*)readFrame {
+  glBindFramebuffer(GL_FRAMEBUFFER, _defaultFramebuffer);
+
+  const size_t bytesPerRow = 4 * (size_t) _width;
+  NSMutableData* pixels = [NSMutableData dataWithLength:bytesPerRow * (size_t) _height];
+  glReadPixels(0, 0, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, pixels.mutableBytes);
+  const GLenum error = glGetError();
+  if (error != GL_NO_ERROR) {
+    ILogger::instance()->logError("ES2Renderer: GL error 0x%x after glReadPixels", error);
+    return nil;
+  }
+
+  unsigned char* bytes = (unsigned char*) pixels.mutableBytes;
+  NSMutableData* rowData = [NSMutableData dataWithLength:bytesPerRow];
+  unsigned char* row = (unsigned char*) rowData.mutableBytes;
+  for (GLint top = 0, bottom = _height - 1; top < bottom; top++, bottom--) {
+    unsigned char* topRow    = bytes + (size_t) top    * bytesPerRow;
+    unsigned char* bottomRow = bytes + (size_t) bottom * bytesPerRow;
+    memcpy(row,       topRow,    bytesPerRow);
+    memcpy(topRow,    bottomRow, bytesPerRow);
+    memcpy(bottomRow, row,       bytesPerRow);
+  }
+
+  CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef) pixels);
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  // the drawable is opaque: its alpha channel is ignored
+  CGImageRef cgImage = CGImageCreate(_width, _height,
+                                     8, 32, bytesPerRow,
+                                     colorSpace,
+                                     kCGBitmapByteOrderDefault | kCGImageAlphaNoneSkipLast,
+                                     provider,
+                                     NULL, false, kCGRenderingIntentDefault);
+  UIImage* image = [UIImage imageWithCGImage:cgImage];
+  CGImageRelease(cgImage);
+  CGColorSpaceRelease(colorSpace);
+  CGDataProviderRelease(provider);
+  return image;
 }
 
 - (BOOL)validateProgram:(GLuint)prog {

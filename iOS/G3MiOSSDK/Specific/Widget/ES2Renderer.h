@@ -6,6 +6,7 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <UIKit/UIKit.h>
 
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/EAGLDrawable.h>
@@ -40,6 +41,8 @@ class GL;
 
   BOOL _firstRender;
 
+  NSMutableArray<void (^)(UIImage* frame)>* _frameCaptureHandlers; // all get the same next frame
+
   GL* _gl;
 }
 
@@ -53,6 +56,10 @@ class GL;
 - (void)setMultisampleCount:(GLint)count;
 
 - (GLint)multisampleCount;
+
+// the handler receives the next rendered frame at the drawable's pixel size, just before it is presented,
+// or nil if it could not be read
+- (void)captureNextFrame:(void (^)(UIImage* frame))handler;
 
 @end
 

@@ -90,7 +90,7 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
   //                                                                                       1, // firstLevel
   //                                                                                       13 // maxLevel
   //                                                                                       );
-  //  URLTemplateLayer* layer = new URLTemplateLayer("http://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg", // urlTemplate
+  //  URLTemplateLayer* layer = new URLTemplateLayer("https://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg", // urlTemplate
   //                                              Sector::FULL_SPHERE,
   //                                              false,                      // isTransparent
   //                                              TimeInterval::fromDays(30), // timeToCache
@@ -164,12 +164,12 @@ void G3MExtrusionDemoScene::rawActivate(const G3MContext* context) {
 
   const double deltaHeight = 0;
 
-  // http://brownietech.ddns.net/test/comunidad_de_madrid/metadata.json
+  // https://brownietech.ddns.net/test/comunidad_de_madrid/metadata.json
 
 //  https://lhind.velimo.tv/bustrack/district-of-columbia/
 
   VectorStreamingRenderer* renderer = model->getVectorStreamingRenderer();
-  renderer->addVectorSet(//URL("http://brownietech.ddns.net/"),
+  renderer->addVectorSet(//URL("https://brownietech.ddns.net/"),
                          URL("https://lhind.velimo.tv/bustrack/"),
                          //"cc3d-buildings",         // name
 //                         "test/comunidad_de_madrid", // name

@@ -8,6 +8,7 @@ package org.glob3.mobile.generated;
 
 
 //class Layer;
+//class G3MEventContext;
 
 public class LayerTouchEvent
 {

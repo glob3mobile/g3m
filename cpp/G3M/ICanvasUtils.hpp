@@ -15,7 +15,6 @@
 #include "Color.hpp"
 
 class ICanvas;
-class GFont;
 class Vector2F;
 
 

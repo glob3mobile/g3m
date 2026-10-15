@@ -10,7 +10,6 @@
 #define __G3M__ShortBufferElevationData__
 
 #include "BufferElevationData.hpp"
-class IShortBuffer;
 
 class ShortBufferElevationData : public BufferElevationData {
 private:

@@ -12,7 +12,6 @@
 #include "GEORasterSymbol.hpp"
 
 #include "Color.hpp"
-class Geodetic2D;
 #include "GEO2DLineRasterStyle.hpp"
 #include "GEO2DCoordinatesData.hpp"
 

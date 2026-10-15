@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class CompositeElevationData;
 
 public class CompositeElevationDataProvider extends ElevationDataProvider
 {
