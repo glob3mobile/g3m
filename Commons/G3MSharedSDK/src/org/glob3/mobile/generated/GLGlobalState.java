@@ -21,9 +21,6 @@ package org.glob3.mobile.generated;
 
 
 //class GL;
-//struct AttributesStruct;
-//class UniformsStruct;
-//class GPUProgram;
 
 //#define MAX_N_TEXTURES 4
 

@@ -29,7 +29,7 @@ int main() {
                                                                                           13  // maxLevel
                                                                                           );
 
-  layerSet->addLayer( new URLTemplateLayer("http://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg",
+  layerSet->addLayer( new URLTemplateLayer("https://brownietech.ddns.net/maps/s2cloudless/{z}/{y}/{x}.jpg",
                                            Sector::FULL_SPHERE,
                                            false,
                                            TimeInterval::fromDays(30),

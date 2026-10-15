@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Geodetic2D;
 
 public class GEOLineRasterSymbol extends GEORasterSymbol
 {

@@ -19,12 +19,10 @@
 
 class IImageFactory;
 class Geodetic3D;
-class Vector2D;
 class Camera;
 class Planet;
 class GLState;
 class IImage;
-class TextureIDReference;
 class Geometry2DGLFeature;
 class ViewportExtentGLFeature;
 class TexturesHandler;

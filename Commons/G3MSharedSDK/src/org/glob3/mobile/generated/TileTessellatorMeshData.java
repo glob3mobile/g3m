@@ -15,10 +15,8 @@ package org.glob3.mobile.generated;
 
 
 //class G3MRenderContext;
-//class Planet;
 //class Mesh;
 //class Tile;
-//class MutableVector2D;
 //class IFloatBuffer;
 //class ElevationData;
 //class Geodetic2D;

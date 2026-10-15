@@ -9,13 +9,11 @@
 #ifndef G3M_DefaultRenderer
 #define G3M_DefaultRenderer
 
-class ChangedInfoListener;
 
 #include "Renderer.hpp"
 #include <stddef.h>
 
 
-class GPUProgramState;
 
 class DefaultRenderer : public Renderer {
   

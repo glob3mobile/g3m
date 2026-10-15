@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 //class LeveledTexturedMesh;
-//class TextureIDReference;
 //class IImageFactory;
 //class IImage;
 

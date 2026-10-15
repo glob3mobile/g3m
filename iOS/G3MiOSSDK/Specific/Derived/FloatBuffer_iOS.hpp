@@ -34,7 +34,6 @@ private:
   static long long _nextID;
 
   //VBO
-  static GLuint     _boundVertexBuffer;
   mutable bool      _vertexBufferCreated;
   mutable GLuint    _vertexBuffer; //VBO
   mutable int       _vertexBufferTimestamp;
@@ -158,11 +157,6 @@ public:
   const std::string description() const;
   
   void bindAsVBOToGPU() const;
-  
-  static void onGPUProgramHasChanged() {
-    //APPARENTLY CHANGING PROGRAM FORCES TO REBIND THE BUFFERS
-    _boundVertexBuffer = -1;
-  }
 
   void rawPut(const size_t i,
               const IFloatBuffer* srcBuffer,

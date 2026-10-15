@@ -13,12 +13,10 @@
 class Mesh;
 class G3MRenderContext;
 class Tile;
-class TileTessellator;
 class G3MContext;
 class TilesRenderParameters;
 class Geodetic3D;
 class LayerSet;
-class LayerTilesRenderParameters;
 class G3MEventContext;
 class PlanetRenderContext;
 

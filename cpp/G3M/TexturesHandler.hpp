@@ -12,10 +12,8 @@
 #include <vector>
 
 class IImage;
-class G3MRenderContext;
 class TextureHolder;
 class GL;
-class IFactory;
 class IGLTextureID;
 class TextureIDReference;
 

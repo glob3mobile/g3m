@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 //class G3MRenderContext;
 //class TimeInterval;
 //class ITimer;
-//class IFactory;
 //class G3MContext;
 
 

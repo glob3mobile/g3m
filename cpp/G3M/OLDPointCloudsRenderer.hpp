@@ -18,7 +18,6 @@
 #include "Box.hpp"
 #include "GAsyncTask.hpp"
 
-class IDownloader;
 class Sector;
 class Frustum;
 class DirectMesh;

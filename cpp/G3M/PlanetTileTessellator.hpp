@@ -14,7 +14,6 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
 
-class IShortBuffer;
 class Sector;
 class FloatBufferBuilderFromGeodetic;
 class ShortBufferBuilder;

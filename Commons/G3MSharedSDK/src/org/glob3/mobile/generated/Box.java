@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Vector2D;
 //class Mesh;
 //class Color;
 

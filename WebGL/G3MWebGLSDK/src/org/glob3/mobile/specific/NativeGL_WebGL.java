@@ -99,11 +99,7 @@ public final class NativeGL_WebGL extends INativeGL {
    public native void drawElements(final int mode, final int count, final IShortBuffer indices) /*-{
     var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-    var webGLBuffer = indices.@org.glob3.mobile.specific.ShortBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webGLBuffer);
-
-    var array = indices.@org.glob3.mobile.specific.ShortBuffer_WebGL::getBuffer()();
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
+    indices.@org.glob3.mobile.specific.ShortBuffer_WebGL::bindIBO(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
 
     gl.drawElements(mode, count, gl.UNSIGNED_SHORT, 0);
    }-*/;

@@ -6,8 +6,12 @@ import com.google.gwt.core.client.*;
 
 public class ShortBuffer_WebGL extends IShortBuffer {
 
+   // Indices are signed Java shorts; the Uint16Array stores their unsigned 16-bit value.
+   private static final int UINT16_MASK = 0xFFFF;
+
    private final JavaScriptObject _buffer;
-   private int                    _timestamp = 0;
+   private int                    _timestamp       = 0;
+   private int                    _bufferTimeStamp = -1;
 
    private JavaScriptObject _webGLBuffer = null;
    private JavaScriptObject _gl          = null;
@@ -16,12 +20,16 @@ public class ShortBuffer_WebGL extends IShortBuffer {
    private static long _nextID = 0;
    private final long  _id     = _nextID++;
 
-   public JavaScriptObject getWebGLBuffer(final JavaScriptObject gl) {
+   public void bindIBO(final JavaScriptObject gl) {
       if (_webGLBuffer == null) {
          _gl          = gl;
          _webGLBuffer = jsCreateWebGLBuffer();
       }
-      return _webGLBuffer;
+      jsBindWebGLBuffer(gl);
+      if (_bufferTimeStamp != _timestamp) {
+         _bufferTimeStamp = _timestamp;
+         jsDataToIBO(gl);
+      }
    }
 
    @Override
@@ -36,6 +44,16 @@ public class ShortBuffer_WebGL extends IShortBuffer {
 
    private native JavaScriptObject jsCreateWebGLBuffer() /*-{
     return this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_gl.createBuffer();
+   }-*/;
+
+   private native void jsBindWebGLBuffer(final JavaScriptObject gl) /*-{
+    var buffer = this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_webGLBuffer;
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+   }-*/;
+
+   private native void jsDataToIBO(final JavaScriptObject gl) /*-{
+    var buffer = this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer;
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, buffer, gl.STATIC_DRAW);
    }-*/;
 
    private native void jsDeleteWebGLBuffer() /*-{
@@ -78,35 +96,29 @@ public class ShortBuffer_WebGL extends IShortBuffer {
 
    @Override
    public short get(final int i) {
-      return jsGet(i);
+      return (short) jsGet(i);
    }
 
    @Override
    public void put(final int i, final short value) {
-      jsPut(i, value);
+      jsPut(i, value & UINT16_MASK);
    }
 
-   private native void jsPut(int i, short value) /*-{
-
-    if (value < 0 || value > 65535) {
-      alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
-    }
-
+   private native void jsPut(int i, int uint16Value) /*-{
     var thisInstance = this;
-    if (thisInstance.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer[i] != value) {
-      thisInstance.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer[i] = value;
+    if (thisInstance.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer[i] != uint16Value) {
+      thisInstance.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer[i] = uint16Value;
       thisInstance.@org.glob3.mobile.specific.ShortBuffer_WebGL::incTimestamp()();
     }
    }-*/;
 
    @Override
-   public native void rawPut(final int i, final short value) /*-{
+   public void rawPut(final int i, final short value) {
+      jsRawPut(i, value & UINT16_MASK);
+   }
 
-    if (value < 0 || value > 65535) {
-      alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
-    }
-
-    this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer[i] = value;
+   private native void jsRawPut(int i, int uint16Value) /*-{
+    this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer[i] = uint16Value;
    }-*/;
 
    public JavaScriptObject getBuffer() {
@@ -129,7 +141,7 @@ public class ShortBuffer_WebGL extends IShortBuffer {
     return this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer.length;
    }-*/;
 
-   private native short jsGet(int i) /*-{
+   private native int jsGet(int i) /*-{
     return this.@org.glob3.mobile.specific.ShortBuffer_WebGL::_buffer[i];
    }-*/;
 

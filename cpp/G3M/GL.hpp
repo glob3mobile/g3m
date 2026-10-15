@@ -24,7 +24,6 @@
 
 class IGLUniformID;
 class GPUProgramManager;
-class GPUProgramState;
 class GLState;
 
 

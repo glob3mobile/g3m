@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-//class IShortBuffer;
 
 public class ShortBufferElevationData extends BufferElevationData
 {

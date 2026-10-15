@@ -76,4 +76,8 @@ class WidgetUserData;
 
 - (NSInteger)multisampleCount;
 
+// the handler receives the next rendered frame (only g3m's drawing, not the UIKit views over it) at the
+// drawable's pixel size, or nil if it could not be read. Frames are rendered only while animating
+- (void)captureNextFrame:(void (^)(UIImage* frame))handler;
+
 @end

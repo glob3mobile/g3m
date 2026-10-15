@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 
 
 //class ICanvas;
-//class GFont;
 //class Vector2F;
 
 

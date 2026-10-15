@@ -15,7 +15,6 @@
 #include "ICanvasUtils.hpp"
 
 class ICanvas;
-class GFont;
 
 
 /**

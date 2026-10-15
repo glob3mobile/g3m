@@ -12,7 +12,6 @@
 
 #include "Geodetic3D.hpp"
 
-class Planet;
 class CameraFlightArc;
 
 

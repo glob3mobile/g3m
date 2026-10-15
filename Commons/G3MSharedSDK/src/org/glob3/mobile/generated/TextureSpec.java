@@ -16,10 +16,8 @@ package org.glob3.mobile.generated;
 
 
 //class IImage;
-//class G3MRenderContext;
 //class TextureHolder;
 //class GL;
-//class IFactory;
 //class IGLTextureID;
 //class TextureIDReference;
 

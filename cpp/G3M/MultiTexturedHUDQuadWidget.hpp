@@ -18,7 +18,6 @@
 class HUDPosition;
 class IImage;
 class Mesh;
-class SimpleTextureMapping;
 
 class MultiTexturedHUDQuadWidget : public HUDWidget {
 private:
