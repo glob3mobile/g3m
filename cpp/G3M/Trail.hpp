@@ -120,6 +120,9 @@ private:
 
     const IFloatBuffer* getBearingsInRadians() const;
 
+    static float averageBearingsInRadians(const float bearing1InRadians,
+                                          const float bearing2InRadians);
+
     int calculateAlphaStatus();
 
     bool isMeshValid() const;

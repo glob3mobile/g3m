@@ -153,31 +153,24 @@ Angle Angle::cosineInterpolation(const Angle& from,
                                                                          alpha) );
 }
 
+// the direction of degrees closest to previousDegrees, however many turns previousDegrees carries
 double Angle::smoothDegrees(double previousDegrees,
                             double degrees) {
   if (ISNAN(previousDegrees)) {
     return degrees;
   }
 
-  const double delta = previousDegrees - degrees;
-  if (IMathUtils::instance()->abs(delta) < 180.0) {
-    return degrees;
-  }
-
-  return (delta < 0.0) ? (degrees - 360.0) : (degrees + 360.0);
+  const double delta = degrees - previousDegrees;
+  return previousDegrees + (delta - 360.0 * IMathUtils::instance()->floor((delta + 180.0) / 360.0));
 }
 
+// the direction of radians closest to previousRadians, however many turns previousRadians carries
 double Angle::smoothRadians(double previousRadians,
                             double radians) {
   if (ISNAN(previousRadians)) {
     return radians;
   }
 
-  const double delta = previousRadians - radians;
-  if (IMathUtils::instance()->abs(delta) < PI) {
-    return delta;
-  }
-
-  const double pi2 = PI*2;
-  return (delta < 0.0) ? (radians - pi2) : (radians + pi2);
+  const double delta = radians - previousRadians;
+  return previousRadians + (delta - (2 * PI) * IMathUtils::instance()->floor((delta + PI) / (2 * PI)));
 }
