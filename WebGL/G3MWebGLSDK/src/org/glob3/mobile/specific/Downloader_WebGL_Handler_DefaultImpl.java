@@ -174,35 +174,21 @@ public class Downloader_WebGL_Handler_DefaultImpl implements Downloader_WebGL_Ha
     xhr.open("GET", url, true);
     xhr.responseType = (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) ? "blob" : "arraybuffer";
 
-    var handled = false;
-    xhr.onload = function() {
-      if (handled) {
-        return;
-      }
-
-      if (xhr.readyState == 4) {
-        handled = true;
-
-        // inform downloader to remove myself, to avoid adding new Listener
-        that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
-        if (xhr.status === 200) {
-          if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) {
-            that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
-          } else {
-            that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
-          }
-        } else {
-          that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
+    // loadend fires exactly once, after load, error (network failure), abort or timeout
+    xhr.onloadend = function() {
+      // inform downloader to remove myself, to avoid adding new Listener
+      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
+      if (xhr.status === 200) {
+        if (that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::_isImageRequest) {
+          that.@org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl::jsCreateImageFromBlob(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
+        }
+        else {
+          that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, xhr.response);
         }
       }
-    };
-
-    xhr.onerror = function() {
-      if (handled) {
-        return;
+      else {
+        that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
       }
-      handled = true;
-      that.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
     };
 
     xhr.send();

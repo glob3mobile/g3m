@@ -299,7 +299,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void onError(URL url)
     {
-      _node.errorDownloadingChildren();
+      _node.errorDownloadingChildren(url);
     }
 
     public final void onCancel(URL url)
@@ -542,7 +542,7 @@ public class VectorStreamingRenderer extends DefaultRenderer
 
     public final void onError(URL url)
     {
-      _node.errorDownloadingFeatures();
+      _node.errorDownloadingFeatures(url);
     }
 
     public final void onCancel(URL url)
@@ -1210,9 +1210,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       return renderedCount;
     }
 
-    public final void errorDownloadingFeatures()
+    public final void errorDownloadingFeatures(URL url)
     {
-      // do nothing by now
+      ILogger.instance().logError("\"%s\": Error downloading features from \"%s\"", getFullName(), url._path);
     }
 
     public final void parsedFeatures(java.util.ArrayList<Cluster> clusters, GEOObject features, java.util.ArrayList<Node> children)
@@ -1262,9 +1262,9 @@ public class VectorStreamingRenderer extends DefaultRenderer
       }
     }
 
-    public final void errorDownloadingChildren()
+    public final void errorDownloadingChildren(URL url)
     {
-      // do nothing by now
+      ILogger.instance().logError("\"%s\": Error downloading children from \"%s\"", getFullName(), url._path);
     }
 
     public final void parsedChildren(java.util.ArrayList<Node> children)

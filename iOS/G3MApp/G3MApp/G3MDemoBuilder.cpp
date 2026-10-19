@@ -122,8 +122,7 @@ void G3MDemoBuilder::build() {
 
   MeasureRenderer* measureRenderer = new MeasureRenderer(shapesRenderer,
                                                          meshRenderer,
-                                                         marksRenderer,
-                                                         compositeRenderer);
+                                                         marksRenderer);
   builder->addRenderer(measureRenderer);
 
   //Uncomment to see render debug mesh on top of tiles

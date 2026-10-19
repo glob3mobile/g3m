@@ -59,7 +59,7 @@ public:
   }
 
   double getMeanRadius() const {
-    return (_radii._x + _radii._y + _radii._y) / 3;
+    return (_radii._x + _radii._y + _radii._z) / 3;
   }
 
   std::vector<double> intersectionsDistances(const Vector3D& origin,

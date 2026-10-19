@@ -246,7 +246,7 @@ public class Trail
           else
           {
             final float previousAngleInRadians = (float)(previous._heading.isNan() ? Geodetic2D.bearingInRadians(_previousSegmentLastPosition._latitude, _previousSegmentLastPosition._longitude, previous._latitude, previous._longitude) : previous._heading._radians);
-            final float avr = (previousAngleInRadians + angleInRadians) / 2.0f;
+            final float avr = averageBearingsInRadians(previousAngleInRadians, angleInRadians);
     
             bearingsInRadians.rawPut(0, avr);
             bearingsInRadians.rawPut(1, avr);
@@ -256,7 +256,7 @@ public class Trail
         {
           final float previousAngleInRadians = bearingsInRadians.get(i - 1);
     
-          final float avr = (previousAngleInRadians + angleInRadians) / 2.0f;
+          final float avr = averageBearingsInRadians(previousAngleInRadians, angleInRadians);
           bearingsInRadians.rawPut(i - 1, avr);
     
           bearingsInRadians.rawPut(i, angleInRadians);
@@ -269,11 +269,18 @@ public class Trail
         final Position lastPosition = _positions.get(lastPositionIndex);
         final float angleInRadians = (float)(_nextSegmentFirstPosition._heading.isNan() ? Geodetic2D.bearingInRadians(lastPosition._latitude, lastPosition._longitude, _nextSegmentFirstPosition._latitude, _nextSegmentFirstPosition._longitude) : _nextSegmentFirstPosition._heading._radians);
     
-        final float avr = (angleInRadians + bearingsInRadians.get(lastPositionIndex)) / 2.0f;
+        final float avr = averageBearingsInRadians(bearingsInRadians.get(lastPositionIndex), angleInRadians);
         bearingsInRadians.rawPut(lastPositionIndex, avr);
       }
     
       return bearingsInRadians;
+    }
+
+
+    // halfway between the two bearings, the short way round (45 and 405 are the same direction)
+    private static float averageBearingsInRadians(float bearing1InRadians, float bearing2InRadians)
+    {
+      return (float)(bearing1InRadians + (Angle.smoothRadians(bearing1InRadians, bearing2InRadians) - bearing1InRadians) / 2);
     }
 
     private int calculateAlphaStatus()

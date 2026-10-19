@@ -47,7 +47,7 @@ public class GLFeatureSet
 
   public final GLFeature get(int i)
   {
-    if (_nFeatures < i)
+    if ((i < 0) || (i >= _nFeatures))
     {
       return null;
     }
@@ -56,13 +56,13 @@ public class GLFeatureSet
 
   public final void add(GLFeature f)
   {
-    _features[_nFeatures++] = f;
-    f._retain();
-  
     if (_nFeatures >= MAX_CONCURRENT_FEATURES_PER_GROUP)
     {
-      ILogger.instance().logError("MAX_CONCURRENT_FEATURES_PER_GROUP REACHED");
+      throw new RuntimeException("MAX_CONCURRENT_FEATURES_PER_GROUP REACHED");
     }
+  
+    _features[_nFeatures++] = f;
+    f._retain();
   }
 
   public final void add(GLFeatureSet fs)

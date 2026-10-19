@@ -64,7 +64,10 @@ void CameraGoToPositionEffect::doStep(const G3MRenderContext* rc,
   camera->setGeodeticPosition(ground._latitude, ground._longitude, height);
 
 
-  const Angle heading = Angle::linearInterpolation(_fromHeading, _toHeading, alpha);
+  // the short way: at most half a turn
+  const Angle heading = Angle::linearInterpolationFromRadians(_fromHeading._radians,
+                                                              Angle::smoothRadians(_fromHeading._radians, _toHeading._radians),
+                                                              alpha);
   camera->setHeading(heading);
 
   // the horizon keeps its place on screen while the height changes; beyond the nadir the camera would look backwards

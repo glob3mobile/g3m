@@ -47,7 +47,10 @@ void CameraPointOfViewEffect::doStep(const G3MRenderContext* rc,
 
   rc->getNextCamera()->setPointOfView(targetAt(rc->getPlanet(), alpha),
                                       distanceAt(alpha),
-                                      Angle::linearInterpolation(_fromAzimuth,  _toAzimuth,  alpha),
+                                      // the short way: at most half a turn
+                                      Angle::linearInterpolationFromRadians(_fromAzimuth._radians,
+                                                                            Angle::smoothRadians(_fromAzimuth._radians, _toAzimuth._radians),
+                                                                            alpha),
                                       Angle::linearInterpolation(_fromAltitude, _toAltitude, alpha));
 }
 

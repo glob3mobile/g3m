@@ -197,6 +197,12 @@ const GLState* Trail::Segment::getMeshGLState(const GLState* parent) {
   return _ribbonGLState;
 }
 
+// halfway between the two bearings, the short way round (45 and 405 are the same direction)
+float Trail::Segment::averageBearingsInRadians(const float bearing1InRadians,
+                                               const float bearing2InRadians) {
+  return (float) (bearing1InRadians + (Angle::smoothRadians(bearing1InRadians, bearing2InRadians) - bearing1InRadians) / 2);
+}
+
 const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
   const size_t positionsSize = _positions.size();
 
@@ -224,7 +230,7 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
                                                                                       previous->_latitude,
                                                                                       previous->_longitude)
                                                       : previous->_heading._radians);
-        const float avr = (previousAngleInRadians + angleInRadians) / 2.0f;
+        const float avr = averageBearingsInRadians(previousAngleInRadians, angleInRadians);
 
         bearingsInRadians->rawPut(0, avr);
         bearingsInRadians->rawPut(1, avr);
@@ -233,7 +239,7 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
     else {
       const float previousAngleInRadians = bearingsInRadians->get(i - 1);
 
-      const float avr = (previousAngleInRadians + angleInRadians) / 2.0f;
+      const float avr = averageBearingsInRadians(previousAngleInRadians, angleInRadians);
       bearingsInRadians->rawPut(i - 1, avr);
 
       bearingsInRadians->rawPut(i, angleInRadians);
@@ -250,7 +256,7 @@ const IFloatBuffer* Trail::Segment::getBearingsInRadians() const {
                                                                          _nextSegmentFirstPosition->_longitude)
                                           : _nextSegmentFirstPosition->_heading._radians);
 
-    const float avr = (angleInRadians + bearingsInRadians->get(lastPositionIndex)) / 2.0f;
+    const float avr = averageBearingsInRadians(bearingsInRadians->get(lastPositionIndex), angleInRadians);
     bearingsInRadians->rawPut(lastPositionIndex, avr);
   }
 

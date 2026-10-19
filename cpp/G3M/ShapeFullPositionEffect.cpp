@@ -22,11 +22,17 @@ void ShapeFullPositionEffect::doStep(const G3MRenderContext* rc,
   }
   
   if (!_fromHeading.isNan() && !_toHeading.isNan()) {
-    _shape->setHeading(Angle::linearInterpolation(_fromHeading, _toHeading, alpha));
+    // the short way: at most half a turn
+    _shape->setHeading(Angle::linearInterpolationFromRadians(_fromHeading._radians,
+                                                             Angle::smoothRadians(_fromHeading._radians, _toHeading._radians),
+                                                             alpha));
   }
 
   if (!_fromRoll.isNan() && !_toRoll.isNan()) {
-    _shape->setRoll(Angle::linearInterpolation(_fromRoll, _toRoll, alpha));
+    // the short way: at most half a turn
+    _shape->setRoll(Angle::linearInterpolationFromRadians(_fromRoll._radians,
+                                                          Angle::smoothRadians(_fromRoll._radians, _toRoll._radians),
+                                                          alpha));
   }
 }
 

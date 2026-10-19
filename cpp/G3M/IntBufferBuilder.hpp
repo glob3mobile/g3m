@@ -20,7 +20,9 @@ private:
   IntBufferBuilder(const IntBufferBuilder& that);
 
 public:
-  
+  IntBufferBuilder() {
+  }
+
   void add(int value) {
     _values.push_back(value);
   }

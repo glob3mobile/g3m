@@ -36,6 +36,10 @@ public class WebSocket_WebGL extends IWebSocket {
 					console.log(event);
 				}
 				listener.@org.glob3.mobile.generated.IWebSocketListener::onClose(Lorg/glob3/mobile/generated/IWebSocket;)(webSocket);
+				// the browser always fires close after error, so close is the last event of the socket
+				if (autodeleteWebSocket) {
+					webSocket.@org.glob3.mobile.generated.IWebSocket::dispose()();
+				}
 			}
 
 			socket.onerror = function(event) {
@@ -57,7 +61,7 @@ public class WebSocket_WebGL extends IWebSocket {
 		} else {
 			listener.@org.glob3.mobile.generated.IWebSocketListener::onError(Lorg/glob3/mobile/generated/IWebSocket;Ljava/lang/String;)(webSocket, "Your browser does not support WebSocket.");
 			if (autodeleteWebSocket) {
-				webSocket.@org.glob3.mobile.specific.WebSocket_WebGL::dispose();
+				webSocket.@org.glob3.mobile.generated.IWebSocket::dispose()();
 			}
 		}
    }-*/;

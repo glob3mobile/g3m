@@ -51,6 +51,7 @@ public abstract class DefaultRenderer implements Renderer
      _enable = true;
      _changedInfoListener = null;
      _rendererID = 0;
+     _context = null;
 
   }
 
@@ -59,6 +60,7 @@ public abstract class DefaultRenderer implements Renderer
      _enable = enable;
      _changedInfoListener = null;
      _rendererID = 0;
+     _context = null;
 
   }
 

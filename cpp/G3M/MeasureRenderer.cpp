@@ -13,12 +13,10 @@
 
 MeasureRenderer::MeasureRenderer(ShapesRenderer*    shapesRenderer,
                                  MeshRenderer*      meshRenderer,
-                                 MarksRenderer*     marksRenderer,
-                                 CompositeRenderer* compositeRenderer) :
+                                 MarksRenderer*     marksRenderer) :
 _shapesRenderer(shapesRenderer),
 _meshRenderer(meshRenderer),
-_marksRenderer(marksRenderer),
-_compositeRenderer(compositeRenderer)
+_marksRenderer(marksRenderer)
 {
   
 }
@@ -38,7 +36,6 @@ void MeasureRenderer::addMeasure(Measure* measure) {
     measure->initialize(_shapesRenderer,
                         _meshRenderer,
                         _marksRenderer,
-                        _compositeRenderer,
                         _context->getPlanet());
   }
 
@@ -80,7 +77,6 @@ void MeasureRenderer::initialize(const G3MContext* context) {
     measure->initialize(_shapesRenderer,
                         _meshRenderer,
                         _marksRenderer,
-                        _compositeRenderer,
                         _context->getPlanet());
   }
 }

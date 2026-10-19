@@ -42,7 +42,7 @@ const Vector2F FrameImageBackground::initializeCanvas(ICanvas* canvas,
                      (int) mu->ceil(canvasHeight));
   
   
-  if (!_color.isTransparent()) {
+  if (!_color.isFullTransparent()) {
     canvas->setFillColor(_color);
     if (_topFrameHeight > 0) {
       canvas->fillRectangle(0,

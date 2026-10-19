@@ -13,7 +13,6 @@
 class ShapesRenderer;
 class MeshRenderer;
 class MarksRenderer;
-class CompositeRenderer;
 class Measure;
 
 
@@ -22,15 +21,13 @@ private:
   ShapesRenderer*    _shapesRenderer;
   MeshRenderer*      _meshRenderer;
   MarksRenderer*     _marksRenderer;
-  CompositeRenderer* _compositeRenderer;
 
   std::vector<Measure*> _measures;
 
 public:
   MeasureRenderer(ShapesRenderer*    shapesRenderer,
                   MeshRenderer*      meshRenderer,
-                  MarksRenderer*     marksRenderer,
-                  CompositeRenderer* compositeRenderer);
+                  MarksRenderer*     marksRenderer);
 
   void initialize(const G3MContext* context);
 

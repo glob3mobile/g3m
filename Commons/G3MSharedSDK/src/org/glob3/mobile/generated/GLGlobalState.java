@@ -187,7 +187,7 @@ public class GLGlobalState
 
   public final void bindTexture(int target, IGLTextureID textureID)
   {
-    if (target > DefineConstants.MAX_N_TEXTURES)
+    if ((target < 0) || (target >= DefineConstants.MAX_N_TEXTURES))
     {
       ILogger.instance().logError("WRONG TARGET FOR TEXTURE");
       return;

@@ -420,17 +420,13 @@ public:
                      const Frustum* frustumInModelCoordinates,
                      GLState* glState);
     
-    void errorDownloadingFeatures() {
-      // do nothing by now
-    }
+    void errorDownloadingFeatures(const URL& url);
     
     void parsedFeatures(std::vector<Cluster*>* clusters,
                         GEOObject*             features,
                         std::vector<Node*>*    children);
     
-    void errorDownloadingChildren() {
-      // do nothing by now
-    }
+    void errorDownloadingChildren(const URL& url);
     
     void parsedChildren(std::vector<Node*>* children);
 

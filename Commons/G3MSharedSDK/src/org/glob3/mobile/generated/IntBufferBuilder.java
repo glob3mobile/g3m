@@ -26,6 +26,9 @@ public class IntBufferBuilder
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  IntBufferBuilder(IntBufferBuilder that);
 
+  public IntBufferBuilder()
+  {
+  }
 
   public final void add(int value)
   {

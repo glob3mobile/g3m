@@ -133,6 +133,8 @@ public class Angle
     return Angle.fromDegrees((1.0-alpha) * fromDegrees + alpha * toDegrees);
   }
 
+
+  // the direction of degrees closest to previousDegrees, however many turns previousDegrees carries
   public static double smoothDegrees(double previousDegrees, double degrees)
   {
     if ((previousDegrees != previousDegrees))
@@ -140,15 +142,12 @@ public class Angle
       return degrees;
     }
   
-    final double delta = previousDegrees - degrees;
-    if (IMathUtils.instance().abs(delta) < 180.0)
-    {
-      return degrees;
-    }
-  
-    return (delta < 0.0) ? (degrees - 360.0) : (degrees + 360.0);
+    final double delta = degrees - previousDegrees;
+    return previousDegrees + (delta - 360.0 * IMathUtils.instance().floor((delta + 180.0) / 360.0));
   }
 
+
+  // the direction of radians closest to previousRadians, however many turns previousRadians carries
   public static double smoothRadians(double previousRadians, double radians)
   {
     if ((previousRadians != previousRadians))
@@ -156,14 +155,8 @@ public class Angle
       return radians;
     }
   
-    final double delta = previousRadians - radians;
-    if (IMathUtils.instance().abs(delta) < DefineConstants.PI)
-    {
-      return delta;
-    }
-  
-    final double pi2 = DefineConstants.PI *2;
-    return (delta < 0.0) ? (radians - pi2) : (radians + pi2);
+    final double delta = radians - previousRadians;
+    return previousRadians + (delta - (2 * DefineConstants.PI) * IMathUtils.instance().floor((delta + DefineConstants.PI) / (2 * DefineConstants.PI)));
   }
 
   public final boolean isNan()

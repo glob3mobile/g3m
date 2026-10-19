@@ -25,7 +25,6 @@
 #include "ShapesRenderer.hpp"
 #include "MeshRenderer.hpp"
 #include "MarksRenderer.hpp"
-#include "CompositeRenderer.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
 
 
@@ -191,7 +190,6 @@ _selectedVertexIndex(-1),
 _shapesRenderer(NULL),
 _meshRenderer(NULL),
 _marksRenderer(NULL),
-_compositeRenderer(NULL),
 _planet(NULL)
 {
   addVertex(firstVertex);
@@ -210,12 +208,10 @@ Measure::~Measure() {
 void Measure::initialize(ShapesRenderer*    shapesRenderer,
                          MeshRenderer*      meshRenderer,
                          MarksRenderer*     marksRenderer,
-                         CompositeRenderer* compositeRenderer,
                          const Planet*      planet) {
   _shapesRenderer    = shapesRenderer;
   _meshRenderer      = meshRenderer;
   _marksRenderer     = marksRenderer;
-  _compositeRenderer = compositeRenderer;
   _planet            = planet;
 
   resetUI();
@@ -453,10 +449,6 @@ void Measure::cleanUI() {
   }
   if (_marksRenderer != NULL) {
     _marksRenderer->removeAllMarks(Measure_MarkFilter(_instanceID), false /* animated */, true /* deleteMarks */);
-  }
-
-  if (_compositeRenderer != NULL) {
-    _compositeRenderer->removeAllRenderers();
   }
 }
 

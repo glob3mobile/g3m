@@ -8,7 +8,7 @@
 
 #include "GLFeatureGroup.hpp"
 #include "GLFeature.hpp"
-#include "ILogger.hpp"
+#include "ErrorHandling.hpp"
 
 
 GLFeatureSet::GLFeatureSet() :
@@ -21,7 +21,7 @@ _nFeatures(0)
 
 GLFeature* GLFeatureSet::get(int i) const
 {
-  if (_nFeatures < i) {
+  if ((i < 0) || (i >= _nFeatures)) {
     return NULL;
   }
   return _features[i];
@@ -63,12 +63,12 @@ GLFeatureGroup* GLFeatureGroup::createGroup(GLFeatureGroupName name) {
 
 
 void GLFeatureSet::add(GLFeature* f) {
+  if (_nFeatures >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
+    THROW_EXCEPTION("MAX_CONCURRENT_FEATURES_PER_GROUP REACHED");
+  }
+
   _features[_nFeatures++] = f;
   f->_retain();
-  
-  if (_nFeatures >= MAX_CONCURRENT_FEATURES_PER_GROUP) {
-    ILogger::instance()->logError("MAX_CONCURRENT_FEATURES_PER_GROUP REACHED");
-  }
 }
 
 void GLFeatureSet::removeFeatureAt(int i) {
