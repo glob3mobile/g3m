@@ -25,6 +25,7 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //class ByteBufferIterator;
 //class DirectMesh;
+//class Mesh;
 //class XPCSelectionResult;
 //class ITimer;
 //class XPCRenderingState;
@@ -47,6 +48,7 @@ public class XPCNode extends RCObject
   private DirectMesh _mesh;
 
   private Sphere _bounds;
+  private Mesh _boundsDebugMesh;
   private Sphere getBounds(G3MRenderContext rc, XPCPointCloud pointCloud)
   {
     if (_bounds == null)
@@ -145,6 +147,7 @@ public class XPCNode extends RCObject
      _minHeight = minHeight;
      _maxHeight = maxHeight;
      _bounds = null;
+     _boundsDebugMesh = null;
      _renderedInPreviousFrame = false;
      _projectedArea = -1;
      _projectedAreaTS = -1;
@@ -166,6 +169,8 @@ public class XPCNode extends RCObject
   
     if (_bounds != null)
        _bounds.dispose();
+    if (_boundsDebugMesh != null)
+       _boundsDebugMesh.dispose();
   
     for (int i = 0; i < _childrenSize; i++)
     {
@@ -262,7 +267,11 @@ public class XPCNode extends RCObject
       {
         if (renderDebug)
         {
-          bounds.render(rc, glState, Color.WHITE);
+          if (_boundsDebugMesh == null)
+          {
+            _boundsDebugMesh = DebugMeshes.createSphereWireframe(bounds, Color.WHITE);
+          }
+          _boundsDebugMesh.render(rc, glState);
         }
   
         if ((_projectedArea == -1) || ((_projectedAreaTS + 50) < nowInMS)) // 167
@@ -460,6 +469,10 @@ public class XPCNode extends RCObject
     if (_bounds != null)
        _bounds.dispose();
     _bounds = null;
+  
+    if (_boundsDebugMesh != null)
+       _boundsDebugMesh.dispose();
+    _boundsDebugMesh = null;
   }
 
 }

@@ -9,13 +9,13 @@
 #define G3M_CameraRenderer
 
 #include "ProtoRenderer.hpp"
+#include "RenderState.hpp"
 
 #include <vector>
 
 class CameraEventHandler;
 class CameraContext;
 class TouchEvent;
-class RenderState;
 
 
 class CameraRenderer: public ProtoRenderer {
@@ -27,7 +27,7 @@ private:
   std::vector<CameraEventHandler*> _handlers;
   size_t                           _handlersSize;
 
-  std::vector<std::string> _errors;
+  RenderStateCollector _renderStateCollector;
 
   CameraContext *_cameraContext;
 
@@ -36,7 +36,8 @@ public:
   _verboseHandlers(verboseHandlers),
   _cameraContext(NULL),
   _processTouchEvents(true),
-  _handlersSize(0)
+  _handlersSize(0),
+  _renderStateCollector()
   {
   }
 

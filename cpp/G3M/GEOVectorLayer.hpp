@@ -9,7 +9,7 @@
 #ifndef __G3M__GEOVectorLayer__
 #define __G3M__GEOVectorLayer__
 
-#include "VectorLayer.hpp"
+#include "MultiProjectionLayer.hpp"
 
 #include "GEORasterSymbol.hpp"
 #include "URL.hpp"
@@ -18,7 +18,7 @@
 class TileImageContribution;
 class GEOVectorTileImageProvider;
 
-class GEOVectorLayer : public VectorLayer {
+class GEOVectorLayer : public MultiProjectionLayer {
 private:
   static long long INSTANCE_COUNTER;
 

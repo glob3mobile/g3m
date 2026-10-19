@@ -11,8 +11,8 @@
 
 #include "Sector.hpp"
 #include "Geodetic2D.hpp"
-#include "GEOVectorTileImageProvider.hpp"
 #include <cstdlib>
+#include <vector>
 #include "ILogger.hpp"
 
 
@@ -210,10 +210,6 @@ public:
     return n;
   }
 
-  void symbolize(GEOVectorLayer* geoVectorLayer) const;
-
-  void getGeodetics(std::vector<Geodetic2D*>& geo) const;
-  void getSectors(std::vector<Sector*>& sectors) const;
 
   bool remove(const void* element);
 };
@@ -261,184 +257,6 @@ public:
 
   bool acceptNodeVisitor(GenericQuadTreeNodeVisitor& visitor) const;
 
-  void symbolize(GEOVectorLayer* geoVectorLayer) const;
-
-  std::vector<Geodetic2D*> getGeodetics() const {
-    std::vector<Geodetic2D*> geo;
-    _root->getGeodetics(geo);
-    return geo;
-  }
-  std::vector<Sector*> getSectors() const {
-    std::vector<Sector*> sectors;
-    _root->getSectors(sectors);
-    return sectors;
-  }
-
-};
-
-
-
-class GenericQuadTree_TESTER {
-
-  class GenericQuadTreeVisitorSector_TESTER: public GenericQuadTreeVisitor {
-  public:
-
-    Sector _sec;
-
-    GenericQuadTreeVisitorSector_TESTER(const Sector& s):_sec(s) {}
-
-    bool visitElement(const Sector& sector,
-                      const void*   element) const {
-
-      if (_sec.isEquals(sector)) {
-        //        std::string* s = (std::string*)element;
-        //        printf("ELEMENT -> %s\n", s->c_str());
-        return true;
-      }
-      return false;
-    }
-
-    bool visitElement(const Geodetic2D& geodetic,
-                      const void*   element) const {
-      return false;
-    }
-
-    void endVisit(bool aborted) const {
-      if (!aborted) {
-        ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
-      }
-      else {
-        //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
-        GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
-        GenericQuadTree_TESTER::_nElements += 1;
-      }
-
-    }
-
-  };
-
-  class GenericQuadTreeVisitorGeodetic_TESTER: public GenericQuadTreeVisitor {
-  public:
-    Geodetic2D _geo;
-
-    GenericQuadTreeVisitorGeodetic_TESTER(const Geodetic2D g):_geo(g) {}
-
-    bool visitElement(const Sector& sector,
-                      const void*   element) const {
-      return false;
-    }
-
-    bool visitElement(const Geodetic2D& geodetic,
-                      const void*   element) const {
-
-      if (geodetic.isEquals(_geo)) {
-        //        std::string* s = (std::string*)element;
-        //        printf("ELEMENT -> %s\n", s->c_str());
-        return true;
-      }
-      return false;
-    }
-
-    void endVisit(bool aborted) const {
-      if (!aborted) {
-        ILogger::instance()->logInfo("COULDN'T FIND ELEMENT\n");
-      }
-      else {
-        //        printf("ELEMENT FOUND WITH %d COMPARISONS\n", getNComparisonsDone() );
-        GenericQuadTree_TESTER::_nComparisons += getNComparisonsDone();
-        GenericQuadTree_TESTER::_nElements += 1;
-      }
-
-    }
-
-  };
-
-  class NodeVisitor_TESTER: public GenericQuadTreeNodeVisitor{
-  public:
-    int _maxDepth;
-    int _meanDepth;
-
-    size_t _maxNEle;
-    int _meanElemDepth;
-    int _nNodes;
-    int _nElem;
-
-    int _leafMinDepth;
-    int _leafMeanDepth;
-    int _nLeaf;
-
-    NodeVisitor_TESTER():
-    _maxDepth(0), _meanDepth(0), _maxNEle(0), _nNodes(0), _meanElemDepth(0), _nElem(0),
-    _leafMinDepth(999999), _leafMeanDepth(0), _nLeaf(0) {}
-
-
-    bool visitNode(const GenericQuadTree_Node* node) {
-      //      printf("NODE D: %d, NE: %d\n", node->getDepth(), node->getNElements());
-
-      int depth = node->getDepth();
-
-      if (node->getNElements() > _maxNEle) {
-        _maxNEle = node->getNElements();
-      }
-
-      if (_maxDepth < depth) {
-        _maxDepth = depth;
-      }
-
-      _meanDepth += depth;
-
-      _nNodes++;
-
-      _nElem += node->getNElements();
-
-      _meanElemDepth += node->getNElements() * depth;
-
-      if (node->isLeaf()) {
-        if (depth < _leafMinDepth) {
-          _leafMinDepth = depth;
-        }
-        _leafMeanDepth += depth;
-        _nLeaf++;
-      }
-
-
-      return false;
-    }
-    void endVisit(bool aborted) const {
-      ILogger::instance()->logInfo("============== \nTREE WITH %d ELEM. \nMAXDEPTH: %d, MEAN NODE DEPTH: %f, MAX NELEM: %d, MEAN ELEM DEPTH: %f\nLEAF NODES %d -> MIN DEPTH: %d, MEAN DEPTH: %f\n============== \n",
-                                   _nElem,
-                                   _maxDepth,
-                                   _meanDepth / (float)_nNodes,
-                                   _maxNEle,
-                                   _meanElemDepth / (float) _nElem,
-                                   _nLeaf,
-                                   _leafMinDepth,
-                                   _leafMeanDepth / (float) _nLeaf
-                                   );
-    }
-  };
-
-public:
-  
-  static int _nComparisons;
-  static int _nElements;
-  
-  static int randomInt(int max) {
-#ifdef C_CODE
-    int i = rand();
-#endif
-#ifdef JAVA_CODE
-    java.util.Random r = new java.util.Random();
-    int i = r.nextInt();
-#endif
-    
-    return i % max;
-  }
-  
-  static void run(int nElements, GEOVectorLayer* geoVectorLayer);
-  
-  static void run(GenericQuadTree& tree, GEOVectorLayer* geoVectorLayer);
-  
 };
 
 #endif

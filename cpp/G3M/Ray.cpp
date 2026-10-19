@@ -9,23 +9,17 @@
 #include "Ray.hpp"
 
 #include "IStringBuilder.hpp"
-
-#include "DirectMesh.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "Color.hpp"
 #include "MutableVector3D.hpp"
 
 
 Ray::Ray(const Vector3D& origin,
          const Vector3D& direction):
 _origin(origin),
-_direction(direction.normalized()),
-_mesh(NULL)
+_direction(direction.normalized())
 {
 }
 
 Ray::~Ray() {
-  delete _mesh;
 }
 
 double Ray::distanceTo(const Vector3D& point) const {
@@ -62,33 +56,6 @@ const std::string Ray::description() const {
   const std::string s = isb->getString();
   delete isb;
   return s;
-}
-
-void Ray::render(const G3MRenderContext* rc,
-                 const GLState* parentState,
-                 const Color& color,
-                 float lineWidth) const {
-  if (_mesh == NULL) {
-    FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithGivenCenter(_origin);
-    
-    vertices->add( _origin );
-    vertices->add( _origin.add(_direction.times(100000)) );
-    
-    _mesh = new DirectMesh(GLPrimitive::lineStrip(),
-                           true,
-                           vertices->getCenter(),
-                           vertices->create(),
-                           lineWidth,
-                           1,
-                           new Color(color),
-                           NULL, // const IFloatBuffer* colors
-                           true  // bool depthTest
-                           );
-    
-    delete vertices;
-  }
-  
-  _mesh->render(rc, parentState);
 }
 
 bool Ray::closestPointsOnTwoRays(const Ray& ray1,

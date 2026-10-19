@@ -42,20 +42,22 @@ public final class StringUtils_WebGL extends IStringUtils {
       return string.substring(beginIndex, endIndex);
    }
 
+   @SuppressWarnings("deprecation")
    @Override
    public String rtrim(final String string) {
       int index = string.length() - 1;
-      while ((index > 0) && (string.charAt(index) == ' ')) {
+      while ((index >= 0) && Character.isSpace(string.charAt(index))) {
          index--;
       }
       return string.substring(0, index + 1);
    }
 
+   @SuppressWarnings("deprecation")
    @Override
    public String ltrim(final String string) {
       int       index        = 0;
       final int stringLength = string.length();
-      while ((index < stringLength) && (string.charAt(index) == ' ')) {
+      while ((index < stringLength) && Character.isSpace(string.charAt(index))) {
          index++;
       }
       return string.substring(index, stringLength);
@@ -97,7 +99,7 @@ public final class StringUtils_WebGL extends IStringUtils {
    public int indexOfFirstNonChar(final String string, final String chars, final int fromIndex) {
       final int stringLen = string.length();
       for (int i = fromIndex; i < stringLen; i++) {
-         if (chars.indexOf(string.charAt(i)) > 0) {
+         if (chars.indexOf(string.charAt(i)) < 0) {
             return i;
          }
       }

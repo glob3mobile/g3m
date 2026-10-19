@@ -73,43 +73,14 @@ bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
 }
 
 RenderState CameraRenderer::getRenderState(const G3MRenderContext* rc) {
-  _errors.clear();
-  bool busyFlag  = false;
-  bool errorFlag = false;
+  _renderStateCollector.reset();
 
   for (int i = 0; i < _handlersSize; i++) {
     CameraEventHandler* handler = _handlers[i];
-    const RenderState handlerRenderState = handler->getRenderState(rc);
-
-    const RenderState_Type childRenderStateType = handlerRenderState._type;
-
-    if (childRenderStateType == RENDER_ERROR) {
-      errorFlag = true;
-
-      const std::vector<std::string> handlerErrors = handlerRenderState.getErrors();
-#ifdef C_CODE
-      _errors.insert(_errors.end(),
-                     handlerErrors.begin(),
-                     handlerErrors.end());
-#endif
-#ifdef JAVA_CODE
-      _errors.addAll(handlerErrors);
-#endif
-    }
-    else if (childRenderStateType == RENDER_BUSY) {
-      busyFlag = true;
-    }
+    _renderStateCollector.add(handler->getRenderState(rc));
   }
 
-  if (errorFlag) {
-    return RenderState::error(_errors);
-  }
-  else if (busyFlag) {
-    return RenderState::busy();
-  }
-  else {
-    return RenderState::ready();
-  }
+  return _renderStateCollector.getState();
 }
 
 void CameraRenderer::addHandler(CameraEventHandler* handler) {

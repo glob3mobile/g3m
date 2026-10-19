@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 // Transparent tiles with the ID, sector and bounds of each tile drawn on them, to put over any other layer
-public class DebugTilesLayer extends ProceduralLayer
+public class DebugTilesLayer extends MultiProjectionLayer
 {
   private final GFont _font;
   private final Color _color ;

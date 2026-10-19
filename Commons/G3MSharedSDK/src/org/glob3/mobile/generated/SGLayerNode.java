@@ -37,9 +37,7 @@ public class SGLayerNode extends SGNode
     {
       if (_downloadedImage != null)
       {
-        _textureID = rc.getTexturesHandler().getTextureIDReference(_downloadedImage, GLFormat.rgba(), getURL()._path, _generateMipmap, _wrapS, _wrapT);
-  
-        _downloadedImage = null;
+        _textureID = rc.getTexturesHandler().getTextureIDReferenceAndDeleteImage(_downloadedImage, GLFormat.rgba(), getURL()._path, _generateMipmap, _wrapS, _wrapT);
         _downloadedImage = null;
       }
     }

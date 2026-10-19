@@ -11,6 +11,9 @@
 #include "Box.hpp"
 #include "MutableVector3D.hpp"
 #include "MutableColor.hpp"
+#include "GLState.hpp"
+#include "IFloatBuffer.hpp"
+#include "MutableMatrix44D.hpp"
 
 
 AbstractGeometryMesh::~AbstractGeometryMesh() {

@@ -29,6 +29,7 @@
 #include <G3M/AtmosphereRenderer.hpp>
 #include <G3M/LayerBuilder.hpp>
 #include <G3M/Sector.hpp>
+#include <G3M/Color.hpp>
 
 #include "G3MDemoScene.hpp"
 #include "G3MDemoListener.hpp"

@@ -5,6 +5,7 @@
 #include <emscripten/emscripten.h>
 
 #include "G3M/GPUProgram.hpp"
+#include "G3M/ILogger.hpp"
 #include "G3M/Matrix44D.hpp"
 #include "G3M/GPUUniform.hpp"
 #include "G3M/GPUAttributeVec3Float.hpp"
@@ -232,7 +233,7 @@ int NativeGL_Emscripten::getError() const {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_OPERATION");
   }
   else if (e == GL_OUT_OF_MEMORY) {
-    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: INVALID_OPERATION");
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: OUT_OF_MEMORY");
   }
   else if (e == GL_CONTEXT_LOST_WEBGL) {
     emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR, "NativeGL_Emscripten: CONTEXT_LOST_WEBGL");
@@ -568,14 +569,10 @@ void NativeGL_Emscripten::deleteShader(int shader) const {
   _shaderList[shader] = val::null();
 }
 
-void NativeGL_Emscripten::printShaderInfoLog(int shader) const {
+void NativeGL_Emscripten::logShaderInfoLog(ILogger* logger, int shader) const {
   const val jsoShader = _shaderList[shader];
-
-  if (!_gl.call<bool>("getShaderParameter", jsoShader, GL_COMPILE_STATUS)) {
-    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR,
-                   "Error compiling shaders: %s",
+  logger->logError("Shader Info Log: %s",
                    _gl.call<std::string>("getShaderInfoLog", jsoShader).c_str());
-  }
 }
 
 bool NativeGL_Emscripten::linkProgram(int program) const {
@@ -584,14 +581,10 @@ bool NativeGL_Emscripten::linkProgram(int program) const {
   return _gl.call<bool>("getProgramParameter", jsoProgram, GL_LINK_STATUS);
 }
 
-void NativeGL_Emscripten::printProgramInfoLog(int program) const {
+void NativeGL_Emscripten::logProgramInfoLog(ILogger* logger, int program) const {
   const val jsoProgram = _shaderList[program];
-
-  if (!_gl.call<bool>("getProgramParameter", jsoProgram, GL_LINK_STATUS)) {
-    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR,
-                   "Error linking program: %s",
+  logger->logError("Program Info Log: %s",
                    _gl.call<std::string>("getProgramInfoLog", jsoProgram).c_str());
-  }
 }
 
 void NativeGL_Emscripten::bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const {

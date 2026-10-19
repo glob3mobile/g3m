@@ -26,8 +26,6 @@ public abstract class BoundingVolume
 
   public abstract double projectedArea(G3MRenderContext rc);
 
-  public abstract void render(G3MRenderContext rc, GLState parentState, Color color);
-
   public abstract boolean touches(BoundingVolume that);
   public abstract boolean touchesBox(Box that);
   public abstract boolean touchesSphere(Sphere that);

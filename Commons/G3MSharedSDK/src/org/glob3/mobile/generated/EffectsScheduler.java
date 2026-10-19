@@ -160,6 +160,12 @@ public class EffectsScheduler
     }
   }
 
+  public final void replaceEffectsFor(EffectTarget target, Effect effect)
+  {
+    cancelAllEffectsFor(target);
+    startEffect(effect, target);
+  }
+
   public final void onResume(G3MContext context)
   {
 

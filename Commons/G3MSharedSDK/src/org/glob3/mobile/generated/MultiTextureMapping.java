@@ -150,7 +150,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
     }
     else
     {
-      state.addGLFeature(new TextureGLFeature(_glTextureID1.getID(), _texCoords1, 2, 0, false, 0, _transparent1, _glTextureID1.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
+      state.addGLFeature(new TextureGLFeature(_glTextureID1.getID(), _texCoords1, 2, 0, false, 0, _transparent1, _glTextureID1.getSourceBlendFactor(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
   
     }
   
@@ -161,7 +161,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
     }
     else
     {
-      state.addGLFeature(new TextureGLFeature(_glTextureID2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, _glTextureID1.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
+      state.addGLFeature(new TextureGLFeature(_glTextureID2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, _glTextureID1.getSourceBlendFactor(), GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
     }
   
   }

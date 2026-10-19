@@ -13,16 +13,9 @@
 
 #include "Vector3D.hpp"
 
-class Mesh;
-class G3MRenderContext;
-class GLState;
-class Color;
-
 
 class Ray {
 private:
-  mutable Mesh* _mesh;
-
   Ray(const Ray& that);
 
 public:
@@ -40,11 +33,6 @@ public:
   double distanceTo(const MutableVector3D& point) const;
   double squaredDistanceTo(const MutableVector3D& point) const;
 
-  void render(const G3MRenderContext* rc,
-              const GLState* parentState,
-              const Color& color,
-              float lineWidth) const;
-  
   Vector3D pointAtTime(double t) const{
     return _origin.add(_direction.times(t));
   }

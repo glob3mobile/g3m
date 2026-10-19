@@ -8,6 +8,7 @@
 class MathUtils_Emscripten : public IMathUtils {
 
 public:
+  MathUtils_Emscripten();
 
   double sin(double v) const;
   float  sin(float v)  const;

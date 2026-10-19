@@ -199,7 +199,7 @@ public class NonOverlappingMark
   
       _springGLState.addGLFeature(new Geometry2DGLFeature(_springVertices, 2, 0, true, 0, 3.0f, true, 1.0f, Vector2F.ZERO), false); // translation -  pointSize -  needsPointSize -  lineWidth -  stride -  normalized -  index -  arrayElementSize -  buffer
   
-      _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
+      _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera().getViewPortWidth(rc.getViewMode()), rc.getCurrentCamera().getViewPortHeight());
       _springGLState.addGLFeature(_springViewportExtentGLFeature, false);
     }
     else

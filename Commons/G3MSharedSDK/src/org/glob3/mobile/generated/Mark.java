@@ -252,7 +252,7 @@ public class Mark implements SurfaceElevationListener
     if (_textureID != null)
     {
   
-      _textureGLF = new TextureGLFeature(_textureID.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
+      _textureGLF = new TextureGLFeature(_textureID.getID(), billboardTexCoords, 2, 0, false, 0, true, _textureID.getSourceBlendFactor(), GLBlendFactor.oneMinusSrcAlpha(), _translationTCX, _translationTCY, _scalingTCX, _scalingTCY, 0.0f, 0.0f, 0.0f);
   
       _glState.addGLFeature(_textureGLF, false);
     }
@@ -369,9 +369,7 @@ public class Mark implements SurfaceElevationListener
   {
     if ((_textureID == null) && (_textureImage != null))
     {
-      _textureID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _imageID, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
-  
-      _textureImage = null;
+      _textureID = rc.getTexturesHandler().getTextureIDReferenceAndDeleteImage(_textureImage, GLFormat.rgba(), _imageID, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
       _textureImage = null;
     }
   }
@@ -400,16 +398,12 @@ public class Mark implements SurfaceElevationListener
     if (_zoomOutDisappears && !_zoomOutDisappearsStarted)
     {
       _zoomOutDisappearsStarted = true;
-      if (_effectsScheduler != null)
-      {
-        _effectsScheduler.cancelAllEffectsFor(getEffectTarget());
-      }
-      else
+      if (_effectsScheduler == null)
       {
         _effectsScheduler = rc.getEffectsScheduler();
       }
       _zoomOutEffect = new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears);
-      _effectsScheduler.startEffect(_zoomOutEffect, getEffectTarget());
+      _effectsScheduler.replaceEffectsFor(getEffectTarget(), _zoomOutEffect);
     }
   }
 

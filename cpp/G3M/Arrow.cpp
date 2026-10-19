@@ -14,6 +14,13 @@
 #include "Ray.hpp"
 #include "G3MEventContext.hpp"
 #include "Camera.hpp"
+#include "Angle.hpp"
+#include "MutableMatrix44D.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "MutableVector3D.hpp"
+#include "ShortBufferBuilder.hpp"
+#include "IndexedMesh.hpp"
+#include "Color.hpp"
 
 
 Arrow::Arrow(const Vector3D& base,
@@ -38,13 +45,13 @@ _listener(NULL)
                       tipVector,
                       0.0,
                       radius * headWidthRatio);
-    addMesh(arrowTip.createMesh(color, 10));
+    addMesh(createCylinderMesh(arrowTip, color, 10));
 
     Cylinder arrowTipCover(tipVector,
                            tipVector.add(_vector.normalized().times(0.0001).asVector3D()),
                            radius * headWidthRatio,
                            0.0);
-    addMesh(arrowTipCover.createMesh(color, 10));
+    addMesh(createCylinderMesh(arrowTipCover, color, 10));
   }
 
   Cylinder cylinder(doubleHeaded? tipVector : Vector3D::ZERO, headBase, radius, radius);
@@ -58,13 +65,70 @@ _listener(NULL)
                          radius * headWidthRatio,
                          0.0);
 
-  addMesh(cylinder.createMesh(color, 10));
-  addMesh(arrowTip.createMesh(color, 20));
-  addMesh(arrowTipCover.createMesh(color, 20));
+  addMesh(createCylinderMesh(cylinder, color, 10));
+  addMesh(createCylinderMesh(arrowTip, color, 20));
+  addMesh(createCylinderMesh(arrowTipCover, color, 20));
 
   _state = new GLState();
   _transformGLFeature = new ModelTransformGLFeature(MutableMatrix44D::createTranslationMatrix(_base.asVector3D()).asMatrix44D());
   _state->addGLFeature(_transformGLFeature, false);
+}
+
+Mesh* Arrow::createCylinderMesh(const Cylinder& cylinder,
+                                const Color& color,
+                                const int nSegments) {
+  Vector3D d = cylinder._end.sub(cylinder._start);
+  Vector3D r = (d._z == 0) ? Vector3D(0.0,0.0,1.0) : Vector3D(1.0, 1.0, (-d._x -d._y) / d._z);
+  
+  Vector3D pStart = cylinder._start.add(r.times(cylinder._startRadius / r.length()));
+  Vector3D pEnd = cylinder._end.add(r.times(cylinder._endRadius / r.length()));
+  MutableMatrix44D mStart = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(360.0 / nSegments),
+                                                                          d,
+                                                                          cylinder._start);
+  MutableMatrix44D mEnd = MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(360.0 / nSegments),
+                                                                        d,
+                                                                        cylinder._end);
+  
+  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
+  FloatBufferBuilderFromCartesian3D* normals  = FloatBufferBuilderFromCartesian3D::builderWithoutCenter();
+
+  MutableVector3D newStartPoint(pStart), newEndPoint(pEnd);
+  for (int i = 0; i < nSegments; ++i){
+    
+    //Tube
+    newStartPoint.set(newStartPoint.transformedBy(mStart, 1.0));
+    newEndPoint.set(newEndPoint.transformedBy(mEnd, 1.0));
+    
+    vertices->add(newStartPoint.asVector3D());
+    vertices->add(newEndPoint.asVector3D());
+    
+    normals->add(newStartPoint.sub(cylinder._start));
+    normals->add(newEndPoint.sub(cylinder._end));
+  }
+  
+  ShortBufferBuilder indices;
+  for (int i = 0; i < nSegments*2; ++i){
+    indices.add((short) i);
+  }
+  indices.add((short) 0);
+  indices.add((short) 1);
+
+  IndexedMesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
+                                    vertices->getCenter(),
+                                    vertices->create(),
+                                    true,              // bool ownsVertices
+                                    indices.create(),
+                                    true,              // bool ownsIndices
+                                    1.0f,              // float lineWidth
+                                    1.0f,              // float pointSize
+                                    new Color(color),  // const Color* flatColor
+                                    NULL,              // IFloatBuffer* colors
+                                    true,              // bool depthTest
+                                    normals->create());
+  delete normals;
+  delete vertices;
+
+  return im;
 }
 
 Arrow::~Arrow() {

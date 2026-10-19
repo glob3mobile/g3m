@@ -249,9 +249,9 @@ public:
   int createShader(ShaderType type) const;
   bool compileShader(int shader, const std::string& source) const;
   void deleteShader(int shader) const;
-  void printShaderInfoLog(int shader) const;
+  void logShaderInfoLog(ILogger* logger, int shader) const;
   bool linkProgram(int program) const;
-  void printProgramInfoLog(int program) const;
+  void logProgramInfoLog(ILogger* logger, int program) const;
 
   void bindAttribLocation(const GPUProgram* program, int loc, const std::string& name) const;
 

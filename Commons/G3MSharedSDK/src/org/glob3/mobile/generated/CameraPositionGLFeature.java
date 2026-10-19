@@ -12,12 +12,11 @@ public class CameraPositionGLFeature extends GLFeature
   private GPUUniformValueVec3FloatMutable _horizonColor;
   private GPUUniformValueVec3FloatMutable _skyRayleighScattering;
 
-  public CameraPositionGLFeature(Camera cam, boolean groundHazePass, Color spaceColor, Color horizonColor, Vector3F skyRayleighScattering)
+  public CameraPositionGLFeature(Vector3D cameraPosition, boolean groundHazePass, Color spaceColor, Color horizonColor, Vector3F skyRayleighScattering)
   {
      super(GLFeatureGroupName.NO_GROUP, GLFeatureID.GLF_CAMERA_POSITION);
      _groundHazePass = groundHazePass;
-    final Vector3D p = cam.getCartesianPosition();
-    _camPos = new GPUUniformValueVec3FloatMutable((float) p._x, (float) p._y, (float) p._z);
+    _camPos = new GPUUniformValueVec3FloatMutable((float) cameraPosition._x, (float) cameraPosition._y, (float) cameraPosition._z);
     _values.addUniformValue(GPUUniformKey.CAMERA_POSITION, _camPos, false);
     _values.addUniformValue(GPUUniformKey.GROUND_HAZE_PASS, new GPUUniformValueFloat(groundHazePass ? 1.0f : 0.0f), false);
     _spaceColor = new GPUUniformValueVec3FloatMutable(spaceColor._red, spaceColor._green, spaceColor._blue);
@@ -36,10 +35,9 @@ public class CameraPositionGLFeature extends GLFeature
     state.setBlendFactors(_groundHazePass ? GLBlendFactor.srcAlpha() : GLBlendFactor.one(), GLBlendFactor.oneMinusSrcAlpha());
   }
 
-  public final void update(Camera cam, Color spaceColor)
+  public final void update(Vector3D cameraPosition, Color spaceColor)
   {
-    final Vector3D p = cam.getCartesianPosition();
-    _camPos.changeValue((float) p._x, (float) p._y, (float) p._z);
+    _camPos.changeValue((float) cameraPosition._x, (float) cameraPosition._y, (float) cameraPosition._z);
     _spaceColor.changeValue(spaceColor._red, spaceColor._green, spaceColor._blue);
   }
 

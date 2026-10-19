@@ -28,3 +28,42 @@ RenderState RenderState::error(const std::string& error) {
   errors.push_back(error);
   return RenderState(errors);
 }
+
+
+void RenderStateCollector::reset() {
+  _errors.clear();
+  _error = false;
+  _busy  = false;
+}
+
+void RenderStateCollector::add(const RenderState& state) {
+  const RenderState_Type type = state._type;
+  if (type == RENDER_ERROR) {
+    _error = true;
+
+    const std::vector<std::string> errors = state.getErrors();
+#ifdef C_CODE
+    _errors.insert(_errors.end(),
+                   errors.begin(),
+                   errors.end());
+#endif
+#ifdef JAVA_CODE
+    _errors.addAll(errors);
+#endif
+  }
+  else if (type == RENDER_BUSY) {
+    _busy = true;
+  }
+}
+
+RenderState RenderStateCollector::getState() const {
+  if (_error) {
+    return RenderState::error(_errors);
+  }
+  else if (_busy) {
+    return RenderState::busy();
+  }
+  else {
+    return RenderState::ready();
+  }
+}

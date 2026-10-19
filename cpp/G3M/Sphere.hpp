@@ -15,19 +15,10 @@
 
 #include "Vector3D.hpp"
 
-class Mesh;
-
 
 class Sphere : public BoundingVolume {
-private:
-  
-  mutable Mesh* _mesh;
-
 public:
-  
-  Mesh* createWireframeMesh(const Color& color,
-                            short resolution) const;
-  
+
   static Sphere* enclosingSphere(const std::vector<Vector3D>& points,
                                  const double radiusDelta);
   
@@ -40,16 +31,14 @@ public:
          double radius):
   _center(center),
   _radius(radius),
-  _radiusSquared(radius * radius),
-  _mesh(NULL)
+  _radiusSquared(radius * radius)
   {
   }
   
   Sphere(const Sphere& that) :
   _center(that._center),
   _radius(that._radius),
-  _radiusSquared(that._radiusSquared),
-  _mesh(NULL)
+  _radiusSquared(that._radiusSquared)
   {
   }
 
@@ -68,10 +57,6 @@ public:
   }
   
   double projectedArea(const G3MRenderContext* rc) const;
-  
-  void render(const G3MRenderContext* rc,
-              const GLState* parentState,
-              const Color& color) const;
   
   bool touches(const BoundingVolume* that) const {
     if (that == NULL) {

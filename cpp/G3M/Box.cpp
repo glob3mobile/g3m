@@ -8,20 +8,16 @@
 #include "Box.hpp"
 #include "Vector2D.hpp"
 #include "Camera.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "ShortBufferBuilder.hpp"
-#include "IndexedMesh.hpp"
-#include "GLConstants.hpp"
-#include "Color.hpp"
 #include "Sphere.hpp"
 #include "Vector2F.hpp"
 #include "G3MRenderContext.hpp"
 #include "Ray.hpp"
+#include "IMathUtils.hpp"
+#include "IStringBuilder.hpp"
+#include "IStringUtils.hpp"
 
 
 Box::~Box() {
-  delete _mesh;
-  
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -233,63 +229,6 @@ const bool Box::touchesRay(const Ray* ray) const {
   return !( intersectionWithRay(ray->_origin, ray->_direction).isNan() );
 }
 
-Mesh* Box::createMesh(const Color& color) const {
-  double v[] = {
-    _lower._x, _lower._y, _lower._z,
-    _lower._x, _upper._y, _lower._z,
-    _lower._x, _upper._y, _upper._z,
-    _lower._x, _lower._y, _upper._z,
-    _upper._x, _lower._y, _lower._z,
-    _upper._x, _upper._y, _lower._z,
-    _upper._x, _upper._y, _upper._z,
-    _upper._x, _lower._y, _upper._z
-  };
-
-  short i[] = {
-    0, 1, 1, 2, 2, 3, 3, 0,
-    1, 5, 5, 6, 6, 2, 2, 1,
-    5, 4, 4, 7, 7, 6, 6, 5,
-    4, 0, 0, 3, 3, 7, 7, 4,
-    3, 2, 2, 6, 6, 7, 7, 3,
-    0, 1, 1, 5, 5, 4, 4, 0
-  };
-
-  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  const int numVertices = 8;
-  for (int n = 0; n < numVertices; n++) {
-    vertices->add(v[n*3], v[n*3+1], v[n*3+2]);
-  }
-
-  ShortBufferBuilder indices;
-  const int numIndices = 48;
-  for (int n = 0; n < numIndices; n++) {
-    indices.add(i[n]);
-  }
-
-  Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
-                               vertices->getCenter(),
-                               vertices->create(),
-                               true,
-                               indices.create(),
-                               true,
-                               2,
-                               1,
-                               new Color(color));
-  
-  delete vertices;
-  
-  return mesh;
-}
-
-void Box::render(const G3MRenderContext* rc,
-                 const GLState* parentState,
-                 const Color& color) const {
-  if (_mesh == NULL) {
-    _mesh = createMesh(color);
-  }
-  _mesh->render(rc, parentState);
-}
-
 bool Box::touchesBox(const Box* that) const {
   if (_lower._x > that->_upper._x) { return false; }
   if (_upper._x < that->_lower._x) { return false; }
@@ -356,10 +295,6 @@ const std::string Box::description() const {
 }
 
 Box* Box::copy() const {
-#ifdef C_CODE
-  return new Box(*this);
-#endif
-#ifdef JAVA_CODE
-  return this;
-#endif
+  // a new Box also in Java: the caller deletes the copy, and dispose() would delete this Box's mesh
+  return new Box(_lower, _upper);
 }

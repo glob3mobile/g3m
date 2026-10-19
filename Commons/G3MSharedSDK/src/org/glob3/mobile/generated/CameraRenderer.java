@@ -19,7 +19,6 @@ package org.glob3.mobile.generated;
 //class CameraEventHandler;
 //class CameraContext;
 //class TouchEvent;
-//class RenderState;
 
 
 public class CameraRenderer implements ProtoRenderer
@@ -31,7 +30,7 @@ public class CameraRenderer implements ProtoRenderer
   private java.util.ArrayList<CameraEventHandler> _handlers = new java.util.ArrayList<CameraEventHandler>();
   private int _handlersSize;
 
-  private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private RenderStateCollector _renderStateCollector = new RenderStateCollector();
 
   private CameraContext _cameraContext;
 
@@ -41,6 +40,7 @@ public class CameraRenderer implements ProtoRenderer
      _cameraContext = null;
      _processTouchEvents = true;
      _handlersSize = 0;
+     _renderStateCollector = new RenderStateCollector();
   }
 
   public void dispose()
@@ -123,42 +123,15 @@ public class CameraRenderer implements ProtoRenderer
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    _errors.clear();
-    boolean busyFlag = false;
-    boolean errorFlag = false;
+    _renderStateCollector.reset();
   
     for (int i = 0; i < _handlersSize; i++)
     {
       CameraEventHandler handler = _handlers.get(i);
-      final RenderState handlerRenderState = handler.getRenderState(rc);
-  
-      final RenderState_Type childRenderStateType = handlerRenderState._type;
-  
-      if (childRenderStateType == RenderState_Type.RENDER_ERROR)
-      {
-        errorFlag = true;
-  
-        final java.util.ArrayList<String> handlerErrors = handlerRenderState.getErrors();
-        _errors.addAll(handlerErrors);
-      }
-      else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
-      {
-        busyFlag = true;
-      }
+      _renderStateCollector.add(handler.getRenderState(rc));
     }
   
-    if (errorFlag)
-    {
-      return RenderState.error(_errors);
-    }
-    else if (busyFlag)
-    {
-      return RenderState.busy();
-    }
-    else
-    {
-      return RenderState.ready();
-    }
+    return _renderStateCollector.getState();
   }
 
   public final void start(G3MRenderContext rc)

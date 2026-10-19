@@ -25,7 +25,7 @@ public class DeviceLocation_WebGL extends IDeviceLocation {
       _altitude   = Double.NaN;
    }
 
-   private native boolean onPositionChanged(JavaScriptObject location)/*-{
+   private native void onPositionChanged(JavaScriptObject location)/*-{
     this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_lat = location.coords.latitude;
     this.@org.glob3.mobile.specific.DeviceLocation_WebGL::_lon = location.coords.longitude;
 
@@ -37,16 +37,20 @@ public class DeviceLocation_WebGL extends IDeviceLocation {
     }
    }-*/;
 
-   private native boolean onError(JavaScriptObject error)/*-{
-    console.log(error);
-   }-*/;
+   private void onError(final String message) {
+      ILogger.instance().logError("Device location error: " + message);
+   }
 
    private native boolean startTrackingLocationJS(DeviceLocation_WebGL devLoc)/*-{
 		if ("geolocation" in navigator) {
 	    	// Request repeated updates.
 			devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::_watchId = 
-	    	navigator.geolocation.watchPosition(devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::onPositionChanged(Lcom/google/gwt/core/client/JavaScriptObject;),
-	    										devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::onError(Lcom/google/gwt/core/client/JavaScriptObject;));
+	    	navigator.geolocation.watchPosition($entry(function(location) {
+	    	                                      devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::onPositionChanged(Lcom/google/gwt/core/client/JavaScriptObject;)(location);
+	    	                                    }),
+	    	                                    $entry(function(error) {
+	    	                                      devLoc.@org.glob3.mobile.specific.DeviceLocation_WebGL::onError(Ljava/lang/String;)(error.message);
+	    	                                    }));
 	    
 			return true;
 		} 

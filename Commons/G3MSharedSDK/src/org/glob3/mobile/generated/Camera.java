@@ -20,8 +20,6 @@ public class Camera
      _frustumInModelCoordinates = null;
      _camEffectTarget = new CameraEffectTarget();
      _geodeticPosition = null;
-     _angle2Horizon = -99;
-     _normalizedPosition = new MutableVector3D(0, 0, 0);
      _tanHalfVerticalFOV = Double.NaN;
      _tanHalfHorizontalFOV = Double.NaN;
      _timestamp = timestamp;
@@ -69,7 +67,6 @@ public class Camera
       _position.set(that._position);
       _center.set(that._center);
       _up.set(that._up);
-      _normalizedPosition.set(that._normalizedPosition);
   
       _dirtyFlags.copyFrom(that._dirtyFlags);
   
@@ -91,7 +88,6 @@ public class Camera
       _frustumInModelCoordinates = that._frustumInModelCoordinates;
   
       _geodeticPosition = that._geodeticPosition;
-      _angle2Horizon = that._angle2Horizon;
   
       _tanHalfVerticalFOV = that._tanHalfVerticalFOV;
       _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
@@ -170,6 +166,10 @@ public class Camera
   {
      return _viewPortWidth;
   }
+  public final int getViewPortWidth(ViewMode viewMode)
+  {
+    return (viewMode == ViewMode.STEREO) ? (_viewPortWidth / 2) : _viewPortWidth;
+  }
   public final int getViewPortHeight()
   {
      return _viewPortHeight;
@@ -194,10 +194,6 @@ public class Camera
     result.set(_position);
   }
 
-  public final Vector3D getNormalizedPosition()
-  {
-    return _normalizedPosition.asVector3D();
-  }
   public final Vector3D getCenter()
   {
     return _center.asVector3D();
@@ -354,11 +350,6 @@ public class Camera
          _geodeticPosition.dispose();
       _geodeticPosition = null;
       _dirtyFlags.setAllDirty();
-      final double distanceToPlanetCenter = _position.length();
-      final double planetRadius = distanceToPlanetCenter - getGeodeticHeight();
-      _angle2Horizon = Math.acos(planetRadius/distanceToPlanetCenter);
-      _normalizedPosition.set(_position);
-      _normalizedPosition.normalize();
     }
   }
 
@@ -594,11 +585,6 @@ public class Camera
   public final Matrix44D getModelViewMatrix44D()
   {
     return getModelViewMatrix().asMatrix44D();
-  }
-
-  public final double getAngle2HorizonInRadians()
-  {
-     return _angle2Horizon;
   }
 
   public final double getProjectedSphereArea(Sphere sphere)
@@ -854,8 +840,6 @@ public class Camera
   //  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
   //  _camEffectTarget(new CameraEffectTarget()),
   //  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
-  //  _angle2Horizon(that._angle2Horizon),
-  //  _normalizedPosition(that._normalizedPosition),
   //  _tanHalfVerticalFieldOfView(NAND),
   //  _tanHalfHorizontalFieldOfView(NAND),
   //  _timestamp(that._timestamp)
@@ -879,12 +863,6 @@ public class Camera
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
 
   private Geodetic3D _geodeticPosition; //Must be updated when changing position
-
-  // this value is only used in the method Sector::isBackOriented
-  // it's stored in double instead of Angle class to optimize performance in android
-  // Must be updated when changing position
-  private double _angle2Horizon;
-  private MutableVector3D _normalizedPosition = new MutableVector3D();
 
   private CameraDirtyFlags _dirtyFlags = new CameraDirtyFlags();
   private FrustumData _frustumData;

@@ -26,7 +26,7 @@ public class GEORasterProjection
   private final int _imageHeight;
 
   private double _mercatorUpperGlobalV;
-  private double _mercatorDeltaGlobalV;
+  private double _mercatorLowerGlobalV;
 
 
   public GEORasterProjection(Sector sector, boolean mercator, int imageWidth, int imageHeight)
@@ -37,9 +37,8 @@ public class GEORasterProjection
      _imageHeight = imageHeight;
     if (_mercator)
     {
-      final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
       _mercatorUpperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
-      _mercatorDeltaGlobalV = mercatorLowerGlobalV - _mercatorUpperGlobalV;
+      _mercatorLowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
     }
   }
 
@@ -57,9 +56,7 @@ public class GEORasterProjection
     {
       final double linearV = uvCoordinates._y;
       final Angle latitude = _sector.getInnerPointLatitude(linearV);
-      final double mercatorGlobalV = MercatorUtils.getMercatorV(latitude);
-      final double mercatorLocalV = (mercatorGlobalV - _mercatorUpperGlobalV) / _mercatorDeltaGlobalV;
-      v = mercatorLocalV;
+      v = MercatorUtils.getLocalMercatorV(latitude, _mercatorUpperGlobalV, _mercatorLowerGlobalV);
     }
     else
     {

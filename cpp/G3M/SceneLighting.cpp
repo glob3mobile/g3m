@@ -56,6 +56,9 @@ _colorsChanged(false),
 _cameraDirX(0),
 _cameraDirY(0),
 _cameraDirZ(0),
+_upX(0),
+_upY(0),
+_upZ(0),
 _meshRenderer(NULL)
 {
 

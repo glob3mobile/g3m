@@ -96,6 +96,7 @@ Mesh* MultiTexturedHUDQuadWidget::createMesh(const G3MRenderContext* rc) {
                                                                                      GLTextureParameterValue::clampToEdge());
 
   if (texID2 == NULL) {
+    delete texID1;
     rc->getLogger()->logError("Can't upload texture #2 to GPU");
     return NULL;
   }

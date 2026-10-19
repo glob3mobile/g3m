@@ -563,8 +563,6 @@
 		E71C10B919B9B0A700EA387C /* MercatorTiledLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MercatorTiledLayer.hpp; sourceTree = "<group>"; };
 		E71C10BA19B9B0A700EA387C /* OSMLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSMLayer.cpp; sourceTree = "<group>"; };
 		E71C10BB19B9B0A700EA387C /* OSMLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OSMLayer.hpp; sourceTree = "<group>"; };
-		E71C10BC19B9B0A700EA387C /* ProceduralLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProceduralLayer.cpp; sourceTree = "<group>"; };
-		E71C10BD19B9B0A700EA387C /* ProceduralLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProceduralLayer.hpp; sourceTree = "<group>"; };
 		E71C10BE19B9B0A700EA387C /* RasterLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RasterLayer.cpp; sourceTree = "<group>"; };
 		E71C10BF19B9B0A700EA387C /* RasterLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RasterLayer.hpp; sourceTree = "<group>"; };
 		E71C10C019B9B0A700EA387C /* SectorTileCondition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SectorTileCondition.cpp; sourceTree = "<group>"; };
@@ -575,8 +573,8 @@
 		E71C10C519B9B0A700EA387C /* TMSLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TMSLayer.hpp; sourceTree = "<group>"; };
 		E71C10C619B9B0A700EA387C /* URLTemplateLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = URLTemplateLayer.cpp; sourceTree = "<group>"; };
 		E71C10C719B9B0A700EA387C /* URLTemplateLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = URLTemplateLayer.hpp; sourceTree = "<group>"; };
-		E71C10C819B9B0A700EA387C /* VectorLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VectorLayer.cpp; sourceTree = "<group>"; };
-		E71C10C919B9B0A700EA387C /* VectorLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VectorLayer.hpp; sourceTree = "<group>"; };
+		E71C10C819B9B0A700EA387C /* MultiProjectionLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiProjectionLayer.cpp; sourceTree = "<group>"; };
+		E71C10C919B9B0A700EA387C /* MultiProjectionLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MultiProjectionLayer.hpp; sourceTree = "<group>"; };
 		E71C10CA19B9B0A700EA387C /* WMSLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WMSLayer.cpp; sourceTree = "<group>"; };
 		E71C10CB19B9B0A700EA387C /* WMSLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WMSLayer.hpp; sourceTree = "<group>"; };
 		E71C10CD19B9B0A700EA387C /* BilinearInterpolator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BilinearInterpolator.cpp; sourceTree = "<group>"; };
@@ -1519,8 +1517,6 @@
 				E71C10B919B9B0A700EA387C /* MercatorTiledLayer.hpp */,
 				E71C10BA19B9B0A700EA387C /* OSMLayer.cpp */,
 				E71C10BB19B9B0A700EA387C /* OSMLayer.hpp */,
-				E71C10BC19B9B0A700EA387C /* ProceduralLayer.cpp */,
-				E71C10BD19B9B0A700EA387C /* ProceduralLayer.hpp */,
 				E71C10BE19B9B0A700EA387C /* RasterLayer.cpp */,
 				E71C10BF19B9B0A700EA387C /* RasterLayer.hpp */,
 				E71C10C019B9B0A700EA387C /* SectorTileCondition.cpp */,
@@ -1531,8 +1527,8 @@
 				E71C10C519B9B0A700EA387C /* TMSLayer.hpp */,
 				E71C10C619B9B0A700EA387C /* URLTemplateLayer.cpp */,
 				E71C10C719B9B0A700EA387C /* URLTemplateLayer.hpp */,
-				E71C10C819B9B0A700EA387C /* VectorLayer.cpp */,
-				E71C10C919B9B0A700EA387C /* VectorLayer.hpp */,
+				E71C10C819B9B0A700EA387C /* MultiProjectionLayer.cpp */,
+				E71C10C919B9B0A700EA387C /* MultiProjectionLayer.hpp */,
 				E71C10CA19B9B0A700EA387C /* WMSLayer.cpp */,
 				E71C10CB19B9B0A700EA387C /* WMSLayer.hpp */,
 			);

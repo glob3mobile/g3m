@@ -41,7 +41,7 @@ public class AtmosphereRenderer extends DefaultRenderer
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
+      _glState.addGLFeature(new ModelViewGLFeature(camera.getModelViewMatrix44D()), false);
     }
     else
     {
@@ -54,7 +54,7 @@ public class AtmosphereRenderer extends DefaultRenderer
     _directMesh.setUserTransformMatrix(new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(camera.getCartesianPosition())));
   
     //CamPos
-    _camPosGLF.update(camera, spaceColor);
+    _camPosGLF.update(camera.getCartesianPosition(), spaceColor);
   }
 
   private void updateVerticesOfZNearPlaneRelativeToCamera(Camera camera)
@@ -186,7 +186,7 @@ public class AtmosphereRenderer extends DefaultRenderer
   
       //CamPos
       // the background colour is the colour of space, seen through the air
-      _camPosGLF = new CameraPositionGLFeature(rc.getCurrentCamera(), _groundHazePass, rc.getWidget().getBackgroundColor(), defaultHorizonColor(), defaultSkyRayleighScattering());
+      _camPosGLF = new CameraPositionGLFeature(rc.getCurrentCamera().getCartesianPosition(), _groundHazePass, rc.getWidget().getBackgroundColor(), defaultHorizonColor(), defaultSkyRayleighScattering());
       _glState.addGLFeature(_camPosGLF, false);
   
       applyColorLook();

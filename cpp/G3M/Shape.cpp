@@ -223,8 +223,7 @@ void Shape::render(const G3MRenderContext* rc,
         ShapePendingEffect* pendingEffect = _pendingEffects[i];
         if (pendingEffect != NULL) {
           EffectTarget* target = pendingEffect->_targetIsCamera ? rc->getNextCamera()->getEffectTarget() : this;
-          effectsScheduler->cancelAllEffectsFor(target);
-          effectsScheduler->startEffect(pendingEffect->_effect, target);
+          effectsScheduler->replaceEffectsFor(target, pendingEffect->_effect);
 
           delete pendingEffect;
         }

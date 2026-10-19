@@ -11,13 +11,8 @@
 #include "Camera.hpp"
 #include "ErrorHandling.hpp"
 #include "Angle.hpp"
-#include "FloatBufferBuilderFromColor.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
-#include "DirectMesh.hpp"
-#include "GLConstants.hpp"
 #include "TaitBryanAngles.hpp"
 #include "IStringBuilder.hpp"
-#include "Color.hpp"
 
 
 CoordinateSystem CoordinateSystem::global() {
@@ -78,51 +73,6 @@ bool CoordinateSystem::checkConsistency(const Vector3D& x,
 
 CoordinateSystem CoordinateSystem::changeOrigin(const Vector3D& newOrigin) const {
   return CoordinateSystem(_x, _y, _z, newOrigin);
-}
-
-Mesh* CoordinateSystem::createMesh(double size) const {
-  return createMesh(size,
-                    Color::RED,
-                    Color::GREEN,
-                    Color::BLUE);
-}
-
-Mesh* CoordinateSystem::createMesh(double size,
-                                   const Color& xColor,
-                                   const Color& yColor,
-                                   const Color& zColor) const {
-  FloatBufferBuilderFromColor colors;
-
-  FloatBufferBuilderFromCartesian3D* fbb = FloatBufferBuilderFromCartesian3D::builderWithGivenCenter(_origin);
-  fbb->add(_origin);
-  fbb->add(_origin.add(_x.normalized().times(size)));
-  colors.add(xColor);
-  colors.add(xColor);
-
-  fbb->add(_origin);
-  fbb->add(_origin.add(_y.normalized().times(size)));
-  colors.add(yColor);
-  colors.add(yColor);
-
-  fbb->add(_origin);
-  fbb->add(_origin.add(_z.normalized().times(size)));
-  colors.add(zColor);
-  colors.add(zColor);
-
-  DirectMesh* dm = new DirectMesh(GLPrimitive::lines(),
-                                  true,
-                                  fbb->getCenter(),
-                                  fbb->create(),
-                                  5.0f,
-                                  1.0f,
-                                  NULL,
-                                  colors.create(),
-                                  false,
-                                  NULL);
-
-  delete fbb;
-
-  return dm;
 }
 
 TaitBryanAngles CoordinateSystem::getTaitBryanAngles(const CoordinateSystem& global) const {

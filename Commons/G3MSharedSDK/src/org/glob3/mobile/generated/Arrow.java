@@ -14,6 +14,52 @@ public class Arrow extends MeshRenderer
 
   private ArrowListener _listener;
 
+  private static Mesh createCylinderMesh(Cylinder cylinder, Color color, int nSegments)
+  {
+    Vector3D d = cylinder._end.sub(cylinder._start);
+    Vector3D r = (d._z == 0) ? new Vector3D(0.0,0.0,1.0) : new Vector3D(1.0, 1.0, (-d._x -d._y) / d._z);
+  
+    Vector3D pStart = cylinder._start.add(r.times(cylinder._startRadius / r.length()));
+    Vector3D pEnd = cylinder._end.add(r.times(cylinder._endRadius / r.length()));
+    MutableMatrix44D mStart = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(360.0 / nSegments), d, cylinder._start);
+    MutableMatrix44D mEnd = MutableMatrix44D.createGeneralRotationMatrix(Angle.fromDegrees(360.0 / nSegments), d, cylinder._end);
+  
+    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
+    FloatBufferBuilderFromCartesian3D normals = FloatBufferBuilderFromCartesian3D.builderWithoutCenter();
+  
+    MutableVector3D newStartPoint = new MutableVector3D(pStart);
+    MutableVector3D newEndPoint = new MutableVector3D(pEnd);
+    for (int i = 0; i < nSegments; ++i)
+    {
+  
+      //Tube
+      newStartPoint.set(newStartPoint.transformedBy(mStart, 1.0));
+      newEndPoint.set(newEndPoint.transformedBy(mEnd, 1.0));
+  
+      vertices.add(newStartPoint.asVector3D());
+      vertices.add(newEndPoint.asVector3D());
+  
+      normals.add(newStartPoint.sub(cylinder._start));
+      normals.add(newEndPoint.sub(cylinder._end));
+    }
+  
+    ShortBufferBuilder indices = new ShortBufferBuilder();
+    for (int i = 0; i < nSegments *2; ++i)
+    {
+      indices.add((short) i);
+    }
+    indices.add((short) 0);
+    indices.add((short) 1);
+  
+    IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1.0f, 1.0f, new Color(color), null, true, normals.create()); // bool depthTest -  IFloatBuffer* colors -  const Color* flatColor -  float pointSize -  float lineWidth -  bool ownsIndices -  bool ownsVertices
+    if (normals != null)
+       normals.dispose();
+    if (vertices != null)
+       vertices.dispose();
+  
+    return im;
+  }
+
   public Arrow(Vector3D base, Vector3D vector, double radius, Color color, double headLength, double headWidthRatio)
   {
      this(base, vector, radius, color, headLength, headWidthRatio, false);
@@ -40,10 +86,10 @@ public class Arrow extends MeshRenderer
     if (doubleHeaded)
     {
       Cylinder arrowTip = new Cylinder(Vector3D.ZERO, tipVector, 0.0, radius * headWidthRatio);
-      addMesh(arrowTip.createMesh(color, 10));
+      addMesh(createCylinderMesh(arrowTip, color, 10));
   
       Cylinder arrowTipCover = new Cylinder(tipVector, tipVector.add(_vector.normalized().times(0.0001).asVector3D()), radius * headWidthRatio, 0.0);
-      addMesh(arrowTipCover.createMesh(color, 10));
+      addMesh(createCylinderMesh(arrowTipCover, color, 10));
     }
   
     Cylinder cylinder = new Cylinder(doubleHeaded? tipVector : Vector3D.ZERO, headBase, radius, radius);
@@ -52,9 +98,9 @@ public class Arrow extends MeshRenderer
   
     Cylinder arrowTipCover = new Cylinder(headBase, headBase.sub(_vector.normalized().times(0.0001)), radius * headWidthRatio, 0.0);
   
-    addMesh(cylinder.createMesh(color, 10));
-    addMesh(arrowTip.createMesh(color, 20));
-    addMesh(arrowTipCover.createMesh(color, 20));
+    addMesh(createCylinderMesh(cylinder, color, 10));
+    addMesh(createCylinderMesh(arrowTip, color, 20));
+    addMesh(createCylinderMesh(arrowTipCover, color, 20));
   
     _state = new GLState();
     _transformGLFeature = new ModelTransformGLFeature(MutableMatrix44D.createTranslationMatrix(_base.asVector3D()).asMatrix44D());

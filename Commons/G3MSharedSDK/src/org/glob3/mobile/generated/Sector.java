@@ -28,13 +28,6 @@ package org.glob3.mobile.generated;
 
 public class Sector
 {
-  // this lazy value represent the half diagonal of the sector, measured in radians
-  // it's stored in double instead of Angle class to optimize performance in android
-  // this value is only used in the method Sector::isBackOriented
-  private double _deltaRadiusInRadians;
-
-  private Vector3D _normalizedCartesianCenter;
-
 
   //Special instances
   public static final Sector FULL_SPHERE = Sector.fromDegrees(-90, -180, 90, 180);
@@ -52,8 +45,6 @@ public class Sector
 
   public void dispose()
   {
-    if (_normalizedCartesianCenter != null)
-       _normalizedCartesianCenter.dispose();
   }
 
   public Sector(Geodetic2D lower, Geodetic2D upper)
@@ -63,8 +54,6 @@ public class Sector
      _deltaLatitude = new Angle(upper._latitude.sub(lower._latitude));
      _deltaLongitude = new Angle(upper._longitude.sub(lower._longitude));
      _center = new Geodetic2D(Angle.midAngle(lower._latitude, upper._latitude), Angle.midAngle(lower._longitude, upper._longitude));
-     _deltaRadiusInRadians = -1.0;
-     _normalizedCartesianCenter = null;
     //    if (_deltaLatitude._degrees == 0) {
     //        printf("NO AREA");
     //    }
@@ -77,17 +66,6 @@ public class Sector
      _deltaLatitude = new Angle(sector._deltaLatitude);
      _deltaLongitude = new Angle(sector._deltaLongitude);
      _center = new Geodetic2D(sector._center);
-     _deltaRadiusInRadians = sector._deltaRadiusInRadians;
-    if (sector._normalizedCartesianCenter == null)
-    {
-      _normalizedCartesianCenter = null;
-    }
-    else
-    {
-      final Vector3D normalizedCartesianCenter = sector._normalizedCartesianCenter;
-      _normalizedCartesianCenter = normalizedCartesianCenter;
-    }
-  
     //    if (_deltaLatitude._degrees == 0) {
     //        printf("NO AREA");
     //    }
@@ -272,25 +250,6 @@ public class Sector
     return (_upper._latitude._radians - latitude._radians) / _deltaLatitude._radians;
   }
 
-  public final boolean isBackOriented(G3MRenderContext rc, double minHeight, Planet planet, Vector3D cameraNormalizedPosition, double cameraAngle2HorizonInRadians)
-  {
-    //  const Camera* camera = rc->getCurrentCamera();
-    //  const Planet* planet = rc->getPlanet();
-    //
-    //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
-    //  const double angleInRadians = IMathUtils::instance()->acos(dot);
-    //
-    //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
-  
-    if (planet.isFlat())
-       return false;
-  
-    final double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
-    final double angleInRadians = Math.acos(dot);
-  
-    return ((angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians);
-  }
-
   public final Geodetic2D clamp(Geodetic2D position)
   {
     if (contains(position))
@@ -464,71 +423,14 @@ public class Sector
     return _lower._longitude;
   }
 
-  public final void rasterize(ICanvas canvas, GEORasterProjection projection)
-  {
-  
-    final Vector2F l = projection.project(_lower);
-    final Vector2F u = projection.project(_upper);
-  
-    final float left = l._x;
-    final float top = l._y;
-    final float width = u._x - left;
-    final float height = u._y - top;
-  
-    canvas.strokeRectangle(left, top, width, height);
-  }
-
   public final boolean touchesPoles()
   {
     return ((_upper._latitude._degrees >= 89.9) || (_lower._latitude._degrees <= -89.9));
   }
 
-  public final double getDeltaRadiusInRadians()
-  {
-    if (_deltaRadiusInRadians < 0)
-    {
-      _deltaRadiusInRadians = IMathUtils.instance().sqrt((_deltaLatitude._radians * _deltaLatitude._radians) + (_deltaLongitude._radians * _deltaLongitude._radians)) * 0.5;
-    }
-    return _deltaRadiusInRadians;
-  }
-
-  public final Vector3D getNormalizedCartesianCenter(Planet planet)
-  {
-    if (_normalizedCartesianCenter == null)
-    {
-      _normalizedCartesianCenter = new Vector3D(planet.toCartesian(_center).normalized());
-    }
-    return _normalizedCartesianCenter;
-  }
-
   public final double getAngularAreaInSquaredDegrees()
   {
     return _deltaLatitude._degrees * _deltaLongitude._degrees;
-  }
-
-  public final GEORasterSymbol createGEOSymbol(Color c)
-  {
-  
-    java.util.ArrayList<Geodetic2D> coordinates = new java.util.ArrayList<Geodetic2D>();
-  
-    coordinates.add(new Geodetic2D(getSW()));
-    coordinates.add(new Geodetic2D(getNW()));
-    coordinates.add(new Geodetic2D(getNE()));
-    coordinates.add(new Geodetic2D(getSE()));
-    coordinates.add(new Geodetic2D(getSW()));
-  
-    //    printf("RESTERIZING: %s\n", _sector->description().c_str());
-  
-    float[] dashLengths = {};
-    int dashCount = 0;
-  
-    GEO2DLineRasterStyle ls = new GEO2DLineRasterStyle(c, (float)1.0, StrokeCap.CAP_ROUND, StrokeJoin.JOIN_ROUND, 1, dashLengths, dashCount, 0); //const int dashPhase) : - const int dashCount, - float dashLengths[], - const float miterLimit, - const StrokeJoin join, -  const StrokeCap cap, - const float width, - const Color& color,
-  
-  
-    final GEO2DCoordinatesData coordinatesData = new GEO2DCoordinatesData(coordinates);
-    final GEOLineRasterSymbol result = new GEOLineRasterSymbol(coordinatesData, ls);
-    coordinatesData._release();
-    return result;
   }
 
   public final Geodetic2D getClosesInnerPoint(Geodetic2D g)

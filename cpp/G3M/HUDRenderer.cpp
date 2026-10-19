@@ -20,6 +20,7 @@
 
 HUDRenderer::HUDRenderer(bool readyWhenWidgetsReady) :
 _glState(new GLState()),
+_renderStateCollector(),
 _readyWhenWidgetsReady(readyWhenWidgetsReady)
 {
   _context = NULL;
@@ -71,45 +72,20 @@ RenderState HUDRenderer::getRenderState(const G3MRenderContext* rc) {
     return RenderState::ready();
   }
 
-  _errors.clear();
-  bool busyFlag  = false;
-  bool errorFlag = false;
+  _renderStateCollector.reset();
 
   for (size_t i = 0; i < _widgetsSize; i++) {
     HUDWidget* widget = _widgets[i];
     if (widget->isEnable()) {
-      const RenderState childRenderState = widget->getRenderState(rc);
-
-      const RenderState_Type childRenderStateType = childRenderState._type;
-
-      if (childRenderStateType == RENDER_ERROR) {
-        errorFlag = true;
-
-        const std::vector<std::string> childErrors = childRenderState.getErrors();
-#ifdef C_CODE
-        _errors.insert(_errors.end(),
-                       childErrors.begin(),
-                       childErrors.end());
-#endif
-#ifdef JAVA_CODE
-        _errors.addAll(childErrors);
-#endif
-      }
-      else if (childRenderStateType == RENDER_BUSY) {
-        busyFlag = true;
-      }
+      _renderStateCollector.add(widget->getRenderState(rc));
     }
   }
 
-  if (errorFlag) {
-    return RenderState::error(_errors);
-  }
-  else if (busyFlag && _readyWhenWidgetsReady) {
-    return RenderState::busy();
-  }
-  else {
+  const RenderState renderState = _renderStateCollector.getState();
+  if ((renderState._type == RENDER_BUSY) && !_readyWhenWidgetsReady) {
     return RenderState::ready();
   }
+  return renderState;
 }
 
 

@@ -10,6 +10,7 @@ using namespace emscripten;
 #include "G3M/GFont.hpp"
 #include "Image_Emscripten.hpp"
 
+#include <map>
 #include <sstream>
 
 
@@ -61,8 +62,8 @@ void Canvas_Emscripten::_initialize(int width, int height) {
   _domCanvas.set("width",  w);
   _domCanvas.set("height", h);
 
-  if ((widthPixelRatio != 1) || (widthPixelRatio != 1)) {
-    _domCanvasContext.call<void>("scale", val(widthPixelRatio), val(widthPixelRatio));
+  if ((widthPixelRatio != 1) || (heightPixelRatio != 1)) {
+    _domCanvasContext.call<void>("scale", val(widthPixelRatio), val(heightPixelRatio));
   }
 
   tryToSetCurrentFontToContext();
@@ -142,7 +143,7 @@ void Canvas_Emscripten::_setLineDash(float lengths[],
   for (int i = 0; i < count; i++) {
     jsArray.set(i, lengths[i]);
   }
-  _domCanvasContext.call<void>("setLineDash", val(lengths));
+  _domCanvasContext.call<void>("setLineDash", jsArray);
   _domCanvasContext.set("lineDashOffset", val(phase));
 }
 
@@ -271,21 +272,64 @@ void Canvas_Emscripten::_setFont(const GFont& font) {
   tryToSetCurrentFontToContext();
 }
 
+struct FontMetrics {
+  int _ascent;
+  int _height;
+};
+
+// as Canvas_WebGL.fontMetrics: ascent and height (ascent + descent) of the context's font, cached by font
+static const FontMetrics& fontMetrics(val& context,
+                                      const int fontSize) {
+  static std::map<std::string, FontMetrics> cache;
+
+  const std::string font = context["font"].as<std::string>();
+  const std::map<std::string, FontMetrics>::const_iterator cached = cache.find(font);
+  if (cached != cache.end()) {
+    return cached->second;
+  }
+
+  context.set("textBaseline", "alphabetic");
+  // accented capitals and descenders, as Canvas_WebGL ("\u00C1\u00C9gjpqy")
+  const val m = context.call<val>("measureText", std::string("\xC3\x81\xC3\x89gjpqy"));
+
+  double ascent;
+  double descent;
+  if (m["fontBoundingBoxAscent"].isNumber() && m["fontBoundingBoxDescent"].isNumber()) {
+    ascent  = m["fontBoundingBoxAscent"].as<double>();
+    descent = m["fontBoundingBoxDescent"].as<double>();
+  }
+  else if (m["actualBoundingBoxAscent"].isNumber() && m["actualBoundingBoxDescent"].isNumber()) {
+    ascent  = m["actualBoundingBoxAscent"].as<double>();
+    descent = m["actualBoundingBoxDescent"].as<double>();
+  }
+  else {
+    // same fallback factors as Canvas_WebGL
+    ascent  = fontSize * 0.95;
+    descent = fontSize * 0.25;
+  }
+
+  const IMathUtils* mu = IMathUtils::instance();
+  const int ceiledAscent = (int) mu->ceil(ascent);
+  const FontMetrics metrics = { ceiledAscent, ceiledAscent + (int) mu->ceil(descent) };
+  return cache[font] = metrics;
+}
+
 const Vector2F Canvas_Emscripten::_textExtent(const std::string& text) {
   const IMathUtils* mu = IMathUtils::instance();
 
-  _domCanvasContext.set("textBaseline", "top");
+  const FontMetrics& metrics = fontMetrics(_domCanvasContext, _currentFontSize);
+  _domCanvasContext.set("textBaseline", "alphabetic");
 
   const val textMetrics = _domCanvasContext.call<val>("measureText", text);
-  const int width  = (int) mu->ceil( textMetrics["width"].as<float>() );
-  const int height = _currentFontSize;
-  return Vector2F(width, height);
+  const int width = (int) mu->ceil( textMetrics["width"].as<float>() );
+  return Vector2F(width, metrics._height);
 }
 
 void Canvas_Emscripten::_fillText(const std::string& text,
                                   float left, float top) {
-  _domCanvasContext.set("textBaseline", "top");
-  _domCanvasContext.call<void>("fillText", text, val(left), val(top - 1));
+  const FontMetrics& metrics = fontMetrics(_domCanvasContext, _currentFontSize);
+  _domCanvasContext.set("textBaseline", "alphabetic");
+  _domCanvasContext.call<void>("fillText", text, val(left), val(top + metrics._ascent));
 }
 
 void Canvas_Emscripten::_drawImage(const IImage* image,

@@ -74,6 +74,13 @@ public class MarkWidget
     texCoords.add(1.0f, 0.0f); // vertex 4
   
     final TextureIDReference textureID = _texHandler.getTextureIDReference(_image, GLFormat.rgba(), imageName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
+    if (textureID == null)
+    {
+      ILogger.instance().logError("Can't upload texture \"%s\" to GPU", imageName);
+      _image = null;
+      _image = null;
+      return;
+    }
   
     // #warning TODO: share unit texCoords
     if (_textureMapping != null)
@@ -123,7 +130,7 @@ public class MarkWidget
     if (_glState == null)
     {
       _glState = new GLState();
-      _viewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
+      _viewportExtentGLFeature = new ViewportExtentGLFeature(rc.getCurrentCamera().getViewPortWidth(rc.getViewMode()), rc.getCurrentCamera().getViewPortHeight());
   
       _texHandler = rc.getTexturesHandler();
       _imageFactory.create(rc, new WidgetImageListener(this), true);

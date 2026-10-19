@@ -12,6 +12,7 @@
 #include <string>
 #include "Layer.hpp"
 #include "Renderer.hpp"
+#include "RenderState.hpp"
 #include "ChangedInfoListener.hpp"
 
 class Layer;
@@ -23,7 +24,6 @@ class LayerTilesRenderParameters;
 class Tile;
 class G3MEventContext;
 class Geodetic3D;
-class RenderState;
 
 
 class LayerSet : public ChangedInfoListener {
@@ -39,7 +39,7 @@ private:
   mutable TileImageProvider* _tileImageProvider;
 
   std::vector<Layer*>      _layers;
-  std::vector<std::string> _errors;
+  RenderStateCollector _renderStateCollector;
   std::vector<const Info*> _infos;
 
   void layersChanged() const;

@@ -153,7 +153,7 @@ public class RectangleF
     return s;
   }
 
-  public static RectangleF calculateInnerRectangleFromSector(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector)
+  public static RectangleF calculateInnerRectangleFromSector(int wholeSectorWidth, int wholeSectorHeight, Sector wholeSector, Sector innerSector, boolean mercator)
   {
     if (wholeSector.isNan() || innerSector.isNan())
     {
@@ -167,25 +167,26 @@ public class RectangleF
       return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
     }
   
-    final double widthFactor2 = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
-    final double heightFactor2 = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
+    final double lowerU = wholeSector.getUCoordinate(innerSector._lower._longitude);
+    final double upperU = wholeSector.getUCoordinate(innerSector._upper._longitude);
   
-    final Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
-    final Vector2D upperUV = wholeSector.getUVCoordinates(innerSector.getSE());
-  
-    final double widthFactor = (upperUV._x - lowerUV._x);
-    final double heightFactor = (upperUV._y - lowerUV._y);
-  
-    //Test factors:
-    final double deltaWidthFactor = (widthFactor - widthFactor2);
-    final double deltaHeightFactor = (heightFactor - heightFactor2);
-  
-    if (deltaWidthFactor < -0.00001 || deltaWidthFactor > 0.00001 || deltaHeightFactor < -0.00001 || deltaHeightFactor > 0.00001)
+    double upperV;
+    double lowerV;
+    if (mercator)
     {
-      ILogger.instance().logWarning("Testing this case (view code): factors are diferents: %f and %f", widthFactor - widthFactor2, heightFactor - heightFactor2);
+      // a mercator image is linear in mercator V, not in latitude
+      final double wholeUpperGlobalV = MercatorUtils.getMercatorV(wholeSector._upper._latitude);
+      final double wholeLowerGlobalV = MercatorUtils.getMercatorV(wholeSector._lower._latitude);
+      upperV = MercatorUtils.getLocalMercatorV(innerSector._upper._latitude, wholeUpperGlobalV, wholeLowerGlobalV);
+      lowerV = MercatorUtils.getLocalMercatorV(innerSector._lower._latitude, wholeUpperGlobalV, wholeLowerGlobalV);
+    }
+    else
+    {
+      upperV = wholeSector.getVCoordinate(innerSector._upper._latitude);
+      lowerV = wholeSector.getVCoordinate(innerSector._lower._latitude);
     }
   
-    return new RectangleF((float)(lowerUV._x * wholeSectorWidth), (float)(lowerUV._y * wholeSectorHeight), (float)(widthFactor * wholeSectorWidth), (float)(heightFactor * wholeSectorHeight));
+    return new RectangleF((float)(lowerU * wholeSectorWidth), (float)(upperV * wholeSectorHeight), (float)((upperU - lowerU) * wholeSectorWidth), (float)((lowerV - upperV) * wholeSectorHeight));
   }
 
 }

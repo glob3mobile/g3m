@@ -12,8 +12,6 @@
 #include <stdio.h>
 
 #include "MutableMatrix44D.hpp"
-#include "ICameraConstrainer.hpp"
-#include "G3MWidget.hpp"
 #include "CoordinateSystem.hpp"
 
 enum InterfaceOrientation{

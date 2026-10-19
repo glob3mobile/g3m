@@ -45,7 +45,7 @@ public class StarsRenderer extends DefaultRenderer
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
+      _glState.addGLFeature(new ModelViewGLFeature(camera.getModelViewMatrix44D()), false);
     }
     else
     {

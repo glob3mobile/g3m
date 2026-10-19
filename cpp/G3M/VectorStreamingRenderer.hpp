@@ -10,6 +10,7 @@
 #define __G3M__VectorStreamingRenderer__
 
 #include "DefaultRenderer.hpp"
+#include "RenderState.hpp"
 
 #include "GAsyncTask.hpp"
 #include "IBufferDownloadListener.hpp"
@@ -771,7 +772,7 @@ private:
   size_t                  _vectorSetsSize;
   std::vector<VectorSet*> _vectorSets;
   
-  std::vector<std::string> _errors;
+  RenderStateCollector _renderStateCollector;
   
   GLState* _glState;
   void updateGLState(const Camera* camera);

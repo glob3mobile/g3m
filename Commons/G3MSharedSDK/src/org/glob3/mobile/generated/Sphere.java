@@ -19,69 +19,9 @@ package org.glob3.mobile.generated;
 
 
 
-//class Mesh;
-
 
 public class Sphere extends BoundingVolume
 {
-
-  private Mesh _mesh;
-
-
-  public final Mesh createWireframeMesh(Color color, short resolution)
-  {
-    final double delta = DefineConstants.PI / (resolution-1);
-  
-    // create vertices
-    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    for (int i = 0; i<2 *resolution-2; i++)
-    {
-      final double longitude = -DefineConstants.PI + i *delta;
-      for (int j = 0; j<resolution; j++)
-      {
-        final double latitude = -DefineConstants.PI/2 + j *delta;
-        final double h = Math.cos(latitude);
-        final double x = h * Math.cos(longitude);
-        final double y = h * Math.sin(longitude);
-        final double z = Math.sin(latitude);
-        vertices.add(new Vector3D(x,y,z).times(_radius).add(_center));
-      }
-    }
-  
-    // create border indices for vertical lines
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-    for (short i = 0; i<2 *resolution-2; i++)
-    {
-      for (short j = 0; j<resolution-1; j++)
-      {
-        indices.add((short)(j+i *resolution));
-        indices.add((short)(j+1+i *resolution));
-      }
-    }
-  
-    // create border indices for horizontal lines
-    for (short j = 1; j<resolution-1; j++)
-    {
-      for (short i = 0; i<2 *resolution-3; i++)
-      {
-        indices.add((short)(j+i *resolution));
-        indices.add((short)(j+(i+1)*resolution));
-      }
-    }
-    for (short j = 1; j<resolution-1; j++)
-    {
-      final short i = (short)(2 *resolution-3);
-      indices.add((short)(j+i *resolution));
-      indices.add((short)(j));
-    }
-  
-    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 1, 1, new Color(color));
-  
-    if (vertices != null)
-       vertices.dispose();
-  
-    return mesh;
-  }
 
   public static Sphere enclosingSphere(java.util.ArrayList<Vector3D> points, double radiusDelta)
   {
@@ -159,7 +99,6 @@ public class Sphere extends BoundingVolume
      _center = center;
      _radius = radius;
      _radiusSquared = radius * radius;
-     _mesh = null;
   }
 
   public Sphere(Sphere that)
@@ -167,14 +106,10 @@ public class Sphere extends BoundingVolume
      _center = that._center;
      _radius = that._radius;
      _radiusSquared = that._radiusSquared;
-     _mesh = null;
   }
 
   public void dispose()
   {
-    if (_mesh != null)
-       _mesh.dispose();
-  
     super.dispose();
   
   }
@@ -197,15 +132,6 @@ public class Sphere extends BoundingVolume
   public final double projectedArea(G3MRenderContext rc)
   {
     return rc.getCurrentCamera().getProjectedSphereArea(this);
-  }
-
-  public final void render(G3MRenderContext rc, GLState parentState, Color color)
-  {
-    if (_mesh == null)
-    {
-      _mesh = createWireframeMesh(color, (short) 16);
-    }
-    _mesh.render(rc, parentState);
   }
 
   public final boolean touches(BoundingVolume that)

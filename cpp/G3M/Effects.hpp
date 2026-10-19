@@ -221,6 +221,9 @@ public:
 
   void cancelAllEffectsFor(EffectTarget* target);
 
+  void replaceEffectsFor(EffectTarget* target,
+                         Effect* effect);
+
   void onResume(const G3MContext* context) {
 
   }

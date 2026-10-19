@@ -49,8 +49,14 @@ public class TexturesHandler
       return new TextureIDReference(previousID, image.isPremultiplied(), this);
     }
   
+    final IGLTextureID glTextureID = _gl.uploadTexture(image, format, generateMipmap, wrapS, wrapT);
+    if (glTextureID == null)
+    {
+      return null;
+    }
+  
     TextureHolder holder = new TextureHolder(textureSpec);
-    holder._glTextureID = _gl.uploadTexture(image, format, generateMipmap, wrapS, wrapT);
+    holder._glTextureID = glTextureID;
   
     if (_verbose)
     {
@@ -62,6 +68,20 @@ public class TexturesHandler
     return new TextureIDReference(holder._glTextureID, image.isPremultiplied(), this);
   }
 
+  // deletes the image; logs an error when the texture can't be created
+  public final TextureIDReference getTextureIDReferenceAndDeleteImage(IImage image, int format, String name, boolean generateMipmap, int wrapS, int wrapT)
+  {
+    final TextureIDReference textureID = getTextureIDReference(image, format, name, generateMipmap, wrapS, wrapT);
+    if (image != null)
+       image.dispose();
+  
+    if (textureID == null)
+    {
+      ILogger.instance().logError("Can't upload texture \"%s\" to GPU", name);
+    }
+  
+    return textureID;
+  }
 
   // also reapplies the value to the mipmapped textures already in the GPU; call it from the renderer thread
   public final void setTextureMaxAnisotropy(float maxAnisotropy)

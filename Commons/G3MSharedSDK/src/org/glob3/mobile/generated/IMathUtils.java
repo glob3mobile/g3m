@@ -339,6 +339,12 @@ public abstract class IMathUtils
   }
 
 
+  public final int toUInt8(byte b)
+  {
+    // in Java unsigned char is a signed byte
+    return (b & 0xFF);
+  }
+
   public final int toUInt16(byte b1, byte b2)
   {
     // LittleEndian

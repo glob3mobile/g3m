@@ -528,7 +528,7 @@ void Mark::createGLState(const Planet* planet,
                                        false,
                                        0,
                                        true,
-                                       _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                       _textureID->getSourceBlendFactor(),
                                        GLBlendFactor::oneMinusSrcAlpha(),
                                        _translationTCX,
                                        _translationTCY,
@@ -687,14 +687,12 @@ void Mark::updateHorizonScale(double radiansPerPixel) {
 
 void Mark::ensureTexture(const G3MRenderContext* rc) {
   if ((_textureID == NULL) && (_textureImage != NULL)) {
-    _textureID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                 GLFormat::rgba(),
-                                                                 _imageID,
-                                                                 false,
-                                                                 GLTextureParameterValue::clampToEdge(),
-                                                                 GLTextureParameterValue::clampToEdge());
-
-    delete _textureImage;
+    _textureID = rc->getTexturesHandler()->getTextureIDReferenceAndDeleteImage(_textureImage,
+                                                                               GLFormat::rgba(),
+                                                                               _imageID,
+                                                                               false,
+                                                                               GLTextureParameterValue::clampToEdge(),
+                                                                               GLTextureParameterValue::clampToEdge());
     _textureImage = NULL;
   }
 }
@@ -734,15 +732,12 @@ void Mark::startPendingEffects(const G3MRenderContext* rc,
 
   if (_zoomOutDisappears && !_zoomOutDisappearsStarted) { 
     _zoomOutDisappearsStarted = true;
-    if (_effectsScheduler != NULL) {
-      _effectsScheduler->cancelAllEffectsFor(getEffectTarget());
-    }
-    else {
+    if (_effectsScheduler == NULL) {
       _effectsScheduler = rc->getEffectsScheduler();
     }
     _zoomOutEffect = new MarkZoomOutAndRemoveEffect(this, renderer, _deleteMarkOnDisappears);
-    _effectsScheduler->startEffect(_zoomOutEffect,
-                                   getEffectTarget());
+    _effectsScheduler->replaceEffectsFor(getEffectTarget(),
+                                         _zoomOutEffect);
   }
 }
 

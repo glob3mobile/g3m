@@ -12,7 +12,19 @@ public class JSONParser_WebGL extends IJSONParser {
 
    @Override
    public JSONBaseObject parse(final String string, final boolean nullAsObject) {
-      final com.google.gwt.json.client.JSONValue value = com.google.gwt.json.client.JSONParser.parseStrict(string);
+      if (string == null) {
+         ILogger.instance().logError("Can't parse a null string");
+         return null;
+      }
+
+      final com.google.gwt.json.client.JSONValue value;
+      try {
+         value = com.google.gwt.json.client.JSONParser.parseStrict(string);
+      }
+      catch (final com.google.gwt.json.client.JSONException | IllegalArgumentException e) {
+         ILogger.instance().logError("Can't parse JSON: " + e.getMessage());
+         return null;
+      }
 
       return convert(value, nullAsObject);
    }

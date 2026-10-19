@@ -128,6 +128,7 @@ _renderCounter(0),
 _totalRenderTime(0),
 _logFPS(logFPS),
 _rendererState( new RenderState( RenderState::busy() ) ),
+_renderStateCollector(),
 _selectedRenderer(NULL),
 _renderStatisticsTimer(NULL),
 _logDownloaderStatistics(logDownloaderStatistics),
@@ -519,45 +520,18 @@ RenderState G3MWidget::calculateRendererState() {
     return RenderState::busy();
   }
 
-  bool busyFlag = false;
+  _renderStateCollector.reset();
 
-  RenderState cameraRendererRenderState = _cameraRenderer->getRenderState(_renderContext);
-  if (cameraRendererRenderState._type == RENDER_ERROR) {
-    return cameraRendererRenderState;
-  }
-  else if (cameraRendererRenderState._type == RENDER_BUSY) {
-    busyFlag = true;
-  }
-
+  _renderStateCollector.add(_cameraRenderer->getRenderState(_renderContext));
   if (_hudRenderer != NULL) {
-    RenderState hudRendererRenderState = _hudRenderer->getRenderState(_renderContext);
-    if (hudRendererRenderState._type == RENDER_ERROR) {
-      return hudRendererRenderState;
-    }
-    else if (hudRendererRenderState._type == RENDER_BUSY) {
-      busyFlag = true;
-    }
+    _renderStateCollector.add(_hudRenderer->getRenderState(_renderContext));
   }
-
   if (_nearFrustumRenderer != NULL) {
-    RenderState nearFrustumRendererRenderState = _nearFrustumRenderer->getRenderState(_renderContext);
-    if (nearFrustumRendererRenderState._type == RENDER_ERROR) {
-      return nearFrustumRendererRenderState;
-    }
-    else if (nearFrustumRendererRenderState._type == RENDER_BUSY) {
-      busyFlag = true;
-    }
+    _renderStateCollector.add(_nearFrustumRenderer->getRenderState(_renderContext));
   }
+  _renderStateCollector.add(_mainRenderer->getRenderState(_renderContext));
 
-  RenderState mainRendererRenderState = _mainRenderer->getRenderState(_renderContext);
-  if (mainRendererRenderState._type == RENDER_ERROR) {
-    return mainRendererRenderState;
-  }
-  else if (mainRendererRenderState._type == RENDER_BUSY) {
-    busyFlag = true;
-  }
-
-  return busyFlag ? RenderState::busy() : RenderState::ready();
+  return _renderStateCollector.getState();
 }
 
 
@@ -998,15 +972,13 @@ void G3MWidget::setAnimatedCameraPosition(const TimeInterval& interval,
 
   const Geodetic3D finalToPosition = nearestEquivalentPosition(fromPosition, toPosition);
 
-  cancelCameraAnimation();
-
-  _effectsScheduler->startEffect(new CameraGoToPositionEffect(interval,
-                                                              fromPosition, finalToPosition,
-                                                              fromHeading,  toHeading,
-                                                              fromPitch,    toPitch,
-                                                              linearTiming,
-                                                              linearHeight),
-                                 _nextCamera->getEffectTarget());
+  _effectsScheduler->replaceEffectsFor(_nextCamera->getEffectTarget(),
+                                       new CameraGoToPositionEffect(interval,
+                                                                    fromPosition, finalToPosition,
+                                                                    fromHeading,  toHeading,
+                                                                    fromPitch,    toPitch,
+                                                                    linearTiming,
+                                                                    linearHeight));
 }
 
 Geodetic3D G3MWidget::nearestEquivalentPosition(const Geodetic3D& from,
@@ -1051,16 +1023,14 @@ void G3MWidget::setAnimatedCameraPointOfView(const TimeInterval& interval,
                                              const bool linearDistance) {
   const Geodetic3D finalToTarget = nearestEquivalentPosition(fromTarget, toTarget);
 
-  cancelCameraAnimation();
-
-  _effectsScheduler->startEffect(new CameraPointOfViewEffect(interval,
-                                                             fromTarget,   finalToTarget,
-                                                             fromDistance, toDistance,
-                                                             fromAzimuth,  toAzimuth,
-                                                             fromAltitude, toAltitude,
-                                                             linearTiming,
-                                                             linearDistance),
-                                 _nextCamera->getEffectTarget());
+  _effectsScheduler->replaceEffectsFor(_nextCamera->getEffectTarget(),
+                                       new CameraPointOfViewEffect(interval,
+                                                                   fromTarget,   finalToTarget,
+                                                                   fromDistance, toDistance,
+                                                                   fromAzimuth,  toAzimuth,
+                                                                   fromAltitude, toAltitude,
+                                                                   linearTiming,
+                                                                   linearDistance));
 }
 
 void G3MWidget::cancelAllEffects() {

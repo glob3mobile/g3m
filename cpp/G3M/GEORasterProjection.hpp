@@ -21,7 +21,7 @@ private:
   const int    _imageHeight;
 
   double _mercatorUpperGlobalV;
-  double _mercatorDeltaGlobalV;
+  double _mercatorLowerGlobalV;
 
 public:
 

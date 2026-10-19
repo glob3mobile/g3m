@@ -16,11 +16,15 @@
 #include "XPCPointCloud.hpp"
 #include "Planet.hpp"
 #include "Geodetic3D.hpp"
+#include "DebugMeshes.hpp"
+#include "Mesh.hpp"
 
 
 XPCSelectionResult::XPCSelectionResult(const Ray* ray) :
 _ray(ray),
 _selectionSphere(NULL),
+_rayMesh(NULL),
+_selectionSphereMesh(NULL),
 _nearestSquaredDistance(NAND),
 _pointCloud(NULL),
 _treeID(""),
@@ -32,6 +36,8 @@ _pointIndex(-1)
 XPCSelectionResult::~XPCSelectionResult() {
   delete _ray;
   delete _selectionSphere;
+  delete _rayMesh;
+  delete _selectionSphereMesh;
 
   if (_pointCloud != NULL) {
     _pointCloud->_release();
@@ -40,9 +46,15 @@ XPCSelectionResult::~XPCSelectionResult() {
 
 void XPCSelectionResult::render(const G3MRenderContext* rc,
                                 GLState* glState) const {
-  _ray->render(rc, glState, Color::YELLOW, 1);
+  if (_rayMesh == NULL) {
+    _rayMesh = DebugMeshes::createRayMesh(*_ray, Color::YELLOW, 1);
+  }
+  _rayMesh->render(rc, glState);
 
-  getSelectionSphere()->render(rc, glState, Color::YELLOW);
+  if (_selectionSphereMesh == NULL) {
+    _selectionSphereMesh = DebugMeshes::createSphereWireframe(*getSelectionSphere(), Color::YELLOW);
+  }
+  _selectionSphereMesh->render(rc, glState);
 }
 
 const Sphere* XPCSelectionResult::getSelectionSphere() const {
@@ -90,6 +102,9 @@ bool XPCSelectionResult::evaluateCantidate(const MutableVector3D& cartesianPoint
 
     delete _selectionSphere;
     _selectionSphere = NULL;
+
+    delete _selectionSphereMesh;
+    _selectionSphereMesh = NULL;
 
     return true;
   }

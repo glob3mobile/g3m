@@ -88,6 +88,7 @@ private:
     FrameTasksExecutor* _frameTasksExecutor;
 
     const Sector _tileSector;
+    const bool   _tileMercator;
 
   protected:
     ~Composer();
@@ -100,6 +101,7 @@ private:
              CompositeTileImageProvider* compositeTileImageProvider,
              const std::string& tileID,
              const Sector& tileSector,
+             bool tileMercator,
              TileImageListener* listener,
              bool deleteListener,
              const CompositeTileImageContribution* compositeContribution,

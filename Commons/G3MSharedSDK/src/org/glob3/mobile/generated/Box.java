@@ -16,13 +16,12 @@ package org.glob3.mobile.generated;
 
 
 
-//class Mesh;
-//class Color;
+
+//class Vector2F;
+
 
 public class Box extends BoundingVolume
 {
-
-  private Mesh _mesh;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Box(Box that);
@@ -50,35 +49,6 @@ public class Box extends BoundingVolume
   }
 
 
-
-  public final Mesh createMesh(Color color)
-  {
-    double[] v = { _lower._x, _lower._y, _lower._z, _lower._x, _upper._y, _lower._z, _lower._x, _upper._y, _upper._z, _lower._x, _lower._y, _upper._z, _upper._x, _lower._y, _lower._z, _upper._x, _upper._y, _lower._z, _upper._x, _upper._y, _upper._z, _upper._x, _lower._y, _upper._z };
-  
-    short[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
-  
-    FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithFirstVertexAsCenter();
-    final int numVertices = 8;
-    for (int n = 0; n < numVertices; n++)
-    {
-      vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
-    }
-  
-    ShortBufferBuilder indices = new ShortBufferBuilder();
-    final int numIndices = 48;
-    for (int n = 0; n < numIndices; n++)
-    {
-      indices.add(i[n]);
-    }
-  
-    Mesh mesh = new IndexedMesh(GLPrimitive.lines(), vertices.getCenter(), vertices.create(), true, indices.create(), true, 2, 1, new Color(color));
-  
-    if (vertices != null)
-       vertices.dispose();
-  
-    return mesh;
-  }
-
   public final Vector3D _lower ;
   public final Vector3D _upper ;
 
@@ -89,14 +59,10 @@ public class Box extends BoundingVolume
   {
      _lower = lower;
      _upper = upper;
-     _mesh = null;
   }
 
   public void dispose()
   {
-    if (_mesh != null)
-       _mesh.dispose();
-  
     super.dispose();
   
   }
@@ -302,15 +268,6 @@ public class Box extends BoundingVolume
     return !(intersectionWithRay(ray._origin, ray._direction).isNan());
   }
 
-  public final void render(G3MRenderContext rc, GLState parentState, Color color)
-  {
-    if (_mesh == null)
-    {
-      _mesh = createMesh(color);
-    }
-    _mesh.render(rc, parentState);
-  }
-
   public final boolean touches(BoundingVolume that)
   {
     if (that == null)
@@ -357,7 +314,7 @@ public class Box extends BoundingVolume
   {
     if (that == null)
     {
-      return this;
+      return copy();
     }
     return that.mergedWithBox(this);
   }
@@ -449,7 +406,8 @@ public class Box extends BoundingVolume
 
   public final Box copy()
   {
-    return this;
+    // a new Box also in Java: the caller deletes the copy, and dispose() would delete this Box's mesh
+    return new Box(_lower, _upper);
   }
 
 }

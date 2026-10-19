@@ -44,6 +44,16 @@ Geodetic2D IMathUtils::greatCircleIntermediatePoint(const Angle& fromLat,
                     Angle::fromRadians(lngRad));
 }
 
+const int IMathUtils::toUInt8(const unsigned char b) const {
+  // in Java unsigned char is a signed byte
+#ifdef C_CODE
+  return b;
+#endif
+#ifdef JAVA_CODE
+  return (b & 0xFF);
+#endif
+}
+
 const int IMathUtils::toUInt16(const unsigned char b1,
                                const unsigned char b2) const {
   // LittleEndian

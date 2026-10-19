@@ -91,10 +91,10 @@ public class HUDBillboardWidget extends HUDWidget implements ChangedListener
     _modelTransformGLF = new ModelTransformGLFeature(MutableMatrix44D.identity().asMatrix44D());
     _glState.addGLFeature(_modelTransformGLF, false);
   
-    _viewportExtentGLF = new ViewportExtentGLFeature(rc.getCurrentCamera(), rc.getViewMode());
+    _viewportExtentGLF = new ViewportExtentGLFeature(rc.getCurrentCamera().getViewPortWidth(rc.getViewMode()), rc.getCurrentCamera().getViewPortHeight());
     _glState.addGLFeature(_viewportExtentGLF, false);
   
-    _textureGLF = new TextureGLFeature(_textureID.getID(), _texCoords, 2, 0, false, 0, true, _textureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), 0, 0, 1, 1, 0, 0, 0); // rotation -  scale -  translation
+    _textureGLF = new TextureGLFeature(_textureID.getID(), _texCoords, 2, 0, false, 0, true, _textureID.getSourceBlendFactor(), GLBlendFactor.oneMinusSrcAlpha(), 0, 0, 1, 1, 0, 0, 0); // rotation -  scale -  translation
     _glState.addGLFeature(_textureGLF, false);
   
     return true;

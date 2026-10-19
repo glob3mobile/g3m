@@ -66,6 +66,8 @@ public class MultiTexturedHUDQuadWidget extends HUDWidget
   
     if (texID2 == null)
     {
+      if (texID1 != null)
+         texID1.dispose();
       rc.getLogger().logError("Can't upload texture #2 to GPU");
       return null;
     }

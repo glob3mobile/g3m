@@ -147,7 +147,7 @@ int StringUtils_iOS::indexOfFirstNonChar(const std::string& string,
                                          size_t fromIndex) const {
   const size_t stringLen = string.length();
   for (size_t i = fromIndex ; i < stringLen; i++) {
-    if (chars.find(string[i]) != std::string::npos) {
+    if (chars.find(string[i]) == std::string::npos) {
       return i;
     }
   }

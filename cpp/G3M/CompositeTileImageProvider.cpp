@@ -117,6 +117,7 @@ CompositeTileImageProvider::Composer::Composer(int width,
                                                CompositeTileImageProvider* compositeTileImageProvider,
                                                const std::string& tileID,
                                                const Sector& tileSector,
+                                               bool tileMercator,
                                                TileImageListener* listener,
                                                bool deleteListener,
                                                const CompositeTileImageContribution* compositeContribution,
@@ -134,7 +135,8 @@ _stepsDone(0),
 _anyError(false),
 _anyCancelation(false),
 _canceled(false),
-_tileSector(tileSector)
+_tileSector(tileSector),
+_tileMercator(tileMercator)
 {
   _compositeTileImageProvider->_retain();
 
@@ -274,11 +276,13 @@ void CompositeTileImageProvider::Composer::mixResult() {
 
       const RectangleF* srcRect = RectangleF::calculateInnerRectangleFromSector(image->getWidth(), image->getHeight(),
                                                                                 *imageSector,
-                                                                                visibleContributionSector);
+                                                                                visibleContributionSector,
+                                                                                _tileMercator);
 
       const RectangleF* destRect = RectangleF::calculateInnerRectangleFromSector(_width, _height,
                                                                                  _tileSector,
-                                                                                 visibleContributionSector);
+                                                                                 visibleContributionSector,
+                                                                                 _tileMercator);
 
       //We add "destRect->id()" to "imageID" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
 
@@ -399,6 +403,7 @@ void CompositeTileImageProvider::create(const Tile* tile,
                                     this,
                                     tileID,
                                     tile->_sector,
+                                    tile->_mercator,
                                     listener,
                                     deleteListener,
                                     compositeContribution,

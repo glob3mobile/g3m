@@ -42,6 +42,9 @@ public:
   bool isPremultiplied() const {
     return _isPremultiplied;
   }
+
+  // the source factor that blends this texture's colors correctly
+  int getSourceBlendFactor() const;
   
 };
 

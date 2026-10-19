@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 
 
 
-//class Camera;
 //class Color;
 //class Vector3F;
 

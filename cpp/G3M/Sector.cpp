@@ -7,13 +7,8 @@
 
 #include "Sector.hpp"
 
-#include "Vector3D.hpp"
 #include "Vector2D.hpp"
-#include "Planet.hpp"
-#include "GEORasterProjection.hpp"
-#include "ICanvas.hpp"
-#include "GEO2DLineRasterStyle.hpp"
-#include "GEOLineRasterSymbol.hpp"
+#include "Vector2F.hpp"
 #include "IStringBuilder.hpp"
 #include "IMathUtils.hpp"
 
@@ -28,9 +23,7 @@ _upper(upper),
 _deltaLatitude(upper._latitude.sub(lower._latitude)),
 _deltaLongitude(upper._longitude.sub(lower._longitude)),
 _center(Angle::midAngle(lower._latitude, upper._latitude),
-        Angle::midAngle(lower._longitude, upper._longitude)),
-_deltaRadiusInRadians(-1.0),
-_normalizedCartesianCenter(NULL)
+        Angle::midAngle(lower._longitude, upper._longitude))
 {
   //    if (_deltaLatitude._degrees == 0) {
   //        printf("NO AREA");
@@ -42,17 +35,8 @@ _lower(sector._lower),
 _upper(sector._upper),
 _deltaLatitude(sector._deltaLatitude),
 _deltaLongitude(sector._deltaLongitude),
-_center(sector._center),
-_deltaRadiusInRadians(sector._deltaRadiusInRadians)
+_center(sector._center)
 {
-  if (sector._normalizedCartesianCenter == NULL) {
-    _normalizedCartesianCenter = NULL;
-  }
-  else {
-    const Vector3D* normalizedCartesianCenter = sector._normalizedCartesianCenter;
-    _normalizedCartesianCenter = new Vector3D(*normalizedCartesianCenter);
-  }
-
   //    if (_deltaLatitude._degrees == 0) {
   //        printf("NO AREA");
   //    }
@@ -128,35 +112,8 @@ Vector2F Sector::getUVCoordinatesF(const Angle& latitude,
 }
 
 Sector::~Sector() {
-  delete _normalizedCartesianCenter;
 }
 
-
-bool Sector::isBackOriented(const G3MRenderContext* rc,
-                            double minHeight,
-                            const Planet* planet,
-                            const Vector3D& cameraNormalizedPosition,
-                            double cameraAngle2HorizonInRadians) const {
-  //  const Camera* camera = rc->getCurrentCamera();
-  //  const Planet* planet = rc->getPlanet();
-  //
-  //  const double dot = camera->getNormalizedPosition().dot(getNormalizedCartesianCenter(planet));
-  //  const double angleInRadians = IMathUtils::instance()->acos(dot);
-  //
-  //  return ( (angleInRadians - getDeltaRadiusInRadians()) > camera->getAngle2HorizonInRadians() );
-
-  if (planet->isFlat()) return false;
-
-  const double dot = cameraNormalizedPosition.dot(getNormalizedCartesianCenter(planet));
-#ifdef C_CODE
-  const double angleInRadians = IMathUtils::instance()->acos(dot);
-#endif
-#ifdef JAVA_CODE
-  final double angleInRadians = Math.acos(dot);
-#endif
-
-  return ( (angleInRadians - getDeltaRadiusInRadians()) > cameraAngle2HorizonInRadians );
-}
 
 Sector Sector::intersection(const Sector& that) const {
   const Angle lowLat = Angle::max(_lower._latitude,  that._lower._latitude);
@@ -292,58 +249,6 @@ const Vector2D Sector::div(const Sector& that) const {
   return Vector2D(scaleX, scaleY);
 }
 
-void Sector::rasterize(ICanvas*                   canvas,
-                       const GEORasterProjection* projection) const {
-
-  const Vector2F l = projection->project(&_lower);
-  const Vector2F u = projection->project(&_upper);
-
-  const float left   = l._x;
-  const float top    = l._y;
-  const float width  = u._x - left;
-  const float height = u._y - top;
-
-  canvas->strokeRectangle(left, top, width, height);
-}
-
-const Vector3D Sector::getNormalizedCartesianCenter(const Planet* planet) const {
-  if (_normalizedCartesianCenter == NULL) {
-    _normalizedCartesianCenter = new Vector3D(planet->toCartesian(_center).normalized());
-  }
-  return *_normalizedCartesianCenter;
-}
-
-const GEORasterSymbol* Sector::createGEOSymbol(const Color& c) const {
-
-  std::vector<Geodetic2D*>* coordinates = new std::vector<Geodetic2D*>();
-
-  coordinates->push_back( new Geodetic2D( getSW() ) );
-  coordinates->push_back( new Geodetic2D( getNW() ) );
-  coordinates->push_back( new Geodetic2D( getNE() ) );
-  coordinates->push_back( new Geodetic2D( getSE() ) );
-  coordinates->push_back( new Geodetic2D( getSW() ) );
-
-  //    printf("RESTERIZING: %s\n", _sector->description().c_str());
-
-  float dashLengths[] = {};
-  int dashCount = 0;
-
-  GEO2DLineRasterStyle ls(c, //const Color&     color,
-                          (float)1.0, //const float      width,
-                          CAP_ROUND, // const StrokeCap  cap,
-                          JOIN_ROUND, //const StrokeJoin join,
-                          1,//const float      miterLimit,
-                          dashLengths,//float            dashLengths[],
-                          dashCount,//const int        dashCount,
-                          0);//const int        dashPhase) :
-
-
-  const GEO2DCoordinatesData* coordinatesData = new GEO2DCoordinatesData(coordinates);
-  const GEOLineRasterSymbol* result = new GEOLineRasterSymbol(coordinatesData, ls);
-  coordinatesData->_release();
-  return result;
-}
-
 Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const {
   double lat = g._latitude._degrees;
   double lon = g._longitude._degrees;
@@ -369,10 +274,3 @@ Geodetic2D Sector::getClosesInnerPoint(const Geodetic2D& g) const {
   return Geodetic2D::fromDegrees(lat, lon);
 }
 
-double Sector::getDeltaRadiusInRadians() const {
-  if (_deltaRadiusInRadians < 0) {
-    _deltaRadiusInRadians = IMathUtils::instance()->sqrt((_deltaLatitude._radians  * _deltaLatitude._radians) +
-                                                         (_deltaLongitude._radians * _deltaLongitude._radians)) * 0.5;
-  }
-  return _deltaRadiusInRadians;
-}

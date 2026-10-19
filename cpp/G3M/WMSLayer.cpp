@@ -489,7 +489,9 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& position,
   double v;
   if (_parameters->_mercator) {
     u = intersectionSector.getUCoordinate(position._longitude);
-    v = MercatorUtils::getMercatorV(position._latitude);
+    v = MercatorUtils::getLocalMercatorV(position._latitude,
+                                         MercatorUtils::getMercatorV(intersectionSector._upper._latitude),
+                                         MercatorUtils::getMercatorV(intersectionSector._lower._latitude));
   }
   else {
     const Vector2D uv = intersectionSector.getUVCoordinates(position);

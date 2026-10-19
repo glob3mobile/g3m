@@ -119,8 +119,13 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
                                   this);
   }
 
+  const IGLTextureID* glTextureID = _gl->uploadTexture(image, format, generateMipmap, wrapS, wrapT);
+  if (glTextureID == NULL) {
+    return NULL;
+  }
+
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureID = _gl->uploadTexture(image, format, generateMipmap, wrapS, wrapT);
+  holder->_glTextureID = glTextureID;
 
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texID=%s" ,
@@ -133,6 +138,27 @@ const TextureIDReference* TexturesHandler::getTextureIDReference(const IImage* i
   return new TextureIDReference(holder->_glTextureID,
                                 image->isPremultiplied(),
                                 this);
+}
+
+const TextureIDReference* TexturesHandler::getTextureIDReferenceAndDeleteImage(const IImage* image,
+                                                                               int format,
+                                                                               const std::string& name,
+                                                                               bool generateMipmap,
+                                                                               int wrapS,
+                                                                               int wrapT) {
+  const TextureIDReference* textureID = getTextureIDReference(image,
+                                                              format,
+                                                              name,
+                                                              generateMipmap,
+                                                              wrapS,
+                                                              wrapT);
+  delete image;
+
+  if (textureID == NULL) {
+    ILogger::instance()->logError("Can't upload texture \"%s\" to GPU", name.c_str());
+  }
+
+  return textureID;
 }
 
 void TexturesHandler::setTextureMaxAnisotropy(float maxAnisotropy) {

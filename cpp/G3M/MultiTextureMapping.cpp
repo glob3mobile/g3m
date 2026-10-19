@@ -100,7 +100,7 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
                                             false,
                                             0,
                                             _transparent1,
-                                            _glTextureID1->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                            _glTextureID1->getSourceBlendFactor(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             _translationU,
                                             _translationV,
@@ -125,7 +125,7 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
                                             false,
                                             0,
                                             _transparent2,
-                                            _glTextureID1->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                            _glTextureID1->getSourceBlendFactor(),
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             1), //TARGET
                        false);

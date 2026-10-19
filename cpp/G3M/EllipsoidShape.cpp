@@ -147,19 +147,13 @@ const TextureIDReference* EllipsoidShape::getTextureID(const G3MRenderContext* r
       return NULL;
     }
 
-    _texID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                             GLFormat::rgba(),
-                                                             _textureURL._path,
-                                                             false,
-                                                             GLTextureParameterValue::clampToEdge(),
-                                                             GLTextureParameterValue::clampToEdge());
-
-    delete _textureImage;
+    _texID = rc->getTexturesHandler()->getTextureIDReferenceAndDeleteImage(_textureImage,
+                                                                           GLFormat::rgba(),
+                                                                           _textureURL._path,
+                                                                           false,
+                                                                           GLTextureParameterValue::clampToEdge(),
+                                                                           GLTextureParameterValue::clampToEdge());
     _textureImage = NULL;
-  }
-
-  if (_texID == NULL) {
-    rc->getLogger()->logError("Can't load texture %s", _textureURL._path.c_str());
   }
 
   if (_texID == NULL) {

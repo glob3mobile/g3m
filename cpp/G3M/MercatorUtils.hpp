@@ -68,6 +68,13 @@ public:
 
   static double getMercatorV(const Angle& latitude);
 
+  // v inside a sector: 0 at its upper latitude, 1 at its lower latitude; upperGlobalV and lowerGlobalV are getMercatorV of those latitudes
+  static double getLocalMercatorV(const Angle& latitude,
+                                  const double upperGlobalV,
+                                  const double lowerGlobalV) {
+    return (getMercatorV(latitude) - upperGlobalV) / (lowerGlobalV - upperGlobalV);
+  }
+
   static const Angle toLatitude(double v);
 
   static const Angle calculateSplitLatitude(const Angle& lowerLatitude,

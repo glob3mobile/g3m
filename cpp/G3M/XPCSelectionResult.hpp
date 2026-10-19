@@ -14,6 +14,7 @@ class G3MRenderContext;
 class GLState;
 class Sphere;
 class Planet;
+class Mesh;
 
 #include "MutableVector3D.hpp"
 
@@ -32,6 +33,9 @@ private:
 
 
   mutable Sphere* _selectionSphere;
+
+  mutable Mesh* _rayMesh;
+  mutable Mesh* _selectionSphereMesh;
 
 public:
   const Ray* _ray;

@@ -12,6 +12,7 @@
 #include "IMathUtils.hpp"
 #include "IStringBuilder.hpp"
 #include "Sector.hpp"
+#include "MercatorUtils.hpp"
 #include "Vector2D.hpp"
 #include "ILogger.hpp"
 
@@ -108,7 +109,8 @@ const std::string RectangleF::id() const {
 RectangleF* RectangleF::calculateInnerRectangleFromSector(int wholeSectorWidth,
                                                           int wholeSectorHeight,
                                                           const Sector& wholeSector,
-                                                          const Sector& innerSector)  {
+                                                          const Sector& innerSector,
+                                                          bool mercator)  {
   if (wholeSector.isNan() || innerSector.isNan()) {
     //I think that this case doesn't exist
     ILogger::instance()->logError("Testing this case: view code");
@@ -119,26 +121,25 @@ RectangleF* RectangleF::calculateInnerRectangleFromSector(int wholeSectorWidth,
     return new RectangleF(0, 0, wholeSectorWidth, wholeSectorHeight);
   }
 
-  const double widthFactor2  = innerSector._deltaLongitude.div(wholeSector._deltaLongitude);
-  const double heightFactor2 = innerSector._deltaLatitude.div(wholeSector._deltaLatitude);
+  const double lowerU = wholeSector.getUCoordinate(innerSector._lower._longitude);
+  const double upperU = wholeSector.getUCoordinate(innerSector._upper._longitude);
 
-  const Vector2D lowerUV = wholeSector.getUVCoordinates(innerSector.getNW());
-  const Vector2D upperUV = wholeSector.getUVCoordinates(innerSector.getSE());
-
-  const double widthFactor  = (upperUV._x - lowerUV._x);
-  const double heightFactor = (upperUV._y - lowerUV._y);
-
-  //Test factors:
-  const double deltaWidthFactor  = (widthFactor  - widthFactor2);
-  const double deltaHeightFactor = (heightFactor - heightFactor2);
-
-  if ( deltaWidthFactor < -0.00001 || deltaWidthFactor > 0.00001 || deltaHeightFactor < -0.00001 || deltaHeightFactor  > 0.00001) {
-    ILogger::instance()->logWarning("Testing this case (view code): factors are diferents: %f and %f", widthFactor - widthFactor2, heightFactor - heightFactor2);
+  double upperV;
+  double lowerV;
+  if (mercator) {
+    // a mercator image is linear in mercator V, not in latitude
+    const double wholeUpperGlobalV = MercatorUtils::getMercatorV(wholeSector._upper._latitude);
+    const double wholeLowerGlobalV = MercatorUtils::getMercatorV(wholeSector._lower._latitude);
+    upperV = MercatorUtils::getLocalMercatorV(innerSector._upper._latitude, wholeUpperGlobalV, wholeLowerGlobalV);
+    lowerV = MercatorUtils::getLocalMercatorV(innerSector._lower._latitude, wholeUpperGlobalV, wholeLowerGlobalV);
+  }
+  else {
+    upperV = wholeSector.getVCoordinate(innerSector._upper._latitude);
+    lowerV = wholeSector.getVCoordinate(innerSector._lower._latitude);
   }
 
-  return new RectangleF((float) (lowerUV._x   * wholeSectorWidth),
-                        (float) (lowerUV._y   * wholeSectorHeight),
-                        (float) (widthFactor  * wholeSectorWidth),
-                        (float) (heightFactor * wholeSectorHeight));
+  return new RectangleF((float) (lowerU            * wholeSectorWidth),
+                        (float) (upperV            * wholeSectorHeight),
+                        (float) ((upperU - lowerU) * wholeSectorWidth),
+                        (float) ((lowerV - upperV) * wholeSectorHeight));
 }
-

@@ -21,9 +21,8 @@ _imageWidth(imageWidth),
 _imageHeight(imageHeight)
 {
   if (_mercator) {
-    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
     _mercatorUpperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
-    _mercatorDeltaGlobalV = mercatorLowerGlobalV - _mercatorUpperGlobalV;
+    _mercatorLowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
   }
 }
 
@@ -35,9 +34,7 @@ Vector2F GEORasterProjection::project(const Geodetic2D* position) const {
   if (_mercator) {
     const double linearV = uvCoordinates._y;
     const Angle latitude = _sector.getInnerPointLatitude(linearV);
-    const double mercatorGlobalV = MercatorUtils::getMercatorV(latitude);
-    const double mercatorLocalV  = (mercatorGlobalV - _mercatorUpperGlobalV) / _mercatorDeltaGlobalV;
-    v = mercatorLocalV;
+    v = MercatorUtils::getLocalMercatorV(latitude, _mercatorUpperGlobalV, _mercatorLowerGlobalV);
   }
   else {
     v = uvCoordinates._y;

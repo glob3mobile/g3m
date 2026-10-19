@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 
 //class TextureIDReference;
+//class IImage;
 
 
 public class QuadShape extends AbstractMeshShape
@@ -44,15 +45,8 @@ public class QuadShape extends AbstractMeshShape
       return null;
     }
   
-    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
-  
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReferenceAndDeleteImage(_textureImage, GLFormat.rgba(), _textureName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
     _textureImage = null;
-    _textureImage = null;
-  
-    if (texID == null)
-    {
-      rc.getLogger().logError("Can't load texture %s", _textureName);
-    }
   
     return texID;
   }

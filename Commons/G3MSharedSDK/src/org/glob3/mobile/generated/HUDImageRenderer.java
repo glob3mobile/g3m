@@ -124,14 +124,11 @@ public class HUDImageRenderer extends DefaultRenderer
     final IStringUtils su = IStringUtils.instance();
     final String textureName = "HUDImageRenderer" + su.toString(_instanceID) + "/" + su.toString(_changeCounter++);
   
-    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReference(_image, GLFormat.rgba(), textureName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge()); // generateMipmap
-  
-    _image = null;
+    final TextureIDReference texID = rc.getTexturesHandler().getTextureIDReferenceAndDeleteImage(_image, GLFormat.rgba(), textureName, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge()); // generateMipmap
     _image = null;
   
     if (texID == null)
     {
-      rc.getLogger().logError("Can't upload texture to GPU");
       return null;
     }
   

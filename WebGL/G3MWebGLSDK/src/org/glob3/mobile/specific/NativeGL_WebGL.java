@@ -171,7 +171,7 @@ public final class NativeGL_WebGL extends INativeGL {
    @Override
    public native ArrayList<IGLTextureID> genTextures(final int n) /*-{
     var array = @java.util.ArrayList::new()();
-    for (i = 0; i < n; i++) {
+    for (var i = 0; i < n; i++) {
       var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.createTexture();
 
       var textureID = @org.glob3.mobile.specific.GLTextureID_WebGL::new(Lcom/google/gwt/core/client/JavaScriptObject;)(texture);

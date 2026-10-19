@@ -48,7 +48,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const {
       state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
-                                              _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                              _glTextureID->getSourceBlendFactor(),
                                               GLBlendFactor::oneMinusSrcAlpha(),
                                               _translationU,
                                               _translationV,
@@ -61,7 +61,7 @@ void LazyTextureMapping::modifyGLState(GLState& state) const {
       state.addGLFeature(new TextureGLFeature(_glTextureID->getID(),
                                               _texCoords, 2, 0, false, 0,
                                               _transparent,
-                                              _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                              _glTextureID->getSourceBlendFactor(),
                                               GLBlendFactor::oneMinusSrcAlpha()
                                               ),
                          false);

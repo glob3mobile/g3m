@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 //class GLState;
 //class Sphere;
 //class Planet;
+//class Mesh;
 
 
 
@@ -38,12 +39,17 @@ public class XPCSelectionResult
 
   private Sphere _selectionSphere;
 
+  private Mesh _rayMesh;
+  private Mesh _selectionSphereMesh;
+
   public final Ray _ray;
 
   public XPCSelectionResult(Ray ray)
   {
      _ray = ray;
      _selectionSphere = null;
+     _rayMesh = null;
+     _selectionSphereMesh = null;
      _nearestSquaredDistance = Double.NaN;
      _pointCloud = null;
      _treeID = "";
@@ -57,6 +63,10 @@ public class XPCSelectionResult
        _ray.dispose();
     if (_selectionSphere != null)
        _selectionSphere.dispose();
+    if (_rayMesh != null)
+       _rayMesh.dispose();
+    if (_selectionSphereMesh != null)
+       _selectionSphereMesh.dispose();
   
     if (_pointCloud != null)
     {
@@ -83,9 +93,17 @@ public class XPCSelectionResult
 
   public final void render(G3MRenderContext rc, GLState glState)
   {
-    _ray.render(rc, glState, Color.YELLOW, 1);
+    if (_rayMesh == null)
+    {
+      _rayMesh = DebugMeshes.createRayMesh(_ray, Color.YELLOW, 1);
+    }
+    _rayMesh.render(rc, glState);
   
-    getSelectionSphere().render(rc, glState, Color.YELLOW);
+    if (_selectionSphereMesh == null)
+    {
+      _selectionSphereMesh = DebugMeshes.createSphereWireframe(getSelectionSphere(), Color.YELLOW);
+    }
+    _selectionSphereMesh.render(rc, glState);
   }
 
   public final boolean isInterestedIn(Sphere area)
@@ -128,6 +146,10 @@ public class XPCSelectionResult
       if (_selectionSphere != null)
          _selectionSphere.dispose();
       _selectionSphere = null;
+  
+      if (_selectionSphereMesh != null)
+         _selectionSphereMesh.dispose();
+      _selectionSphereMesh = null;
   
       return true;
     }

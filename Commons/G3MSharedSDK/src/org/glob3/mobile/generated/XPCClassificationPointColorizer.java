@@ -113,7 +113,7 @@ public class XPCClassificationPointColorizer extends XPCFixedAlphaPointColorizer
       return;
     }
   
-    final byte classification = dimensionsValues.get(0).get(i);
+    final int classification = IMathUtils.instance().toUInt8(dimensionsValues.get(0).get(i));
   
     if (classification >= _colors.size())
     {

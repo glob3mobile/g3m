@@ -584,9 +584,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   
     final Geodetic3D finalToPosition = nearestEquivalentPosition(fromPosition, toPosition);
   
-    cancelCameraAnimation();
-  
-    _effectsScheduler.startEffect(new CameraGoToPositionEffect(interval, fromPosition, finalToPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight), _nextCamera.getEffectTarget());
+    _effectsScheduler.replaceEffectsFor(_nextCamera.getEffectTarget(), new CameraGoToPositionEffect(interval, fromPosition, finalToPosition, fromHeading, toHeading, fromPitch, toPitch, linearTiming, linearHeight));
   }
 
   public final void setCameraPointOfView(Geodetic3D target, double distance, Angle azimuth, Angle altitude)
@@ -606,9 +604,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   {
     final Geodetic3D finalToTarget = nearestEquivalentPosition(fromTarget, toTarget);
   
-    cancelCameraAnimation();
-  
-    _effectsScheduler.startEffect(new CameraPointOfViewEffect(interval, fromTarget, finalToTarget, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, linearTiming, linearDistance), _nextCamera.getEffectTarget());
+    _effectsScheduler.replaceEffectsFor(_nextCamera.getEffectTarget(), new CameraPointOfViewEffect(interval, fromTarget, finalToTarget, fromDistance, toDistance, fromAzimuth, toAzimuth, fromAltitude, toAltitude, linearTiming, linearDistance));
   }
 
   public final void cancelCameraAnimation()
@@ -809,6 +805,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
   private Renderer _hudRenderer;
   private NearFrustumRenderer _nearFrustumRenderer;
   private RenderState _rendererState;
+  private RenderStateCollector _renderStateCollector = new RenderStateCollector();
   private ProtoRenderer _selectedRenderer;
 
   private EffectsScheduler _effectsScheduler;
@@ -912,6 +909,7 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
      _totalRenderTime = 0;
      _logFPS = logFPS;
      _rendererState = new RenderState(RenderState.busy());
+     _renderStateCollector = new RenderStateCollector();
      _selectedRenderer = null;
      _renderStatisticsTimer = null;
      _logDownloaderStatistics = logDownloaderStatistics;
@@ -1047,55 +1045,20 @@ public class G3MWidget implements ChangedRendererInfoListener, FrustumPolicyHand
       return RenderState.busy();
     }
   
-    boolean busyFlag = false;
+    _renderStateCollector.reset();
   
-    RenderState cameraRendererRenderState = _cameraRenderer.getRenderState(_renderContext);
-    if (cameraRendererRenderState._type == RenderState_Type.RENDER_ERROR)
-    {
-      return cameraRendererRenderState;
-    }
-    else if (cameraRendererRenderState._type == RenderState_Type.RENDER_BUSY)
-    {
-      busyFlag = true;
-    }
-  
+    _renderStateCollector.add(_cameraRenderer.getRenderState(_renderContext));
     if (_hudRenderer != null)
     {
-      RenderState hudRendererRenderState = _hudRenderer.getRenderState(_renderContext);
-      if (hudRendererRenderState._type == RenderState_Type.RENDER_ERROR)
-      {
-        return hudRendererRenderState;
-      }
-      else if (hudRendererRenderState._type == RenderState_Type.RENDER_BUSY)
-      {
-        busyFlag = true;
-      }
+      _renderStateCollector.add(_hudRenderer.getRenderState(_renderContext));
     }
-  
     if (_nearFrustumRenderer != null)
     {
-      RenderState nearFrustumRendererRenderState = _nearFrustumRenderer.getRenderState(_renderContext);
-      if (nearFrustumRendererRenderState._type == RenderState_Type.RENDER_ERROR)
-      {
-        return nearFrustumRendererRenderState;
-      }
-      else if (nearFrustumRendererRenderState._type == RenderState_Type.RENDER_BUSY)
-      {
-        busyFlag = true;
-      }
+      _renderStateCollector.add(_nearFrustumRenderer.getRenderState(_renderContext));
     }
+    _renderStateCollector.add(_mainRenderer.getRenderState(_renderContext));
   
-    RenderState mainRendererRenderState = _mainRenderer.getRenderState(_renderContext);
-    if (mainRendererRenderState._type == RenderState_Type.RENDER_ERROR)
-    {
-      return mainRendererRenderState;
-    }
-    else if (mainRendererRenderState._type == RenderState_Type.RENDER_BUSY)
-    {
-      busyFlag = true;
-    }
-  
-    return busyFlag ? RenderState.busy() : RenderState.ready();
+    return _renderStateCollector.getState();
   }
 
   private void setSelectedRenderer(ProtoRenderer selectedRenderer)

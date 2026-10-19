@@ -53,7 +53,7 @@ public class ShapesRenderer extends DefaultRenderer
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
+      _glState.addGLFeature(new ModelViewGLFeature(camera.getModelViewMatrix44D()), false);
     }
     else
     {
@@ -63,7 +63,7 @@ public class ShapesRenderer extends DefaultRenderer
     f = (ModelViewGLFeature) _glStateTransparent.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glStateTransparent.addGLFeature(new ModelViewGLFeature(camera), false);
+      _glStateTransparent.addGLFeature(new ModelViewGLFeature(camera.getModelViewMatrix44D()), false);
     }
     else
     {

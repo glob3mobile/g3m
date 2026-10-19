@@ -220,12 +220,9 @@ const Vector2F PlanetTileTessellator::getTextCoord(const Tile* tile,
     return linearUV;
   }
 
-  const double lowerGlobalV = MercatorUtils::getMercatorV(sector._lower._latitude);
-  const double upperGlobalV = MercatorUtils::getMercatorV(sector._upper._latitude);
-  const double deltaGlobalV = lowerGlobalV - upperGlobalV;
-
-  const double globalV = MercatorUtils::getMercatorV(latitude);
-  const double localV  = (globalV - upperGlobalV) / deltaGlobalV;
+  const double localV = MercatorUtils::getLocalMercatorV(latitude,
+                                                         MercatorUtils::getMercatorV(sector._upper._latitude),
+                                                         MercatorUtils::getMercatorV(sector._lower._latitude));
 
   return Vector2F(linearUV._x, (float) localV);
 }
@@ -424,38 +421,21 @@ double PlanetTileTessellator::createSurface(const Sector& tileSector,
 
   //TEX COORDINATES
 
-  if (mercator) {
-    const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(tileSector._lower._latitude);
-    const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(tileSector._upper._latitude);
-    const double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
+  // the tile image covers tileSector, the mesh may cover only a part of it (meshSector, clipped by the rendered sector)
+  const double mercatorUpperGlobalV = MercatorUtils::getMercatorV(tileSector._upper._latitude);
+  const double mercatorLowerGlobalV = MercatorUtils::getMercatorV(tileSector._lower._latitude);
 
-    for (int j = 0; j < meshResolution._y; j++) {
-      const double v = (double) j / (meshResolution._y - 1);
+  for (int j = 0; j < meshResolution._y; j++) {
+    const Angle lat = meshSector.getInnerPointLatitude((double) j / (meshResolution._y - 1));
+    const double textureV = mercator
+    /*                   */ ? MercatorUtils::getLocalMercatorV(lat, mercatorUpperGlobalV, mercatorLowerGlobalV)
+    /*                   */ : tileSector.getVCoordinate(lat);
 
-      for (int i = 0; i < meshResolution._x; i++) {
-        const double u = (double) i / (meshResolution._x - 1);
+    for (int i = 0; i < meshResolution._x; i++) {
+      const Angle lon = meshSector.getInnerPointLongitude((double) i / (meshResolution._x - 1));
+      const double textureU = tileSector.getUCoordinate(lon);
 
-        const Angle lat = Angle::linearInterpolation( meshSector._lower._latitude,  meshSector._upper._latitude,  1.0 - v );
-        const Angle lon = Angle::linearInterpolation( meshSector._lower._longitude, meshSector._upper._longitude,       u );
-
-        //U
-        const double m_u = tileSector.getUCoordinate(lon);
-
-        //V
-        const double mercatorGlobalV = MercatorUtils::getMercatorV(lat);
-        const double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-
-        textCoords.add((float)m_u, (float)m_v);
-      }
-    }
-  }
-  else {
-    for (int j = 0; j < meshResolution._y; j++) {
-      const double v = (double) j / (meshResolution._y - 1);
-      for (int i = 0; i < meshResolution._x; i++) {
-        const double u = (double) i / (meshResolution._x - 1);
-        textCoords.add((float)u, (float)v);
-      }
+      textCoords.add((float) textureU, (float) textureV);
     }
   }
 

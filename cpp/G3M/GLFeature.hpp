@@ -16,7 +16,6 @@
 #include "GPUUniform.hpp"
 
 
-class Camera;
 class Color;
 class Vector3F;
 
@@ -110,9 +109,6 @@ public:
   ViewportExtentGLFeature(int viewportWidth,
                           int viewportHeight);
 
-  ViewportExtentGLFeature(const Camera* camera,
-                          ViewMode      viewMode);
-
   void applyOnGlobalGLState(GLGlobalState* state)  const {}
 
   void changeExtent(int viewportWidth,
@@ -176,7 +172,7 @@ private:
   GPUUniformValueVec3FloatMutable* _skyRayleighScattering;
 
 public:
-  CameraPositionGLFeature(const Camera* cam,
+  CameraPositionGLFeature(const Vector3D& cameraPosition,
                           bool groundHazePass,
                           const Color& spaceColor,
                           const Color& horizonColor,
@@ -190,7 +186,7 @@ public:
                            GLBlendFactor::oneMinusSrcAlpha());
   }
 
-  void update(const Camera* cam,
+  void update(const Vector3D& cameraPosition,
               const Color& spaceColor);
 
   void changeAtmosphereColors(const Color& horizonColor,
@@ -377,8 +373,6 @@ public:
   GLCameraGroupFeature(modelview, GLF_MODEL_VIEW)
   {
   }
-
-  ModelViewGLFeature(const Camera* camera);
 };
 
 
@@ -395,8 +389,6 @@ public:
   GLCameraGroupFeature(model, GLF_MODEL)
   {
   }
-
-  ModelGLFeature(const Camera* camera);
 };
 
 
@@ -413,8 +405,6 @@ public:
   GLCameraGroupFeature(projection, GLF_PROJECTION)
   {
   }
-
-  ProjectionGLFeature(const Camera* camera);
 };
 
 

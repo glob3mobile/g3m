@@ -524,8 +524,7 @@ public abstract class Shape implements SurfaceElevationListener, EffectTarget
           if (pendingEffect != null)
           {
             EffectTarget target = pendingEffect._targetIsCamera ? rc.getNextCamera().getEffectTarget() : this;
-            effectsScheduler.cancelAllEffectsFor(target);
-            effectsScheduler.startEffect(pendingEffect._effect, target);
+            effectsScheduler.replaceEffectsFor(target, pendingEffect._effect);
   
             if (pendingEffect != null)
                pendingEffect.dispose();

@@ -22,6 +22,7 @@ class Frustum;
 class IDownloader;
 class ByteBufferIterator;
 class DirectMesh;
+class Mesh;
 class XPCSelectionResult;
 class ITimer;
 class XPCRenderingState;
@@ -44,6 +45,7 @@ private:
   DirectMesh* _mesh;
 
   Sphere* _bounds;
+  Mesh*   _boundsDebugMesh;
   const Sphere* getBounds(const G3MRenderContext* rc,
                           const XPCPointCloud* pointCloud);
   

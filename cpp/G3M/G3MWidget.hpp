@@ -296,6 +296,7 @@ private:
   Renderer*            _hudRenderer;
   NearFrustumRenderer* _nearFrustumRenderer;
   RenderState*         _rendererState;
+  RenderStateCollector _renderStateCollector;
   ProtoRenderer*       _selectedRenderer;
 
   EffectsScheduler*   _effectsScheduler;

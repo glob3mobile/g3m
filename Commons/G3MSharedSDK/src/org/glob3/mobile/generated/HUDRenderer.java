@@ -28,7 +28,7 @@ public class HUDRenderer extends DefaultRenderer
 
   private GLState _glState;
 
-  private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private RenderStateCollector _renderStateCollector = new RenderStateCollector();
   private final boolean _readyWhenWidgetsReady;
 
   public HUDRenderer()
@@ -38,6 +38,7 @@ public class HUDRenderer extends DefaultRenderer
   public HUDRenderer(boolean readyWhenWidgetsReady)
   {
      _glState = new GLState();
+     _renderStateCollector = new RenderStateCollector();
      _readyWhenWidgetsReady = readyWhenWidgetsReady;
     _context = null;
     _widgetsSize = _widgets.size();
@@ -98,45 +99,23 @@ public class HUDRenderer extends DefaultRenderer
       return RenderState.ready();
     }
   
-    _errors.clear();
-    boolean busyFlag = false;
-    boolean errorFlag = false;
+    _renderStateCollector.reset();
   
     for (int i = 0; i < _widgetsSize; i++)
     {
       HUDWidget widget = _widgets.get(i);
       if (widget.isEnable())
       {
-        final RenderState childRenderState = widget.getRenderState(rc);
-  
-        final RenderState_Type childRenderStateType = childRenderState._type;
-  
-        if (childRenderStateType == RenderState_Type.RENDER_ERROR)
-        {
-          errorFlag = true;
-  
-          final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
-          _errors.addAll(childErrors);
-        }
-        else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
-        {
-          busyFlag = true;
-        }
+        _renderStateCollector.add(widget.getRenderState(rc));
       }
     }
   
-    if (errorFlag)
-    {
-      return RenderState.error(_errors);
-    }
-    else if (busyFlag && _readyWhenWidgetsReady)
-    {
-      return RenderState.busy();
-    }
-    else
+    final RenderState renderState = _renderStateCollector.getState();
+    if ((renderState._type == RenderState_Type.RENDER_BUSY) && !_readyWhenWidgetsReady)
     {
       return RenderState.ready();
     }
+    return renderState;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)

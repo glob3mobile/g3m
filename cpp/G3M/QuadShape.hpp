@@ -14,6 +14,7 @@
 #include "URL.hpp"
 
 class TextureIDReference;
+class IImage;
 
 
 class QuadShape : public AbstractMeshShape {

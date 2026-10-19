@@ -106,7 +106,6 @@
 #import <G3MiOSSDK/GEO2DSurfaceRasterStyle.hpp>
 #import <G3MiOSSDK/GEO2DMultiPolygonGeometry.hpp>
 #import <G3MiOSSDK/GPUProgramFactory.hpp>
-#import <G3MiOSSDK/GenericQuadTree.hpp>
 #import <G3MiOSSDK/GEOFeatureCollection.hpp>
 #import <G3MiOSSDK/Angle.hpp>
 #import <G3MiOSSDK/SectorAndHeightCameraConstrainer.hpp>
@@ -131,6 +130,7 @@
 #import <G3MiOSSDK/PlanetRenderer.hpp>
 #import <G3MiOSSDK/G3MMeshParser.hpp>
 #import <G3MiOSSDK/CoordinateSystem.hpp>
+#import <G3MiOSSDK/DebugMeshes.hpp>
 #import <G3MiOSSDK/TaitBryanAngles.hpp>
 #import <G3MiOSSDK/GEOLabelRasterSymbol.hpp>
 #import <G3MiOSSDK/TileRenderingListener.hpp>
@@ -798,7 +798,6 @@ public:
   //                                                                               -16.339417,
   //                                                                               100076.892613024946));
   //
-  // [self testGenericQuadTree:geoVectorLayer];
   
 }
 
@@ -1301,8 +1300,8 @@ public:
     CoordinateSystem sr2 = sr.applyTaitBryanAngles(TaitBryanAngles::fromDegrees(170, 80, 10))
     .changeOrigin(planet->toCartesian(Geodetic3D::fromDegrees(lat, lon, 1.5e4)));
     
-    meshRenderer->addMesh( sr.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
-    meshRenderer->addMesh( sr2.createMesh(1e4, Color::red(), Color::green(), Color::blue()));
+    meshRenderer->addMesh( DebugMeshes::createCoordinateSystemMesh(sr, 1e4, Color::red(), Color::green(), Color::blue()));
+    meshRenderer->addMesh( DebugMeshes::createCoordinateSystemMesh(sr2, 1e4, Color::red(), Color::green(), Color::blue()));
     
     TaitBryanAngles tba = sr2.getTaitBryanAngles(sr);
     printf("ANGLES: %f, %f, %f\n", tba._heading._degrees, tba._pitch._degrees, tba._roll._degrees);
@@ -1749,120 +1748,7 @@ public:
   
   // initialization
   builder.initializeWidget();
-  //  [self testGenericQuadTree:geoVectorLayer];
   
-}
-
-- (void) testGenericQuadTree: (GEOVectorLayer*) geoVectorLayer {
-  
-  
-  NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/populated_places"
-                                                              ofType: @"geojson"];
-  
-  if (geoJSONFilePath) {
-    NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
-                                                    encoding: NSUTF8StringEncoding
-                                                       error: nil];
-    
-    if (nsGEOJSON) {
-      
-      std::string geoJSON = [nsGEOJSON UTF8String];
-      
-      GEOObject* geoObject = GEOJSONParser::parseJSON(geoJSON);
-      
-      GEOFeatureCollection* fc = (GEOFeatureCollection*) geoObject;
-      
-      for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1) {
-        
-        GenericQuadTree tree(1,12,areaProportion);
-        
-        std::string* x = new std::string("OK");
-        
-        for (int i = 0; i < fc->size(); i++) {
-          GEO2DPointGeometry* p = (GEO2DPointGeometry*) fc->get(i)->getGeometry();
-          p->getPosition();
-          
-          Geodetic2D geo = p->getPosition();
-          //        printf("POINT: %s\n", geo.description().c_str());
-          
-          tree.add(p->getPosition(), x);
-        }
-        
-        //      double areaProportion = 0.5;
-        printf("TREE WITH CHILD_ARE_PROPORTION %f\n--------------------\n", areaProportion);
-        GenericQuadTree_TESTER::run(tree, geoVectorLayer);
-        
-        delete x;
-      }
-      
-      delete fc;
-      
-    }
-    
-  } else{
-    GenericQuadTree_TESTER::run(10000, geoVectorLayer);
-  }
-  
-  ////////////////////////////////////////////////////
-  /*
-   {
-   
-   NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/countries-50m"
-   ofType: @"geojson"];
-   
-   if (geoJSONFilePath) {
-   NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
-   encoding: NSUTF8StringEncoding
-   error: nil];
-   
-   if (nsGEOJSON) {
-   std::string geoJSON = [nsGEOJSON UTF8String];
-   
-   GEOObject* geoObject = GEOJSONParser::parse(geoJSON);
-   
-   GEOFeatureCollection* fc = (GEOFeatureCollection*) geoObject;
-   
-   for (double areaProportion = 0.1; areaProportion < 0.9; areaProportion += 0.1) {
-   
-   GenericQuadTree tree(1,12,areaProportion);
-   
-   std::string* x = new std::string("OK");
-   
-   for (int i = 0; i < fc->size(); i++) {
-   GEO2DPolygonGeometry* p = (GEO2DPolygonGeometry*) fc->get(i)->getGeometry();
-   
-   const std::vector<Geodetic2D*>* ps = p->getCoordinates();
-   Sector *s = new Sector(*ps->at(0), *ps->at(0));
-   for (unsigned int j = 0; j < ps->size(); j++) {
-   if (ps->at(j) != NULL) {
-   Geodetic2D g = *ps->at(j);
-   Sector x(g,g);
-   Sector *s2 = new Sector( s->mergedWith(x));
-   delete s;
-   s = s2;
-   }
-   }
-   
-   //            Geodetic2D geo = p->getPosition();
-   printf("SEC: %s\n", s->description().c_str());
-   
-   tree.add(*s, x);
-   delete s;
-   }
-   
-   //      double areaProportion = 0.5;
-   printf("TREE WITH CHILD_ARE_PROPORTION %f\n--------------------\n", areaProportion);
-   GenericQuadTree_TESTER::run(tree, geoVectorLayer);
-   
-   delete x;
-   }
-   }
-   } else{
-   GenericQuadTree_TESTER::run(10000, geoVectorLayer);
-   }
-   
-   }
-   */
 }
 
 - (void)createInterpolationTest: (MeshRenderer*) meshRenderer
@@ -4250,8 +4136,8 @@ public:
              Vector3D posInGround = ec->getPlanet()->toCartesian(cam->getGeodeticPosition()._latitude, cam->getGeodeticPosition()._longitude, 0);
              
              
-             _meshRenderer->addMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround).createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
-             _meshRenderer->addMesh(cam->getCameraCoordinateSystem().createMesh(1e3, Color::red(), Color::green(), Color::blue())  );
+             _meshRenderer->addMesh(DebugMeshes::createCoordinateSystemMesh(cam->getLocalCoordinateSystem().changeOrigin(posInGround), 1e3, Color::red(), Color::green(), Color::blue())  );
+             _meshRenderer->addMesh(DebugMeshes::createCoordinateSystemMesh(cam->getCameraCoordinateSystem(), 1e3, Color::red(), Color::green(), Color::blue())  );
              
              */
             return true;

@@ -130,7 +130,9 @@ const Tile* RasterLayer::getParentTileOfSuitableLevel(const Tile* tile) const {
 }
 
 void RasterLayer::selectLayerTilesRenderParameters(int index) {
-  THROW_EXCEPTION("Logic error");
+  if (index != 0) {
+    THROW_EXCEPTION("RasterLayer has only one LayerTilesRenderParameters");
+  }
 }
 
 const std::vector<URL*> RasterLayer::getDownloadURLs(const Tile* tile) const {

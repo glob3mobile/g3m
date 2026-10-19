@@ -65,7 +65,7 @@ MeshRenderer::~MeshRenderer() {
 void MeshRenderer::updateGLState(const Camera* camera) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
+    _glState->addGLFeature(new ModelViewGLFeature(camera->getModelViewMatrix44D()), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());

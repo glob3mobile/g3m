@@ -7,9 +7,11 @@
 
 class Timer_Emscripten : public ITimer {
 private:
-  long _startTimeInMilliseconds;
+  long long _startTimeInMilliseconds;
   
 public:
+  Timer_Emscripten();
+
   TimeInterval now() const;
   
   TimeInterval fromDaysFromNow(const double days) const;

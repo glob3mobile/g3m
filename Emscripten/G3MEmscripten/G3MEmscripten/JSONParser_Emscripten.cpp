@@ -3,10 +3,13 @@
 #include "JSONParser_Emscripten.hpp"
 
 #include <emscripten/val.h>
+#include <emscripten/em_js.h>
+#include <limits>
 
 #include "EMStorage.hpp"
 
 #include "G3M/IByteBuffer.hpp"
+#include "G3M/ILogger.hpp"
 #include "G3M/JSONNull.hpp"
 #include "G3M/JSONBoolean.hpp"
 #include "G3M/JSONInteger.hpp"
@@ -39,19 +42,31 @@ JSONBaseObject* _convert(const val& json,
   if (json.isNumber()) {
     const double doubleValue = json.as<double>();
 
-    const int intValue = (int) doubleValue;
-    if (doubleValue == intValue) {
-      return new JSONInteger(intValue);
+    // casting a double outside the target range is undefined behaviour, so check the range first
+    if ((doubleValue >= std::numeric_limits<int>::min()) &&
+        (doubleValue <= std::numeric_limits<int>::max())) {
+      const int intValue = (int) doubleValue;
+      if (doubleValue == intValue) {
+        return new JSONInteger(intValue);
+      }
     }
 
-    const long long longValue = (long long) doubleValue;
-    if (doubleValue == longValue) {
-      return new JSONLong(longValue);
+    // -2^63 is exact as a double, 2^63 (the first value out of range) is its negation
+    const double minLongLong = (double) std::numeric_limits<long long>::min();
+    if ((doubleValue >= minLongLong) &&
+        (doubleValue < -minLongLong)) {
+      const long long longValue = (long long) doubleValue;
+      if (doubleValue == longValue) {
+        return new JSONLong(longValue);
+      }
     }
 
-    const float floatValue = (float) doubleValue;
-    if (doubleValue == floatValue) {
-      return new JSONFloat(floatValue);
+    if ((doubleValue >= -std::numeric_limits<float>::max()) &&
+        (doubleValue <= std::numeric_limits<float>::max())) {
+      const float floatValue = (float) doubleValue;
+      if (doubleValue == floatValue) {
+        return new JSONFloat(floatValue);
+      }
     }
 
     return new JSONDouble(doubleValue);
@@ -100,6 +115,19 @@ JSONBaseObject* _convert(const val& json,
   return NULL;
 }
 
+// JSON.parse throws on invalid text; C++ can't catch a JS exception, so the error comes back as a value
+EM_JS_DEPS(JSONParser_Emscripten, "$UTF8ToString");
+EM_JS(int, JSONParser_Emscripten_parseToStorage, (const char* json), {
+  var result;
+  try {
+    result = { "value" : JSON.parse(UTF8ToString(json)) };
+  }
+  catch (e) {
+    result = { "error" : String(e) };
+  }
+  return document.EMStorage.put(result);
+});
+
 const JSONBaseObject* JSONParser_Emscripten::parse(const IByteBuffer* buffer,
                                                    bool nullAsObject)
 {
@@ -109,11 +137,15 @@ const JSONBaseObject* JSONParser_Emscripten::parse(const IByteBuffer* buffer,
 const JSONBaseObject* JSONParser_Emscripten::parse(const std::string& json,
                                                    bool nullAsObject)
 {
-  const val jsResult = val::global("JSON").call<val>("parse", json);
+  const val jsResult = EMStorage::take( JSONParser_Emscripten_parseToStorage(json.c_str()) );
 
-//  EMStorage::consoleLog( jsResult );
+  const val jsError = jsResult["error"];
+  if (!jsError.isUndefined()) {
+    ILogger::instance()->logError("Can't parse JSON: %s", jsError.as<std::string>().c_str());
+    return NULL;
+  }
 
-  const JSONBaseObject* result = _convert(jsResult, nullAsObject, val::global("Object"));
+  const JSONBaseObject* result = _convert(jsResult["value"], nullAsObject, val::global("Object"));
 
 //  EMStorage::consoleLog( val(result->description()) );
 

@@ -2,6 +2,7 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.*;
+import com.google.gwt.core.client.*;
 
 public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
@@ -13,6 +14,8 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
    private boolean _isTracking;
 
+   private JavaScriptObject _deviceOrientationListener = null;
+
    //Implementation of DeviceAttitude_WebGL may be inconsistent with device natural screen orientation
    //Further development needed
    public DeviceAttitude_WebGL() {
@@ -22,15 +25,10 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
    private static native void trackGyroscope(DeviceAttitude_WebGL devAtt) /*-{
     try {
-      $wnd.addEventListener('deviceorientation', function(event) {
+      var listener = function(event) {
         devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_beta = event.beta;
         devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_gamma = event.gamma;
         devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha = event.alpha;
-
-        console
-            .log("TG EVENT B:" + devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_beta + " G:"
-                + devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_gamma + " A:"
-                + devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_alpha);
 
         // Chrome - Safari points alpha to the first position instead
         // of true north.
@@ -41,15 +39,19 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
         //								} catch(err){
         //								}
 
-      }, false);
+      };
+      // removeEventListener needs the same function object
+      devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_deviceOrientationListener = listener;
+      $wnd.addEventListener('deviceorientation', listener, false);
     } catch (err) {
     }
 
    }-*/;
 
-   private static native void stopTrackingGyroscope() /*-{
+   private static native void stopTrackingGyroscope(DeviceAttitude_WebGL devAtt) /*-{
     try {
-      $wnd.addEventListener('deviceorientation', null, false);
+      $wnd.removeEventListener('deviceorientation', devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_deviceOrientationListener, false);
+      devAtt.@org.glob3.mobile.specific.DeviceAttitude_WebGL::_deviceOrientationListener = null;
     } catch (err) {
     }
    }-*/;
@@ -110,7 +112,7 @@ public class DeviceAttitude_WebGL extends IDeviceAttitude {
 
    @Override
    public void stopTrackingDeviceOrientation() {
-      stopTrackingGyroscope();
+      stopTrackingGyroscope(this);
       _beta = _gamma = _alpha = Double.NaN;
 
       _isTracking = false;

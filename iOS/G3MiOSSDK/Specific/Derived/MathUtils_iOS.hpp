@@ -9,6 +9,8 @@
 #define G3MiOSSDK_MathUtils
 
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 #include <limits>
 
 #include "G3M/IMathUtils.hpp"
@@ -42,6 +44,11 @@ public:
 class MathUtils_iOS: public IMathUtils {
 
 public:
+
+  // seeds rand() so nextRandomDouble() differs between runs, as java.util.Random in WebGL
+  MathUtils_iOS() {
+    srand((unsigned int) time(NULL));
+  }
 
   //  double NanD() const { return NAN;}
   //  float NanF() const { return NAN; }

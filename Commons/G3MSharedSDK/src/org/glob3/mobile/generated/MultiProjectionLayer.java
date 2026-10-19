@@ -1,32 +1,32 @@
 package org.glob3.mobile.generated;
 //
-//  ProceduralLayer.cpp
+//  MultiProjectionLayer.cpp
 //  G3M
 //
-//  Created by Diego Gomez Deck on 5/15/14.
+//  Created by Diego Gomez Deck on 4/30/14.
 //
 //
 
 //
-//  ProceduralLayer.hpp
+//  MultiProjectionLayer.hpp
 //  G3M
 //
-//  Created by Diego Gomez Deck on 5/15/14.
+//  Created by Diego Gomez Deck on 4/30/14.
 //
 //
 
 
 
-public abstract class ProceduralLayer extends Layer
+public abstract class MultiProjectionLayer extends Layer
 {
-  private final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
 
+  protected final java.util.ArrayList<LayerTilesRenderParameters> _parametersVector = new java.util.ArrayList<LayerTilesRenderParameters>();
   protected int _selectedLayerTilesRenderParametersIndex;
 
-  protected ProceduralLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
-                            final float transparency,
-                            final LayerCondition condition,
-                            final java.util.ArrayList<Info> layerInfo) {
+  protected MultiProjectionLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
+                                 final float transparency,
+                                 final LayerCondition condition,
+                                 final java.util.ArrayList<Info> layerInfo) {
     super(transparency, condition, layerInfo);
     _parametersVector.addAll(parametersVector);
     _selectedLayerTilesRenderParametersIndex = 0;
@@ -34,12 +34,14 @@ public abstract class ProceduralLayer extends Layer
 
   public void dispose()
   {
-    for (int i = 0; i < _parametersVector.size(); i++)
+    final int parametersVectorSize = _parametersVector.size();
+    for (int i = 0; i < parametersVectorSize; i++)
     {
       final LayerTilesRenderParameters parameters = _parametersVector.get(i);
       if (parameters != null)
          parameters.dispose();
     }
+  
     super.dispose();
   }
 

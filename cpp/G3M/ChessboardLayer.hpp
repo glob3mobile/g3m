@@ -9,11 +9,11 @@
 #ifndef __G3M__ChessboardLayer__
 #define __G3M__ChessboardLayer__
 
-#include "ProceduralLayer.hpp"
+#include "MultiProjectionLayer.hpp"
 #include "Sector.hpp"
 #include "Color.hpp"
 
-class ChessboardLayer : public ProceduralLayer {
+class ChessboardLayer : public MultiProjectionLayer {
 private:
   const Sector _dataSector;
 
@@ -32,10 +32,10 @@ public:
                   const float                                          transparency    = 1.0f,
                   const LayerCondition*                                condition       = NULL,
                   std::vector<const Info*>*                            layerInfo       = new std::vector<const Info*>()) :
-  ProceduralLayer(parametersVector,
-                  transparency,
-                  condition,
-                  layerInfo),
+  MultiProjectionLayer(parametersVector,
+                       transparency,
+                       condition,
+                       layerInfo),
   _dataSector(dataSector),
   _backgroundColor(backgroundColor),
   _boxColor(boxColor),

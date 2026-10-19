@@ -8,7 +8,6 @@
 
 #include "GLFeature.hpp"
 
-#include "Camera.hpp"
 #include "Color.hpp"
 #include "Vector2F.hpp"
 #include "Vector3F.hpp"
@@ -24,24 +23,6 @@ GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
 {
   _extent = new GPUUniformValueVec2FloatMutable(viewportWidth,
                                                 viewportHeight);
-  
-  _values->addUniformValue(VIEWPORT_EXTENT,
-                           _extent,
-                           false);
-}
-
-ViewportExtentGLFeature::ViewportExtentGLFeature(const Camera* camera,
-                                                 ViewMode      viewMode) :
-GLFeature(NO_GROUP, GLF_VIEWPORT_EXTENT)
-{
-
-  int logicWidth = camera->getViewPortWidth();
-  if (viewMode == STEREO) {
-    logicWidth /= 2;
-  }
-
-  _extent = new GPUUniformValueVec2FloatMutable(logicWidth,
-                                                camera->getViewPortHeight());
   
   _values->addUniformValue(VIEWPORT_EXTENT,
                            _extent,
@@ -81,17 +62,16 @@ GLFeature(NO_GROUP, GLF_RIBBON_SIDE)
                              false);
 }
 
-CameraPositionGLFeature::CameraPositionGLFeature(const Camera* cam,
+CameraPositionGLFeature::CameraPositionGLFeature(const Vector3D& cameraPosition,
                                                  bool groundHazePass,
                                                  const Color& spaceColor,
                                                  const Color& horizonColor,
                                                  const Vector3F& skyRayleighScattering):
 GLFeature(NO_GROUP, GLF_CAMERA_POSITION),
 _groundHazePass(groundHazePass) {
-  const Vector3D p = cam->getCartesianPosition();
-  _camPos = new GPUUniformValueVec3FloatMutable((float) p._x,
-                                                (float) p._y,
-                                                (float) p._z);
+  _camPos = new GPUUniformValueVec3FloatMutable((float) cameraPosition._x,
+                                                (float) cameraPosition._y,
+                                                (float) cameraPosition._z);
   _values->addUniformValue(CAMERA_POSITION, _camPos, false);
   _values->addUniformValue(GROUND_HAZE_PASS,
                            new GPUUniformValueFloat(groundHazePass ? 1.0f : 0.0f),
@@ -120,12 +100,11 @@ void CameraPositionGLFeature::changeAtmosphereColors(const Color& horizonColor,
                                       skyRayleighScattering._z);
 }
 
-void CameraPositionGLFeature::update(const Camera* cam,
+void CameraPositionGLFeature::update(const Vector3D& cameraPosition,
                                      const Color& spaceColor) {
-  const Vector3D p = cam->getCartesianPosition();
-  _camPos->changeValue((float) p._x,
-                       (float) p._y,
-                       (float) p._z);
+  _camPos->changeValue((float) cameraPosition._x,
+                       (float) cameraPosition._y,
+                       (float) cameraPosition._z);
   _spaceColor->changeValue(spaceColor._red,
                            spaceColor._green,
                            spaceColor._blue);
@@ -548,21 +527,6 @@ PriorityGLFeature(COLOR_GROUP, GLF_TEXTURE_COORDS, 4)
 }
 
 void TextureCoordsGLFeature::applyOnGlobalGLState(GLGlobalState* state) const {
-}
-
-ProjectionGLFeature::ProjectionGLFeature(const Camera* camera) :
-GLCameraGroupFeature(camera->getProjectionMatrix44D(), GLF_PROJECTION)
-{
-}
-
-ModelGLFeature::ModelGLFeature(const Camera* camera) :
-GLCameraGroupFeature(camera->getModelMatrix44D(), GLF_MODEL)
-{
-}
-
-ModelViewGLFeature::ModelViewGLFeature(const Camera* camera) :
-GLCameraGroupFeature(camera->getModelViewMatrix44D(), GLF_MODEL_VIEW)
-{
 }
 
 DirectionLightGLFeature::DirectionLightGLFeature(const Vector3D& diffuseLightDirection,

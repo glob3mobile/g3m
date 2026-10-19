@@ -18,16 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
-//class Mesh;
-//class G3MRenderContext;
-//class GLState;
-//class Color;
-
 
 public class Ray
 {
-  private Mesh _mesh;
-
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Ray(Ray that);
 
@@ -38,13 +31,10 @@ public class Ray
   {
      _origin = origin;
      _direction = direction.normalized();
-     _mesh = null;
   }
 
   public void dispose()
   {
-    if (_mesh != null)
-       _mesh.dispose();
   }
 
   public final double distanceTo(Vector3D point)
@@ -63,24 +53,6 @@ public class Ray
   public final double squaredDistanceTo(MutableVector3D point)
   {
     return _direction.cross(point._x - _origin._x, point._y - _origin._y, point._z - _origin._z).squaredLength();
-  }
-
-  public final void render(G3MRenderContext rc, GLState parentState, Color color, float lineWidth)
-  {
-    if (_mesh == null)
-    {
-      FloatBufferBuilderFromCartesian3D vertices = FloatBufferBuilderFromCartesian3D.builderWithGivenCenter(_origin);
-  
-      vertices.add(_origin);
-      vertices.add(_origin.add(_direction.times(100000)));
-  
-      _mesh = new DirectMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), lineWidth, 1, new Color(color), null, true); // bool depthTest -  const IFloatBuffer* colors
-  
-      if (vertices != null)
-         vertices.dispose();
-    }
-  
-    _mesh.render(rc, parentState);
   }
 
   public final Vector3D pointAtTime(double t)

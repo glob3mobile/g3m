@@ -107,14 +107,12 @@ void SGLayerNode::requestImage(const G3MRenderContext* rc) {
 const TextureIDReference* SGLayerNode::getTextureID(const G3MRenderContext* rc) {
   if (_textureID == NULL) {
     if (_downloadedImage != NULL) {
-      _textureID = rc->getTexturesHandler()->getTextureIDReference(_downloadedImage,
-                                                                   GLFormat::rgba(),
-                                                                   getURL()._path,
-                                                                   _generateMipmap,
-                                                                   _wrapS,
-                                                                   _wrapT);
-
-      delete _downloadedImage;
+      _textureID = rc->getTexturesHandler()->getTextureIDReferenceAndDeleteImage(_downloadedImage,
+                                                                                 GLFormat::rgba(),
+                                                                                 getURL()._path,
+                                                                                 _generateMipmap,
+                                                                                 _wrapS,
+                                                                                 _wrapT);
       _downloadedImage = NULL;
     }
   }

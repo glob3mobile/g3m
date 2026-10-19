@@ -69,7 +69,6 @@ void Camera::copyFrom(const Camera& that,
     _position.set(that._position);
     _center.set(that._center);
     _up.set(that._up);
-    _normalizedPosition.set(that._normalizedPosition);
 
     _dirtyFlags.copyFrom(that._dirtyFlags);
 
@@ -121,7 +120,6 @@ void Camera::copyFrom(const Camera& that,
 #ifdef JAVA_CODE
     _geodeticPosition = that._geodeticPosition;
 #endif
-    _angle2Horizon = that._angle2Horizon;
 
     _tanHalfVerticalFOV   = that._tanHalfVerticalFOV;
     _tanHalfHorizontalFOV = that._tanHalfHorizontalFOV;
@@ -147,8 +145,6 @@ _frustum(NULL),
 _frustumInModelCoordinates(NULL),
 _camEffectTarget(new CameraEffectTarget()),
 _geodeticPosition(NULL),
-_angle2Horizon(-99),
-_normalizedPosition(0, 0, 0),
 _tanHalfVerticalFOV(NAND),
 _tanHalfHorizontalFOV(NAND),
 _timestamp(timestamp),
@@ -871,11 +867,6 @@ void Camera::setCartesianPosition(const MutableVector3D& v) {
     delete _geodeticPosition;
     _geodeticPosition = NULL;
     _dirtyFlags.setAllDirty();
-    const double distanceToPlanetCenter = _position.length();
-    const double planetRadius = distanceToPlanetCenter - getGeodeticHeight();
-    _angle2Horizon = acos(planetRadius/distanceToPlanetCenter);
-    _normalizedPosition.set(_position);
-    _normalizedPosition.normalize();
   }
 }
 
@@ -937,10 +928,6 @@ Matrix44D* Camera::getModelViewMatrix44D() const {
 
 const Vector3D Camera::getCartesianPosition() const {
   return _position.asVector3D();
-}
-
-const Vector3D Camera::getNormalizedPosition() const {
-  return _normalizedPosition.asVector3D();
 }
 
 const Vector3D Camera::getCenter() const {

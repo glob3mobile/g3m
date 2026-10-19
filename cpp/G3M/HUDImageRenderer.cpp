@@ -137,18 +137,15 @@ Mesh* HUDImageRenderer::createMesh(const G3MRenderContext* rc) {
   const IStringUtils* su = IStringUtils::instance();
   const std::string textureName = "HUDImageRenderer" + su->toString(_instanceID) + "/" + su->toString(_changeCounter++);
 
-  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_image,
-                                                                                    GLFormat::rgba(),
-                                                                                    textureName,
-                                                                                    false, // generateMipmap
-                                                                                    GLTextureParameterValue::clampToEdge(),
-                                                                                    GLTextureParameterValue::clampToEdge());
-
-  delete _image;
+  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReferenceAndDeleteImage(_image,
+                                                                                                  GLFormat::rgba(),
+                                                                                                  textureName,
+                                                                                                  false, // generateMipmap
+                                                                                                  GLTextureParameterValue::clampToEdge(),
+                                                                                                  GLTextureParameterValue::clampToEdge());
   _image = NULL;
 
   if (texID == NULL) {
-    rc->getLogger()->logError("Can't upload texture to GPU");
     return NULL;
   }
 

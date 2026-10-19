@@ -24,7 +24,6 @@ package org.glob3.mobile.generated;
 //class Tile;
 //class G3MEventContext;
 //class Geodetic3D;
-//class RenderState;
 
 
 public class LayerSet implements ChangedInfoListener
@@ -35,7 +34,7 @@ public class LayerSet implements ChangedInfoListener
   private TileImageProvider _tileImageProvider;
 
   private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
-  private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private RenderStateCollector _renderStateCollector = new RenderStateCollector();
   private final java.util.ArrayList<Info> _infos = new java.util.ArrayList<Info>();
 
   private void layersChanged()
@@ -214,6 +213,7 @@ public class LayerSet implements ChangedInfoListener
      _changedInfoListener = null;
      _context = null;
      _tileImageProvider = null;
+     _renderStateCollector = new RenderStateCollector();
   }
 
   public void dispose()
@@ -290,43 +290,19 @@ public class LayerSet implements ChangedInfoListener
 
   public final RenderState getRenderState()
   {
-    _errors.clear();
-    boolean busyFlag = false;
-    boolean errorFlag = false;
-    final int layersCount = _layers.size();
+    _renderStateCollector.reset();
   
+    final int layersCount = _layers.size();
     for (int i = 0; i < layersCount; i++)
     {
       Layer child = _layers.get(i);
       if (child.isEnable())
       {
-        final RenderState childRenderState = child.getRenderState();
-  
-        final RenderState_Type childRenderStateType = childRenderState._type;
-  
-        if (childRenderStateType == RenderState_Type.RENDER_ERROR)
-        {
-          errorFlag = true;
-  
-          final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
-          _errors.addAll(childErrors);
-        }
-        else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
-        {
-          busyFlag = true;
-        }
+        _renderStateCollector.add(child.getRenderState());
       }
     }
   
-    if (errorFlag)
-    {
-      return RenderState.error(_errors);
-    }
-    else if (busyFlag)
-    {
-      return RenderState.busy();
-    }
-    return RenderState.ready();
+    return _renderStateCollector.getState();
   }
 
   public final void initialize(G3MContext context)

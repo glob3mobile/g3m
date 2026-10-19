@@ -97,7 +97,10 @@ public abstract class RasterLayer extends Layer
 
   public final void selectLayerTilesRenderParameters(int index)
   {
-    throw new RuntimeException("Logic error");
+    if (index != 0)
+    {
+      throw new RuntimeException("RasterLayer has only one LayerTilesRenderParameters");
+    }
   }
 
   public final boolean isEquals(Layer that)

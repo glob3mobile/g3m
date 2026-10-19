@@ -21,6 +21,8 @@ package org.glob3.mobile.generated;
 //class Sector;
 //class Frustum;
 //class DirectMesh;
+//class Mesh;
+//class IFloatBuffer;
 //class ByteBufferIterator;
 //class ITimer;
 
@@ -1358,7 +1360,7 @@ public class OLDPointCloudsRenderer extends DefaultRenderer
 
   private java.util.ArrayList<PointCloud> _clouds = new java.util.ArrayList<PointCloud>();
   private int _cloudsSize;
-  private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private RenderStateCollector _renderStateCollector = new RenderStateCollector();
 
   private GLState _glState;
 
@@ -1376,6 +1378,7 @@ public class OLDPointCloudsRenderer extends DefaultRenderer
   public OLDPointCloudsRenderer()
   {
      _cloudsSize = 0;
+     _renderStateCollector = new RenderStateCollector();
      _glState = new GLState();
      _timer = null;
   }
@@ -1398,42 +1401,15 @@ public class OLDPointCloudsRenderer extends DefaultRenderer
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    _errors.clear();
-    boolean busyFlag = false;
-    boolean errorFlag = false;
+    _renderStateCollector.reset();
   
     for (int i = 0; i < _cloudsSize; i++)
     {
       PointCloud cloud = _clouds.get(i);
-      final RenderState childRenderState = cloud.getRenderState(rc);
-  
-      final RenderState_Type childRenderStateType = childRenderState._type;
-  
-      if (childRenderStateType == RenderState_Type.RENDER_ERROR)
-      {
-        errorFlag = true;
-  
-        final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
-        _errors.addAll(childErrors);
-      }
-      else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
-      {
-        busyFlag = true;
-      }
+      _renderStateCollector.add(cloud.getRenderState(rc));
     }
   
-    if (errorFlag)
-    {
-      return RenderState.error(_errors);
-    }
-    else if (busyFlag)
-    {
-      return RenderState.busy();
-    }
-    else
-    {
-      return RenderState.ready();
-    }
+    return _renderStateCollector.getState();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)
@@ -1450,7 +1426,7 @@ public class OLDPointCloudsRenderer extends DefaultRenderer
       ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
       if (f == null)
       {
-        _glState.addGLFeature(new ModelViewGLFeature(camera), false);
+        _glState.addGLFeature(new ModelViewGLFeature(camera.getModelViewMatrix44D()), false);
       }
       else
       {

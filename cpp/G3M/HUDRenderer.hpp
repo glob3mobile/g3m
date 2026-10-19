@@ -10,6 +10,7 @@
 #define __G3M__HUDRenderer__
 
 #include "DefaultRenderer.hpp"
+#include "RenderState.hpp"
 
 #include <vector>
 
@@ -23,7 +24,7 @@ private:
 
   GLState*                _glState;
 
-  std::vector<std::string> _errors;
+  RenderStateCollector _renderStateCollector;
   const bool _readyWhenWidgetsReady;
 
 public:

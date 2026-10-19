@@ -3,6 +3,8 @@
 #include "MathUtils_Emscripten.hpp"
 
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 #include <limits>
 
 //Class used to avoid method names collision with Math.h
@@ -190,6 +192,11 @@ double MathUtils_Emscripten::mod(double d1, double d2) const {
 
 float MathUtils_Emscripten::mod(float f1, float f2) const {
   return fmodf(f1, f2);
+}
+
+// seeds rand() so nextRandomDouble() differs between runs, as java.util.Random in WebGL
+MathUtils_Emscripten::MathUtils_Emscripten() {
+  srand((unsigned int) time(NULL));
 }
 
 double MathUtils_Emscripten::nextRandomDouble() const {

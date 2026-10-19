@@ -10,6 +10,7 @@
 #define __G3M__OLDPointCloudsRenderer__
 
 #include "DefaultRenderer.hpp"
+#include "RenderState.hpp"
 
 #include "IThreadUtils.hpp"
 #include "IBufferDownloadListener.hpp"
@@ -17,10 +18,13 @@
 #include "Vector3D.hpp"
 #include "Box.hpp"
 #include "GAsyncTask.hpp"
+#include "RCObject.hpp"
 
 class Sector;
 class Frustum;
 class DirectMesh;
+class Mesh;
+class IFloatBuffer;
 class ByteBufferIterator;
 class ITimer;
 
@@ -592,7 +596,7 @@ private:
 
   std::vector<PointCloud*> _clouds;
   size_t _cloudsSize;
-  std::vector<std::string> _errors;
+  RenderStateCollector _renderStateCollector;
 
   GLState* _glState;
 

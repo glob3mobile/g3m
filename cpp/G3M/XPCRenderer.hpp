@@ -9,6 +9,7 @@
 #define XPCRenderer_hpp
 
 #include "DefaultRenderer.hpp"
+#include "RenderState.hpp"
 
 class ITimer;
 class XPCPointCloud;
@@ -23,7 +24,7 @@ private:
 
   std::vector<XPCPointCloud*> _clouds;
   size_t                      _cloudsSize;
-  std::vector<std::string>    _errors;
+  RenderStateCollector _renderStateCollector;
 
   GLState* _glState;
 

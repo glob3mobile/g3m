@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class ChessboardLayer extends ProceduralLayer
+public class ChessboardLayer extends MultiProjectionLayer
 {
   private final Sector _dataSector ;
 

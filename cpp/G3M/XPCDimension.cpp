@@ -49,7 +49,7 @@ const float XPCDimension::getNormalizedValue(const IByteBuffer* values,
 
   if (_type == "unsigned") {
     if (_size == 1) {
-      return values->get(i) / 255.0f;
+      return IMathUtils::instance()->toUInt8( values->get(i) ) / 255.0f;
     }
     else if (_size == 2) {
       const unsigned char b1 = values->get( i*2     );

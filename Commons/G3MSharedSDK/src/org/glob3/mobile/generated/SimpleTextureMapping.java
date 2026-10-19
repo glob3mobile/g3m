@@ -49,10 +49,10 @@ public class SimpleTextureMapping extends TransformableTextureMapping
   {
     if (isIdentity())
     {
-      return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+      return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.getSourceBlendFactor(), GLBlendFactor.oneMinusSrcAlpha());
     }
   
-    return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.isPremultiplied() ? GLBlendFactor.one() : GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV);
+    return new TextureGLFeature(_glTextureID.getID(), _texCoords, 2, 0, false, 0, _transparent, _glTextureID.getSourceBlendFactor(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV);
   }
 
   private boolean canUpdateInPlace(TextureGLFeature tglf)

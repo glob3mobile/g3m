@@ -9,12 +9,12 @@
 #ifndef __G3M__DebugTilesLayer__
 #define __G3M__DebugTilesLayer__
 
-#include "ProceduralLayer.hpp"
+#include "MultiProjectionLayer.hpp"
 #include "GFont.hpp"
 #include "Color.hpp"
 
 // Transparent tiles with the ID, sector and bounds of each tile drawn on them, to put over any other layer
-class DebugTilesLayer : public ProceduralLayer {
+class DebugTilesLayer : public MultiProjectionLayer {
 private:
   const GFont _font;
   const Color _color;
@@ -40,10 +40,10 @@ public:
                   const float                                          transparency,
                   const LayerCondition*                                condition,
                   std::vector<const Info*>*                            layerInfo) :
-  ProceduralLayer(parametersVector,
-                  transparency,
-                  condition,
-                  layerInfo),
+  MultiProjectionLayer(parametersVector,
+                       transparency,
+                       condition,
+                       layerInfo),
   _font(font),
   _color(color),
   _showIDLabel(showIDLabel),

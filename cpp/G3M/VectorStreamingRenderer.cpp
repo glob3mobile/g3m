@@ -1407,6 +1407,7 @@ VectorStreamingRenderer::VectorStreamingRenderer(MarksRenderer* marksRenderer,
 _marksRenderer(marksRenderer),
 _meshRenderer(meshRenderer),
 _vectorSetsSize(0),
+_renderStateCollector(),
 _glState(new GLState())
 {
 }
@@ -1439,43 +1440,14 @@ void VectorStreamingRenderer::onChangedContext() {
 }
 
 RenderState VectorStreamingRenderer::getRenderState(const G3MRenderContext* rc) {
-  _errors.clear();
-  bool busyFlag  = false;
-  bool errorFlag = false;
-  
+  _renderStateCollector.reset();
+
   for (size_t i = 0; i < _vectorSetsSize; i++) {
     VectorSet* vectorSet = _vectorSets[i];
-    const RenderState childRenderState = vectorSet->getRenderState(rc);
-    
-    const RenderState_Type childRenderStateType = childRenderState._type;
-    
-    if (childRenderStateType == RENDER_ERROR) {
-      errorFlag = true;
-      
-      const std::vector<std::string> childErrors = childRenderState.getErrors();
-#ifdef C_CODE
-      _errors.insert(_errors.end(),
-                     childErrors.begin(),
-                     childErrors.end());
-#endif
-#ifdef JAVA_CODE
-      _errors.addAll(childErrors);
-#endif
-    }
-    else if (childRenderStateType == RENDER_BUSY) {
-      busyFlag = true;
-    }
+    _renderStateCollector.add(vectorSet->getRenderState(rc));
   }
-  
-  if (errorFlag) {
-    return RenderState::error(_errors);
-  }
-  else if (busyFlag) {
-    return RenderState::busy();
-  }
-  else {
-    return RenderState::ready();
-  }
+
+  return _renderStateCollector.getState();
 }
 
 void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
@@ -1519,7 +1491,7 @@ void VectorStreamingRenderer::addVectorSet(const URL&                 serverURL,
 void VectorStreamingRenderer::updateGLState(const Camera* camera) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
+    _glState->addGLFeature(new ModelViewGLFeature(camera->getModelViewMatrix44D()), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());

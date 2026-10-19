@@ -25,7 +25,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
 
   private boolean _enable;
 
-  private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private RenderStateCollector _renderStateCollector = new RenderStateCollector();
 
   private ChangedRendererInfoListener _changedInfoListener;
 
@@ -52,6 +52,7 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
      _context = null;
      _enable = true;
      _renderersSize = 0;
+     _renderStateCollector = new RenderStateCollector();
      _changedInfoListener = null;
     //    _renderers = std::vector<Renderer*>();
   }
@@ -116,45 +117,18 @@ public class CompositeRenderer implements Renderer, ChangedRendererInfoListener
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    _errors.clear();
-    boolean busyFlag = false;
-    boolean errorFlag = false;
+    _renderStateCollector.reset();
   
     for (int i = 0; i < _renderersSize; i++)
     {
       Renderer child = _renderers.get(i).getRenderer();
       if (child.isEnable())
       {
-        final RenderState childRenderState = child.getRenderState(rc);
-  
-        final RenderState_Type childRenderStateType = childRenderState._type;
-  
-        if (childRenderStateType == RenderState_Type.RENDER_ERROR)
-        {
-          errorFlag = true;
-  
-          final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
-          _errors.addAll(childErrors);
-        }
-        else if (childRenderStateType == RenderState_Type.RENDER_BUSY)
-        {
-          busyFlag = true;
-        }
+        _renderStateCollector.add(child.getRenderState(rc));
       }
     }
   
-    if (errorFlag)
-    {
-      return RenderState.error(_errors);
-    }
-    else if (busyFlag)
-    {
-      return RenderState.busy();
-    }
-    else
-    {
-      return RenderState.ready();
-    }
+    return _renderStateCollector.getState();
   }
 
   public final void render(G3MRenderContext rc, GLState glState)

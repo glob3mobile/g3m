@@ -141,44 +141,23 @@ public class PlanetTileTessellator extends TileTessellator
   
     //TEX COORDINATES
   
-    if (mercator)
+    // the tile image covers tileSector, the mesh may cover only a part of it (meshSector, clipped by the rendered sector)
+    final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(tileSector._upper._latitude);
+    final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(tileSector._lower._latitude);
+  
+    for (int j = 0; j < meshResolution._y; j++)
     {
-      final double mercatorLowerGlobalV = MercatorUtils.getMercatorV(tileSector._lower._latitude);
-      final double mercatorUpperGlobalV = MercatorUtils.getMercatorV(tileSector._upper._latitude);
-      final double mercatorDeltaGlobalV = mercatorLowerGlobalV - mercatorUpperGlobalV;
+      final Angle lat = meshSector.getInnerPointLatitude((double) j / (meshResolution._y - 1));
+      final double textureV = mercator ? MercatorUtils.getLocalMercatorV(lat, mercatorUpperGlobalV, mercatorLowerGlobalV) : tileSector.getVCoordinate(lat);
+      /*                   */
+      /*                   */
   
-      for (int j = 0; j < meshResolution._y; j++)
+      for (int i = 0; i < meshResolution._x; i++)
       {
-        final double v = (double) j / (meshResolution._y - 1);
+        final Angle lon = meshSector.getInnerPointLongitude((double) i / (meshResolution._x - 1));
+        final double textureU = tileSector.getUCoordinate(lon);
   
-        for (int i = 0; i < meshResolution._x; i++)
-        {
-          final double u = (double) i / (meshResolution._x - 1);
-  
-          final Angle lat = Angle.linearInterpolation(meshSector._lower._latitude, meshSector._upper._latitude, 1.0 - v);
-          final Angle lon = Angle.linearInterpolation(meshSector._lower._longitude, meshSector._upper._longitude, u);
-  
-          //U
-          final double m_u = tileSector.getUCoordinate(lon);
-  
-          //V
-          final double mercatorGlobalV = MercatorUtils.getMercatorV(lat);
-          final double m_v = (mercatorGlobalV - mercatorUpperGlobalV) / mercatorDeltaGlobalV;
-  
-          textCoords.add((float)m_u, (float)m_v);
-        }
-      }
-    }
-    else
-    {
-      for (int j = 0; j < meshResolution._y; j++)
-      {
-        final double v = (double) j / (meshResolution._y - 1);
-        for (int i = 0; i < meshResolution._x; i++)
-        {
-          final double u = (double) i / (meshResolution._x - 1);
-          textCoords.add((float)u, (float)v);
-        }
+        textCoords.add((float) textureU, (float) textureV);
       }
     }
   
@@ -521,12 +500,7 @@ public class PlanetTileTessellator extends TileTessellator
       return linearUV;
     }
   
-    final double lowerGlobalV = MercatorUtils.getMercatorV(sector._lower._latitude);
-    final double upperGlobalV = MercatorUtils.getMercatorV(sector._upper._latitude);
-    final double deltaGlobalV = lowerGlobalV - upperGlobalV;
-  
-    final double globalV = MercatorUtils.getMercatorV(latitude);
-    final double localV = (globalV - upperGlobalV) / deltaGlobalV;
+    final double localV = MercatorUtils.getLocalMercatorV(latitude, MercatorUtils.getMercatorV(sector._upper._latitude), MercatorUtils.getMercatorV(sector._lower._latitude));
   
     return new Vector2F(linearUV._x, (float) localV);
   }

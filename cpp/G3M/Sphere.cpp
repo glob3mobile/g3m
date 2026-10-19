@@ -9,18 +9,13 @@
 #include "Sphere.hpp"
 #include "Box.hpp"
 #include "Camera.hpp"
-#include "ShortBufferBuilder.hpp"
-#include "IndexedMesh.hpp"
-#include "GLConstants.hpp"
 #include "G3MRenderContext.hpp"
 #include "Ray.hpp"
+#include "IMathUtils.hpp"
 #include "Ellipsoid.hpp"
-#include "FloatBufferBuilderFromCartesian3D.hpp"
 
 
 Sphere::~Sphere() {
-  delete _mesh;
-
 #ifdef JAVA_CODE
   super.dispose();
 #endif
@@ -77,72 +72,6 @@ Sphere* Sphere::enclosingSphere(const std::vector<Vector3D>& points,
 double Sphere::projectedArea(const G3MRenderContext* rc) const {
   return rc->getCurrentCamera()->getProjectedSphereArea(*this);
 }
-
-Mesh* Sphere::createWireframeMesh(const Color& color,
-                                  short resolution) const {
-  const double delta = PI / (resolution-1);
-
-  // create vertices
-  FloatBufferBuilderFromCartesian3D* vertices = FloatBufferBuilderFromCartesian3D::builderWithFirstVertexAsCenter();
-  for (int i=0; i<2*resolution-2; i++) {
-    const double longitude = -PI + i*delta;
-    for (int j=0; j<resolution; j++) {
-      const double latitude = -PI/2 + j*delta;
-      const double h = COS(latitude);
-      const double x = h * COS(longitude);
-      const double y = h * SIN(longitude);
-      const double z = SIN(latitude);
-      vertices->add(Vector3D(x,y,z).times(_radius).add(_center));
-    }
-  }
-
-  // create border indices for vertical lines
-  ShortBufferBuilder indices;
-  for (short i=0; i<2*resolution-2; i++) {
-    for (short j=0; j<resolution-1; j++) {
-      indices.add((short) (j+i*resolution));
-      indices.add((short) (j+1+i*resolution));
-    }
-  }
-
-  // create border indices for horizontal lines
-  for (short j=1; j<resolution-1; j++) {
-    for (short i=0; i<2*resolution-3; i++) {
-      indices.add((short) (j+i*resolution));
-      indices.add((short) (j+(i+1)*resolution));
-    }
-  }
-  for (short j=1; j<resolution-1; j++) {
-    const short i = (short) (2*resolution-3);
-    indices.add((short) (j+i*resolution));
-    indices.add((short) (j));
-  }
-
-  Mesh* mesh = new IndexedMesh(GLPrimitive::lines(),
-                               vertices->getCenter(),
-                               vertices->create(),
-                               true,
-                               indices.create(),
-                               true,
-                               1,
-                               1,
-                               new Color(color));
-
-  delete vertices;
-
-  return mesh;
-}
-
-
-void Sphere::render(const G3MRenderContext* rc,
-                    const GLState* parentState,
-                    const Color& color) const {
-  if (_mesh == NULL) {
-    _mesh = createWireframeMesh(color, (short) 16);
-  }
-  _mesh->render(rc, parentState);
-}
-
 
 bool Sphere::touchesFrustum(const Frustum *frustum) const {
 #warning This implementation could gives false positives

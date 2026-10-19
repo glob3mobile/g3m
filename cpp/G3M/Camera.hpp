@@ -16,6 +16,7 @@
 #include "MutableVector3D.hpp"
 #include "MutableMatrix44D.hpp"
 #include "CameraPose.hpp"
+#include "ViewMode.hpp"
 
 class FrustumPolicy;
 class Vector3D;
@@ -133,6 +134,9 @@ public:
   const Vector2F point2Pixel(const Vector3F& point) const;
 
   int getViewPortWidth()  const { return _viewPortWidth; }
+  int getViewPortWidth(ViewMode viewMode) const {
+    return (viewMode == STEREO) ? (_viewPortWidth / 2) : _viewPortWidth;
+  }
   int getViewPortHeight() const { return _viewPortHeight; }
 
   float getViewPortRatio() const {
@@ -146,7 +150,6 @@ public:
   const Vector3D getCartesianPosition() const;
   void getCartesianPositionMutable(MutableVector3D& result) const;
 
-  const Vector3D getNormalizedPosition() const;
   const Vector3D getCenter() const;
   const Vector3D getUp() const;
   void getUpMutable(MutableVector3D& result) const;
@@ -261,8 +264,6 @@ public:
 
   Matrix44D* getModelViewMatrix44D() const;
 
-  double getAngle2HorizonInRadians() const { return _angle2Horizon; }
-
   double getProjectedSphereArea(const Sphere& sphere) const;
 
   void applyTransform(const MutableMatrix44D& mat);
@@ -359,8 +360,6 @@ private:
   //  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
   //  _camEffectTarget(new CameraEffectTarget()),
   //  _geodeticPosition((that._geodeticPosition == NULL) ? NULL: new Geodetic3D(*that._geodeticPosition)),
-  //  _angle2Horizon(that._angle2Horizon),
-  //  _normalizedPosition(that._normalizedPosition),
   //  _tanHalfVerticalFieldOfView(NAND),
   //  _tanHalfHorizontalFieldOfView(NAND),
   //  _timestamp(that._timestamp)
@@ -388,12 +387,6 @@ private:
   MutableVector3D _up;                  // vertical vector
 
   mutable Geodetic3D*     _geodeticPosition;    //Must be updated when changing position
-
-  // this value is only used in the method Sector::isBackOriented
-  // it's stored in double instead of Angle class to optimize performance in android
-  // Must be updated when changing position
-  mutable double          _angle2Horizon;
-  MutableVector3D         _normalizedPosition;
 
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData*     _frustumData;

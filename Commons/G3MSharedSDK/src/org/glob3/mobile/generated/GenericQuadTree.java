@@ -94,25 +94,9 @@ public class GenericQuadTree
     return false;
   }
 
-  public final void symbolize(GEOVectorLayer geoVectorLayer)
-  {
-    if (_root != null)
-    {
-      _root.symbolize(geoVectorLayer);
-    }
-  }
-
-  public final java.util.ArrayList<Geodetic2D> getGeodetics()
-  {
-    java.util.ArrayList<Geodetic2D> geo = new java.util.ArrayList<Geodetic2D>();
-    _root.getGeodetics(geo);
-    return geo;
-  }
-  public final java.util.ArrayList<Sector> getSectors()
-  {
-    java.util.ArrayList<Sector> sectors = new java.util.ArrayList<Sector>();
-    _root.getSectors(sectors);
-    return sectors;
-  }
-
 }
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark NODE
+
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#pragma mark TREE

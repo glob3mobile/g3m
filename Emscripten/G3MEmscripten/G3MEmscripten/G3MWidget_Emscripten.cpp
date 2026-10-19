@@ -5,6 +5,7 @@
 #include "G3M/GL.hpp"
 #include "G3M/Vector2F.hpp"
 #include "G3M/ErrorHandling.hpp"
+#include "G3M/ILogger.hpp"
 
 #include "Logger_Emscripten.hpp"
 #include "Factory_Emscripten.hpp"
@@ -19,6 +20,7 @@
 #include "EMStorage.hpp"
 
 #include <math.h>
+#include <algorithm>
 
 #include <emscripten/emscripten.h>
 using namespace emscripten;
@@ -27,6 +29,8 @@ using namespace emscripten;
 G3MWidget_Emscripten::G3MWidget_Emscripten() :
 _canvas(val::null()),
 _webGLContext(val::null()),
+_gl(NULL),
+_g3mWidget(NULL),
 _width(0),
 _height(0),
 _physicalWidth(0),
@@ -48,8 +52,10 @@ _mouseDown(false)
   webGLContextArguments.set("antialias",                       false);
   _webGLContext = _canvas.call<val>("getContext", val("webgl"), webGLContextArguments);
 
-  INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
-  _gl = new GL(nativeGL);
+  if (isWebGLSupported()) {
+    INativeGL* nativeGL = new NativeGL_Emscripten(_webGLContext);
+    _gl = new GL(nativeGL);
+  }
 }
 
 G3MWidget_Emscripten::~G3MWidget_Emscripten() {
@@ -206,6 +212,9 @@ EM_JS(int, getAbsoluteTop, (int elemID), {
       return top;
       });
 
+// separation of the three touches simulated with shift+mouse, as MotionEventProcessor.DELTA in WebGL
+static const Vector2F SHIFT_TOUCHES_DELTA(10, 0);
+
 const Vector2F G3MWidget_Emscripten::createPosition(const EmscriptenMouseEvent* e) const {
   const int canvasAbsoluteLeft = getAbsoluteLeft( EMStorage::put(_canvas) );
   const int canvasAbsoluteTop  = getAbsoluteTop ( EMStorage::put(_canvas) );
@@ -213,74 +222,36 @@ const Vector2F G3MWidget_Emscripten::createPosition(const EmscriptenMouseEvent* 
                   (e->clientY - canvasAbsoluteTop ) * _devicePixelRatio);
 }
 
-const TouchEvent* G3MWidget_Emscripten::createTouchFromMouseEvent(const TouchEventType& type,
-                                                                  const EmscriptenMouseEvent* e) const {
-  const Vector2F currentPos = createPosition(e);
-  const float previousX = currentPos._x - e->movementX;
-  const float previousY = currentPos._y - e->movementY;
+std::vector<const Touch*> G3MWidget_Emscripten::createMouseTouches(const EmscriptenMouseEvent* e) const {
+  const Vector2F position = createPosition(e);
+  const unsigned char tapCount = 1;
 
+  std::vector<const Touch*> touches;
   if (e->shiftKey) {
-    std::vector<const Touch*> touches;
-    touches.reserve(3);
-    touches.push_back( new Touch(Vector2F(currentPos._x - 10, currentPos._y), Vector2F(previousX - 10, previousY) ) );
-    touches.push_back( new Touch(currentPos,                                  Vector2F(previousX     , previousY) ) );
-    touches.push_back( new Touch(Vector2F(currentPos._x + 10, currentPos._y), Vector2F(previousX + 10, previousY) ) );
-    return TouchEvent::create(type, touches);
+    touches.push_back( new Touch(position.sub(SHIFT_TOUCHES_DELTA), tapCount) );
+    touches.push_back( new Touch(position,                          tapCount) );
+    touches.push_back( new Touch(position.add(SHIFT_TOUCHES_DELTA), tapCount) );
   }
+  else {
+    touches.push_back( new Touch(position, tapCount) );
+  }
+  return touches;
+}
 
-  Touch* touch = new Touch(currentPos, Vector2F(previousX, previousY));
-  return TouchEvent::create(type, touch);
+void G3MWidget_Emscripten::dispatchTouchEvent(const TouchEvent* event) {
+  _g3mWidget->onTouchEvent(event);
+  delete event;
 }
 
 EM_BOOL G3MWidget_Emscripten::_onMouseWheelEvent(int eventType,
                                                  const EmscriptenWheelEvent* e) {
-  if ((e->deltaY > 0) || (e->deltaY < 0)) {
-    const int canvasAbsoluteLeft = getAbsoluteLeft( EMStorage::put(_canvas) );
-    const int canvasAbsoluteTop  = getAbsoluteTop ( EMStorage::put(_canvas) );
+  const Vector2F position = createPosition(&(e->mouse));
+  // same value as WebGL's wheelDelta clamped to [-1, 1]; wheelDelta has the opposite sign of deltaY
+  const double delta = std::max(-1.0, std::min(1.0, -e->deltaY));
 
-    const float x = (e->mouse.clientX - canvasAbsoluteLeft) * _devicePixelRatio;
-    const float y = (e->mouse.clientY - canvasAbsoluteTop ) * _devicePixelRatio;
-    const float delta = (float) (e->deltaY / 16);
-
-    const Vector2F beginFirstPosition (x - 10, y - 10);
-    const Vector2F beginSecondPosition(x + 10, y + 10);
-
-    {
-      std::vector<const Touch*> beginTouches;
-      beginTouches.reserve(2);
-      beginTouches.push_back(new Touch(beginFirstPosition,  beginFirstPosition));
-      beginTouches.push_back(new Touch(beginSecondPosition, beginSecondPosition));
-
-      const TouchEvent* event = TouchEvent::create(TouchEventType::Down, beginTouches);
-      _g3mWidget->onTouchEvent(event);
-    }
-
-    {
-      const Vector2F endFirstPosition (beginFirstPosition._x  - delta, beginFirstPosition._y  - delta);
-      const Vector2F endSecondPosition(beginSecondPosition._x + delta, beginSecondPosition._y + delta);
-
-      std::vector<const Touch*> endTouches;
-      endTouches.reserve(2);
-      endTouches.push_back(new Touch(endFirstPosition,  beginFirstPosition ));
-      endTouches.push_back(new Touch(endSecondPosition, beginSecondPosition));
-
-      _g3mWidget->onTouchEvent( TouchEvent::create(TouchEventType::Move, endTouches) );
-      _g3mWidget->onTouchEvent( TouchEvent::create(TouchEventType::Up,   endTouches) );
-    }
-
-    //if (e->deltaMode == DOM_DELTA_PIXEL) {
-    //  printf("*** onMouseWheelEvent: DOM_DELTA_PIXEL %f\n", e->deltaY);
-    //}
-    //else if (e->deltaMode == DOM_DELTA_LINE) {
-    //  printf("*** onMouseWheelEvent: DOM_DELTA_LINE %f\n", e->deltaY);
-    //}
-    //else if (e->deltaMode == DOM_DELTA_PAGE) {
-    //  printf("*** onMouseWheelEvent: DOM_DELTA_PAGE %f\n", e->deltaY);
-    //}
-    //else {
-    //  printf("*** onMouseWheelEvent: unknown delta page %f\n", e->deltaY);
-    //}
-  }
+  dispatchTouchEvent( TouchEvent::create(TouchEventType::MouseWheel,
+                                         new Touch(position, (unsigned char) 0),
+                                         delta) );
 
   return EM_TRUE;
 }
@@ -291,119 +262,114 @@ EM_BOOL G3MWidget_Emscripten::_onMouseEvent(int eventType,
   if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN) {
     _mouseDown = true;
 
-    const TouchEvent* event = createTouchFromMouseEvent(TouchEventType::Down, e);
-    _g3mWidget->onTouchEvent(event);
+    dispatchTouchEvent( TouchEvent::create(TouchEventType::Down, createMouseTouches(e)) );
 
     return EM_TRUE;
   }
   else if (eventType == EMSCRIPTEN_EVENT_MOUSEMOVE) {
     if (_mouseDown) {
-      const TouchEvent* event = createTouchFromMouseEvent(TouchEventType::Move, e);
-      _g3mWidget->onTouchEvent(event);
+      dispatchTouchEvent( TouchEvent::create(TouchEventType::Move, createMouseTouches(e)) );
     }
 
     return EM_TRUE;
   }
   else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP) {
-    if (_mouseDown) {
-      _mouseDown = false;
+    _mouseDown = false;
 
-      const TouchEvent* event = createTouchFromMouseEvent(TouchEventType::Up, e);
-      _g3mWidget->onTouchEvent(event);
-    }
+    const bool isSecondaryButton = !e->shiftKey && e->ctrlKey && (e->button == 0);
+    const TouchEventType type = isSecondaryButton ? TouchEventType::LongPress : TouchEventType::Up;
+    dispatchTouchEvent( TouchEvent::create(type, createMouseTouches(e)) );
 
     return EM_TRUE;
   }
   else if (eventType == EMSCRIPTEN_EVENT_DBLCLICK) {
-    const Vector2F currentPos = createPosition(e);
-    const Touch* touch = new Touch(currentPos, currentPos, (unsigned char) 2);
-    const TouchEvent* event = TouchEvent::create(TouchEventType::Down, touch);
-    _g3mWidget->onTouchEvent(event);
-    
+    dispatchTouchEvent( TouchEvent::create(TouchEventType::Down,
+                                           new Touch(createPosition(e), (unsigned char) 2)) );
+
     return EM_TRUE;
   }
   else {
-    //printf("%s, screen: (%ld,%ld), client: (%ld,%ld),%s%s%s%s button: %hu, buttons: %hu, movement: (%ld,%ld), canvas: (%ld,%ld), target: (%ld, %ld)\n",
-    //       emscripten_event_type_to_string(eventType), e->screenX, e->screenY, e->clientX, e->clientY,
-    //       e->ctrlKey ? " CTRL" : "", e->shiftKey ? " SHIFT" : "", e->altKey ? " ALT" : "", e->metaKey ? " META" : "",
-    //       e->button, e->buttons, e->movementX, e->movementY, e->canvasX, e->canvasY, e->targetX, e->targetY);
     return EM_FALSE;
   }
 }
 
-
-std::vector<const Touch*> G3MWidget_Emscripten::createPointers(const EmscriptenTouchEvent* e) {
+std::vector<const Touch*> G3MWidget_Emscripten::createTouches(const EmscriptenTouchEvent* e,
+                                                               const bool onlyChanged) const {
   const int canvasAbsoluteLeft = getAbsoluteLeft( EMStorage::put(_canvas) );
   const int canvasAbsoluteTop  = getAbsoluteTop ( EMStorage::put(_canvas) );
+  const unsigned char tapCount = 1;
 
-  const int numTouches = e->numTouches;
-
-  std::map<long, XY> currentPositions;
-
-  std::vector<const Touch*> pointers;
-
-  pointers.reserve(numTouches);
-
-  for (int i = 0; i < numTouches; i++) {
-    const EmscriptenTouchPoint point = e->touches[i];
-    const long id = point.identifier;
-
-    const float x = (point.clientX - canvasAbsoluteLeft) * _devicePixelRatio;
-    const float y = (point.clientY - canvasAbsoluteTop ) * _devicePixelRatio;
-    const Vector2F currentPosition(x, y);
-
-    const Vector2F previousPosition = (_previousTouchesPositions.find(id) == _previousTouchesPositions.end()) ? Vector2F(x, y) : _previousTouchesPositions[id].asVector2F();
-
-    currentPositions[id] = {x, y};
-
-    pointers.push_back(new Touch(currentPosition, previousPosition));
+  std::vector<const Touch*> touches;
+  for (int i = 0; i < e->numTouches; i++) {
+    const EmscriptenTouchPoint& point = e->touches[i];
+    if (onlyChanged && !point.isChanged) {
+      continue;
+    }
+    const Vector2F position((point.clientX - canvasAbsoluteLeft) * _devicePixelRatio,
+                            (point.clientY - canvasAbsoluteTop ) * _devicePixelRatio);
+    touches.push_back( new Touch(position, tapCount) );
   }
-
-  _previousTouchesPositions = currentPositions;
-
-  return pointers;
+  return touches;
 }
 
 EM_BOOL G3MWidget_Emscripten::_onTouchEvent(int eventType,
                                             const EmscriptenTouchEvent* e)
 {
-  TouchEvent* event = NULL;
+  std::vector<const Touch*> touches;
+  TouchEventType type;
 
   switch (eventType) {
     case EMSCRIPTEN_EVENT_TOUCHSTART:
-      event = TouchEvent::create(TouchEventType::Down, createPointers(e));
-      break;
-
-    case EMSCRIPTEN_EVENT_TOUCHEND:
-      event = TouchEvent::create(TouchEventType::Up, createPointers(e));
+      type    = TouchEventType::Down;
+      touches = createTouches(e, false);
       break;
 
     case EMSCRIPTEN_EVENT_TOUCHMOVE:
-      event = TouchEvent::create(TouchEventType::Move, createPointers(e));
+      type    = TouchEventType::Move;
+      touches = createTouches(e, false);
       break;
 
-    case EMSCRIPTEN_EVENT_TOUCHCANCEL:
-      _previousTouchesPositions.clear();
+    case EMSCRIPTEN_EVENT_TOUCHEND:
+      // as WebGL: an Up carries the touches that ended (changedTouches)
+      type    = TouchEventType::Up;
+      touches = createTouches(e, true);
       break;
+
+    default:
+      // touchcancel: as WebGL, no event
+      return EM_TRUE;
   }
 
-  if (event) {
-    _g3mWidget->onTouchEvent(event);
+  if (touches.empty()) {
+    ILogger::instance()->logError("G3MWidget_Emscripten: touch event type %d without touches", eventType);
+    return EM_TRUE;
   }
+
+  dispatchTouchEvent( TouchEvent::create(type, touches) );
 
   return EM_TRUE;
 }
 
 void G3MWidget_Emscripten::startWidget(const std::string& canvasContainerID) {
+  val document = val::global("document");
+
+  val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
+  if ( !canvasContainer.as<bool>() ) {
+    emscripten_console_error("Can't find canvasContainer");
+    THROW_EXCEPTION("Can't find canvasContainer!");
+  }
+
+  if (!isWebGLSupported()) {
+    // as G3MWidget_WebGL, the container shows why there is no globe
+    const char* message = "Your browser does not support WebGL.";
+    emscripten_console_error(message);
+    val messageElement = document.call<val>("createElement", val("div"));
+    messageElement.set("textContent", val(message));
+    canvasContainer.call<void>("appendChild", messageElement);
+    return;
+  }
+
   if (_g3mWidget != NULL) {
-    val document = val::global("document");
-
-    val canvasContainer = document.call<val>("getElementById", val(canvasContainerID));
-    if ( !canvasContainer.as<bool>() ) {
-      emscripten_console_error("Can't find canvasContainer");
-      THROW_EXCEPTION("Can't find canvasContainer!");
-    }
-
     canvasContainer.call<void>("appendChild", _canvas);
 
     EM_ASM({
@@ -437,7 +403,7 @@ void G3MWidget_Emscripten::startWidget(const std::string& canvasContainerID) {
     // render loop
     emscripten_set_main_loop_arg(G3MWidget_Emscripten_loopStep, // em_arg_callback_func func
                                  (void*) this,                  // void *arg
-                                 60,                            // int fps
+                                 0,                             // int fps: 0 = requestAnimationFrame, as WebGL
                                  1                              // int simulate_infinite_loop
                                  );
   }

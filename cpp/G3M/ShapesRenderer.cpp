@@ -94,7 +94,7 @@ RenderState ShapesRenderer::getRenderState(const G3MRenderContext* rc) {
 void ShapesRenderer::updateGLState(const Camera* camera) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
+    _glState->addGLFeature(new ModelViewGLFeature(camera->getModelViewMatrix44D()), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());
@@ -102,7 +102,7 @@ void ShapesRenderer::updateGLState(const Camera* camera) {
 
   f = (ModelViewGLFeature*) _glStateTransparent->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glStateTransparent->addGLFeature(new ModelViewGLFeature(camera), false);
+    _glStateTransparent->addGLFeature(new ModelViewGLFeature(camera->getModelViewMatrix44D()), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());

@@ -60,7 +60,8 @@ public:
   static RectangleF* calculateInnerRectangleFromSector(int wholeSectorWidth,
                                                        int wholeSectorHeight,
                                                        const Sector& wholeSector,
-                                                       const Sector& innerSector);
+                                                       const Sector& innerSector,
+                                                       bool mercator);
 
 };
 

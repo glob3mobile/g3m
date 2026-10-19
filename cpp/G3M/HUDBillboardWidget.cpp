@@ -146,8 +146,8 @@ bool HUDBillboardWidget::createGLState(const G3MRenderContext* rc) {
   _modelTransformGLF = new ModelTransformGLFeature(MutableMatrix44D::identity().asMatrix44D());
   _glState->addGLFeature(_modelTransformGLF, false);
 
-  _viewportExtentGLF = new ViewportExtentGLFeature(rc->getCurrentCamera(),
-                                                   rc->getViewMode());
+  _viewportExtentGLF = new ViewportExtentGLFeature(rc->getCurrentCamera()->getViewPortWidth(rc->getViewMode()),
+                                                   rc->getCurrentCamera()->getViewPortHeight());
   _glState->addGLFeature(_viewportExtentGLF, false);
 
   _textureGLF = new TextureGLFeature(_textureID->getID(),
@@ -157,7 +157,7 @@ bool HUDBillboardWidget::createGLState(const G3MRenderContext* rc) {
                                      false,
                                      0,
                                      true,
-                                     _textureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                     _textureID->getSourceBlendFactor(),
                                      GLBlendFactor::oneMinusSrcAlpha(),
                                      0, 0, // translation
                                      1, 1, // scale

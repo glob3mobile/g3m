@@ -7,6 +7,7 @@
 //
 
 #import "DeviceAttitude_iOS.hpp"
+#import "G3M/Angle.hpp"
 
 #import <UIKit/UIKit.h>
 

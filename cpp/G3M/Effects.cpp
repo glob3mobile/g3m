@@ -195,3 +195,9 @@ void EffectsScheduler::startEffect(Effect* effect,
                                    EffectTarget* target) {
   _effectsRuns.push_back(new EffectRun(effect, target));
 }
+
+void EffectsScheduler::replaceEffectsFor(EffectTarget* target,
+                                         Effect* effect) {
+  cancelAllEffectsFor(target);
+  startEffect(effect, target);
+}

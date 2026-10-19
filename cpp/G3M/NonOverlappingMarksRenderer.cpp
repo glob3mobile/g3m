@@ -71,8 +71,8 @@ MarkWidget::~MarkWidget() {
 void MarkWidget::init(const G3MRenderContext* rc) {
   if (_glState == NULL) {
     _glState = new GLState();
-    _viewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera(),
-                                                           rc->getViewMode());
+    _viewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera()->getViewPortWidth(rc->getViewMode()),
+                                                           rc->getCurrentCamera()->getViewPortHeight());
 
     _texHandler = rc->getTexturesHandler();
     _imageFactory->create(rc, new WidgetImageListener(this), true);
@@ -127,6 +127,12 @@ void MarkWidget::prepareWidget(const IImage* image,
                                                                            false,
                                                                            GLTextureParameterValue::clampToEdge(),
                                                                            GLTextureParameterValue::clampToEdge());
+  if (textureID == NULL) {
+    ILogger::instance()->logError("Can't upload texture \"%s\" to GPU", imageName.c_str());
+    delete _image;
+    _image = NULL;
+    return;
+  }
 
   // #warning TODO: share unit texCoords
   if (_textureMapping != NULL) {
@@ -362,8 +368,8 @@ void NonOverlappingMark::renderSpringWidget(const G3MRenderContext* rc,
                                                          ),
                                  false);
 
-    _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera(),
-                                                                 rc->getViewMode());
+    _springViewportExtentGLFeature = new ViewportExtentGLFeature(rc->getCurrentCamera()->getViewPortWidth(rc->getViewMode()),
+                                                                 rc->getCurrentCamera()->getViewPortHeight());
     _springGLState->addGLFeature(_springViewportExtentGLFeature, false);
   }
   else {

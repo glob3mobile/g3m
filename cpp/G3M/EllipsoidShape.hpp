@@ -18,6 +18,7 @@ class FloatBufferBuilderFromGeodetic;
 class FloatBufferBuilderFromCartesian2D;
 class FloatBufferBuilderFromCartesian3D;
 class TextureIDReference;
+class IImage;
 
 
 class EllipsoidShape : public AbstractMeshShape {

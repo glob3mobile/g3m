@@ -15,14 +15,14 @@
 #include "DebugTileImageProvider.hpp"
 
 DebugTilesLayer::DebugTilesLayer() :
-ProceduralLayer(LayerTilesRenderParameters::createDefaultMultiProjection(2,  // mercatorFirstLevel
-                                                                         18, // mercatorMaxLevel
-                                                                         0,  // wgs84firstLevel
-                                                                         18  // wgs84maxLevel
-                                                                         ),
-                1.0f, // transparency
-                NULL, // condition
-                new std::vector<const Info*>()),
+MultiProjectionLayer(LayerTilesRenderParameters::createDefaultMultiProjection(2,  // mercatorFirstLevel
+                                                                              18, // mercatorMaxLevel
+                                                                              0,  // wgs84firstLevel
+                                                                              18  // wgs84maxLevel
+                                                                              ),
+                     1.0f, // transparency
+                     NULL, // condition
+                     new std::vector<const Info*>()),
 _font(GFont::monospaced(15)),
 _color(Color::YELLOW),
 _showIDLabel(true),
@@ -43,13 +43,13 @@ DebugTilesLayer::DebugTilesLayer(const GFont&              font,
                                  const float               transparency,
                                  const LayerCondition*     condition,
                                  std::vector<const Info*>* layerInfo) :
-ProceduralLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
-                                                                         mercatorMaxLevel,
-                                                                         wgs84firstLevel,
-                                                                         wgs84maxLevel),
-                transparency,
-                condition,
-                layerInfo),
+MultiProjectionLayer(LayerTilesRenderParameters::createDefaultMultiProjection(mercatorFirstLevel,
+                                                                              mercatorMaxLevel,
+                                                                              wgs84firstLevel,
+                                                                              wgs84maxLevel),
+                     transparency,
+                     condition,
+                     layerInfo),
 _font(font),
 _color(color),
 _showIDLabel(showIDLabel),

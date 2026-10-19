@@ -209,7 +209,9 @@ public:
   }
 
   ~Downloader_Emscripten_Handler() {
-
+    for (size_t i = 0; i < _listeners.size(); i++) {
+      delete _listeners[i];
+    }
   }
 
   const long long getPriority() const {
@@ -279,6 +281,7 @@ public:
       ListenerEntry* listener = *it;
       if ((listener != NULL) && (listener->_tag == tag)) {
         listener->onCancel(url);
+        delete listener;
 
         it = _listeners.erase(it);
         anyRemoved = true;
@@ -415,21 +418,23 @@ public:
     }, xhrStatus, blobID, this);
   }
 
-  void onLoad(int xhrStatus,
+  // returns true when the response is still being decoded as an image, and
+  // Downloader_Emscripten_Handler_processResponse will finish the handler
+  bool onLoad(int xhrStatus,
               const val& xhrResponse) {
     _downloader->removeDownloadingHandlerForURLPath(_urlPath);
 
     if (xhrStatus == 200) {
       if (_isImageRequest) {
         createImageFromBlobAndProcessResponse(xhrStatus, xhrResponse);
+        return true;
       }
-      else {
-        processResponse(xhrStatus, xhrResponse);
-      }
+      processResponse(xhrStatus, xhrResponse);
     }
     else {
       processResponse(xhrStatus, val::null());
     }
+    return false;
   }
 
 
@@ -440,7 +445,10 @@ void Downloader_Emscripten_Handler_onLoad(int xhrStatus,
                                           void* voidHandler) {
   val xhrResponse = EMStorage::take(xhrResponseID);
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;
-  handler->onLoad(xhrStatus, xhrResponse);
+  const bool decodingImage = handler->onLoad(xhrStatus, xhrResponse);
+  if (!decodingImage) {
+    delete handler;
+  }
 }
 
 void Downloader_Emscripten_Handler_processResponse(int xhrStatus,
@@ -449,6 +457,7 @@ void Downloader_Emscripten_Handler_processResponse(int xhrStatus,
   val domImage = EMStorage::take(domImageID);
   Downloader_Emscripten_Handler* handler = (Downloader_Emscripten_Handler*) voidHandler;
   handler->processResponse(xhrStatus, domImage);
+  delete handler;
 }
 
 Downloader_Emscripten::Downloader_Emscripten(const int  maxConcurrentOperationCount,
@@ -539,13 +548,13 @@ long long Downloader_Emscripten::requestImage(const URL& url,
 
   const long long requestID = _requestIDCounter++;
 
-  if ((handler != NULL) && !handler->_isImageRequest) {
+  if ((handler != NULL) && handler->_isImageRequest) {
     // the URL is being downloaded, just add the new listener
     handler->addListener(listener, deleteListener, priority, requestID, tag);
   }
   else {
     handler = _queuedHandlers.count(urlPath) ? _queuedHandlers[urlPath] : NULL;
-    if ((handler != NULL) && !handler->_isImageRequest) {
+    if ((handler != NULL) && handler->_isImageRequest) {
       // the URL is queued for future download, just add the new listener
       handler->addListener(listener, deleteListener, priority, requestID, tag);
     }
@@ -571,6 +580,7 @@ bool Downloader_Emscripten::cancelRequest(long long requestID) {
     if (handler->removeListenerForRequestId(requestID)) {
       if (!handler->hasListener()) {
         _queuedHandlers.erase( handler->_urlPath );
+        delete handler;
       }
       return true;
     }
@@ -599,6 +609,7 @@ void Downloader_Emscripten::cancelRequestsTagged(const std::string& tag) {
     if (handler->removeListenersTagged(tag)) {
       if (!handler->hasListener()) {
         it = _queuedHandlers.erase(it);
+        delete handler;
       }
       else {
         ++it;
@@ -632,8 +643,6 @@ void Downloader_Emscripten::__heartbeat() {
     Downloader_Emscripten_Handler* handler = getHandlerToRun();
     if (handler != NULL) {
       handler->runWithDownloader(this);
-#warning FIX MEMORY LEAK
-//      delete handler;
     }
   }
   queueHeartbeat();

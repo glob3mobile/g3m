@@ -23,6 +23,10 @@
 #include "G3MRenderContext.hpp"
 #include "ITimer.hpp"
 #include "ILogger.hpp"
+#include "GLState.hpp"
+#include "IFloatBuffer.hpp"
+#include "Color.hpp"
+#include "IMathUtils.hpp"
 
 
 void OLDPointCloudsRenderer::PointCloudMetadataDownloadListener::onDownload(const URL& url,
@@ -996,6 +1000,7 @@ void OLDPointCloudsRenderer::PointCloudLeafNode::stoppedRendering(const G3MRende
 
 OLDPointCloudsRenderer::OLDPointCloudsRenderer() :
 _cloudsSize(0),
+_renderStateCollector(),
 _glState(new GLState()),
 _timer(NULL)
 {
@@ -1023,43 +1028,14 @@ void OLDPointCloudsRenderer::onChangedContext() {
 }
 
 RenderState OLDPointCloudsRenderer::getRenderState(const G3MRenderContext* rc) {
-  _errors.clear();
-  bool busyFlag  = false;
-  bool errorFlag = false;
-  
+  _renderStateCollector.reset();
+
   for (int i = 0; i < _cloudsSize; i++) {
     PointCloud* cloud = _clouds[i];
-    const RenderState childRenderState = cloud->getRenderState(rc);
-    
-    const RenderState_Type childRenderStateType = childRenderState._type;
-    
-    if (childRenderStateType == RENDER_ERROR) {
-      errorFlag = true;
-      
-      const std::vector<std::string> childErrors = childRenderState.getErrors();
-#ifdef C_CODE
-      _errors.insert(_errors.end(),
-                     childErrors.begin(),
-                     childErrors.end());
-#endif
-#ifdef JAVA_CODE
-      _errors.addAll(childErrors);
-#endif
-    }
-    else if (childRenderStateType == RENDER_BUSY) {
-      busyFlag = true;
-    }
+    _renderStateCollector.add(cloud->getRenderState(rc));
   }
-  
-  if (errorFlag) {
-    return RenderState::error(_errors);
-  }
-  else if (busyFlag) {
-    return RenderState::busy();
-  }
-  else {
-    return RenderState::ready();
-  }
+
+  return _renderStateCollector.getState();
 }
 
 void OLDPointCloudsRenderer::addPointCloud(const URL& serverURL,
@@ -1140,7 +1116,7 @@ void OLDPointCloudsRenderer::render(const G3MRenderContext* rc,
     const Camera* camera = rc->getCurrentCamera();
     ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
     if (f == NULL) {
-      _glState->addGLFeature(new ModelViewGLFeature(camera), false);
+      _glState->addGLFeature(new ModelViewGLFeature(camera->getModelViewMatrix44D()), false);
     }
     else {
       f->setMatrix(camera->getModelViewMatrix44D());

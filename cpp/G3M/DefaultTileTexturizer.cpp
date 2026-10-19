@@ -113,6 +113,7 @@ class DTT_TileImageListener : public TileImageListener {
 private:
   DTT_TileTextureBuilder* _builder;
   const Sector            _tileSector;
+  const bool              _tileMercator;
   const IImage*           _backgroundTileImage;
   const std::string       _backgroundTileImageName;
 
@@ -411,6 +412,7 @@ DTT_TileImageListener::DTT_TileImageListener(DTT_TileTextureBuilder* builder,
                                              const std::string&      backgroundTileImageName) :
 _builder(builder),
 _tileSector(tile->_sector),
+_tileMercator(tile->_mercator),
 _tileTextureResolution(tileTextureResolution),
 _backgroundTileImage(backgroundTileImage),
 _backgroundTileImageName(backgroundTileImageName)
@@ -473,11 +475,13 @@ void DTT_TileImageListener::imageCreated(const std::string&           tileID,
 
       const RectangleF* srcRect = RectangleF::calculateInnerRectangleFromSector(image->getWidth(), image->getHeight(),
                                                                                 *imageSector,
-                                                                                visibleContributionSector);
+                                                                                visibleContributionSector,
+                                                                                _tileMercator);
 
       const RectangleF* destRect = RectangleF::calculateInnerRectangleFromSector(width, height,
                                                                                  _tileSector,
-                                                                                 visibleContributionSector);
+                                                                                 visibleContributionSector,
+                                                                                 _tileMercator);
 
 
       //We add "destRect->id()" to "auxImageID" for to differentiate cases of same "visibleContributionSector" at different levels of tiles

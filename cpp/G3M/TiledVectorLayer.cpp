@@ -32,7 +32,7 @@ TiledVectorLayer::TiledVectorLayer(const GEORasterSymbolizer*                   
                                    const float                                           transparency,
                                    const LayerCondition*                                 condition,
                                    std::vector<const Info*>*                             layerInfo) :
-VectorLayer(parametersVector, transparency, condition, layerInfo),
+MultiProjectionLayer(parametersVector, transparency, condition, layerInfo),
 _symbolizer(symbolizer),
 _urlTemplate(urlTemplate),
 _dataSector(dataSector),

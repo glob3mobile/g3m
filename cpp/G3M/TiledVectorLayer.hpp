@@ -9,7 +9,7 @@
 #ifndef __G3M__TiledVectorLayer__
 #define __G3M__TiledVectorLayer__
 
-#include "VectorLayer.hpp"
+#include "MultiProjectionLayer.hpp"
 #include "Sector.hpp"
 #include "TimeInterval.hpp"
 #include "URL.hpp"
@@ -20,7 +20,7 @@ class GEORasterSymbolizer;
 class TiledVectorLayerTileImageProvider;
 
 
-class TiledVectorLayer : public VectorLayer {
+class TiledVectorLayer : public MultiProjectionLayer {
 private:
 #ifdef C_CODE
   const GEORasterSymbolizer* _symbolizer;

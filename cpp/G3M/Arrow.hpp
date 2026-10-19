@@ -13,6 +13,7 @@
 
 class ModelTransformGLFeature;
 class Arrow;
+class Cylinder;
 
 class ArrowListener{
 public:
@@ -40,7 +41,11 @@ private:
   const double _radius;
   
   ArrowListener* _listener;
-  
+
+  static Mesh* createCylinderMesh(const Cylinder& cylinder,
+                                  const Color& color,
+                                  const int nSegments);
+
 public:
   Arrow(const Vector3D& base,
         const Vector3D& vector,

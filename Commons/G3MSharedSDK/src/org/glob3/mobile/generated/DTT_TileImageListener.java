@@ -9,6 +9,7 @@ public class DTT_TileImageListener extends TileImageListener
 {
   private DTT_TileTextureBuilder _builder;
   private final Sector _tileSector ;
+  private final boolean _tileMercator;
   private final IImage _backgroundTileImage;
   private final String _backgroundTileImageName;
 
@@ -18,6 +19,7 @@ public class DTT_TileImageListener extends TileImageListener
   {
      _builder = builder;
      _tileSector = new Sector(tile._sector);
+     _tileMercator = tile._mercator;
      _tileTextureResolution = tileTextureResolution;
      _backgroundTileImage = backgroundTileImage;
      _backgroundTileImageName = backgroundTileImageName;
@@ -79,9 +81,9 @@ public class DTT_TileImageListener extends TileImageListener
         auxImageID.addString(visibleContributionSector.id());
         auxImageID.addString("|");
   
-        final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector);
+        final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector, _tileMercator);
   
-        final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(width, height, _tileSector, visibleContributionSector);
+        final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(width, height, _tileSector, visibleContributionSector, _tileMercator);
   
   
         //We add "destRect->id()" to "auxImageID" for to differentiate cases of same "visibleContributionSector" at different levels of tiles

@@ -158,6 +158,13 @@ public:
                                                   int wrapS,
                                                   int wrapT);
 
+  // deletes the image; logs an error when the texture can't be created
+  const TextureIDReference* getTextureIDReferenceAndDeleteImage(const IImage* image,
+                                                                int format,
+                                                                const std::string& name,
+                                                                bool generateMipmap,
+                                                                int wrapS,
+                                                                int wrapT);
 
   // also reapplies the value to the mipmapped textures already in the GPU; call it from the renderer thread
   void setTextureMaxAnisotropy(float maxAnisotropy);

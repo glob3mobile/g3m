@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 //class FloatBufferBuilderFromCartesian2D;
 //class FloatBufferBuilderFromCartesian3D;
 //class TextureIDReference;
+//class IImage;
 
 
 public class EllipsoidShape extends AbstractMeshShape
@@ -158,16 +159,8 @@ public class EllipsoidShape extends AbstractMeshShape
         return null;
       }
   
-      _texID = rc.getTexturesHandler().getTextureIDReference(_textureImage, GLFormat.rgba(), _textureURL._path, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
-  
-      if (_textureImage != null)
-         _textureImage.dispose();
+      _texID = rc.getTexturesHandler().getTextureIDReferenceAndDeleteImage(_textureImage, GLFormat.rgba(), _textureURL._path, false, GLTextureParameterValue.clampToEdge(), GLTextureParameterValue.clampToEdge());
       _textureImage = null;
-    }
-  
-    if (_texID == null)
-    {
-      rc.getLogger().logError("Can't load texture %s", _textureURL._path);
     }
   
     if (_texID == null)

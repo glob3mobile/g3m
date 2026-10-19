@@ -21,7 +21,7 @@ package org.glob3.mobile.generated;
 //class TileImageContribution;
 //class GEOVectorTileImageProvider;
 
-public class GEOVectorLayer extends VectorLayer
+public class GEOVectorLayer extends MultiProjectionLayer
 {
   private static long INSTANCE_COUNTER = 0;
 

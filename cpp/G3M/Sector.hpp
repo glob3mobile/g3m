@@ -22,14 +22,6 @@ class Color;
 
 
 class Sector {
-private:
-  // this lazy value represent the half diagonal of the sector, measured in radians
-  // it's stored in double instead of Angle class to optimize performance in android
-  // this value is only used in the method Sector::isBackOriented
-  mutable double _deltaRadiusInRadians;
-
-  mutable Vector3D* _normalizedCartesianCenter;
-
 public:
 
   //Special instances
@@ -149,12 +141,6 @@ public:
     return (_upper._latitude._radians - latitude._radians)   / _deltaLatitude._radians;
   }
 
-  bool isBackOriented(const G3MRenderContext* rc,
-                      double minHeight,
-                      const Planet* planet,
-                      const Vector3D& cameraNormalizedPosition,
-                      double cameraAngle2HorizonInRadians) const;
-
   const Geodetic2D clamp(const Geodetic2D& pos) const;
 
   const Geodetic2D clamp(const Angle& latitude,
@@ -220,23 +206,14 @@ public:
     return _lower._longitude;
   }
 
-  void rasterize(ICanvas*                   canvas,
-                 const GEORasterProjection* projection) const;
-
   bool touchesPoles() const {
     return ((_upper._latitude._degrees >=  89.9) ||
             (_lower._latitude._degrees <= -89.9));
   }
 
-  double getDeltaRadiusInRadians() const;
-
-  const Vector3D getNormalizedCartesianCenter(const Planet* planet) const;
-
   const double getAngularAreaInSquaredDegrees() const {
     return _deltaLatitude._degrees * _deltaLongitude._degrees;
   }
-
-  const GEORasterSymbol* createGEOSymbol(const Color& c) const;
 
   Geodetic2D getClosesInnerPoint(const Geodetic2D& g) const;
 

@@ -21,7 +21,7 @@
 
   #define THROW_EXCEPTION(x)                                                                               \
   {                                                                                                        \
-    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR | EM_LOG_C_STACK | EM_LOG_JS_STACK | EM_LOG_DEMANGLE, x); \
+    emscripten_log(EM_LOG_CONSOLE | EM_LOG_ERROR | EM_LOG_C_STACK | EM_LOG_JS_STACK, x); \
     throw( std::logic_error(x) );                                                                          \
   }
 #endif

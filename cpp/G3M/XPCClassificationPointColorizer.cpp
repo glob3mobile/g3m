@@ -99,7 +99,7 @@ void XPCClassificationPointColorizer::colorize(const XPCMetadata* metadata,
     return;
   }
 
-  const unsigned char classification = dimensionsValues->at(0)->get(i);
+  const size_t classification = IMathUtils::instance()->toUInt8( dimensionsValues->at(0)->get(i) );
 
   if (classification >= _colors.size()) {
     color.set(1, 0, 0, 1);

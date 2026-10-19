@@ -118,19 +118,13 @@ const TextureIDReference* QuadShape::getTextureID(const G3MRenderContext* rc) {
     return NULL;
   }
 
-  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReference(_textureImage,
-                                                                                    GLFormat::rgba(),
-                                                                                    _textureName,
-                                                                                    false,
-                                                                                    GLTextureParameterValue::clampToEdge(),
-                                                                                    GLTextureParameterValue::clampToEdge());
-
-  delete _textureImage;
+  const TextureIDReference* texID = rc->getTexturesHandler()->getTextureIDReferenceAndDeleteImage(_textureImage,
+                                                                                                  GLFormat::rgba(),
+                                                                                                  _textureName,
+                                                                                                  false,
+                                                                                                  GLTextureParameterValue::clampToEdge(),
+                                                                                                  GLTextureParameterValue::clampToEdge());
   _textureImage = NULL;
-
-  if (texID == NULL) {
-    rc->getLogger()->logError("Can't load texture %s", _textureName.c_str());
-  }
 
   return texID;
 }

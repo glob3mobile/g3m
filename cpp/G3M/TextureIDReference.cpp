@@ -8,6 +8,7 @@
 
 #include "TextureIDReference.hpp"
 #include "TexturesHandler.hpp"
+#include "GLConstants.hpp"
 
 TextureIDReference::~TextureIDReference() {
   _texHandler->releaseGLTextureID(_id);
@@ -16,4 +17,8 @@ TextureIDReference::~TextureIDReference() {
 TextureIDReference* TextureIDReference::createCopy() const {
   _texHandler->retainGLTextureID(_id);
   return new TextureIDReference(_id, _isPremultiplied, _texHandler);
+}
+
+int TextureIDReference::getSourceBlendFactor() const {
+  return _isPremultiplied ? GLBlendFactor::one() : GLBlendFactor::srcAlpha();
 }

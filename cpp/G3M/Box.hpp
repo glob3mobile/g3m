@@ -9,25 +9,23 @@
 #define G3M_Box
 
 #include "BoundingVolume.hpp"
+
+#include <vector>
+
 #include "Vector3D.hpp"
 #include "Vector3F.hpp"
 #include "Frustum.hpp"
 
-#include "GLState.hpp"
+class Vector2F;
 
-class Mesh;
-class Color;
 
 class Box: public BoundingVolume {
 private:
 
-  mutable Mesh* _mesh;
-
 #ifdef C_CODE
   explicit Box(const Box& that) :
   _lower(that._lower),
-  _upper(that._upper),
-  _mesh(NULL)
+  _upper(that._upper)
   {
   }
 #else
@@ -37,10 +35,7 @@ private:
   bool contains(double x, double y, double z) const;
 
 public:
-  
-  
-  Mesh* createMesh(const Color& color) const;
-  
+
   const Vector3D _lower;
   const Vector3D _upper;
 
@@ -52,8 +47,7 @@ public:
   Box(const Vector3D& lower,
       const Vector3D& upper):
   _lower(lower),
-  _upper(upper),
-  _mesh(NULL)
+  _upper(upper)
   {
   }
 
@@ -79,10 +73,6 @@ public:
   
   const bool touchesRay(const Ray* ray) const;
 
-  void render(const G3MRenderContext* rc,
-              const GLState* parentState,
-              const Color& color) const;
-
   bool touches(const BoundingVolume* that) const {
     if (that == NULL) {
       return false;
@@ -95,12 +85,7 @@ public:
 
   BoundingVolume* mergedWith(const BoundingVolume* that) const {
     if (that == NULL) {
-#ifdef C_CODE
-      return new Box(*this);
-#endif
-#ifdef JAVA_CODE
-      return this;
-#endif
+      return copy();
     }
     return that->mergedWithBox(this);
   }

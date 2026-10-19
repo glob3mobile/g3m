@@ -27,6 +27,7 @@
 
 XPCRenderer::XPCRenderer() :
 _cloudsSize(0),
+_renderStateCollector(),
 _glState(new GLState()),
 _timer(NULL),
 _lastCamera(NULL),
@@ -107,43 +108,19 @@ void XPCRenderer::onChangedContext() {
 
 
 RenderState XPCRenderer::getRenderState(const G3MRenderContext* rc) {
-  _errors.clear();
-  bool busyFlag  = false;
-  bool errorFlag = false;
+  _renderStateCollector.reset();
 
   for (int i = 0; i < _cloudsSize; i++) {
     XPCPointCloud* cloud = _clouds[i];
-    const RenderState childRenderState = cloud->getRenderState(rc);
-
-    const RenderState_Type childRenderStateType = childRenderState._type;
-
-    if (childRenderStateType == RENDER_ERROR) {
-      errorFlag = true;
-
-      const std::vector<std::string> childErrors = childRenderState.getErrors();
-#ifdef C_CODE
-      _errors.insert(_errors.end(),
-                     childErrors.begin(),
-                     childErrors.end());
-#endif
-#ifdef JAVA_CODE
-      _errors.addAll(childErrors);
-#endif
-    }
-//    else if (childRenderStateType == RENDER_BUSY) {
-//      busyFlag = true;
-//    }
+    _renderStateCollector.add(cloud->getRenderState(rc));
   }
 
-  if (errorFlag) {
-    return RenderState::error(_errors);
-  }
-  else if (busyFlag) {
-    return RenderState::busy();
-  }
-  else {
+  // busy clouds don't make the renderer busy
+  const RenderState renderState = _renderStateCollector.getState();
+  if (renderState._type == RENDER_BUSY) {
     return RenderState::ready();
   }
+  return renderState;
 }
 
 void XPCRenderer::render(const G3MRenderContext* rc,
@@ -165,7 +142,7 @@ void XPCRenderer::render(const G3MRenderContext* rc,
     const Camera* camera = rc->getCurrentCamera();
     ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
     if (f == NULL) {
-      _glState->addGLFeature(new ModelViewGLFeature(camera), false);
+      _glState->addGLFeature(new ModelViewGLFeature(camera->getModelViewMatrix44D()), false);
     }
     else {
       f->setMatrix(camera->getModelViewMatrix44D());

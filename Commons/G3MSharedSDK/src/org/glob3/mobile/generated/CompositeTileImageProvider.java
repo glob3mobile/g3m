@@ -183,6 +183,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
     private FrameTasksExecutor _frameTasksExecutor;
 
     private final Sector _tileSector ;
+    private final boolean _tileMercator;
 
     public void dispose()
     {
@@ -202,7 +203,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
 
     public final String _tileID;
 
-    public Composer(int width, int height, CompositeTileImageProvider compositeTileImageProvider, String tileID, Sector tileSector, TileImageListener listener, boolean deleteListener, CompositeTileImageContribution compositeContribution, FrameTasksExecutor frameTasksExecutor)
+    public Composer(int width, int height, CompositeTileImageProvider compositeTileImageProvider, String tileID, Sector tileSector, boolean tileMercator, TileImageListener listener, boolean deleteListener, CompositeTileImageContribution compositeContribution, FrameTasksExecutor frameTasksExecutor)
     {
        _width = width;
        _height = height;
@@ -218,6 +219,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
        _anyCancelation = false;
        _canceled = false;
        _tileSector = new Sector(tileSector);
+       _tileMercator = tileMercator;
       _compositeTileImageProvider._retain();
     
       for (int i = 0; i < _contributionsSize; i++)
@@ -309,9 +311,9 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
           imageID.addString(visibleContributionSector.id());
           imageID.addString("|");
     
-          final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector);
+          final RectangleF srcRect = RectangleF.calculateInnerRectangleFromSector(image.getWidth(), image.getHeight(), imageSector, visibleContributionSector, _tileMercator);
     
-          final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(_width, _height, _tileSector, visibleContributionSector);
+          final RectangleF destRect = RectangleF.calculateInnerRectangleFromSector(_width, _height, _tileSector, visibleContributionSector, _tileMercator);
     
           //We add "destRect->id()" to "imageID" for to differentiate cases of same "visibleContributionSector" at different levels of tiles
     
@@ -492,7 +494,7 @@ public class CompositeTileImageProvider extends CanvasTileImageProvider
   
     final String tileID = tile._id;
   
-    Composer composer = new Composer(resolution._x, resolution._y, this, tileID, tile._sector, listener, deleteListener, compositeContribution, frameTasksExecutor);
+    Composer composer = new Composer(resolution._x, resolution._y, this, tileID, tile._sector, tile._mercator, listener, deleteListener, compositeContribution, frameTasksExecutor);
   
     _composers.put(tileID, composer);
   

@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //class TiledVectorLayerTileImageProvider;
 
 
-public class TiledVectorLayer extends VectorLayer
+public class TiledVectorLayer extends MultiProjectionLayer
 {
   private GEORasterSymbolizer _symbolizer;
   private final String _urlTemplate;

@@ -56,4 +56,10 @@ public class TextureIDReference
     return _isPremultiplied;
   }
 
+  // the source factor that blends this texture's colors correctly
+  public final int getSourceBlendFactor()
+  {
+    return _isPremultiplied ? GLBlendFactor.one() : GLBlendFactor.srcAlpha();
+  }
+
 }

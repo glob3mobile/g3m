@@ -287,7 +287,7 @@ Layer* G3MRasterLayersDemoScene::createWMSLayer(const std::string& title,
 
 void G3MRasterLayersDemoScene::rawActivate(const G3MContext* context) {
   createLayerSet( getModel()->getLayerSet() );
-  getModel()->getPlanetRenderer()->setShowStatistics(true);
+  getModel()->getPlanetRenderer()->setShowStatistics(false);
 }
 
 void G3MRasterLayersDemoScene::rawSelectGroupOption(size_t groupIndex,

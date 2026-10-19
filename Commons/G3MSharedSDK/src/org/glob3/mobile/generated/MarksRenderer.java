@@ -53,7 +53,7 @@ public class MarksRenderer extends DefaultRenderer
     ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
     if (f == null)
     {
-      _glState.addGLFeature(new ModelViewGLFeature(camera), false);
+      _glState.addGLFeature(new ModelViewGLFeature(camera.getModelViewMatrix44D()), false);
     }
     else
     {
@@ -63,7 +63,7 @@ public class MarksRenderer extends DefaultRenderer
     if (_glState.getGLFeature(GLFeatureID.GLF_VIEWPORT_EXTENT) == null)
     {
       _glState.clearGLFeatureGroup(GLFeatureGroupName.NO_GROUP);
-      _glState.addGLFeature(new ViewportExtentGLFeature(camera, rc.getViewMode()), false);
+      _glState.addGLFeature(new ViewportExtentGLFeature(camera.getViewPortWidth(rc.getViewMode()), camera.getViewPortHeight()), false);
     }
   }
   private IFloatBuffer _billboardTexCoords;

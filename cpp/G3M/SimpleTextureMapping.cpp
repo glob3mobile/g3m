@@ -59,7 +59,7 @@ TextureGLFeature* SimpleTextureMapping::createTextureFeature() const {
                                 false,
                                 0,
                                 _transparent,
-                                _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                                _glTextureID->getSourceBlendFactor(),
                                 GLBlendFactor::oneMinusSrcAlpha());
   }
 
@@ -70,7 +70,7 @@ TextureGLFeature* SimpleTextureMapping::createTextureFeature() const {
                               false,
                               0,
                               _transparent,
-                              _glTextureID->isPremultiplied() ? GLBlendFactor::one() : GLBlendFactor::srcAlpha(),
+                              _glTextureID->getSourceBlendFactor(),
                               GLBlendFactor::oneMinusSrcAlpha(),
                               _translationU,
                               _translationV,

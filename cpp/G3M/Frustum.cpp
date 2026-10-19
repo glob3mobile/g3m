@@ -9,6 +9,7 @@
 #include "Box.hpp"
 #include "BoundingVolume.hpp"
 #include "FrustumData.hpp"
+#include "MutableMatrix44D.hpp"
 
 
 Frustum::Frustum(const FrustumData* data):

@@ -28,6 +28,11 @@
 #include "XPCPointCloud.hpp"
 #include "XPCMetadata.hpp"
 #include "XPCDimension.hpp"
+#include "DebugMeshes.hpp"
+#include "Mesh.hpp"
+#include "IMathUtils.hpp"
+#include "ErrorHandling.hpp"
+#include "IFloatBuffer.hpp"
 #include "XPCPointColorizer.hpp"
 #include "XPCSelectionResult.hpp"
 #include "XPCRenderingState.hpp"
@@ -370,6 +375,7 @@ _sector(sector),
 _minHeight(minHeight),
 _maxHeight(maxHeight),
 _bounds(NULL),
+_boundsDebugMesh(NULL),
 _renderedInPreviousFrame(false),
 _projectedArea(-1),
 _projectedAreaTS(-1),
@@ -390,6 +396,7 @@ XPCNode::~XPCNode() {
   delete _sector;
 
   delete _bounds;
+  delete _boundsDebugMesh;
 
   for (size_t i = 0; i < _childrenSize; i++) {
     XPCNode* child = _children->at(i);
@@ -530,6 +537,9 @@ void XPCNode::clean() {
 
   delete _bounds;
   _bounds = NULL;
+
+  delete _boundsDebugMesh;
+  _boundsDebugMesh = NULL;
 }
 
 void XPCNode::loadContent(const XPCPointCloud* pointCloud,
@@ -622,7 +632,10 @@ long long XPCNode::render(const XPCPointCloud* pointCloud,
 
     if (isVisible) {
       if (renderDebug) {
-        bounds->render(rc, glState, Color::WHITE);
+        if (_boundsDebugMesh == NULL) {
+          _boundsDebugMesh = DebugMeshes::createSphereWireframe(*bounds, Color::WHITE);
+        }
+        _boundsDebugMesh->render(rc, glState);
       }
 
       if ((_projectedArea == -1) || ((_projectedAreaTS + 50 /* 167 */) < nowInMS)) {

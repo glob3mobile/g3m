@@ -11,6 +11,7 @@
 #include "ChildRenderer.hpp"
 #include "Renderer.hpp"
 #include "ILogger.hpp"
+#include "RenderState.hpp"
 #include <vector>
 
 class CompositeRenderer: public Renderer, ChangedRendererInfoListener
@@ -28,7 +29,7 @@ private:
 
   bool _enable;
 
-  std::vector<std::string> _errors;
+  RenderStateCollector _renderStateCollector;
 
   ChangedRendererInfoListener* _changedInfoListener;
 
@@ -42,6 +43,7 @@ public:
   _context(NULL),
   _enable(true),
   _renderersSize(0),
+  _renderStateCollector(),
   _changedInfoListener(NULL)
   {
     //    _renderers = std::vector<Renderer*>();

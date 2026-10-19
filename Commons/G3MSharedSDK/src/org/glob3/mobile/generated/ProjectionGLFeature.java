@@ -10,9 +10,4 @@ public class ProjectionGLFeature extends GLCameraGroupFeature
   {
      super(projection, GLFeatureID.GLF_PROJECTION);
   }
-
-  public ProjectionGLFeature(Camera camera)
-  {
-     super(camera.getProjectionMatrix44D(), GLFeatureID.GLF_PROJECTION);
-  }
 }

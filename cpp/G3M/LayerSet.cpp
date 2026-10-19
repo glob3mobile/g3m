@@ -24,7 +24,8 @@ LayerSet::LayerSet() :
 _listener(NULL),
 _changedInfoListener(NULL),
 _context(NULL),
-_tileImageProvider(NULL)
+_tileImageProvider(NULL),
+_renderStateCollector()
 {
 }
 
@@ -83,44 +84,17 @@ void LayerSet::setTileImageProvider(TileImageProvider* tileImageProvider) {
 
 
 RenderState LayerSet::getRenderState() {
-  _errors.clear();
-  bool busyFlag  = false;
-  bool errorFlag = false;
-  const size_t layersCount = _layers.size();
+  _renderStateCollector.reset();
 
+  const size_t layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
     Layer* child = _layers[i];
     if (child->isEnable()) {
-      const RenderState childRenderState = child->getRenderState();
-
-      const RenderState_Type childRenderStateType = childRenderState._type;
-
-      if (childRenderStateType == RENDER_ERROR) {
-        errorFlag = true;
-
-        const std::vector<std::string> childErrors = childRenderState.getErrors();
-#ifdef C_CODE
-        _errors.insert(_errors.end(),
-                       childErrors.begin(),
-                       childErrors.end());
-#endif
-#ifdef JAVA_CODE
-        _errors.addAll(childErrors);
-#endif
-      }
-      else if (childRenderStateType == RENDER_BUSY) {
-        busyFlag = true;
-      }
+      _renderStateCollector.add(child->getRenderState());
     }
   }
 
-  if (errorFlag) {
-    return RenderState::error(_errors);
-  }
-  else if (busyFlag) {
-    return RenderState::busy();
-  }
-  return RenderState::ready();
+  return _renderStateCollector.getState();
 }
 
 Layer* LayerSet::getLayer(size_t index) const {

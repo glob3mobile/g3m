@@ -79,4 +79,30 @@ private:
 
 };
 
+
+// an error if any added state is an error (keeping all their errors), else busy if any is busy, else ready
+class RenderStateCollector {
+private:
+  std::vector<std::string> _errors;
+  bool _error;
+  bool _busy;
+
+public:
+  RenderStateCollector() :
+  _error(false),
+  _busy(false)
+  {
+  }
+
+  ~RenderStateCollector() {
+  }
+
+  void reset();
+
+  void add(const RenderState& state);
+
+  RenderState getState() const;
+
+};
+
 #endif

@@ -88,7 +88,7 @@ void AtmosphereRenderer::start(const G3MRenderContext* rc) {
 
     //CamPos
     // the background colour is the colour of space, seen through the air
-    _camPosGLF = new CameraPositionGLFeature(rc->getCurrentCamera(),
+    _camPosGLF = new CameraPositionGLFeature(rc->getCurrentCamera()->getCartesianPosition(),
                                              _groundHazePass,
                                              rc->getWidget()->getBackgroundColor(),
                                              defaultHorizonColor(),
@@ -157,7 +157,7 @@ void AtmosphereRenderer::updateGLState(const Camera* camera,
                                        const Color& spaceColor) {
   ModelViewGLFeature* f = (ModelViewGLFeature*) _glState->getGLFeature(GLF_MODEL_VIEW);
   if (f == NULL) {
-    _glState->addGLFeature(new ModelViewGLFeature(camera), false);
+    _glState->addGLFeature(new ModelViewGLFeature(camera->getModelViewMatrix44D()), false);
   }
   else {
     f->setMatrix(camera->getModelViewMatrix44D());
@@ -169,7 +169,7 @@ void AtmosphereRenderer::updateGLState(const Camera* camera,
   _directMesh->setUserTransformMatrix(new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(camera->getCartesianPosition())));
 
   //CamPos
-  _camPosGLF->update(camera, spaceColor);
+  _camPosGLF->update(camera->getCartesianPosition(), spaceColor);
 }
 
 void AtmosphereRenderer::updateVerticesOfZNearPlaneRelativeToCamera(const Camera* camera) {

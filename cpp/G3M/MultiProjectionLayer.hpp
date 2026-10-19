@@ -1,17 +1,17 @@
 //
-//  VectorLayer.hpp
+//  MultiProjectionLayer.hpp
 //  G3M
 //
 //  Created by Diego Gomez Deck on 4/30/14.
 //
 //
 
-#ifndef __G3M__VectorLayer__
-#define __G3M__VectorLayer__
+#ifndef __G3M__MultiProjectionLayer__
+#define __G3M__MultiProjectionLayer__
 
 #include "Layer.hpp"
 
-class VectorLayer : public Layer {
+class MultiProjectionLayer : public Layer {
 
 protected:
 #ifdef C_CODE
@@ -22,10 +22,10 @@ protected:
   int _selectedLayerTilesRenderParametersIndex;
 
 #ifdef C_CODE
-  VectorLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
-              const float                                           transparency,
-              const LayerCondition*                                 condition,
-              std::vector<const Info*>*                             layerInfo) :
+  MultiProjectionLayer(const std::vector<const LayerTilesRenderParameters*>& parametersVector,
+                       const float                                           transparency,
+                       const LayerCondition*                                 condition,
+                       std::vector<const Info*>*                             layerInfo) :
   Layer(transparency, condition, layerInfo),
   _parametersVector(parametersVector),
   _selectedLayerTilesRenderParametersIndex(0)
@@ -33,17 +33,17 @@ protected:
   }
 #endif
 #ifdef JAVA_CODE
-  protected VectorLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
-                        final float transparency,
-                        final LayerCondition condition,
-                        final java.util.ArrayList<Info> layerInfo) {
+  protected MultiProjectionLayer(final java.util.ArrayList<LayerTilesRenderParameters> parametersVector,
+                                 final float transparency,
+                                 final LayerCondition condition,
+                                 final java.util.ArrayList<Info> layerInfo) {
     super(transparency, condition, layerInfo);
     _parametersVector.addAll(parametersVector);
     _selectedLayerTilesRenderParametersIndex = 0;
   }
 #endif
 
-  ~VectorLayer();
+  ~MultiProjectionLayer();
 
 public:
   const std::vector<const LayerTilesRenderParameters*> getLayerTilesRenderParametersVector() const {

@@ -28,7 +28,7 @@ public class XPCRenderer extends DefaultRenderer
 
   private java.util.ArrayList<XPCPointCloud> _clouds = new java.util.ArrayList<XPCPointCloud>();
   private int _cloudsSize;
-  private java.util.ArrayList<String> _errors = new java.util.ArrayList<String>();
+  private RenderStateCollector _renderStateCollector = new RenderStateCollector();
 
   private GLState _glState;
 
@@ -53,6 +53,7 @@ public class XPCRenderer extends DefaultRenderer
   public XPCRenderer()
   {
      _cloudsSize = 0;
+     _renderStateCollector = new RenderStateCollector();
      _glState = new GLState();
      _timer = null;
      _lastCamera = null;
@@ -86,41 +87,21 @@ public class XPCRenderer extends DefaultRenderer
 
   public final RenderState getRenderState(G3MRenderContext rc)
   {
-    _errors.clear();
-    boolean busyFlag = false;
-    boolean errorFlag = false;
+    _renderStateCollector.reset();
   
     for (int i = 0; i < _cloudsSize; i++)
     {
       XPCPointCloud cloud = _clouds.get(i);
-      final RenderState childRenderState = cloud.getRenderState(rc);
-  
-      final RenderState_Type childRenderStateType = childRenderState._type;
-  
-      if (childRenderStateType == RenderState_Type.RENDER_ERROR)
-      {
-        errorFlag = true;
-  
-        final java.util.ArrayList<String> childErrors = childRenderState.getErrors();
-        _errors.addAll(childErrors);
-      }
-  //    else if (childRenderStateType == RENDER_BUSY) {
-  //      busyFlag = true;
-  //    }
+      _renderStateCollector.add(cloud.getRenderState(rc));
     }
   
-    if (errorFlag)
-    {
-      return RenderState.error(_errors);
-    }
-    else if (busyFlag)
-    {
-      return RenderState.busy();
-    }
-    else
+    // busy clouds don't make the renderer busy
+    final RenderState renderState = _renderStateCollector.getState();
+    if (renderState._type == RenderState_Type.RENDER_BUSY)
     {
       return RenderState.ready();
     }
+    return renderState;
   }
 
   public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
@@ -195,7 +176,7 @@ public class XPCRenderer extends DefaultRenderer
       ModelViewGLFeature f = (ModelViewGLFeature) _glState.getGLFeature(GLFeatureID.GLF_MODEL_VIEW);
       if (f == null)
       {
-        _glState.addGLFeature(new ModelViewGLFeature(camera), false);
+        _glState.addGLFeature(new ModelViewGLFeature(camera.getModelViewMatrix44D()), false);
       }
       else
       {

@@ -10,9 +10,6 @@
 
 #include "Vector3D.hpp"
 
-class Mesh;
-class Color;
-
 
 class Cylinder{
   
@@ -33,10 +30,7 @@ public:
   {
 
   }
-  
-  Mesh* createMesh(const Color& color,
-                   const int nSegments) const;
-  
+
 };
 
 #endif

@@ -12,8 +12,6 @@
 #include "Vector3D.hpp"
 
 class TaitBryanAngles;
-class Mesh;
-class Color;
 class Camera;
 
 
@@ -76,13 +74,6 @@ public:
     return description();
   }
 #endif
-
-  Mesh* createMesh(double size,
-                   const Color& xColor,
-                   const Color& yColor,
-                   const Color& zColor) const;
-
-  Mesh* createMesh(double size) const;
 
 };
 

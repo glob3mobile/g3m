@@ -100,6 +100,12 @@ public class MercatorUtils
     return 1.0 - ((mu.log((1.0 + latSin) / (1.0 - latSin)) / pi4) + 0.5);
   }
 
+  // v inside a sector: 0 at its upper latitude, 1 at its lower latitude; upperGlobalV and lowerGlobalV are getMercatorV of those latitudes
+  public static double getLocalMercatorV(Angle latitude, double upperGlobalV, double lowerGlobalV)
+  {
+    return (getMercatorV(latitude) - upperGlobalV) / (lowerGlobalV - upperGlobalV);
+  }
+
   public static Angle toLatitude(double v)
   {
     final IMathUtils mu = IMathUtils.instance();
