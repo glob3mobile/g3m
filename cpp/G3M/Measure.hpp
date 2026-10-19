@@ -16,7 +16,6 @@ class MeasureVertex;
 class ShapesRenderer;
 class MeshRenderer;
 class MarksRenderer;
-class CompositeRenderer;
 class Planet;
 class Measure_VertexShape;
 class MeasureHandler;
@@ -45,7 +44,6 @@ private:
   ShapesRenderer*    _shapesRenderer;
   MeshRenderer*      _meshRenderer;
   MarksRenderer*     _marksRenderer;
-  CompositeRenderer* _compositeRenderer;
 
 #ifdef C_CODE
   const Planet* _planet;
@@ -88,7 +86,6 @@ public:
   void initialize(ShapesRenderer*    shapesRenderer,
                   MeshRenderer*      meshRenderer,
                   MarksRenderer*     marksRenderer,
-                  CompositeRenderer* compositeRenderer,
                   const Planet*      planet);
 
   const double getVertexSphereRadius() const {

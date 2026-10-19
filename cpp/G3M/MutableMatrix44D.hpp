@@ -126,8 +126,12 @@ public:
   }
 
   bool isIdentity() const {
-    static const MutableMatrix44D identity = MutableMatrix44D::identity();
-    return isEquals(identity);
+    return (
+            (_m00 == 1) && (_m01 == 0) && (_m02 == 0) && (_m03 == 0) &&
+            (_m10 == 0) && (_m11 == 1) && (_m12 == 0) && (_m13 == 0) &&
+            (_m20 == 0) && (_m21 == 0) && (_m22 == 1) && (_m23 == 0) &&
+            (_m30 == 0) && (_m31 == 0) && (_m32 == 0) && (_m33 == 1)
+            );
   }
 
   static MutableMatrix44D invalid() {

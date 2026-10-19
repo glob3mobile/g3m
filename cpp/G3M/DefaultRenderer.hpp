@@ -40,7 +40,8 @@ protected:
   DefaultRenderer() :
   _enable(true),
   _changedInfoListener(NULL),
-  _rendererID(0)
+  _rendererID(0),
+  _context(NULL)
   {
 
   }
@@ -48,7 +49,8 @@ protected:
   DefaultRenderer(bool enable) :
   _enable(enable),
   _changedInfoListener(NULL),
-  _rendererID(0)
+  _rendererID(0),
+  _context(NULL)
   {
     
   }

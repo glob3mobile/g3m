@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MeshRenderer;
 //class MarksRenderer;
-//class CompositeRenderer;
 //class Planet;
 //class Measure_VertexShape;
 //class MeasureHandler;
@@ -49,7 +48,6 @@ public class Measure
   private ShapesRenderer _shapesRenderer;
   private MeshRenderer _meshRenderer;
   private MarksRenderer _marksRenderer;
-  private CompositeRenderer _compositeRenderer;
 
   private Planet _planet;
 
@@ -250,17 +248,15 @@ public class Measure
      _shapesRenderer = null;
      _meshRenderer = null;
      _marksRenderer = null;
-     _compositeRenderer = null;
      _planet = null;
     addVertex(firstVertex);
   }
 
-  public final void initialize(ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, CompositeRenderer compositeRenderer, Planet planet)
+  public final void initialize(ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, Planet planet)
   {
     _shapesRenderer = shapesRenderer;
     _meshRenderer = meshRenderer;
     _marksRenderer = marksRenderer;
-    _compositeRenderer = compositeRenderer;
     _planet = planet;
   
     resetUI();
@@ -395,11 +391,6 @@ public class Measure
     if (_marksRenderer != null)
     {
       _marksRenderer.removeAllMarks(new Measure_MarkFilter(_instanceID), false, true); // deleteMarks -  animated
-    }
-  
-    if (_compositeRenderer != null)
-    {
-      _compositeRenderer.removeAllRenderers();
     }
   }
 

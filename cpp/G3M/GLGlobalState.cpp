@@ -48,7 +48,7 @@ _clearColorA(0.0)
 
 void GLGlobalState::bindTexture(const int target,
                                 const IGLTextureID* textureID) {
-  if (target > MAX_N_TEXTURES) {
+  if ((target < 0) || (target >= MAX_N_TEXTURES)) {
     ILogger::instance()->logError("WRONG TARGET FOR TEXTURE");
     return;
   }

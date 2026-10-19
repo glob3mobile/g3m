@@ -512,13 +512,15 @@ public final class Canvas_WebGL extends ICanvas {
    @Override
    protected native void _fill() /*-{
     var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-    context.fill();
+    // even-odd, like Canvas_iOS (kCGPathEOFill): the holes of a polygon stay empty
+    context.fill("evenodd");
    }-*/;
 
    @Override
    protected native void _fillAndStroke() /*-{
     var context = this.@org.glob3.mobile.specific.Canvas_WebGL::_domCanvasContext;
-    context.fill();
+    // even-odd, like Canvas_iOS (kCGPathEOFillStroke): the holes of a polygon stay empty
+    context.fill("evenodd");
     context.stroke();
    }-*/;
 

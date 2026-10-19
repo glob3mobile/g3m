@@ -118,7 +118,7 @@ void VectorStreamingRenderer::NodeChildrenDownloadListener::onDownload(const URL
 }
 
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onError(const URL& url) {
-  _node->errorDownloadingChildren();
+  _node->errorDownloadingChildren(url);
 }
 
 void VectorStreamingRenderer::NodeChildrenDownloadListener::onCancel(const URL& url) {
@@ -288,7 +288,7 @@ void VectorStreamingRenderer::NodeFeaturesDownloadListener::onDownload(const URL
 }
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onError(const URL& url) {
-  _node->errorDownloadingFeatures();
+  _node->errorDownloadingFeatures(url);
 }
 
 void VectorStreamingRenderer::NodeFeaturesDownloadListener::onCancel(const URL& url) {
@@ -406,6 +406,18 @@ VectorStreamingRenderer::Node::~Node() {
 #ifdef JAVA_CODE
   super.dispose();
 #endif
+}
+
+void VectorStreamingRenderer::Node::errorDownloadingFeatures(const URL& url) {
+  ILogger::instance()->logError("\"%s\": Error downloading features from \"%s\"",
+                                getFullName().c_str(),
+                                url._path.c_str());
+}
+
+void VectorStreamingRenderer::Node::errorDownloadingChildren(const URL& url) {
+  ILogger::instance()->logError("\"%s\": Error downloading children from \"%s\"",
+                                getFullName().c_str(),
+                                url._path.c_str());
 }
 
 void VectorStreamingRenderer::Node::parsedChildren(std::vector<Node*>* children) {

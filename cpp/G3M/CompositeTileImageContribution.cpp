@@ -51,7 +51,8 @@ const TileImageContribution* CompositeTileImageContribution::create(const std::v
   final ChildContribution firsChild = contributions.get(0);
 #endif
   
-  return new CompositeTileImageContribution(contributions, firsChild->_contribution->isOpaque());
+  const bool transparent = !firsChild->_contribution->isFullCoverageAndOpaque();
+  return new CompositeTileImageContribution(contributions, transparent);
 }
 
 

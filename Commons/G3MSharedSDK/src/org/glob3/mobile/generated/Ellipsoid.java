@@ -65,7 +65,7 @@ public class Ellipsoid
 
   public final double getMeanRadius()
   {
-    return (_radii._x + _radii._y + _radii._y) / 3;
+    return (_radii._x + _radii._y + _radii._z) / 3;
   }
 
   public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)

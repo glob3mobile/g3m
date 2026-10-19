@@ -408,11 +408,11 @@ void Canvas_Emscripten::_stroke() {
 }
 
 void Canvas_Emscripten::_fill() {
-  _domCanvasContext.call<void>("fill");
+  _domCanvasContext.call<void>("fill", val(std::string("evenodd")));
 }
 
 void Canvas_Emscripten::_fillAndStroke() {
-  _domCanvasContext.call<void>("fill");
+  _domCanvasContext.call<void>("fill", val(std::string("evenodd")));
   _domCanvasContext.call<void>("stroke");
 }
 

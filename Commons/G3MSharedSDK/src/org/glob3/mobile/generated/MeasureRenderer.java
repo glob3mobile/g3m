@@ -18,7 +18,6 @@ package org.glob3.mobile.generated;
 //class ShapesRenderer;
 //class MeshRenderer;
 //class MarksRenderer;
-//class CompositeRenderer;
 //class Measure;
 
 
@@ -27,16 +26,14 @@ public class MeasureRenderer extends DefaultRenderer
   private ShapesRenderer _shapesRenderer;
   private MeshRenderer _meshRenderer;
   private MarksRenderer _marksRenderer;
-  private CompositeRenderer _compositeRenderer;
 
   private java.util.ArrayList<Measure> _measures = new java.util.ArrayList<Measure>();
 
-  public MeasureRenderer(ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer, CompositeRenderer compositeRenderer)
+  public MeasureRenderer(ShapesRenderer shapesRenderer, MeshRenderer meshRenderer, MarksRenderer marksRenderer)
   {
      _shapesRenderer = shapesRenderer;
      _meshRenderer = meshRenderer;
      _marksRenderer = marksRenderer;
-     _compositeRenderer = compositeRenderer;
   
   }
 
@@ -47,7 +44,7 @@ public class MeasureRenderer extends DefaultRenderer
     for (int i = 0; i < _measures.size(); i++)
     {
       Measure measure = _measures.get(i);
-      measure.initialize(_shapesRenderer, _meshRenderer, _marksRenderer, _compositeRenderer, _context.getPlanet());
+      measure.initialize(_shapesRenderer, _meshRenderer, _marksRenderer, _context.getPlanet());
     }
   }
 
@@ -65,7 +62,7 @@ public class MeasureRenderer extends DefaultRenderer
   {
     if (_context != null)
     {
-      measure.initialize(_shapesRenderer, _meshRenderer, _marksRenderer, _compositeRenderer, _context.getPlanet());
+      measure.initialize(_shapesRenderer, _meshRenderer, _marksRenderer, _context.getPlanet());
     }
   
     _measures.add(measure);

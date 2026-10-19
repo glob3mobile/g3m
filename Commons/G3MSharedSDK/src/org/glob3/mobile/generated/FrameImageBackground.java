@@ -55,7 +55,7 @@ public class FrameImageBackground extends ImageBackground
     canvas.initialize((int) mu.ceil(canvasWidth), (int) mu.ceil(canvasHeight));
   
   
-    if (!_color.isTransparent())
+    if (!_color.isFullTransparent())
     {
       canvas.setFillColor(_color);
       if (_topFrameHeight > 0)

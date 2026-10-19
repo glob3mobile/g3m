@@ -49,7 +49,8 @@ public class CompositeTileImageContribution extends TileImageContribution
     //if first contribution is opaque, then composite is opaque.
     final ChildContribution firsChild = contributions.get(0);
   
-    return new CompositeTileImageContribution(contributions, firsChild._contribution.isOpaque());
+    final boolean transparent = !firsChild._contribution.isFullCoverageAndOpaque();
+    return new CompositeTileImageContribution(contributions, transparent);
   }
 
 

@@ -87,7 +87,8 @@ public class CameraPointOfViewEffect extends EffectWithDuration
   {
     final double alpha = getAlpha(when);
   
-    rc.getNextCamera().setPointOfView(targetAt(rc.getPlanet(), alpha), distanceAt(alpha), Angle.linearInterpolation(_fromAzimuth, _toAzimuth, alpha), Angle.linearInterpolation(_fromAltitude, _toAltitude, alpha));
+    rc.getNextCamera().setPointOfView(targetAt(rc.getPlanet(), alpha), distanceAt(alpha), Angle.linearInterpolationFromRadians(_fromAzimuth._radians, Angle.smoothRadians(_fromAzimuth._radians, _toAzimuth._radians), alpha), Angle.linearInterpolation(_fromAltitude, _toAltitude, alpha));
+                                        // the short way: at most half a turn
   }
 
   public final void stop(G3MRenderContext rc, TimeInterval when)
