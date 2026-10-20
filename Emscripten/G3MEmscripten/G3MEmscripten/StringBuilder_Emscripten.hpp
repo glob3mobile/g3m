@@ -5,11 +5,21 @@
 #include "G3M/IStringBuilder.hpp"
 
 #include <sstream>
+#include <string>
 
 
 class StringBuilder_Emscripten : public IStringBuilder {
 private:
   std::ostringstream _oss;
+  int                _floatPrecision;
+
+  static std::string format(double d, int maxDecimals);
+
+  static void toPrecision20(double d, std::string& digits, int& scale);
+
+  static std::string mantissaDigits(const char* scientific);
+
+  static bool propagateCarry(std::string& digits, int i);
 
 protected:
 

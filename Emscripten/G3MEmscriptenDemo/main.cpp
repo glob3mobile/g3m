@@ -10,6 +10,7 @@
 #include "G3M/LayerTilesRenderParameters.hpp"
 #include "G3M/URLTemplateLayer.hpp"
 #include "G3M/PlanetRendererBuilder.hpp"
+#include "G3M/StarsRenderer.hpp"
 
 
 int main() {
@@ -17,6 +18,10 @@ int main() {
   G3MBuilder_Emscripten builder;
 
   builder.setAtmosphere(true);
+  // same stars as the iOS G3MApp demo
+  builder.setStarsRenderer(new StarsRenderer(2   /* smallestStarDiameter */,
+                                             4.5 /* fullStarMagnitude    */,
+                                             0.3 /* starSizeExponent     */));
 
   PlanetRendererBuilder* planetRendererBuilder = builder.getPlanetRendererBuilder();
 

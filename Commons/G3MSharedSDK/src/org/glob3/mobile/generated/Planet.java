@@ -31,6 +31,9 @@ package org.glob3.mobile.generated;
 
 public abstract class Planet
 {
+  protected static final double DOUBLE_TAP_ZOOM_FACTOR = 0.6;
+  protected static final double DOUBLE_TAP_DURATION_IN_SECONDS = 0.75;
+
 
   public void dispose()
   {
@@ -113,6 +116,9 @@ public abstract class Planet
 
   public abstract MutableMatrix44D createGeodeticTransformMatrix(Angle latitude, Angle longitude, double height);
 
+
+  // fraction of the way from the camera to the double-tapped point
+  
   public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
     return createGeodeticTransformMatrix(position._latitude, position._longitude, position._height);

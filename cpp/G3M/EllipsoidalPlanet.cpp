@@ -602,6 +602,12 @@ Effect* EllipsoidalPlanet::createDoubleTapEffect(const Vector3D& origin,
 
   // compute central point of view
   const Vector3D centerPoint = closestIntersection(origin, centerRay);
+  if (centerPoint.isNan()) {
+    // the center of view is off the globe (looking at the horizon): zoom toward the tapped point without rotating
+    return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(DOUBLE_TAP_DURATION_IN_SECONDS),
+                                          initialPoint.sub(origin).times(DOUBLE_TAP_ZOOM_FACTOR),
+                                          0);
+  }
 
   // compute drag parameters
   const IMathUtils* mu = IMathUtils::instance();
@@ -610,10 +616,10 @@ Effect* EllipsoidalPlanet::createDoubleTapEffect(const Vector3D& origin,
 
   // compute zoom factor
   const double height   = toGeodetic3D(origin)._height;
-  const double distance = height * 0.6;
+  const double distance = height * DOUBLE_TAP_ZOOM_FACTOR;
 
   // create effect
-  return new DoubleTapRotationEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
+  return new DoubleTapRotationEffect(TimeInterval::fromSeconds(DOUBLE_TAP_DURATION_IN_SECONDS), axis, angle, distance);
 }
 
 

@@ -46,6 +46,14 @@ void MultiTextureMapping::releaseGLTextureID() {
   }
 }
 
+// The shader multiplies both texels, so a single blend factor is right only when both
+// textures are premultiplied or both are not.
+void MultiTextureMapping::checkSamePremultiplication() const {
+  if (_glTextureID1->isPremultiplied() != _glTextureID2->isPremultiplied()) {
+    ILogger::instance()->logError("MultiTextureMapping: only one of the textures is premultiplied, no blend factor is right");
+  }
+}
+
 MultiTextureMapping::~MultiTextureMapping() {
   if (_ownedTexCoords1) {
     delete _texCoords1;
@@ -88,6 +96,8 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
 
   state.clearGLFeatureGroup(COLOR_GROUP);
 
+  const int sourceBlendFactor = _glTextureID1->getSourceBlendFactor();
+
   // TARGET 0
   if (_texCoords1 == NULL) {
     ILogger::instance()->logError("MultiTextureMapping::bind() with _texCoords == NULL");
@@ -100,7 +110,7 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
                                             false,
                                             0,
                                             _transparent1,
-                                            _glTextureID1->getSourceBlendFactor(),
+                                            sourceBlendFactor,
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             _translationU,
                                             _translationV,
@@ -125,7 +135,7 @@ void MultiTextureMapping::modifyGLState(GLState& state) const {
                                             false,
                                             0,
                                             _transparent2,
-                                            _glTextureID1->getSourceBlendFactor(),
+                                            sourceBlendFactor,
                                             GLBlendFactor::oneMinusSrcAlpha(),
                                             1), //TARGET
                        false);

@@ -218,6 +218,10 @@ public:
     return _priority;
   }
 
+  const Downloader_Emscripten::HandlerKey getKey() const {
+    return Downloader_Emscripten::HandlerKey(_urlPath, _isImageRequest);
+  }
+
   void addListener(IBufferDownloadListener* listener,
                    const bool               deleteListener,
                    const long long          priority,
@@ -422,7 +426,7 @@ public:
   // Downloader_Emscripten_Handler_processResponse will finish the handler
   bool onLoad(int xhrStatus,
               const val& xhrResponse) {
-    _downloader->removeDownloadingHandlerForURLPath(_urlPath);
+    _downloader->removeDownloadingHandler(getKey());
 
     if (xhrStatus == 200) {
       if (_isImageRequest) {
@@ -510,24 +514,25 @@ long long Downloader_Emscripten::requestBuffer(const URL& url,
   _requestsCounter++;
 
   const std::string urlPath = url._path;
-  Downloader_Emscripten_Handler* handler =  _downloadingHandlers.count(urlPath) ? _downloadingHandlers[urlPath] : NULL;
+  const HandlerKey  key(urlPath, false);
+  Downloader_Emscripten_Handler* handler = _downloadingHandlers.count(key) ? _downloadingHandlers[key] : NULL;
 
   const long long requestID = _requestIDCounter++;
 
-  if ((handler != NULL) && !handler->_isImageRequest) {
+  if (handler != NULL) {
     // the URL is being downloaded, just add the new listener
     handler->addListener(listener, deleteListener, priority, requestID, tag);
   }
   else {
-    handler = _queuedHandlers.count(urlPath) ? _queuedHandlers[urlPath] : NULL;
-    if ((handler != NULL) && !handler->_isImageRequest) {
+    handler = _queuedHandlers.count(key) ? _queuedHandlers[key] : NULL;
+    if (handler != NULL) {
       // the URL is queued for future download, just add the new listener
       handler->addListener(listener, deleteListener, priority, requestID, tag);
     }
     else {
       // new handler, queue it
       handler = new Downloader_Emscripten_Handler(urlPath, listener, deleteListener, priority, requestID, tag);
-      _queuedHandlers[urlPath] = handler;
+      _queuedHandlers[key] = handler;
     }
   }
 
@@ -544,24 +549,25 @@ long long Downloader_Emscripten::requestImage(const URL& url,
   _requestsCounter++;
 
   const std::string urlPath = url._path;
-  Downloader_Emscripten_Handler* handler =  _downloadingHandlers.count(urlPath) ? _downloadingHandlers[urlPath] : NULL;
+  const HandlerKey  key(urlPath, true);
+  Downloader_Emscripten_Handler* handler = _downloadingHandlers.count(key) ? _downloadingHandlers[key] : NULL;
 
   const long long requestID = _requestIDCounter++;
 
-  if ((handler != NULL) && handler->_isImageRequest) {
+  if (handler != NULL) {
     // the URL is being downloaded, just add the new listener
     handler->addListener(listener, deleteListener, priority, requestID, tag);
   }
   else {
-    handler = _queuedHandlers.count(urlPath) ? _queuedHandlers[urlPath] : NULL;
-    if ((handler != NULL) && handler->_isImageRequest) {
+    handler = _queuedHandlers.count(key) ? _queuedHandlers[key] : NULL;
+    if (handler != NULL) {
       // the URL is queued for future download, just add the new listener
       handler->addListener(listener, deleteListener, priority, requestID, tag);
     }
     else {
       // new handler, queue it
       handler = new Downloader_Emscripten_Handler(urlPath, listener, deleteListener, priority, requestID, tag);
-      _queuedHandlers[urlPath] = handler;
+      _queuedHandlers[key] = handler;
     }
   }
 
@@ -575,18 +581,18 @@ bool Downloader_Emscripten::cancelRequest(long long requestID) {
 
   _cancelsCounter++;
 
-  for (const std::pair<const std::string, Downloader_Emscripten_Handler*>& element : _queuedHandlers) {
+  for (const std::pair<const HandlerKey, Downloader_Emscripten_Handler*>& element : _queuedHandlers) {
     Downloader_Emscripten_Handler* handler = element.second;
     if (handler->removeListenerForRequestId(requestID)) {
       if (!handler->hasListener()) {
-        _queuedHandlers.erase( handler->_urlPath );
+        _queuedHandlers.erase( handler->getKey() );
         delete handler;
       }
       return true;
     }
   }
   
-  for (const std::pair<const std::string, Downloader_Emscripten_Handler*>& element : _downloadingHandlers) {
+  for (const std::pair<const HandlerKey, Downloader_Emscripten_Handler*>& element : _downloadingHandlers) {
     Downloader_Emscripten_Handler* handler = element.second;
     if (handler->cancelListenerForRequestId(requestID)) {
       return true;
@@ -603,7 +609,7 @@ void Downloader_Emscripten::cancelRequestsTagged(const std::string& tag) {
 
   _cancelsCounter++;
 
-  std::map<const std::string, Downloader_Emscripten_Handler*>::iterator it = _queuedHandlers.begin();
+  std::map<HandlerKey, Downloader_Emscripten_Handler*>::iterator it = _queuedHandlers.begin();
   while (it != _queuedHandlers.end()) {
     Downloader_Emscripten_Handler* handler = it->second;
     if (handler->removeListenersTagged(tag)) {
@@ -620,7 +626,7 @@ void Downloader_Emscripten::cancelRequestsTagged(const std::string& tag) {
     }
   }
 
-  for (const std::pair<const std::string, Downloader_Emscripten_Handler*>& element : _downloadingHandlers) {
+  for (const std::pair<const HandlerKey, Downloader_Emscripten_Handler*>& element : _downloadingHandlers) {
     Downloader_Emscripten_Handler* handler = element.second;
     handler->cancelListenersTagged(tag);
   }
@@ -666,7 +672,7 @@ Downloader_Emscripten_Handler* Downloader_Emscripten::getHandlerToRun() {
 
   Downloader_Emscripten_Handler* selectedHandler  = NULL;
   long long                      selectedPriority = -(std::numeric_limits<long long>::max());
-  for (std::pair<const std::string, Downloader_Emscripten_Handler*>& element : _queuedHandlers) {
+  for (std::pair<const HandlerKey, Downloader_Emscripten_Handler*>& element : _queuedHandlers) {
     Downloader_Emscripten_Handler* candidateHandler  = element.second;
     const long long                candidatePriority = candidateHandler->getPriority();
 
@@ -674,23 +680,22 @@ Downloader_Emscripten_Handler* Downloader_Emscripten::getHandlerToRun() {
     if ((candidatePriority > selectedPriority) ||
         ((candidatePriority == selectedPriority) && (selectedHandler != NULL) &&
          (candidateHandler->_firstRequestID < selectedHandler->_firstRequestID))) {
-      const std::string urlPath = element.first;
       selectedPriority = candidatePriority;
       selectedHandler  = candidateHandler;
     }
   }
 
   if (selectedHandler != NULL) {
-    const std::string selectedURLPath = selectedHandler->_urlPath;
+    const HandlerKey selectedKey = selectedHandler->getKey();
 
     // move the selected handler to _downloadingHandlers collection
-    _queuedHandlers.erase(selectedURLPath);
-    _downloadingHandlers[selectedURLPath] = selectedHandler;
+    _queuedHandlers.erase(selectedKey);
+    _downloadingHandlers[selectedKey] = selectedHandler;
   }
 
   return selectedHandler;
 }
 
-void Downloader_Emscripten::removeDownloadingHandlerForURLPath(const std::string& urlPath) {
-  _downloadingHandlers.erase(urlPath);
+void Downloader_Emscripten::removeDownloadingHandler(const HandlerKey& key) {
+  _downloadingHandlers.erase(key);
 }

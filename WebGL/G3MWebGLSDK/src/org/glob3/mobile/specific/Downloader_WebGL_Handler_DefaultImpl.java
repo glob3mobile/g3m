@@ -138,7 +138,7 @@ public class Downloader_WebGL_Handler_DefaultImpl implements Downloader_WebGL_Ha
 
    @Override
    final public void removeFromDownloaderDownloadingHandlers() {
-      _downloader.removeDownloadingHandlerForUrl(_url);
+      _downloader.removeDownloadingHandler(this);
    }
 
    @Override

@@ -37,6 +37,8 @@ private:
 
   void releaseGLTextureID();
 
+  void checkSamePremultiplication() const;
+
 public:
 
   MultiTextureMapping(const TextureIDReference* glTextureID1,
@@ -59,6 +61,7 @@ public:
   _ownedTexCoords2(ownedTexCoords2),
   _transparent2(transparent2)
   {
+    checkSamePremultiplication();
   }
 
   MultiTextureMapping(const TextureIDReference* glTextureID1,
@@ -92,6 +95,7 @@ public:
   _ownedTexCoords2(ownedTexCoords2),
   _transparent2(transparent2)
   {
+    checkSamePremultiplication();
   }
 
   virtual ~MultiTextureMapping();

@@ -24,6 +24,10 @@ class Ray;
 
 
 class Planet {
+protected:
+  static const double DOUBLE_TAP_ZOOM_FACTOR;
+  static const double DOUBLE_TAP_DURATION_IN_SECONDS;
+
 public:
 
   virtual ~Planet() {

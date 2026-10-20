@@ -153,6 +153,24 @@ EM_BOOL G3MWidget_Emscripten_onMouseEvent(int eventType,
   return widget->_onMouseEvent(eventType, e);
 }
 
+// html5.h has no contextmenu callback; startWidget() adds a JS listener that calls this
+extern "C" {
+EMSCRIPTEN_KEEPALIVE
+void G3MWidget_Emscripten_onContextMenu(void* widget,
+                                        long clientX,
+                                        long clientY) {
+  ((G3MWidget_Emscripten*) widget)->_onContextMenu(clientX, clientY);
+}
+}
+
+// as WebGL's MotionEventProcessor.processContextMenu: the secondary button is a LongPress
+void G3MWidget_Emscripten::_onContextMenu(const long clientX,
+                                          const long clientY) {
+  _mouseDown = false;
+  dispatchTouchEvent( TouchEvent::create(TouchEventType::LongPress,
+                                         new Touch(createPosition(clientX, clientY), (unsigned char) 1)) );
+}
+
 EM_BOOL G3MWidget_Emscripten_onMouseWheelEvent(int eventType,
                                                const EmscriptenWheelEvent* e,
                                                void* userData) {
@@ -215,11 +233,16 @@ EM_JS(int, getAbsoluteTop, (int elemID), {
 // separation of the three touches simulated with shift+mouse, as MotionEventProcessor.DELTA in WebGL
 static const Vector2F SHIFT_TOUCHES_DELTA(10, 0);
 
-const Vector2F G3MWidget_Emscripten::createPosition(const EmscriptenMouseEvent* e) const {
+const Vector2F G3MWidget_Emscripten::createPosition(const long clientX,
+                                                    const long clientY) const {
   const int canvasAbsoluteLeft = getAbsoluteLeft( EMStorage::put(_canvas) );
   const int canvasAbsoluteTop  = getAbsoluteTop ( EMStorage::put(_canvas) );
-  return Vector2F((e->clientX - canvasAbsoluteLeft) * _devicePixelRatio,
-                  (e->clientY - canvasAbsoluteTop ) * _devicePixelRatio);
+  return Vector2F((clientX - canvasAbsoluteLeft) * _devicePixelRatio,
+                  (clientY - canvasAbsoluteTop ) * _devicePixelRatio);
+}
+
+const Vector2F G3MWidget_Emscripten::createPosition(const EmscriptenMouseEvent* e) const {
+  return createPosition(e->clientX, e->clientY);
 }
 
 std::vector<const Touch*> G3MWidget_Emscripten::createMouseTouches(const EmscriptenMouseEvent* e) const {
@@ -378,7 +401,13 @@ void G3MWidget_Emscripten::startWidget(const std::string& canvasContainerID) {
         event.preventDefault();
         alert("webglcontextlost");
       }, false);
-    });
+      // as WebGL: no browser menu, the secondary button goes to g3m
+      var widget = $0;
+      canvas.addEventListener("contextmenu", function(event) {
+        event.preventDefault();
+        Module.ccall('G3MWidget_Emscripten_onContextMenu', 'void', ['number', 'number', 'number'], [ widget, event.clientX, event.clientY ]);
+      }, false);
+    }, this);
 
     {
       // mouse events

@@ -88,10 +88,9 @@ IWebSocket* Factory_Emscripten::createWebSocket(const URL& url,
                                                 bool autodeleteListener,
                                                 bool autodeleteWebSocket,
                                                 bool verboseErrors) const {
-  #warning TODO!!!!!!
-  THROW_EXCEPTION("TODO!");
-//  return new WebSocket_Emscripten(url,
-//                                  listener,
-//                                  autodeleteListener,
-//                                  autodeleteWebSocket);
+  return new WebSocket_Emscripten(url,
+                                  listener,
+                                  autodeleteListener,
+                                  autodeleteWebSocket,
+                                  verboseErrors);
 }

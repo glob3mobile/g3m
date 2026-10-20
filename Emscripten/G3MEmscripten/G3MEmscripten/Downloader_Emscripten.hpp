@@ -5,18 +5,23 @@
 #include "G3M/IDownloader.hpp"
 
 #include <map>
+#include <utility>
 #include <string>
 
 class Downloader_Emscripten_Handler;
 
 
 class Downloader_Emscripten : public IDownloader {
+public:
+  // (URL path, is image request): the same URL can be requested as an image and as a buffer at once
+  typedef std::pair<std::string, bool> HandlerKey;
+
 private:
   const int  _maxConcurrentOperationCount;
   const int  _delayMillis;
 
-  std::map<const std::string, Downloader_Emscripten_Handler*> _downloadingHandlers;
-  std::map<const std::string, Downloader_Emscripten_Handler*> _queuedHandlers;
+  std::map<HandlerKey, Downloader_Emscripten_Handler*> _downloadingHandlers;
+  std::map<HandlerKey, Downloader_Emscripten_Handler*> _queuedHandlers;
 
   long _timeoutID;
 
@@ -70,7 +75,7 @@ public:
 
   void __heartbeat();
 
-  void removeDownloadingHandlerForURLPath(const std::string& urlPath);
+  void removeDownloadingHandler(const HandlerKey& key);
 
 
 };

@@ -14,6 +14,8 @@ class G3MWidget_Emscripten;
 
 class G3MBuilder_Emscripten : public IG3MBuilder {
 private:
+  G3MWidget_Emscripten* _nativeWidget;
+
   void addGPUProgramSources();
   
 protected:

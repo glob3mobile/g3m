@@ -16,6 +16,11 @@
 #include "MutableMatrix44D.hpp"
 #include "Ray.hpp"
 
+
+// fraction of the way from the camera to the double-tapped point
+const double Planet::DOUBLE_TAP_ZOOM_FACTOR         = 0.6;
+const double Planet::DOUBLE_TAP_DURATION_IN_SECONDS = 0.75;
+
 MutableMatrix44D Planet::createGeodeticTransformMatrix(const Geodetic3D& position) const {
   return createGeodeticTransformMatrix(position._latitude,
                                        position._longitude,

@@ -60,6 +60,17 @@ public class MultiTextureMapping extends TransformableTextureMapping
   }
 
 
+  // The shader multiplies both texels, so a single blend factor is right only when both
+  // textures are premultiplied or both are not.
+  private void checkSamePremultiplication()
+  {
+    if (_glTextureID1.isPremultiplied() != _glTextureID2.isPremultiplied())
+    {
+      ILogger.instance().logError("MultiTextureMapping: only one of the textures is premultiplied, no blend factor is right");
+    }
+  }
+
+
   public MultiTextureMapping(TextureIDReference glTextureID1, IFloatBuffer texCoords1, boolean ownedTexCoords1, boolean transparent1, TextureIDReference glTextureID2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2)
   {
      super(0, 0, 1, 1, 0, 0, 0);
@@ -71,6 +82,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
      _texCoords2 = texCoords2;
      _ownedTexCoords2 = ownedTexCoords2;
      _transparent2 = transparent2;
+    checkSamePremultiplication();
   }
 
   public MultiTextureMapping(TextureIDReference glTextureID1, IFloatBuffer texCoords1, boolean ownedTexCoords1, boolean transparent1, TextureIDReference glTextureID2, IFloatBuffer texCoords2, boolean ownedTexCoords2, boolean transparent2, float translationU, float translationV, float scaleU, float scaleV, float rotationAngleInRadians, float rotationCenterU, float rotationCenterV)
@@ -84,6 +96,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
      _texCoords2 = texCoords2;
      _ownedTexCoords2 = ownedTexCoords2;
      _transparent2 = transparent2;
+    checkSamePremultiplication();
   }
 
   public void dispose()
@@ -143,6 +156,8 @@ public class MultiTextureMapping extends TransformableTextureMapping
   
     state.clearGLFeatureGroup(GLFeatureGroupName.COLOR_GROUP);
   
+    final int sourceBlendFactor = _glTextureID1.getSourceBlendFactor();
+  
     // TARGET 0
     if (_texCoords1 == null)
     {
@@ -150,7 +165,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
     }
     else
     {
-      state.addGLFeature(new TextureGLFeature(_glTextureID1.getID(), _texCoords1, 2, 0, false, 0, _transparent1, _glTextureID1.getSourceBlendFactor(), GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
+      state.addGLFeature(new TextureGLFeature(_glTextureID1.getID(), _texCoords1, 2, 0, false, 0, _transparent1, sourceBlendFactor, GLBlendFactor.oneMinusSrcAlpha(), _translationU, _translationV, _scaleU, _scaleV, _rotationInRadians, _rotationCenterU, _rotationCenterV), false);
   
     }
   
@@ -161,7 +176,7 @@ public class MultiTextureMapping extends TransformableTextureMapping
     }
     else
     {
-      state.addGLFeature(new TextureGLFeature(_glTextureID2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, _glTextureID1.getSourceBlendFactor(), GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
+      state.addGLFeature(new TextureGLFeature(_glTextureID2.getID(), _texCoords2, 2, 0, false, 0, _transparent2, sourceBlendFactor, GLBlendFactor.oneMinusSrcAlpha(), 1), false); //TARGET
     }
   
   }

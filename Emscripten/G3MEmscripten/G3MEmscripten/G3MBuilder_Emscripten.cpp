@@ -11,7 +11,13 @@
 #include <emscripten/html5.h>
 
 
-G3MBuilder_Emscripten::G3MBuilder_Emscripten() {
+// as G3MBuilder_WebGL: the singletons and the GL exist from the builder's creation,
+// so what is created before createWidget() (e.g. a StarsRenderer, which reads GLType) sees them
+G3MBuilder_Emscripten::G3MBuilder_Emscripten() :
+_nativeWidget(NULL)
+{
+  G3MWidget_Emscripten::initSingletons();
+  _nativeWidget = new G3MWidget_Emscripten();
 }
 
 G3MBuilder_Emscripten::~G3MBuilder_Emscripten() {
@@ -41,18 +47,15 @@ void G3MBuilder_Emscripten::addGPUProgramSources() {
 }
 
 G3MWidget_Emscripten* G3MBuilder_Emscripten::createWidget() {
-  G3MWidget_Emscripten* nativeWidget = new G3MWidget_Emscripten();
-  if (nativeWidget->isWebGLSupported()) {
+  if (_nativeWidget->isWebGLSupported()) {
     addGPUProgramSources();
 
-    G3MWidget_Emscripten::initSingletons();
+    setGL(_nativeWidget->getGL());
 
-    setGL(nativeWidget->getGL());
-
-    nativeWidget->setG3MWidget(create());
+    _nativeWidget->setG3MWidget(create());
     
     // nativeWidget->startWidget();
   }
 
-  return nativeWidget;
+  return _nativeWidget;
 }

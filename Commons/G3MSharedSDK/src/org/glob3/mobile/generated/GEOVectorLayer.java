@@ -167,9 +167,17 @@ public class GEOVectorLayer extends MultiProjectionLayer
       if (symbol != null)
          symbol.dispose();
     }
+    else if (!sector.touchesWith(Sector.FULL_SPHERE))
+    {
+      ILogger.instance().logError("GEORasterSymbol sector %s is outside the sphere, can't rasterize", sector.description());
+      if (symbol != null)
+         symbol.dispose();
+    }
     else
     {
-      final boolean added = _quadTree.add(sector, symbol);
+      // The quadtree root is the whole sphere and only takes sectors it fully contains, and
+      // the sectors of symbols at a pole or at the antimeridian are padded beyond it.
+      final boolean added = _quadTree.add(sector.intersection(Sector.FULL_SPHERE), symbol);
       if (added)
       {
         _contentsRevision++;
@@ -177,6 +185,7 @@ public class GEOVectorLayer extends MultiProjectionLayer
       }
       else
       {
+        ILogger.instance().logError("GEORasterSymbol with sector %s can't be added to the GEOVectorLayer", sector.description());
         if (symbol != null)
            symbol.dispose();
       }

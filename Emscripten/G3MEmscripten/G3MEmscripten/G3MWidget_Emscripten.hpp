@@ -37,6 +37,9 @@ private:
   void onSizeChanged(const int width,
                      const int height);
 
+  const Vector2F createPosition(const long clientX,
+                                const long clientY) const;
+
   const Vector2F createPosition(const EmscriptenMouseEvent* e) const;
 
   std::vector<const Touch*> createMouseTouches(const EmscriptenMouseEvent* e) const;
@@ -77,6 +80,9 @@ public:
 
   EM_BOOL _onTouchEvent(int eventType,
                         const EmscriptenTouchEvent* e);
+
+  void _onContextMenu(const long clientX,
+                      const long clientY);
 
 };
 

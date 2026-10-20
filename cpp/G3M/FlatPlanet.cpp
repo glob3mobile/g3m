@@ -223,11 +223,17 @@ Effect* FlatPlanet::createDoubleTapEffect(const Vector3D& origin,
   const Vector3D initialPoint = Plane::intersectionXYPlaneWithRay(origin, tapRay);
   if (initialPoint.isNan()) return NULL;
   const Vector3D centerPoint = Plane::intersectionXYPlaneWithRay(origin, centerRay);
+  if (centerPoint.isNan()) {
+    // the center of view is off the plane (looking at the horizon): zoom toward the tapped point
+    return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(DOUBLE_TAP_DURATION_IN_SECONDS),
+                                          initialPoint.sub(origin).times(DOUBLE_TAP_ZOOM_FACTOR),
+                                          0);
+  }
 
   // create effect
-  return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(0.75),
+  return new DoubleTapTranslationEffect(TimeInterval::fromSeconds(DOUBLE_TAP_DURATION_IN_SECONDS),
                                         initialPoint.sub(centerPoint),
-                                        toGeodetic3D(origin)._height*0.6);
+                                        toGeodetic3D(origin)._height*DOUBLE_TAP_ZOOM_FACTOR);
 }
 
 double FlatPlanet::distanceToHorizon(const Vector3D& position) const {
