@@ -46,9 +46,10 @@ void TextUtils_Emscripten::labelImage(const IImage* image,
   }
 }
 
-const std::string toJSColor(const Color* color) {
+// as TextUtils_WebGL.toJSColor: no color is a JS null, which the canvas ignores
+const val toJSColor(const Color* color) {
   if (color == NULL) {
-    return NULL;
+    return val::null();
   }
 
   const IMathUtils* mu = IMathUtils::instance();
@@ -59,12 +60,12 @@ const std::string toJSColor(const Color* color) {
   const int   b = mu->round(255 * color->_blue);
   const float a = color->_alpha;
 
-  return ("rgba(" +
-          su->toString(r) + "," +
-          su->toString(g) + "," +
-          su->toString(b) + "," +
-          su->toString(a) +
-          ")");
+  return val("rgba(" +
+             su->toString(r) + "," +
+             su->toString(g) + "," +
+             su->toString(b) + "," +
+             su->toString(a) +
+             ")");
 }
 
 void TextUtils_Emscripten::createLabelImage(const std::string& label,
